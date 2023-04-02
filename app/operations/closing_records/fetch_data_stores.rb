@@ -72,10 +72,10 @@ module ClosingRecords
         }
       else
         @records = ReadOnlyDataStore.done.where(
-          "meta->>'data_store_type' = ? AND meta->>'branch_id' = ? AND EXTRACT(month FROM as_of) = ? AND EXTRACT(year FROM as_of) = ?",
+          "meta->>'data_store_type' = ? AND meta->>'branch_id' = ? AND EXTRACT(month FROM as_of) IN (?) AND EXTRACT(year FROM as_of) = ?",
           @record_type,
           @branch.id,
-          @month,
+          [@month,@month + 1],
           @year
         ).order("updated_at DESC").map{ |o|
           path = "#"
