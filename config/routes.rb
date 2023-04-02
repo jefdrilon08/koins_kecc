@@ -396,6 +396,7 @@ Rails.application.routes.draw do
 
     get "/involuntary_members", to: "involuntary_members#index"
     get "/involuntary_members/:id", to: "involuntary_members#show"
+    delete "/involuntary_members/:id", to: "involuntary_members#destroy"
 
     get "/patronage_refund", to: "patronage_refund#index"
     get "/patronage_refund/:id", to: "patronage_refund#show"

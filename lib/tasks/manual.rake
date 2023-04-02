@@ -84,4 +84,59 @@ namespace :manual do
 
         end
   end
+          task :capr => :environment do
+          require 'csv'
+          branch_id = ENV['ID']
+          @data = DataStore.where(id: branch_id)
+            @count1 = 0
+            @count2 = 0
+            @count3 = 0
+            @count4 = 0
+            @count5 = 0
+            @count6 = 0
+            @count7 = 0
+            @count8 = 0
+            @count9 = 0
+            @count10 = 0
+
+            @counts
+            @data.each do |b|
+              @id = b.id
+              @year = b["meta"]["as_of"]
+              @branch = b["meta"]["branch_name"]
+              @female = 0
+              @male = 0
+              @loans = 0
+              @amount = 0
+
+              a_data = b["data"]
+              a_data_rec = a_data.with_indifferent_access[:record]
+              @counts = a_data_rec.group_by{ |obj| obj["member"]["id"]}.map{|mem, obj| [mem,obj.count]}.to_h
+            end
+            @counts.each do |c|
+              @member = Member.find(c[0])
+              @gender = @member.gender
+              @age = @member.age
+              if @gender == "Male" and @age >= 18 and @age <= 39
+                @count1 += 1
+              elsif @gender == "Female" and @age >= 18 and @age <= 39 
+                @count2 += 1
+              elsif @gender == "Others" and @age >= 18 and @age <= 39 
+                @count3 += 1
+              elsif @gender == "Male" and @age >= 40 and @age <= 65 
+                @count4 += 1
+              elsif @gender == "Female" and @age >= 40 and @age <= 65 
+                @count5 += 1
+              elsif @gender == "Others" and @age >= 40 and @age <= 65
+                @count6 += 1
+              elsif @gender == "Male" and @age >= 66
+                @count7 += 1
+              elsif @gender == "Female" and @age >= 66
+                @count8 += 1
+              elsif @gender == "Others" and @age >= 66
+                @count9 += 1
+              end
+            end
+              puts "#{@count1}|#{@count2}|#{@count3}|#{@count4}|#{@count5}|#{@count6}|#{@count7}|#{@count8}|#{@count9}"
+  end
 end

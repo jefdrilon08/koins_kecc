@@ -308,6 +308,31 @@ module Api
         end
       end
 
+      def save_date_paid
+        claim          = Claim.where(id: params[:id]).first
+        date_paid       = params[:date_paid]
+
+        config  = {
+          date_paid: date_paid,
+          claim: claim,
+          user: current_user
+        }
+
+        errors  = ::Claims::ValidateSaveDatePaid.new(
+                    config: config
+                  ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::Claims::SaveDatePaid.new(
+            config: config
+          ).execute!
+
+          render json: { id: claim.id }
+        end
+      end
+      
       def save_note
         claim  = Claim.where(id: params[:id]).first
         note   = params[:note]

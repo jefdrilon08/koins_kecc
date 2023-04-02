@@ -1,5 +1,5 @@
 class Claim < ApplicationRecord
-	INSURANCE_POLICY_TYPES = ["Basic Life", "Accidental Death", "TPD", "MVAH"]
+	INSURANCE_POLICY_TYPES = ["Basic Life Insurance Plan", "Accidental Death", "TPD", "MVAH"]
 	INSURED_CLASSIFICATION = ["Member", "Legal Dependent (Spouse)", "Legal Dependent (Child)", "Legal Dependent (Parent)"]
 	CATEGORY_OF_CAUSE_OF_DEATH_TPD_ACCIDENT = ["Cardiovascular", "Respiratory", "Hematological", "Gastro Intestinal", "Gynecological", "Neurological", "Suicide", "Motor Vehicular Accident", "Others"]
   YEAR_LEVEL = ["GRADE 7", "GRADE 8", "GRADE 9", "GRADE 10", "GRADE 11", "GRADE 12", "1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
@@ -15,7 +15,44 @@ class Claim < ApplicationRecord
   CREDITORS_NAME = ["KCOOP", "JVOMFI", "CAPS-R", "KEEPFAI"]
   GENDER = ["MALE","FEMALE"]
   CREDITORS_NAME_FULL = ["KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE", "CEBU ARCHDIOCESAN PROGRAM FOR SELF RELIANCE INC.-CAPS-R", "CAPS-R INC (A MICROFINANCE NGO)", "KASAGANA-KA EMPLOYEE-EMPLOYER'S PROVIDENT FUND ASSOCIATION INC."]
-
+  CAUSE_OF_DELAY = ["LATE SUBMISSION OF DEATH CERTIFICATE", 
+                    "LATE SUBMISSION OF MARRIAGE CONTRACT",
+                    "LATE SUBMISSION OF BIRTH CERTIFICATE",
+                    "LATE SUBMISSION OF AFFIDABIT OF COHABITATION",
+                    "LATE SUBMISSION OF AFFIDABIT",
+                    "LATE SUBMISSION OF CENOMAR",
+                    "LATE SUBMISSION OF WAIVER",
+                    "LATE SUBMISSION OF POLICE REPORT/BARANGAY BLOTTER",
+                    "LATE SUBMISSION OF HOSPITAL BILLING",
+                    "LATE SUBMISSION OF MEDICAL CERTIFICATE",
+                    "LATE SUBMISSION OF MEDICAL ABSTRACT",
+                    "LATE SUBMISSION OF STATEMENT OF ACCOUNT",
+                    "LATE SUBMISSION OF DISCHARGE SUMMARY",
+                    "LATE SUBMISSION OF CERTIFICATE OF CONFINEMENT",
+                    "LATE SUBMISSION OF SUMMARY OF EXPENSE",
+                    "LATE SUBMISSION OF OFFICIAL RECEIPT",
+                    "LATE SUBMISSION OF PICTURE OF TPD",
+                    "LATE SUBMISSION OF COLLECTION REPORT",
+                    "LATE SUBMISSION OF ID",
+                    "LATE SUBMISSION OF E-WALLET",
+                    "LATE SUBMISSION OF BANK ACCOUNT",
+                    "Beneficiary ay nasa probinsya",
+                    "Beneficiary ay wala sa lugar/tahanan",
+                    "Beneficiary ay wala sa hustong gulang",
+                    "Ang bangkay ay nasa probinsya"
+  ]
+  REASON_OF_DELAY = [
+                    "no registry number",
+                    "malaki ang balance sa hospital",
+                    "Muslim/Iba ang Religion",
+                    "Di agad naasikaso ng pamilya",
+                    "may discrepancy",
+                    "walang notaryo",
+                    "hindi agad nahanap",
+                    "walang pirma",
+                    "malabo",
+                    "walang valid ID"
+  ]
   belongs_to :branch
 	belongs_to :center
 	belongs_to :member, optional: true
