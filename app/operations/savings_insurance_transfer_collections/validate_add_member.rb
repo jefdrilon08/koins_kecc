@@ -90,26 +90,28 @@ module SavingsInsuranceTransferCollections
         end
       end
 
-      if @member.present?
-        @savings_account  = MemberAccount.where(member_id: @member.id, account_subtype: @savings_subtype).first
+      if !Settings.activate_microinsurance
+        if @member.present?
+          @savings_account  = MemberAccount.where(member_id: @member.id, account_subtype: @savings_subtype).first
 
-        if @savings_account.blank?
-          @errors[:messages] << {
-            key: "savings_account",
-            message: "savings account #{@savings_subtype} not found"
-          }
-        end
+          if @savings_account.blank?
+            @errors[:messages] << {
+              key: "savings_account",
+              message: "savings account #{@savings_subtype} not found"
+            }
+          end
 
-        @insurance_account  = MemberAccount.where(member_id: @member.id, account_subtype: @insurance_subtype).first
-        
-        if @insurance_account.blank?
-          @errors[:messages] << {
-            key: "insurance_account",
-            message: "insurance account #{@insurance_subtype} not found"
-          }
+          @insurance_account  = MemberAccount.where(member_id: @member.id, account_subtype: @insurance_subtype).first
+          
+          if @insurance_account.blank?
+            @errors[:messages] << {
+              key: "insurance_account",
+              message: "insurance account #{@insurance_subtype} not found"
+            }
+          end
         end
       end
-
+      
       if @savings_account.present? and @savings_account.maintaining_balance > (@savings_account.balance - @amount)
         @errors[:messages] << {
           key: "savings_account",

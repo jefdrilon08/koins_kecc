@@ -22,17 +22,31 @@
                 %label
                   Collection Date
                 = text_field_tag :collection_date, Date.today, type: 'date', id: 'input-collection-date', class: 'form-control'
-          .row
-            .col-md-6
-              .form-group
-                %label
-                  Savings Type
-                = select_tag :savings_type, options_for_select(savings_subtypes), id: "select-savings-subtype", class: "form-control"
-            .col-md-6
-              .form-group
-                %label
-                  Insurance Type
-                = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "select-insurance-subtype", class: "form-control"
+          - if !Settings.activate_microinsurance
+            .row
+              .col-md-6
+                .form-group
+                  %label
+                    Savings Type
+                  = select_tag :savings_type, options_for_select(savings_subtypes), id: "select-savings-subtype", class: "form-control"
+              .col-md-6
+                .form-group
+                  %label
+                    Insurance Type
+                  = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "select-insurance-subtype", class: "form-control"
+          - else
+            .row
+              .col-md-6
+                .form-group
+                  %label
+                    Payment Type
+                  = select_tag :payment_type, options_for_select(payment_subtypes), id: "select-payment-subtype", class: "form-control"
+              .col-md-6
+                .form-group
+                  %label
+                    Insurance Type
+                  = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "select-insurance-subtype", class: "form-control"
+
           .message
       .modal-footer
         .controls

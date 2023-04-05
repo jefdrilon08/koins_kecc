@@ -17,9 +17,11 @@ module SavingsInsuranceTransferCollections
                         ).execute!
     end
 
-    def execute!
+    def execute!  
       post_accounting_entry!
-      withdraw_funds!
+      if !Settings.activate_microinsurance
+        withdraw_funds!
+      end
       deposit_funds!
       rehash_accounts!
 
@@ -35,10 +37,15 @@ module SavingsInsuranceTransferCollections
     private
 
     def rehash_accounts!
-      @data[:records].each do |r|
-        ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:insurance_account_id])).execute!
-        ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:savings_account_id])).execute!
-        
+      if !Settings.activate_microinsurance
+        @data[:records].each do |r|
+          ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:insurance_account_id])).execute!
+          ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:savings_account_id])).execute!  
+        end
+      else
+        @data[:records].each do |r|
+          ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(r[:insurance_account_id])).execute! 
+        end
       end
     end
 

@@ -190,33 +190,64 @@ module Api
       end
 
       def save
-        branch            = Branch.where(id: params[:branch_id]).first
-        center            = Center.where(id: params[:center_id]).first
-        collection_date   = params[:collection_date]
-        savings_subtype   = params[:savings_subtype]
-        insurance_subtype = params[:insurance_subtype]
+        if !Settings.activate_microinsurance
+          branch            = Branch.where(id: params[:branch_id]).first
+          center            = Center.where(id: params[:center_id]).first
+          collection_date   = params[:collection_date]
+          savings_subtype   = params[:savings_subtype]
+          insurance_subtype = params[:insurance_subtype]
 
-        config  = {
-          branch: branch,
-          center: center,
-          collection_date: collection_date,
-          savings_subtype: savings_subtype,
-          insurance_subtype: insurance_subtype,
-          user: current_user
-        }
+          config  = {
+            branch: branch,
+            center: center,
+            collection_date: collection_date,
+            savings_subtype: savings_subtype,
+            insurance_subtype: insurance_subtype,
+            user: current_user
+          }
 
-        errors  = ::SavingsInsuranceTransferCollections::ValidateSave.new(
-                    config: config
-                  ).execute!
+          errors  = ::SavingsInsuranceTransferCollections::ValidateSave.new(
+                      config: config
+                    ).execute!
 
-        if errors[:full_messages].any?
-          render json: { errors: errors }, status: 400
+          if errors[:full_messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            savings_insurance_transfer_collection = ::SavingsInsuranceTransferCollections::Save.new(
+                                                      config: config
+                                                    ).execute!
+
+            render json: { message: "ok", id: savings_insurance_transfer_collection.id }
+          end
         else
-          savings_insurance_transfer_collection = ::SavingsInsuranceTransferCollections::Save.new(
-                                                    config: config
-                                                  ).execute!
+          branch            = Branch.where(id: params[:branch_id]).first
+          center            = Center.where(id: params[:center_id]).first
+          collection_date   = params[:collection_date]
+          payment_subtype   = params[:payment_subtype]
+          insurance_subtype = params[:insurance_subtype]
 
-          render json: { message: "ok", id: savings_insurance_transfer_collection.id }
+          config  = {
+            branch: branch,
+            center: center,
+            collection_date: collection_date,
+            payment_subtype: payment_subtype,
+            insurance_subtype: insurance_subtype,
+            user: current_user
+          }
+
+          errors  = ::SavingsInsuranceTransferCollections::ValidateSave.new(
+                      config: config
+                    ).execute!
+
+          if errors[:full_messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            savings_insurance_transfer_collection = ::SavingsInsuranceTransferCollections::Save.new(
+                                                      config: config
+                                                    ).execute!
+
+            render json: { message: "ok", id: savings_insurance_transfer_collection.id }
+          end
         end
       end
     end

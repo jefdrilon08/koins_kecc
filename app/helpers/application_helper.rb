@@ -149,6 +149,12 @@ module ApplicationHelper
     }
   end
 
+  def payment_subtypes
+    Settings.savings_insurance_transfer_accounting_codes.select{ |o| o.payment_type }.map{ |o|
+      o.payment_type
+    }
+  end
+
   def savings_subtypes
     data  = []
 
