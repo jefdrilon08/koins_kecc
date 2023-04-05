@@ -1,6 +1,7 @@
 namespace :api do
   # Standard API
   post "/public/save_members", to: "public#save_members"
+  post "/receive_api/save_members_api", to: "receive_api#save_members_api"
 
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"
