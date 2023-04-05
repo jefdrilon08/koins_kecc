@@ -5,6 +5,7 @@ module SavingsInsuranceTransferCollections
       @branch = @config[:branch]
       @data   = @config[:data]
       @user   = @config[:user]
+      @payment_subtype = @data["payment_subtype"]
 
       @book         = "JVB"
       @prepared_by  = @user.full_name
@@ -14,21 +15,50 @@ module SavingsInsuranceTransferCollections
                           branch: @branch
                         }
                       ).execute!
+      if !Settings.activate_microinsurance
+        @savings_subtype                    = @data[:savings_subtype]
+        @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                  s.savings_type == @savings_subtype
+                                                }.first.withdrawal_accounting_code_id
+                                              )
 
-      @savings_subtype                    = @data[:savings_subtype]
-      @savings_withdrawal_accounting_code = AccountingCode.find(
-                                              Settings.savings_insurance_transfer_accounting_codes.select{ |s|
-                                                s.savings_type == @savings_subtype
-                                              }.first.withdrawal_accounting_code_id
-                                            )
+        @insurance_subtype                  = @data[:insurance_subtype]
+        @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                Settings.insurance_accounting_codes.select{ |s|
+                                                  s.insurance_type == @insurance_subtype
+                                                }.first.deposit_accounting_code_id
+                                              )
+      else 
+        if @payment_subtype == "OTHER-BANK"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "OTHER-BANK"
+                                                  }.first.withdrawal_accounting_code_id
+                                                )
 
-      @insurance_subtype                  = @data[:insurance_subtype]
-      @insurance_deposit_accounting_code  = AccountingCode.find(
-                                              Settings.insurance_accounting_codes.select{ |s|
-                                                s.insurance_type == @insurance_subtype
-                                              }.first.deposit_accounting_code_id
-                                            )
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
+        else
+          @payment_subtypes                      = @data[:payment_subtype]
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "CASH"
+                                                  }.first.withdrawal_accounting_code_id
+                                                )
 
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
+        end
+      end
       @total_amount = @data[:records].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
       
       @particular   = default_particular
@@ -136,9 +166,17 @@ module SavingsInsuranceTransferCollections
          names << member.check_name
         end
 
-        "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype.upcase} #{@current_date.strftime("%B %d, %Y")}, #{names.join(', ')} = #{@total_amount}"
+        if !Settings.activate_microinsurance
+          "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype.upcase} #{@current_date.strftime("%B %d, %Y")}, #{names.join(', ')} = #{@total_amount}"
+        else
+          "TO RECORD PAYMENT OF #{@branch.name} - #{@insurance_subtype.upcase} #{@current_date.strftime("%B %d, %Y")}, #{names.join(', ')} = #{@total_amount}"
+        end
       else
-        "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype}"
+        if !Settings.activate_microinsurance
+          "TO RECORD WITHDRAWAL OF #{@branch.name} - #{@insurance_subtype}"
+        else
+          "TO RECORD PAYMENT OF #{@branch.name} - #{@insurance_subtype}"
+        end
       end
 
     end

@@ -10,8 +10,12 @@
         Center / Branch
       %th
         Status
-      %th
-        Savings Type
+      -if !Settings.activate_microinsurance
+        %th
+          Savings Type
+      -if Settings.activate_microinsurance
+        %th
+          Payment Type
       %th
         Insurance Type
       %th.text-end
@@ -41,8 +45,12 @@
           - elsif o.processing?
             .badge.badge-info
               Processing
-        %td
-          #{o.data["savings_subtype"]}
+        -if !Settings.activate_microinsurance
+          %td
+            #{o.data["savings_subtype"]}
+        -if Settings.activate_microinsurance
+          %td
+            #{o.data["payment_subtype"]}
         %td
           #{o.data["insurance_subtype"]}
         %td.text-end

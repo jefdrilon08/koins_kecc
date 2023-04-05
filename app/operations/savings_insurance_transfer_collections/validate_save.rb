@@ -40,13 +40,15 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      if @savings_subtype.blank?
-        @errors[:messages] << {
-          key: "savings_subtype",
-          message: "Savings subtype required"
-        }
+      if !Settings.activate_microinsurance
+        if @savings_subtype.blank?
+          @errors[:messages] << {
+            key: "savings_subtype",
+            message: "Savings subtype required"
+          }
+        end
       end
-
+      
       if @insurance_subtype.blank?
         @errors[:messages] << {
           key: "insurance subtype",

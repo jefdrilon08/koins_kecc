@@ -8,6 +8,7 @@ var $modalNewTransaction;
 var $selectBranch;
 var $selectCenter;
 var $selectSavingsSubtype;
+var $selectPaymentSubtype;
 var $selectInsuranceSubtype;
 var $inputCollectionDate;
 var $message;
@@ -25,6 +26,7 @@ var _cacheDom = function() {
   $selectBranch             = $("#select-branch");
   $selectCenter             = $("#select-center");
   $selectSavingsSubtype     = $("#select-savings-subtype");
+  $selectPaymentSubtype     = $("#select-payment-subtype");
   $selectInsuranceSubtype   = $("#select-insurance-subtype");
   $inputCollectionDate      = $("#input-collection-date");
   $message                  = $(".message");
@@ -41,6 +43,7 @@ var _bindEvents = function() {
     var branchId          = $selectBranch.val();
     var centerId          = $selectCenter.val();
     var savingsSubtype    = $selectSavingsSubtype.val();
+    var paymentSubtype    = $selectPaymentSubtype.val();
     var insuranceSubtype  = $selectInsuranceSubtype.val();
     var collectionDate    = $inputCollectionDate.val();
 
@@ -49,12 +52,14 @@ var _bindEvents = function() {
     $selectCenter.prop("disabled", true);
     $inputCollectionDate.prop("disabled", true);
     $selectSavingsSubtype.prop("disabled", true);
+    $selectPaymentSubtype.prop("disabled", true);
     $selectInsuranceSubtype.prop("disabled", true);
 
     var data  = {
       branch_id: branchId,
       center_id: centerId,
       savings_subtype: savingsSubtype,
+      payment_subtype: paymentSubtype,
       insurance_subtype: insuranceSubtype,
       collection_date: collectionDate,
       authenticity_token: _authenticityToken
@@ -89,6 +94,7 @@ var _bindEvents = function() {
           $selectCenter.prop("disabled", false);
           $inputCollectionDate.prop("disabled", false);
           $selectSavingsSubtype.prop("disabled", false);
+          $selectPaymentSubtype.prop("disabled", false);
           $selectInsuranceSubtype.prop("disabled", false);
         }
       }

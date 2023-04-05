@@ -271,6 +271,12 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Equity Value"
+  - 
+    account_type: "INSURANCE"
+    account_subtype: "K_BENTE"
+  - 
+    account_type: "INSURANCE"
+    account_subtype: "K-KALINGA"
  
 default_equity_withdrawal_accounts:
   -
@@ -599,6 +605,16 @@ cash_management_templates:
         deposit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
         withdrawal_accounting_code_id: ""
 
+savings_insurance_transfer_accounting_codes:
+  -
+    payment_type: "CASH"
+    deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
+    withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
+  -
+    payment_type: "OTHER-BANK"
+    deposit_accounting_code_id: "3e608010-0274-4d37-a408-fc0121c21a22"
+    withdrawal_accounting_code_id: "3f2d41e6-415a-4619-89d7-1ea2cbcc535e"
+
 insurance_accounting_codes:
   -
     insurance_type: "Life Insurance Fund"
@@ -612,6 +628,18 @@ insurance_accounting_codes:
     insurance_type: "K-Kalinga"
     deposit_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
     withdrawal_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
+  -
+    insurance_type: "K-BENTE"
+    deposit_accounting_code_id: "65991126-c9ec-4204-b455-e1aaf66cc962"
+    withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
+  -
+    insurance_type: "K-KALINGA"
+    deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
+    withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
+  -
+    insurance_type: "Hospital Income Insurance Plan"
+    deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
+    withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
 
 savings_accounting_codes:
   -
@@ -762,9 +790,9 @@ clip: "Credit Life Insurance Plan"
 life: "Life Insurance Fund"
 pl: "Policy Loan"
 ev: "Equity Value"
-kalinga: "K-Kalinga"
+kalinga: "K-KALINGA"
 rf: "Retirement Fund"
-kbente: ""
+bente: "K-BENTE"
 
 ###############################
 # AUTHORIZATION               #
