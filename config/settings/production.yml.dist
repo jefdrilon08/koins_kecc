@@ -526,7 +526,10 @@ default_id_fee_accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
 default_member_types: [
   "Regular",
   "GK",
-  "Kaagapay"
+  "Kaagapay",
+  "MCLF",
+  "MCLF-KAAGAPAY",
+  "MCLF-GK"
 ]
 
 organizations: [

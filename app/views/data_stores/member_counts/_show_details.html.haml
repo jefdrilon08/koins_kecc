@@ -133,6 +133,12 @@
     %th.text-center
       Kaagapay
     %th.text-center
+      MCLF
+    %th.text-center
+      MCLF-GK
+    %th.text-center
+      MCLF-KAAGAPAY
+    %th.text-center
       Total
   - if microloans?
     %tr
@@ -141,11 +147,20 @@
         -$regular   = 0
         -$kaagapay  = 0
         -$gk        = 0
+        -$mcpl      = 0
+        -$mclf_gk      = 0
+        -$mclf_kaagapay      = 0
         - @data[:counts][:pure_savers][:members].each do |member_type| 
           - if member_type[:member_type] == "Regular"
             - $regular += 1 
           - elsif member_type[:member_type] == "GK"
             - $gk  +=1
+          - elsif member_type[:member_type] == "MCLF"
+            - $mcpl  +=1
+          - elsif member_type[:member_type] == "MCLF-GK"
+            - $mclf_gk   +=1
+          - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
+            - $mclf_kaagapay  +=1
           - else 
             - $kaagapay +=1
         %td.text-center
@@ -154,6 +169,13 @@
           #{$gk}
         %td.text-center
           #{$kaagapay}
+        %td.text-center
+          #{$mcpl}
+        %td.text-center
+          #{$mclf_gk}
+        %td.text-center
+          #{$mclf_kaagapay}
+
         %td.text-center
           #{@data[:counts][:pure_savers][:total]}
     %tr
@@ -161,12 +183,21 @@
         Active Borrowers
         -$regular   = 0
         -$kaagapay  = 0
+        -$mcpl      = 0
+        -$mclf_gk      = 0
+        -$mclf_kaagapay      = 0
         -$gk        = 0
         - @data[:counts][:loaners][:members].each do |member_type|
           - if member_type[:member_type] == "Regular"
             - $regular += 1 
           - elsif member_type[:member_type] == "GK"
             - $gk  +=1
+          - elsif member_type[:member_type] == "MCLF"
+            - $mcpl  +=1
+          - elsif member_type[:member_type] == "MCLF-GK"
+            - $mclf_gk   +=1
+          - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
+            - $mclf_kaagapay  +=1
           - else 
             - $kaagapay +=1
         %td.text-center
@@ -175,6 +206,12 @@
           #{$gk}
         %td.text-center
           #{$kaagapay}
+        %td.text-center
+          #{$mcpl}
+        %td.text-center
+          #{$mclf_gk}
+        %td.text-center
+          #{$mclf_kaagapay}
         %td.text-center
           #{@data[:counts][:loaners][:total]}
   %tr
@@ -189,12 +226,21 @@
         #{@data[:counts][:active_members][:pending]}   
     -$regular   = 0
     -$kaagapay  = 0
+    -$mcpl      = 0
+    -$mclf_gk      = 0
+    -$mclf_kaagapay      = 0
     -$gk        = 0
     - @data[:counts][:active_members][:members].each do |member_type|
       - if member_type[:member_type] == "Regular"
         - $regular += 1 
       - elsif member_type[:member_type] == "GK"
         - $gk  +=1
+      - elsif member_type[:member_type] == "MCLF"
+        - $mcpl  +=1
+      - elsif member_type[:member_type] == "MCLF-GK"
+        - $mclf_gk   +=1
+      - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
+        - $mclf_kaagapay  +=1
       - else 
         - $kaagapay +=1 
     %td.text-center
@@ -203,6 +249,12 @@
       #{$gk}
     %td.text-center
       #{$kaagapay}
+    %td.text-center
+      #{$mcpl}
+    %td.text-center
+      #{$mclf_gk}
+    %td.text-center
+      #{$mclf_kaagapay}
     %td.text-center
       #{@data[:counts][:active_members][:total]}
   
@@ -220,11 +272,19 @@
       -$regular   = 0
       -$kaagapay  = 0
       -$gk        = 0
+      -$mclf_gk      = 0
+      -$mclf_kaagapay      = 0
       - @data[:counts][:inactive_members][:members].each do |member_type|
         - if member_type[:member_type] == "Regular"
           - $regular += 1 
         - elsif member_type[:member_type] == "GK"
           - $gk  +=1
+        - elsif member_type[:member_type] == "MCLF"
+          - $mcpl  +=1
+        - elsif member_type[:member_type] == "MCLF-GK"
+          - $mclf_gk   +=1
+        - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
+          - $mclf_kaagapay  +=1
         - else 
           - $kaagapay +=1 
       %td.text-center
@@ -233,6 +293,13 @@
         #{$gk}
       %td.text-center
         #{$kaagapay}
+      %td.text-center
+        #{$mcpl}
+      %td.text-center
+        #{$mclf_gk}
+      %td.text-center
+        #{$mclf_kaagapay}
+
       %td.text-center
         #{@data[:counts][:inactive_members][:total]}
 
