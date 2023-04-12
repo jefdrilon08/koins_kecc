@@ -224,6 +224,8 @@ module Api
           center            = Center.where(id: params[:center_id]).first
           collection_date   = params[:collection_date]
           payment_subtype   = params[:payment_subtype]
+          ar_number         = params[:ar_number]
+          or_number         = params[:or_number]
           insurance_subtype = params[:insurance_subtype]
 
           config  = {
@@ -231,6 +233,8 @@ module Api
             center: center,
             collection_date: collection_date,
             payment_subtype: payment_subtype,
+            ar_number: ar_number,
+            or_number: or_number,
             insurance_subtype: insurance_subtype,
             user: current_user
           }

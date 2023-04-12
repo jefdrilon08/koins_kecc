@@ -17,7 +17,11 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
 
   def to_s
-    "#{self.branch.name} #{self.collection_date.strftime("%B %d, %Y")}: #{self.data['savings_subtype']} to #{self.data['insurance_subtype']}"
+    if !Settings.activate_microinsurance
+      "#{self.branch.name} #{self.collection_date.strftime("%B %d, %Y")}: #{self.data['savings_subtype']} to #{self.data['insurance_subtype']}"
+    else
+      "#{self.branch.name} #{self.collection_date.strftime("%B %d, %Y")}: #{self.data['payment_subtype']} to #{self.data['insurance_subtype']}"
+    end
   end
 
   def load_defaults
@@ -96,6 +100,6 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
   
   def accounting_entry
     self.data.with_indifferent_access[:accounting_entry]
-  end
-
+  end  
+  
 end
