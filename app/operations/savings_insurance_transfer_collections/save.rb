@@ -34,6 +34,8 @@ module SavingsInsuranceTransferCollections
         @center             = @config[:center]
         @collection_date    = @config[:collection_date]
         @payment_subtype    = @config[:payment_subtype]
+        @or_number          = @config[:or_number]
+        @ar_number          = @config[:ar_number]
         @insurance_subtype  = @config[:insurance_subtype]
         @user               = @config[:user]
 
@@ -43,6 +45,8 @@ module SavingsInsuranceTransferCollections
                                                     collection_date: @collection_date,
                                                     data: {
                                                       payment_subtype:  @payment_subtype,
+                                                      ar_number: @ar_number,
+                                                      or_number: @or_number,
                                                       insurance_subtype: @insurance_subtype,
                                                       records: []
                                                     }

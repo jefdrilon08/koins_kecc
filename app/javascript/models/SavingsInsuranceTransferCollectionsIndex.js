@@ -11,6 +11,8 @@ var $selectSavingsSubtype;
 var $selectPaymentSubtype;
 var $selectInsuranceSubtype;
 var $inputCollectionDate;
+var $inputOrNumber;          
+var $inputArNumber;          
 var $message;
 var templateErrorList;
 
@@ -29,6 +31,8 @@ var _cacheDom = function() {
   $selectPaymentSubtype     = $("#select-payment-subtype");
   $selectInsuranceSubtype   = $("#select-insurance-subtype");
   $inputCollectionDate      = $("#input-collection-date");
+  $inputOrNumber            = $("#input-or-number");
+  $inputArNumber            = $("#input-ar-number");
   $message                  = $(".message");
   templateErrorList         = $("#template-error-list").html();
 
@@ -46,14 +50,19 @@ var _bindEvents = function() {
     var paymentSubtype    = $selectPaymentSubtype.val();
     var insuranceSubtype  = $selectInsuranceSubtype.val();
     var collectionDate    = $inputCollectionDate.val();
+    var arNumber          = $inputArNumber.val();
+    var orNumber          = $inputOrNumber.val();
 
     $btnConfirmNewTransaction.prop("disabled", true);
     $selectBranch.prop("disabled", true);
     $selectCenter.prop("disabled", true);
     $inputCollectionDate.prop("disabled", true);
+    $inputArNumber.prop("disabled", true);
+    $inputOrNumber.prop("disabled", true);
     $selectSavingsSubtype.prop("disabled", true);
     $selectPaymentSubtype.prop("disabled", true);
     $selectInsuranceSubtype.prop("disabled", true);
+
 
     var data  = {
       branch_id: branchId,
@@ -62,6 +71,8 @@ var _bindEvents = function() {
       payment_subtype: paymentSubtype,
       insurance_subtype: insuranceSubtype,
       collection_date: collectionDate,
+      or_number: orNumber,
+      ar_number: arNumber,
       authenticity_token: _authenticityToken
     };
 
@@ -93,6 +104,8 @@ var _bindEvents = function() {
           $selectBranch.prop("disabled", false);
           $selectCenter.prop("disabled", false);
           $inputCollectionDate.prop("disabled", false);
+          $inputArNumber.prop("disabled", false);
+          $inputOrNumber.prop("disabled", false);
           $selectSavingsSubtype.prop("disabled", false);
           $selectPaymentSubtype.prop("disabled", false);
           $selectInsuranceSubtype.prop("disabled", false);
