@@ -199,7 +199,8 @@ module Billings
           key: "member_account",
           message: "member_account for withdraw payment not found"
         }
-      elsif member_account.balance.to_f - amount < member_account.maintaining_balance
+      #elsif member_account.balance.to_f - amount < member_account.maintaining_balance
+      elsif member_account.balance.to_f - amount < 100.00
         @errors[:messages] << {
           key: "member_account",
           message: "not enough funds to withdraw #{amount}. Balance: #{member_account.balance}. Maintaning balance: #{member_account.maintaining_balance}"
