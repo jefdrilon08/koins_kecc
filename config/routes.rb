@@ -574,7 +574,8 @@ Rails.application.routes.draw do
   get "/reports/insurance_interest", to: "reports#insurance_interest", as: :insurance_interest
   get '/reports/download_excel_insurance_interest', to: 'reports#download_excel_insurance_interest', as: :download_excel_insurance_interest
   get "/reports/address_update", to: "reports#address_update", as: :address_update
-  
+  get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports", as: :savings_insurance_transfer_reports
+  get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
 
   #transfer_savings
   get "/transfer_savings", to: "transfer_savings#index"

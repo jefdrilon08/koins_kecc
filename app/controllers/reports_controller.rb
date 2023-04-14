@@ -431,6 +431,44 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def savings_insurance_transfer_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Savings Insurance Transfer Reports" }
+    ]
+  end
+
+  def savings_insurance_transfer_reports_excel
+    if !Settings.activate_microinsurance  
+      @savings_subtype = params[:savings_subtype]
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @insurance_subtype = params[:insurance_subtype]
+      @branch = params[:branch_id]
+      @branch_name = Branch.where(id: @branch).first.name
+
+      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, savings_subtype: @savings_subtype).execute!
+      filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
+
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    else
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @insurance_subtype = params[:insurance_subtype]
+      @payment_subtype = params[:payment_subtype]
+      @branch = params[:branch_id]
+      @branch_name = Branch.where(id: @branch).first.name
+  
+      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, payment_subtype: @payment_subtype).execute!
+      filename  = "#{@branch_name} Savings Insurance Transfer Report.xlsx"
+
+      excel.serialize "#{Rails.root}/tmp/#{filename}"
+      send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    end
+  end
+
+
   def claim_generate_report
     claim_type = params[:claim_type]
     start_date = params[:start_date]
@@ -480,6 +518,7 @@ class ReportsController < ApplicationController
     end
   end
 
+  
   def insurance_interest
     @subheader_items = [
       { text: "Other Reports" },
