@@ -25,6 +25,7 @@ module Kmba
 
           if a[:first_name].blank?
             @errors[:messages] << {
+              identification_number: a[:identification_number],
               key: "first_name", 
               message: "first_name not found"
             }
@@ -107,6 +108,14 @@ module Kmba
               message: "Center not found"
             }
           end
+
+          # uncomment this group of lines, if the records have external_ref came from kezar
+          # if a[:identification_number].blank?
+          #   @errors[:messages] << {
+          #     key: "identification_number",
+          #     message: "Identification Number not Found"
+          #   }
+          # end 
         }
       end
 
