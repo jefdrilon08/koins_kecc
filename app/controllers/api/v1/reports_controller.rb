@@ -108,6 +108,27 @@ module Api
         render json: data
       end
 
+      def savings_insurance_transfer_reports
+        branch        = params[:branch]
+        start_date    = params[:start_date]
+        end_date      = params[:end_date]
+
+        data = Reports::GenerateSavingsInsuranceTransferReports.new(
+                  branch_id: branch_id,
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+        data[:download_url] = savings_insurance_transfer_reports_path(
+                                branch_id: branch_id,
+                                start_date: start_date,
+                                download: true,
+                                end_date: end_date
+                              )
+
+        render json: data
+      end
+
 
     end
   end

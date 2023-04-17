@@ -1,0 +1,34 @@
+= form_tag savings_insurance_transfer_reports_path, html: { novalidate: true }, method: "GET" do
+  .row
+    .col
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
+    .col
+      .form-group
+        %label Start Date
+        = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "filter-start-date"
+    .col
+      .form-group
+        %label End Date
+        = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "filter-end-date"
+    - if !Settings.activate_microinsurance
+      .col
+        .form-group
+          %label Savings Type
+          = select_tag :savings_type, options_for_select(savings_subtypes), id: "savings-subtype", class: "form-control"
+    - else
+      .col
+        .form-group
+          %label Payment Type
+          = select_tag :payment_type, options_for_select(payment_subtypes), id: "payment-subtype", class: "form-control"
+    .col
+      .form-group
+        %label Insurance Type
+        = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "insurance-subtype", class: "form-control"
+    .col
+      .form-group
+        %label Actions
+        = link_to "#", id: 'btn-excel', class: 'btn btn-success btn-block' do
+          .fa.fa-download
+          Excel 

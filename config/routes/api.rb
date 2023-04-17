@@ -679,7 +679,7 @@ namespace :api do
     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
-
+    get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
     #claims
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"

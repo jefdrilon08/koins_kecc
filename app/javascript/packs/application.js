@@ -166,6 +166,7 @@ import ReportsMemberCounts from "../models/ReportsMemberCounts.js";
 import ReportsCIC from "../models/ReportsCIC.js";
 import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
 import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfCertificatesAndPolicies.js";
+import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
 import ReportsPersonalDocuments from "../models/ReportsPersonalDocuments.js";
 import ReportsClaims from "../models/ReportsClaims.js";
 import UserDemeritsShow from "../models/UserDemeritsShow.js";
@@ -376,6 +377,7 @@ const hooks = {
   "reports/cic":                                      [ReportsCIC],
   "reports/monthly_collection":                       [ReportsMonthlyCollection],
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
+  "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
   "reports/personal_documents":                       [ReportsPersonalDocuments],
   "reports/claims":                                   [ReportsClaims],
   "monitoring/accounting_entry_subsidiary_balancing": [AccountingEntrySubsidiaryBalancingComponent],
