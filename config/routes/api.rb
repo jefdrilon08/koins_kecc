@@ -3,7 +3,11 @@ namespace :api do
   post "/psr_schedules/generate", to: "psr_schedules#generate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
+
+  # API for KEZAR
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
+  post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
+  post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
 
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"

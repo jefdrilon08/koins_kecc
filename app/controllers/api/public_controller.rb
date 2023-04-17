@@ -1,8 +1,10 @@
 module Api
   class PublicController < ActionController::API
     def save_members
-      members = params["members"]
+      members = params.permit(:center_id, :branch_id)
       puts params
+
+      raise members.permit(:center_id, :branch_id)
 
       cmd = ::Kmba::ValidateSaveMembers.new(
         members: members 

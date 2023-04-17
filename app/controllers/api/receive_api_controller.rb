@@ -1,13 +1,13 @@
 module Api
   class ReceiveApiController < ActionController::API
+    # API FOR MEMBERS
     def save_members_api
-        
       @members = []
-      @config = {}
+      config = {}
 
       # raise params[:_json].inspect      
       members = params[:_json]
-      puts "Number of Members to be Upload #{members.count}"
+      # puts "Number of Members to be Upload #{members.count}"
       # raise member_data.inspect
         
       members.each do |m|
@@ -49,12 +49,13 @@ module Api
         @member_data[:referrer_id]                  = m["referrer_id"]
         @member_data[:coordinator_id]               = m["coordinator_id"]
         @member_data[:email]                        = m["email"]
+        @member_data[:external_ref]                 = m["external_ref"]
 
         # raise @member_data.inspect
         @members << @member_data 
 
         # raise @member_data.inspect 
-        @config = @members.map{ |o|
+        config = @members.map{ |o|
           {
             center_id: o[:center_id],
             branch_id: o[:branch_id],
@@ -92,29 +93,253 @@ module Api
             membership_type_id: o[:membership_type_id],
             referrer_id: o[:referrer_id],
             coordinator_id: o[:coordinator_id],
-            email: o[:email]
+            email: o[:email],
+            external_ref: o[:external_ref]
           }
         }
+      end
 
-        errors = ::Kmba::ValidateSaveMembers.new(
-          config: @config
-        ).execute!
-        
-        if errors[:full_messages].any?
-          render json: errors, status: 400
-        else
-          @config.map{ |a|
-            if Member.where(:identification_number => a[:identification_number]).count >= 1
-              cmd = ::Kmba::UpdateMembers.new(
-                config: @config
-              ).execute! 
-            else 
-              cmd = ::Kmba::SaveMembers.new(
-                config: @config
-              ).execute!
-            end  
+      errors = ::Kmba::ValidateSaveMembers.new(
+        config: config
+      ).execute!
+
+      if errors[:full_messages].any?
+      render json: errors, status: 400
+      else
+        config.each do |a|
+        @member = Member.where(identification_number: a[:identification_number])
+          # raise @member.inspect
+          member_data = {
+            center_id: a[:center_id],
+            branch_id: a[:branch_id],
+            first_name: a[:first_name],
+            middle_name: a[:middle_name],
+            last_name: a[:last_name],
+            gender: a[:gender],
+            date_of_birth: a[:date_of_birth],
+            civil_status: a[:civil_status],
+            home_number: a[:home_number],
+            mobile_number: a[:mobile_number],
+            processed_by: a[:processed_by],
+            approved_by: a[:approved_by],
+            identification_number: a[:identification_number],
+            place_of_birth: a[:place_of_birth],
+            status: a[:status],
+            member_type: a[:member_type],
+            religion: a[:religion],
+            insurance_status: a[:insurance_status],
+            data: a[:data],
+            date_resigned: a[:date_resigned],
+            meta: a[:meta],
+            created_at: a[:created_at],
+            updated_at: a[:update_at],
+            access_token: a[:access_token],
+            signature_data: a[:signature_data],
+            modifiable: a[:modifiable],
+            previous_date_resigned: a[:previous_date_resigned],
+            insurance_date_resigned: a[:insurance_date_resigned],
+            member_id: a[:member_id],
+            encrypted_password: a[:encrypted_password],
+            username: a[:username],
+            online_application_id: a[:online_application_id],
+            membership_arrangement_id: a[:membership_arrangement_id],
+            membership_type_id: a[:membership_type_id],
+            referrer_id: a[:referrer_id],
+            coordinator_id: a[:coordinator_id],
+            email: a[:email],
+            external_ref: a[:external_ref]
           }
-        end  
+          
+          if @member.count > 1
+            Rails.logger.info(puts("#{a[:identification_number]} Duplicate"))
+          elsif @member.count == 1 
+            cmd = ::Kmba::UpdateMembers.new(
+              member_data: member_data
+            ).execute!
+          else
+            cmd = ::Kmba::SaveMembers.new(
+              member_data: member_data
+            ).execute!   
+          end
+
+          # count member save and update
+          # if @member.present?
+          #   Rails.logger.info(puts("#{@member.count}"))
+          # end
+        end 
+      end    
+    end
+
+
+    # API FOR PAYMENTS
+    def save_payments_api
+      @payments = []
+      config = {}
+
+      # raise params[:_json].inspect
+      payments = params[:_json]
+
+      payments.each do |m|
+
+        @payment_data = {}
+
+        @payment_data[:member_id]                 =m["member_id"]
+        @payment_data[:account_subtype]           =m["account_subtype"]
+        @payment_data[:subsidiary_id]             =m["subsidiary_id"]
+        @payment_data[:subsidiary_type]           =m["subsidiary_type"]
+        @payment_data[:amount]                    =m["amount"]
+        @payment_data[:transaction_type]          =m["transaction_type"]
+        @payment_data[:transacted_at]             =m["transacted_at"]
+        @payment_data[:status]                    =m["status"]
+        @payment_data[:data]                      =m["data"]
+        @payment_data[:created_at]                =m["created_at"]
+        @payment_data[:updated_at]                =m["updated_at"]
+
+        # raise @payment_data.inspect
+        @payments << @payment_data 
+        # raise @payments.inspect
+
+        config = @payments.map{ |o|
+          {
+            subsidiary_id: o[:subsidiary_id],
+            subsidiary_type: o[:subsidiary_type],
+            amount: o[:amount],
+            transaction_type: o[:transaction_type],
+            transacted_at: o[:transacted_at],
+            status: o[:status],
+            data: o[:data],
+            created_at: o[:created_at],
+            updated_at: o[:updated_at]  
+          }
+        }
+        # raise config.inspect
+      end
+
+      errors = ::Kmba::ValidateSavePayment.new(
+        config: config
+      ).execute!
+
+
+      if errors[:full_messages].any?
+        render json: errors, status: 400
+      else
+        config.each do |a|
+          @payment = AccountTransaction.where(subsidiary_id: a[:subsidiary_id])
+          # raise @payment.inspect
+          payment_data = {
+            subsidiary_id: a[:subsidiary_id],
+            subsidiary_type: a[:subsidiary_type],
+            amount: a[:amount],
+            transaction_type: a[:transaction_type],
+            transacted_at: a[:transacted_at],
+            status: a[:status],
+            data: a[:data],
+            created_at: a[:created_at],
+            updated_at: a[:updated_at]  
+          }
+
+          #can payment have to update? or only save? 
+          if @payment.count > 0
+            cmd = Kmba::SavePayment.new(
+              payment_data: payment_data
+            ).execute!
+          # else
+          #   cmd = Kmba::UpdatePayments.new(
+          #     payment_data: payment_data
+          #   ).execute!
+          end
+        end
+      end  
+    end
+
+    # API FOR CLAIMS
+    def save_claims_api
+      @claims = []
+      config = {}
+
+      claims = params[:_json]
+
+      # raise claims.inspect
+      claims.each do |c|
+        @claims_data = {}
+        @claims_data[:date_prepared]                      = c[:date_prepared]
+        @claims_data[:prepared_by]                        = c[:prepared_by]
+        @claims_data[:created_at]                         = c[:created_at]
+        @claims_data[:updated_at]                         = c[:updated_at]
+        @claims_data[:member_id]                          = c[:member_id]
+        @claims_data[:center_id]                          = c[:center_id]
+        @claims_data[:branch_id]                          = c[:branch_id]
+        @claims_data[:claim_type]                         = c[:claim_type]
+        @claims_data[:data]                               = c[:data]
+        @claims_data[:status]                             = c[:status]
+        @claims_data[:approved_by]                        = c[:approved_by]
+        @claims_data[:checked_by]                         = c[:checked_by]
+        @claims_data[:date_checked]                       = c[:date_checked]
+        @claims_data[:date_approved]                      = c[:date_approved]
+        @claims_data[:posted_by]                          = c[:posted_by]
+        @claims_data[:date_posted]                        = c[:date_posted]
+      end
+
+      # raise @claims_data.inspect
+      @claims << @claims_data
+      # raise @claims.inspect
+
+      config  = @claims.map { |o|
+        {
+          date_prepared: o[:date_prepared],
+          prepared_by: o[:prepared_by],
+          created_at: o[:created_at],
+          updated_at: o[:updated_at],
+          member_id: o[:member_id],
+          center_id: o[:center_id],
+          branch_id: o[:branch_id],
+          claim_type: o[:claim_type],
+          data: o[:data],
+          status: o[:status],
+          approved_by: o[:approved_by],
+          checked_by: o[:checked_by],
+          date_checked: o[:date_checked],
+          date_approved: o[:date_approved],
+          posted_by: o[:posted_by],
+          date_posted: o[:date_posted]
+        }
+      }
+
+      # raise config.inspect
+      errors = ::Kmba::ValidateSaveClaims.new(
+        config: config
+      ).execute!
+
+      if errors[:full_messages].any?
+      render json: errors, status: 400
+      else
+        config.each do |a|
+          @claims = Claim.where(member_id: a[:member_id])
+          claims_data = {
+            date_prepared: a[:date_prepared],
+            prepared_by: a[:prepared_by],
+            created_at: a[:created_at],
+            updated_at: a[:updated_at],
+            member_id: a[:member_id],
+            center_id: a[:center_id],
+            branch_id: a[:branch_id],
+            claim_type: a[:claim_type],
+            data: a[:data],
+            status: a[:status],
+            approved_by: a[:approved_by],
+            checked_by: a[:checked_by],
+            date_checked: a[:date_checked],
+            date_approved: a[:date_approved],
+            posted_by: a[:posted_by],
+            date_posted: a[:date_posted]
+          }
+
+          if @claims.count == 1
+            cmd = ::Kmba::UpdateClaims.new(
+              claims_data: claims_data
+            ).execute!
+          end
+        end
       end
     end
   end

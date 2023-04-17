@@ -183,7 +183,7 @@ namespace :kezar do
           ids: o.ids,
           appStatus: 'approved',
           blipDate: o.blipdate.to_date,
-          externalRef: o.externalref,
+          externalRef: o.id,
           appChildrenAdultUnder: [
             {
                 "dateofBirth" => "",
@@ -356,7 +356,7 @@ namespace :kezar do
           memberCenter: o.center_name,
           memberDateOfMembership: o.dateofmembership,
           memberFullName: o.memberfullname,
-          externalRef: o.externalref,
+          externalRef: o.id,
           proofAffidavitOfLoss: o.proofaffidavitofloss,
           proofBirth: o.proofbirth,
           proofClaimantId: o.proofclaimantid,
