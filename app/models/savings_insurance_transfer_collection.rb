@@ -8,6 +8,7 @@ class SavingsInsuranceTransferCollection < ApplicationRecord
 
   belongs_to :center
   belongs_to :branch
+  belongs_to :member
 
   validates :collection_date, presence: true
 

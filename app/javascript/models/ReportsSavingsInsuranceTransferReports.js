@@ -16,6 +16,7 @@ var _cacheDom = function() {
   $paymentSubtype    = $("#payment-subtype");
   $filterStartDate   = $("#filter-start-date");
   $filterEndDate     = $("#filter-end-date");
+  $status            = $("#status");
 }
 
 var encodeQueryData = function(data) {
@@ -33,9 +34,10 @@ var _bindEvents = function() {
       branch_id: $branchSelect.val(),
       start_date: $filterStartDate.val(),
       end_date: $filterEndDate.val(),
-      // savings_subtype: $savingsSubtype.val(),
+      savings_subtype: $savingsSubtype.val(),
       insurance_subtype: $insuranceSubtype.val(),
-      payment_subtype: $paymentSubtype.val()
+      payment_subtype: $paymentSubtype.val(),
+      status: $status.val()
     };
 
     window.location = "/reports/savings_insurance_transfer_reports_excel?" + encodeQueryData(data);
