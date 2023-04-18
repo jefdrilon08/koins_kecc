@@ -1,20 +1,26 @@
 module Reports
   class GenerateSavingsInsuranceTransferReports 
      if Settings.activate_microinsurance 
-      def initialize(branch:, start_date:, end_date:, insurance_subtype:, payment_subtype:)
+      def initialize(branch:, start_date:, end_date:, insurance_subtype:, payment_subtype:, status:)
         @start_date = start_date.try(:to_date) 
         @end_date = end_date.try(:to_date) 
         @branch_id = branch
         @insurance_subtype = insurance_subtype
-        @payment_subtype = payment_subtype
+        @payment_subtype = payment_subtype 
+        @status = status
 
-        if @insurance_subtype == "K-BENTE"
-          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id).order("collection_date DESC")
-        elsif @insurance_subtype == "K-KALINGA"
-          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id).order("collection_date DESC")
-        elsif @insurance_subtype == "Hospital Income Insurance Plan"
-          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id).order("collection_date DESC")
-          # @identification_number = @hiip.joins("INNER JOIN members ON @hiip.data.records.member.id = member.identification_number")
+        if @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
+          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC") 
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? 
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC") 
+        elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
+          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         else
           puts "not valid"
         end
@@ -22,19 +28,27 @@ module Reports
       end
       
     else
-      def initialize(branch:, start_date:, end_date:, insurance_subtype:, savings_subtype:)
+      def initialize(branch:, start_date:, end_date:, insurance_subtype:, savings_subtype:, status:)
         @start_date = start_date.try(:to_date) 
         @end_date = end_date.try(:to_date) 
         @branch_id = branch
         @insurance_subtype = insurance_subtype
         @savings_subtype = savings_subtype
+        @status = status
         
-        if @insurance_subtype == "K-BENTE"
-          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id).order("collection_date DESC")
-        elsif @insurance_subtype == "K-KALINGA"
-          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id).order("collection_date DESC")
-        elsif @insurance_subtype == "Hospital Income Insurance Plan"
-          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id).order("collection_date DESC")
+        if @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
+          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? 
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
+          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
+        
         else
           puts "not valid"
         end
@@ -147,7 +161,7 @@ module Reports
                   "",
                   "",
                   "",
-                  "",
+                  kkalinga.center.name,
                   o["kkalinga_data"]["kkalinga_beneficiary_age"].to_i,
                   o["kkalinga_data"]["kkalinga_name_of_insured"],
                   o["kkalinga_data"]["kkalinga_date_of_birth"].try(:to_date).try(:strftime, "%b %d, %Y"),
@@ -209,8 +223,8 @@ module Reports
               sheet.add_row [
                 hiip[:data]["accounting_entry"]["branch"],
                 o["member"]["first_name"] + " " + o["member"]["middle_name"] + " , " + o["member"]["last_name"],
-                o["member"]["id"],
-                o["member"]["id"],
+                Member.find(o["member"]["id"]).identification_number,
+                Member.find(o["member"]["id"]).identification_number,
                 "6,000.00",
                 o["amount"],
                 "N/A",

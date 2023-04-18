@@ -16,16 +16,21 @@
       .col
         .form-group
           %label Savings Type
-          = select_tag :savings_type, options_for_select(savings_subtypes), id: "savings-subtype", class: "form-control"
+          = select_tag :savings_type, options_for_select(savings_subtypes), id: "savings-subtype", prompt: "-- SELECT --", class: "form-control"
     - else
       .col
         .form-group
           %label Payment Type
-          = select_tag :payment_type, options_for_select(payment_subtypes), id: "payment-subtype", class: "form-control"
+          = select_tag :payment_type, options_for_select(payment_subtypes), id: "payment-subtype", prompt: "-- SELECT --", class: "form-control"
     .col
       .form-group
         %label Insurance Type
-        = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "insurance-subtype", class: "form-control"
+        = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "insurance-subtype", prompt: "-- SELECT --", class: "form-control"
+    .col
+      .form-group
+        %label Status
+        = select_tag :status, options_for_select(SavingsInsuranceTransferCollection::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
+    
     .col
       .form-group
         %label Actions

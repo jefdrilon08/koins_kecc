@@ -445,9 +445,10 @@ class ReportsController < ApplicationController
       @end_date = params[:end_date]
       @insurance_subtype = params[:insurance_subtype]
       @branch = params[:branch_id]
+      @status = params[:status]
       @branch_name = Branch.where(id: @branch).first.name
 
-      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, savings_subtype: @savings_subtype).execute!
+      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, savings_subtype: @savings_subtype, status: @status).execute!
       filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
 
       excel.serialize "#{Rails.root}/tmp/#{filename}"
@@ -458,9 +459,10 @@ class ReportsController < ApplicationController
       @insurance_subtype = params[:insurance_subtype]
       @payment_subtype = params[:payment_subtype]
       @branch = params[:branch_id]
+      @status = params[:status]
       @branch_name = Branch.where(id: @branch).first.name
   
-      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, payment_subtype: @payment_subtype).execute!
+      excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, payment_subtype: @payment_subtype, status: @status).execute!
       filename  = "#{@branch_name} Savings Insurance Transfer Report.xlsx"
 
       excel.serialize "#{Rails.root}/tmp/#{filename}"
