@@ -67,7 +67,7 @@ task :involuntary_resignation => :environment do
     else 
       status = "Paid"
     end
-    data  = "#{loans.member.full_name}|#{loans.loan_product.name}|#{am['total_accrued_interest']}|#{am['total_accrued_interest_balance']}|#{cb}|#{status}"
+    data  = "#{loans.member.full_name}|#{loans.loan_product.name}|#{am['total_accrued_interest']}|#{am['total_accrued_interest_balance']}|#{cb}|#{status}|#{am['status']}"
     @data << data
 
     end  
@@ -731,6 +731,69 @@ task :involuntary_resignation => :environment do
         csv << mems
       end
     end
+  end
+
+  ##### LIST POSTED PROJECT TYPE #####
+  task :loan_project_type_report_xx => :environment do
+    s_date= ENV['s_date']
+    #mat_date = ENV['mat_date']
+    br_name = ENV['SATO']
+    br_id= Branch.where(name: br_name).ids
+    @data = []  
+  
+    @data_store  = DataStore.where(
+                                        "meta->>'branch_id' = ? AND 
+                                         CAST(meta->>'as_of' AS date) = ? AND 
+                                         meta->>'data_store_type' = ?", 
+                                         br_id, 
+                                         s_date,
+                                         "MANUAL_AGING").last
+  
+    @data_store_data = @data_store.data.with_indifferent_access
+    @data_store_data[:records].each.with_index do |r|
+      if r[:loan_product][:name] == 'K - KABUHAYAN'
+
+        loan = Loan.find(r[:id])
+        #raise proj.inspect
+        x = r[:member]
+
+        l = r[:loan_product][:name]
+        #px = ProjectType.find
+        mem = Member.find(x[:id])
+
+        j = "#{x[:last_name]}#{l}#{loan.project_type_id}"
+      end
+      @data << j
+    end
+      puts @data
+end
+    task :project_type_report_xx => :environment do
+    require 'csv'
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids.shift
+    CSV.open("#{Rails.root}/tmp/project_type_report.csv", "w",:write_headers=> true, :headers => ["MEMBER","PROJECT TYPE" ,"PROJECT CATEGORY","CENTER"] ) do |csv|
+    @project = DataStore.where("meta->>'branch_id' = ? AND  
+                                           meta->>'data_store_type' = ? AND status='approved'", 
+                                           br_id,
+                                           "PROJECT TYPE")
+        @project.each do |dd|
+         data_store = DataStore.find(dd[:id])
+       
+             data_store[:data].each_with_index do |s|
+
+              #raise s["details"]["project_type"].inspect:
+              f_name = s["details"]["member"]
+              pt     = s["details"]["project_type"]
+              ptc    = s["details"]["project_type_category"]
+              center = data_store["meta"]["center_name"]
+              #csv << ["#{s["details"]["member"]},#{s["details"]["project_type"]},#{s["details"]["project_type_category"]},#{data_store["meta"]["center_name"]}"]
+              csv << [f_name,pt,ptc,center]
+
+             end
+          
+        end
+    end
+    puts "DONE"
   end
 
 ##### LIST OF RESIGNED #####
