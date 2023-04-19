@@ -170,10 +170,10 @@ module Api
       end    
     end
 
-
     # API FOR PAYMENTS
     def save_payments_api
       @payments = []
+      @transaction = []
       config = {}
 
       # raise params[:_json].inspect
@@ -199,9 +199,31 @@ module Api
         @payments << @payment_data 
         # raise @payments.inspect
 
+        @member_id = MemberAccount.where(member_id: m[:member_id])
+        @member_id.each do |o|
+          @account_transaction = {}
+          @account_transaction[:id]                     =o[:id]
+          @account_transaction[:member_id]              =o[:member_id]
+          @account_transaction[:account_type]           =o[:account_type]
+          @account_transaction[:account_subtype]        =o[:account_subtype]
+          @account_transaction[:balance]                =o[:balance]
+          @account_transaction[:center_id]              =o[:center_id]  
+          @account_transaction[:branch_id]              =o[:branch_id]
+          @account_transaction[:status]                 =o[:status]
+          @account_transaction[:maintaining_balance]    =o[:maintaining_balance]
+          @account_transaction[:created_at]             =o[:created_at]
+          @account_transaction[:data]                   =o[:data]
+
+          @transaction << @account_transaction
+        end
+
+        raise @transaction.inspect
+
+        
+        
         config = @payments.map{ |o|
           {
-            subsidiary_id: o[:subsidiary_id],
+            subsidiary_id: @subsidiary_id,
             subsidiary_type: o[:subsidiary_type],
             amount: o[:amount],
             transaction_type: o[:transaction_type],
@@ -313,8 +335,9 @@ module Api
       if errors[:full_messages].any?
       render json: errors, status: 400
       else
-        config.each do |a|
+        config.each do |a|  
           @claims = Claim.where(member_id: a[:member_id])
+
           claims_data = {
             date_prepared: a[:date_prepared],
             prepared_by: a[:prepared_by],
@@ -335,9 +358,15 @@ module Api
           }
 
           if @claims.count == 1
-            cmd = ::Kmba::UpdateClaims.new(
-              claims_data: claims_data
-            ).execute!
+            if a[:status] == 'approved'
+              # cmd = ::Kmba::UpdateClaims.new(
+              #   claims_data: claims_data
+              # ).execute!
+            end
+          # else
+          #   cmd = ::Kmba::SaveClaims.new(
+          #     claims_data: claims_data
+          #   ).execute!
           end
         end
       end
