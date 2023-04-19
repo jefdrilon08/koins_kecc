@@ -95,7 +95,7 @@ module Accounting
         data  = {
           is_withdraw_payment: false,
           is_fund_transfer: false,
-          is_interest: false,
+          is_interest: true,
           is_adjustment: false,
           is_for_exit_age: false,
           is_for_loan_payments: false,
