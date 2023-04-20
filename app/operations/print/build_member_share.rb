@@ -16,8 +16,11 @@ module Print
       @data
     end
 
-    def in_words(int)
-      numbers_to_name = {
+  def in_words(int)
+  numbers_to_name = {
+      1000000 => "isang milyon",
+      1000 => "isang libo",
+      100 => "ng daan",
         90 => "siyamnapu",
         80 => "walumpu",
         70 => "pitumpu",
@@ -45,21 +48,21 @@ module Print
         3 => "tatlo",
         2 => "dalawa",
         1 => "isa"
-      }
-    str = ""
-    numbers_to_name.each do |num, name|
-      if int == 0
-        return str
-      elsif int.to_s.length == 1 && int/num > 0
-        return str + "#{name}"
-      elsif int < 100 && int/num > 0
-        return str + "#{name}" if int%num == 0
-        return str + "#{name}"+"t " + in_words(int%num)
-      elsif int/num > 0
-        return str + in_words(int/num) + " #{name} " + in_words(int%num)
-      end
+    }
+  str = ""
+  numbers_to_name.each do |num, name|
+    if int == 0
+      return str
+    elsif int.to_s.length == 1 && int/num > 0
+      return str + "#{name}"      
+    elsif int < 100 && int/num > 0
+      return str + "#{name}" if int%num == 0
+      return str + "#{name} " + in_words(int%num)
+    elsif int/num > 0
+      return str + in_words(int/num) + "#{name} " + in_words(int%num)
     end
   end
+end
 
   end
 end
