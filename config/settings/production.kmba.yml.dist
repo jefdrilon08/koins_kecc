@@ -273,7 +273,7 @@ default_member_accounts:
     account_subtype: "Equity Value"
   - 
     account_type: "INSURANCE"
-    account_subtype: "K_BENTE"
+    account_subtype: "K-BENTE"
   - 
     account_type: "INSURANCE"
     account_subtype: "K-KALINGA"
