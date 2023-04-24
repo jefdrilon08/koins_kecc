@@ -6,6 +6,7 @@ import Select from 'react-select';
 import ErrorList from '../ErrorList';
 
 export default function MembersProfileLoans(props) {
+  console.log(props.accruedInterest);
   const [memberId]                                          = useState(props.memberId);
   const [isLoading, setIsLoading]                           = useState(false);
   const [isModalRestructureOpen, setIsModalRestructureOpen] = useState(false);
@@ -27,12 +28,13 @@ export default function MembersProfileLoans(props) {
   const [clipDateOfBirth, setClipDateOfBirth]               = useState("");
   const [clipRelationship, setClipRelationship]             = useState("");
   const [token]                                             = useState(props.token);
+  const [accruedInterest]                                   = useState(props.accruedInterest || []);
+
+
 
   const handleConfirmClicked = () => {
     setIsLoading(true);
     setErrors([]);
-
-    console.log(rActiveLoans);
 
     const payload = {
       co_maker:                   coMaker,
@@ -49,8 +51,10 @@ export default function MembersProfileLoans(props) {
       beneficiary_middle_name:    clipMiddleName,
       beneficiary_last_name:      clipLastName,
       beneficiary_relationship:   clipRelationship,
-      beneficiary_date_of_birth:  clipDateOfBirth
+      beneficiary_date_of_birth:  clipDateOfBirth,
+
     }
+
 
     const headers = {
       'X-KOINS-HQ-TOKEN': token
@@ -524,7 +528,75 @@ export default function MembersProfileLoans(props) {
       >
         Restructure
       </button>
-
+      <hr/>
+      <h6>
+        Accrued Interest
+      </h6>
+       {(() => {
+        if(props.accruedInterest && props.accruedInterest.length > 0) {
+          return (
+            <table className="table table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>
+                    PN Number
+                  </th>
+                  <th>
+                    Loan Product
+                  </th>
+                  <th className="text-center">
+                    Accrued Interest
+                  </th>
+                  <th className="text-end">
+                    Total Balance
+                  </th>
+                  <th className="text-end">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {props.accruedInterest.map((o) => {
+                  return (
+                    <tr key={"accrued-interest-data-" + o.id}>
+                      <td>
+                        <a href={`/loans/${o.id}`}>
+                          <strong>
+                            {o.pn_number}
+                          </strong>
+                        </a>
+                      </td>
+                      <td className="text-muted">
+                        {o.loan_product}
+                      </td>
+                      <td className="text-center">
+                        {o.total_accrued_interest}
+                      </td>
+                      <td className="text-end">
+                        <strong>
+                          {o.total_accrued_interest_balance}
+                        </strong>
+                      </td>
+                      <td className="text-end">
+                        <strong>
+                          {o.status}
+                        </strong>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )
+        } else {
+          return (
+            <p>
+              No Accrued Interest.
+            </p>
+          )
+        }
+      })()}
+          
       <hr/>
       <h6>
         For Verification &nbsp;
