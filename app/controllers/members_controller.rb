@@ -315,11 +315,16 @@ class MembersController < ApplicationController
       "loan_products.name ASC, loans.cycle ASC"
     )
 
+    @accrued_interest = ReadOnlyLoan.includes(:loan_product).where(
+      "data ->> 'accrued_interest' is not null and member_id = ?" ,params[:id]
+    )
+
     @for_verification_loans = ReadOnlyLoan.for_verification.includes(:loan_product).where(
       member_id: params[:id]
     ).order(
       "loan_products.name ASC"
     )
+  
 
     @paid_loans = ReadOnlyLoan.paid.includes(:loan_product).where(
       member_id: params[:id]
@@ -385,6 +390,21 @@ class MembersController < ApplicationController
         relationship:   o.relationship
       }
     }
+      @accrued_interest_data = []
+      if @accrued_interest.present?
+       @accrued_interest_data = @accrued_interest.map{ |o|
+          if o[:data]["accrued_interest"].present?
+            {
+          id:                               o.id,
+          pn_number:                        o.pn_number,
+          loan_product:                     o.loan_product.name,
+          total_accrued_interest:           view_context.number_to_currency(o[:data]["accrued_interest"]["total_accrued_interest"], unit: ''),
+          total_accrued_interest_balance:   view_context.number_to_currency(o[:data]["accrued_interest"]["total_accrued_interest_balance"], unit: ''),
+          status:                           o[:data]["accrued_interest"]["status"]
+          }
+        end
+        }
+      end
 
     @resignation_records = []
 
@@ -461,10 +481,11 @@ class MembersController < ApplicationController
       "surveys":                      @surveys,
       "status":                       @member.status,
       "reinstated":                   @member.reinstated,
-      "project_type":                 @project_type
+      "project_type":                 @project_type,
+      "accrued_interest_data":        @accrued_interest_data
       
     }
-
+    
     @payload[:active_loans] = @active_loans.map{ |o|
       {
         id:             o.id,

@@ -75,70 +75,74 @@ module Icpr
       values  = []
 
       @data[:records].each do |o|
-        member_id                   = o[:id]
-        savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
-        savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
-        savings_distribute          = o[:savings_distribute].to_f.round(2)
-        savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)
-       
-        # DEPOSIT TO SAVINGS
-        subsidiary_id     = savings_account_id
-        subsidiary_type   = 'MemberAccount'
-        amount            = savings_distribute
-        transaction_type  = 'deposit'
-        transacted_at     = @date_approved
-        status            = 'approved'
-        created_at        = Time.now.to_s
-        updated_at        = Time.now.to_s
+        if o[:savings_distribute].to_f.round(2) > 0.0
+          member_id                   = o[:id]
+          savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
+          savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
+          savings_distribute          = o[:savings_distribute].to_f.round(2)
+          savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)
+         
+          # DEPOSIT TO SAVINGS
+          subsidiary_id     = savings_account_id
+          subsidiary_type   = 'MemberAccount'
+          amount            = savings_distribute
+          transaction_type  = 'deposit'
+          transacted_at     = @date_approved
+          status            = 'approved'
+          created_at        = Time.now.to_s
+          updated_at        = Time.now.to_s
 
-        data  = {
-          is_withdraw_payment: false,
-          is_fund_transfer: false,
-          is_interest: false,
-          is_adjustment: false,
-          is_for_exit_age: false,
-          is_for_loan_payments: false,
-          is_time_deposit: false,
-          is_for_icpr: true,
-          accounting_entry_reference_number: @accounting_entry.reference_number,
-          beginning_balance: savings_account_balance,
-          ending_balance: savings_account_new_balance,
-          lock_in_period: nil
-        }
+          data  = {
+            is_withdraw_payment: false,
+            is_fund_transfer: false,
+            is_interest: true,
+            is_adjustment: false,
+            is_for_exit_age: false,
+            is_for_loan_payments: false,
+            is_time_deposit: false,
+            is_for_interest_for_sharecap: true,
+            accounting_entry_reference_number: @accounting_entry.reference_number,
+            beginning_balance: savings_account_balance,
+            ending_balance: savings_account_new_balance,
+            lock_in_period: nil
+          }
 
-        values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+          values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+        end
+        
+        if o[:cbu_distribute].to_f.round(2) > 0.0
+          cbu_account_id              = o[:cbu_account_id]
+          cbu_account_balance         = MemberAccount.find(cbu_account_id).balance.round(2)
+          cbu_distribute              = o[:cbu_distribute].to_f.round(2)
+          cbu_account_new_balance     = (cbu_account_balance + cbu_distribute).round(2)
 
-        cbu_account_id              = o[:cbu_account_id]
-        cbu_account_balance         = MemberAccount.find(cbu_account_id).balance.round(2)
-        cbu_distribute              = o[:cbu_distribute].to_f.round(2)
-        cbu_account_new_balance     = (cbu_account_balance + cbu_distribute).round(2)
+          # DEPOSIT TO EQUITY
+          subsidiary_id     = cbu_account_id
+          subsidiary_type   = 'MemberAccount'
+          amount            = cbu_distribute
+          transaction_type  = 'deposit'
+          transacted_at     = @date_approved
+          status            = 'approved'
+          created_at        = Time.now.to_s
+          updated_at        = Time.now.to_s
 
-        # DEPOSIT TO EQUITY
-        subsidiary_id     = cbu_account_id
-        subsidiary_type   = 'MemberAccount'
-        amount            = cbu_distribute
-        transaction_type  = 'deposit'
-        transacted_at     = @date_approved
-        status            = 'approved'
-        created_at        = Time.now.to_s
-        updated_at        = Time.now.to_s
+          data  = {
+            is_withdraw_payment: false,
+            is_fund_transfer: false,
+            is_interest: false,
+            is_adjustment: false,
+            is_for_exit_age: false,
+            is_for_loan_payments: false,
+            is_time_deposit: false,
+            is_for_icpr: true,
+            accounting_entry_reference_number: nil,
+            beginning_balance: cbu_account_balance,
+            ending_balance: cbu_account_new_balance,
+            lock_in_period: nil
+          }
 
-        data  = {
-          is_withdraw_payment: false,
-          is_fund_transfer: false,
-          is_interest: false,
-          is_adjustment: false,
-          is_for_exit_age: false,
-          is_for_loan_payments: false,
-          is_time_deposit: false,
-          is_for_icpr: true,
-          accounting_entry_reference_number: nil,
-          beginning_balance: cbu_account_balance,
-          ending_balance: cbu_account_new_balance,
-          lock_in_period: nil
-        }
-
-        values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+          values << "('#{subsidiary_id}', '#{subsidiary_type}', #{amount}, '#{transaction_type}', '#{transacted_at}', '#{status}', '#{created_at}', '#{updated_at}', '#{data.to_json}')"
+        end
       end
       query = "INSERT INTO account_transactions (subsidiary_id, subsidiary_type, amount, transaction_type, transacted_at, status, created_at, updated_at, data) VALUES #{values.join(',')}"
       ActiveRecord::Base.connection.execute(query)

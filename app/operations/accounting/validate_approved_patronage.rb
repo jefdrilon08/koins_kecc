@@ -10,7 +10,8 @@ module Accounting
     end
 
     def execute!
-      if !@data_store.done?
+
+      if @data_store[:status] == "approved"
         @errors[:messages] << {
           key: "status",
           message: "Cannot approve record"

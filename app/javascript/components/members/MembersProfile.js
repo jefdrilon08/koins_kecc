@@ -64,6 +64,7 @@ export default function MembersProfile(props) {
   const [loanProductsForRestructuring]  = useState(props.loan_products_for_restructuring);
   const [coMakers]                      = useState(props.co_makers);
   const [projectType]                   = useState(props.project_type);
+  const [accruedInterest]               = useState(props.accrued_interest_data);
 
   return (
     <>
@@ -171,6 +172,8 @@ export default function MembersProfile(props) {
                     beneficiaries={beneficiaries}
                     resignationRecords={resignationRecords}
                     projectType={projectType}
+
+
                   />
                 </div>
                 <div id="loans" className="home p-3 tab-pane" role="tabpanel">
@@ -187,6 +190,7 @@ export default function MembersProfile(props) {
                     entryPointLoanCycleCount={entryPointLoanCycleCount}
                     loanProductsForRestructuring={loanProductsForRestructuring}
                     coMakers={coMakers}
+                    accruedInterest={accruedInterest}
                   />
                 </div>
                 <div id="savings_accounts" className="home p-3 tab-pane" role="tabpanel">
