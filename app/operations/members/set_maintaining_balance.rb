@@ -14,7 +14,15 @@ module Members
     end
 
     def execute!
+      #raise @active_loans.length.inspect
+      #if @active_loans == []
+      
+      @member_accounts.where(account_subtype: "K-IMPOK").last.update(maintaining_balance: 100.0)
+        
+      #end
+      
       @member_accounts.each do |member_account|
+      
         maintaining_balance = 0.00
 
         @settings_loan_products.each do |s|
@@ -24,12 +32,12 @@ module Members
             if member_account.present? and current_loans.any?
               current_loans.each do |loan|
                 if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
-                  maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
+                  maintaining_balance += (loan.principal_balance * s.maintaining_balance.percentage)
                 end
               end
 
               mb  = maintaining_balance.to_f.round(2)
-
+                       
               member_account.update!(maintaining_balance: mb)
             end
           end

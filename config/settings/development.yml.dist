@@ -963,7 +963,7 @@ loan_products:
     jef: 100
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -1182,7 +1182,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -1357,7 +1357,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -1533,7 +1533,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -1757,7 +1757,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions: []
@@ -1770,7 +1770,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions: []
@@ -1783,7 +1783,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions:
@@ -1807,7 +1807,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -1982,7 +1982,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -2158,7 +2158,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -2335,7 +2335,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -2511,7 +2511,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions:
@@ -2689,7 +2689,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: []
@@ -2701,7 +2701,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: []
@@ -2714,7 +2714,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: []
@@ -2727,7 +2727,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: []
@@ -2740,7 +2740,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: 
@@ -2884,7 +2884,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -3028,7 +3028,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions: 
@@ -3161,7 +3161,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -3283,7 +3283,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions:
@@ -3406,7 +3406,7 @@ loan_products:
     default_amount: 7000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -3623,7 +3623,7 @@ loan_products:
     default_amount: 7000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -3790,7 +3790,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -3912,7 +3912,7 @@ loan_products:
     default_amount: 7000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -4079,7 +4079,7 @@ loan_products:
     default_amount: 7000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -4246,7 +4246,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions:
@@ -4422,7 +4422,7 @@ loan_products:
     miscellaneous_accounting_code_id: "216f35d5-2809-4696-b5b9-83d30c2bce6d"
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
     deductions:
@@ -4632,7 +4632,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 10001.00
     deductions:
@@ -4753,7 +4753,7 @@ loan_products:
     default_amount: 7000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 0.00
     deductions:
@@ -4926,7 +4926,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 10001.00
     deductions:
@@ -5098,7 +5098,7 @@ loan_products:
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "Personal Savings Account"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.5
       threshold: 0.00
     deductions:
@@ -5294,7 +5294,7 @@ loan_products:
     default_amount: 3000.00
     maintaining_balance:
       account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
+      account_subtype: "Maintaining Balance Savings"
       percentage: 0.0
       threshold: 0.00
     deductions:
