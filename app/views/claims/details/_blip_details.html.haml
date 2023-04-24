@@ -130,7 +130,7 @@
       %td
         = @data[:arrears]
        
-      %th Claims Office Report
+      %th Claims Officer Report
       %td
         = @data[:cause_of_delay]
     %tr
@@ -170,16 +170,16 @@
       %th Date Approved
       %td 
         = @claim.try(:date_approved).try(:strftime, "%b %d, %Y")
-      %th Date Posted
+      %th Posted by
       %td 
-        = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
+        = @claim.try(:posted_by).try(:titleize)
     %tr
       %th 
       %td 
        
-      %th Posted by
+      %th Date Posted
       %td 
-        = @claim.try(:posted_by).try(:titleize)
+        = @claim.try(:date_posted).try(:strftime, "%b %d, %Y")
     %tr
       %th 
       %td 

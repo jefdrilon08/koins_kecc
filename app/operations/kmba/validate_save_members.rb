@@ -25,6 +25,7 @@ module Kmba
 
           if a[:first_name].blank?
             @errors[:messages] << {
+              code: "KMBA-000",
               identification_number: a[:identification_number],
               key: "first_name", 
               message: "first_name not found"
@@ -33,6 +34,7 @@ module Kmba
 
           if a[:first_name].nil?
             @errors[:messages] << {
+              identification_number: a[:identification_number],
               key: "first_name", 
               message: "first_name not found"
             }
@@ -49,7 +51,7 @@ module Kmba
           if a[:last_name].blank?
             @errors[:messages] << {
               key: "middle_name", 
-              message: "middle not found"
+              message: "Last Name not found"
             }
           end
 

@@ -9,7 +9,7 @@ module Kmba
     end
 
     def execute!
-      # raise @member_data.
+      # raise @member_data.inspect
         member_data = Member.new(
           center_id: @member_data[:center_id],
           branch_id: @member_data[:branch_id],
@@ -48,7 +48,7 @@ module Kmba
 
         # raise @member_data.inspect
 
-        Rails.logger.info(puts " New Record is Save ID NO : #{@member_data[:identification_number]}, saved! ")
+        Rails.logger.info(puts " New Record is Save ID NO : #{@member_data[:identification_number]}, saved! ", status: 200)
         member_data.save!
     # raise member.inspect
     # @member = Member.find(@member.id)
