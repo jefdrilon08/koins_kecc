@@ -18,7 +18,7 @@ class ProcessApproveBilling < ApplicationJob
 
         # Set maintaining balance for members
         Member.where(id: billing.member_ids).each do |m|
-          raise m.inspect
+    
           ::Members::SetMaintainingBalance.new(
             config: {
               member: m
