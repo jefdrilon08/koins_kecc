@@ -448,10 +448,10 @@ interest_member_accounts:
 
 icpr:
   accounting_code_interest_on_share_capital_payable: "3e0fbff5-b4cc-4f6d-9c69-344d752942d2"
-  accounting_code_due_to_members: "1e849571-b1e3-49d8-af5d-2bcbb4b5c314"
+  accounting_code_due_to_members: "62ee3be0-0c5d-4f36-8881-c1f0b2c9390a"
   accounting_code_deposits_on_share_capital_subscription: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
   savings_account_type: "SAVINGS"
-  savings_account_subtype: "Maintaining Balance Savings"
+  savings_account_subtype: "Savings Deposits - Regular"
   cbu_account_type: "EQUITY"
   cbu_account_subtype: "CBU"
 
@@ -461,10 +461,10 @@ icpr:
 
 patronage_refund:
   accounting_code_patronage_refund_payable: "2d84a68e-7f21-44aa-b565-faa34a876496"
-  accounting_code_due_to_members: "1e849571-b1e3-49d8-af5d-2bcbb4b5c314"
+  accounting_code_due_to_members: "62ee3be0-0c5d-4f36-8881-c1f0b2c9390a"
   accounting_code_deposits_on_share_capital_subscription: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
   savings_account_type: "SAVINGS"
-  savings_account_subtype: "Maintaining Balance Savings"
+  savings_account_subtype: "Savings Deposits - Regular"
   cbu_account_type: "EQUITY"
   cbu_account_subtype: "CBU"
 
