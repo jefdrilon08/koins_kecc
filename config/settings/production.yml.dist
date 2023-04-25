@@ -451,7 +451,7 @@ icpr:
   accounting_code_due_to_members: "62ee3be0-0c5d-4f36-8881-c1f0b2c9390a"
   accounting_code_deposits_on_share_capital_subscription: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
   savings_account_type: "SAVINGS"
-  savings_account_subtype: "Savings Deposits - Regular"
+  savings_account_subtype: "K-IMPOK"
   cbu_account_type: "EQUITY"
   cbu_account_subtype: "CBU"
 
@@ -464,7 +464,7 @@ patronage_refund:
   accounting_code_due_to_members: "62ee3be0-0c5d-4f36-8881-c1f0b2c9390a"
   accounting_code_deposits_on_share_capital_subscription: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
   savings_account_type: "SAVINGS"
-  savings_account_subtype: "Savings Deposits - Regular"
+  savings_account_subtype: "K-IMPOK"
   cbu_account_type: "EQUITY"
   cbu_account_subtype: "CBU"
 
