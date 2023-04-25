@@ -64,12 +64,12 @@ class MbsTransferController < DataStoreController
 
 
     def destroy
-      additional_share = DataStore.find(params[:id])
-      if additional_share.pending?
-        additional_share.destroy!
-        redirect_to additional_share_path
+      mbs_transfer = DataStore.find(params[:id])
+      if mbs_transfer.pending?
+        mbs_transfer.destroy!
+        redirect_to mbs_transfer_path
       else
-        redirect_to additional_share_path(additional_share)
+        redirect_to mbs_transfer_path(mbs_transfer)
       end
     end
 

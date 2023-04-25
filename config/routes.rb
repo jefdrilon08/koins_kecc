@@ -253,6 +253,7 @@ Rails.application.routes.draw do
   #mbs_transfer
   get "/mbs_transfer", to: "mbs_transfer#index"
   get "/mbs_transfer/:id", to: "mbs_transfer#show"
+  delete "/mbs_transfer/:id", to: "mbs_transfer#destroy"
 
   #additional_share
   get "/additional_share", to: "additional_share#index"
