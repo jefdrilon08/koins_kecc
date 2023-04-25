@@ -73,7 +73,7 @@ module Adjustments
         }
       if @adjustment_record.pending?
           
-        if helpers.sbk_mis_user
+        if helpers.sbk_bk_mis_user
           @subheader_side_actions << {
             id: "btn-approve",
             link: "#",
