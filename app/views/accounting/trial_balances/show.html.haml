@@ -4,6 +4,10 @@
     .card
       .card-body
         .table-responsive
+          .h5
+            Trial Balance - #{@trial_balance.meta["branch_name"]}
+            .h5 
+            #{@trial_balance.meta["start_date"].to_date.strftime("%B %d, %Y")} to #{@trial_balance.meta["end_date"].to_date.strftime("%B %d, %Y")}
           %table.table.table-bordered.table-sm
             %thead
               %tr
