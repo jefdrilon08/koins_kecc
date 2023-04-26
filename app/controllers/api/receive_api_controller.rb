@@ -303,7 +303,7 @@ module Api
               center_id: o[:center_id],
               branch_id: o[:branch_id],
               claim_type: o[:claim_type],
-              data: o[:data],
+              data: o[:data], 
               status: o[:status],
               approved_by: o[:approved_by],
               checked_by: o[:checked_by],
@@ -311,10 +311,10 @@ module Api
               date_approved: o[:date_approved],
               posted_by: o[:posted_by],
               date_posted: o[:date_posted]
-            }
+            } 
           }
         end
-
+ 
         config.each do |a|  
           @claims = Claim.where(member_id: a[:member_id])
 

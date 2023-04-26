@@ -8,7 +8,7 @@ module Kmba
 
     def execute!
       #validate the Payments_data
-
+ 
       if @payments.nil?
         @errors[:messages] << {
           code: "KMBA-001",

@@ -24,7 +24,7 @@ module Kmba
 
           if a[:first_name].blank?
             @errors[:messages] << {
-              code: "KMBA-001",
+              code: "KMBA-001", 
               member_id: a[:identification_number],
               key: "first_name", 
               message: "first_name not found"
