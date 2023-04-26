@@ -134,7 +134,7 @@ module Icpr
             is_for_exit_age: false,
             is_for_loan_payments: false,
             is_time_deposit: false,
-            is_for_icpr: true,
+            is_for_interest_for_sharecap: true,
             accounting_entry_reference_number: nil,
             beginning_balance: cbu_account_balance,
             ending_balance: cbu_account_new_balance,
