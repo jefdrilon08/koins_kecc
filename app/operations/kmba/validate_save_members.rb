@@ -1,44 +1,35 @@
 module Kmba
   class ValidateSaveMembers < AppValidator 
-    def initialize(config:)
+    def initialize(members:)
       super()
-      @config               = config
-      # raise @config.inspect
+      @members               = members
+      # raise @members.inspect
     end
 
     def execute!
-      #validate the member_data
-
-      if @config.blank?
+     
+      if @members.nil?
         @errors[:messages] << {
-          key: "no_member", 
-          message: "No Member Record Found!"
+          code: "KMBA-001",
+          message: "No Member Data Record Found!"
         }
-      else 
-        @config.map{ |a|
-          if a.blank?
-            @errors[:messages] << {
-              key: "no_member", 
-              message: "No Member Record Found!"
-            }
-          end
+      else
+        @members.map{ |a|
+          # if a.is_a?(Array)
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     message: "One Member Data, Record is not Array!"
+          #   }
+          # end
 
           if a[:first_name].blank?
             @errors[:messages] << {
-              code: "KMBA-000",
-              identification_number: a[:identification_number],
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "first_name", 
               message: "first_name not found"
             }
-          end 
-
-          if a[:first_name].nil?
-            @errors[:messages] << {
-              identification_number: a[:identification_number],
-              key: "first_name", 
-              message: "first_name not found"
-            }
-          end 
+          end
 
           # Validate Middle Name
           # if a[:middle_name].blank?
@@ -50,13 +41,17 @@ module Kmba
 
           if a[:last_name].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              last_name_of: a[:identification_number],
               key: "middle_name", 
               message: "Last Name not found"
             }
-          end
+          end 
 
           if a[:data][:address][:street].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "address_street", 
               message: "Address Street not found"
             }
@@ -64,6 +59,8 @@ module Kmba
 
           if a[:data][:address][:district].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "address_district",
               message: "Address District not found"
             }
@@ -71,6 +68,8 @@ module Kmba
 
           if a[:data][:address][:city].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "address_city",
               message: "Address City not found"
             }
@@ -78,6 +77,8 @@ module Kmba
 
           if a[:date_of_birth].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "date_of_birth",
               message: "Date of Birth not found"
             }
@@ -85,6 +86,8 @@ module Kmba
 
           if a[:gender].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "gender",
               message: "Gender not found"
             }
@@ -92,6 +95,8 @@ module Kmba
 
           if a[:civil_status].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "civil_status",
               message: "Civil Status not found"
             }
@@ -99,6 +104,8 @@ module Kmba
 
           if a[:branch_id].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "branch_id",
               message: "Branch not Found"
             }
@@ -106,18 +113,12 @@ module Kmba
 
           if a[:center_id].blank?
             @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
               key: "center_id",
               message: "Center not found"
             }
           end
-
-          # uncomment this group of lines, if the records have external_ref came from kezar
-          # if a[:identification_number].blank?
-          #   @errors[:messages] << {
-          #     key: "identification_number",
-          #     message: "Identification Number not Found"
-          #   }
-          # end 
         }
       end
 
@@ -125,7 +126,7 @@ module Kmba
         @errors[:full_messages] << o[:message]
       end
 
-      @errors  
+      @errors 
     end
   end
 end
