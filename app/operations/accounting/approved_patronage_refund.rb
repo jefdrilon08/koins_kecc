@@ -78,7 +78,7 @@ module Accounting
       @data[:records].each do |o|
           if o[:savings_distribute].to_f.round(2) > 0.0
             member_id                   = o[:id]
-            savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
+            savings_account_id          = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "K-IMPOK").ids.shift
             savings_account_balance     = MemberAccount.find(savings_account_id).balance.round(2)
             savings_distribute          = o[:savings_distribute].to_f.round(2)
             savings_account_new_balance = (savings_account_balance + savings_distribute).round(2)
@@ -153,7 +153,7 @@ module Accounting
     def rehash_savings!
       @data[:records].each do |o|
         member_id                   = o[:id]
-        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "Maintaining Balance Savings").ids.shift
+        personal_savings_account    = MemberAccount.where(member_id: member_id, account_type: "SAVINGS",account_subtype: "K-IMPOK").ids.shift
         cbu_account                 = MemberAccount.where(member_id: member_id, account_type: "EQUITY",account_subtype: "CBU").ids.shift
         ::MemberAccounts::Rehash.new(
           member_account: MemberAccount.find(personal_savings_account), account_transactions: nil).execute!
