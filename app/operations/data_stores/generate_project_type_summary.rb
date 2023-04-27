@@ -1,52 +1,75 @@
 module DataStores
   class GenerateProjectTypeSummary
     def initialize
-      @data = {
-        records: []
-
-      }
-      @project_type = ProjectType.where(is_active: true)
-      @project_type_category = ProjectTypeCategory.where(is_active: true) 
-    
-   end
+      @alist = Member.where(branch_id: "18cebed1-4838-4335-9023-ffd35c5e2629", status: "active")
+      @p = ProjectTypeCategory.where(is_active: true)
+      @data_category = []
+      @data = []
+    end
 
     def execute!
-      query!
 
+      @p.each do |pd|
 
-    
-      @project_type_category.map { |a| 
-
-      a[:id]
-
-
-      g = @result.select{ |o| o["project_type"]["project_type_categor"] == '68b0a0c3-9786-4ca3-96e3-31dddf1bb6e6'}
-
-       raise g.inspect
+      
+        iter = 0
+        tmp = []
+        @alist.each do |a|
+          a_data = a.data.with_indifferent_access
+          if a_data[:project_type].present?
+            c = a_data[:project_type].select{ |a| a[:project_type_category_id] == pd.id  }
+            if c.count > 0
+              iter = iter + c.count
+              tmp <<  {last_name: a.last_name, first_name: a.first_name, project_type: c}
+            end
+          end
+        end
         
 
+        temp = { category: pd.name, category_id: pd.id, count: iter, member: tmp  }
+        @data_category << temp
+      end
 
-      }
+      @p.each do |pdd|
+        g = @data_category.select{ |a| a[:category_id] == pdd.id }
+        h = g.map{ |f| f[:member]  }
+        tmp2 = []
+        ProjectType.where(project_type_category_id: pdd.id, is_active: true).each do |pt|
+         iter = 0
+         h[0].map{ |d| d[:project_type]}.each do |ptd|
+          
+            c = ptd.select{ |a| a[:project_type_id] == pt.id  }.count
 
+            iter = iter + c 
+          end
+          
+          mem = h[0].map{ |l| 
+                              tmp = { last_name: l.fetch(:last_name),  
+                                      first_name:l.fetch(:first_name) 
+                                    } 
+                                    tmp  
+                        }
+
+      
+          tmp2 << { det: pt.name, cter: iter, member_list: mem }
+        
+
+        end
+
+        
+        @data << { categ: pdd.name, categ_det: tmp2, cntotal: g[0][:count]}
+
+
+      end
+
+      @data
+      #@data_category.each do |a|
+      #  raise a.inspect
+      #end
 
 
     end
     
-    def query!
-      @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
-        SELECT
-          m.first_name,
-          m.last_name,
-          m.middle_name,
-          m.data->'project_type' as project_type
-        FROM Members m
-        WHERE
-          m.branch_id = '339144e0-9544-4a7a-b2d4-b500cc329034' and
-          m.data->'project_type' IS NOT NULL and
-          m.status = 'active'
-
-      EOS
-    end
 
   end
 end
