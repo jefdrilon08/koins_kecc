@@ -11,9 +11,14 @@ module Api
       # raise params[:_json].inspect      
       members = params[:_json]
       # puts "Number of Members to be Upload #{members.count}"
-      # raise member_data.inspect
-        
-      members.each do |m|
+      errors = ::Kmba::ValidateSaveMembers.new(
+        members: members
+      ).execute!
+
+      if errors[:full_messages].any?
+        render json: errors, status: 400
+      else 
+        members.each do |m|
         @member_data  = {}
         @member_data[:center_id]                    = m["center_id"]
         @member_data[:branch_id]                    = m["branch_id"]
@@ -98,16 +103,8 @@ module Api
             external_ref: o[:external_ref]
           }
         }
-      end
+        end
 
-
-      errors = ::Kmba::ValidateSaveMembers.new(
-        config: config
-      ).execute!
-
-      if errors[:full_messages].any?
-        render json: errors, status: 400
-      else 
         config.each do |a|
           @member = Member.where(identification_number: a[:identification_number])
           # raise @member.inspect
@@ -168,11 +165,11 @@ module Api
         end
 
         if @counter_save > 0 and @counter_update > 0
-          render :status => "200", :json => {:code => "KMBA-003", :Updated => "#{@counter_update}", :Uploaded => "#{@counter_save}"}.to_json
+          render :status => "200", :json => {:code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}"}
         elsif @counter_save > 0
-          render :status => "200", :json => {:code => "KMBA-001", :Uploaded => "#{@counter_save}"}.to_json
+          render :status => "201", :json => {:code => "KMBA-002", :Uploaded => "#{@counter_save}"}.to_json
         elsif @counter_update > 0
-          render :status => "200", :json => {:code => "KMBA-002", :Updated => "#{@counter_update}"}.to_json
+          render :status => "200", :json => {:code => "KMBA-003", :Updated => "#{@counter_update}"}.to_json
         end
       end
     end
@@ -187,46 +184,46 @@ module Api
 
       payments = params[:_json]
 
-      payments.each do |m|
-
-        @payment_data = {}
-        @payment_data[:member_id]                 =m["member_id"]
-        @payment_data[:account_subtype]           =m["account_subtype"]
-        @payment_data[:subsidiary_id]             =m["subsidiary_id"]
-        @payment_data[:subsidiary_type]           =m["subsidiary_type"]
-        @payment_data[:amount]                    =m["amount"]
-        @payment_data[:transaction_type]          =m["transaction_type"]
-        @payment_data[:transacted_at]             =m["transacted_at"]
-        @payment_data[:status]                    =m["status"]
-        @payment_data[:data]                      =m["data"]
-        @payment_data[:created_at]                =m["created_at"]
-        @payment_data[:updated_at]                =m["updated_at"]
-
-        @payments << @payment_data 
-       
-        config = @payments.map{ |o|
-          {
-            subsidiary_id: o[:subsidiary_id],
-            subsidiary_type: o[:subsidiary_type],
-            amount: o[:amount],
-            transaction_type: o[:transaction_type],
-            transacted_at: o[:transacted_at],
-            status: o[:status],
-            data: o[:data],
-            created_at: o[:created_at],
-            updated_at: o[:updated_at]  
-          }
-        }
-      end
-
       errors = ::Kmba::ValidateSavePayment.new(
-        config: config
+        payments: payments
       ).execute!
 
 
       if errors[:full_messages].any?
         render json: errors, status: 400
       else
+        payments.each do |m|
+
+          @payment_data = {}
+          @payment_data[:member_id]                 =m["member_id"]
+          @payment_data[:account_subtype]           =m["account_subtype"]
+          @payment_data[:subsidiary_id]             =m["subsidiary_id"]
+          @payment_data[:subsidiary_type]           =m["subsidiary_type"]
+          @payment_data[:amount]                    =m["amount"]
+          @payment_data[:transaction_type]          =m["transaction_type"]
+          @payment_data[:transacted_at]             =m["transacted_at"]
+          @payment_data[:status]                    =m["status"]
+          @payment_data[:data]                      =m["data"]
+          @payment_data[:created_at]                =m["created_at"]
+          @payment_data[:updated_at]                =m["updated_at"]
+
+          @payments << @payment_data 
+         
+          config = @payments.map{ |o|
+            {
+              subsidiary_id: o[:subsidiary_id],
+              subsidiary_type: o[:subsidiary_type],
+              amount: o[:amount],
+              transaction_type: o[:transaction_type],
+              transacted_at: o[:transacted_at],
+              status: o[:status],
+              data: o[:data],
+              created_at: o[:created_at],
+              updated_at: o[:updated_at]  
+            }
+          }
+        end
+
         config.each do |a|
           @payment = AccountTransaction.where(subsidiary_id: a[:subsidiary_id])
           payment_data = {
@@ -256,7 +253,7 @@ module Api
       end
 
       if @counter_save > 0
-        render :status => "200", :json => {:code => "KMBA-001", :Uploaded => "#{@counter_save}"}.to_json
+        render :status => "200", :json => {:code => "KMBA-002", :Uploaded => "#{@counter_save}"}.to_json
       end  
     end
 
@@ -268,56 +265,56 @@ module Api
 
       claims = params[:_json]
 
-      claims.each do |c|
-        @claims_data = {}
-        @claims_data[:date_prepared]                      = c[:date_prepared]
-        @claims_data[:prepared_by]                        = c[:prepared_by]
-        @claims_data[:created_at]                         = c[:created_at]
-        @claims_data[:updated_at]                         = c[:updated_at]
-        @claims_data[:member_id]                          = c[:member_id]
-        @claims_data[:center_id]                          = c[:center_id]
-        @claims_data[:branch_id]                          = c[:branch_id]
-        @claims_data[:claim_type]                         = c[:claim_type]
-        @claims_data[:data]                               = c[:data]
-        @claims_data[:status]                             = c[:status]
-        @claims_data[:approved_by]                        = c[:approved_by]
-        @claims_data[:checked_by]                         = c[:checked_by]
-        @claims_data[:date_checked]                       = c[:date_checked]
-        @claims_data[:date_approved]                      = c[:date_approved]
-        @claims_data[:posted_by]                          = c[:posted_by]
-        @claims_data[:date_posted]                        = c[:date_posted]
-
-        @claims << @claims_data
-
-        config  = @claims.map { |o|
-          {
-            date_prepared: o[:date_prepared],
-            prepared_by: o[:prepared_by],
-            created_at: o[:created_at],
-            updated_at: o[:updated_at],
-            member_id: o[:member_id],
-            center_id: o[:center_id],
-            branch_id: o[:branch_id],
-            claim_type: o[:claim_type],
-            data: o[:data],
-            status: o[:status],
-            approved_by: o[:approved_by],
-            checked_by: o[:checked_by],
-            date_checked: o[:date_checked],
-            date_approved: o[:date_approved],
-            posted_by: o[:posted_by],
-            date_posted: o[:date_posted]
-          }
-        }
-      end
-
       errors = ::Kmba::ValidateSaveClaims.new(
-        config: config
+        claims: claims
       ).execute!
 
       if errors[:full_messages].any?
-      render json: errors, status: 400
+        render json: errors, status: 400
       else
+        claims.each do |c|
+          @claims_data = {}
+          @claims_data[:date_prepared]                      = c[:date_prepared]
+          @claims_data[:prepared_by]                        = c[:prepared_by]
+          @claims_data[:created_at]                         = c[:created_at]
+          @claims_data[:updated_at]                         = c[:updated_at]
+          @claims_data[:member_id]                          = c[:member_id]
+          @claims_data[:center_id]                          = c[:center_id]
+          @claims_data[:branch_id]                          = c[:branch_id]
+          @claims_data[:claim_type]                         = c[:claim_type]
+          @claims_data[:data]                               = c[:data]
+          @claims_data[:status]                             = c[:status]
+          @claims_data[:approved_by]                        = c[:approved_by]
+          @claims_data[:checked_by]                         = c[:checked_by]
+          @claims_data[:date_checked]                       = c[:date_checked]
+          @claims_data[:date_approved]                      = c[:date_approved]
+          @claims_data[:posted_by]                          = c[:posted_by]
+          @claims_data[:date_posted]                        = c[:date_posted]
+
+          @claims << @claims_data
+
+          config  = @claims.map { |o|
+            {
+              date_prepared: o[:date_prepared],
+              prepared_by: o[:prepared_by],
+              created_at: o[:created_at],
+              updated_at: o[:updated_at],
+              member_id: o[:member_id],
+              center_id: o[:center_id],
+              branch_id: o[:branch_id],
+              claim_type: o[:claim_type],
+              data: o[:data], 
+              status: o[:status],
+              approved_by: o[:approved_by],
+              checked_by: o[:checked_by],
+              date_checked: o[:date_checked],
+              date_approved: o[:date_approved],
+              posted_by: o[:posted_by],
+              date_posted: o[:date_posted]
+            } 
+          }
+        end
+ 
         config.each do |a|  
           @claims = Claim.where(member_id: a[:member_id])
 
@@ -356,7 +353,7 @@ module Api
       end
 
       if @counter_update > 0
-        render :status => "200", :json => {:code => "KMBA-002", :Updated => "#{@counter_update}"}.to_json
+        render :status => "200", :json => {:code => "KMBA-003", :Updated => "#{@counter_update}"}.to_json
       end  
     end
   end
