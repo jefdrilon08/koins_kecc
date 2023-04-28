@@ -33,39 +33,41 @@ module DataStores
       @p.each do |pdd|
         g = @data_category.select{ |a| a[:category_id] == pdd.id }
         h = g.map{ |f| f[:member]  }
-        tmp2 = []
+        tmp3 = []
+        dettmp = ""
         ProjectType.where(project_type_category_id: pdd.id, is_active: true).each do |pt|
          iter = 0
-         h[0].map{ |d| d[:project_type]}.each do |ptd|
-          
-            c = ptd.select{ |a| a[:project_type_id] == pt.id  }.count
+         tmp2 = []
+         
+          mem = h[0].map{ |l|
+                    
 
-            iter = iter + c 
-          end
-          
-          mem = h[0].map{ |l| 
-                              tmp = { last_name: l.fetch(:last_name),  
+
+                              c =  l.fetch(:project_type).select{ |h| h[:project_type_id] == pt.id}
+
+                              if c.count > 0
+                                tmp = { last_name: l.fetch(:last_name),  
                                       first_name:l.fetch(:first_name) 
                                     } 
-                                    tmp  
+                                    tmp 
+                                tmp2 << { member: tmp, ptype: c.last  }
+                                iter = iter + c.count
+                              end
                         }
 
-      
-          tmp2 << { det: pt.name, cter: iter, member_list: mem }
-        
+
+          tmp3 << { det: pt.name, i: iter, name: tmp2 }
+          
 
         end
 
         
-        @data << { categ: pdd.name, categ_det: tmp2, cntotal: g[0][:count]}
+        @data << { categ: tmp3}
 
 
       end
 
       @data
-      #@data_category.each do |a|
-      #  raise a.inspect
-      #end
 
 
     end
