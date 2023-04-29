@@ -225,6 +225,7 @@ import InvoluntaryMembersShow from "../models/InvoluntaryMembersShow.js";
 //=======
 import BankTransferIndex from "../models/BankTransferIndex.js";
 import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
+import ProjectTypeSummaryIndex from "../models/ProjectTypeSummaryIndex.js";
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -412,6 +413,7 @@ const hooks = {
   "billing_for_writeoff/index":                       [BillingForWriteoffIndex],
   "billing_for_writeoff/show":                        [BillingForWriteoffShow],
   "data_stores/member_id_generators/index":           [MemberIdGeneratorsIndex],
+  "data_stores/project_types_summary/index":          [ProjectTypeSummaryIndex],
   "data_stores/member_id_generators/show":            [MemberIdGeneratorsShow],
   "data_stores/monthly_incentives/show":              [MonthlyIncentivesShow],
   "billing_for_writeoff_collections/index":           [BillingForWriteoffCollectionIndex],

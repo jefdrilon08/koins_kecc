@@ -382,6 +382,7 @@ Rails.application.routes.draw do
     delete "/members_project_types/:id", to: "members_project_types#destroy"
     
     get "/project_types_summary", to: "project_types_summary#index"
+    get "/project_types_summary/:id", to: "project_types_summary#show"
 
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"

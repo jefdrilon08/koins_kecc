@@ -1,0 +1,38 @@
+.row
+  .col 
+    .card
+      .card-body
+      
+        %h3 
+          #{@branch_name} Project Type
+        
+        %h6 
+          #{@data_store.created_at}
+        
+        %br
+        
+
+        - @data_store.data.each do |d|
+          %label
+            #{d["cated"]} (#{d["gTotal"]})
+          %table.table.table-bordered.table-sm.table-hover
+            %tbody
+            %tr
+              %th{:classname => "text-center", :width => "50%"}
+                Project Type
+              %th{:classname => "text-center", :width => "25%"}
+                Count
+              %th{:classname => "text-center", :width => "25%"}
+                Action
+                
+            - d["categ"].each do |dd|
+              %tr
+                %td{:classname => "text-center", :width => "50%"}
+                  #{dd["det"]}
+                %td{:classname => "text-center", :width => "25%"}
+                  #{dd["i"]}
+                %td{:classname => "text-center", :width => "25%"}
+                  Details
+
+              
+    

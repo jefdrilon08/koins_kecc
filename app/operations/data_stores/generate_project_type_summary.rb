@@ -1,6 +1,9 @@
 module DataStores
   class GenerateProjectTypeSummary
-    def initialize
+    
+    def initialize(branch_id:)
+  
+      @branch_id = branch_id
       @alist = Member.where(branch_id: "18cebed1-4838-4335-9023-ffd35c5e2629", status: "active")
       @p = ProjectTypeCategory.where(is_active: true)
       @data_category = []
@@ -20,7 +23,7 @@ module DataStores
             c = a_data[:project_type].select{ |a| a[:project_type_category_id] == pd.id  }
             if c.count > 0
               iter = iter + c.count
-              tmp <<  {last_name: a.last_name, first_name: a.first_name, project_type: c}
+              tmp <<  {last_name: a.last_name, first_name: a.first_name, center_id: a.center_id ,project_type: c}
             end
           end
         end
@@ -36,34 +39,28 @@ module DataStores
         tmp3 = []
         dettmp = ""
         ProjectType.where(project_type_category_id: pdd.id, is_active: true).each do |pt|
-         iter = 0
-         tmp2 = []
+          iter = 0
+          tmp2 = []
          
           mem = h[0].map{ |l|
-                    
-
-
                               c =  l.fetch(:project_type).select{ |h| h[:project_type_id] == pt.id}
-
                               if c.count > 0
                                 tmp = { last_name: l.fetch(:last_name),  
-                                      first_name:l.fetch(:first_name) 
-                                    } 
-                                    tmp 
+                                        first_name:l.fetch(:first_name),
+                                        center_id: l.fetch(:center_id)
+                                      } 
+                                tmp 
                                 tmp2 << { member: tmp, ptype: c.last  }
                                 iter = iter + c.count
                               end
                         }
 
-
-          tmp3 << { det: pt.name, i: iter, name: tmp2 }
+          tmp3 << { det: pt.name, i: iter, memDet: tmp2  }
           
 
         end
-
-        
-        @data << { categ: tmp3}
-
+      
+        @data << { cated: pdd.name, categ: tmp3, gTotal: g[0][:count]}
 
       end
 
@@ -71,7 +68,5 @@ module DataStores
 
 
     end
-    
-
   end
 end

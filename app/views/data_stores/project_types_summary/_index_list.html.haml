@@ -1,0 +1,27 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        SATO
+      %th.text-center
+        Ceated at
+      %th.text-center
+        Updated at
+
+  %tbody
+    - @data_store.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/project_types_summary/#{o.id}" do
+            .bi.bi-search
+        %td
+          %strong
+            = Branch.find(o.meta["branch_id"]).name
+        %td
+          %strong
+            = o["created_at"]
+        %td
+          %strong
+            = o["updated_at"]
+            

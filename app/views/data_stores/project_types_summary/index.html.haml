@@ -1,1 +1,8 @@
-jef
+= form_tag "", method: 'GET' do
+  .row
+    .col
+      .card
+        = render partial: "index_list"
+
+
+= render partial: "data_stores/project_types_summary/modals/new"

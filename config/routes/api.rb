@@ -1,6 +1,6 @@
 namespace :api do
   # PSR Schedules
-  post "/psr_schedules/generate", to: "psr_schedules#generate"
+  post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
 
@@ -564,6 +564,7 @@ namespace :api do
     post "/survey_answers/save", to: "survey_answers#save"
 
     namespace :data_stores do
+      post "/project_type_summary/create", to: "project_type_summary#create"
       post "/icpr/queue", to: "icpr#queue"
       get "/icpr/fetch", to: "icpr#fetch"
       post "/icpr/approve", to: "icpr#approve"
