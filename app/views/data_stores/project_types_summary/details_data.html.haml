@@ -11,16 +11,13 @@
       %table.table.table-bordered.table-sm.table-hover
         %tr
           %th
-            no. 
-          %th
             Name
           %th
             Center
         - @cdet.each do |c|
-          - c["memDet"].each_with_index do |m,i|
+          - c["memDet"].each do |m|
             %tr
-              %td
-                #{ i + 1 }
+            
               %td
                 #{m["member"]["last_name"]}, #{m["member"]["first_name"]}
               %td
