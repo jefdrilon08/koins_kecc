@@ -1,0 +1,29 @@
+.row
+  .col
+    .card
+      %h3
+        #{@prcategory.name}
+      %h6
+        #{@data_category_details.name}
+
+      %br
+
+      %table.table.table-bordered.table-sm.table-hover
+        %tr
+          %th
+            no. 
+          %th
+            Name
+          %th
+            Center
+        - @cdet.each do |c|
+          - c["memDet"].each_with_index do |m,i|
+            %tr
+              %td
+                #{ i + 1 }
+              %td
+                #{m["member"]["last_name"]}, #{m["member"]["first_name"]}
+              %td
+                #{Center.find(m["member"]["center_id"]).name} 
+        
+

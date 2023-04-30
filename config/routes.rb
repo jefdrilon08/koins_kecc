@@ -383,6 +383,7 @@ Rails.application.routes.draw do
     
     get "/project_types_summary", to: "project_types_summary#index"
     get "/project_types_summary/:id", to: "project_types_summary#show"
+    get "/project_types_summary/:id/details_data/:categ/cetag_details/:cated_details", to: "project_types_summary#details_data"
 
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"

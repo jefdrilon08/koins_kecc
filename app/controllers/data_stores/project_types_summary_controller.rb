@@ -39,5 +39,18 @@ module DataStores
 
     end
 
+    def details_data
+      @data_store = DataStore.find(params[:id])
+      @prcategory = ProjectTypeCategory.find(params[:categ])
+      @data_category_details = ProjectType.find(params[:cated_details])
+      
+      h = @data_store.data.select{ |c| c["cated_id"] == @prcategory.id  }
+      
+      @cdet  = h[0]["categ"].select{ |cc| cc["det_id"]  == @data_category_details.id   }
+
+      #raise cdet[0]["memDet"].inspect
+
+    end
+
   end
 end

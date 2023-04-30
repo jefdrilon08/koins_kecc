@@ -55,12 +55,12 @@ module DataStores
                               end
                         }
 
-          tmp3 << { det: pt.name, i: iter, memDet: tmp2  }
+          tmp3 << { det_id: pt.id, det: pt.name, i: iter, memDet: tmp2  }
           
 
         end
       
-        @data << { cated: pdd.name, categ: tmp3, gTotal: g[0][:count]}
+        @data << { cated_id: pdd.id, cated: pdd.name, categ: tmp3, gTotal: g[0][:count]}
 
       end
 
