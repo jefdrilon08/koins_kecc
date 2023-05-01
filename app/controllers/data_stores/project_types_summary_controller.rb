@@ -9,7 +9,7 @@ module DataStores
                                      "PROJECT_TYPE_SUMMARY"
                                     )
 
-      @data_store_meta = @data_store.last.meta.with_indifferent_access
+      #@data_store_meta = @data_store.last.meta.with_indifferent_access
 
 
 
