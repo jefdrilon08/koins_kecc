@@ -12,8 +12,8 @@ module Loans
 
     def execute!
       #PROJECT TYPE present in entry point
-      #if @loan_product.is_entry_point == true and @loan_data[:project_type_id].blank?
-      if @loan_product.is_entry_point == true
+      if @loan_product.is_entry_point == true and @loan_data[:project_type_id].blank?
+      #if @loan_product.is_entry_point == true
         @errors[:messages] << {
           key: "project_type",
           message: "Project Type is required"
