@@ -57,32 +57,32 @@ module Kmba
             }
           end
 
-          if a[:data][:address][:district].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "address_district",
-              message: "Address District not found"
-            }
-          end
+          # if a[:data][:address][:district].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     member_id: a[:identification_number],
+          #     key: "address_district",
+          #     message: "Address District not found"
+          #   }
+          # end
 
-          if a[:data][:address][:city].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "address_city",
-              message: "Address City not found"
-            }
-          end
+          # if a[:data][:address][:city].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     member_id: a[:identification_number],
+          #     key: "address_city",
+          #     message: "Address City not found"
+          #   }
+          # end
 
-          if a[:date_of_birth].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "date_of_birth",
-              message: "Date of Birth not found"
-            }
-          end
+          # if a[:date_of_birth].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     member_id: a[:identification_number],
+          #     key: "date_of_birth",
+          #     message: "Date of Birth not found"
+          #   }
+          # end
 
           if a[:gender].blank?
             @errors[:messages] << {
@@ -93,14 +93,14 @@ module Kmba
             }
           end
 
-          if a[:civil_status].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "civil_status",
-              message: "Civil Status not found"
-            }
-          end
+          # if a[:civil_status].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     member_id: a[:identification_number],
+          #     key: "civil_status",
+          #     message: "Civil Status not found"
+          #   }
+          # end
 
           if a[:branch_id].blank?
             @errors[:messages] << {

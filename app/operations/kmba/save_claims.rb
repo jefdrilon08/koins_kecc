@@ -10,7 +10,7 @@ module Kmba
 
     def execute!
       # raise @member_data.
-        claims_data = Claims.new(
+        claims_data = Claim.new(
           date_prepared: @claims_data[:date_prepared],
           prepared_by: @claims_data[:prepared_by],
           created_at: @claims_data[:created_at],
