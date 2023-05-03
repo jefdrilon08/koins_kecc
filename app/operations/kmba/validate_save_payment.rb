@@ -12,7 +12,6 @@ module Kmba
       if @payments.nil?
         @errors[:messages] << {
           code: "KMBA-001",
-          subsidiary_id: a[:subsidiary_id],
           key: "no_Payments", 
           message: "No Payments Record Found!"
         }
@@ -104,60 +103,60 @@ module Kmba
             }
           end 
 
-          if a[:data][:is_withdraw_payment].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_withdraw_payment", 
-              message: "is Withdraw Payment not found"
-            }
-          end
+          # if a[:data][:is_withdraw_payment].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_withdraw_payment", 
+          #     message: "is Withdraw Payment not found"
+          #   }
+          # end
 
-          if a[:data][:is_fund_transfer].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_fund_transfer", 
-              message: "is Fund Transfer not found"
-            }
-          end
+          # if a[:data][:is_fund_transfer].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_fund_transfer", 
+          #     message: "is Fund Transfer not found"
+          #   }
+          # end
 
-          # validation need to specified
-          if a[:data][:is_interest].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_interest", 
-              message: "is Interest not found"
-            }
-          end
+          # # validation need to specified
+          # if a[:data][:is_interest].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_interest", 
+          #     message: "is Interest not found"
+          #   }
+          # end
 
-          if a[:data][:is_adjustment].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_adjustment", 
-              message: "is Adjustment not found"
-            }
-          end
+          # if a[:data][:is_adjustment].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_adjustment", 
+          #     message: "is Adjustment not found"
+          #   }
+          # end
 
-          if a[:data][:is_for_exit_age].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_for_exit_age", 
-              message: "is for Exit Age not found"
-            }
-          end 
+          # if a[:data][:is_for_exit_age].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_for_exit_age", 
+          #     message: "is for Exit Age not found"
+          #   }
+          # end 
 
-          if a[:data][:is_for_loan_payments].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              subsidiary_id: a[:subsidiary_id],
-              key: "is_for_loan_payments", 
-              message: "Is For Loan Payments not found"
-            }
-          end
+          # if a[:data][:is_for_loan_payments].blank?
+          #   @errors[:messages] << {
+          #     code: "KMBA-001",
+          #     subsidiary_id: a[:subsidiary_id],
+          #     key: "is_for_loan_payments", 
+          #     message: "Is For Loan Payments not found"
+          #   }
+          # end
         }
       end
 

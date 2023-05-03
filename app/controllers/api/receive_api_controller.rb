@@ -165,7 +165,7 @@ module Api
         end
 
         if @counter_save > 0 and @counter_update > 0
-          render :status => "200", :json => {:code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}"}
+          render :status => "200", :json => {:code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}", :Record_Count => "#{config.count}"}
         elsif @counter_save > 0
           render :status => "201", :json => {:code => "KMBA-002", :Uploaded => "#{@counter_save}"}.to_json
         elsif @counter_update > 0
@@ -193,35 +193,34 @@ module Api
         render json: errors, status: 400
       else
         payments.each do |m|
+        @payment_data = {}
+        @payment_data[:member_id]                 =m["member_id"]
+        @payment_data[:account_subtype]           =m["account_subtype"]
+        @payment_data[:subsidiary_id]             =m["subsidiary_id"]
+        @payment_data[:subsidiary_type]           =m["subsidiary_type"]
+        @payment_data[:amount]                    =m["amount"]
+        @payment_data[:transaction_type]          =m["transaction_type"]
+        @payment_data[:transacted_at]             =m["transacted_at"]
+        @payment_data[:status]                    =m["status"]
+        @payment_data[:data]                      =m["data"]
+        @payment_data[:created_at]                =m["created_at"]
+        @payment_data[:updated_at]                =m["updated_at"]
 
-          @payment_data = {}
-          @payment_data[:member_id]                 =m["member_id"]
-          @payment_data[:account_subtype]           =m["account_subtype"]
-          @payment_data[:subsidiary_id]             =m["subsidiary_id"]
-          @payment_data[:subsidiary_type]           =m["subsidiary_type"]
-          @payment_data[:amount]                    =m["amount"]
-          @payment_data[:transaction_type]          =m["transaction_type"]
-          @payment_data[:transacted_at]             =m["transacted_at"]
-          @payment_data[:status]                    =m["status"]
-          @payment_data[:data]                      =m["data"]
-          @payment_data[:created_at]                =m["created_at"]
-          @payment_data[:updated_at]                =m["updated_at"]
-
-          @payments << @payment_data 
+        @payments << @payment_data 
          
-          config = @payments.map{ |o|
-            {
-              subsidiary_id: o[:subsidiary_id],
-              subsidiary_type: o[:subsidiary_type],
-              amount: o[:amount],
-              transaction_type: o[:transaction_type],
-              transacted_at: o[:transacted_at],
-              status: o[:status],
-              data: o[:data],
-              created_at: o[:created_at],
-              updated_at: o[:updated_at]  
-            }
+        config = @payments.map{ |o|
+          {
+            subsidiary_id: o[:subsidiary_id],
+            subsidiary_type: o[:subsidiary_type],
+            amount: o[:amount],
+            transaction_type: o[:transaction_type],
+            transacted_at: o[:transacted_at],
+            status: o[:status],
+            data: o[:data],
+            created_at: o[:created_at],
+            updated_at: o[:updated_at]  
           }
+        }
         end
 
         config.each do |a|
@@ -243,7 +242,7 @@ module Api
             cmd = Kmba::SavePayment.new(
               payment_data: payment_data
             ).execute!
-          @counter_save += 1
+            @counter_save += 1
           # else
           #   cmd = Kmba::UpdatePayments.new(
           #     payment_data: payment_data
@@ -337,17 +336,11 @@ module Api
             date_posted: a[:date_posted]
           }
 
-          if @claims.count == 1
-            if a[:status] == 'approved'
-              cmd = ::Kmba::UpdateClaims.new(
-                claims_data: claims_data
-              ).execute!
-              @counter_update =+1
-            end
-          # else
-          #   cmd = ::Kmba::SaveClaims.new(
-          #     claims_data: claims_data
-          #   ).execute!
+          if @claims.count >= 1
+            cmd = ::Kmba::UpdateClaims.new(
+              claims_data: claims_data
+            ).execute!
+            @counter_update +=1
           end
         end
       end
