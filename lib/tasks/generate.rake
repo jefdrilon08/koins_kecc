@@ -206,4 +206,35 @@ namespace :generate do
       end
     end  
   end
+
+  task :patronage_refund => :environment do 
+    require 'csv'
+    accounting_reference_number = ENV["REFERENCE_NUMBER"]
+    date_approved  = ENV["DATE_APPROVED"]
+    CSV.open("#{Rails.root}/tmp/patronage_refund_#{accounting_reference_number}.csv", "w",:write_headers=> true, :headers => ["MEMBER" , "ID_NUMBER" ,"SAVINGS", "CBU" ] ) do |csv|
+      account_transaction = AccountTransaction.where("data->>'is_patronage_refund'=? and data->>'is_interest' = ? and status = ? 
+        and transaction_type = ? and data->>'accounting_entry_reference_number' = ? and transacted_at = ? " , "true","true","approved","deposit","#{accounting_reference_number}","#{date_approved.to_date}")
+
+        account_transaction.each do |at|
+          #kimpok
+          subsidiary_id = at.subsidiary_id
+          savings = at.amount.to_f
+          member_account = MemberAccount.find(subsidiary_id)
+          member = Member.find(member_account.member_id)
+          account_subtype = member_account.account_subtype
+          
+          #cbu
+          cbu = MemberAccount.where(member_id: member_account.member_id, account_type: "EQUITY", account_subtype: "CBU").first
+          cbu_account_transaction = AccountTransaction.where("data->>'is_patronage_refund' = 'true'  and status = 'approved'
+          and transaction_type = 'deposit' and transacted_at = '#{date_approved.to_date}' and subsidiary_id = '#{cbu.id}' ").first
+          cbu_amount = cbu_account_transaction.amount.to_f
+          csv << [member.full_name,member.identification_number,savings,cbu_amount]
+        
+        end
+    end
+  end
+
+
+
+
 end
