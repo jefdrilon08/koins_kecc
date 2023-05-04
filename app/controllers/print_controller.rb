@@ -14,9 +14,14 @@ class PrintController < ApplicationController
     if type == "print_monthly_incentives"
       monthly_incentive = params[:id]
       data = ::Print::BuildMonthlyIncentive.new(config: monthly_incentive).execute!
+
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
-
+    elsif type == "involuntary_members_list"
+      id = params[:id]
+      data = ::Print::BuildInvoluntaryMasterList.new(config: id).execute!
+      @data = data
+      render "print/involuntary_master_list", layout: "print"
     elsif type == "print_involuntary_members"
       data_str = params[:data]
       data = ::Print::BuildInvoluntaryLetter.new(config: JSON.parse(data_str)).execute!
