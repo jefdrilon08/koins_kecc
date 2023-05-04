@@ -548,6 +548,9 @@ export default function MembersProfileLoans(props) {
                     Accrued Interest
                   </th>
                   <th className="text-end">
+                    Total Paid
+                  </th>
+                  <th className="text-end">
                     Total Balance
                   </th>
                   <th className="text-end">
@@ -579,6 +582,11 @@ export default function MembersProfileLoans(props) {
                       </td>
                       <td className="text-end">
                         <strong>
+                          {o.total_balance_accrued_interest}
+                        </strong>
+                      </td>
+                      <td className="text-end">
+                        <strong>
                           {o.status}
                         </strong>
                       </td>
@@ -591,7 +599,7 @@ export default function MembersProfileLoans(props) {
         } else {
           return (
             <p>
-              No Accrued Interest.
+              No Accrued Interest found.
             </p>
           )
         }
