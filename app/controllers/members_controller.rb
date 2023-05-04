@@ -390,22 +390,32 @@ class MembersController < ApplicationController
         relationship:   o.relationship
       }
     }
-      @accrued_interest_data = []
-      if @accrued_interest.present?
-       @accrued_interest_data = @accrued_interest.map{ |o|
-          if o[:data]["accrued_interest"].present?
-            {
-          id:                               o.id,
-          pn_number:                        o.pn_number,
-          loan_product:                     o.loan_product.name,
-          total_accrued_interest:           view_context.number_to_currency(o[:data]["accrued_interest"]["total_accrued_interest"], unit: ''),
-          total_accrued_interest_balance:   view_context.number_to_currency(o[:data]["accrued_interest"]["total_accrued_interest_balance"], unit: ''),
-          status:                           o[:data]["accrued_interest"]["status"]
-          }
-        end
-        }
+@accrued_interest_data = []
+if @accrued_interest.present?
+  @accrued_interest_data = @accrued_interest.map{ |o|
+    if o[:data]["accrued_interest"].present?
+      total_accrued_interest = o[:data]["accrued_interest"]["total_accrued_interest"]
+      total_accrued_interest_balance = o[:data]["accrued_interest"]["total_accrued_interest_balance"]
+      status = o[:data]["accrued_interest"]["status"]
+      
+      if status.blank?
+        status = o[:data]["accrued_interest"]["status"] = "active"
+      else
+  
       end
-
+      
+      {
+        id:                               o.id,
+        pn_number:                        o.pn_number,
+        loan_product:                     o.loan_product.name,
+        total_accrued_interest:           view_context.number_to_currency(total_accrued_interest, unit: ''),
+        total_accrued_interest_balance:   total_accrued_interest_balance,
+        total_balance_accrued_interest:   total_accrued_interest,
+        status:                           status
+      }
+    end
+  }
+end
     @resignation_records = []
 
     if @data[:resignation_records].present?
