@@ -30,6 +30,15 @@ module DataStores
 	          },
 	          text: "Delete"
 	        }
+	   @subheader_side_actions << {
+	          id: "btn-print-list",
+	          link: "#",
+	          class: "fa fa-download",
+	          data: {
+              id: "#{@record.id}"
+            },
+	          text: "Print Master List"
+	        }
 		      @payload = {
 		        id: @record.id
 		      }

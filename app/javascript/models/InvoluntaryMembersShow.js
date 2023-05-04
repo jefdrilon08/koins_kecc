@@ -6,7 +6,8 @@ var authenticityToken;
 
 var $modalDetails;
 var $btnDetails;
-var $btnPrint;
+var $btnPrintList;
+var $modalPrintlist;
 var $btnConfirm;
 var $member_name;
 var $currentMember = "";
@@ -20,16 +21,35 @@ var _cacheDom = function() {
     document.getElementById("modal-details")
   );
 
-  $btnPrint = $(".btn-print-letter");
+  $btnPrint = $("btn-print-letter");
   $member_name = $(".display-member");
   $btnConfirm = $(".btn-confirm");
-
+  $btnPrintList  = $("#btn-print-list");
+  $modalPrintlist = $("#modal-print");
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
+  $printMessage       = $(".print-message");
+  loader            = $("#template-loader").html();
   var id = _id;
 }
 
 var _bindEvents = function() {
+  $btnPrintList.on("click", function(){
+    var print_list_id = $btnPrintList.data('id');
+    console.log(print_list_id);
+    $modalPrintlist.show();
+    $printMessage.html(
+      Mustache.render(
+        loader,
+        {}
+      )
+    );
+
+    $modalPrintlist.hide();
+    window.open("/print?id=" + print_list_id + "&type=involuntary_members_list");
+    
+  });
+
 	$btnPrint.on("click", function() {
     $currentMember = $(this).data("member-name");
     $currentMemberId = $(this).data("member-id");

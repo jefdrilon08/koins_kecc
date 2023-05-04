@@ -1,0 +1,111 @@
+:css
+  @page { size: portrait; margin: 60px;}
+  .just-font br {
+  content: "";
+  display: block;
+  
+  }
+  .text-indent p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    
+  }
+  .list-inline ul{
+  display:block;
+  margin-bottom:2rem;
+  }
+  .list-inline li {
+    display:inline-block;
+    margin-left: 50px;
+    margin-right: 100px;
+
+  }
+  .signatories ul{
+    display:block;
+
+  }
+  .signatories li{
+    display:inline-block;
+    margin-right: 80px;
+    padding-inline-start: 0px;
+  }
+  .member_signatories{
+    
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+
+
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 150px; margin-right: 20px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 13.32px"}
+          KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE
+      %br
+        %span
+          %var 4
+          %sup th
+          Floor KMBA Members Center Building
+      %br
+        %span
+          Telephone Numbers: (632) 8442-9607 or 5310-2470 / Fax Number: 
+        %br
+          (632) 8442-9607 loc. 204
+      %br
+        %span
+          %b
+            CDA REG. NO.: 9520-1016000000028521
+      %br
+        %span
+          %b
+            CIN: 16201628521
+
+
+%strong{style: "font-size: 16px"}
+  %center
+    Involuntary Members Master List
+
+%br
+%br
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "25%" }
+        Identification Number
+      %th.text-center
+        Member Name
+      %th.text-center
+        Center
+      %th.text-center
+        Release Date of Letter
+  %tbody
+    -@data[:records].each do |rec|
+      %tr
+        %td.text-center
+          #{rec[:identification_number]}
+        %td.text-center
+          #{rec[:member_name]}
+        %td.text-center
+          #{rec[:center]}
+        %td.text-center
