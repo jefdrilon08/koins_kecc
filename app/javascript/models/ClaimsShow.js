@@ -1,5 +1,6 @@
 import Mustache from "mustache";
 import $ from "jquery";
+import * as bootstrap from "bootstrap";
 
 var $btnConfirmApprove;
 var $btnConfirmPost;
@@ -847,14 +848,27 @@ var _cacheDom = function() {
   $errorsTemplate               = $("#errors-template");
   
   // Validate
-  $modalCheck                   = $("#modal-check-confirmation");
-  $modalProceed                 = $("#modal-proceed-confirmation");
-  $modalDeclined                = $("#modal-declined-confirmation");
-  $modalApprove                 = $("#modal-approve-confirmation");
-  $modalPost                    = $("#modal-post-confirmation");
-  $modalPending                 = $("#modal-pending-confirmation");
-
-  $modalNote                    = $("#modal-note");
+  $modalNote = new bootstrap.Modal(
+    document.getElementById("modal-note")
+  );
+  $modalPending = new bootstrap.Modal(
+    document.getElementById("modal-pending-confirmation")
+  );
+  $modalPost = new bootstrap.Modal(
+    document.getElementById("modal-post-confirmation")
+  );
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve-confirmation")
+  );
+  $modalDeclined = new bootstrap.Modal(
+    document.getElementById("modal-declined-confirmation")
+  );
+  $modalProceed = new bootstrap.Modal(
+    document.getElementById("modal-proceed-confirmation")
+  );
+  $modalCheck = new bootstrap.Modal(
+    document.getElementById("modal-check-confirmation")
+  );
 
   
   $modalErrorsApproval          = $(".modal-approve").find(".errors");
