@@ -79,4 +79,4 @@
       Admitted Members (#{@data[:counts][:active_members][:total]})
 .tab-content
   #active-members.tab-pane.active.show{:role => "tabpanel"}
-    = render partial: "data_stores/member_counts/members", locals: { members: @data[:counts][:active_members][:members] }
+    = render partial: "data_stores/insurance_member_counts/members", locals: { members: @data[:counts][:active_members][:members] }

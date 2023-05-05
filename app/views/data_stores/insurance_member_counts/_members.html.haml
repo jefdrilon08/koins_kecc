@@ -10,6 +10,8 @@
       %th
         Member Type
       %th
+        Insurance Status
+      %th
         Membership Date
   %tbody
     :ruby
@@ -30,5 +32,7 @@
           #{m[:center][:name]}
         %td
           #{m[:member_type]}
+        %td
+          #{m[:insurance_status]}
         %td
           #{membership_payment_records[m[:id]]}
