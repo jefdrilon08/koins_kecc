@@ -1658,7 +1658,7 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
- -
+  -
     loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # MAKITA POWER TOOLS
     receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
     interest_receivable_accounting_code_id: "0b747789-3f23-4bed-8737-e0e7acc44925"
@@ -1667,7 +1667,7 @@ loan_products:
       account_type: "SAVINGS"
       account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
-      threshold: 7001.00
+      threshold: 10001.00
     midas:
       contract_type: 12
       contract_phase: "AC"
@@ -1837,7 +1837,6 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
-
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-BAHAY W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
@@ -7723,6 +7722,10 @@ loan_product_accounting_codes:
     receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
     interest_receivable_accounting_code_id: "71f7aae7-9e8d-4d62-91f9-a91d87f9d978"
   -
+    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # Makita Power Tools
+    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
+    interest_receivable_accounting_code_id: "0b747789-3f23-4bed-8737-e0e7acc44925"
+  -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-Bahay W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
     interest_receivable_accounting_code_id: "37bc5013-9a2b-42a2-a904-0747f8f6d276"
@@ -7886,13 +7889,13 @@ loan_product_accounting_codes_for_writeoff:
     receivable_accounting_code_id: "eab8552e-4eed-41cd-a4d7-f91e120f03da"
     allowance_for_impairment_losses_accounting_code_id: "298d7ec9-a193-4e94-8cf2-9db91bdc4a85"
   -
+    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # Makita Power Tools
+    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
+    allowance_for_impairment_losses_accounting_code_id: "a8874c5b-cb34-49c0-bbab-192141ea1a76"
+  -
     loan_product_id: "584b2b6d-0499-4564-8c9b-57e2407b08b0"                         # K-Bahay W1
     receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
     allowance_for_impairment_losses_accounting_code_id: "cc14648f-4b94-4d45-a6fe-9b679673f0ed"
-  -
-    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # Makita Power Tools
-    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
-    interest_receivable_accounting_code_id: "0b747789-3f23-4bed-8737-e0e7acc44925"
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-Bahay W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
