@@ -1790,22 +1790,22 @@ loan_products:
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.255
+        monthly_interest_rate: 0.256
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.1542
+        monthly_interest_rate: 0.155
       -
         term: "weekly"
         min_num_installments: 26
         max_num_installments: 35
-        monthly_interest_rate: 0.110
+        monthly_interest_rate: 0.111
       -
         term: "weekly"
         min_num_installments: 36
         max_num_installments: 50
-        monthly_interest_rate: 0.0773
+        monthly_interest_rate: 0.0775
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-BAHAY W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
