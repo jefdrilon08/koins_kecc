@@ -41,7 +41,8 @@
             "Share Capital",
             "CBU",
             "Hospital Income Plan",
-            "Credit Life Insurance Plan"
+            "Credit Life Insurance Plan",
+            "Maintaining Balance Savings"
           ], 
           style: label_cell
 
@@ -57,6 +58,7 @@
           @cbu_total = 0.00
           @hiip_total = 0.00
           @clip_total = 0.00
+          @mbs_total = 0.00
 
           @records.each_with_index do |record, i|
             
@@ -76,6 +78,7 @@
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "CBU" }.first[:balance].to_f.round(2)
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
             row << record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
+            row << record[:accounts].select{ |acc| acc[:account_subtype] == "Maintaining Balance Savings"}.first[:balance].to_f.round(2)
 
             @kimpok_total += record["accounts"].select{ |acc| acc["account_subtype"] == "K-IMPOK" }.first["balance"].to_f.round(2)
             @goldenk_total += record["accounts"].select{ |acc| acc["account_subtype"] == "Golden K" }.first["balance"].to_f.round(2)
@@ -88,7 +91,7 @@
             @cbu_total += record[:accounts].select{ |acc| acc[:account_subtype] == "CBU" }.first[:balance].to_f.round(2)
             @hiip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Hospital Income Insurance Plan" }.first[:balance].to_f.round(2)
             @clip_total += record[:accounts].select{ |acc| acc[:account_subtype] == "Credit Life Insurance Plan" }.first[:balance].to_f.round(2)
-
+            @mbs_total += record[:accounts].select{  |acc| acc[:account_subtype] == "Maintaining Balance Savings"}.first[:balance].to_f.round(2)
               # record[:accounts].each do |a|
               #   row << a[:balance]
               #   if a[:account_subtype] == "Retirement Fund"
@@ -140,7 +143,8 @@
             @sc_total,
             @cbu_total,
             @hiip_total,
-            @clip_total
+            @clip_total,
+            @mbs_total
             ],
           style: [label_cell, count_cell, nil, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold, currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold,currency_cell_right_bold]
            
