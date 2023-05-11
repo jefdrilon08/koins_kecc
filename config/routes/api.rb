@@ -8,6 +8,7 @@ namespace :api do
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
+  get "/public/api_centers/:branch_id", to: "public#centers"
 
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"
@@ -606,6 +607,7 @@ namespace :api do
       post "/insurance_member_counts/queue", to: "insurance_member_counts#queue"
       post "/claims_counts/queue", to: "claims_counts#queue"
       post "/uploaded_documents_counts/queue", to: "uploaded_documents_counts#queue"
+      post "/member_quarterly_reports/queue", to: "member_quarterly_reports#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
       get "/monthly_new_and_resigned/fetch", to: "monthly_new_and_resigned#fetch"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
