@@ -67,12 +67,10 @@ module Api
     end
 
     def centers
-      raise params[:branch_id].inspect
-      if params[:id].blank?
-
+      if params[:branch_id].blank?
         render json: { errors: { branch_id: 'Branch id required' } }, status: :unprocessable_entity
       else
-        centers = Center.where("branch_id IN (?)", params[:id]).order("name ASC").order("name ASC").map{ |o|
+        centers = Center.select("id, name, branch_id").order("name ASC").map{ |o|
                     {
                       id: o.id,
                       name: o.name,
