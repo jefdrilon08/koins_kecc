@@ -20,6 +20,7 @@ export default function ClosingRecordsList(props) {
           </thead>
           <tbody>
             {props.closingRecords.map((o, i) => {
+              console.log(o);
               return (
                 <tr key={`cr-${i}`}>
                   <td>
