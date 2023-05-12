@@ -16,7 +16,7 @@ namespace :api do
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
   get "/public/branches", to: "public#branches"
-  get "/public/centers", to: "public#centers"
+  get "/public/centers/:branch_id", to: "public#centers"
   get "/public/clusters", to: "public#clusters"
   get "/public/areas", to: "public#areas"
 
@@ -628,6 +628,8 @@ namespace :api do
 
       post "/share_capital_summary/create", to: "share_capital_summary#create"
       get "/share_capital_summary/fetch", to: "share_capital_summary#fetch"
+
+      post "/assets_liabilities/create", to: "assets_liabilities#create"
     end
 
     namespace :epassbook do
