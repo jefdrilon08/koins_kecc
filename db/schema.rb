@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_01_022359) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -41,6 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_022359) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.uuid "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
@@ -410,6 +411,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_022359) do
     t.date "date_approved"
     t.string "posted_by"
     t.date "date_posted"
+    t.uuid "external_ref"
     t.index ["branch_id"], name: "index_claims_on_branch_id"
     t.index ["center_id"], name: "index_claims_on_center_id"
     t.index ["member_id"], name: "index_claims_on_member_id"
@@ -1239,6 +1241,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_01_022359) do
     t.uuid "referrer_id"
     t.uuid "coordinator_id"
     t.string "email"
+    t.uuid "external_ref"
     t.index ["branch_id"], name: "index_members_on_branch_id"
     t.index ["center_id"], name: "index_members_on_center_id"
     t.index ["member_id"], name: "index_members_on_member_id"

@@ -20,7 +20,6 @@ module DataStores
 
     def show
       super
-      @data_store = DataStore.find(params[:id])
       @subheader_items = [
         { text: "Data Stores" },
         { text: "Repayment Rates", is_link: true, path:  "/data_stores/repayment_rates" }
