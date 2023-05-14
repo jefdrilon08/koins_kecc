@@ -82,6 +82,22 @@ module Api
       end
     end
 
+    def api_centers
+      if params[:branch_id].blank?
+        render json: { errors: { branch_id: 'Branch id required' } }, status: :unprocessable_entity
+      else
+        centers = Center.select("id, name, branch_id").order("name ASC").map{ |o|
+                    {
+                      id: o.id,
+                      name: o.name,
+                      branch_id: o.branch_id
+                    }
+                  }
+
+        render json: { centers: centers }
+      end
+    end
+
     def status_check
       reference_number = params[:reference_number]
 
