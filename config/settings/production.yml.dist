@@ -710,6 +710,18 @@ defaults:
     -
       account_subtype: "Retirement Fund"
       amount: 5.00
+    -
+      account_subtype: "Hospital Income Insurance Plan"
+      amount: 250.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-BENTE"
+      amount: 20.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-KALINGA"
+      amount: 50.00
+      mode_of_payment: "yearly"
   savings_deposits:
     -
       account_subtype: "K-IMPOK"
