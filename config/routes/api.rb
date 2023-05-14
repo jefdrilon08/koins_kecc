@@ -631,6 +631,8 @@ namespace :api do
 
       post "/share_capital_summary/create", to: "share_capital_summary#create"
       get "/share_capital_summary/fetch", to: "share_capital_summary#fetch"
+
+      post "/assets_liabilities/create", to: "assets_liabilities#create"
     end
 
     namespace :epassbook do

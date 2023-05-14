@@ -134,6 +134,7 @@ class DataStoreController < ApplicationController
       "additional_share"             => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "mbs_transfer"                => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "involuntary_members"         => {order: "as_of DESC", meta: %w[branch_name as_of],data: %[]},
+      "assets_liabilities"          => {order: "created_at DESC", meta: %w[start_date, end_date],data: %w[] },
 
     }
   end

@@ -53,8 +53,8 @@ module Api
                             }
                           }
                         )
-            elsif !@record.processing? and !@record.approved?
-              @record.update!("processing")
+              elsif !@record.processing? and !@record.approved?
+                @record.update!("processing")
             end
 
             args = {
