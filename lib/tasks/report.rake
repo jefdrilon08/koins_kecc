@@ -26,7 +26,7 @@ namespace :report do
     end
     puts @data
   end
-  
+
 task :involuntary_resignation => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
@@ -94,6 +94,20 @@ task :involuntary_resignation => :environment do
 
   puts @data
 
+  end
+  
+  task :member_list_ito => :environment do
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    @data = []
+    member = Member.where("status = 'active' and branch_id = ?" , br_id)
+
+    member.each do |mem|
+      
+    data = "#{mem.center.name}|#{mem.full_name}|#{mem.mobile_number}|#{mem.home_number}"
+    @data << data
+    end
+puts @data
   end
 
   task :member_registry => :environment do

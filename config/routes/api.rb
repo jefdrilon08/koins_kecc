@@ -37,6 +37,7 @@ namespace :api do
   post "/members/apply_online", to: "members#apply_online"
   post "/members/unlock", to: "members#unlock"
   post "/members/balik_kasapi", to: "members#balik_kasapi"
+  post "/members/reinstate", to: "members#reinstate"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
