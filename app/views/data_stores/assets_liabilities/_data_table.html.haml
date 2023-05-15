@@ -1,5 +1,5 @@
 %h4
-	Start Date #{@data_store[:meta]["start_date"].to_date} End Date #{@data_store[:meta]["end_date"]}
+	Date Range: #{@data_store[:meta]["start_date"].to_date.strftime("%B %d, %Y")} - #{@data_store[:meta]["end_date"].to_date.strftime("%B %d, %Y")}
 %br
 
 %table.table.table-bordered.table-sm.table-hover
@@ -49,7 +49,7 @@
 						Total
 					%th.text-end{:style =>"color: #ff0000"}
 						#{number_to_currency(total_liabilities.to_f.round(2),unit: '')}
-					}
+					
 				%tr{:style => "background-color: #171413;",:colspan => 2}
 					%th
 					%th
