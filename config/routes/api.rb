@@ -9,7 +9,7 @@ namespace :api do
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
   get "/public/api_centers/:branch_id", to: "public#centers"
-
+  
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"
   get "/dashboard/overview", to: "dashboard#overview"
