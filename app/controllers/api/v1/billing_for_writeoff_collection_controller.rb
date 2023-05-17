@@ -49,6 +49,17 @@ module Api
           render json: { message: "Done" }
         end
       end
+
+      def add_book_type
+          data_store_id = params[:id]
+          txtBt    =  params[:txtBookType]
+          ab = DataStore.find(data_store_id)
+          if txtBt == ""
+          else
+            ab.data['accounting_entry']['book'] = txtBt
+            ab.save!
+          end
+      end
       
       def add_particular
         data_store_id     = params[:id]
@@ -59,7 +70,7 @@ module Api
         data_store.save!
         render json: { message: "Done" }
       end
-      
+        
       def approve
         record = DataStore.find(params[:id])
         config = {
