@@ -13,7 +13,7 @@
       %th.text-center
         Status
   %thead
-    - @records.each do |o|
+    - @records.order(created_at: :desc).each do |o|
       %tr
         %td.text-center
           = link_to "/billing_for_writeoff_collections/#{o.id}" do
