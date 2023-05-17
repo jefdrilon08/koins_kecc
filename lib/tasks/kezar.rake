@@ -400,14 +400,23 @@ namespace :kezar do
 
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
   task send_to_mba_members: :environment do
-    # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    # save new record
+    # branch_id         = ENV["BRANCH_ID"] || "a181c1d0-6d41-4167-859b-30b2642bc891"
     # branch            = Branch.find(branch_id)
+    # start_date        = ENV["START_DATE"]  || '2023-02-01'
+    # end_date          = ENV["END_DATE"] || '2023-02-28'
 
-    start_date        = ENV["START_DATE"]  || '2022-12-01'
-    end_date          = ENV["END_DATE"] || '2022-12-31'
+    # update record
+    # branch_id         = ENV["BRANCH_ID"] || "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"
+    # branch            = Branch.find(branch_id)
+    # start_date        = ENV["START_DATE"]  || '2022-09-09'
+    # end_date          = ENV["END_DATE"] || '2022-09-10'
+
     # status            = 'inforce'
     is_batch          = ENV["BATCH"] || true
-    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
+    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/api_save_members"
+    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
+
 
     member_data = Member.select(
       "
@@ -421,6 +430,7 @@ namespace :kezar do
         members.date_of_birth,
         members.civil_status,
         members.home_number,
+        members.mobile_number,
         members.processed_by,
         members.approved_by,
         members.identification_number,
@@ -455,10 +465,11 @@ namespace :kezar do
         LEFT JOIN centers ON centers.id = members.center_id
       "
     ).where(
-      "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ?",
+      "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ? AND members.branch_id = ?",
       start_date,
-      end_date
-    ).find_in_batches(:batch_size => 500) do |group|
+      end_date,
+      branch
+    ).find_in_batches(:batch_size => 10) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
       member = group.map{ |o|
@@ -472,6 +483,7 @@ namespace :kezar do
           date_of_birth: o.date_of_birth,
           civil_status: o.civil_status,
           home_number: o.home_number,
+          mobile_number: o.mobile_number,
           processed_by: o.processed_by,
           approved_by: o.approved_by,
           identification_number: o.identification_number,
