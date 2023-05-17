@@ -170,6 +170,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/build_accounting_entry", to: "billing_for_writeoff_collection#build_accounting_entry"
     post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     post "/billing_for_writeoff_collection/add_particular", to: "billing_for_writeoff_collection#add_particular"
+    post "/billing_for_writeoff_collection/add_book_type", to: "billing_for_writeoff_collection#add_book_type"
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"

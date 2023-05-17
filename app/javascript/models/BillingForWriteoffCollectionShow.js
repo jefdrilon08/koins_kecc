@@ -5,6 +5,9 @@ import * as bootstrap from "bootstrap";
 var _authenticityToken;
 var _id;
 
+var $btnAddBook;
+var $inputBookType;
+
 var $btnAdd;
 var $btnApprove;
 var $btnConfirmProcess; 
@@ -13,7 +16,8 @@ var $modalUpdate;
 var $modalApproveTransaction;
 var $btnAddParticular;
 var $inputParticular;
-var _urlAddParticular = "/api/v1/billing_for_writeoff_collection/add_particular";
+var _urlAddParticular   = "/api/v1/billing_for_writeoff_collection/add_particular";
+var _urlAddBookType     = "/api/v1/billing_for_writeoff_collection/add_book_type";
 var _loanId;
 var _memberId;
 
@@ -28,6 +32,8 @@ var _cacheDom = function() {
   $modalApproveTransaction = new bootstrap.Modal(
     document.getElementById("modal-approve-transaction")
   )
+  $btnAddBook             = $("#btn-add-book");
+  $inputBookType          = $("#book_type");
 
   $btnAdd             = $("#btn-add");	
   $btnConfirmAmount   = $("#btn-confirm-amount")
@@ -45,6 +51,45 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+
+  $btnAddBook.on("click", function() {
+    //alert("jayson");
+     var txtBookType = $inputBookType.val()   
+     _id = $(this).data("id");    
+      $.ajax({      
+        url: _urlAddBookType,
+        method: "POST",
+        data: {
+    id: _id,
+    txtBookType:  txtBookType,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success!");
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors = ["Something went wrong"];
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnAddBook.prop("disabled", false);
+          }
+        }
+      });
+ 
+  });
+
   $btnAdd.on("click", function() {
     _memberId = $selectMember.val();
     _id = $(this).data("id");	  

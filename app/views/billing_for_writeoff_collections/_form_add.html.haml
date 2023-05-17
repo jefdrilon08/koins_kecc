@@ -17,6 +17,13 @@
     %th
       Action
       %button#btn-add-particular.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+        Save
+
+  %tr
+    %th
+      Book
+      = select_tag :book_type, options_for_select(["CRB" , "JVB"]), class: "form-control select-select2", id: "book_type" , prompt: "#{@data_store.data['accounting_entry']['book']}"
+    %th
+      Action
+      %button#btn-add-book.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
         Save 
-
-
