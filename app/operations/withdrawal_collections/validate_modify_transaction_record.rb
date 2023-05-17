@@ -72,11 +72,11 @@ module WithdrawalCollections
             key: "balance",
             message: "Invalid Withdrawal Amount #{amount} Balance is #{member_account.balance}"
           }
-          #elsif result < member_account.maintaining_balance
-          #  @errors[:messages] << {
-          #    key: "balance",
-          #    message: "Cannot withdraw #{amount} for balance #{member_account.balance} (Result: #{result}) with maintaining balance #{member_account.maintaining_balance}"
-          #  }
+          elsif result < member_account.maintaining_balance
+           @errors[:messages] << {
+             key: "balance",
+             message: "Cannot withdraw #{amount} for balance #{member_account.balance} (Result: #{result}) with maintaining balance #{member_account.maintaining_balance}"
+           }
           end
         end
       end
