@@ -7,6 +7,7 @@ module Api
       @count = []
       @counter_update = 0
       @counter_save = 0
+      @counter_invalid = 0
 
       # raise params[:_json].inspect      
       members = params[:_json]
@@ -46,7 +47,7 @@ module Api
           @member_data[:access_token]                 = m["access_token"]
           @member_data[:signature_data]               = m["signature_data"]
           @member_data[:modifiable]                   = m["modifiable"]
-          @member_data[:previous_date_resigned]       = m["previous_date_resigned"]
+          @member_data[:previous_date_resigned]       = m["previous_date_resignedd"]
           @member_data[:insurance_date_resigned]      = m["insurance_date_resigned"]
           @member_data[:member_id]                    = m["member_id"]
           @member_data[:encrypted_password]           = m["encrypted_password"]
@@ -107,6 +108,7 @@ module Api
 
         config.each do |a|
           @member = Member.where(identification_number: a[:identification_number])
+          @center = Center.where(id: a[:center_id])
           # raise @member.inspect
           member_data = {
             center_id: a[:center_id],
@@ -149,27 +151,33 @@ module Api
             external_ref: a[:external_ref]
           }
 
-          # if @member.count > 1
-          #   Rails.logger.info(puts("#{a[:identification_number]} Duplicate"))
-          if @member.count >= 1 
-            cmd = ::Kmba::UpdateMembers.new(
-              member_data: member_data
-            ).execute!
-            @counter_update +=1
+          if @center.count >= 1
+            # if @member.count > 1
+            # Rails.logger.info(puts("#{a[:identification_number]} Duplicate"))
+            if @member.count >= 1 
+              cmd = ::Kmba::UpdateMembers.new(
+                member_data: member_data
+              ).execute!
+              @counter_update +=1
+            else
+              cmd = ::Kmba::SaveMembers.new(
+                member_data: member_data
+              ).execute!
+              @counter_save +=1   
+            end
           else
-            cmd = ::Kmba::SaveMembers.new(
-              member_data: member_data
-            ).execute!
-            @counter_save +=1   
+            puts "invalid center_id"
+            @counter_invalid +=1 
           end
+   
         end
 
         if @counter_save > 0 and @counter_update > 0
-          render :status => "200", :json => {:code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}", :Record_Count => "#{config.count}"}
+          render :status => "200", :json => {:Code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}", :Invalid => "#{@counter_invalid}", :Record_Count => "#{config.count}"}
         elsif @counter_save > 0
-          render :status => "201", :json => {:code => "KMBA-002", :Uploaded => "#{@counter_save}"}.to_json
+          render :status => "201", :json => {:Code => "KMBA-002", :Uploaded => "#{@counter_save}", :Invalid => "#{@counter_invalid}"}.to_json
         elsif @counter_update > 0
-          render :status => "200", :json => {:code => "KMBA-003", :Updated => "#{@counter_update}"}.to_json
+          render :status => "200", :json => {:Code => "KMBA-003", :Updated => "#{@counter_update}", :Invalid => "#{@counter_invalid}"}.to_json
         end
       end
     end
