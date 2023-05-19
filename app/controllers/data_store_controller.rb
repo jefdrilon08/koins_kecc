@@ -17,6 +17,7 @@ class DataStoreController < ApplicationController
       @records = @records.where(
                   "as_of >= ?" , @start_date
                   )
+
     end
 
     if @end_date.present?
@@ -62,13 +63,12 @@ class DataStoreController < ApplicationController
     if @status.present?
       @records  = @records.where(
                     status: @status
-                  ) 
+                  )  
     end
   end
 
   def show
     @record = branch_data_stores.find_by(id: params[:id])
-
     if !@record || @record.processing?
       # XXX: Flashes aren't being used yet
       #
@@ -79,8 +79,8 @@ class DataStoreController < ApplicationController
 
   def destroy
     @record = DataStore.find(params[:id])
-
-    if !@record.processing?
+    
+    if !@record.processing? || !@record_summary.processing?
       @record.destroy!
       flash[:danger] = "#{data_store_scope.humanize} ##{@record.id} deleted."
     else
@@ -134,6 +134,7 @@ class DataStoreController < ApplicationController
       "additional_share"             => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "mbs_transfer"                => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "involuntary_members"         => {order: "as_of DESC", meta: %w[branch_name as_of],data: %[]},
+      "member_quarterly_reports"      => { order: "as_of DESC", data: %w[] },
 
     }
   end
