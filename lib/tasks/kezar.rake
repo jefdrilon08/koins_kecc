@@ -401,10 +401,11 @@ namespace :kezar do
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
   task send_to_mba_members: :environment do
     # save new record
-    # branch_id         = ENV["BRANCH_ID"] || "a181c1d0-6d41-4167-859b-30b2642bc891"
-    # branch            = Branch.find(branch_id)
-    # start_date        = ENV["START_DATE"]  || '2023-02-01'
-    # end_date          = ENV["END_DATE"] || '2023-02-28'
+    branch_id         = ENV["BRANCH_ID"] || "26df15a2-80de-4830-aae4-2f0645c059a3"
+    branch            = Branch.find(branch_id)
+    start_date        = ENV["START_DATE"]  || '2023-02-01'
+    end_date          = ENV["END_DATE"] || '2023-02-28'
+    # member            = 'd723aa98-fdd8-4834-b531-ecd6d447dcac'
 
     # update record
     # branch_id         = ENV["BRANCH_ID"] || "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"
@@ -412,59 +413,12 @@ namespace :kezar do
     # start_date        = ENV["START_DATE"]  || '2022-09-09'
     # end_date          = ENV["END_DATE"] || '2022-09-10'
 
-    # status            = 'inforce'
     is_batch          = ENV["BATCH"] || true
-    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/api_save_members"
+    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
     end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
 
 
-    member_data = Member.select(
-      "
-        members.id,
-        members.center_id,
-        members.branch_id,
-        members.first_name,
-        members.middle_name,
-        members.last_name,
-        members.gender,
-        members.date_of_birth,
-        members.civil_status,
-        members.home_number,
-        members.mobile_number,
-        members.processed_by,
-        members.approved_by,
-        members.identification_number,
-        members.place_of_birth,
-        members.status,
-        members.member_type,
-        members.religion,
-        members.insurance_status,
-        members.data,
-        members.date_resigned,
-        members.meta,
-        members.created_at,
-        members.updated_at,
-        members.access_token,
-        members.signature_data,
-        members.modifiable,
-        members.previous_date_resigned,
-        members.insurance_date_resigned,
-        members.member_id,
-        members.encrypted_password,
-        members.username,
-        members.online_application_id,
-        members.membership_arrangement_id,
-        members.membership_type_id,
-        members.referrer_id,
-        members.coordinator_id,
-        members.email
-      "
-    ).joins(
-      "
-        LEFT JOIN branches ON branches.id = members.branch_id
-        LEFT JOIN centers ON centers.id = members.center_id
-      "
-    ).where(
+    member_data = Member.where(
       "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ? AND members.branch_id = ?",
       start_date,
       end_date,
@@ -495,8 +449,6 @@ namespace :kezar do
           data: o.data,
           date_resigned: o.date_resigned,
           meta: o.meta,
-          created_at: o.created_at,
-          updated_at: o.updated_at,
           access_token: o.access_token,
           signature_data: o.signature_data,
           modifiable: o.modifiable,
@@ -510,7 +462,8 @@ namespace :kezar do
           membership_type_id: o.membership_type_id,
           referrer_id: o.referrer_id,
           coordinator_id: o.coordinator_id,
-          email: o.email
+          email: o.email,
+          external_ref: o.external_ref
         }
       }
 
