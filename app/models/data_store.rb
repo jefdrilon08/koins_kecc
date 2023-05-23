@@ -30,6 +30,7 @@ class DataStore < ApplicationRecord
   scope :income_statements, -> { where("meta->>'data_store_type' = ?", "INCOME_STATEMENT") }
   scope :member_counts, -> { where("meta->>'data_store_type' = ?", "MEMBER_COUNTS") }
   scope :insurance_member_counts, -> { where("meta->>'data_store_type' = ?", "INSURANCE_MEMBER_COUNTS") }
+  scope :member_quarterly_reports, -> { where("meta->>'data_store_type' = ?", "MEMBER QUARTERLY REPORTS") }
   scope :claims_counts, -> { where("meta->>'data_store_type' = ?", "CLAIMS_COUNTS") }
   scope :uploaded_documents_counts, -> { where("meta->>'data_store_type' = ?", "UPLOADED_DOCUMENTS_COUNTS") }
   scope :branch_repayment_reports, -> { where("meta->>'data_store_type' = ?", "BRANCH_REPAYMENT_REPORT") }
