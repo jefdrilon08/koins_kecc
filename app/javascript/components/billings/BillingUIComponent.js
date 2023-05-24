@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import SkCubeLoading from '../SkCubeLoading';
 import BillingUITable from './BillingUITable';
+import BillingUITableTablet from './BillingUITableTablet';
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
 import {numberWithCommas} from '../utils/helpers';
 
