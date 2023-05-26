@@ -1,4 +1,7 @@
 namespace :api do
+
+  get "/branch_cash_flow", to: "branch_cash_flow#index"
+  post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules
   post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
   # Standard API

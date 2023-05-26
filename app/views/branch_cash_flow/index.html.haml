@@ -1,0 +1,12 @@
+%h4
+  Branch Cash Flow
+
+- if @records.any?
+  = render partial: "index_list"
+  = paginate @records
+- else
+  %p
+    No records
+
+= render partial: "branch_cash_flow/modals/new"
+        
