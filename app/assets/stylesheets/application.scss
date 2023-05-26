@@ -72,3 +72,30 @@ label {
   border: 1px solid #ddd;
   border-left-width: 0;
 }
+
+.sticky-header{
+  overflow-y:auto;
+  overflow-x:auto;
+  height: 1000px;
+
+}
+.header-fixed {
+  position: sticky;
+  top:0;
+  background-color: #737373;
+}
+
+.headcol {
+  position: absolute;
+  width: 5em;
+  left: 0;
+  top: auto;
+  border-top-width: 1px;
+  /*only relevant for first row*/
+  margin-top: -1px;
+  /*compensate for top border*/
+}
+
+.headcol:before {
+  content: 'Row ';
+}
