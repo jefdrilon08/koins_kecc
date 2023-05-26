@@ -498,6 +498,8 @@ Rails.application.routes.draw do
     get "/share_capital_summary", to: "share_capital_summary#index"
     get "/assets_liabilities", to: "assets_liabilities#index"
     get "/assets_liabilities/:id", to: "assets_liabilities#show"
+
+   
   end
   
   # daily_branch_metrics
@@ -593,6 +595,8 @@ Rails.application.routes.draw do
 
   # PSR Schedule
   get "/psr_schedules/generate", to: "psr_schedules#generate", as: :psr_schedules_generate
+
+  get "branch_cash_flow",to: "branch_cash_flow#index", as: :branch_cash_flow
 
   # ACTIVITY LOGS
   #resources :activity_logs, only: [:index]
