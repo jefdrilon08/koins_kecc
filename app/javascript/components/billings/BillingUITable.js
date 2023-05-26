@@ -30,7 +30,7 @@ export default class BillingUITable extends React.Component {
     var headers = [];
 
     headers.push(
-      <th key={"h-member-attendance"} style={{minWidth: "100px"}}>
+      <th key={"h-member-attendance"} style={{minWidth: "100px"}} className="header-fixed">
         <center>
           <small>
             Attend.
@@ -55,14 +55,14 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th key={"h-member"} style={{minWidth: "300px"}}>
+      <th key={"h-member"} style={{minWidth: "300px"}} className="header-fixed">
         Member
       </th>
     );
 
     for(var i = 0; i < this.props.data.data.headers.length; i++) {
       headers.push(
-        <th key={"h-" + i} style={{minWidth: "100px"}}>
+        <th key={"h-" + i} style={{minWidth: "100px"}} className="header-fixed">
           <center>
             <small>
               {this.props.data.data.headers[i]}
@@ -73,7 +73,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th  key={"h-total"} style={{minWidth: "40px"}}>
+      <th  key={"h-total"} style={{minWidth: "40px"}} className="header-fixed">
         <center>
           CP
         </center>
@@ -81,7 +81,7 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th  key={"h-grand-total"} style={{minWidth: "40px"}}>
+      <th  key={"h-grand-total"} style={{minWidth: "40px"}} className="header-fixed">
         <center>
           TOTAL
         </center>
@@ -801,11 +801,10 @@ export default class BillingUITable extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
-        <div className="table-responsive">
+        <div className="table-responsive sticky-header">
           <table className="table table-bordered table-hover table-sm">
             <thead>
-              <tr>
+              <tr className="header-fixed">
                 {this.buildHeaders()}
               </tr>
             </thead>
