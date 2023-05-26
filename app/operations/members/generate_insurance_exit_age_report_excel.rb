@@ -29,8 +29,8 @@ module Members
 	                  member.age,
 	                  member.branch.name,
 	                  member.center.name,
-	                  member.member_accounts.where(account_subtype: "Life Insurance Fund").first.try(:balance),
-	                  member.member_accounts.where(account_subtype: "Retirement Fund").first.try(:balance)
+	                  member.member_accounts.where("account_subtype = ? AND balance >= ? ", "Life Insurance Fund", 1 ).first.try(:balance),
+	                  member.member_accounts.where("account_subtype = ? AND balance >= ? ", "Retirement Fund", 1).first.try(:balance)
 	                ]
 	              	end
 	            end

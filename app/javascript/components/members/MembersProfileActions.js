@@ -12,6 +12,38 @@ export default function MembersProfileActions(props) {
   const [modifiable, setModifiable]               = useState(props.member.modifiable);
   const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
   const [isModalDelete, setIsModalDelete]         = useState(false);
+  const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
+  const [dateReinstated, setDateReinstated]       = useState("");
+
+  const handleReinstateClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/reinstate',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Reinstated");
+      window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
 
   const handleCreateSurveyClicked = () => {
     setIsLoading(true);
@@ -139,6 +171,54 @@ export default function MembersProfileActions(props) {
   }
   return (
     <>
+      <Modal
+        show={isModalReinstateOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Reinstate Member
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Reinstatement Date
+              </label>
+              <input
+                className="form-control"
+                value={dateReinstated}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateReinstated(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleReinstateClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalReinstateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal
         show={isModalSurveyOpen}
       >
@@ -281,6 +361,8 @@ export default function MembersProfileActions(props) {
 
       <hr/>
 
+      
+
       <div className="row">
         <div className="col">
           <div className="note note-info">
@@ -353,6 +435,53 @@ export default function MembersProfileActions(props) {
       </div>
 
       <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <button
+              className="btn btn-primary"
+              onClick={() => { window.location.href=`/members/${props.memberId}/blip_form_pdf` }}
+            >
+              Generate BLIP Form
+            </button>     
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            {(() => {
+              if(props.member.data["reinstatement"] == null ) {
+                return (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setModalReinstateOpen(true)
+                    }}
+                  >
+                    Reinstate
+                  </button>
+                )
+              } else if(props.member.data["reinstatement"]["is_reinstated"] == true || props.member.status == "pending"){
+                return (
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => { setModalReinstateOpen(false) }}
+                  >
+                    <span className="bi bi-padlock"/>
+                    Already Reinstated OR Pending Status
+                  </button>
+                )
+              }            
+            })()}
+          </div>
+        </div>
+      </div>
+      <hr/>
+
       <div className="row">
         <div className="col">
           <div className="note note-info">

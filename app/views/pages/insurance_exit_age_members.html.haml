@@ -59,6 +59,6 @@
                       %td
                         #{m.center.name}
                       %td
-                        #{m.member_accounts.where(account_subtype: "Life Insurance Fund").first.try(:balance)}
+                        #{m.member_accounts.where("account_subtype = ? AND balance >= ? ", "Life Insurance Fund", 1 ).first.try(:balance)}
                       %td
-                        #{m.member_accounts.where(account_subtype: "Retirement Fund").first.try(:balance)}
+                        #{m.member_accounts.where("account_subtype = ? AND balance >= ? ", "Retirement Fund", 1).first.try(:balance)}

@@ -425,6 +425,10 @@ Rails.application.routes.draw do
     get "/uploaded_documents_counts/:id", to: "uploaded_documents_counts#show"
     delete "/uploaded_documents_counts/:id", to: "uploaded_documents_counts#destroy"
 
+    get "/member_quarterly_reports", to: "member_quarterly_reports#index"
+    get "/member_quarterly_reports/:id", to: "member_quarterly_reports#show"
+    delete "/member_quarterly_reports/:id", to: "member_quarterly_reports#destroy"
+
     get "/monthly_new_and_resigned", to: "monthly_new_and_resigned#index"
     get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
     delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"

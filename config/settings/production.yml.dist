@@ -710,6 +710,18 @@ defaults:
     -
       account_subtype: "Retirement Fund"
       amount: 5.00
+    -
+      account_subtype: "Hospital Income Insurance Plan"
+      amount: 250.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-BENTE"
+      amount: 20.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-KALINGA"
+      amount: 50.00
+      mode_of_payment: "yearly"
   savings_deposits:
     -
       account_subtype: "K-IMPOK"
@@ -1254,7 +1266,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "Maintaining Balance Savings"
-      percentage: 0.2
+      percentage: 0.0
       threshold: 0.00
     midas:
       contract_type: 22
@@ -1658,7 +1670,154 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
-
+  -
+    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # MAKITA POWER TOOLS
+    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
+    interest_receivable_accounting_code_id: "0b747789-3f23-4bed-8737-e0e7acc44925"
+    amount_released_accounting_code_id: "d954b71f-2649-408f-b732-4c23987b3224"
+    default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "Maintaining Balance Savings"
+      percentage: 0.2
+      threshold: 10001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
+    deductions: 
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Deposit to credit life insurance plan"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "deposit"
+        advance_insurance_value: true
+        meta:
+          account_type: "INSURANCE"
+          account_subtype: "Credit Life Insurance Plan"
+          value: 0.00
+          algo: "term_multiplier_for_second_cycle_onwards"
+          offset: 1
+    use_term_interest:
+      -
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.256
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.155
+      -
+        term: "weekly"
+        min_num_installments: 26
+        max_num_installments: 35
+        monthly_interest_rate: 0.111
+      -
+        term: "weekly"
+        min_num_installments: 36
+        max_num_installments: 50
+        monthly_interest_rate: 0.0775
   -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-BAHAY W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
@@ -6202,12 +6361,12 @@ loan_products:
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.039
+        monthly_interest_rate: 0.050
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.048
+        monthly_interest_rate: 0.050
 #<<<<<<< HEAD
   -
     loan_product_id: "43e1ae2f-b723-4646-816c-5659146cf2ad"                         # KABUHAYAN W4
@@ -7544,6 +7703,10 @@ loan_product_accounting_codes:
     receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
     interest_receivable_accounting_code_id: "71f7aae7-9e8d-4d62-91f9-a91d87f9d978"
   -
+    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # Makita Power Tools
+    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
+    interest_receivable_accounting_code_id: "0b747789-3f23-4bed-8737-e0e7acc44925"
+  -
     loan_product_id: "204f8e78-586a-4266-ba9d-901b2f90d3c5"                         # K-Bahay W2
     receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
     interest_receivable_accounting_code_id: "37bc5013-9a2b-42a2-a904-0747f8f6d276"
@@ -7706,6 +7869,10 @@ loan_product_accounting_codes_for_writeoff:
     loan_product_id: "4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00"                         # K-Kabuhayan
     receivable_accounting_code_id: "eab8552e-4eed-41cd-a4d7-f91e120f03da"
     allowance_for_impairment_losses_accounting_code_id: "298d7ec9-a193-4e94-8cf2-9db91bdc4a85"
+  -
+    loan_product_id: "c77fa8f0-aa0f-4883-a677-e4addedf7ca3"                         # Makita Power Tools
+    receivable_accounting_code_id: "4172b33a-b6af-4d6e-a187-dc3be6c71dd3"
+    allowance_for_impairment_losses_accounting_code_id: "a8874c5b-cb34-49c0-bbab-192141ea1a76"
   -
     loan_product_id: "584b2b6d-0499-4564-8c9b-57e2407b08b0"                         # K-Bahay W1
     receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"

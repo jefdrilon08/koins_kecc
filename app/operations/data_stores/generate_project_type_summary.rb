@@ -4,7 +4,7 @@ module DataStores
     def initialize(branch_id:)
   
       @branch_id = branch_id
-      @alist = Member.where(branch_id: "18cebed1-4838-4335-9023-ffd35c5e2629", status: "active")
+      @alist = Member.where(branch_id: @branch_id, status: "active")
       @p = ProjectTypeCategory.where(is_active: true)
       @data_category = []
       @data = []
@@ -54,13 +54,15 @@ module DataStores
                                 iter = iter + c.count
                               end
                         }
-
-          tmp3 << { det_id: pt.id, det: pt.name, i: iter, memDet: tmp2  }
+          
+          #tmp3 << { det_id: pt.id, det: pt.name, i: tmp2.count, memDet: tmp2  }
+          tmp3 << { det_id: pt.id, det: pt.name, i: tmp2.count  }
           
 
         end
       
-        @data << { cated_id: pdd.id, cated: pdd.name, categ: tmp3, gTotal: g[0][:count]}
+        #raise tmp3.sum{ |a| a[:i] }.inspect
+        @data << { cated_id: pdd.id, cated: pdd.name, categ: tmp3, gTotal: tmp3.sum{ |a| a[:i] }}
 
       end
 

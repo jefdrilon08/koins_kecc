@@ -1,0 +1,88 @@
+:css
+  @page { size: portrait; margin: 0.0rem; margin-bottom: 0.0rem; margin-top: 0.0rem;}
+
+  @media print{
+      /* use your css selector */    
+      body{ 
+          page-break-inside: avoid;
+            
+      }
+  }
+  .page-break{
+     display: block;
+  clear: both;
+  page-break-after: avoid;
+  }
+- grand_total_wp = 0.0
+- grand_total_cp = 0.0
+- grand_total_payment = 0.0
+
+
+%div 
+  %small
+  %strong
+  %br
+    #{Settings.company_name}
+    #{Settings.company_address}
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  #{Branch.find(@billing[:branch]).name.upcase} - #{Center.find(@billing[:center]).name.upcase}
+  %br
+  Billing: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
+  %br
+  S.O: #{User.find(Center.find(@billing[:center]).user_id).full_name} 
+
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th.text-center{ width: "10%" }
+          Member Name
+        //- @billing[:data][:totals].each do |t|
+        %th.text-center{width: "5%" }
+          Withdraw
+        %th.text-center{width: "5%" }
+          Cash Payment
+        %th.text-center{width: "5%" }
+          Total
+    %tbody
+      - @billing[:data][:records].each do |r|
+        
+        
+        - member_total_cp     = 0.00
+        - member_grand_total  = 0.00
+        - withdraw_payment    = 0.0
+        %tr
+          %td
+            /#{Member.find(r[:member][:id]).identification_number}
+            #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
+
+          - r[:records].each do |rr|
+            - if rr[:record_type] == "WP"
+              - member_total_cp -= rr[:amount].to_f
+              - member_grand_total += rr[:amount].to_f
+              - withdraw_payment += rr[:amount]
+              - grand_total_wp += withdraw_payment
+              - grand_total_cp += member_total_cp
+            - else
+              - member_total_cp += rr[:amount].to_f
+              - member_grand_total += rr[:amount].to_f
+              
+
+          %td.text-end
+            #{number_to_currency(withdraw_payment.to_f.round(2),unit:'')}
+          %td.text-end
+            #{number_to_currency(member_total_cp.to_f.round(2),unit:'')}
+          %td.text-end
+            - grand_total_payment += member_grand_total
+            #{number_to_currency(member_grand_total.to_f.round(2),unit:'')}
+
+    %tr
+      %th
+        TOTAL
+      %th.text-end
+        #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
+      %th.text-end
+        #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
+      %th.text-end
+        #{number_to_currency(grand_total_payment.to_f.round(2),unit: '')}
+.page-break

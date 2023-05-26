@@ -29,7 +29,7 @@ module Api
                 }
               }
 
-      render json: { areas: areas }
+      render json: JSON.pretty_generate(areas: areas.as_json)
     end
 
     def clusters
@@ -46,7 +46,7 @@ module Api
                     }
                   }
 
-      render json: { clusters: clusters }
+      render json: JSON.pretty_generate(clusters: clusters.as_json)
     end
 
     def branches
@@ -63,23 +63,36 @@ module Api
                     }
                   }
 
-      render json: { branches: branches }
+      render json: JSON.pretty_generate(branches: branches.as_json)
     end
 
     def centers
       if params[:branch_id].blank?
-        render json: { errors: { branch_id: 'Branch id required' } }, status: :unprocessable_entity
+       render json: { errors: { branch_id: 'Branch id required' } }, status: :unprocessable_entity
       else
-        centers = Center.select("id, name, branch_id").order("name ASC").map{ |o|
+       centers = Center.select("id, name, branch_id").order("name ASC").map{ |o|
+                  {
+                    id: o.id,
+                    name: o.name,
+                    branch_id: o.branch_id
+                    }
+                  }
+ 
+        render json: JSON.pretty_generate(centers: centers.as_json)
+       end
+     end
+
+    def api_centers
+      branch_id = params[:branch_id]   
+      branch_center = Center.select("id, name").where(branch_id:  branch_id)            
+      centers  = branch_center.order("name ASC").map{ |o|
                     {
-                      id: o.id,
-                      name: o.name,
-                      branch_id: o.branch_id
+                      center_id: o.id,
+                      center_name: o.name,
                     }
                   }
 
-        render json: { centers: centers }
-      end
+      render json: JSON.pretty_generate(branch_centers: centers.as_json)
     end
 
     def status_check

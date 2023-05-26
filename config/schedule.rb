@@ -52,5 +52,10 @@ every :day, at: '1am' do
   rake "adjust:fill_recognition_date_from_membership_payment"
 end
 
+#runs on at 12:00AM on the first of each month
+every '0 0 1 * *' do
+    rake "adjust:process_member_quarterly_reports"
+end
+
 
 # Learn more: http://github.com/javan/whenever

@@ -111,8 +111,10 @@ class PagesController < ApplicationController
   end
 
   def insurance_exit_age_members 
-    @members = Member.where("DATE(date_of_birth) <= ? AND member_type = ? AND status = ? AND branch_id IN (?) ", 774.months.ago, "Regular", "active", @branches.pluck(:id)).order("branch_id ASC, center_id ASC, last_name ASC") 
-  
+    # @members = Member.where("DATE(date_of_birth) <= ? AND member_type = ? AND status = ? AND branch_id IN (?) ", 774.months.ago, "Regular", "active", @branches.pluck(:id)).order("branch_id ASC, center_id ASC, last_name ASC") 
+    @for_exit_age_members = Member.where("DATE(date_of_birth) <= ? AND member_type = ? AND members.status = ? AND members.branch_id IN (?) ", 774.months.ago, "Regular", "active", @branches.pluck(:id)).order("branch_id ASC, center_id ASC, last_name ASC") 
+    @members = @for_exit_age_members.joins(:member_accounts).where("account_subtype = ? AND balance >= ? AND members.branch_id IN (?) ", "Retirement Fund", 1, @branches.pluck(:id))
+    
     if params[:branch_id].present?
       @branch_id = params[:branch_id]
       @members = @members.where(branch_id: @branch_id)
@@ -182,7 +184,9 @@ class PagesController < ApplicationController
   end
 
   def download_exit_age
-    @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+    # @members = Member.active.where("DATE(date_of_birth) <= ? AND member_type = ? AND branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+    @for_exit_age_members = Member.where("DATE(date_of_birth) <= ? AND member_type = ?  AND members.branch_id IN (?) ", 774.months.ago, "Regular", @branches.pluck(:id)).order("branch_id ASC") 
+    @members = @for_exit_age_members.joins(:member_accounts).where("account_subtype = ? AND balance >= ? AND members.branch_id IN (?) ", "Retirement Fund", 1, @branches.pluck(:id))
     excel     = Members::GenerateInsuranceExitAgeReportExcel.new(
                   members: @members
                 ).execute!

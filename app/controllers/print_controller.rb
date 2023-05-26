@@ -185,6 +185,17 @@ class PrintController < ApplicationController
       @billing  = data
 
       render "print/billing", layout: "print"
+
+    elsif type == "print_thermal"
+      billing = Billing.find(params[:id])
+
+      data = ::Print::BuildBilling.new(
+        billing: billing
+        ).execute!
+
+      @billing = data
+      render "print/print_thermal", layout:"print"
+
     elsif type == "wp"
       billing = Billing.find(params[:id])
 

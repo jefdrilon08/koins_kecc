@@ -8,6 +8,8 @@ module BillingForWriteoffCollection
       @data           = @data_store.data.with_indifferent_access
       @member         = @data[:record].select{|x| x["member_id"] == @member_id}.last
       @member_loan    = @member['loan_data'].select{|y| y[:enabled] == true && y[:name] != "Withdraw Payment"}
+
+      #@member_loan    = @member['loan_data'].select{|y| y[:enabled] == true && y[:name] != "Withdraw Payment" && y[:name] != "CBU" && y[:name] != "Maintaining Balance"}
     end
     
     def add_member!
@@ -33,7 +35,8 @@ module BillingForWriteoffCollection
     end
 
     def update_distribution!
-      @member_loan = @member['loan_data'].select{|y| y[:enabled] == true && y[:name] != "Withdraw Payment" && y[:name] != 'CBU' && y[:name] != 'Share Capital' && y[:name] != 'Maintaining Balance'}
+      @member_loan = @member['loan_data'].select{|y| y[:enabled] == true && y[:name] != "Withdraw Payment"}
+      #@member_loan = @member['loan_data'].select{|y| y[:enabled] == true && y[:name] != "Withdraw Payment" && y[:name] != 'CBU' && y[:name] != 'Maintaining Balance'}
       @member_loan.each do |mem_loan|
         amort            = mem_loan[:loan_amort]
         principal_amount = []

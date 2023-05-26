@@ -22,6 +22,7 @@ var $modalUncheck;
 var $btnPrint;
 var $btnPrintWp;
 var $modalPrint;
+var $btnPrintThermal;
 
 var $btnZeroOut;
 var $btnConfirmZeroOut;
@@ -59,6 +60,7 @@ var _cacheDom = function() {
     document.getElementById("modal-print")
   );
 
+
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
 
@@ -70,6 +72,7 @@ var _cacheDom = function() {
 
   $btnPrint   = $("#btn-print");
   $btnPrintWp = $("#btn-print-wp");
+  $btnPrintThermal = $("#btn-termal");
   $btnExcel   = $("#btn-excel");
   $btnZeroOut         = $("#btn-zero-out");
   $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
@@ -219,6 +222,15 @@ var _bindEvents = function() {
     $message.html("");
 
     var type = "wp";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + id);
+  });
+  $btnPrintThermal.on("click", function() {
+    $modalPrint.show();
+    $message.html("");
+
+    var type = "print_thermal";
 
     $modalPrint.hide();
     window.open("/print?type=" + type + "&id=" + id);

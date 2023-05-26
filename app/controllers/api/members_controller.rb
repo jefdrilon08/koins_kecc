@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :delete]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -63,6 +63,27 @@ module Api
       end
     end
 
+    def reinstate
+      member             = Member.where(id: params[:member_id]).first
+      reinstatement_date = params[:reinstatement_date]
+      errors             = ::Members::ValidateReinstatement.new(
+                            member: member,
+                            reinstatement_date: reinstatement_date
+                          ).execute!
+
+      if errors.size == 0
+        ::Members::Reinstate.new(
+          member: member,
+          reinstatement_date: reinstatement_date,
+          reinstate_by: current_user.full_name
+        ).execute!
+
+        render json: { id: member.id }
+      else
+        render json: { errors: errors }, status: 402
+      end
+    end
+
     def balik_kasapi
       member = Member.find(params[:id])
       
@@ -75,7 +96,6 @@ module Api
                   config: config
                 ).execute!
       
-    
       if errors[:messages].any?
 
         render json: errors, status: 400
@@ -86,10 +106,7 @@ module Api
         ).execute!
 
         render json: { id: member.id,  message: "ok"  }
-
-
-      end
-    
+      end   
     end
 
       def delete

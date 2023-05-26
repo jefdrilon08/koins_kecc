@@ -327,7 +327,7 @@ module SavingsInsuranceTransferCollections
           }
         end
 
-        if @kkalinga_beneficiary_age > 65 
+        if @kkalinga_beneficiary_age >= 65
           @errors[:messages] << {
             key: "kkalinga_beneficiary_age",
             message: "You should be below 65 yrs old"

@@ -99,12 +99,6 @@ class BillingsController < ApplicationController
           }
         end
 
-        @subheader_side_actions << {
-          link: billing_path(@billing.id),
-          class: "fa fa-times",
-          data: { method: :delete, confirm: "Are you sure?" },
-          text: "Delete"
-        }
       end
 
       @subheader_side_actions << {
@@ -126,6 +120,12 @@ class BillingsController < ApplicationController
         class: "fa fa-download",
         id: "btn-excel",
         text: "Download Excel"
+      }
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-download",
+        id: "btn-termal",
+        text: "Print Thermal Printer"
       }
       
       if @billing.status != "approved"
