@@ -46,6 +46,10 @@ module ApplicationHelper
   def oas_mis_user
     oas_mis_user = ["OAS","MIS","SO"].include? current_user.roles.last
   end
+  
+  def bk_mis_fm_sbk_user
+    bk_mis_fm_sbk_user = ["BK","MIS","FM","SBK"].include? current_user.roles.last
+  end
 
   def title(*args)
     key = "titles.#{params[:controller].gsub("/", ".")}.#{params[:action]}"

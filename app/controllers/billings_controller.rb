@@ -63,7 +63,7 @@ class BillingsController < ApplicationController
       @subheader_side_actions = []
 
       if @billing.pending?
-        if helpers.sbk_bk_mis_user
+        if helpers.bk_mis_fm_sbk_user
           
           if @data["is_checked"] == true
             @subheader_side_actions << {
@@ -72,12 +72,15 @@ class BillingsController < ApplicationController
               class: "fa fa-check",
               text: "Uncheck"
             }
-            @subheader_side_actions << {
-              id: "btn-approve",
-              link: "#",
-              class: "fa fa-check",
-              text: "Approve"
-            }
+
+            if helpers.sbk_bk_mis_user
+              @subheader_side_actions << {
+                id: "btn-approve",
+                link: "#",
+                class: "fa fa-check",
+                text: "Approve"
+              }
+            end
           else
             @subheader_side_actions << {
               id: "btn-check",
