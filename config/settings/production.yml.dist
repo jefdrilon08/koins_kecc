@@ -6361,12 +6361,12 @@ loan_products:
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.039
+        monthly_interest_rate: 0.050
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.048
+        monthly_interest_rate: 0.050
 #<<<<<<< HEAD
   -
     loan_product_id: "43e1ae2f-b723-4646-816c-5659146cf2ad"                         # KABUHAYAN W4
