@@ -136,9 +136,9 @@ class DataStoreController < ApplicationController
       "involuntary_members"         => {order: "as_of DESC", meta: %w[branch_name as_of],data: %[]},
       "assets_liabilities"          => {order: "created_at DESC", meta: %w[start_date, end_date],data: %w[] },
 
-      "branch_cash_flow" => {order: "as_of DESC", meta: %w[branch_name as_of],data: %w[] },
+      #"branch_cash_flow" => {order: "as_of DESC", meta: %w[branch_name as_of],data: %w[] },
 
-      "member_quarterly_reports"      => { order: "as_of DESC", data: %w[] },
+      #"member_quarterly_reports"      => { order: "as_of DESC", data: %w[] },
 
 
     }
