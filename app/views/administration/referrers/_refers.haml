@@ -20,7 +20,7 @@
             = link_to member_path(o.id) do
               .bi.bi-search
           %td
-            #{o.recognition_date.try("strftime, '%b %d, %Y'")}
+            #{o[:data]["recognition_date"]}
           %td
             #{o.full_name}
           %td
@@ -36,7 +36,7 @@
             = link_to member_path(o.id) do
               .bi.bi-search
           %td
-            #{o.recognition_date.try("strftime, '%b %d, %Y'")}
+            #{o[:data]["recognition_date"]}
           %td
             #{o.full_name}
           %td
