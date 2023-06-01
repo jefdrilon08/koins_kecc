@@ -414,8 +414,8 @@ namespace :kezar do
     # end_date          = ENV["END_DATE"] || '2022-09-10'
 
     is_batch          = ENV["BATCH"] || true
-    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
-    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
+    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
+    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
 
 
     member_data = Member.where(
@@ -423,7 +423,7 @@ namespace :kezar do
       start_date,
       end_date,
       branch
-    ).find_in_batches(:batch_size => 10) do |group|
+    ).find_in_batches(:batch_size => 100) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
       member = group.map{ |o|
@@ -498,56 +498,45 @@ namespace :kezar do
     # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
     # branch            = Branch.find(branch_id)
 
-    start_date                = ENV["START_DATE"]  || '2023-04-03'
-    end_date                  = ENV["END_DATE"] || '2023-04-05'
+    start_date                = ENV["START_DATE"]  || '2023-02-01'
+    end_date                  = ENV["END_DATE"]  || '2023-02-02'
     is_batch                  = ENV["BATCH"] || true
     end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
-    is_withdraw_payment       = 'false'
-    is_fund_transfer          = 'false'
-    is_interest               = 'false'
+    account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
 
     payment_data = AccountTransaction.select(
       "
         account_transactions.id,
-        account_transactions.subsidiary_id,
-        account_transactions.subsidiary_type,
+        members.identification_number,
         account_transactions.amount,
-        account_transactions.transaction_type,
+        member_accounts.account_subtype,
         account_transactions.transacted_at,
-        account_transactions.status,
-        account_transactions.data,
-        account_transactions.created_at,
-        account_transactions.updated_at
+        account_transactions.status
       "
-    ).where(
+    ).joins(
       "
-        account_transactions.created_at >= ? 
-        AND account_transactions.created_at <= ?
-        AND account_transactions.data->>'is_withdraw_payment' = ?
-        AND account_transactions.data->>'is_fund_transfer' = ?
-        AND account_transactions.data->>'is_interest' = ?
-      ",
+      LEFT JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id
+      LEFT JOIN members ON members.id = member_accounts.member_id
+      "
+    )
+    .where(
+      "account_transactions.created_at >= ? AND account_transactions.created_at <= ? and member_accounts.account_subtype IN (?)",
       start_date,
       end_date,
-      is_withdraw_payment,
-      is_fund_transfer,
-      is_interest
-    ).find_in_batches(:batch_size => 100) do |group|
-
+      account_subtypes
+    ).find_in_batches(:batch_size => 200) do |group|
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
         {
-          subsidiary_id: o.subsidiary_id,
-          subsidiary_type: o.subsidiary_type,
-          amount: o.amount,
-          transaction_type: o.transaction_type,
+          identification_number: o.identification_number,
+          amount: o.amount,          
+          account_subtype: o.account_subtype,
           transacted_at: o.transacted_at,
-          status: o.status,
-          data: o.data,
-          created_at: o.created_at,
-          updated_at: o.updated_at
+          status: o.status
         }
       }
+
+      # raise payment.inspect
 
       Rails.logger.info(puts(payment.to_json))
 
@@ -613,7 +602,7 @@ namespace :kezar do
       end_date,
       claim_type,
       claim_status
-    ).find_in_batches(:batch_size => 500) do |group|
+    ).find_in_batches(:batch_size => 1) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
       claims = group.map{ |o|
@@ -639,6 +628,8 @@ namespace :kezar do
 
       Rails.logger.info(puts(claims.to_json))
 
+      raise claims.inspect
+      
       payload = claims
       
       if is_batch.present?

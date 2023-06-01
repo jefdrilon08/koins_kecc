@@ -108,7 +108,6 @@ module Api
 
         config.each do |a|
           @member = Member.where(identification_number: a[:identification_number])
-          @center = Center.where(id: a[:center_id])
           # raise @member.inspect
           member_data = {
             center_id: a[:center_id],
@@ -151,7 +150,9 @@ module Api
             external_ref: a[:external_ref]
           }
 
-          if @center.count >= 1
+          # if @center.count == 0
+          #   @counter_invalid +=1 
+          # else
             # if @member.count > 1
             # Rails.logger.info(puts("#{a[:identification_number]} Duplicate"))
             if @member.count >= 1 
@@ -165,19 +166,18 @@ module Api
               ).execute!
               @counter_save +=1   
             end
-          else
-            puts "invalid center_id"
-            @counter_invalid +=1 
-          end
-   
+          # end
         end
 
+        # count invalid data sent
+        # if @counter_invalid >= 1 
+        #   render :status => "422", :json => {:Code => "KMBA-000", :Invalid => "#{@counter_invalid}", :Record_Count => "#{config.count}"} 
         if @counter_save > 0 and @counter_update > 0
-          render :status => "200", :json => {:Code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}", :Invalid => "#{@counter_invalid}", :Record_Count => "#{config.count}"}
+          render :status => "200", :json => {:Code => "KMBA-002 - KMBA-003", :Uploaded => "#{@counter_save}", :Updated => "#{@counter_update}", :Record_Count => "#{config.count}"}
         elsif @counter_save > 0
-          render :status => "201", :json => {:Code => "KMBA-002", :Uploaded => "#{@counter_save}", :Invalid => "#{@counter_invalid}"}.to_json
+          render :status => "201", :json => {:Code => "KMBA-002", :Uploaded => "#{@counter_save}"}
         elsif @counter_update > 0
-          render :status => "200", :json => {:Code => "KMBA-003", :Updated => "#{@counter_update}", :Invalid => "#{@counter_invalid}"}.to_json
+          render :status => "200", :json => {:Code => "KMBA-003", :Updated => "#{@counter_update}"}
         end
       end
     end
@@ -187,8 +187,12 @@ module Api
       @payments = []
       @transaction = []
       config = {}
-      @counter_save = 0
-      # @counter_update = 0
+      @rf_counter = 0
+      @lif_counter = 0
+      @lif_account_subtype = "Life Insurance Fund"
+      @rf_account_subtype = "Retirement Fund"
+      # @lif_account_subtypes = "Life Insurance Fund"
+
 
       payments = params[:_json]
 
@@ -201,66 +205,105 @@ module Api
         render json: errors, status: 400
       else
         payments.each do |m|
-        @payment_data = {}
-        @payment_data[:member_id]                 =m["member_id"]
-        @payment_data[:account_subtype]           =m["account_subtype"]
-        @payment_data[:subsidiary_id]             =m["subsidiary_id"]
-        @payment_data[:subsidiary_type]           =m["subsidiary_type"]
-        @payment_data[:amount]                    =m["amount"]
-        @payment_data[:transaction_type]          =m["transaction_type"]
-        @payment_data[:transacted_at]             =m["transacted_at"]
-        @payment_data[:status]                    =m["status"]
-        @payment_data[:data]                      =m["data"]
-        @payment_data[:created_at]                =m["created_at"]
-        @payment_data[:updated_at]                =m["updated_at"]
+          @payment_data = {}
+          @payment_data[:identification_number]     =m["identification_number"]
+          @payment_data[:amount]                    =m["amount"]
+          @payment_data[:account_subtype]           =m["account_subtype"]
+          @payment_data[:transacted_at]             =m["transacted_at"]
+          @payment_data[:status]                    =m["status"]
 
-        @payments << @payment_data 
-         
-        config = @payments.map{ |o|
-          {
-            subsidiary_id: o[:subsidiary_id],
-            subsidiary_type: o[:subsidiary_type],
-            amount: o[:amount],
-            transaction_type: o[:transaction_type],
-            transacted_at: o[:transacted_at],
-            status: o[:status],
-            data: o[:data],
-            created_at: o[:created_at],
-            updated_at: o[:updated_at]  
+          @payments << @payment_data 
+           
+      
+          config = @payments.map{ |o|
+            {
+              identification_number: o[:identification_number],    
+              amount: o[:amount],                   
+              account_subtype: o[:account_subtype],          
+              transacted_at: o[:transacted_at],            
+              status: o[:status]                   
+            }
           }
-        }
         end
 
+        # raise config.inspect 
         config.each do |a|
-          @payment = AccountTransaction.where(subsidiary_id: a[:subsidiary_id])
-          payment_data = {
-            subsidiary_id: a[:subsidiary_id],
-            subsidiary_type: a[:subsidiary_type],
-            amount: a[:amount],
-            transaction_type: a[:transaction_type],
-            transacted_at: a[:transacted_at],
-            status: a[:status],
-            data: a[:data],
-            created_at: a[:created_at],
-            updated_at: a[:updated_at]  
-          }
+          @member = Member.where(identification_number: a[:identification_number])
+          @member.each do |b|
+            if a[:account_subtype] == 'Life Insurance Fund'
+              @subsidiary_id = MemberAccount.where("member_accounts.member_id = ? AND member_accounts.account_subtype IN (?)", b[:id], @lif_account_subtype)
+              @subsidiary_id.each do |c|
+                payment_data = {
+                  subsidiary_id: c[:id],
+                  subsidiary_type: "MemberAccount",
+                  amount: a[:amount],
+                  transaction_type: "deposit",
+                  transacted_at: a[:transacted_at],
+                  status: a[:status],
+                  data: {
+                    is_withdraw_payment: false,
+                    is_fund_transfer: false,
+                    is_interest: false,
+                    is_adjustment: false,
+                    is_for_exit_age: false,
+                    is_for_loan_payments: false,
+                    accounting_entry_reference_number: nil,
+                    beginning_balance: 0.0,
+                    ending_balance: 0.0
+                  },
+                  created_at: a[:created_at],
+                  pdated_at: a[:updated_at]  
+                }
 
-          #can payment have to update? or only save? 
-          if @payment.count > 0
-            cmd = Kmba::SavePayment.new(
-              payment_data: payment_data
-            ).execute!
-            @counter_save += 1
-          # else
-          #   cmd = Kmba::UpdatePayments.new(
-          #     payment_data: payment_data
-          #   ).execute!
+                cmd = Kmba::SavePayment.new(
+                  payment_data: payment_data
+                ).execute!
+                @lif_counter += 1
+              end
+            elsif a[:account_subtype] == 'Retirement Fund'
+              @subsidiary_id = MemberAccount.where("member_accounts.member_id = ? AND member_accounts.account_subtype IN (?)", b[:id], @rf_account_subtype)
+               @subsidiary_id.each do |c|
+                payment_data = {
+                  subsidiary_id: c[:id],
+                  subsidiary_type: "MemberAccount",
+                  amount: a[:amount],
+                  transaction_type: "deposit",
+                  transacted_at: a[:transacted_at],
+                  status: a[:status],
+                  data: {
+                    is_withdraw_payment: false,
+                    is_fund_transfer: false,
+                    is_interest: false,
+                    is_adjustment: false,
+                    is_for_exit_age: false,
+                    is_for_loan_payments: false,
+                    accounting_entry_reference_number: nil,
+                    beginning_balance: 0.0,
+                    ending_balance: 0.0
+                  },
+                  created_at: a[:created_at],
+                  pdated_at: a[:updated_at]  
+                }
+
+                cmd = Kmba::SavePayment.new(
+                  payment_data: payment_data
+                ).execute!
+                @rf_counter += 1
+              end 
+            end  
           end
+          
+          # raise @subsidiary_id.inspect
+          #can payment have to update? or only save?     
         end
       end
 
-      if @counter_save > 0
-        render :status => "200", :json => {:code => "KMBA-002", :Uploaded => "#{@counter_save}"}.to_json
+      if @rf_counter > 0 && @lif_counter > 0
+        render :status => "200", :json => {:code => "KMBA-002", :RetirementFund => "#{@rf_counter}", :LifeInsuranceFund => "#{@lif_counter}"}.to_json
+      elsif @lif_counter > 0
+        render :status => "200", :json => {:code => "KMBA-002", :LifeInsuranceFund => "#{@lif_counter}"}.to_json
+      elsif @rf_counter > 0
+        render :status => "200", :json => {:code => "KMBA-002", :LifeInsuranceFund => "#{@rf_counter}"}.to_json
       end  
     end
 

@@ -15,6 +15,9 @@ module Kmba
       else 
         @claims.map{ |a|
 
+          center = Center.where(id: a[:center_id])
+          branch = Branch.where(id: a[:branch_id])
+
           if a[:date_prepared].blank?
             @errors[:messages] << {
               code: "KMBA-001",
@@ -65,8 +68,15 @@ module Kmba
               code: "KMBA-001",
               member_id: a[:member_id],
               key: "center_id", 
-              message: "Center ID By not found"
+              message: "Center ID not found"
             }
+          elsif center.count == 0
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:member_id],
+              key: "center_id", 
+              message: "Center ID is not VALID" 
+            }  
           end
 
           if a[:branch_id].blank?
@@ -74,127 +84,16 @@ module Kmba
               code: "KMBA-001",
               member_id: a[:member_id],
               key: "branch_id", 
-              message: "Branch ID By not found"
+              message: "Branch ID not found"
+            }
+          elsif branch.count == 0 
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:member_id],
+              key: "branch_id", 
+              message: "Branch ID is NOT VALID"
             }
           end
-
-          # if a[:data][:type_of_insurance_policy].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "Insurance Policy is Blank", 
-          #     message: "Insurance Policy must be BLIP OR HIIP"
-          #   }
-          # end
-
-          # if a[:data][:name_of_insured].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "name_of_insured", 
-          #     message: "Name of Insured is not found"
-          #   }
-          # end
-
-          # if a[:data][:beneficiary].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "beneficiary", 
-          #     message: "Name of Beneficiary is not found"
-          #   }
-          # end
-
-          # if a[:data][:classification_of_insured].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "classification_of_insured", 
-          #     message: "Classification of Insured is not found"
-          #   }
-          # end
-
-          # if a[:data][:face_amount].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "face_amount", 
-          #     message: "Face Amount is not found"
-          #   }
-          # end
-
-          # # Arrears are now named Lapsed Amount
-          # if a[:data][:arrears].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "arrears", 
-          #     message: "Arrears is not found"
-          #   }
-          # end
-
-          # if a[:data][:cause_of_death_tpd_accident].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "cause_of_death_tpd_accident", 
-          #     message: "Cause of Death tpd Accident is not found"
-          #   }
-          # end
-
-          # if a[:data][:length_of_stay].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "length_of_stay", 
-          #     message: "Length of Stay is not found"
-          #   }
-          # end
-
-          # if a[:data][:returned_contribution].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "returned_contribution", 
-          #     message: "Returned Contribution is not found"
-          #   }
-          # end
-
-          # if a[:data][:category_of_cause_of_death_tpd_accident].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "category_of_cause_of_death_tpd_accident", 
-          #     message: "Category of Cause of Death tpd Accident is not found"
-          #   }
-          # end
-
-          # if a[:data][:category_of_cause_of_death_tpd_accident].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "category_of_cause_of_death_tpd_accident", 
-          #     message: "Category of Cause of Death tpd Accident is not found"
-          #   }
-          # end
-
-          # if a[:data][:category_of_cause_of_death_tpd_accident].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "category_of_cause_of_death_tpd_accident", 
-          #     message: "Category of Cause of Death tpd Accident is not found"
-          #   }
-          # end
-
-          # if a[:data][:date_reported].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:member_id],
-          #     key: "date_reported", 
-          #     message: ":Date Reported is not found"
-          #   }
-          # end
 
           if a[:claim_type] == 'CLIP' or a[:claim_type] == 'K-BENTE' or a[:claim_type] == 'KUYA JUN SCHOLARSHIP PROGRAM' 
             @errors[:messages] << {
