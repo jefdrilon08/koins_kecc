@@ -401,7 +401,7 @@ namespace :kezar do
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
   task send_to_mba_members: :environment do
     # save new record
-    branch_id         = ENV["BRANCH_ID"] || "26df15a2-80de-4830-aae4-2f0645c059a3"
+    branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
     branch            = Branch.find(branch_id)
     start_date        = ENV["START_DATE"]  || '2023-02-01'
     end_date          = ENV["END_DATE"] || '2023-02-28'
@@ -414,8 +414,8 @@ namespace :kezar do
     # end_date          = ENV["END_DATE"] || '2022-09-10'
 
     is_batch          = ENV["BATCH"] || true
-    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
-    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
+    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
+    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
 
 
     member_data = Member.where(
@@ -500,8 +500,11 @@ namespace :kezar do
 
     start_date                = ENV["START_DATE"]  || '2023-02-01'
     end_date                  = ENV["END_DATE"]  || '2023-02-02'
+    start_recognition         = '2023-01-01'
+    end_recognition           = '2023-01-31'
     is_batch                  = ENV["BATCH"] || true
-    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
+    # end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
+    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"    
     account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
 
     payment_data = AccountTransaction.select(
@@ -520,11 +523,17 @@ namespace :kezar do
       "
     )
     .where(
-      "account_transactions.created_at >= ? AND account_transactions.created_at <= ? and member_accounts.account_subtype IN (?)",
+      "account_transactions.created_at >= ? 
+      AND account_transactions.created_at <= ? 
+      AND member_accounts.account_subtype IN (?)
+      AND DATE(members.data->>'recognition_date') >= ?
+      AND DATE(members.data->>'recognition_date') <= ?",
       start_date,
       end_date,
-      account_subtypes
-    ).find_in_batches(:batch_size => 200) do |group|
+      account_subtypes,
+      start_recognition,
+      end_recognition
+    ).find_in_batches(:batch_size => 100) do |group|
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
         {
@@ -535,8 +544,6 @@ namespace :kezar do
           status: o.status
         }
       }
-
-      # raise payment.inspect
 
       Rails.logger.info(puts(payment.to_json))
 
@@ -627,8 +634,6 @@ namespace :kezar do
       }
 
       Rails.logger.info(puts(claims.to_json))
-
-      raise claims.inspect
       
       payload = claims
       
