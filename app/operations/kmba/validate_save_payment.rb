@@ -17,11 +17,20 @@ module Kmba
         }
       else 
         @payments.map{ |a|
+
+          member = Member.where(identification_number: a[:identification_number])
+
           if a[:identification_number].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "identification_number", 
               message: "Identification Number Not Found!"
+            }
+          elsif member.count == 0
+            @errors[:messages] << {
+              code: "KMBA-001",
+              key: "identification_number", 
+              message: "Identification Number is not VALID!"
             }
           end
 
