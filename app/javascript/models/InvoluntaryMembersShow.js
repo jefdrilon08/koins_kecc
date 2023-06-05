@@ -21,7 +21,7 @@ var _cacheDom = function() {
     document.getElementById("modal-details")
   );
 
-  $btnPrint = $("btn-print-letter");
+  $btnPrint = $(".btn-print-letter");
   $member_name = $(".display-member");
   $btnConfirm = $(".btn-confirm");
   $btnPrintList  = $("#btn-print-list");
