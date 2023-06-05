@@ -12,13 +12,21 @@ module Print
 		def execute!
 		#	raise @member_accounts.inspect
 			@last_savings_deposit = @member_accounts.sort_by{|key| key["last_transaction"] }.reverse.first
-			@last_loan_transaction = @loan_records.sort_by{|key| 
-				if key["last_loan_payment"].present?
-					key["last_loan_payment"]
-				end
-				}.reverse.first
+			
+			@last_loan_payment = nil
+			
+			if @loan_records.present?
+			 @loan_records.sort_by{|key| 
+					if key["last_loan_payment"].present?
+						@last_loan_payment = key["last_loan_payment"]
+					end
+					}.reverse.first
+			end
 
 
+
+			
+			
 			@total_loan_balance = 0
 					@loan_records.each do |lr|
 						principal_balance = lr["principal_balance"]
@@ -35,7 +43,7 @@ module Print
 				loan_records: @loan_records,
 				member_account: @member_accounts,
 				last_savings_deposit: @last_savings_deposit["last_transaction"],
-				last_loan_payment_transaction: @last_loan_transaction["last_loan_payment"]
+				last_loan_payment_transaction: @last_loan_payment
 			}
 
 
