@@ -8,10 +8,8 @@ module Api
       @counter_update = 0
       @counter_save = 0
       @counter_invalid = 0
-
-      # raise params[:_json].inspect      
+   
       members = params[:_json]
-      # puts "Number of Members to be Upload #{members.count}"
       errors = ::Kmba::ValidateSaveMembers.new(
         members: members
       ).execute!
@@ -108,7 +106,6 @@ module Api
 
         config.each do |a|
           @member = Member.where(identification_number: a[:identification_number])
-          # raise @member.inspect
           member_data = {
             center_id: a[:center_id],
             branch_id: a[:branch_id],
@@ -291,10 +288,7 @@ module Api
                 @rf_counter += 1
               end 
             end  
-          end
-          
-          # raise @subsidiary_id.inspect
-          #can payment have to update? or only save?     
+          end    
         end
       end
 
@@ -303,7 +297,7 @@ module Api
       elsif @lif_counter > 0
         render :status => "200", :json => {:code => "KMBA-002", :LifeInsuranceFund => "#{@lif_counter}"}.to_json
       elsif @rf_counter > 0
-        render :status => "200", :json => {:code => "KMBA-002", :LifeInsuranceFund => "#{@rf_counter}"}.to_json
+        render :status => "200", :json => {:code => "KMBA-002", :RetirementFund => "#{@rf_counter}"}.to_json
       end  
     end
 
