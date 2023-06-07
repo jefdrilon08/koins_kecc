@@ -50,7 +50,8 @@
         
         - member_total_cp     = 0.00
         - member_grand_total  = 0.00
-        - withdraw_payment    = 0.0
+        - withdraw_payment    = 0.00
+        - total_payment       = 0.00
         %tr
           %td
             /#{Member.find(r[:member][:id]).identification_number}
@@ -63,18 +64,19 @@
               - withdraw_payment += rr[:amount]
               - grand_total_wp += withdraw_payment
               - grand_total_cp += member_total_cp
+             
             - else
               - member_total_cp += rr[:amount].to_f
               - member_grand_total += rr[:amount].to_f
-              
+              - total_payment += rr[:amount].to_f
 
           %td.text-end
             #{number_to_currency(withdraw_payment.to_f.round(2),unit:'')}
           %td.text-end
             #{number_to_currency(member_total_cp.to_f.round(2),unit:'')}
           %td.text-end
-            - grand_total_payment += member_grand_total
-            #{number_to_currency(member_grand_total.to_f.round(2),unit:'')}
+            - grand_total_payment += total_payment
+            #{number_to_currency(total_payment.to_f.round(2),unit:'')}
 
     %tr
       %th
