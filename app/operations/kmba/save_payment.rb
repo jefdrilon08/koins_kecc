@@ -5,7 +5,6 @@ module Kmba
     def initialize(payment_data:)
       super()
       @payment_data = payment_data
-      # raise @payment_data.inspect
     end
 
     def execute!
@@ -23,12 +22,10 @@ module Kmba
           updated_at: @payment_data[:updated_at],
         )
       end
-    
-      # raise payment_data.inspect
+
       Rails.logger.info(puts " New Record is Save ID NO : #{@payment_data[:subsidiary_id]}, saved! ")
       payment_data.save!
       ::MemberAccounts::Rehash.new( member_account:MemberAccount.find(@payment_data[:subsidiary_id])).execute!
-
     end
   end
 end

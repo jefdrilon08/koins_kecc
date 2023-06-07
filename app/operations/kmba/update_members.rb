@@ -4,7 +4,6 @@ module Kmba
     def initialize(member_data:)
       super()
       @member_data = member_data
-      # raise @member_data[:identification_number].inspect
     end
 
     def execute!
@@ -47,7 +46,6 @@ module Kmba
         email: @member_data[:email]
       )
 
-      
       Rails.logger.info(puts "Update Record ID NO : #{@member_data[:identification_number]}, updated! ")
       @member
     end 

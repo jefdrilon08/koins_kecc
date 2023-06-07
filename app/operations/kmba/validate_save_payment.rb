@@ -3,12 +3,9 @@ module Kmba
     def initialize(payments:)
       super()
       @payments               = payments
-      # raise @payments.inspect
     end
 
     def execute!
-      #validate the Payments_data
- 
       if @payments.nil?
         @errors[:messages] << {
           code: "KMBA-001",
@@ -28,7 +25,7 @@ module Kmba
             }
           elsif member.count == 0
             @errors[:messages] << {
-              code: "KMBA-001",
+              code: "KMBA-004",
               key: "identification_number", 
               message: "Identification Number is not VALID!"
             }

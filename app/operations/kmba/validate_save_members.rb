@@ -117,14 +117,13 @@ module Kmba
             }
           elsif branch.count == 0
             @errors[:messages] << {
-              code: "KMBA-001",
+              code: "KMBA-004",
               member_id: a[:identification_number],
               key: "branch_id",
               message: "Branch is not Valid"
             }
           end
 
-          
           if a[:center_id].blank?
             @errors[:messages] << {
               code: "KMBA-001",
@@ -134,7 +133,7 @@ module Kmba
             }
           elsif center.count == 0
             @errors[:messages] << {
-              code: "KMBA-001",
+              code: "KMBA-004",
               member_id: a[:identification_number],
               key: "center_id",
               message: "Center is not valid"
