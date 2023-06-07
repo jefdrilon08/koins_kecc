@@ -13,13 +13,14 @@ export default function MembersProfileActions(props) {
   const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
   const [isModalDelete, setIsModalDelete]         = useState(false);
   const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
-  const [dateReinstated, setDateReinstated]       = useState("");
+  const [dateReinstated, setDateReinstated]       = useState('');
 
   const handleReinstateClicked = () => {
     setIsLoading(true);
 
     const payload = {
-      id: props.memberId
+      id: props.memberId,
+      reinstatement_date: dateReinstated
     }
 
     const headers = {
@@ -38,6 +39,7 @@ export default function MembersProfileActions(props) {
       console.log(res);
       alert("Successfully Reinstated");
       window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
     }).catch((error) => {
       console.log(error.response);
       setErrors(error.response.data.errors);
@@ -191,7 +193,9 @@ export default function MembersProfileActions(props) {
                 value={dateReinstated}
                 disabled={isLoading}
                 type="date"
+              
                 onChange={(event) => { setDateReinstated(event.target.value) } }
+
               />
             </div>
           </div>

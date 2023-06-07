@@ -64,7 +64,7 @@ module Api
     end
 
     def reinstate
-      member             = Member.where(id: params[:member_id]).first
+      member = Member.find(params[:id])
       reinstatement_date = params[:reinstatement_date]
       errors             = ::Members::ValidateReinstatement.new(
                             member: member,
