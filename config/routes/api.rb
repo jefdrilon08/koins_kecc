@@ -45,6 +45,7 @@ namespace :api do
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
+  post "/members/form_make_payments", to: "members#form_make_payments"
 
 
   # Messages
