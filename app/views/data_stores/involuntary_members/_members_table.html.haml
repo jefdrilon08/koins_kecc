@@ -69,9 +69,9 @@
                             #{ma[:last_transaction]}
                 %tr
                     %td.text-center{colspan: 2}(style= "width: 50%;")
-                        .btn.btn-success.btn-print-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loan_records].to_json,member_accounts: rec[:member_accounts].to_json}} PRINT FIRST LETTER
+                        .btn.btn-primary.btn-print-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loan_records].to_json,member_accounts: rec[:member_accounts].to_json}} PRINT FIRST LETTER
                     %td.text-center{colspan: 2}(style= "width: 50%;")
-                        .btn.btn-primary.btn-print-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loan_records].to_json,member_accounts: rec[:member_accounts].to_json}} PRINT SECOND LETTER
+                        .btn.btn-danger.btn-second-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loan_records].to_json,member_accounts: rec[:member_accounts].to_json}} PRINT SECOND LETTER
      
              
 -else
