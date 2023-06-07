@@ -1,0 +1,27 @@
+#modal-second.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Print Second Letter
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+            Print Letter for 
+            %span.display-member
+          .br
+          .row
+            .col
+              .form-group
+                %label
+                  Date Recieved of the First Letter
+                = text_field_tag :as_of, Date.today, type: :date, id: "as-of", class: 'form-control'
+          .message
+      .modal-footer
+        .controls
+          %button.btn-confirm-print-second.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

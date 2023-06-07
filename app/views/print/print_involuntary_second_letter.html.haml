@@ -1,0 +1,167 @@
+:css
+  @page { size: portrait; margin: 60px;}
+  .just-font br {
+  content: "";
+  display: block;
+  
+  }
+  .text-indent p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    
+  }
+  .list-inline ul{
+  display:block;
+  margin-bottom:2rem;
+  }
+  .list-inline li {
+    display:inline-block;
+    margin-left: 50px;
+    margin-right: 100px;
+
+  }
+  .signatories ul{
+    display:block;
+
+  }
+  .signatories li{
+    display:inline-block;
+    margin-right: 80px;
+    padding-inline-start: 0px;
+  }
+  .member_signatories{
+    
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+
+
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 150px; margin-right: 20px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 13.32px"}
+          KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE
+      %br
+        %span
+          %var 4
+          %sup th
+          Floor KMBA Members Center Building
+      %br
+        %span
+          Telephone Numbers: (632) 8442-9607 or 5310-2470 / Fax Number: 
+        %br
+          (632) 8442-9607 loc. 204
+      %br
+        %span
+          %b
+            CDA REG. NO.: 9520-1016000000028521
+      %br
+        %span
+          %b
+            CIN: 16201628521
+%strong{style: "font-size: 13.32px"}
+  %center
+    ABISO NG PAGTATANGAL SA KOOPERATIBA
+%br
+%div.just-font{style: "font-size: 14px"}
+  %br
+    %b
+      #{Date.today.strftime("%B %d, %Y")}
+%br
+%div.just-font{style: "font-size: 14px"}
+  %br
+    %b
+      #{@data[:member_full_name].upcase}
+  %br
+    %b
+      #{@data[:member_branch].upcase} / #{@data[:member_center]}
+  %br
+    %b
+      #{@data[:member_address]}
+%br
+%p{style: "font-size: 14px"}
+  %b
+    G./Gng. #{@data[:member_full_name]}:
+%p{style: "font-size: 14px"}
+  Ikinalulungkot ko pong ipagbigay-alam na sa kabila ng aming paunang abiso ukol sa iyong posibleng pagkatanggal bilang miyembro ng K-Coop, ay hindi kami nakatanggap ng anumang tugon mula sa iyo. Kung kaya, ipinababatid po namin na simula
+  %b 
+    #{@data[:as_of].to_date.strftime("%B %d, %Y")}
+  , ikaw ay pormal ng itinitiwalag bilang miyembro ng kooperatiba dahil sa mga sumusunod na kadahilanan ayon sa itinatakda ng ating By-laws:
+  
+
+
+  %ul.list-group
+    - if @data[:last_savings_deposit].present?
+      %li.list-group-item{style: "font-size: 14px"}
+        %input{:required => "", :type => "checkbox"}>/ 
+        &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
+        %b
+          #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
+        hanggang sa kasalukuyan
+    -if @data[:loan_records].any?
+      %li.list-group-item{style: "font-size: 14px"}
+        %input{:required => "", :type => "checkbox"}>/
+        &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
+        -if @data[:loan_records].any?
+          -@data[:loan_records].each do |lr|
+            %div.just-font
+              %br
+                %b
+                  #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
+    %li.list-group-item{style: "font-size: 14px"}
+      %input{:required => "", :type => "checkbox"}>/
+      &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba
+    %li.list-group-item{style: "font-size: 14px"}
+      %input{:required => "", :type => "checkbox"}>/
+      &nbsp&nbsp Paggawa ng anumang gawain, o pagkukulang na nakapipinsala sa interes o kapakanan ng kooperatiba
+%br
+%p{style: "font-size: 14px"}
+  Maraming Salamat.
+
+%br
+%p{style: "font-size: 14px"}
+  Gumagalang,
+
+%div.just-font{style: "font-size: 14px"}
+  %br
+    #{Settings.taga_pangulo}
+  %br
+    Tagapangulo
+%br
+
+%p{style: "font-size: 14px"}
+  Binigyan Pansin:
+
+%div.just-font{style: "font-size: 14px"}
+  %br{style: "font-size: 14px"}
+    #{Settings.kalihim}
+  %br{style: "font-size: 14px"}
+    Kalihim
+
+ 
+%div.footer
+  %br
+    %b
+      ANNEX 3: ABISO NG PAGTATANGGAL SA KOOPERATIBA
+  
