@@ -490,7 +490,7 @@ end
       "co_makers":                    @co_makers,
       "surveys":                      @surveys,
       "status":                       @member.status,
-      "reinstated":                   @member.reinstated,
+      "reinstated":                   @member.reinstated.try(:strftime, "%b %d, %Y"),
       "project_type":                 @project_type,
       "accrued_interest_data":        @accrued_interest_data
       
