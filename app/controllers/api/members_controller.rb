@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -83,6 +83,51 @@ module Api
         render json: { errors: errors }, status: 402
       end
     end
+
+    def form_make_payments
+    
+    @member = Member.find(params[:id]) 
+    config = {
+                member_id: @member.id,
+                make_payment_type: params[:type]
+      
+              }
+    @data = ::Members::BuildMakePayments.new(config: config).execute!
+
+    @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(
+                                    make_payment_data: @data, 
+                                    current_user: current_user,
+                                    make_payment_type: params[:type]
+
+                                    ).execute!
+
+    @subheader_items = [
+      { is_link: true, path: members_path, text: "Members" },
+      { is_link: true, path: member_path(@member), text: "#{@member.full_name}" },
+      { text: "Make Payment Form" }
+    ]
+
+  
+    @subheader_side_actions = [
+      {
+        id: "btn-save",
+        link: "#",
+        class: "fa fa-check",
+        text: "Save",
+      
+        data: { member_id: @member.id, make_payment_type: params[:type] }
+      },
+      { 
+        is_link: true, 
+        path: member_path(@member), 
+        class: "fa fa-times",
+        text: "Cancel" }
+    ]
+    @payload = {
+      id: @member.id,
+      memberResignationTypes: helpers.member_resignation_types
+    }
+  end
 
     def balik_kasapi
       member = Member.find(params[:id])

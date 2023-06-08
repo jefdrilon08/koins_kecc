@@ -14,6 +14,22 @@ export default function MembersProfileActions(props) {
   const [isModalDelete, setIsModalDelete]         = useState(false);
   const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
   const [dateReinstated, setDateReinstated]       = useState('');
+  const [isModalMakePaymentOpen, setModalMakePaymentOpen] = useState(false);
+  const [makePayment, setMakePayment]       = useState('');
+  const options = [
+  {
+    label: "CLIP",
+    value: "CLIP",
+  },
+  {
+    label: "GPF",
+    value: "GPF",
+  },
+  {
+    label: "Members Benefit",
+    value: "Members Benefit",
+  }
+  ];
 
   const handleReinstateClicked = () => {
     setIsLoading(true);
@@ -39,6 +55,37 @@ export default function MembersProfileActions(props) {
       console.log(res);
       alert("Successfully Reinstated");
       window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
+  const handleMakePaymentClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/form_make_payments',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Payment");
+      window.location.href="/members/" + props.memberId + "/form_make_payments/";
       setIsLoading(false);
     }).catch((error) => {
       console.log(error.response);
@@ -221,6 +268,50 @@ export default function MembersProfileActions(props) {
             Close
           </Button>
         </Modal.Footer>
+
+      </Modal>
+
+      <Modal
+        show={isModalMakePaymentOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Make Payment
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <select className="form-control">
+                {options.map((option) => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
+              </select>              
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleMakePaymentClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalMakePaymentOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Modal
@@ -346,6 +437,26 @@ export default function MembersProfileActions(props) {
         <div className="col">
           <div className="note note-info">
             <strong>
+              Profile Picture
+            </strong>
+            <p>
+              Mag Upload ng Porfile Picture
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => { window.location.href=`/members/${props.memberId}/blip_form_pdf` }}
+            >
+              Upload Profile Picture
+            </button>     
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
               Member Survey
             </strong>
             <p>
@@ -365,7 +476,6 @@ export default function MembersProfileActions(props) {
 
       <hr/>
 
-      
 
       <div className="row">
         <div className="col">
@@ -481,6 +591,22 @@ export default function MembersProfileActions(props) {
                 )
               }            
             })()}
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setModalMakePaymentOpen(true)
+              }}
+            >
+              Clip Make Payment
+            </button>     
           </div>
         </div>
       </div>
