@@ -5,7 +5,6 @@ module Kmba
       @members            = members
   
       # raise @members.inspect
-
     end
 
     def execute!
@@ -20,13 +19,38 @@ module Kmba
 
           center = Center.where(id: a[:center_id])
           branch = Branch.where(id: a[:branch_id])
-          
-          # if a.is_a?(Array)
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     message: "One Member Data, Record is not Array!"
-          #   }
-          # end
+
+          if a[:center_id].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
+              key: "center_id",
+              message: "Center not found"
+            }
+          elsif center.count == 0
+            @errors[:messages] << {
+              code: "KMBA-004",
+              member_id: a[:identification_number],
+              key: "center_id",
+              message: "Center is not valid"
+            }
+          end
+
+          if a[:branch_id].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
+              key: "branch_id",
+              message: "Branch not Found"
+            }
+          elsif branch.count == 0
+            @errors[:messages] << {
+              code: "KMBA-004",
+              member_id: a[:identification_number],
+              key: "branch_id",
+              message: "Branch is not Valid"
+            }
+          end
 
           if a[:first_name].blank?
             @errors[:messages] << {
@@ -52,7 +76,34 @@ module Kmba
               key: "middle_name", 
               message: "Last Name not found"
             }
+          end
+
+          if a[:gender].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
+              key: "gender",
+              message: "Gender not found"
+            }
+          end
+
+          if a[:date_of_birth].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
+              key: "date_of_birth",
+              message: "Date of Birth not found"
+            }
           end 
+
+          if a[:civil_status].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              member_id: a[:identification_number],
+              key: "civil_status",
+              message: "Civil Status not found"
+            }
+          end   
 
           if a[:data][:address][:street].blank?
             @errors[:messages] << {
@@ -62,6 +113,7 @@ module Kmba
               message: "Address Street not found"
             }
           end
+
 
           # if a[:data][:address][:district].blank?
           #   @errors[:messages] << {
@@ -80,65 +132,7 @@ module Kmba
           #     message: "Address City not found"
           #   }
           # end
-
-          # if a[:date_of_birth].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:identification_number],
-          #     key: "date_of_birth",
-          #     message: "Date of Birth not found"
-          #   }
-          # end
-
-          if a[:gender].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "gender",
-              message: "Gender not found"
-            }
-          end
-
-          # if a[:civil_status].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     member_id: a[:identification_number],
-          #     key: "civil_status",
-          #     message: "Civil Status not found"
-          #   }
-          # end
-
-          if a[:branch_id].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "branch_id",
-              message: "Branch not Found"
-            }
-          elsif branch.count == 0
-            @errors[:messages] << {
-              code: "KMBA-004",
-              member_id: a[:identification_number],
-              key: "branch_id",
-              message: "Branch is not Valid"
-            }
-          end
-
-          if a[:center_id].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              member_id: a[:identification_number],
-              key: "center_id",
-              message: "Center not found"
-            }
-          elsif center.count == 0
-            @errors[:messages] << {
-              code: "KMBA-004",
-              member_id: a[:identification_number],
-              key: "center_id",
-              message: "Center is not valid"
-            }
-          end
+       
         }
       end
 
