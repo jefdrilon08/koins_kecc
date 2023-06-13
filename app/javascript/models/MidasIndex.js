@@ -13,6 +13,12 @@ var $reportDate;
 var $inputAsOf;
 var $midasType;
 
+var $startDate;
+var $endDate;
+var $selectBranch2;
+var $midasType2;
+var $btnGenMidasClosing;
+
 var $message;
 var templateErrorList;
 
@@ -28,10 +34,16 @@ var _cacheDom = function() {
   $btnConfirmNew = $("#btn-confirm-new");
   $btnGenMidas   = $("#btn-gen-midas");
 
+  $selectBranch2        = $("#branch-select");
+  $startDate            = $("#start-date");
+  $endDate              = $("#end-date");
+  $midasType2           = $("#midas-type-closing");
+  $btnGenMidasClosing   = $("#c-btn-gen-midas");
+
   $selectBranch = $("#select-branch");
-  $reportDate	= $("#report-date");	
+  $reportDate	  = $("#report-date");	
   $inputAsOf    = $("#input-as-of");
-  $midasType	= $("#midas-type");
+  $midasType	  = $("#midas-type");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -67,6 +79,7 @@ var _bindEvents = function() {
 
 
 }
+
 
 var init  = function(config) {
   authenticityToken = config.authenticityToken;

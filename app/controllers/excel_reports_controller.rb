@@ -29,6 +29,8 @@ class ExcelReportsController < ApplicationController
             #excel = ProcessExcelReport.perform_later(args)
           when 'Member Registry'
             excel = ExcelReports::GenerateMemberRegistry.new(config: config).execute!
+          when 'MIDAS - PODs Closing'
+            excel = ExcelReports::GenerateReportPodsClosing.new(config: config).execute!
           else
         end        
         excel.serialize "#{Rails.root}/tmp/#{filename}"
