@@ -804,11 +804,11 @@ export default class BillingUITable extends React.Component {
         <div className="tableFixHead">
           <table className="table table-bordered table-hover table-sm">
             <thead>
-              <tr className="tbl-th-fixed">
+              <tr>
                 {this.buildHeaders()}
               </tr>
             </thead>
-            <tbody className="fixed-td fixed-th">
+            <tbody>
               {this.buildRecords()}
             </tbody>
             <tfoot>
