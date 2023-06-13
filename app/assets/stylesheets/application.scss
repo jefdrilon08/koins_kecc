@@ -73,17 +73,45 @@ label {
   border-left-width: 0;
 }
 
-.sticky-header{
-  overflow-y:auto;
-  overflow-x:auto;
-  height: 1000px;
 
+.tableFixHead {
+  overflow: auto;
+  height: 1000px;
+  width: 100%;
 }
-.header-fixed {
+
+.tableFixHead table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableFixHead th,
+.tableFixHead td {
+  padding: 8px 16px;
+}
+.tableFixHead td:first-child, th:first-child {
+  position:sticky;
+  left:0;
+  z-index:1;
+  background-color:white;
+}
+.tableFixHead td:nth-child(2),th:nth-child(2)  { 
+position:sticky;
+  left:100px;
+  z-index:1;
+  background-color:white;
+  }
+.tableFixHead th {
   position: sticky;
-  top:0;
-  background-color: #53c653;
+  top: 0;
+  background: #f1f1f1;
+  z-index:2
 }
+th:first-child , th:nth-child(2) {
+  z-index:3
+}
+
+
 
 .headcol {
   position: absolute;

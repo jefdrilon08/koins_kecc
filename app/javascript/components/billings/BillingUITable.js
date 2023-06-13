@@ -30,7 +30,7 @@ export default class BillingUITable extends React.Component {
     var headers = [];
 
     headers.push(
-      <th key={"h-member-attendance"} style={{minWidth: "100px"}} className="header-fixed">
+      <th key={"h-member-attendance"} style={{minWidth: "100px"}} >
         <center>
           <small>
             Attend.
@@ -55,14 +55,14 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th key={"h-member"} style={{minWidth: "300px"}} className="header-fixed">
+      <th key={"h-member"} style={{minWidth: "300px"}} >
         Member
       </th>
     );
 
     for(var i = 0; i < this.props.data.data.headers.length; i++) {
       headers.push(
-        <th key={"h-" + i} style={{minWidth: "100px"}} className="header-fixed">
+        <th key={"h-" + i} style={{minWidth: "100px"}}>
           <center>
             <small>
               {this.props.data.data.headers[i]}
@@ -73,7 +73,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th  key={"h-total"} style={{minWidth: "40px"}} className="header-fixed">
+      <th  key={"h-total"} style={{minWidth: "40px"}} >
         <center>
           CP
         </center>
@@ -81,7 +81,7 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th  key={"h-grand-total"} style={{minWidth: "40px"}} className="header-fixed">
+      <th  key={"h-grand-total"} style={{minWidth: "40px"}} >
         <center>
           TOTAL
         </center>
@@ -222,7 +222,7 @@ export default class BillingUITable extends React.Component {
         );
       } else {
         components.push(
-          <td key={"c-member-attnd-" + member.id}>
+          <td key={"c-member-attnd-" + member.id} >
             <center>
               <div className="badge bg-danger">
                 <span className="fa fa-minus"/>
@@ -233,7 +233,7 @@ export default class BillingUITable extends React.Component {
       }
 
       components.push(
-        <td key={"c-member-" + member.id}>
+        <td key={"c-member-" + member.id} >
           <strong>
             <a onClick={this.handleMemberClicked.bind(this, this.props.data.data.records[i].member)}>
               {this.props.data.data.records[i].member.full_name}
@@ -801,14 +801,14 @@ export default class BillingUITable extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <div className="table-responsive sticky-header">
+        <div className="tableFixHead">
           <table className="table table-bordered table-hover table-sm">
             <thead>
-              <tr className="header-fixed">
+              <tr className="tbl-th-fixed">
                 {this.buildHeaders()}
               </tr>
             </thead>
-            <tbody>
+            <tbody className="fixed-td fixed-th">
               {this.buildRecords()}
             </tbody>
             <tfoot>
