@@ -16,6 +16,10 @@ export default function MembersProfileActions(props) {
   const [dateReinstated, setDateReinstated]       = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen] = useState(false);
   const [makePayment, setMakePayment]       = useState('');
+
+  const [isModalProfilePictureOpen, setModalProfilePictureOpen] = useState(false);
+  const [profilePicture, setProfilePicture]       = useState('');
+
   const options = [
   {
     label: "CLIP",
@@ -31,6 +35,37 @@ export default function MembersProfileActions(props) {
   }
   ];
 
+  const handleProfilePictureClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+      profile_picture: profilePicture
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/reinstate',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Uploaded");
+      window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
   const handleReinstateClicked = () => {
     setIsLoading(true);
 
@@ -220,6 +255,7 @@ export default function MembersProfileActions(props) {
   }
   return (
     <>
+
       <Modal
         show={isModalReinstateOpen}
       >
@@ -262,6 +298,57 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalReinstateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
+
+      <Modal
+        show={isModalProfilePictureOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Profile Picture
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Profile Picture
+              </label>
+              <input
+                className="form-control"
+                value={profilePicture}
+                disabled={isLoading}
+                type="fileInput"
+              
+                onChange={(event) => { setProfilePicture(event.target.value) } }
+
+              />
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleProfilePictureClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalProfilePictureOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -444,7 +531,9 @@ export default function MembersProfileActions(props) {
             </p>
             <button
               className="btn btn-primary"
-              onClick={() => { window.location.href=`/members/${props.memberId}/blip_form_pdf` }}
+              onClick={() => {
+                setModalProfilePictureOpen(true)
+              }}
             >
               Upload Profile Picture
             </button>     
@@ -553,6 +642,12 @@ export default function MembersProfileActions(props) {
       <div className="row">
         <div className="col">
           <div className="note note-info">
+            <strong>
+              Generate Blip Form
+            </strong>
+            <p>
+              Generate BLIP FORM PDF
+            </p>
             <button
               className="btn btn-primary"
               onClick={() => { window.location.href=`/members/${props.memberId}/blip_form_pdf` }}
@@ -567,6 +662,12 @@ export default function MembersProfileActions(props) {
       <div className="row">
         <div className="col">
           <div className="note note-info">
+            <strong>
+              Reinstatement
+            </strong>
+            <p>
+              Reinstate member
+            </p>
             {(() => {
               if(props.member.data["reinstatement"] == null ) {
                 return (
@@ -599,6 +700,12 @@ export default function MembersProfileActions(props) {
       <div className="row">
         <div className="col">
           <div className="note note-info">
+            <strong>
+              Clip Make Payment
+            </strong>
+            <p>
+              Clip Make Payment
+            </p>
             <button
               className="btn btn-primary"
               onClick={() => {
