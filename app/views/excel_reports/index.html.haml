@@ -2,6 +2,8 @@
   .col
     .card
       .card-body
+        %h5
+          Report
         %table.table.table-sm.table-hover
           %thead
             %tr
@@ -18,11 +20,53 @@
                 .form-group
                   = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch", prompt: "-- SELECT --"
               %td
-                = date_field_tag :report_date, "now", class: "form-control", id: "report-date"
+                .form-group
+                  = date_field_tag :report_date, "now", class: "form-control", id: "report-date"
               %td
                 .form-group
                   = select_tag :midas_type, options_for_select(["MIDAS - PODs" , "MIDAS - BARis" , "Member Registry"]), class: "form-control select-select2", id: "midas-type"
               %td
-                %button#btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
-                  GENERATE EXCEL FILE
-              
+                .form-group
+                  %br
+                    %button#btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
+                      GENERATE EXCEL FILE
+          %tr
+        %tr
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Midas Closing
+        %table.table.table-sm.table-hover
+          %thead
+            %tr
+              %th
+                Date Start
+              %th
+                Date End
+              %th
+                Sato
+              %th
+                Record Type
+              %th
+                Action
+              %th
+            %tr
+              %td
+                .form-group
+                  = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date ,id: "start-date"
+              %td      
+                .form-group
+                  = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date ,id: "end-date"
+              %td
+                .form-group
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+              %td
+                .form-group
+                  = select_tag :c_midas_type, options_for_select(["MIDAS - PODs Closing", "MIDAS - BARis Closing"]), class: "form-control select-select2", id: "midas-type-closing"
+              %td
+                .form-group
+                  %br
+                    %button#c-btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
+                      GENERATE EXCEL FILE
