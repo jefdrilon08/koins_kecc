@@ -803,9 +803,8 @@ export default class BillingUITableTablet extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
         <div className="table-responsive">
-          <table className="table table-bordered table-hover table-sm">
+          <table className="table table-bordered table-hover table-sm tableFixHead">
             <thead>
               <tr>
                 {this.buildHeaders()}
