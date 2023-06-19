@@ -53,6 +53,8 @@ module Billings
         attendance: true,
         total_expected_collections: 0.00,
         total_collected: 0.00,
+        total_fix_payment: 0.00,
+        total_loan_payment: 0.00,
         records: []
       }
     end
@@ -93,6 +95,15 @@ module Billings
         if o[:record_type] != "WP"
           @data[:total_collected] += o[:amount]
         end
+
+        if o[:record_type] == "LOAN_PAYMENT"
+          @data[:total_fix_payment] += o[:fixamount]
+        end
+
+        if o[:record_type] == "LOAN_PAYMENT"
+          @data[:total_loan_payment] += o[:amount]
+        end 
+
       end
 
       @data
@@ -248,6 +259,7 @@ module Billings
           name: loan_product.to_s,
         },
         amount: 0.00,
+        fixamount: 0.00,
         enabled: false,
         loan_id: false
       }
@@ -257,6 +269,12 @@ module Billings
       if loan.present?
         data[:enabled]  = true
         data[:loan_id]  = loan.id
+        data[:fixamount] = ::Billings::NextLoanPaymentAmount.new(
+                            config: {
+                              loan: loan,
+                              current_date: @collection_date
+                            }
+                          ).execute!
         data[:amount]   = ::Billings::NextLoanPaymentAmount.new(
                             config: {
                               loan: loan,
