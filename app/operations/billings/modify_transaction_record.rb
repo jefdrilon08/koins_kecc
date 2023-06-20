@@ -216,8 +216,9 @@ module Billings
           total_collected_for_member -= rr[:amount].to_f.round(2)
         end
       end
+  m_record[:total_collected] = total_collected_for_member
 
-      #recompute
+      #recompute for thermal printer
       loan_payment = 0.00
       x_record  = @data[:records].select{ |r|
                     r[:member][:id] == @current_member[:id]
