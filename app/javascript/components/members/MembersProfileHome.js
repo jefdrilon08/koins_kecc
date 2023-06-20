@@ -95,8 +95,19 @@ export default function MembersProfileHome(props) {
               </div>
             </li>
             {(() => {
-              if(props.isReinstated) {
+              if(props.member.data["reinstatement"] == null) {
                 return (
+                  <li className="list-group-item">
+                    Recognition Date
+                    <div className="value text-muted">
+                      <b>
+                        {props.recognitionDate ? props.recognitionDate : "N/A"}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+              return (
                   <li className="list-group-item">
                     Reinstatement Date
                     <div className="value text-muted">
@@ -105,24 +116,13 @@ export default function MembersProfileHome(props) {
                       </b>
                     </div>
                   </li>
-                )
-              }
-              return (
-               <li className="list-group-item">
-                Recognition Date
-                <div className="value text-muted">
-                  <b>
-                    {props.recognitionDate}
-                  </b>
-                </div>
-              </li>
               )
             })()}    
             <li className="list-group-item">
               Length of Stay (MBA)
               <div className="value text-muted">
                 <b>
-                  {props.lengthOfStay}
+                  {props.lengthOfStay ? props.lengthOfStay : "N/A"}
                 </b>
               </div>
             </li>
@@ -261,16 +261,32 @@ export default function MembersProfileHome(props) {
                   {props.data.government_identification_numbers.tin_number}
                 </td>
               </tr>
-              <tr>
-                <th>
-                  Is Reinstated
-                </th>
-                <td>
-                  {props.isReinstated ? "YES" : "NO"}
-                </td>
-              </tr>
               {(() => {
-                if(props.isReinstated) {
+                if(props.member.data["reinstatement"] != null) {
+                  return (
+                    <tr>
+                      <th>
+                        Is Reinstated
+                      </th>
+                      <td>
+                        YES
+                      </td>
+                    </tr>
+                  )
+                }
+                return (
+                    <tr>
+                      <th>
+                        Is Reinstated
+                      </th>
+                      <td>
+                        NO
+                      </td>
+                    </tr>
+                  )
+              })()}
+              {(() => {
+                if(props.member.data["reinstatement"] != null) {
                   return (
                     <tr>
                       <th>
@@ -284,7 +300,7 @@ export default function MembersProfileHome(props) {
                 }
               })()}
               {(() => {
-                if(props.isReinstated) {
+                if(props.member.data["reinstatement"] != null) {
                   return (
                     <tr>
                       <th>
