@@ -52,11 +52,14 @@
         - member_grand_total  = 0.00
         - withdraw_payment    = 0.00
         - total_payment       = 0.00
+        - total_fix_payment   = 0.00
+        - total_loan_payment  = 0.00
         %tr
           %td
             /#{Member.find(r[:member][:id]).identification_number}
+            - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
+              *
             #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
-
           - r[:records].each do |rr|
             - if rr[:record_type] == "WP"
               - member_total_cp -= rr[:amount].to_f
