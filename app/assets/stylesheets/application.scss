@@ -89,17 +89,19 @@ label {
 .tableFixHead td {
   padding: 8px 16px;
 }
-.tableFixHead td:first-child, th:first-child {
+.tableFixHead td:first-child,  
+.tableFixHead th:first-child {
   position:sticky;
   left:0;
   z-index:1;
-  background-color:white;
+  background-color:#f1f1f1;
 }
-.tableFixHead td:nth-child(2),th:nth-child(2)  { 
-position:sticky;
+.tableFixHead td:nth-child(2), 
+.tableFixHead th:nth-child(2)  { 
+  position:sticky;
   left:100px;
   z-index:1;
-  background-color:white;
+  background-color:#f1f1f1;
   }
 .tableFixHead th {
   position: sticky;
@@ -107,7 +109,8 @@ position:sticky;
   background: #f1f1f1;
   z-index:2
 }
-th:first-child , th:nth-child(2) {
+.tableFixHead th:first-child ,  
+.tableFixHead th:nth-child(2) {
   z-index:3
 }
 
