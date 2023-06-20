@@ -169,8 +169,6 @@ module Billings
               total_collected -= rr[:amount].try(:to_f).round(2)
               @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
 
-              total_loan_payment += rr[:amount].try(:to_f).round(2)
-              @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
             end
 
 #            r[:records].each_with_index do |rr, j|
@@ -216,7 +214,7 @@ module Billings
           total_collected_for_member -= rr[:amount].to_f.round(2)
         end
       end
-  m_record[:total_collected] = total_collected_for_member
+    m_record[:total_collected] = total_collected_for_member
 
       #recompute for thermal printer
       loan_payment = 0.00
