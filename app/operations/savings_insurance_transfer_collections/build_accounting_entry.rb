@@ -6,8 +6,10 @@ module SavingsInsuranceTransferCollections
       @data   = @config[:data]
       @user   = @config[:user]
       @payment_subtype = @data["payment_subtype"]
+      @insurance_subtype = @data["insurance_subtype"]
 
       @book         = "JVB"
+      @book1        = "CRB"
       @prepared_by  = @user.full_name
 
       @current_date = ::Utils::GetCurrentDate.new(
@@ -30,11 +32,37 @@ module SavingsInsuranceTransferCollections
                                                 }.first.deposit_accounting_code_id
                                               )
       else 
-        if @payment_subtype == "OTHER-BANK"
+        if @payment_subtype == "OTHER-BANK" && @insurance_subtype != "Hospital Income Insurance Plan"
           @savings_withdrawal_accounting_code = AccountingCode.find(
                                                   Settings.savings_insurance_transfer_accounting_codes.select{ |s|
                                                     s.payment_type == "OTHER-BANK"
                                                   }.first.withdrawal_accounting_code_id
+                                                )
+
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
+        elsif @payment_subtype == "OTHER-BANK" && @insurance_subtype == "Hospital Income Insurance Plan"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "OTHER-BANK"
+                                                  }.first.hiip_withdrawal_accounting_code_id
+                                                )
+
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
+        elsif @payment_subtype == "CASH" && @insurance_subtype == "Hospital Income Insurance Plan"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "CASH"
+                                                  }.first.hiip_withdrawal_accounting_code_id
                                                 )
 
           @insurance_subtype                  = @data[:insurance_subtype]
@@ -62,31 +90,84 @@ module SavingsInsuranceTransferCollections
       @total_amount = @data[:records].inject(0){ |sum, hash| sum + hash[:amount] }.to_f.round(2)
       
       @particular   = default_particular
-
-      @accounting_entry_data  = {
-        book: @book,
-        date_prepared: @current_date.strftime("%B %d, %Y"),
-        company_name: Settings.company_name,
-        company_address: Settings.company_address,
-        branch: @branch.to_s.upcase,
-        prepared_by: @prepared_by,
-        particular: @particular,
-        debit_journal_entries: [],
-        credit_journal_entries: [],
-        journal_entries: [],
-        branch_id: @branch.id,
-        branch_name: @branch.name,
-        status: "display",
-        data: {
-          or_number: "",
-          ar_number: "",
-          check_number: "",
-          check_voucher_number: "",
-          date_of_check: "",
-          sub_reference_number: "",
-          payee: ""
+      if Settings.activate_microinsurance
+        if @payment_subtype == "CASH"
+          @accounting_entry_data  = {
+            book: @book1,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: "",
+              ar_number: "",
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+        else
+          @accounting_entry_data  = {
+            book: @book,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: "",
+              ar_number: "",
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+        end
+      else
+        @accounting_entry_data  = {
+          book: @book,
+          date_prepared: @current_date.strftime("%B %d, %Y"),
+          company_name: Settings.company_name,
+          company_address: Settings.company_address,
+          branch: @branch.to_s.upcase,
+          prepared_by: @prepared_by,
+          particular: @particular,
+          debit_journal_entries: [],
+          credit_journal_entries: [],
+          journal_entries: [],
+          branch_id: @branch.id,
+          branch_name: @branch.name,
+          status: "display",
+          data: {
+            or_number: "",
+            ar_number: "",
+            check_number: "",
+            check_voucher_number: "",
+            date_of_check: "",
+            sub_reference_number: "",
+            payee: ""
+          }
         }
-      }
+      end
     end
 
     def execute!

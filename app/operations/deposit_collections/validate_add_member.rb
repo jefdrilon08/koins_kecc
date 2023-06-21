@@ -32,11 +32,6 @@ module DepositCollections
           key: "member",
           message: "Member not active"
         }
-      elsif @member.insurance_pending?
-        @errors[:messages] << {
-          key: "member",
-          message: "Member Insurance Status is pending"
-        }
       end
 
       if @deposit_collection.present? && @member.present?
