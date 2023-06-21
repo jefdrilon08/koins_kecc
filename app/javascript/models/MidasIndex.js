@@ -58,6 +58,28 @@ var encodeQueryData = function(data) {
 };
 
 var _bindEvents = function() {
+  $btnGenMidasClosing.on("click",function(){
+    var select_branch = $selectBranch2.val();
+    var start_date = $startDate.val();
+    var end_date = $endDate.val();
+    var midas_type = $midasType2.val();
+
+    var data = {
+      branch: select_branch,
+      start_date: start_date,
+      end_date: end_date,
+      midas_type: midas_type
+    }
+
+   console.log(data);
+
+   window.location = "/excel_reports/midas_closing_report?" + encodeQueryData(data);
+
+
+  });
+
+
+
   $btnNew.on("click", function() {
     $modalNew.show();
     $message.html("");

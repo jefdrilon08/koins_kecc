@@ -226,6 +226,7 @@ module ExcelReports
                 ], types: [ nil, nil , nil , nil , nil , nil, nil, nil , nil , nil , nil , nil , nil , :string , nil , nil , nil , nil , nil , :string , nil , :string , :string , :string]
               end
           end
+          
         sheet.add_row ["END"], style: title_cell
        end
       end
