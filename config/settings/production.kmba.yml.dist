@@ -610,10 +610,13 @@ savings_insurance_transfer_accounting_codes:
     payment_type: "CASH"
     deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
     withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
+    hiip_withdrawal_accounting_code_id: "4f426778-32e3-482c-b7f3-ba69c9e4adfb"
+
   -
     payment_type: "OTHER-BANK"
     deposit_accounting_code_id: "3e608010-0274-4d37-a408-fc0121c21a22"
-    withdrawal_accounting_code_id: "3f2d41e6-415a-4619-89d7-1ea2cbcc535e"
+    withdrawal_accounting_code_id: "3e608010-0274-4d37-a408-fc0121c21a22"
+    hiip_withdrawal_accounting_code_id: "39288846-d5ad-405d-a099-29ec02e42e7c"
 
 insurance_accounting_codes:
   -
@@ -636,10 +639,10 @@ insurance_accounting_codes:
     insurance_type: "K-KALINGA"
     deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
     withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
-  -
+ -
     insurance_type: "Hospital Income Insurance Plan"
-    deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
-    withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
+    deposit_accounting_code_id: "e0125f81-d1b3-4175-bfeb-11b65410f518"  
+    withdrawal_accounting_code_id: "4f426778-32e3-482c-b7f3-ba69c9e4adfb"
 
 savings_accounting_codes:
   -
