@@ -39,4 +39,36 @@ class ExcelReportsController < ApplicationController
  
   end
 
+  def midas_closing_report
+    branch_id  = params[:branch]
+    start_date = params[:start_date]
+    end_date   = params[:end_date]
+    type       = params[:midas_type]
+
+    if branch_id.present?
+      @branch = Branch.find(branch_id)
+      @filename = "#{@branch.name}_#{type}_midas.xlsx"
+    end
+    
+    config = {
+      branch_id: branch_id,
+      start_date: start_date,
+      end_date: end_date
+    }
+
+    case type
+      when 'MIDAS - PODs Closing'
+        excel = ::ExcelReports::GenerateReportPodsClosing.new(config: config).execute!
+      when 'MIDAS - BARis Closing'
+        excel = ::ExcelReports::GenerateReportBarisClosing.new(config: config).execute!
+      else
+    end
+
+   
+
+    excel.serialize "#{Rails.root}/tmp/#{@filename}"
+     send_file "#{Rails.root}/tmp/#{@filename}", filename: "#{@filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  end
+
 end	
