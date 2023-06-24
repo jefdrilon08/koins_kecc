@@ -72,3 +72,61 @@ label {
   border: 1px solid #ddd;
   border-left-width: 0;
 }
+
+
+.tableFixHead {
+  overflow: auto;
+  height: 700px;
+  width: 100%;
+}
+
+.tableFixHead table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableFixHead th,
+.tableFixHead td {
+  padding: 8px 16px;
+}
+.tableFixHead td:first-child,  
+.tableFixHead th:first-child {
+  position:sticky;
+  left:0;
+  z-index:1;
+  background-color:#f1f1f1;
+}
+.tableFixHead td:nth-child(2), 
+.tableFixHead th:nth-child(2)  { 
+  position:sticky;
+  left:100px;
+  z-index:1;
+  background-color:#f1f1f1;
+  }
+.tableFixHead th {
+  position: sticky;
+  top: 0;
+  background: #f1f1f1;
+  z-index:2
+}
+.tableFixHead th:first-child ,  
+.tableFixHead th:nth-child(2) {
+  z-index:3
+}
+
+
+
+.headcol {
+  position: absolute;
+  width: 5em;
+  left: 0;
+  top: auto;
+  border-top-width: 1px;
+  /*only relevant for first row*/
+  margin-top: -1px;
+  /*compensate for top border*/
+}
+
+.headcol:before {
+  content: 'Row ';
+}

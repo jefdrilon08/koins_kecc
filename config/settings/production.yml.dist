@@ -710,6 +710,18 @@ defaults:
     -
       account_subtype: "Retirement Fund"
       amount: 5.00
+    -
+      account_subtype: "Hospital Income Insurance Plan"
+      amount: 250.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-BENTE"
+      amount: 20.00
+      mode_of_payment: "yearly"
+    -
+      account_subtype: "K-KALINGA"
+      amount: 50.00
+      mode_of_payment: "yearly"
   savings_deposits:
     -
       account_subtype: "K-IMPOK"
@@ -1254,7 +1266,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "Maintaining Balance Savings"
-      percentage: 0.2
+      percentage: 0.0
       threshold: 0.00
     midas:
       contract_type: 22
@@ -6349,12 +6361,12 @@ loan_products:
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.039
+        monthly_interest_rate: 0.050
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.048
+        monthly_interest_rate: 0.050
 #<<<<<<< HEAD
   -
     loan_product_id: "43e1ae2f-b723-4646-816c-5659146cf2ad"                         # KABUHAYAN W4

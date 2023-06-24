@@ -115,7 +115,7 @@ module DataStores
                     members.member_type as member_type,
                     members.status as member_status 
                     from members
-                    INNER JOIN loans as loans on members.id = loans.member_id and loans.status = 'active' and loans.maturity_date <= '#{@as_of}'
+                    INNER JOIN loans as loans on members.id = loans.member_id
                     where members.status = 'active' and
                     members.branch_id= '#{@branch_id}' order by members.identification_number "
             @result = ActiveRecord::Base.connection.execute(sql).to_a

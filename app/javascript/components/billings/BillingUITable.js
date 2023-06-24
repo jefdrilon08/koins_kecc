@@ -30,7 +30,7 @@ export default class BillingUITable extends React.Component {
     var headers = [];
 
     headers.push(
-      <th key={"h-member-attendance"} style={{minWidth: "100px"}}>
+      <th key={"h-member-attendance"} style={{minWidth: "100px"}} >
         <center>
           <small>
             Attend.
@@ -55,7 +55,7 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th key={"h-member"} style={{minWidth: "300px"}}>
+      <th key={"h-member"} style={{minWidth: "300px"}} >
         Member
       </th>
     );
@@ -73,7 +73,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th  key={"h-total"} style={{minWidth: "40px"}}>
+      <th  key={"h-total"} style={{minWidth: "40px"}} >
         <center>
           CP
         </center>
@@ -81,7 +81,7 @@ export default class BillingUITable extends React.Component {
     );
 
     headers.push(
-      <th  key={"h-grand-total"} style={{minWidth: "40px"}}>
+      <th  key={"h-grand-total"} style={{minWidth: "40px"}} >
         <center>
           TOTAL
         </center>
@@ -222,7 +222,7 @@ export default class BillingUITable extends React.Component {
         );
       } else {
         components.push(
-          <td key={"c-member-attnd-" + member.id}>
+          <td key={"c-member-attnd-" + member.id} >
             <center>
               <div className="badge bg-danger">
                 <span className="fa fa-minus"/>
@@ -233,7 +233,7 @@ export default class BillingUITable extends React.Component {
       }
 
       components.push(
-        <td key={"c-member-" + member.id}>
+        <td key={"c-member-" + member.id} >
           <strong>
             <a onClick={this.handleMemberClicked.bind(this, this.props.data.data.records[i].member)}>
               {this.props.data.data.records[i].member.full_name}
@@ -801,8 +801,7 @@ export default class BillingUITable extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
-        <div className="table-responsive">
+        <div className="tableFixHead">
           <table className="table table-bordered table-hover table-sm">
             <thead>
               <tr>

@@ -241,6 +241,7 @@ Rails.application.routes.draw do
   #MIDAS
   get "/excel_reports", to: "excel_reports#index"
   get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
+  get "/excel_reports/midas_closing_report", to: "excel_reports#midas_closing_report", as: :midas_closing_report
 
   #excel_for_banks
   get "/excel_for_bank", to: "excel_for_bank#index"
@@ -425,6 +426,10 @@ Rails.application.routes.draw do
     get "/uploaded_documents_counts/:id", to: "uploaded_documents_counts#show"
     delete "/uploaded_documents_counts/:id", to: "uploaded_documents_counts#destroy"
 
+    get "/member_quarterly_reports", to: "member_quarterly_reports#index"
+    get "/member_quarterly_reports/:id", to: "member_quarterly_reports#show"
+    delete "/member_quarterly_reports/:id", to: "member_quarterly_reports#destroy"
+
     get "/monthly_new_and_resigned", to: "monthly_new_and_resigned#index"
     get "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#show"
     delete "/monthly_new_and_resigned/:id", to: "monthly_new_and_resigned#destroy"
@@ -496,6 +501,11 @@ Rails.application.routes.draw do
 
     get "share_capital_summary/:id", to: "share_capital_summary#show"
     get "/share_capital_summary", to: "share_capital_summary#index"
+    get "/assets_liabilities", to: "assets_liabilities#index"
+    get "/assets_liabilities/:id", to: "assets_liabilities#show"
+    delete "/assets_liabilities/:id",to: "assets_liabilities#destroy"
+
+   
   end
   
   # daily_branch_metrics
@@ -591,6 +601,8 @@ Rails.application.routes.draw do
 
   # PSR Schedule
   get "/psr_schedules/generate", to: "psr_schedules#generate", as: :psr_schedules_generate
+
+  get "branch_cash_flow",to: "branch_cash_flow#index", as: :branch_cash_flow
 
   # ACTIVITY LOGS
   #resources :activity_logs, only: [:index]

@@ -1,0 +1,12 @@
+%h4
+  Assets and Liabilities
+- if @records.any?
+  = render partial: "index_list"
+- else
+  %p
+    No records
+
+    
+  
+
+= render partial: "data_stores/assets_liabilities/modals/new"

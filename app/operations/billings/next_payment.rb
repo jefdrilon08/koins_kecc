@@ -10,7 +10,11 @@ module Billings
 
     INSURANCE_SUBTYPES  = [
       "Life Insurance Fund",
-      "Retirement Fund"
+      "Retirement Fund",
+      "K-BENTE",
+      "K-KALINGA",
+      "Hospital Income Insurance Plan"
+
     ]
     
     EQUITY_SUBTYPES  = [
@@ -49,6 +53,8 @@ module Billings
         attendance: true,
         total_expected_collections: 0.00,
         total_collected: 0.00,
+        total_fix_payment: 0.00,
+        total_loan_payment: 0.00,
         records: []
       }
     end
@@ -89,6 +95,15 @@ module Billings
         if o[:record_type] != "WP"
           @data[:total_collected] += o[:amount]
         end
+
+        if o[:record_type] == "LOAN_PAYMENT"
+          @data[:total_fix_payment] += o[:fixamount]
+        end
+
+        if o[:record_type] == "LOAN_PAYMENT"
+          @data[:total_loan_payment] += o[:amount]
+        end 
+
       end
 
       @data
@@ -166,13 +181,37 @@ module Billings
       if member_account.present?
         data[:enabled]            = true
         data[:member_account_id]  = member_account.id
+        
 
         defaults  = Settings.try(:defaults).try(:insurance_deposits)
 
         if defaults.present? and @member.loans.size <= 1
           defaults.each do |o|
+            
             if o.account_subtype == insurance_subtype
-              data[:amount] = o.amount
+              if o.mode_of_payment == "yearly"
+                
+                account_transaction = AccountTransaction.where(subsidiary_id: member_account.id)
+                if account_transaction.present?
+                  expiration_data = ((account_transaction.last.transacted_at.to_date + 1.year) - 1.month).to_date
+                
+                  if @collection_date.to_date >= expiration_data.to_date
+                    
+                    total_amount = o.amount
+                  else
+                    total_amount = 0
+                  end
+                else
+                  total_amount = 0
+                end
+              
+              else
+                
+                total_amount = o.amount
+              
+              end
+
+              data[:amount] = total_amount
             end
           end
         end
@@ -220,6 +259,7 @@ module Billings
           name: loan_product.to_s,
         },
         amount: 0.00,
+        fixamount: 0.00,
         enabled: false,
         loan_id: false
       }
@@ -229,6 +269,12 @@ module Billings
       if loan.present?
         data[:enabled]  = true
         data[:loan_id]  = loan.id
+        data[:fixamount] = ::Billings::NextLoanPaymentAmount.new(
+                            config: {
+                              loan: loan,
+                              current_date: @collection_date
+                            }
+                          ).execute!
         data[:amount]   = ::Billings::NextLoanPaymentAmount.new(
                             config: {
                               loan: loan,

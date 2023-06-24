@@ -1,0 +1,209 @@
+%h5
+  Generated As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+  %br
+  From: #{@record.meta.with_indifferent_access[:start_date].to_date.strftime("%B %d, %Y")}
+  To: #{@record.meta.with_indifferent_access[:end_date].to_date.strftime("%B %d, %Y")}
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th.text-center
+      Branch
+    %th.text-center
+      All Active Members
+    %th.text-center
+      All Resigned Members
+    %th.text-center
+      Active Inforce Members
+    %th.text-center
+      Active Lapsed Members
+    %th.text-center
+      Active Dormant Members
+    %th.text-center
+      GK
+    %th.text-center
+      Active MFI - Resigned MII Members
+    %th.text-center
+      Active Pending
+    %th.text-center
+      New Members
+    %th.text-center
+      Resigned Members
+    %th.text-center
+      Resigned MFI - Inforce
+    %th.text-center
+      Resigned MFI - Lapsed
+    %th.text-center
+      Resigned MFI - Dormant
+    %th.text-center
+      Female
+    %th.text-center
+      Female Inforce
+    %th.text-center
+      Female Lapsed
+    %th.text-center
+      Female Dormant
+    %th.text-center
+      Female Resigned
+    %th.text-center
+      Male
+    %th.text-center
+      Male Inforce
+    %th.text-center
+      Male Lapsed
+    %th.text-center
+      Male Dormant
+    %th.text-center
+      Male Resigned
+    %th.text-center
+      Spouse
+    %th.text-center
+      Valid Dependent
+    %th.text-center
+      Single
+    %th.text-center
+      Married
+    %th.text-center
+      May Kinakasama
+    %th.text-center
+      Hiwalay
+    %th.text-center
+      Biyuda/o
+  
+  %tr
+    - @data[:members].each_with_index do |o|
+      %tr
+        %td.text-center
+          #{o["branch"]}
+        %td.text-center
+          #{o["active_count"]}  
+        %td.text-center
+          #{o["all_resigned_count"]}
+        %td.text-center
+          #{o["active_inforce_count"]}
+        %td.text-center
+          #{o["active_lapsed_count"]}
+        %td.text-center
+          #{o["active_dormant_count"]}
+        %td.text-center
+          #{o["gk_count"]}
+        %td.text-center
+          #{o["active_resigned_insurance"]}
+        %td.text-center
+          #{o["pending"]}
+        %td.text-center
+          #{o["new_count"]}
+        %td.text-center
+          #{o["resigned_count"]}
+        %td.text-center
+          #{o["resigned_inforce_count"]}
+        %td.text-center
+          #{o["resigned_lapsed_count"]}
+        %td.text-center
+          #{o["resigned_dormant_count"]}
+        %td.text-center
+          #{o["female_count"]}
+        %td.text-center
+          #{o["female_inforce_count"]}
+        %td.text-center
+          #{o["female_lapsed_count"]}
+        %td.text-center
+          #{o["female_dormant_count"]}
+        %td.text-center
+          #{o["female_resigned_count"]}
+        %td.text-center
+          #{o["male_count"]}
+        %td.text-center
+          #{o["male_inforce_count"]}
+        %td.text-center
+          #{o["male_lapsed_count"]}
+        %td.text-center
+          #{o["male_dormant_count"]}
+        %td.text-center
+          #{o["male_resigned_count"]}
+        %td.text-center
+          #{o["member_with_spouse_count"]}
+        %td.text-center
+          #{o["valid_dependent_count"]}
+        %td.text-center
+          #{o["single"]}
+        %td.text-center
+          #{o["married"]}
+        %td.text-center
+          #{o["maykinakasama"]}
+        %td.text-center
+          #{o["hiwalay"]}
+        %td.text-center
+          #{o["biyuda"]}
+   
+  %tr
+    %td.text-center
+      Total Counts
+    %td.text-center
+      #{@data[:total_members][0]["total_active"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_all_resigned"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_active_inforce"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_active_lapsed"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_active_dormant"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_gk"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_active_resigned_insurance"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_pending"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_new"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_inforce"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_lapsed"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_dormant"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_inforce_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_lapsed_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_dormant_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_inforce_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_lapsed_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_dormant_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_with_spouse"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_valid_dependent"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_single"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_married"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_maykinakasama"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_hiwalay"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_biyuda"]}
+
+
+
+
+/ %hr
+/ %ul.nav.nav-tabs{:role => "tablist"}
+/   %li.nav-item
+/     %a.nav-link.active.show{"aria-selected" => "true", "data-bs-toggle" => "tab", :href => "#active-members", :role => "tab"}
+/       Uploaded Documents Counts (#{@data[:percentage]})  
+

@@ -1,0 +1,59 @@
+%h4
+	Date Range: #{@data_store[:meta]["start_date"].to_date.strftime("%B %d, %Y")} - #{@data_store[:meta]["end_date"].to_date.strftime("%B %d, %Y")}
+%br
+
+%table.table.table-bordered.table-sm.table-hover
+	%tbody
+		-@data[:records].each do |rec|
+			-if rec[:records].present?
+				%tr
+					%th.text-center{:style => "background-color: #dedbd9", :colspan=> 2}
+						#{Branch.find(rec[:branch_id]).name}
+				%tr
+					%th.text-center
+						Assets
+					%th.text-center
+						Amount
+				- total_assets = 0.0
+				-rec[:records].each do |acc|
+					-if AccountingCode.find(acc[:accounting_code_id]).category == "ASSETS"
+						%tr
+							%td.text-center
+								#{AccountingCode.find(acc[:accounting_code_id]).name}
+							%td.text-end
+								#{number_to_currency(acc[:amount].to_f.round(2), unit: '')}
+						-total_assets += acc[:amount]
+				%tr
+					%th.text-center
+						Total
+					%th.text-end{:style =>"color: #ff0000"}
+						#{number_to_currency(total_assets.to_f.round(2),unit: '')}
+
+								
+				%tr
+					%th.text-center
+						LIABILITES
+					%th.text-center
+						Amount
+				- total_liabilities = 0.0
+				-rec[:records].each do |acc|
+					-if AccountingCode.find(acc[:accounting_code_id]).category == "LIABILITIES"
+						%tr
+							%td.text-center
+								#{AccountingCode.find(acc[:accounting_code_id]).name}
+							%td.text-end
+								#{number_to_currency(acc[:amount].to_f.round(2), unit: '')}
+						-total_liabilities += acc[:amount]
+				%tr
+					%th.text-center
+						Total
+					%th.text-end{:style =>"color: #ff0000"}
+						#{number_to_currency(total_liabilities.to_f.round(2),unit: '')}
+					
+				%tr{:style => "background-color: #171413;",:colspan => 2}
+					%th
+					%th
+
+					
+				
+		

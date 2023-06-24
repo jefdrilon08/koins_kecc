@@ -15,9 +15,10 @@
           %th
             Center
         - @cdet.each do |c|
-          - c["memDet"].each do |m|
+          - c["memDet"].each_with_index do |m, i|
             %tr
-            
+              %td
+                #{ i + 1 }
               %td
                 #{m["member"]["last_name"]}, #{m["member"]["first_name"]}
               %td

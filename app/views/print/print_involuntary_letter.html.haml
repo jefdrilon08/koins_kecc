@@ -117,11 +117,12 @@
       %li.list-group-item{style: "font-size: 10.66px"}
         %input{:required => "", :type => "checkbox"}>/
         &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
-        -@data[:loan_records].each do |lr|
-          %div.just-font
-            %br
-              %b
-                #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
+        -if @data[:loan_records].any?
+          -@data[:loan_records].each do |lr|
+            %div.just-font
+              %br
+                %b
+                  #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
     %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
       &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba

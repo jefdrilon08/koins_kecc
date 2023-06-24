@@ -290,22 +290,22 @@ module Claims
         }
       end
 
-      if !@data.nil?
-        if @data[:transaction_fee].present?
-          transaction_fee = @data[:transaction_fee]
+      # if !@data.nil?
+      #   if @data[:transaction_fee].present?
+      #     transaction_fee = @data[:transaction_fee]
 
-          dr_accounting_code  = AccountingCode.find("3f2d41e6-415a-4619-89d7-1ea2cbcc535e")
+      #     dr_accounting_code  = AccountingCode.find("3f2d41e6-415a-4619-89d7-1ea2cbcc535e")
 
-          amount = transaction_fee
+      #     amount = transaction_fee
 
-          journal_entries << {
-            accounting_code_id: dr_accounting_code.id,
-            code: dr_accounting_code.code,
-            name: dr_accounting_code.name,
-            amount: amount
-          }
-        end
-      end
+      #     journal_entries << {
+      #       accounting_code_id: dr_accounting_code.id,
+      #       code: dr_accounting_code.code,
+      #       name: dr_accounting_code.name,
+      #       amount: amount
+      #     }
+      #   end
+      # end
 
       journal_entries
     end
@@ -385,24 +385,25 @@ module Claims
         }
       end
 
-      if !@data.nil?
-        if @data[:transaction_fee].present?
-          transaction_fee = @data[:transaction_fee]
+      # if !@data.nil?
+      #   if @data[:transaction_fee].present?
+      #     transaction_fee = @data[:transaction_fee]
 
-          cr_accounting_code  = AccountingCode.find("184a4473-8795-46b2-aec7-33561471353b")
+      #     cr_accounting_code  = AccountingCode.find("184a4473-8795-46b2-aec7-33561471353b")
 
-          amount = transaction_fee
+      #     amount = transaction_fee
 
-          journal_entries << {
-            accounting_code_id: cr_accounting_code.id,
-            code: cr_accounting_code.code,
-            name: cr_accounting_code.name,
-            amount: amount
-          }
-        end
-      end
+      #     journal_entries << {
+      #       accounting_code_id: cr_accounting_code.id,
+      #       code: cr_accounting_code.code,
+      #       name: cr_accounting_code.name,
+      #       amount: amount
+      #     }
+      #   end
+      # end
 
       journal_entries
+      # raise journal_entries.inspect
     end
 
     # FOR CLIP DEBIT

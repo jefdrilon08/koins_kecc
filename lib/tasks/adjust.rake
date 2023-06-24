@@ -2270,6 +2270,98 @@ namespace :adjust do
     end
   end
 
+  task :process_member_quarterly_reports => :environment do
+    @data_store_type  = "MEMBER QUARTERLY REPORTS"
+    @as_of            = Date.today
+    @start_date = Date.today.beginning_of_month
+    @end_date = @start_date.end_of_month
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    @branches         = Branch.find("ff757405-81b9-4fba-a3f6-9a7903789295")
+
+      puts "Processing #{@branches.name}"
+
+      @record = DataStore.member_quarterly_reports.where(
+                  "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                  @branches.id,
+                  @as_of
+                ).first
+
+      if @record.blank?
+        @record = DataStore.create!(
+                    meta: {
+                      branch_id: @branches.id,
+                      branch_name: @branches.name,
+                      branch: {
+                        id: @branches.id,
+                        name: @branches.name
+                      },
+                      as_of: @as_of,
+                      data_store_type: @data_store_type,
+                      start_date: @start_date,
+                      end_date: @end_date
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+        args  = {
+          record: @record,
+          data_store_type: @data_store_type
+        }
+
+        ProcessMemberQuarterlyReports.perform_later(args)
+      end
+
+      puts "Done!"
+  end
+
+  # task :process_member_quarterly_reports => :environment do
+  #   @data_store_type  = "MEMBER QUARTERLY REPORTS"
+  #   @as_of            = Date.today
+
+  #   puts "Processing"
+
+  #     @record = DataStore.member_quarterly_reports.where(
+  #                 "CAST(meta->>'as_of' AS date) = ?",
+  #                 # branch.id,
+  #                 @as_of
+  #               ).first
+
+  #     if @record.blank?
+  #       @record = DataStore.create!(
+  #                   meta: {
+  #                     # branch_id: branch.id,
+  #                     # branch_name: branch.name,
+  #                     # branch: {
+  #                     #   id: branch.id,
+  #                     #   name: branch.name
+  #                     # },
+  #                     as_of: @as_of,
+  #                     data_store_type: @data_store_type
+  #                   },
+  #                   data: {
+  #                     status: "processing"
+  #                   }
+  #                 )
+
+  #       args  = {
+  #         record: @record,
+  #         data_store_type: @data_store_type
+  #       }
+
+
+  #       ProcessMemberQuarterlyReports.perform_later(args)
+  #     end
+  #   puts "Done!"
+  # end
+
+
+
   task :process_personal_funds => :environment do
     @data_store_type  = "PERSONAL_FUNDS"
     @as_of            = Date.today

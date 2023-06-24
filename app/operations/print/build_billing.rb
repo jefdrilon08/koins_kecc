@@ -12,8 +12,8 @@ module Print
       @collector              = Center.find(@billing.center_id).user
 
       @data[:collection_date] = @billing.collection_date
-      @data[:branch]          = Branch.find(@billing.branch_id).to_s
-      @data[:center]          = Center.find(@billing.center_id).to_s
+      @data[:branch]          = Branch.find(@billing.branch_id).id
+      @data[:center]          = Center.find(@billing.center_id).id
       @data[:data]            = @billing.data.with_indifferent_access
 
       # WP Details
@@ -33,7 +33,7 @@ module Print
       }
 
       @data[:accounting_entry]  = accounting_entry
-
+   
       @data
     end
   end

@@ -38,5 +38,6 @@ module Koins
     #config.action_view.raise_on_missing_translations = true
     config.action_controller.asset_host = "#{(ENV['APP_PIPELINE'] == 'staging' || ENV['APP_PIPELINE'] == 'production') ? 'https' : 'http'}://#{ENV['APP_HOST']}"
     config.active_record.dump_schemas = :all
+    config.action_controller.forgery_protection_origin_check = false
   end
 end

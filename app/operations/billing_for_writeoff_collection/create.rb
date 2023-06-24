@@ -77,18 +77,14 @@ module BillingForWriteoffCollection
         name: "Withdraw Payment",
         total_amount: 0.0
       }
-      @data_store.data['header'] << {
-        name: "CBU",
-        total_amount: 0.0
-      }
-      @data_store.data['header'] << {
-        name: "MBS",
-        total_amount: 0.0
-      }
-      @data_store.data['header'] << {
-        name: "Share Capital",
-        total_amount: 0.0
-      }
+      # @data_store.data['header'] << {
+      #   name: "CBU",
+      #   total_amount: 0.0
+      # }
+      # @data_store.data['header'] << {
+      #   name: "MBS",
+      #   total_amount: 0.0
+      # }
     end
    
     def process_data_record!
@@ -134,56 +130,56 @@ module BillingForWriteoffCollection
             }
           end 
         end
+        mem_acc  = MemberAccount.where(member_id: loan_data[:member_id] , account_type: 'SAVINGS' , account_subtype: 'K-IMPOK').last.id
+        loan_data[:loan_data] << {
+          name: "Withdraw Payment",
+          loan_id: '',
+          loan_product_id: nil,
+          savings_account_id: mem_acc,
+          enabled: true,
+          amount: 0.0,
+          record_type: "WP"
+        }
         #mem_acc = MemberAccount.where(member_id: loan_data[:member_id] , account_type: 'SAVINGS' , account_subtype: 'K-IMPOK').last.id
 
-        a = MemberAccount.where("member_id = ? and account_subtype IN ('K-IMPOK','CBU','Maintaining Balance Savings','Share Capital')", "#{loan_data[:member_id]}").ids
-        a.each do |mem_a|
+        # a = MemberAccount.where("member_id = ? and account_subtype IN ('K-IMPOK','CBU','Maintaining Balance Savings')", "#{loan_data[:member_id]}").ids
+        # a.each do |mem_a|
          
-        member_acc = MemberAccount.find(mem_a)
-        if member_acc.account_subtype == 'K-IMPOK'
-            loan_data[:loan_data] << {
-            name: "Withdraw Payment",
-            loan_id: '',
-            loan_product_id: nil,
-            savings_account_id: member_acc,
-            enabled: true,
-            amount: 0.0,
-            record_type: "WP"
-          }
-          elsif member_acc.account_subtype == 'CBU'
-          loan_data[:loan_data] << {
-            name: "CBU",
-            loan_id: '',
-            loan_product_id: nil,
-            savings_account_id: member_acc,
-            enabled: true,
-            amount: 0.0,
-            record_type: "WP"
-          }
-        elsif member_acc.account_subtype == 'Share Capital'
-          loan_data[:loan_data] << {
-            name: "Share Capital",
-            loan_id: '',
-            loan_product_id: nil,
-            savings_account_id: member_acc,
-            enabled: true,
-            amount: 0.0,
-            record_type: "WP"
-          }
-        elsif member_acc.account_subtype == 'Maintaining Balance Savings'
-          loan_data[:loan_data] << {
-            name: "Maintaining Balance",
-            loan_id: '',
-            loan_product_id: nil,
-            savings_account_id: member_acc,
-            enabled: true,
-            amount: 0.0,
-            record_type: "WP"
-          }
+        # member_acc = MemberAccount.find(mem_a)
+        # if member_acc.account_subtype == 'K-IMPOK'
+        #     loan_data[:loan_data] << {
+        #     name: "Withdraw Payment",
+        #     loan_id: '',
+        #     loan_product_id: nil,
+        #     savings_account_id: member_acc,
+        #     enabled: true,
+        #     amount: 0.0,
+        #     record_type: "WP"
+        #   }
+        #   elsif member_acc.account_subtype == 'CBU'
+        #   loan_data[:loan_data] << {
+        #     name: "CBU",
+        #     loan_id: '',
+        #     loan_product_id: nil,
+        #     savings_account_id: member_acc,
+        #     enabled: true,
+        #     amount: 0.0,
+        #     record_type: "WP"
+        #   }
+        # elsif member_acc.account_subtype == 'Maintaining Balance Savings'
+        #   loan_data[:loan_data] << {
+        #     name: "Maintaining Balance",
+        #     loan_id: '',
+        #     loan_product_id: nil,
+        #     savings_account_id: member_acc,
+        #     enabled: true,
+        #     amount: 0.0,
+        #     record_type: "WP"
+        #   }
 
-        end
+        # end
         
-        end
+        # end
         
       end
     end

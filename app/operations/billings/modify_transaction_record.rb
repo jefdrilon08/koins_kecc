@@ -109,6 +109,8 @@ module Billings
 
       # Recompute
       total_collected = 0.00
+      total_loan_payment = 0.00
+
 
       @data[:totals].each_with_index do |t, index|
         if t[:record_type] == "SAVINGS"
@@ -166,6 +168,7 @@ module Billings
             }.each do |rr|
               total_collected -= rr[:amount].try(:to_f).round(2)
               @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+
             end
 
 #            r[:records].each_with_index do |rr, j|
@@ -197,7 +200,6 @@ module Billings
       end
 
       @data[:total_collected] = total_collected
-
       # Recompute member totals
       total_collected_for_member  = 0.00
 
@@ -212,8 +214,23 @@ module Billings
           total_collected_for_member -= rr[:amount].to_f.round(2)
         end
       end
+    m_record[:total_collected] = total_collected_for_member
 
-      m_record[:total_collected] = total_collected_for_member
+      #recompute for thermal printer
+      loan_payment = 0.00
+      x_record  = @data[:records].select{ |r|
+                    r[:member][:id] == @current_member[:id]
+                  }.first
+
+      x_record[:records].each_with_index do |rr, j|
+        if rr[:record_type] == "LOAN_PAYMENT"
+          loan_payment += rr[:amount].to_f.round(2)
+        elsif rr[:record_type] == "LOAN_PAYMENT"
+          loan_payment -= rr[:amount].to_f.round(2)
+        end
+      end
+
+      x_record[:total_loan_payment] = loan_payment
 
 #      @data[:records].each_with_index do |r, i|
 #        if r[:member][:id] == @current_member[:id]

@@ -17,6 +17,11 @@ class PrintController < ApplicationController
 
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
+    elsif type == "print_second_involuntary_letter"
+      data_str = params[:data]
+      data = ::Print::BuildInvoluntarySecondLetter.new(config: JSON.parse(data_str)).execute!
+      @data = data
+      render "print/print_involuntary_second_letter", layout: "print"
     elsif type == "involuntary_members_list"
       id = params[:id]
       data = ::Print::BuildInvoluntaryMasterList.new(config: id).execute!
@@ -185,6 +190,17 @@ class PrintController < ApplicationController
       @billing  = data
 
       render "print/billing", layout: "print"
+
+    elsif type == "print_thermal"
+      billing = Billing.find(params[:id])
+
+      data = ::Print::BuildBilling.new(
+        billing: billing
+        ).execute!
+
+      @billing = data
+      render "print/print_thermal", layout:"print"
+
     elsif type == "wp"
       billing = Billing.find(params[:id])
 

@@ -400,65 +400,30 @@ namespace :kezar do
 
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
   task send_to_mba_members: :environment do
-    # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    # save new record
+    branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    branch            = Branch.find(branch_id)
+    start_date        = ENV["START_DATE"]  || '2023-02-01'
+    end_date          = ENV["END_DATE"] || '2023-02-28'
+    # member            = 'd723aa98-fdd8-4834-b531-ecd6d447dcac'
+
+    # update record
+    # branch_id         = ENV["BRANCH_ID"] || "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"
     # branch            = Branch.find(branch_id)
+    # start_date        = ENV["START_DATE"]  || '2022-09-09'
+    # end_date          = ENV["END_DATE"] || '2022-09-10'
 
-    start_date        = ENV["START_DATE"]  || '2022-12-01'
-    end_date          = ENV["END_DATE"] || '2022-12-31'
-    # status            = 'inforce'
     is_batch          = ENV["BATCH"] || true
-    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
+    # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
+    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
 
-    member_data = Member.select(
-      "
-        members.id,
-        members.center_id,
-        members.branch_id,
-        members.first_name,
-        members.middle_name,
-        members.last_name,
-        members.gender,
-        members.date_of_birth,
-        members.civil_status,
-        members.home_number,
-        members.processed_by,
-        members.approved_by,
-        members.identification_number,
-        members.place_of_birth,
-        members.status,
-        members.member_type,
-        members.religion,
-        members.insurance_status,
-        members.data,
-        members.date_resigned,
-        members.meta,
-        members.created_at,
-        members.updated_at,
-        members.access_token,
-        members.signature_data,
-        members.modifiable,
-        members.previous_date_resigned,
-        members.insurance_date_resigned,
-        members.member_id,
-        members.encrypted_password,
-        members.username,
-        members.online_application_id,
-        members.membership_arrangement_id,
-        members.membership_type_id,
-        members.referrer_id,
-        members.coordinator_id,
-        members.email
-      "
-    ).joins(
-      "
-        LEFT JOIN branches ON branches.id = members.branch_id
-        LEFT JOIN centers ON centers.id = members.center_id
-      "
-    ).where(
-      "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ?",
+
+    member_data = Member.where(
+      "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ? AND members.branch_id = ?",
       start_date,
-      end_date
-    ).find_in_batches(:batch_size => 500) do |group|
+      end_date,
+      branch
+    ).find_in_batches(:batch_size => 100) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
       member = group.map{ |o|
@@ -472,6 +437,7 @@ namespace :kezar do
           date_of_birth: o.date_of_birth,
           civil_status: o.civil_status,
           home_number: o.home_number,
+          mobile_number: o.mobile_number,
           processed_by: o.processed_by,
           approved_by: o.approved_by,
           identification_number: o.identification_number,
@@ -483,8 +449,6 @@ namespace :kezar do
           data: o.data,
           date_resigned: o.date_resigned,
           meta: o.meta,
-          created_at: o.created_at,
-          updated_at: o.updated_at,
           access_token: o.access_token,
           signature_data: o.signature_data,
           modifiable: o.modifiable,
@@ -498,7 +462,8 @@ namespace :kezar do
           membership_type_id: o.membership_type_id,
           referrer_id: o.referrer_id,
           coordinator_id: o.coordinator_id,
-          email: o.email
+          email: o.email,
+          external_ref: o.external_ref
         }
       }
 
@@ -533,54 +498,50 @@ namespace :kezar do
     # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
     # branch            = Branch.find(branch_id)
 
-    start_date                = ENV["START_DATE"]  || '2023-04-03'
-    end_date                  = ENV["END_DATE"] || '2023-04-05'
+    start_date                = ENV["START_DATE"]  || '2023-02-01'
+    end_date                  = ENV["END_DATE"]  || '2023-02-02'
+    start_recognition         = '2023-01-01'
+    end_recognition           = '2023-01-31'
     is_batch                  = ENV["BATCH"] || true
-    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
-    is_withdraw_payment       = 'false'
-    is_fund_transfer          = 'false'
-    is_interest               = 'false'
+    # end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
+    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"    
+    account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
 
     payment_data = AccountTransaction.select(
       "
         account_transactions.id,
-        account_transactions.subsidiary_id,
-        account_transactions.subsidiary_type,
+        members.identification_number,
         account_transactions.amount,
-        account_transactions.transaction_type,
+        member_accounts.account_subtype,
         account_transactions.transacted_at,
-        account_transactions.status,
-        account_transactions.data,
-        account_transactions.created_at,
-        account_transactions.updated_at
+        account_transactions.status
       "
-    ).where(
+    ).joins(
       "
-        account_transactions.created_at >= ? 
-        AND account_transactions.created_at <= ?
-        AND account_transactions.data->>'is_withdraw_payment' = ?
-        AND account_transactions.data->>'is_fund_transfer' = ?
-        AND account_transactions.data->>'is_interest' = ?
-      ",
+      LEFT JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id
+      LEFT JOIN members ON members.id = member_accounts.member_id
+      "
+    )
+    .where(
+      "account_transactions.created_at >= ? 
+      AND account_transactions.created_at <= ? 
+      AND member_accounts.account_subtype IN (?)
+      AND DATE(members.data->>'recognition_date') >= ?
+      AND DATE(members.data->>'recognition_date') <= ?",
       start_date,
       end_date,
-      is_withdraw_payment,
-      is_fund_transfer,
-      is_interest
+      account_subtypes,
+      start_recognition,
+      end_recognition
     ).find_in_batches(:batch_size => 100) do |group|
-
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
         {
-          subsidiary_id: o.subsidiary_id,
-          subsidiary_type: o.subsidiary_type,
-          amount: o.amount,
-          transaction_type: o.transaction_type,
+          identification_number: o.identification_number,
+          amount: o.amount,          
+          account_subtype: o.account_subtype,
           transacted_at: o.transacted_at,
-          status: o.status,
-          data: o.data,
-          created_at: o.created_at,
-          updated_at: o.updated_at
+          status: o.status
         }
       }
 
@@ -648,7 +609,7 @@ namespace :kezar do
       end_date,
       claim_type,
       claim_status
-    ).find_in_batches(:batch_size => 500) do |group|
+    ).find_in_batches(:batch_size => 1) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
       claims = group.map{ |o|
@@ -673,7 +634,7 @@ namespace :kezar do
       }
 
       Rails.logger.info(puts(claims.to_json))
-
+      
       payload = claims
       
       if is_batch.present?

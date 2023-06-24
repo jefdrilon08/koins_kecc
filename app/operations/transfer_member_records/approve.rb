@@ -41,24 +41,27 @@ module TransferMemberRecords
 
 		def update_member!
 			@branch_counter = @branch.member_counter
-			@counter = 1 
+			@counter = 1
 			@data_records[:records].each do |rec|
 				member = Member.find(rec[:member][:id])
 				center = Center.find(rec[:transfer_to_center][:id])
 
 				member.branch_id =  @transfer_member_records.branch_id_to_transfer
 				if @counter == 1
-				next_member_counter  = @branch_counter + @counter
+				@next_member_counter  = @branch_counter + @counter
 				else
-					next_member_counter  = @branch_counter + @counter
+					@next_member_counter  = @branch_counter + @counter
 				end
 				@counter = @counter + 1
+				member_identification_number  = @cluster_code + @branch_code + @next_member_counter.to_s.rjust(5, "0")
 
-				member_identification_number  = @cluster_code + @branch_code + next_member_counter.to_s.rjust(5, "0")
 				member.identification_number = member_identification_number
 				member.center = center
 				member.save!
 			end
+			update_member_counter = @branch_counter  + @counter - 1
+			@branch.member_counter = update_member_counter
+			@branch.save!
 		end
 		
 		def update_loans!
