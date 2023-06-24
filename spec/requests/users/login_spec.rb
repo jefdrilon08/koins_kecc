@@ -17,11 +17,11 @@ RSpec.describe 'Login' do
 
         payload = JSON.parse(response.body)
 
-        expected_payload = { 'username': ['username required'], 'password': ['password required'] }
-        expect(payload).to eq(expected_payload)
+        expect(payload['username']).to eq(['username required'])
+        expect(payload['password']).to eq(['password required'])
       end
 
-      it 'returns error on invalid username / password' do
+      it 'returns error on no user found' do
         invalid_username = 'test'
         invalid_password = 'test'
 
@@ -31,8 +31,19 @@ RSpec.describe 'Login' do
 
         payload = JSON.parse(response.body)
 
-        expected_payload = { 'username': ['invalid username'], 'password': ['invalid password'] }
-        expect(payload).to eq(expected_payload)
+        expect(payload['username']).to eq(['user not found'])
+      end
+
+      it 'returns error on invalid username / password' do
+        invalid_password = 'test'
+
+        post api_url, params: { username: user.username, password: invalid_password }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['password']).to eq(['invalid password'])
       end
     end
 

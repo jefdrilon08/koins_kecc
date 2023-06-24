@@ -6,6 +6,8 @@ FactoryBot.define do
     last_name { Faker::Name.last_name }
     identification_number { Faker::Internet.username(specifier: 20) }
     roles { [] }
+    password { 'password' }
+    password_confirmation { 'password' }
     encrypted_password { User.new(password: 'password').encrypted_password }
   end
 end
