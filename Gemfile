@@ -68,7 +68,7 @@ group :development do
   gem 'stackprof'
 end
 
-group :development, :test do
+group :test do
   gem "factory_bot_rails"
   gem "faker"
   gem "rspec-rails"

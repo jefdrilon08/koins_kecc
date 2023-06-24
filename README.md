@@ -4,16 +4,16 @@ Microfinance and Microinsurance management system.
 
 ## Software Requirements
 
-* Ruby on Rails version 5.2.x or higher
-* PostgreSQL version 9.x or higher
-* NodeJS version 8.x or higher with webpack
+* Ruby on Rails version 7.x or higher
+* PostgreSQL version 14.x or higher
+* NodeJS version 16.x or higher with webpack
 
 ## First Time Setup
 
-1. Acquire the source code from `https://bitbucket.org`.
+1. Acquire the source code from `https://github.com`.
 
 ```
-git clone https://bitbucket.org/cloudbandsolutions/koins.git
+git clone git@github.com:cloudband-solutions/koins.git
 ```
 
 2. KOINS uses `dotenv-rails` gem to manage environment variables. Copy the `.env.dist` file to `.env` and make sure to change the values according to your environment
@@ -123,3 +123,5 @@ From the redis server, enter the cli and issue the following command:
 ```
 CONFIG SET protected-mode no
 ```
+
+## Running Tests
