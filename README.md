@@ -125,3 +125,9 @@ CONFIG SET protected-mode no
 ```
 
 ## Running Tests
+
+Make sure that you have the `retest` gem locally installed (`gem install retest`). To run all tests:
+
+```
+retest 'bundle exec rspec'
+```

@@ -6,11 +6,12 @@ RSpec.describe 'Login' do
   let(:user) { FactoryBot.create(:user) }
   let(:valid_username) { user.username }
   let(:valid_password) { user.password }
+  let(:api_url) { '/api/authenticate' }
 
-  describe 'POST /authenticate', type: :request do
+  describe "POST /api/authenticate", type: :request do
     context 'invalid calls' do
       it 'returns error on no parameters passed' do
-        post '/authenticate'
+        post api_url
 
         expect(response).to have_http_status(:unprocessable_entity)
 
@@ -24,7 +25,7 @@ RSpec.describe 'Login' do
         invalid_username = 'test'
         invalid_password = 'test'
 
-        post '/authenticate', params: { username: invalid_username, password: invalid_password }
+        post api_url, params: { username: invalid_username, password: invalid_password }
 
         expect(response).to have_http_status(:unprocessable_entity)
 

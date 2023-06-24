@@ -1,5 +1,8 @@
 namespace :api do
 
+  # Universal api
+  post "/authenticate", to: "users#login"
+
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules

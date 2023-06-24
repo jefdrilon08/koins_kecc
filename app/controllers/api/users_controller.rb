@@ -1,6 +1,5 @@
 module Api
   class UsersController < ActionController::API
-
     def change_password
       verification_token  = params[:verification_token]
       password            = params[:password]
@@ -62,8 +61,8 @@ module Api
 
       cmd.execute!
 
-      if cmd.errors.any?
-        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      if cmd.valid?
+        render json: cmd.errors, status: :unprocessable_entity
       else
         sign_in(:user, cmd.user)
 
