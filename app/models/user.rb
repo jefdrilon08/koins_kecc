@@ -96,17 +96,20 @@ class User < ApplicationRecord
   end
 
   def generate_jwt
-    JWT.encode({
-      id: id,
-      exp: 60.days.from_now.to_i
-    }, Rails.application.secret_key_base)
+    payload = user_object
+    payload[:exp] = 60.days.from_now.to_i
+
+    JWT.encode(payload, Rails.application.secret_key_base)
   end
 
   def user_object
     {
+      id: id,
       username: username,
       first_name: first_name,
       last_name: last_name,
+      full_name: full_name,
+      identification_number: identification_number,
       roles: roles
     }
   end
