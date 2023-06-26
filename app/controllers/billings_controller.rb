@@ -2,6 +2,7 @@ class BillingsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    
     @billings = ReadOnlyBilling
       .select("id,or_number,ar_number,branch_id,center_id,collection_date,date_approved,status,total_expected_collections,total_collected")
       .includes(:center, :branch)
@@ -63,46 +64,79 @@ class BillingsController < ApplicationController
       @subheader_side_actions = []
 
       if @billing.pending?
-        if helpers.bk_mis_fm_sbk_user
-          
-          if @data["is_checked"] == true
-            @subheader_side_actions << {
-              id: "btn-uncheck",
-              link: "#",
-              class: "fa fa-check",
-              text: "Uncheck"
-            }
+        
 
-            if helpers.sbk_bk_mis_user
-              @subheader_side_actions << {
-                id: "btn-approve",
-                link: "#",
-                class: "fa fa-check",
-                text: "Approve"
-              }
-            end
-          else
-            @subheader_side_actions << {
-              id: "btn-check",
-              link: "#",
-              class: "fa fa-check",
-              text: "Check"
-            }
-          end
-
-
-        end
-
-        if helpers.oas_mis_user
+        if helpers.so_mis_user
+          @subheader_side_actions << {
+            link: "#",
+            class: "fa fa-print",
+            id: "btn-save-billing",
+            text: "Save"
+          }
+        
           @subheader_side_actions << {
             id: "btn-zero-out",
             link: "#",
             class: "fa fa-times",
             text: "Zero Out"
           }
+
+          @subheader_side_actions << {
+            link: "#",
+            class: "fa fa-download",
+            id: "btn-termal",
+            text: "Print Thermal Printer"
+          }
+       
+          @subheader_side_actions << {
+            link: billing_path(@billing.id),
+            class: "fa fa-times",
+            data: { method: :delete, confirm: "Are you sure?" },
+            text: "Delete"
+          }
         end
 
       end
+
+      if @billing.save?
+
+        if helpers.is_mis_fm?
+          @subheader_side_actions << {
+            link: "#",
+            class: "fa fa-print",
+            id: "btn-unsave-billing",
+            text: "UnSave"
+          }
+
+
+          @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: "Check"
+          }
+        end
+
+      end
+      
+      if @billing.checked?
+        if helpers.sbk_bk_mis_user
+          @subheader_side_actions << {
+            id: "btn-uncheck",
+            link: "#",
+            class: "fa fa-check",
+            text: "Uncheck"
+          }
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            class: "fa fa-check",
+            text: "Approve"
+          }
+        end
+      end
+
+
 
       @subheader_side_actions << {
         link: "#",
@@ -124,22 +158,7 @@ class BillingsController < ApplicationController
         id: "btn-excel",
         text: "Download Excel"
       }
-      @subheader_side_actions << {
-        link: "#",
-        class: "fa fa-download",
-        id: "btn-termal",
-        text: "Print Thermal Printer"
-      }
       
-      if @billing.status != "approved"
-       
-       @subheader_side_actions << {
-        link: billing_path(@billing.id),
-        class: "fa fa-times",
-        data: { method: :delete, confirm: "Are you sure?" },
-        text: "Delete"
-      }
-      end
       
       @payload = {
         id: @billing.id

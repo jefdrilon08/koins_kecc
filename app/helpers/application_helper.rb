@@ -38,6 +38,10 @@ module ApplicationHelper
   def bk_mis_user
     bk_mis_user = ["MIS","BK"].include? current_user.roles.last
   end
+  
+  def so_mis_user
+    bk_mis_user = ["MIS","SO"].include? current_user.roles.last
+  end
 
   def sbk_bk_mis_user
     sbk_bk_mis_user = ["SBK","MIS","BK"].include? current_user.roles.last
