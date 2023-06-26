@@ -61,7 +61,7 @@ module Api
 
       cmd.execute!
 
-      if cmd.valid?
+      if cmd.invalid?
         render json: cmd.errors, status: :unprocessable_entity
       else
         sign_in(:user, cmd.user)

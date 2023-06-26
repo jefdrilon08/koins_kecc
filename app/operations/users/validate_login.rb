@@ -1,5 +1,7 @@
 module Users
   class ValidateLogin < Validator
+    attr_accessor :user, :token
+
     def initialize(username:, password:)
       super()
       @username = username
@@ -30,7 +32,7 @@ module Users
         elsif !@user.verified?
           @errors[:username] << 'user is not verified'
         else
-          @token = user.generate_jwt
+          @token = @user.generate_jwt
         end
       end
     end
