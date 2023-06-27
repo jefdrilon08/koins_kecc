@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -81,6 +81,56 @@ module Api
         render json: { id: member.id }
       else
         render json: { errors: errors }, status: 402
+      end
+    end
+
+    def update_recognition_date
+      member            = Member.find(params[:id])
+      recognition_date  = params[:recognition_date]
+      config  = {
+        member: member,
+        user: current_user,
+        recognition_date: recognition_date
+      }
+      errors = ::Members::ValidateRecognitionDate.new(
+        member: member,
+        recognition_date: recognition_date
+      ).execute!
+      if errors.any?
+        ender json: errors, status: 400
+      else
+        data  = member.data.with_indifferent_access
+          
+          data[:recognition_date] = recognition_date
+          if member.pending? && member.insurance_pending?
+            status = "active"
+            insurance_status = "inforce"
+          else
+            status = member.status
+            insurance_status = member.status
+          end
+          if member.identification_number.present?
+            identification_number = member.identification_number
+          else
+            identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+                                              member: member
+                                              ).execute!
+            c = member.branch.try(:member_counter) || 0
+            member.branch.update(member_counter: c + 1)
+          end
+          member.update!(
+            data: data,
+            status: status,
+            insurance_status: insurance_status,
+            identification_number: identification_number,
+            modifiable: nil
+          )
+        ::Members::UpdateRecognitionDate.new(
+          member: member,
+          recognition_date: recognition_date,
+          change_by: current_user.full_name
+        ).execute!
+        render json: { id: member.id }
       end
     end
 
