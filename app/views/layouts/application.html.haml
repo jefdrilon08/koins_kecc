@@ -9,7 +9,8 @@
     = csrf_meta_tags
     = csp_meta_tag
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
-    %meta{ name: "branch-ids", content: "#{{ branch_ids: @branches.pluck(:id) }.to_json}" }
+    - if Settings.activate_microloans?
+      %meta{ name: "branch-ids", content: "#{{ branch_ids: @branches.pluck(:id) }.to_json}" }
     %meta{ name: "parameters", content: "#{{ route: "#{params[:controller]}/#{params[:action]}", payload: (@payload || {}) }.to_json}" }
 
     - if microinsurance?
