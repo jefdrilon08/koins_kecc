@@ -25,7 +25,8 @@ module Reports
         @resigned_before_dormant    = ::Members::FetchInsuranceMembers.new(config: {members: @resigned_before, as_of: @end_date, insurance_status: "dormant"}).execute!
         @all_dormant                = @active_dormant_members + @resigned_before_dormant
         
-        @all_active_members         = @all_inforce + @all_lapsed + @all_dormant
+        # @all_active_members         = @all_inforce + @all_lapsed + @all_dormant
+        @all_active_members         = @all_inforce
         
         @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ?", @start_date, @end_date)
         @all_resigned_members       = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)
@@ -43,12 +44,36 @@ module Reports
         @female_members             = @all_active_members.select{|o| o[:gender] == "Female"}
 
         @members_with_spouse        = @all_active_members.select{|o| o.data["spouse"]["first_name"] != nil}
-        @single_members             = @all_active_members.select{|o| o[:civil_status] == "Single"}
-        @married_members            = @all_active_members.select{|o| o[:civil_status] == "Kasal"}
-        @maykinakasama_members      = @all_active_members.select{|o| o[:civil_status] == "May Kinakasama"}
-        @hiwalay_members            = @all_active_members.select{|o| o[:civil_status] == "Hiwalay"}
-        @biyuda_members             = @all_active_members.select{|o| o[:civil_status] == "Biyudo/a"}
+        # @single_members             = @all_active_members.select{|o| o[:civil_status] == "Single"}
+        # @single_members             = @all_active_members.select{|o| o[:civil_status] == "Single"}
+        # @single_members             = @all_active_members.select{|o| o[:civil_status] == "Single"}
+        # @married_members            = @all_active_members.select{|o| o[:civil_status] == "Kasal"}
+        # @maykinakasama_members      = @all_active_members.select{|o| o[:civil_status] == "May Kinakasama"}
+        # @hiwalay_members            = @all_active_members.select{|o| o[:civil_status] == "Hiwalay"}
+        # @biyuda_members             = @all_active_members.select{|o| o[:civil_status] == "Biyudo/a"}
 
+        @single_members             = @all_active_members.select{|o| o[:civil_status] == "Single"}
+        @single_male_members        = @all_active_members.select{|o| o[:civil_status] == "Single" and o[:gender] == "Male"}
+        @single_female_members      = @all_active_members.select{|o| o[:civil_status] == "Single" and o[:gender] == "Female"}
+        
+
+        @married_members            = @all_active_members.select{|o| o[:civil_status] == "Kasal"}
+        @married_male_members       = @all_active_members.select{|o| o[:civil_status] == "Kasal" and o[:gender] == "Male"}
+        @married_female_members     = @all_active_members.select{|o| o[:civil_status] == "Kasal" and o[:gender] == "Female"}
+        
+        @maykinakasama_members      = @all_active_members.select{|o| o[:civil_status] == "May Kinakasama"}
+        @maykinakasama_male_members      = @all_active_members.select{|o| o[:civil_status] == "May Kinakasama" and o[:gender] == "Male"}
+        @maykinakasama_female_members      = @all_active_members.select{|o| o[:civil_status] == "May Kinakasama" and o[:gender] == "Female"}
+        
+        @hiwalay_members            = @all_active_members.select{|o| o[:civil_status] == "Hiwalay"}
+        @hiwalay_male_members            = @all_active_members.select{|o| o[:civil_status] == "Hiwalay" and o[:gender] == "Male"}
+        @hiwalay_female_members            = @all_active_members.select{|o| o[:civil_status] == "Hiwalay" and o[:gender] == "Female"}
+
+
+        
+        @biyuda_members             = @all_active_members.select{|o| o[:civil_status] == "Biyudo/a"}
+        @biyuda_male_members             = @all_active_members.select{|o| o[:civil_status] == "Biyudo/a" and o[:gender] == "Male"}
+        @biyuda_female_members             = @all_active_members.select{|o| o[:civil_status] == "Biyudo/a" and o[:gender] == "Female"}
       else
         @all_members                = Member.all.order("last_name ASC")
       end
@@ -77,11 +102,26 @@ module Reports
       @total_gk = 0
       @total_valid_dependent = 0
       @total_with_spouse = 0
+
       @total_single = 0
+      @total_single_male = 0
+      @total_single_female = 0
+      
       @total_biyuda = 0
+      @total_biyuda_male = 0
+      @total_biyuda_female = 0
+      
       @total_married = 0
+      @total_married_male = 0
+      @total_married_female = 0
+      
       @total_maykinakasama = 0
+      @total_maykinakasama_male = 0
+      @total_maykinakasama_female = 0
+      
       @total_hiwalay = 0
+      @total_hiwalay_male = 0
+      @total_hiwalay_female = 0
 
       @total_inforce_male = 0
       @total_inforce_female = 0
@@ -142,10 +182,26 @@ module Reports
         member[:resigned_dormant_count] = @resigned_dormant.where(branch_id: branch).count
         
         member[:single] = @single_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:single_male_members] = @single_male_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:single_female_members] = @single_female_members.select{|o| o[:branch_id] == branch.id}.count
+
+        
+        
         member[:married] = @married_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:married_male_members] = @married_male_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:married_female_members] = @married_female_members.select{|o| o[:branch_id] == branch.id}.count
+        
         member[:maykinakasama] = @maykinakasama_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:maykinakasama_male_members] = @maykinakasama_male_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:maykinakasama_female_members] = @maykinakasama_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         member[:hiwalay] = @hiwalay_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:hiwalay_male_members] = @hiwalay_male_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:hiwalay_female_members] = @hiwalay_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         member[:biyuda] = @biyuda_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:biyuda_male_members] = @biyuda_male_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:biyuda_female_members] = @biyuda_female_members.select{|o| o[:branch_id] == branch.id}.count
 
         @total_resigned += @resigned_members.where(branch_id: branch).count
         @total_all_resigned += @all_resigned_members.where(branch_id: branch).count
@@ -179,10 +235,29 @@ module Reports
         @total_resigned_dormant += @resigned_dormant.where(branch_id: branch).count
         
         @total_single += @single_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_single_male += @single_male_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_single_female += @single_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         @total_married += @married_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_married_male += @married_male_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_married_female += @married_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         @total_maykinakasama += @maykinakasama_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_maykinakasama_male += @maykinakasama_male_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_maykinakasama_female += @maykinakasama_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         @total_hiwalay += @hiwalay_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_hiwalay_male += @hiwalay_male_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_hiwalay_female += @hiwalay_female_members.select{|o| o[:branch_id] == branch.id}.count
+
         @total_biyuda += @biyuda_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_biyuda_male += @biyuda_male_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_biyuda_female += @biyuda_female_members.select{|o| o[:branch_id] == branch.id}.count
+        # @total_single += @single_members.select{|o| o[:branch_id] == branch.id}.count
+        # @total_married += @married_members.select{|o| o[:branch_id] == branch.id}.count
+        # @total_maykinakasama += @maykinakasama_members.select{|o| o[:branch_id] == branch.id}.count
+        # @total_hiwalay += @hiwalay_members.select{|o| o[:branch_id] == branch.id}.count
+        # @total_biyuda += @biyuda_members.select{|o| o[:branch_id] == branch.id}.count
         @data[:members] << member
       end
 
@@ -209,11 +284,31 @@ module Reports
       total[:total_female] = @total_female
       total[:total_with_spouse] = @total_with_spouse
       total[:total_valid_dependent] = @total_valid_dependent
+      # total[:total_single] = @total_single
+      # total[:total_married] = @total_married
+      # total[:total_maykinakasama] = @total_maykinakasama
+      # total[:total_hiwalay] = @total_hiwalay
+      # total[:total_biyuda] = @total_biyuda
       total[:total_single] = @total_single
+      total[:total_single_male] = @total_single_male
+      total[:total_single_female] = @total_single_female
+      
       total[:total_married] = @total_married
+      total[:total_married_male] = @total_married_male
+      total[:total_married_female] = @total_married_female
+
       total[:total_maykinakasama] = @total_maykinakasama
+      total[:total_maykinakasama_male] = @total_maykinakasama_male
+      total[:total_maykinakasama_female] = @total_maykinakasama_female
+
       total[:total_hiwalay] = @total_hiwalay
+      total[:total_hiwalay_male] = @total_hiwalay_male
+      total[:total_hiwalay_female] = @total_hiwalay_female
+
       total[:total_biyuda] = @total_biyuda
+      total[:total_biyuda_male] = @total_biyuda_male
+      total[:total_biyuda_female] = @total_biyuda_female
+      
       total[:total_resigned_inforce] = @total_resigned_inforce
       total[:total_resigned_lapsed] = @total_resigned_lapsed
       total[:total_resigned_dormant] = @total_resigned_dormant

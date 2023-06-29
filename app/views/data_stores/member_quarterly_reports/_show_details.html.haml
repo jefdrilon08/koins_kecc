@@ -8,25 +8,27 @@
     %th.text-center
       Branch
     %th.text-center
-      All Active Members
+      Active
     %th.text-center
-      All Resigned Members
+      All Resigned
     %th.text-center
-      Active Inforce Members
+      Inforce
     %th.text-center
-      Active Lapsed Members
+      Lapsed
     %th.text-center
-      Active Dormant Members
+      Dormant
     %th.text-center
       GK
     %th.text-center
       Active MFI - Resigned MII Members
     %th.text-center
-      Active Pending
+      Pending
     %th.text-center
       New Members
     %th.text-center
-      Resigned Members
+      New Resigned Members
+    %th.text-center
+      Old Resigned Members 
     %th.text-center
       Resigned MFI - Inforce
     %th.text-center
@@ -60,13 +62,33 @@
     %th.text-center
       Single
     %th.text-center
+      Single Male
+    %th.text-center
+      Single Female
+    %th.text-center
       Married
+    %th.text-center
+      Married Male
+    %th.text-center
+      Married Female
     %th.text-center
       May Kinakasama
     %th.text-center
+      May Kinakasama Male
+    %th.text-center
+      May Kinakasama Female
+    %th.text-center
       Hiwalay
     %th.text-center
+      Hiwalay Male
+    %th.text-center
+      Hiwalay Female
+    %th.text-center
       Biyuda/o
+    %th.text-center
+      Biyuda/o Male
+    %th.text-center
+      Biyuda/o Female
   
   %tr
     - @data[:members].each_with_index do |o|
@@ -93,6 +115,8 @@
           #{o["new_count"]}
         %td.text-center
           #{o["resigned_count"]}
+        %td.text-center
+          #{o["resigned_old_count"]}
         %td.text-center
           #{o["resigned_inforce_count"]}
         %td.text-center
@@ -126,13 +150,33 @@
         %td.text-center
           #{o["single"]}
         %td.text-center
+          #{o["single_male_members"]}
+        %td.text-center
+          #{o["single_female_members"]}
+        %td.text-center
           #{o["married"]}
+        %td.text-center
+          #{o["married_male_members"]}
+        %td.text-center
+          #{o["married_female_members"]}
         %td.text-center
           #{o["maykinakasama"]}
         %td.text-center
+          #{o["maykinakasama_male_members"]}
+        %td.text-center
+          #{o["maykinakasama_female_members"]}
+        %td.text-center
           #{o["hiwalay"]}
         %td.text-center
+          #{o["hiwalay_male_members"]}
+        %td.text-center
+          #{o["hiwalay_female_members"]}
+        %td.text-center
           #{o["biyuda"]}
+        %td.text-center
+          #{o["biyuda_male_members"]}
+        %td.text-center
+          #{o["biyuda_female_members"]}
    
   %tr
     %td.text-center
@@ -157,6 +201,8 @@
       #{@data[:total_members][0]["total_new"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_old"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_inforce"]}
     %td.text-center
@@ -190,13 +236,33 @@
     %td.text-center
       #{@data[:total_members][0]["total_single"]}
     %td.text-center
+      #{@data[:total_members][0]["total_single_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_single_female"]}
+    %td.text-center
       #{@data[:total_members][0]["total_married"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_married_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_married_female"]}
     %td.text-center
       #{@data[:total_members][0]["total_maykinakasama"]}
     %td.text-center
+      #{@data[:total_members][0]["total_maykinakasama_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_maykinakasama_female"]}
+    %td.text-center
       #{@data[:total_members][0]["total_hiwalay"]}
     %td.text-center
+      #{@data[:total_members][0]["total_hiwalay_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_hiwalay_female"]}
+    %td.text-center
       #{@data[:total_members][0]["total_biyuda"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_biyuda_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_biyuda_female"]}
 
 
 
