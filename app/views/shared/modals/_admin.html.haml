@@ -8,14 +8,13 @@
         .row
           - if is_mis_user?
             .col
-              = link_to administration_users_path, class: "btn-nav-square-md" do
-                Users
-          .col
-            = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
-              Chart of Accounts
-
+              = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
+                Chart of Accounts
           .mt-4
           .row
+            .col
+              = link_to administration_users_path, class: "btn-nav-square-md" do
+                Users
             .col
               = link_to administration_loan_product_categories_path, class: "btn-nav-square-md" do
                 Loan Product Categories
