@@ -14,7 +14,9 @@ module ApplicationHelper
       []
     end
   end
-
+  def is_mis?
+    is_mis = ["MIS"].include? current_user.roles.last
+  end
   def is_mis_fm?
     is_mis_user = ["MIS", "FM"].include? current_user.roles.last
   end
@@ -37,6 +39,10 @@ module ApplicationHelper
   
   def bk_mis_user
     bk_mis_user = ["MIS","BK"].include? current_user.roles.last
+  end
+  
+  def so_mis_user
+    bk_mis_user = ["MIS","SO"].include? current_user.roles.last
   end
 
   def sbk_bk_mis_user

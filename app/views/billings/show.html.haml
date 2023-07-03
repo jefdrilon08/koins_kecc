@@ -16,12 +16,6 @@
             %p
               This billing has been approved on #{@billing.date_approved.strftime("%b %d, %Y")}
 
-        - if !@billing.checked?
-          .alert.alert-danger
-            This billing has not been checked yet.
-        - else
-          .alert.alert-info
-            Checked By: #{@billing.checked_by}
 
         %h5
           Billing for #{@billing.branch} / #{@billing.center} - #{@billing.collection_date.strftime("%b %d, %Y")} #{@billing.approved? ? "(Approved on #{@billing.date_approved.strftime("%b %d, %Y")})" : ""}
@@ -38,4 +32,6 @@
 = render partial: "billings/modals/check"
 = render partial: "billings/modals/uncheck"
 = render partial: "billings/modals/zero_out"
+= render partial: "billings/modals/save"
+= render partial: "billings/modals/unsave"
 = render partial: "templates/error_list"

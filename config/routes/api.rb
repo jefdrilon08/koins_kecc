@@ -1,8 +1,5 @@
 namespace :api do
 
-  # Universal api
-  post "/authenticate", to: "users#login"
-
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules
@@ -388,6 +385,8 @@ namespace :api do
     # Billing
     post "/billings", to: "billings#create"
     post "/billings/update", to: "billings#update"
+    post "/billings/save", to: "billings#save"
+    post "/billings/unsave", to: "billings#unsave"
     post "/billings/modify_transaction_record", to: "billings#modify_transaction_record"
     post "/billings/modify_member_record", to: "billings#modify_member_record"
     post "/billings/toggle_attendance", to: "billings#toggle_attendance"
@@ -719,6 +718,5 @@ namespace :api do
     post "/claims/save_note", to: "claims#save_note"
     post "/claims/save_date_paid", to: "claims#save_date_paid"
     post "/claims/add_transaction_fee", to: "claims#add_transaction_fee"    
-
   end
 end

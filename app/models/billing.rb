@@ -1,6 +1,8 @@
 class Billing < ApplicationRecord
   STATUSES  = [
     "pending",
+    "save",
+    "checked",
     "approved",
     "processing",
     "error"
@@ -13,6 +15,7 @@ class Billing < ApplicationRecord
 
   before_validation :load_defaults
 
+  scope :save, -> { where(status: "save").order("collection_date ASC") }
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
   scope :processing, -> { where(status: "processing").order("collection_date ASC") }
@@ -77,6 +80,13 @@ class Billing < ApplicationRecord
 
   def processing?
     self.status == "processing"
+  end
+  def save?
+    self.status == "save"
+  end
+  
+  def checked?
+    self.status == "checked"
   end
 
   def loan_payments
