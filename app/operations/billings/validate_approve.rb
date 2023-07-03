@@ -18,10 +18,10 @@ module Billings
           key: "billing",
           message: "billing not found"
         }
-      elsif !@billing.pending?
+      elsif !@billing.checked?
         @errors[:messages] << {
           key: "billing",
-          message: "billing is not pending"
+          message: "billing is not checked"
         }
       elsif !@billing.checked?
         @errors[:messages] << {

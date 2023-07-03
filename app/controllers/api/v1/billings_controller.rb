@@ -129,6 +129,50 @@ module Api
         
         render json: billing
       end
+      
+      def save
+        billing = Billing.where(id: params[:id]).first
+
+        config  = {
+          billing: billing,
+          user: current_user
+        }
+
+          billing.update!(status: "save")
+  
+          ActivityLog.create!(
+            content: "#{current_user.full_name} save billing",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              billing_id: billing.id
+            }
+          )
+
+          render json: { message: "ok" }
+      end
+
+      def unsave
+        billing = Billing.where(id: params[:id]).first
+
+        config  = {
+          billing: billing,
+          user: current_user
+        }
+
+          billing.update!(status: "pending")
+  
+          ActivityLog.create!(
+            content: "#{current_user.full_name} unchecked billing",
+            activity_type: "approval",
+            data: {
+              user_id: current_user.id,
+              billing_id: billing.id
+            }
+          )
+
+          render json: { message: "ok" }
+      end
 
       def check
         billing = Billing.where(id: params[:id]).first
@@ -148,6 +192,7 @@ module Api
           billing = ::Billings::Check.new(
                       config: config
                     ).execute!
+          billing.update!(status: "checked")
   
           ActivityLog.create!(
             content: "#{current_user.full_name} checked billing",
@@ -172,6 +217,7 @@ module Api
                       config: config
                     ).execute!
         
+          billing.update!(status: "save")
           render json: { message: "ok" }
       end
 

@@ -52,3 +52,9 @@
             - elsif o.processing?
               .badge.badge-info
                 Processing
+            - elsif o.save?
+              .badge.badge-secondary
+                Save
+            - elsif o.checked?
+              .badge.badge-secondary
+                Checked

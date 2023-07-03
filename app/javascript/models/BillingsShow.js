@@ -6,6 +6,14 @@ var options;
 var id;
 var authenticityToken;
 
+var $btnSave;
+var $modalSave;
+var $btnConfirmSave;
+
+var $btnUnSave;
+var $modalUnSave;
+var $btnConfirmUnSave;
+
 var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
@@ -34,12 +42,20 @@ var templateErrorList;
 
 var _urlApprove   = "/api/v1/billings/approve";
 var _urlCheck     = "/api/v1/billings/check";
+var _urlSave     = "/api/v1/billings/save";
+var _urlUnSave     = "/api/v1/billings/unsave";
 var _urlUncheck   = "/api/v1/billings/uncheck";
 var _urlZeroOut   = "/api/v1/billings/zero_out";
 var _urlPrint     = "/api/v1/print/generate_file";
 var _urlDownload  = "/billings/excel";
 
 var _cacheDom = function() {
+  $modalSave = new bootstrap.Modal(
+    document.getElementById("modal-save")
+  );
+  $modalUnSave = new bootstrap.Modal(
+    document.getElementById("modal-unsave")
+  );
   $modalApprove = new bootstrap.Modal(
     document.getElementById("modal-approve")
   );
@@ -60,7 +76,12 @@ var _cacheDom = function() {
     document.getElementById("modal-print")
   );
 
+  $btnSave         = $("#btn-save-billing");
+  $btnConfirmSave  = $("#btn-confirm-save");
 
+  $btnUnSave         = $("#btn-unsave-billing");
+  $btnConfirmUnSave  = $("#btn-confirm-unsave");
+  
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
 
@@ -173,10 +194,95 @@ var _bindEvents = function() {
     });
   });
 
+  $btnSave.on("click", function() {
+    $modalSave.show();
+    $message.html("");
+  });
+  
+  $btnUnSave.on("click", function() {
+    $modalUnSave.show();
+    $message.html("");
+  });
+  
+  $btnConfirmUnSave.on("click", function() {
+    $btnConfirmUnSave.prop("disabled", true);
+
+    $.ajax({
+      url: _urlUnSave,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: id,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
 
   $btnCheck.on("click", function() {
     $modalCheck.show();
     $message.html("");
+  });
+  
+  $btnConfirmSave.on("click", function() {
+    $btnConfirmSave.prop("disabled", true);
+
+    $.ajax({
+      url: _urlSave,
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        id: id,
+        authenticity_token: authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
   });
 
   $btnConfirmCheck.on("click", function() {

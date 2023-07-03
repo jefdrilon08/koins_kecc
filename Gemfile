@@ -66,6 +66,7 @@ group :development do
   gem 'memory_profiler' # For memory profiling
   gem 'flamegraph' # For call-stack profiling flamegraphs
   gem 'stackprof'
+  gem 'puma_worker_killer'
 end
 
 group :test do
