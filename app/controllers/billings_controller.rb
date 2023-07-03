@@ -75,17 +75,17 @@ class BillingsController < ApplicationController
           }
         
           @subheader_side_actions << {
-            id: "btn-zero-out",
-            link: "#",
-            class: "fa fa-times",
-            text: "Zero Out"
-          }
-
-          @subheader_side_actions << {
             link: "#",
             class: "fa fa-download",
             id: "btn-termal",
             text: "Print Thermal Printer"
+          }
+          
+          @subheader_side_actions << {
+            id: "btn-zero-out",
+            link: "#",
+            class: "fa fa-times",
+            text: "Zero Out"
           }
        
           @subheader_side_actions << {
