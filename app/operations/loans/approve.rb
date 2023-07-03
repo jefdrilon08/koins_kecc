@@ -43,7 +43,9 @@ module Loans
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles] || []
       @entry_point_loan_cycle = @member_data[:entry_point_loan_cycle] || 0
-      @project_type = ProjectType.find(@project_type_id)
+      if @project_type_id.present?
+        @project_type = ProjectType.find(@project_type_id)
+      end
     end
 
     def execute!
@@ -88,19 +90,22 @@ module Loans
       @member_data[:loan_cycles]            = @loan_cycles
       @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
 
-      @member_data[:project_type] = [ 
-          { project_type_id: @project_type_id,
-            project_type_category_id: @project_type.project_type_category_id,
-            details: {
-              project_type: @project_type.name,
-              project_type_category: @project_type.project_type_category.name ,
-              latitude_data: 0.0,
-              longtitude_data: 0.0
-            }
+      if @project_type_id.present?
+        @member_data[:project_type] = [ 
+            { project_type_id: @project_type_id,
+              project_type_category_id: @project_type.project_type_category_id,
+              details: {
+                project_type: @project_type.name,
+                project_type_category: @project_type.project_type_category.name ,
+                latitude_data: 0.0,
+                longtitude_data: 0.0
+              }
             
-          }
+            }
           
-      ]
+        ]
+
+      end
 
       @member.update!(data: @member_data)
       
