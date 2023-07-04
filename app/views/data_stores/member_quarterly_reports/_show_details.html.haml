@@ -18,7 +18,13 @@
     %th.text-center
       Dormant
     %th.text-center
-      GK
+      ALL GK
+    %th.text-center
+      GK YTD
+    %th.text-center
+      GK Male
+    %th.text-center
+      GK Female
     %th.text-center
       Active MFI - Resigned MII Members
     %th.text-center
@@ -26,9 +32,11 @@
     %th.text-center
       New Members
     %th.text-center
-      New Resigned Members
+      New Resigned YTD
     %th.text-center
-      Old Resigned Members 
+      Old Resigned YTD 
+    %th.text-center
+      Resigned YTD
     %th.text-center
       Resigned MFI - Inforce
     %th.text-center
@@ -108,6 +116,12 @@
         %td.text-center
           #{o["gk_count"]}
         %td.text-center
+          #{o["gk_count_ytd"]}
+        %td.text-center
+          #{o["gk_count_male"]}
+        %td.text-center
+          #{o["gk_count_female"]}
+        %td.text-center
           #{o["active_resigned_insurance"]}
         %td.text-center
           #{o["pending"]}
@@ -117,6 +131,8 @@
           #{o["resigned_count"]}
         %td.text-center
           #{o["resigned_old_count"]}
+        %td.text-center
+          #{o["resigned_ytd_count"]}
         %td.text-center
           #{o["resigned_inforce_count"]}
         %td.text-center
@@ -193,6 +209,12 @@
       #{@data[:total_members][0]["total_active_dormant"]}
     %td.text-center  
       #{@data[:total_members][0]["total_gk"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_gk_ytd"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_gk_male"]}
+    %td.text-center  
+      #{@data[:total_members][0]["total_gk_female"]}
     %td.text-center
       #{@data[:total_members][0]["total_active_resigned_insurance"]}
     %td.text-center
@@ -203,6 +225,8 @@
       #{@data[:total_members][0]["total_resigned"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_old"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_ytd"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_inforce"]}
     %td.text-center
