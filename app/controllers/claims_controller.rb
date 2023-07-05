@@ -270,7 +270,7 @@ class ClaimsController < ApplicationController
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
         if @claim.prepared_by == "Richard Monteron"
-          if ["Aljon", "Jake", "Evelyn", "Adrian"].include? current_user.first_name
+          if ["Aljon", "Jake", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
             @subheader_side_actions << {
               id: "btn-check",
               link: "#",
@@ -279,7 +279,7 @@ class ClaimsController < ApplicationController
             }
           end
         elsif @claim.prepared_by == "Jake Villanueva"
-          if ["Aljon", "Richard", "Evelyn", "Adrian"].include? current_user.first_name
+          if ["Aljon", "Richard", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
             @subheader_side_actions << {
               id: "btn-check",
               link: "#",
