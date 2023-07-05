@@ -3,14 +3,19 @@ module Branches
     def initialize(config:)
       @config = config
       @as_of    = @config[:as_of].try(:to_date) || Date.today
-      @start_date = Date.today.beginning_of_year
-      @end_date = @start_date.end_of_quarter
+      @start_date = Date.today.beginning_of_month
+      @end_date = @start_date.end_of_month
+      # @start_date = Date.today.beginning_of_year
+      # @end_date = Date.today.end_of_quarter
 
       if @start_date.present? && @end_date.present?
         @active_members             = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
         @resigned_before            = Member.where("data ->> 'recognition_date' <= ? AND insurance_date_resigned >= ?", @end_date, @end_date)
             
-        @gk_members                 = Member.where("status = ? AND member_type = ?", "active", "GK")
+        @gk_members                 = Member.where("member_type = ?", "GK")
+        @gk_members_ytd             = Member.where("member_type = ? AND insurance_date_resigned >= ? AND insurance_date_resigned <= ?", "GK", @start_date, @end_date)
+        @gk_members_male            = @gk_members_ytd.where("gender = ?", "Male")
+        @gk_members_female          = @gk_members_ytd.where("gender = ?", "Female")
         
         # inforce
         @active_inforce_members     = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
@@ -28,13 +33,12 @@ module Branches
         @all_dormant                = @active_dormant_members + @resigned_before_dormant
         
         @all_active_members         = @all_inforce
-        
-        @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ?", @start_date, @end_date)
+        @resigned_members           = Member.insurance_resigned.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND data ->> 'recognition_date' >= ?", @start_date, @end_date, @start_date)
         @all_resigned_members       = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)
         @active_resigned_insurance  = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "resigned")
         
-        @resigned_old_members       = @all_resigned_members - @resigned_members
-
+        @resigned_old_members       = @all_resigned_members.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND data ->> 'recognition_date' < ?", @start_date, @end_date, @start_date )
+        @resigned_ytd               = @resigned_members + @resigned_old_members
         #resigned MFI
         @resigned_inforce           = Member.where("status = ? AND insurance_status = ? AND date_resigned <= ?", "resigned", "inforce", @end_date)
         @resigned_lapsed            = Member.where("status = ? AND insurance_status = ? AND date_resigned <= ?", "resigned", "lapsed", @end_date)
@@ -88,6 +92,7 @@ module Branches
       @total_new = 0
       @total_resigned = 0
       @total_resigned_old = 0
+      @total_resigned_ytd = 0
       @total_pending = 0
       @total_active_resigned_insurance = 0
       #@total_resigned_before = 0
@@ -97,6 +102,9 @@ module Branches
       @total_male = 0
       @total_female = 0
       @total_gk = 0
+      @total_gk_ytd = 0
+      @total_gk_male = 0
+      @total_gk_female = 0
       @total_valid_dependent = 0
       @total_with_spouse = 0
       
@@ -142,6 +150,9 @@ module Branches
         member[:branch] = branch.name
         
         member[:gk_count] = @gk_members.where(branch_id: branch).count
+        member[:gk_count_ytd] = @gk_members_ytd.where(branch_id: branch).count
+        member[:gk_count_male] = @gk_members_male.where(branch_id: branch).count
+        member[:gk_count_female] = @gk_members_female.where(branch_id: branch).count
         member[:active_count] = @all_active_members.select{|o| o[:branch_id] == branch.id}.count
         member[:all_resigned_count] = @all_resigned_members.where(branch_id: branch).count
         member[:active_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id}.count
@@ -149,6 +160,7 @@ module Branches
         member[:active_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id}.count
         member[:resigned_count] = @resigned_members.where(branch_id: branch).count
         member[:resigned_old_count] = @resigned_old_members.select{|o| o[:branch_id] == branch.id}.count
+        member[:resigned_ytd_count] = @resigned_ytd.select{|o| o[:branch_id] == branch.id}.count
         member[:new_count] = @new_members.where(branch_id: branch).count
         member[:pending] = @pending.where(branch_id: branch).count
         member[:active_resigned_insurance] = @active_resigned_insurance.where(branch_id: branch).count
@@ -196,6 +208,7 @@ module Branches
 
         @total_resigned += @resigned_members.where(branch_id: branch).count
         @total_resigned_old += @resigned_old_members.select{|o| o[:branch_id] == branch.id}.count
+        @total_resigned_ytd += @resigned_ytd.select{|o| o[:branch_id] == branch.id}.count
         @total_all_resigned += @all_resigned_members.where(branch_id: branch).count
         @total_new += @new_members.where(branch_id: branch).count
         @total_active += @all_active_members.select{|o| o[:branch_id] == branch.id}.count
@@ -206,6 +219,9 @@ module Branches
         @total_active_resigned_insurance += @active_resigned_insurance.where(branch_id: branch).count
         @total_male += @male_members.select{|o| o[:branch_id] == branch.id}.count
         @total_gk += @gk_members.where(branch_id: branch).count
+        @total_gk_ytd += @gk_members_ytd.where(branch_id: branch).count
+        @total_gk_male += @gk_members_male.where(branch_id: branch).count
+        @total_gk_female += @gk_members_female.where(branch_id: branch).count
         @total_female += @female_members.select{|o| o[:branch_id] == branch.id}.count
         @total_with_spouse += @members_with_spouse.select{|o| o[:branch_id] == branch.id}.count
         @total_valid_dependent += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ?", branch, @end_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count
@@ -251,8 +267,12 @@ module Branches
 
       @total = {}
       @total[:total_gk] = @total_gk
+      @total[:total_gk_ytd] = @total_gk_ytd
+      @total[:total_gk_male] = @total_gk_male
+      @total[:total_gk_female] = @total_gk_female
       @total[:total_resigned] = @total_resigned
       @total[:total_resigned_old] = @total_resigned_old
+      @total[:total_resigned_ytd] = @total_resigned_ytd
       @total[:total_all_resigned] = @total_all_resigned
       @total[:total_new] = @total_new
       @total[:total_active] = @total_active
