@@ -166,7 +166,7 @@
           %u
             #{@claim.prepared_by}
           %br
-          Account Officer
+          Claims Officer
         %td{style: "width:42%; height: 25px;"}
           %b
             Checked by: 
@@ -177,10 +177,10 @@
           - if @claim.checked_by.nil? 
             - if @claim.prepared_by == "Richard Monteron"
               %u
-                Jake Villanueva
+                Diobert Calanza
             - elsif @claim.prepared_by == "Jake Villanueva"
               %u
-                Richard Monteron
+                Diobert Calanza
             - else
               ""
           - else
@@ -189,7 +189,7 @@
           %u
             #{@claim.checked_by}
           %br
-          Account Officer
+          Underwriting Officer
         %td{style: "width:40%; height: 25px;"}
           %b
             Approved by:
