@@ -1680,8 +1680,18 @@ namespace :adjust do
   # end
 
   task :update_insurance_status => :environment do
+    
+    # live code
     current_date = Date.today
     
+    # for 1st reporting purposes
+    # @start_date = Date.today.beginning_of_year
+    # current_date = @start_date.end_of_quarter
+
+    # for 2nd and 3rd reporting purposes
+    # @start_date = Date.today.beginning_of_year
+    # current_date = Date.today.end_of_quarter
+
     if ENV['CURRENT_DATE'].present?
       current_date = ENV['CURRENT_DATE'].to_date
     end
@@ -1785,19 +1795,17 @@ namespace :adjust do
                         new_status = "resigned"  
                       end
 
-                      if amt_past_due >= 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
-                        if amt_past_due >= 780 && amt_past_due <= 2340
+                      if amt_past_due >= 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        if amt_past_due >= 2340
                           new_status = "dormant"
-                        elsif amt_past_due > 2340 
-                          new_status = "inactive"
                         end
                       end
 
-                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
                         new_status = "lapsed"
                       end
 
-                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
                         new_status = "lapsed"
                       end
 
@@ -2273,8 +2281,11 @@ namespace :adjust do
   task :process_member_quarterly_reports => :environment do
     @data_store_type  = "MEMBER QUARTERLY REPORTS"
     @as_of            = Date.today
-    @start_date = Date.today.beginning_of_month
-    @end_date = @start_date.end_of_month
+    # @start_date = Date.today.beginning_of_month
+    # @end_date = @start_date.end_of_month
+
+    @start_date = Date.today.beginning_of_year
+      @end_date = @start_date.end_of_quarter
 
     if ENV['CURRENT_DATE'].present?
       @as_of = ENV['CURRENT_DATE'].to_date
@@ -2455,7 +2466,11 @@ namespace :adjust do
 
   task :process_uploaded_documents_counts => :environment do
     @data_store_type  = "UPLOADED_DOCUMENTS_COUNTS"
+    # live code
     @as_of            = Date.today
+    # for 1st Quarter
+    # @start_date = Date.today.beginning_of_year
+    # @as_of = @start_date.end_of_quarter
     @branches         = Branch.all
 
     if ENV['CURRENT_DATE'].present?

@@ -12,7 +12,18 @@ module Members
     def execute!
       @member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", @a_members.pluck(:id))
       @account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND transacted_at <= ?", @member_accounts.pluck(:id), @as_of).order("transacted_at ASC")
+      
+      # live code
       @current_date = @as_of
+
+      # for 1st reporting purposes
+      # @first_day = Date.today.beginning_of_year
+      # @current_date = @first_day.end_of_quarter
+
+      # for 2nd and 3rd reporting purposes
+      # @first_day = Date.today.beginning_of_year
+      # @current_date = Date.today.end_of_quarter
+      
       @default_periodic_payment  = 15
 
       @i_status = nil
@@ -37,15 +48,15 @@ module Members
               amt_past_due             = (current_balance - insured_amount).to_i * -1
               days_lapsed              = (@current_date - last_payment_date).to_i
               
-              if amt_past_due >= 780
+              if amt_past_due >= 2340
                 @i_status = "dormant"
               end
 
-              if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780
+              if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340
                 @i_status = "lapsed"
               end
 
-              if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 780
+              if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340
                 @i_status = "lapsed"
               end
 

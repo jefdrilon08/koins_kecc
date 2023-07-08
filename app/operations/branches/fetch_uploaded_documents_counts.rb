@@ -2,9 +2,17 @@ module Branches
   class FetchUploadedDocumentsCounts
     def initialize(config:)
       @config = config
-
       @branch   = @config[:branch]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
+      
+      # for 1st reporting purposes
+      # @start_date = Date.today.beginning_of_year
+      # @as_of = @start_date.end_of_quarter
+
+      # for 2nd and 3rd reporting purposes
+      # @start_date = Date.today.beginning_of_year
+      # current_date = Date.today.end_of_quarter
+      
       @cluster  = @branch.cluster
       @area     = @cluster.area
 
@@ -74,9 +82,9 @@ module Branches
         FROM attachment_files a
         LEFT JOIN Members b ON a.member_id = b.id
         LEFT JOIN Branches c ON b.branch_id = c.id
-        WHERE b.status = 'active'
-          and b.insurance_status in ('inforce')
-          and c.id  = '#{@branch.id}'                
+        WHERE b.insurance_status in ('inforce')
+          and c.id  = '#{@branch.id}'
+          and b.data ->> 'recognition_date' <= '2023-03-31'                
       EOS
     end
 
@@ -89,9 +97,9 @@ module Branches
           b.id AS BID
         FROM Members a
         LEFT JOIN Branches b ON a.branch_id = b.id
-        WHERE a.status = 'active'
-          and a.insurance_status in ('inforce')
-          and b.id = '#{@branch.id}'                
+        WHERE a.insurance_status in ('inforce')
+          and b.id = '#{@branch.id}'
+          and a.data ->> 'recognition_date' <= '2023-03-31'                
       EOS
     end
 
