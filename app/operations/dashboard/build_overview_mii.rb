@@ -6,11 +6,19 @@ module Dashboard
     end
 
     def execute!
+      all_branches!
+      # kcoop_branches!
+      # associates_branches!
+      # raise associates_branches!.inspect
+    end
+    private
+
+    def all_branches!
       areas = Area
         .includes(clusters: :branches)
         .where(clusters: { branches: { id: @branches.ids }})
         .order("areas.name ASC, clusters.name ASC")
-
+        # raise areas.inspect
       data_stores = DataStore
         .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
         .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[UPLOADED_DOCUMENTS_COUNTS CLAIMS_COUNTS PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
@@ -31,7 +39,59 @@ module Dashboard
       }
     end
 
-    private
+    def kcoop_branches!
+      areas_kcoop = Area.kcoop_area
+        .includes(clusters: :branches)
+        .where(clusters: { branches: { id: @branches.ids }})
+        .order("clusters.name ASC")
+      # raise areas_kcoop.inspect
+      data_stores = DataStore
+        .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC"))
+
+      {
+        areas_kcoop: areas_kcoop.map do |area|
+          clusters = area.clusters
+            .map do |c|
+              {
+                id:       c.id,
+                name:     c.name,
+                branches: c.branches.map { |b| build_branch(data_stores, b) }
+              }
+            end
+          { id: area.id, name: area.name, clusters: clusters }
+        end
+      }
+    end
+    
+    def associates_branches!
+      areas_associates = Area.associates_area
+        .includes(clusters: :branches)
+        .where(clusters: { branches: { id: @branches.ids }})
+        .order("clusters.name ASC")
+      # raise areas_kcoop.inspect
+
+      data_stores = DataStore
+        .select("DISTINCT ON (meta->>'data_store_type', meta->>'branch_id') *")
+        .where("meta->>'data_store_type' IN (?) AND meta->>'branch_id' IN (?) AND DATE(meta->>'as_of') <= ?", %w[PERSONAL_FUNDS INSURANCE_MEMBER_COUNTS], @branches.ids, @as_of)
+        .order(Arel.sql("meta->>'data_store_type', meta->>'branch_id', DATE(meta->>'as_of') DESC"))
+
+      {
+        areas_associates: areas_associates.map do |area|
+          clusters = area.clusters
+            .map do |c|
+              {
+                id:       c.id,
+                name:     c.name,
+                branches: c.branches.map { |b| build_branch(data_stores, b) }
+              }
+            end
+          { id: area.id, name: area.name, clusters: clusters }
+        end
+      }
+    end
+
 
     def build_branch(data_stores, branch)
       mc = data_stores.find { |ds| ds.meta["branch_id"] == branch.id && ds.meta["data_store_type"] == "INSURANCE_MEMBER_COUNTS" }

@@ -13,16 +13,7 @@ module Members
       @member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", @a_members.pluck(:id))
       @account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?) AND transacted_at <= ?", @member_accounts.pluck(:id), @as_of).order("transacted_at ASC")
       
-      # live code
       @current_date = @as_of
-
-      # for 1st reporting purposes
-      # @first_day = Date.today.beginning_of_year
-      # @current_date = @first_day.end_of_quarter
-
-      # for 2nd and 3rd reporting purposes
-      # @first_day = Date.today.beginning_of_year
-      # @current_date = Date.today.end_of_quarter
       
       @default_periodic_payment  = 15
 
