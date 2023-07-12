@@ -185,7 +185,7 @@ module Branches
                   LEFT JOIN
                     users ON users.id = centers.user_id
                   WHERE 
-                    (members.status = 'active' AND members.branch_id::text = '#{@branch.id}')
+                    (members.branch_id::text = '#{@branch.id}')
                     OR 
                     (members.status = 'resigned' AND members.insurance_date_resigned > '#{@as_of}' AND members.branch_id::text = '#{@branch.id}')
                   GROUP BY
