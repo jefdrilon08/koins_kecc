@@ -8,23 +8,37 @@
     %th.text-center
       Branch
     %th.text-center
-      Active
+      All Inforce
+    %th.text-center
+      All Female Inforce
+    %th.text-center
+      All Male Inforce
+    %th.text-center
+      All Lapsed
+    %th.text-center
+      All Female Lapsed
+    %th.text-center
+      All Male Lapsed
+    %th.text-center
+      Total Female inforce/lapsed
+    %th.text-center
+      Total Male inforce/lapsed
+    %th.text-center
+      All Dormant
+    %th.text-center
+      All Female Dormant
+    %th.text-center
+      All Male Dormant
     %th.text-center
       All Resigned
     %th.text-center
-      Inforce
-    %th.text-center
-      Lapsed
-    %th.text-center
-      Dormant
-    %th.text-center
-      ALL GK
+      All GK
     %th.text-center
       GK YTD
     %th.text-center
-      GK Male
+      GK Male TYD
     %th.text-center
-      GK Female
+      GK Female YTD
     %th.text-center
       Active MFI - Resigned MII Members
     %th.text-center
@@ -32,11 +46,19 @@
     %th.text-center
       New Members
     %th.text-center
+      Resigned YTD
+    %th.text-center
       New Resigned YTD
+    %th.text-center
+      Female New Resigned YTD
+    %th.text-center
+      Male New Resigned YTD
     %th.text-center
       Old Resigned YTD 
     %th.text-center
-      Resigned YTD
+      Old Female Resigned YTD 
+    %th.text-center
+      Old Male Resigned YTD 
     %th.text-center
       Resigned MFI - Inforce
     %th.text-center
@@ -44,29 +66,13 @@
     %th.text-center
       Resigned MFI - Dormant
     %th.text-center
-      Female
-    %th.text-center
-      Female Inforce
-    %th.text-center
-      Female Lapsed
-    %th.text-center
-      Female Dormant
-    %th.text-center
-      Female Resigned
-    %th.text-center
-      Male
-    %th.text-center
-      Male Inforce
-    %th.text-center
-      Male Lapsed
-    %th.text-center
-      Male Dormant
-    %th.text-center
-      Male Resigned
-    %th.text-center
       Spouse
     %th.text-center
       Valid Dependent
+    %th.text-center
+      Spouse YTD
+    %th.text-center
+      Valid Dependent YTD
     %th.text-center
       Single
     %th.text-center
@@ -97,6 +103,36 @@
       Biyuda/o Male
     %th.text-center
       Biyuda/o Female
+    %th.text-center
+      0-3 Mos
+    %th.text-center
+      3 Mos - 1 Yr
+    %th.text-center
+      1 Yr - 2 Yrs
+    %th.text-center
+      2 Yrs - 3 Yrs
+    %th.text-center
+      3 Yrs Above
+    %th.text-center
+      Member Benefit 0-3 Mos
+    %th.text-center
+      Member Benefit 3 Mos - 1 Yr
+    %th.text-center
+      Member Benefit 1 Yr - 2 Yrs
+    %th.text-center
+      Member Benefit 2 Yrs - 3 Yrs
+    %th.text-center
+      Member Benefit 3 Yrs Above
+    / %th.text-center
+    /   Dependent Benefit 0-3 Mos
+    / %th.text-center
+    /   Dependent Benefit 3 Mos - 1 Yr
+    / %th.text-center
+    /   Dependent Benefit 1 Yr - 2 Yrs
+    / %th.text-center
+    /   Dependent Benefit 2 Yrs - 3 Yrs
+    / %th.text-center
+    /   Dependent Benefit 3 Yrs Above
   
   %tr
     - @data[:members].each_with_index do |o|
@@ -104,15 +140,29 @@
         %td.text-center
           #{o["branch"]}
         %td.text-center
-          #{o["active_count"]}  
-        %td.text-center
-          #{o["all_resigned_count"]}
-        %td.text-center
           #{o["active_inforce_count"]}
+        %td.text-center
+          #{o["female_inforce_count"]}
+        %td.text-center
+          #{o["male_inforce_count"]}
         %td.text-center
           #{o["active_lapsed_count"]}
         %td.text-center
+          #{o["female_lapsed_count"]}
+        %td.text-center
+          #{o["male_lapsed_count"]}
+        %td.text-center
+          #{o["female_count"]}
+        %td.text-center
+          #{o["male_count"]}
+        %td.text-center
           #{o["active_dormant_count"]}
+        %td.text-center
+          #{o["female_dormant_count"]} 
+        %td.text-center
+          #{o["male_dormant_count"]} 
+        %td.text-center
+          #{o["all_resigned_count"]}
         %td.text-center
           #{o["gk_count"]}
         %td.text-center
@@ -128,41 +178,33 @@
         %td.text-center
           #{o["new_count"]}
         %td.text-center
+          #{o["resigned_ytd_count"]}
+        %td.text-center
           #{o["resigned_count"]}
+        %td.text-center
+          #{o["female_resigned_count"]}
+        %td.text-center
+          #{o["male_resigned_count"]}
         %td.text-center
           #{o["resigned_old_count"]}
         %td.text-center
-          #{o["resigned_ytd_count"]}
+          #{o["resigned_old_female_count"]}
+        %td.text-center
+          #{o["resigned_old_male_count"]}
         %td.text-center
           #{o["resigned_inforce_count"]}
         %td.text-center
           #{o["resigned_lapsed_count"]}
         %td.text-center
-          #{o["resigned_dormant_count"]}
-        %td.text-center
-          #{o["female_count"]}
-        %td.text-center
-          #{o["female_inforce_count"]}
-        %td.text-center
-          #{o["female_lapsed_count"]}
-        %td.text-center
-          #{o["female_dormant_count"]}
-        %td.text-center
-          #{o["female_resigned_count"]}
-        %td.text-center
-          #{o["male_count"]}
-        %td.text-center
-          #{o["male_inforce_count"]}
-        %td.text-center
-          #{o["male_lapsed_count"]}
-        %td.text-center
-          #{o["male_dormant_count"]}
-        %td.text-center
-          #{o["male_resigned_count"]}
+          #{o["resigned_dormant_count"]}  
         %td.text-center
           #{o["member_with_spouse_count"]}
         %td.text-center
           #{o["valid_dependent_count"]}
+        %td.text-center
+          #{o["member_with_spouse_ytd_count"]}
+        %td.text-center
+          #{o["valid_dependent_ytd_count"]}
         %td.text-center
           #{o["single"]}
         %td.text-center
@@ -193,20 +235,54 @@
           #{o["biyuda_male_members"]}
         %td.text-center
           #{o["biyuda_female_members"]}
+        %td.text-center
+          #{o["length_of_stay_member_3m_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_3m_1yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_1yr_2yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_2yrs_3yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_3yr_above_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_benefit_3m_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_benefit_3m_1yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_benefit_1yr_2yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_benefit_2yrs_3yr_count"]}
+        %td.text-center
+          #{o["length_of_stay_member_benefit_3yr_above_count"]}
    
   %tr
     %td.text-center
       Total Counts
     %td.text-center
-      #{@data[:total_members][0]["total_active"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_all_resigned"]}
-    %td.text-center
       #{@data[:total_members][0]["total_active_inforce"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_inforce_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_inforce_male"]}
     %td.text-center  
       #{@data[:total_members][0]["total_active_lapsed"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_lapsed_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_lapsed_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_male"]}
     %td.text-center  
       #{@data[:total_members][0]["total_active_dormant"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_dormant_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_dormant_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_all_resigned"]}
     %td.text-center  
       #{@data[:total_members][0]["total_gk"]}
     %td.text-center  
@@ -222,11 +298,19 @@
     %td.text-center
       #{@data[:total_members][0]["total_new"]}
     %td.text-center
+      #{@data[:total_members][0]["total_resigned_ytd"]}
+    %td.text-center
       #{@data[:total_members][0]["total_resigned"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_male"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_old"]}
     %td.text-center
-      #{@data[:total_members][0]["total_resigned_ytd"]}
+      #{@data[:total_members][0]["total_resigned_old_female"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_resigned_old_male"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_inforce"]}
     %td.text-center
@@ -234,29 +318,13 @@
     %td.text-center
       #{@data[:total_members][0]["total_resigned_dormant"]}
     %td.text-center
-      #{@data[:total_members][0]["total_female"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_inforce_female"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_lapsed_female"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_dormant_female"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_resigned_female"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_male"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_inforce_male"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_lapsed_male"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_dormant_male"]}
-    %td.text-center
-      #{@data[:total_members][0]["total_resigned_male"]}
-    %td.text-center
       #{@data[:total_members][0]["total_with_spouse"]}
     %td.text-center
       #{@data[:total_members][0]["total_valid_dependent"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_with_spouse_ytd"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_valid_dependent_ytd"]}
     %td.text-center
       #{@data[:total_members][0]["total_single"]}
     %td.text-center
@@ -287,9 +355,26 @@
       #{@data[:total_members][0]["total_biyuda_male"]}
     %td.text-center
       #{@data[:total_members][0]["total_biyuda_female"]}
-
-
-
+    %td.text-center
+      #{@data[:total_members][0]["total_length_of_stay_member_3m"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_length_of_stay_member_3m_1yr"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_length_of_stay_member_1yr_2yr"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_length_of_stay_member_2yrs_3yr"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_length_of_stay_member_3yr_above"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_member_3m_benefit"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_member_3m_1yr_benefit"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_member_1yr_2yr_benefit"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_member_2yr_3yr_benefit"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_member_3yr_above_benefit"]}
 
 / %hr
 / %ul.nav.nav-tabs{:role => "tablist"}
