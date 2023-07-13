@@ -284,7 +284,7 @@ export default class BillingUIComponent extends React.Component {
   renderParticular() {
     var particular  = this.state.data.data.accounting_entry.particular;
 
-    if(this.state.data.status == "checked") {
+    if(this.state.data.status == "save") {
       return  (
         <div className="row">
           <div className="col-md-10">
@@ -315,7 +315,7 @@ export default class BillingUIComponent extends React.Component {
   renderOrNumber() {
     var orNumber  = this.state.data.data.or_number;
    
-    if(this.state.data.status == "pending") {
+    if(this.state.data.status == "save") {
       return  (
         <div className="row">
           <div className="col-md-10">
@@ -348,7 +348,7 @@ export default class BillingUIComponent extends React.Component {
   renderBook() {
     var book  = this.state.data.data.accounting_entry.book;
 
-    if(this.state.data.status == "pending") {
+    if(this.state.data.status == "save") {
       return (
         <div className="row">
           <div className="col">
@@ -371,7 +371,7 @@ export default class BillingUIComponent extends React.Component {
 
   renderArNumber() {
     var arNumber  = this.state.data.data.ar_number;
-    if(this.state.data.status == "pending") {
+    if(this.state.data.status == "save") {
       return  (
         <div className="row">
           <div className="col-md-10">
