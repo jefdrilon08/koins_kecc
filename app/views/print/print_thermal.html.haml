@@ -1,5 +1,5 @@
 :css
-  @page { size: portrait; margin: 0.0rem; margin-bottom: 0.0rem; margin-top: 0.0rem;}
+  @page { size: portrait; margin: 0.0rem; margin-bottom: 0.0rem; margin-top: 55px;}
 
   @media print{
       /* use your css selector */    
@@ -13,27 +13,58 @@
   clear: both;
   page-break-after: avoid;
   }
-- grand_total_wp = 0.0
-- grand_total_cp = 0.0
-- grand_total_payment = 0.0
+  .header{
+    margin-bottom: 50px;
+  }
+  .img{
+    padding: 10px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+  .just-font br {
+  content: "";
+  display: block;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+- grand_total_wp                = 0.00
+- grand_total_cp                = 0.00
+- grand_total_payment           = 0.00
+- grand_total_loan_payment      = 0.00
+- grand_total_savings           = 0.00
+- total_life_rf                 = 0.00
+- total_cash_collection         = 0.00
+- total_cash_collection_x         = 0.00
+- total_cash_collection_c         = 0.00
 
 
-%div 
-  %small
-  %strong
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 100px; height: 85px; margin-right: 8px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 11.32px"}
+          #{Settings.company_name}
+          #{Settings.company_address}
+        %span
+          VAT Registration Tin Number: #{Settings.company_tin_number}
   %br
-    #{Settings.company_name}
-    #{Settings.company_address}
-  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br        
   %br
   %strong
   #{Branch.find(@billing[:branch]).name.upcase} - #{Center.find(@billing[:center]).name.upcase}
   %br
-  Billing: #{@billing[:collection_date].to_date.strftime("%B %d, %Y")}
-  %br
-  S.O: #{User.find(Center.find(@billing[:center]).user_id).full_name}
+  Billing: #{@billing[:collection_date].to_date.strftime("%A, %B %d, %Y")} / 
   %strong
     #{Time.now.strftime("%H:%M:%S")}
+  %br
+  S.O: #{User.find(Center.find(@billing[:center]).user_id).full_name}
   %br
   %strong COLLECTION REPORT
   %br
@@ -41,15 +72,19 @@
   %table.table.table-bordered.table-sm
     %thead
       %tr
-        %th.text-center{ width: "10%" }
-          Member Name
+        %th.text-center{ width: "3%" }
+          Name
         //- @billing[:data][:totals].each do |t|
-        %th.text-center{width: "5%" }
-          Withdraw Payment
-        %th.text-center{width: "5%" }
-          Cash Payment
-        %th.text-center{width: "5%" }
-          Total
+        %th.text-center{width: "3%" }
+          LP
+        %th.text-center{width: "3%" }
+          S
+        %th.text-center{width: "3%" }
+          I
+        %th.text-center{width: "3%" }
+          WP
+        %th.text-center{width: "3%" }
+          TOTAL
     %tbody
       - @billing[:data][:records].each do |r|
         
@@ -60,77 +95,129 @@
         - total_payment       = 0.00
         - total_fix_payment   = 0.00
         - total_loan_payment  = 0.00
+        - savings             = 0.00
+        - liferf              = 0.00
+        - grand_total_liferf       = 0.00
+
+
+        
         %tr
-          %td
+          %td{style: "font-size: 14px"}
             /#{Member.find(r[:member][:id]).identification_number}
             - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
               *
+              %table(style="background-color: #f1f1f1;")
             #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
           - r[:records].each do |rr|
             - if rr[:record_type] == "WP"
-              - member_total_cp -= rr[:amount].to_f
               - member_grand_total += rr[:amount].to_f
               - withdraw_payment += rr[:amount]
               - grand_total_wp += withdraw_payment
               - grand_total_cp += member_total_cp
-             
             - else
               - member_total_cp += rr[:amount].to_f
               - member_grand_total += rr[:amount].to_f
               - total_payment += rr[:amount].to_f
 
-          %td.text-end
+          - r[:records].each do |tt|
+            - if tt[:record_type] == "WP"
+              - total_cash_collection_c =+ grand_total_cp
+              - total_cash_collection_x =+ grand_total_wp
+              - total_cash_collection =+ total_cash_collection_c -= total_cash_collection_x 
+
+          - r[:records].each do |xx|
+            - if xx[:record_type] == "SAVINGS"
+              - savings += xx[:amount].to_f
+              - grand_total_savings += xx[:amount].to_f
+
+          - r[:records].each do |ss|
+            - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
+              - liferf += ss[:amount].to_f
+              - grand_total_liferf += liferf
+              - total_life_rf += ss[:amount].to_f
+
+          - r[:records].each do |cc|
+            - if cc[:record_type] == "LOAN_PAYMENT"
+              - total_loan_payment += cc[:amount].to_f
+              - grand_total_loan_payment += cc[:amount].to_f
+
+              
+            
+
+          %td.text-end{style: "font-size: 16px"}
+            - if total_loan_payment.to_f == 0
+              - x = " - "
+              #{x}
+            - else
+              #{number_to_currency(total_loan_payment.to_f.round(2),unit:'')}
+          %td.text-end{style: "font-size: 16px"}
+            - if savings.to_f == 0
+              - x = " - "
+              #{x}
+            - else
+              #{number_to_currency(savings.to_f.round(2),unit: '')}
+          %td.text-end{style: "font-size: 16px"}
+            - if liferf.to_f == 0
+              - x = " - "
+              #{x}
+            - else
+              #{number_to_currency(liferf.to_f.round(2),unit: '')}
+          %td.text-end{style: "font-size: 16px"}
             - if withdraw_payment.to_f == 0
-              - x =  " - "
+              - x = " - "
               #{x}
-            - else   
-              #{number_to_currency(withdraw_payment.to_f.round(2),unit:'')}
-          %td.text-end
-            - if member_total_cp.to_f == 0
-              - x =  " - "
-              #{x}
-            - else 
-              #{number_to_currency(member_total_cp.to_f.round(2),unit:'')}
-          %td.text-end
+            - else
+              #{number_to_currency(withdraw_payment.to_f.round(2),unit: '')}
+          %td.text-end{style: "font-size: 16px"}
             - if total_payment.to_f == 0
               - x = " - "
               #{x}
             - else
-              - grand_total_payment += total_payment
-              #{number_to_currency(total_payment.to_f.round(2),unit:'')}
-
+              #{number_to_currency(total_payment.to_f.round(2),unit: '')}
     %tr
       %th
         TOTAL
       %th.text-end
+        #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
+      %th.text-end
+        #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
+      %th.text-end
+        #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
+      %th.text-end
         #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
       %th.text-end
         #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
-      %th.text-end
-        #{number_to_currency(grand_total_payment.to_f.round(2),unit: '')}
+.row
+.col
+  Grand Total:
+  %strong #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
+%br
+.row
+.col
+  Total Withdraw:
+  %strong #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
+%br
+.row
+.col
+  Total Cash Collection:
+  %strong #{number_to_currency(total_cash_collection.to_f.round(2),unit: '')}
 .row
 %br
 .col
 %br
 .row
   .col
-    ______________________________
-    .strong
-      Center Chief
+    Center Chief: ______________________________  
   %br
   %br
   %br
   .col
-    ______________________________
-    .strong
-      Secretary
+    Secretary:    ______________________________
   %br
   %br
   %br
   .col
-    ______________________________
-    .strong
-      Auditor
+    Auditor:     ______________________________
   %br
   %br
   %br
@@ -141,10 +228,11 @@
       %br
       Socio Economic Officer
       %br
-    %br
+      %br
+      %br
   %br
   %br
-  %br 
+  %br
   .col
     ______________________________
     .strong
@@ -154,7 +242,7 @@
   .col
     ______________________________
     .strong
-      Posted By:
+      Approved By:
   %br
   %br
   %br
