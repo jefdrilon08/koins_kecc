@@ -75,7 +75,7 @@ module Branches
         LEFT JOIN Members b ON a.member_id = b.id
         LEFT JOIN Branches c ON b.branch_id = c.id
         WHERE b.status = 'active'
-          and b.insurance_status in ('inforce','lapsed')
+          and b.insurance_status in ('inforce')
           and c.id  = '#{@branch.id}'                
       EOS
     end
@@ -90,7 +90,7 @@ module Branches
         FROM Members a
         LEFT JOIN Branches b ON a.branch_id = b.id
         WHERE a.status = 'active'
-          and a.insurance_status in ('inforce','lapsed')
+          and a.insurance_status in ('inforce')
           and b.id = '#{@branch.id}'                
       EOS
     end

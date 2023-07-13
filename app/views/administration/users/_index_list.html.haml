@@ -31,7 +31,7 @@
             = link_to administration_user_path(user), class: 'btn btn-sm btn-primary' do
               .bi.bi-search
               Show
-            - if sbk_mis_user
+            - if is_mis?
               = link_to edit_administration_user_path(user), class: 'btn btn-sm btn-info' do
                 .fa.fa-pencil-alt
                 Edit
