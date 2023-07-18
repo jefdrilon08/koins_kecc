@@ -26,6 +26,7 @@ namespace :api do
 
   # Users
   post "/users/login", to: "users#login"
+  post "/authenticate", to: "users#login"
   post "/users/forgot_password", to: "users#forgot_password"
   post "/users/change_password", to: "users#change_password"
 
