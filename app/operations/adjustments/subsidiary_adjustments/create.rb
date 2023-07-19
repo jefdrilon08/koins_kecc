@@ -22,7 +22,12 @@ module Adjustments
           },
           generated_by: @user
         }
-
+       
+        if Settings.activate_microinsurance
+          branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+          @branch = Branch.where(id: branch_id).first
+        end
+       
         @data = {
           records: [],
           accounting_entry: {

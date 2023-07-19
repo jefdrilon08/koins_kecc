@@ -169,14 +169,14 @@ class Member < ApplicationRecord
   end
 
   def life_number_of_lapsed
-    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first
-      
+    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first  
+    
     if ma.present?
       recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
       current_date = Date.today.to_date
 
       current_balance   = ma.balance
-      num_days = (current_date - recognition_date).to_i
+      num_days = (current_date - recognition_date).to_i  
       num_weeks  = (num_days / 7).to_i + 1
       insured_amount  = num_weeks  * 15
       amt_past_due    = (current_balance - insured_amount) * -1
@@ -419,10 +419,11 @@ class Member < ApplicationRecord
       now = Time.now
       
       if (now.to_date - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i < 0
-        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i + (self.data.with_indifferent_access[:reinstatement_date]["date_stop"].to_date - self.data.with_indifferent_access[:reinstatement]["old_recognition_date"].to_date).to_i  
         "#{number_of_days} DAYS"
+
       else
-        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_time).abs 
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_time).abs  + (self.data.with_indifferent_access[:reinstatement]["date_stop"].to_time - self.data.with_indifferent_access[:reinstatement]["old_recognition_date"].to_time).abs
         days_between = seconds_between / 60 / 60 / 24
         number_of_days = days_between.floor
         number_of_months = (days_between / 30.44).floor

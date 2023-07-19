@@ -23,8 +23,13 @@ module MemberAccounts
 
 			latest_transaction = @account_transactions.last
 			@current_balance   = @member_account.balance
+			
+			if @member.data.with_indifferent_access[:reinstatement].present?
+				@num_days = (@current_date - @member.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i + (@member.data.with_indifferent_access[:reinstatement]["date_stop"].to_date - @member.data.with_indifferent_access[:reinstatement]["old_recognition_date"].to_date).to_i
+			else	
+				@num_days = (@current_date - @recognition_date).to_i
+			end
 
-			@num_days = (@current_date - @recognition_date).to_i
 			@num_weeks  = (@num_days / 7).to_i + 1
 			
 			@latest_transaction_date = latest_transaction.try(:transacted_at)
