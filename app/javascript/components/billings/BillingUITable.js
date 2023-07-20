@@ -80,8 +80,17 @@ export default class BillingUITable extends React.Component {
       </th>
     );
 
+
     headers.push(
       <th  key={"h-grand-total"} style={{minWidth: "40px"}} >
+        <center>
+          LP
+        </center>
+      </th>
+    );    
+
+    headers.push(
+      <th  key={"h-total"} style={{minWidth: "40px"}} >
         <center>
           TOTAL
         </center>
@@ -394,6 +403,14 @@ export default class BillingUITable extends React.Component {
       components.push(
         <td key={"c-member-grand-total-" + member.id} className="text-end">
           <strong>
+            {numberWithCommas(this.props.data.data.records[i].total_loan_payment)}
+          </strong>
+        </td>
+      );
+
+      components.push(
+        <td key={"c-member-grand-total-" + member.id} className="text-end">
+          <strong>
             {numberWithCommas(grandTotal)}
           </strong>
         </td>
@@ -488,7 +505,15 @@ export default class BillingUITable extends React.Component {
         </div>
       </td>
     )
-
+    records.push(
+      <td key="grand-total-loan-paymet-total" className="text-end">
+        <div className="badge bg-success">
+          <strong>
+            {numberWithCommas(this.props.data.data.grand_total_loan_paymet)}
+          </strong>
+        </div>
+      </td>
+    )
     // Grand Total
     records.push(
       <td key="grand-total-final" className="text-end">

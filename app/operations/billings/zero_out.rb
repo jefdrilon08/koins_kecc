@@ -49,8 +49,13 @@ module Billings
         @data[:totals][index][:amount]  = 0.00
       end
 
+      @data[:records].each do |rec|
+        rec[:total_loan_payment] = 0.00
+      end
+
       # Recompute
       total_collected = 0.00
+      grand_total_loan_payment = 0.00
 
       @data[:totals].each_with_index do |t, index|
         if t[:record_type] == "SAVINGS"
@@ -96,6 +101,11 @@ module Billings
               if rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and Loan.find(rr[:loan_id]).loan_product.name == t[:key]
                 total_collected += rr[:amount].try(:to_f).round(2)
                 @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+
+              grand_total_loan_payment += rr[:amount].try(:to_f).round(2)
+              #raise @data[:grand_total_loan_paymet].inspect
+              @data[:grand_total_loan_paymet] = 0.0
+              @data[:grand_total_loan_paymet] += grand_total_loan_payment.to_f
               end
             end
           end
