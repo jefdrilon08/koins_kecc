@@ -52,6 +52,7 @@ var $btnConfirmReinstatement;
 var $inputDateResigned;
 var $inputReason;
 var $inputReinstatementDate;
+var $inputDateStopped;
 var $fileProfilePicture;
 var $fileSignature;
 var templateErrorList;
@@ -204,6 +205,7 @@ var _cacheDom = function() {
   $inputDateResigned                = $("#input-date-resigned");
   $inputReason                      = $("#input-reason");
   $inputReinstatementDate           = $("#input-reinstatement-date");
+  $inputDateStopped                 = $("#input-date-stop");
 
   $btnConfirmClaimsCopy             = $("#btn-confirm-claims-copy");
   $inputDateOfDeath                 = $("#input-date-of-death");
@@ -1184,6 +1186,7 @@ var _bindEvents = function() {
       data: { 
         member_id: _memberId,
         reinstatement_date: $inputReinstatementDate.val(),
+        date_stop: $inputDateStopped.val(),
         authenticity_token: _authenticityToken
       },
       success: function(response) {

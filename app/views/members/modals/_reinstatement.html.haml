@@ -11,6 +11,12 @@
             .col
               .form-group
                 %label
+                  Date Stop:
+                = date_field_tag :date_stop, @date_stop, class: "form-control", id: "input-date-stop"
+          .row
+            .col
+              .form-group
+                %label
                   Reinstatement Date:
                 = date_field_tag :reinstatement_date, @reinstatement_date, class: "form-control", id: "input-reinstatement-date"      
           .message

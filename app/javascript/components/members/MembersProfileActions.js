@@ -15,6 +15,7 @@ export default function MembersProfileActions(props) {
   const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
   const [dateReinstated, setDateReinstated]       = useState('');
+  const [dateStopped, setDateStopped]       = useState('');
   const [dateRecognition, setDateRecognition]               = useState("");
   const [isModalMakePaymentOpen, setModalMakePaymentOpen] = useState(false);
   const [makePayment, setMakePayment]       = useState('');
@@ -100,7 +101,8 @@ export default function MembersProfileActions(props) {
 
     const payload = {
       id: props.memberId,
-      reinstatement_date: dateReinstated
+      reinstatement_date: dateReinstated,
+      date_stop: dateStopped
     }
 
     const headers = {
@@ -307,6 +309,18 @@ export default function MembersProfileActions(props) {
                 type="date"
               
                 onChange={(event) => { setDateReinstated(event.target.value) } }
+
+              />
+              <label>
+               Date Stop
+              </label>
+              <input
+                className="form-control"
+                value={dateStopped}
+                disabled={isLoading}
+                type="date"
+              
+                onChange={(event) => { setDateStopped(event.target.value) } }
 
               />
             </div>

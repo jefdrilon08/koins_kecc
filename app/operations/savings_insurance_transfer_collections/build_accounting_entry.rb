@@ -12,6 +12,11 @@ module SavingsInsuranceTransferCollections
       @book1        = "CRB"
       @prepared_by  = @user.full_name
 
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+      
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
                           branch: @branch

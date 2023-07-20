@@ -66,15 +66,18 @@ module Api
     def reinstate
       member = Member.find(params[:id])
       reinstatement_date = params[:reinstatement_date]
+      date_stop = params[:date_stop]
       errors             = ::Members::ValidateReinstatement.new(
                             member: member,
-                            reinstatement_date: reinstatement_date
+                            reinstatement_date: reinstatement_date,
+                            date_stop: date_stop
                           ).execute!
 
       if errors.size == 0
         ::Members::Reinstate.new(
           member: member,
           reinstatement_date: reinstatement_date,
+          date_stop: date_stop,
           reinstate_by: current_user.full_name
         ).execute!
 
