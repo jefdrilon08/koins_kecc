@@ -2281,11 +2281,10 @@ namespace :adjust do
   task :process_member_quarterly_reports => :environment do
     @data_store_type  = "MEMBER QUARTERLY REPORTS"
     @as_of            = Date.today
-    # @start_date = Date.today.beginning_of_month
-    # @end_date = @start_date.end_of_month
 
     @start_date = Date.today.beginning_of_year
-      @end_date = @start_date.end_of_quarter
+    @end_date = @start_date.end_of_month
+
 
     if ENV['CURRENT_DATE'].present?
       @as_of = ENV['CURRENT_DATE'].to_date
