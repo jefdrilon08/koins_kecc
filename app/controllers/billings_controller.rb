@@ -88,15 +88,10 @@ class BillingsController < ApplicationController
             text: "Zero Out"
           }
        
-          @subheader_side_actions << {
-            link: billing_path(@billing.id),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
         end
 
       end
+
 
       if @billing.save?
 
@@ -164,6 +159,17 @@ class BillingsController < ApplicationController
         id: @billing.id
       }
     end
+      if @billing.pending?
+        if helpers.is_mis_fm?
+          @subheader_side_actions << {
+            link: billing_path(@billing.id),
+            class: "fa fa-times",
+            data: { method: :delete, confirm: "Are you sure?" },
+            text: "Delete"
+          }
+
+        end
+      end
   end
 
   def destroy
