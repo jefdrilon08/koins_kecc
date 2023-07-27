@@ -23,13 +23,6 @@
       %label.col.control-label{class: "col-md-10"} 
         Date Compeleted Documents
         = text_field_tag :date_completed_documents, @claim.data["date_completed_documents"], id: 'date-completed-documents', type: 'date', class: 'form-control', value: @claim.data["date_completed_documents"] || Date.today
-  -if is_mis_fm?
-    .col{class: "col-md-3"}
-      .form-group 
-        %label.col.control-label{class: "col-md-10"} 
-          Date Paid
-          = text_field_tag :date_paid, @claim.data["date_paid"], id: 'date-paid', type: 'date', class: 'form-control', value: @claim.data["date_paid"] || Date.today
-  - else
   .col{class: "col-md-3"}
     .form-group
       %label.col.control-label{class: "col-md-10"}

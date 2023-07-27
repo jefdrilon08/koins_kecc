@@ -3,137 +3,134 @@ module Kmba
     def initialize(members:)
       super()
       @members            = members
-  
-      # raise @members.inspect
+
     end
 
     def execute!
-     
       if @members.nil?
         @errors[:messages] << {
           code: "KMBA-001",
           message: "No Member Data Record Found!"
         }
       else
-        @members.map{ |a|
+        @members.map{ |member|
+          
+          center = Center.where(id: member["center_id"])
+          branch = Branch.where(id: member["branch_id"])
 
-          center = Center.where(id: a[:center_id])
-          branch = Branch.where(id: a[:branch_id])
-
-          if a[:center_id].blank?
+          if member["center_id"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "center_id",
               message: "Center not found"
             }
           elsif center.count == 0
             @errors[:messages] << {
               code: "KMBA-004",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "center_id",
               message: "Center is not valid"
             }
           end
 
-          if a[:branch_id].blank?
+          if member["branch_id"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "branch_id",
               message: "Branch not Found"
             }
           elsif branch.count == 0
             @errors[:messages] << {
               code: "KMBA-004",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "branch_id",
               message: "Branch is not Valid"
             }
           end
 
-          if a[:first_name].blank?
+          if member["first_name"].blank?
             @errors[:messages] << {
               code: "KMBA-001", 
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "first_name", 
               message: "first_name not found"
             }
           end
 
           # Validate Middle Name
-          # if a[:middle_name].blank?
+          # if member[:middle_name].blank?
           #   @errors[:messages] << {
           #     key: "middle_name", 
           #     message: "middle not found"
           #   }
           # end 
 
-          if a[:last_name].blank?
+          if member["last_name"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              last_name_of: a[:identification_number],
+              last_name_of: member["identification_number"],
               key: "middle_name", 
               message: "Last Name not found"
             }
           end
 
-          if a[:gender].blank?
+          if member["gender"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "gender",
               message: "Gender not found"
             }
           end
 
-          if a[:date_of_birth].blank?
+          if member["date_of_birth"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "date_of_birth",
               message: "Date of Birth not found"
             }
           end 
 
-          if a[:civil_status].blank?
+          if member["civil_status"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member["identification_number"],
               key: "civil_status",
               message: "Civil Status not found"
             }
           end   
 
-          if a[:data][:address][:street].blank?
+          if member["data"]["address"]["street"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: a[:identification_number],
+              member_id: member[:identification_number],
               key: "address_street", 
               message: "Address Street not found"
             }
           end
 
 
-          # if a[:data][:address][:district].blank?
+          # if member[:data][:address][:district].blank?
           #   @errors[:messages] << {
           #     code: "KMBA-001",
-          #     member_id: a[:identification_number],
+          #     member_id: member[:identification_number],
           #     key: "address_district",
           #     message: "Address District not found"
           #   }
           # end
 
-          # if a[:data][:address][:city].blank?
+          # if member[:data][:address][:city].blank?
           #   @errors[:messages] << {
           #     code: "KMBA-001",
-          #     member_id: a[:identification_number],
+          #     member_id: member[:identification_number],
           #     key: "address_city",
           #     message: "Address City not found"
           #   }
           # end
-       
-        }
+        }  
       end
 
       @errors[:messages].each do |o|
