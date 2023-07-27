@@ -14,7 +14,7 @@ module Api
         data    = billing.try(:data).try(:with_indifferent_access)
         book    = params[:book]
 
-        if billing.pending?
+        if billing.save?
           data[:accounting_entry][:book]  = book
 
           billing.update!(
