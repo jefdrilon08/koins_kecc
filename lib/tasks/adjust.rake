@@ -3161,4 +3161,37 @@ namespace :adjust do
 
     puts "\nDone."
   end
+
+  task :member_is_reclassified_adjust => :environment do
+    puts "Checking All Member ..."
+    # csv_format_header (identification_number,associate_identification_number)
+
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+    # raise file_location.inspect
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member_identification_number = row['identification_number']
+      is_reclassified = row['is_reclassified']
+
+      member = Member.where(identification_number: member_identification_number)
+      # raise member.inspect
+      member.map { |m|  
+        @member_id = m[:id]
+      }
+
+      member_id = Member.find(@member_id)
+            
+      if member_id.present?
+        puts "Updating Reclassified Member: #{member_identification_number}"   
+        member_data = member_id.data.with_indifferent_access
+        member_data[:is_reclassified] = is_reclassified
+        member.update!(data: member_data)
+      else
+        puts "Id Number not Found"
+      end
+    end
+
+    puts "Done!"
+  end
 end
