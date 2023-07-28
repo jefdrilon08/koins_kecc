@@ -3,13 +3,51 @@ import MembersProfileLegalDependents from "./MembersProfileLegalDependents";
 import MembersProfileBeneficiaries from "./MembersProfileBeneficiaries";
 import MembersProfileResignationRecords from "./MembersProfileResignationRecords";
 import MembersProfileProjectType from "./MembersProfileProjectType";
+import axios from 'axios';
 
 export default function MembersProfileHome(props) {
+  const [configData, setConfigData] = useState();
+
+  useEffect(() => {
+    axios.get('/api/public/development_values')
+      .then(response => setConfigData(response.data))
+      .catch(error => console.error(error));
+  }, []);
+
   return (
     <div id="semi_member_details">
       <div className="row">
         <div className="col-md-3">
           <ul className="list-group list-group-unbordered">
+            {(() => {
+              if(JSON.stringify(configData, null, 2) == 'true') {
+                if(props.member.insurance_status == 'inforce') {
+                  return (
+                    <button class="btn-success">
+                        <b>
+                          INFORCE
+                        </b>
+                      </button>
+                    )
+                  }
+                else if(props.member.insurance_status == 'lapsed') {
+                  return (
+                    <button class="btn-warning">
+                      <b>
+                        LAPSED    
+                      </b>
+                    </button>
+                  )
+                }
+                return (
+                  <button class="btn-danger">
+                    <b>
+                      DORMANT    
+                    </b>
+                  </button>
+                )  
+              }    
+            })()}
             <li className="list-group-item">
               Branch
               <div className="value text-muted">
@@ -78,22 +116,34 @@ export default function MembersProfileHome(props) {
                 </b>
               </div>
             </li>
-            <li className="list-group-item">
-              Membership Type
-              <div className="value text-muted">
-                <b>
-                  {props.membershipType ? props.membershipType.name : "N/A"}
-                </b>
-              </div>
-            </li>
-            <li className="list-group-item">
-              Arrangement
-              <div className="value text-muted">
-                <b>
-                  {props.membershipArrangement ? props.membershipArrangement.name : "N/A"}
-                </b>
-              </div>
-            </li>
+            {(() => {
+              if(JSON.stringify(configData, null, 2) == 'false') {
+                return (
+                  <li className="list-group-item">
+                    Membership Type
+                    <div className="value text-muted">
+                      <b>
+                        {props.membershipType ? props.membershipType.name : "N/A"}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+            })()}
+            {(() => {
+              if(JSON.stringify(configData, null, 2) == 'false') {
+                return (
+                  <li className="list-group-item">
+                    Arrangement
+                    <div className="value text-muted">
+                      <b>
+                        {props.membershipArrangement ? props.membershipArrangement.name : "N/A"}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+            })()}
             {(() => {
               if(props.member.data["reinstatement"] == null) {
                 return (
@@ -123,6 +173,14 @@ export default function MembersProfileHome(props) {
               <div className="value text-muted">
                 <b>
                   {props.lengthOfStay ? props.lengthOfStay : "N/A"}
+                </b>
+              </div>
+            </li>
+            <li className="list-group-item">
+              Face Amount
+              <div className="value text-muted">
+                <b>
+                  {props.faceAmount ? props.faceAmount: "N/A"}
                 </b>
               </div>
             </li>
@@ -312,6 +370,30 @@ export default function MembersProfileHome(props) {
                     </tr>
                   )
                 }
+              })()}
+              {(() => {
+                if(props.member.data["is_reclassified"] != null) {
+                  return (
+                    <tr>
+                      <th>
+                        Is Reclassified
+                      </th>
+                      <td>
+                        YES
+                      </td>
+                    </tr>
+                  )
+                }
+                return (
+                    <tr>
+                      <th>
+                        Is Reclassified
+                      </th>
+                      <td>
+                        NO
+                      </td>
+                    </tr>
+                  )
               })()}
             </tbody>
           </table>

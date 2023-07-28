@@ -65,6 +65,7 @@ export default function MembersProfile(props) {
   const [coMakers]                      = useState(props.co_makers);
   const [projectType]                   = useState(props.project_type);
   const [accruedInterest]               = useState(props.accrued_interest_data);
+  const [faceAmount]                    = useState(props.face_amount);
 
   return (
     <>
@@ -165,6 +166,7 @@ export default function MembersProfile(props) {
                     membershipArrangement={membershipArrangement}
                     recognitionDate={recognitionDate}
                     lengthOfStay={lengthOfStay}
+                    faceAmount={faceAmount}
                     memberAge={memberAge}
                     dateOfBirth={dateOfBirth}
                     address={address}
@@ -172,8 +174,6 @@ export default function MembersProfile(props) {
                     beneficiaries={beneficiaries}
                     resignationRecords={resignationRecords}
                     projectType={projectType}
-
-
                   />
                 </div>
                 <div id="loans" className="home p-3 tab-pane" role="tabpanel">

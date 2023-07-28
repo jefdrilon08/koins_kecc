@@ -475,6 +475,7 @@ end
       "membership_arrangement":       @member.membership_arrangement,
       "recognition_date":             @member.recognition_date.try(:strftime, "%b %d, %Y"),
       "length_of_stay":               @member.length_of_stay,
+      "face_amount":                  @member.face_amount, 
       "legal_dependents":             @legal_dependents,
       "beneficiaries":                @beneficiaries,
       "resignation_records":          @resignation_records,
