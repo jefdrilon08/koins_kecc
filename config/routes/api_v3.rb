@@ -1,7 +1,5 @@
 namespace :api do
   namespace :v3 do
-    namespace :admin do
-      
-    end
+    post "/users", to: "users#create"
   end
 end

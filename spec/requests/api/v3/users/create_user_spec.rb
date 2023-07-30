@@ -7,7 +7,7 @@ RSpec.describe 'Create a User' do
   let(:oas_user) { FactoryBot.create(:user, roles: ['OAS'], username: 'oas') }
   let(:valid_user_headers) { build_jwt_header(user.generate_jwt) }
   let(:oas_user_headers) { build_jwt_header(oas_user.generate_jwt) }
-  let(:api_url) { '/api/v3/admin/users' }
+  let(:api_url) { '/api/v3/users' }
 
   describe 'POST /api/v3/users', type: :request do
     context 'invalid calls' do
@@ -22,7 +22,7 @@ RSpec.describe 'Create a User' do
         post api_url, params: {}, headers: oas_user_headers
 
         payload = JSON.parse(response.body)
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'fails on no parameters passed' do
@@ -45,7 +45,7 @@ RSpec.describe 'Create a User' do
       it 'fails if passwords do not match' do
         params = {
           password: 'a',
-          password_confirmation: 'a'
+          password_confirmation: 'b'
         }
 
         post api_url, params: params, headers: valid_user_headers
@@ -53,7 +53,7 @@ RSpec.describe 'Create a User' do
         payload = JSON.parse(response.body)
         expect(response).to have_http_status(:unprocessable_entity)
         expect(payload['password'][0]).to eq('passwords do not match')
-        expect(payload['password_confirmation'][0]).to eq('password do not match')
+        expect(payload['password_confirmation'][0]).to eq('passwords do not match')
       end
 
       it 'fails for taken fields' do
