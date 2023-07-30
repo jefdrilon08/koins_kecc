@@ -139,6 +139,7 @@ class DataStoreController < ApplicationController
       "branch_cash_flow" => {order: "as_of DESC", meta: %w[branch_name as_of],data: %w[] },
 
       "member_quarterly_reports"      => { order: "as_of DESC", data: %w[] },
+      "share_capital_involuntary"     => {order: "as_of DESC",data: %w[] }
 
 
     }

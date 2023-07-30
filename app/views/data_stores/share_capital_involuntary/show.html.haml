@@ -1,0 +1,12 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          List of Share Capital Involuntary Members #{@data_store.meta["branch_name"]} - As of #{@data_store[:as_of]}
+        %hr
+          = render partial: "members_table"
+
+
+= render partial: "data_stores/share_capital_involuntary/modals/first_letter"
+= render partial: "data_stores/share_capital_involuntary/modals/second_letter"
