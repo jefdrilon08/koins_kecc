@@ -291,7 +291,9 @@ module Api
         q: "%#{q.upcase}%"
       ).order(
         "members.last_name ASC"
-      ).limit(50)
+      ).page(params[:page]).per(
+        LIST_PAGE_SIZE
+      )
 
       render json: { members: members }
     end

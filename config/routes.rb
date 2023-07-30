@@ -536,6 +536,7 @@ Rails.application.routes.draw do
   draw :administration
   draw :accounting
   draw :api
+  draw :api_v3
 
   #reports
   get '/reports/monthly_remittance', to: 'reports#monthly_remittance', as: :monthly_remittance

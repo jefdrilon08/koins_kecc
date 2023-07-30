@@ -8,6 +8,6 @@ FactoryBot.define do
     roles { [] }
     password { 'password' }
     password_confirmation { 'password' }
-    encrypted_password { User.new(password: 'password').encrypted_password }
+    encrypted_password { User.new(password: password).encrypted_password }
   end
 end
