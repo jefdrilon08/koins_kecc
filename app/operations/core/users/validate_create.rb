@@ -41,6 +41,8 @@ module Core
           @payload[:email] << "required"
         elsif User.where(email: @email).count > 0
           @payload[:email] << "already taken"
+        elsif (@email =~ URI::MailTo::EMAIL_REGEXP).nil?
+          @payload[:email] << "invalid format"
         end
 
         if @username.blank?

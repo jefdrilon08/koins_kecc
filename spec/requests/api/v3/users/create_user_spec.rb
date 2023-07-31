@@ -74,9 +74,10 @@ RSpec.describe 'Create a User' do
         expect(payload['email'][0]).to eq('already taken')
       end
 
-      it 'fails if profile picture is not jpg or png' do
+      it 'fails on invalid formats' do
         params = {
-          profile_picture: invalid_file
+          profile_picture: invalid_file,
+          email: 'invalid-format'
         }
 
         post api_url, params: params, headers: valid_user_headers
@@ -85,6 +86,7 @@ RSpec.describe 'Create a User' do
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(payload['profile_picture'][0]).to eq('invalid format')
+        expect(payload['email'][0]).to eq('invalid format')
       end
     end
 
