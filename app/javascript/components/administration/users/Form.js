@@ -9,7 +9,8 @@ export default Form = (props) => {
     first_name: "",
     last_name: "",
     password: "",
-    password_confirmation: ""
+    password_confirmation: "",
+    roles: []
   })
 
   const [isLoading, setIsLoading] = useState(false);
@@ -122,6 +123,43 @@ export default Form = (props) => {
             />
             <div className="invalid-feedback">
               {hasFormError(errors, 'identification_number') ? errors.identification_number.join(', ') : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-6 col-xs-12">
+          <div className="form-group">
+            <div className="form-label">
+              Roles
+            </div>
+            {props.roles.map((role) => {
+              return (
+                <input
+                  type="checkbox"
+                  key={`role-${role}`}
+                  className="form-check-input"
+                  checked={user.roles.includes(role)}
+                  disabled={isLoading}
+                  onChange={(e) => {
+                    let roles = [...user.roles];
+
+                    if (roles.includes(role)) {
+                      const roleIndex = roles.indexOf(role);
+                      roles.splice(roleIndex, 1);
+                    } else {
+                      roles.push(role);
+                    }
+
+                    let _user = {...user};
+                    _user.roles = roles;
+                    setUser(_user);
+                  }}
+                />
+              )
+            })}
+            <div className="invalid-feedback">
+              {hasFormError(errors, 'roles') ? errors.first_name.join(', ') : ''}
             </div>
           </div>
         </div>

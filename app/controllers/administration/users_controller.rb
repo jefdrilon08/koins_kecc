@@ -27,6 +27,10 @@ module Administration
 
     def new
       @user = User.new
+
+      @payload = {
+        roles: User::ROLES
+      }
     end
 
     def create

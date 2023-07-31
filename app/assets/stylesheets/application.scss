@@ -2,11 +2,7 @@
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
-@import "select2/src/scss/core";
-@import "select2-bootstrap-5-theme/src/include-all";
 @import "react-toggle/style";
-@import 'mdb-ui-kit/src/scss/mdb.free.scss';
-//@import "jquery.dataTables.min.css";
 @import 'leaflet.scss';
 
 // Local imports
@@ -129,4 +125,9 @@ label {
 
 .headcol:before {
   content: 'Row ';
+}
+
+// Federated styles
+input.form-check-input {
+  transition: 0.3s all ease;
 }
