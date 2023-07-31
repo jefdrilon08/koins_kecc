@@ -1,6 +1,6 @@
 import $ from "jquery";
 import DataTable from "datatables.net";
-DataTable($);
+///DataTable($);
 
 var $dataTable;
 
@@ -14,9 +14,11 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  /*
   $dataTable.DataTable({
     fixedHeader: true
   });
+  */
 };
 
 export default { init: init };

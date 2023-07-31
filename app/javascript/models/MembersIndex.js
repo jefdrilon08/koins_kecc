@@ -1,8 +1,8 @@
 import Mustache from "mustache";
 import * as bootstrap from "bootstrap";
 import $ from 'jquery';
-import DataTable from "datatables.net";
-DataTable($);
+//import DataTable from "datatables.net";
+//DataTable($);
 
 var $branchSelect;
 var $centerSelect;

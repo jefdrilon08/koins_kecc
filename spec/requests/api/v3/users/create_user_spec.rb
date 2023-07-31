@@ -71,6 +71,9 @@ RSpec.describe 'Create a User' do
         expect(payload['username'][0]).to eq('already taken')
         expect(payload['email'][0]).to eq('already taken')
       end
+
+      it 'fails if profile picture is not jpg or png' do
+      end
     end
 
     context 'valid calls' do
