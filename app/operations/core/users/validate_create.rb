@@ -3,7 +3,7 @@ module Core
     class ValidateCreate < ::Core::Validator
       attr_accessor :payload
 
-      def initialize(email:, username:, first_name:, last_name:, identification_number:, roles:, password:, password_confirmation:)
+      def initialize(email:, username:, first_name:, last_name:, identification_number:, roles:, password:, password_confirmation:, profile_picture:)
         super()
 
         @email                  = email
@@ -14,6 +14,7 @@ module Core
         @roles                  = roles
         @password               = password
         @password_confirmation  = password_confirmation
+        @profile_picture        = profile_picture
 
         @payload = {
           email:                  [],
@@ -23,11 +24,19 @@ module Core
           identification_number:  [],
           roles:                  [],
           password:               [],
-          password_confirmation:  []
+          password_confirmation:  [],
+          profile_picture:        []
         }
       end
 
       def execute!
+        if @profile_picture.present?
+          validator_pic = ::Core::Utils::ValidateImageFile.new(file: @profile_picture)
+          validator_pic.execute!
+
+          @payload[:profile_picture] = validator_pic.payload[:file]
+        end
+
         if @email.blank?
           @payload[:email] << "required"
         elsif User.where(email: @email).count > 0

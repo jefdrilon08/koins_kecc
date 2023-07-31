@@ -27,22 +27,6 @@ module Administration
 
     def new
       @user = User.new
-
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          is_link: true,
-          path: administration_users_path,
-          text: "Users"
-        },
-        {
-          text: "New User"
-        }
-      ]
-
-      @subheader_side_actions = []
     end
 
     def create

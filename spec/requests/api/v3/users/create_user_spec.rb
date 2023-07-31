@@ -7,6 +7,8 @@ RSpec.describe 'Create a User' do
   let(:oas_user) { FactoryBot.create(:user, roles: ['OAS'], username: 'oas') }
   let(:valid_user_headers) { build_jwt_header(user.generate_jwt) }
   let(:oas_user_headers) { build_jwt_header(oas_user.generate_jwt) }
+  let(:invalid_file) { fixture_file_upload(File.new(File.join(::Rails.root.to_s, "/test/fixtures/files", "test.pdf"))) }
+  let(:picture_file) { fixture_file_upload(File.new(File.join(::Rails.root.to_s, "/test/fixtures/files", "pic.jpg"))) }
   let(:api_url) { '/api/v3/users' }
 
   describe 'POST /api/v3/users', type: :request do
@@ -73,6 +75,16 @@ RSpec.describe 'Create a User' do
       end
 
       it 'fails if profile picture is not jpg or png' do
+        params = {
+          profile_picture: invalid_file
+        }
+
+        post api_url, params: params, headers: valid_user_headers
+
+        payload = JSON.parse(response.body)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(payload['profile_picture'][0]).to eq('invalid format')
       end
     end
 
@@ -87,7 +99,8 @@ RSpec.describe 'Create a User' do
           email: 'new_user@example.com',
           first_name: 'First',
           last_name: 'Last',
-          roles: ['MIS']
+          roles: ['MIS'],
+          profile_picture: picture_file
         }
 
         current_user_count = User.count

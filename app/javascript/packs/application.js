@@ -63,6 +63,7 @@ import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
 import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
 import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
+import AdministrationUsersForm from "../components/administration/users/Form.js";
 
 
 // "init" Objects
@@ -320,6 +321,7 @@ const hooks = {
   "administration/pages/index":                       [AdministrationDashboard],
   "administration/users/index":                       [AdministrationUsersIndex],
   "administration/users/show":                        [BranchManagerComponent],
+  "administration/users/new":                         [AdministrationUsersForm],
   "administration/loan_products/show":                [AdministrationLoanProductsShow],
   "administration/loan_products/index":               [AdministrationLoanProductsIndex],
   "administration/areas/index":                       [AdministrationAreasIndex],

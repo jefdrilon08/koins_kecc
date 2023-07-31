@@ -13,7 +13,8 @@ module Api
           last_name:              params[:last_name],
           roles:                  params[:roles],
           password:               params[:password],
-          password_confirmation:  params[:password_confirmation]
+          password_confirmation:  params[:password_confirmation],
+          profile_picture:        params[:profile_picture]
         )
 
         validator.execute!
@@ -27,7 +28,10 @@ module Api
             last_name:              params[:last_name],
             roles:                  params[:roles],
             password:               params[:password],
-            password_confirmation:  params[:password_confirmation]
+            password_confirmation:  params[:password_confirmation],
+            profile_picture:        params[:profile_picture],
+            is_regular:             params[:is_regular],
+            incentivized_date:      params[:incentivized_date]
           )
 
           cmd.execute!
