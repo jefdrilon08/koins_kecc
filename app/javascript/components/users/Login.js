@@ -3,12 +3,14 @@ import { hasFormError } from "../../helpers/AppHelper";
 import kmba_logo from '../../../assets/images/kmba_logo.png';
 import logo from '../../../assets/images/logo.png';
 import { createSession, login } from "../../services/AuthService";
+import ModalForgotPassword from "./ModalForgotPassword";
 
 export default Login = (props) => {
-  const [username, setUsername]   = useState("");
-  const [password, setPassword]   = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors]       = useState({});
+  const [username, setUsername]                                   = useState("");
+  const [password, setPassword]                                   = useState("");
+  const [isLoading, setIsLoading]                                 = useState(false);
+  const [errors, setErrors]                                       = useState({});
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
 
   const {
     is_microloans,
@@ -16,6 +18,10 @@ export default Login = (props) => {
   } = props;
   return (
     <div className="d-flex align-items-center" style={{ height: "100vh" }}>
+      <ModalForgotPassword
+        isOpen={isForgotPasswordModalOpen}
+        setIsOpen={setIsForgotPasswordModalOpen}
+      />
       <div className="container">
         <div className="card">
           <div className="card-body">
@@ -25,7 +31,7 @@ export default Login = (props) => {
                   return (
                     <img src={kmba_logo} width="220px"/>
                   )
-                } else {
+                } else if (is_microloans) {
                   return (
                     <img src={logo} width="220px"/>
                   )
@@ -97,11 +103,14 @@ export default Login = (props) => {
                     Login to System
                   </button>
                   <hr/>
-                  <a 
-                    href="#"
+                  <div
+                    className="clickable"
+                    onClick={() => {
+                      setIsForgotPasswordModalOpen(true);
+                    }}
                   >
                     Forgot Password
-                  </a>
+                  </div>
                 </center>
               </div>
             </div>

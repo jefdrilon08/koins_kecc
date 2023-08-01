@@ -5,8 +5,6 @@ import {
   APP_USER
 } from 'env';
 import {buildHeaders} from '../helpers/AppHelper';
-import jwtDecode from 'jwt-decode';
-
 
 export const login = (args) => {
   return axios.post(

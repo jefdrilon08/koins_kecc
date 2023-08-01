@@ -13,6 +13,11 @@
 @import "./member";
 @import "./accordion";
 
+.clickable {
+  cursor: pointer;
+  color: 'blue';
+}
+
 .btn-nav-square-md {
   @extend .btn, .btn-primary, .btn-square-md, .d-flex, .align-items-center, .justify-content-center, .mx-auto;
 }
