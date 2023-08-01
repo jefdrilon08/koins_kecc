@@ -64,6 +64,7 @@ import TransferSavingsRecordsShow from "../components/transfer_savings/ShowCompo
 import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
 import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
 import AdministrationUsersForm from "../components/administration/users/Form.js";
+import AdministrationUsersIndex from "../components/administration/users/Index.js";
 import Login from "../components/users/Login.js";
 
 // "init" Objects
@@ -116,7 +117,6 @@ import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
 import Seriatim from "../models/Seriatim.js";
-import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
 import AdministrationLoanProductsShow from "../models/AdministrationLoanProductsShow.js";
 import AdministrationLoanProductsIndex from "../models/AdministrationLoanProductsIndex.js";
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";

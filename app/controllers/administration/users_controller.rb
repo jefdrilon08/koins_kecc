@@ -4,17 +4,6 @@ module Administration
     before_action :load_user!, only: [:show, :edit, :update]
 
     def index
-      @users  = User.select("*")
-
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          text: "Users"
-        }
-      ]
-
       @subheader_side_actions = [
         {
           id: "btn-new",
@@ -23,14 +12,16 @@ module Administration
           text: "New User"
         }
       ]
+
+      render 'pages/react_root'
     end
 
     def new
-      @user = User.new
-
       @payload = {
         roles: User::ROLES
       }
+
+      render 'pages/react_root'
     end
 
     def create

@@ -13,18 +13,6 @@ export default Login = (props) => {
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
 
   useEffect(() => {
-    const keyDownHandler = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleLogin();
-      }
-    }
-
-    document.addEventListener('keydown', keyDownHandler);
-
-    return () => {
-      document.addEventListener('keydown', keyDownHandler);
-    }
   }, []);
 
   const {

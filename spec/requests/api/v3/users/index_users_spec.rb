@@ -27,6 +27,12 @@ RSpec.describe 'Index Users' do
     end
 
     context 'valid calls' do
+      it 'returns users' do
+        get api_url, headers: valid_user_headers
+
+        payload = JSON.parse(response.body)
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 end

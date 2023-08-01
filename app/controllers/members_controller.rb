@@ -48,6 +48,7 @@ class MembersController < ApplicationController
     end
 
     @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+
     @subheader_items = [
       { text: "Members" },
     ]

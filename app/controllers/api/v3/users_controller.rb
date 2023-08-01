@@ -16,7 +16,16 @@ module Api
       def index
         users = User.select("*")
 
-        render json: users.map{ |o| o.to_h }
+        count = users.count
+        num_pages = count / LIST_PAGE_SIZE
+
+        users = users.order("last_name ASC")
+                  .page(params[:page])
+                  .per(LIST_PAGE_SIZE)
+
+        users = users.map{ |o| o.to_h }
+
+        render json: { users: users, count: count, num_pages: num_pages, page: params[:page] }
       end
 
       def delete
