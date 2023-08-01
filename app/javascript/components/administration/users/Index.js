@@ -53,12 +53,6 @@ export default Index = (props) => {
 
   return (
     <React.Fragment>
-      <h1>
-        Users Index
-      </h1>
-      <h2>
-        Num Pages: {numPages} Count: {count} Page: {page}
-      </h2>
       {(() => {
         if (users.length > 0) {
           return (
@@ -137,6 +131,7 @@ export default Index = (props) => {
           )
         }
       })()}
+      <div className="pb-4"/>
     </React.Fragment>
   )
 }
