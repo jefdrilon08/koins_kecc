@@ -93,8 +93,6 @@ module Administration
     end
 
     def show
-      @user_demerits  = @user.user_demerits
-
       @subheader_items = [
         {
           text: "Administration"
@@ -109,11 +107,11 @@ module Administration
         }
       ]
 
-      @subheader_side_actions = []
-
       @payload = {
         id: @user.id
       }
+
+      render 'pages/react_root'
     end
 
     private

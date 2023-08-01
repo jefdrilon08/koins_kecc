@@ -65,6 +65,7 @@ import ShareCapitalSummary from "../components/share_capital_summary/ShowCompone
 import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
 import AdministrationUsersForm from "../components/administration/users/Form.js";
 import AdministrationUsersIndex from "../components/administration/users/Index.js";
+import AdministrationUsersShow from "../components/administration/users/Show.js";
 import Login from "../components/users/Login.js";
 
 // "init" Objects
@@ -317,7 +318,7 @@ const hooks = {
   "closing_records/index":                            [ClosingRecordsManager],
   "administration/pages/index":                       [AdministrationDashboard],
   "administration/users/index":                       [AdministrationUsersIndex],
-  "administration/users/show":                        [BranchManagerComponent],
+  "administration/users/show":                        [AdministrationUsersShow],
   "administration/users/new":                         [AdministrationUsersForm],
   "administration/loan_products/show":                [AdministrationLoanProductsShow],
   "administration/loan_products/index":               [AdministrationLoanProductsIndex],

@@ -9,7 +9,7 @@ module Core
         @first_name             = first_name
         @last_name              = last_name
         @identification_number  = identification_number
-        @roles                  = roles
+        @roles                  = roles.split(",")
         @password               = password
         @password_confirmation  = password_confirmation
         @profile_picture        = profile_picture

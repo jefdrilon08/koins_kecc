@@ -67,6 +67,8 @@ module Core
 
         if @roles.blank?
           @payload[:roles] << "required"
+        elsif not @roles.split(",").kind_of?(Array)
+          @payload[:roles] << "invalid format"
         end
 
         if @password.blank?

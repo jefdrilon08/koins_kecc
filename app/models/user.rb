@@ -111,12 +111,20 @@ class User < ApplicationRecord
       last_name: last_name,
       full_name: full_name,
       identification_number: identification_number,
+      incentivized_date: incentivized_date,
       roles: roles
     }
   end
 
   def to_h
     user_object
+  end
+
+  def to_h_with_pic
+    obj = to_h
+    obj[:profile_picture_url] = profile_picture_url
+
+    obj
   end
 
   def verified?

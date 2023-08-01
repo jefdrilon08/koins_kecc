@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { hasFormError } from "../../../helpers/AppHelper";
+import { fetchUser, saveUser } from "../../../services/UsersService";
 
 export default Form = (props) => {
   const [user, setUser] = useState({
@@ -10,6 +11,8 @@ export default Form = (props) => {
     last_name: "",
     password: "",
     password_confirmation: "",
+    incentivized_date: "",
+    profile_picture: "",
     roles: []
   })
 
@@ -18,8 +21,15 @@ export default Form = (props) => {
 
   useEffect(() => {
     if (props.id) {
+      fetchUser(props.id)
+        .then((payload) => {
+          setUser(payload.data);
+        }).catch((payload) => {
+          console.log("Error");
+          console.log(payload);
+        })
     }
-  });
+  }, []);
 
   return (
     <React.Fragment>
@@ -164,6 +174,7 @@ export default Form = (props) => {
                 </React.Fragment>
               )
             })}
+            <input type="hidden" className="form-control" />
             <div className="invalid-feedback">
               {hasFormError(errors, 'roles') ? errors.roles.join(', ') : ''}
             </div>
@@ -175,14 +186,16 @@ export default Form = (props) => {
               Profile Picture
             </label>
             <input
-              value={user.profile_picture}
               type="file"
               className={`form-control ${hasFormError(errors, 'profile_picture') ? 'is-invalid' : ''}`}
               disabled={isLoading}
               onChange={(event) => {
                 let _user = {...user}
-                _user.profile_picture = event.target.value;
-                setUser(_user);
+
+                if (event.target.files.length > 0) {
+                  _user.profile_picture = event.target.files[0];
+                  setUser(_user);
+                }
               }}
             />
             <div className="invalid-feedback">
@@ -224,9 +237,89 @@ export default Form = (props) => {
             <div className="invalid-feedback">
               {hasFormError(errors, 'is_regular') ? errors.is_regular.join(', ') : ''}
             </div>
+            {(() => {
+              if (!user.id) {
+                return (
+                  <div className="card mt-2">
+                    <div className="card-header">
+                      Setup Password
+                    </div>
+                    <div className="card-body">
+                      <div className="form-group">
+                        <label className="form-label">
+                          Password
+                        </label>
+                        <input
+                          value={user.password}
+                          className={`form-control ${hasFormError(errors, 'password') ? 'is-invalid' : ''}`}
+                          disabled={isLoading}
+                          type="password"
+                          onChange={(event) => {
+                            let _user = {...user}
+                            _user.password = event.target.value;
+                            setUser(_user);
+                          }}
+                        />
+                        <div className="invalid-feedback">
+                          {hasFormError(errors, 'password') ? errors.password.join(', ') : ''}
+                        </div>
+                      </div>
+                      <div className="form-group mt-2">
+                        <label className="form-label">
+                          Password Confirmation
+                        </label>
+                        <input
+                          value={user.password_confirmation}
+                          className={`form-control ${hasFormError(errors, 'password_confirmation') ? 'is-invalid' : ''}`}
+                          disabled={isLoading}
+                          type="password"
+                          onChange={(event) => {
+                            let _user = {...user}
+                            _user.password_confirmation = event.target.value;
+                            setUser(_user);
+                          }}
+                        />
+                        <div className="invalid-feedback">
+                          {hasFormError(errors, 'password_confirmation') ? errors.password_confirmation.join(', ') : ''}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              }
+            })()}
           </div>
         </div>
       </div>
+      <hr/>
+      <button
+        className="btn btn-primary"
+        disabled={isLoading}
+        onClick={() => {
+          setIsLoading(true);
+          setErrors({});
+
+          saveUser({...user})
+            .then((payload) => {
+            }).catch((payload) => {
+              console.log(payload);
+              setErrors(payload.response.data);
+              setIsLoading(false);
+            })
+        }}
+      >
+        Save
+      </button>
+      <button
+        className="btn btn-secondary ms-2"
+        disabled={isLoading}
+        onClick={() => {
+          window.location.href = '/administration/users';
+        }}
+      >
+        Cancel
+      </button>
+      <hr/>
     </React.Fragment>
   )
 }

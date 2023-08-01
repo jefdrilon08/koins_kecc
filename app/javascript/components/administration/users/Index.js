@@ -60,7 +60,12 @@ export default Index = (props) => {
                   {users.map((user) => {
                     return (
                       <tr key={`user-${user.id}`}>
-                        <td>
+                        <td className="text-center">
+                          <a
+                            href={`/administration/users/${user.id}`}
+                          >
+                            <span className="bi bi-search"/>
+                          </a>
                         </td>
                         <td>
                           {user.full_name}

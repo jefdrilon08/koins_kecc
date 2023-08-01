@@ -35,7 +35,7 @@ module Api
       end
 
       def show
-        render json: @user.to_h
+        render json: @user.to_h_with_pic
       end
 
       def update
