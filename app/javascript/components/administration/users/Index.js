@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchUsers } from "../../../services/UsersService";
 import Pagination from "../../commons/Pagination";
+import { initPages } from "../../../helpers/AppHelper";
 
 export default Index = (props) => {
   const [numPages, setNumPages]   = useState(0);
@@ -17,34 +18,11 @@ export default Index = (props) => {
         setUsers(payload.data.users);
         setNumPages(payload.data.num_pages);
         setCount(payload.data.count);
-        initPages();
+        setPages(initPages(page, offset, numPages));
       }).catch((payload) => {
+        console.log(payload);
         console.log(payload.response);
       })
-  }
-
-  const initPages = () => {
-    let _pages = [];
-
-    let startPage = page;
-
-    if (page - offset <= 0) {
-      startPage = 1;
-    } else {
-      startPage = page - offset;
-    }
-
-    let endPage = page + offset;
-
-    if (endPage > numPages) {
-      endPage = numPages;
-    }
-
-    for (var i = startPage; i <= endPage; i++) {
-      _pages.push(i);
-    }
-
-    setPages(_pages);
   }
 
   useEffect(() => {
