@@ -16,6 +16,13 @@ module Api
       def index
         users = User.select("*")
 
+        if params[:q].present?
+          users = users.where(
+            "first_name LIKE lower(:q) OR last_name LIKE lower(:q) OR email LIKE lower(:q)",
+            { q: "%#{params[:q].downcase}%" }
+          )
+        end
+
         count = users.count
         num_pages = count / LIST_PAGE_SIZE
 

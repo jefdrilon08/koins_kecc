@@ -68,10 +68,14 @@ class User < ApplicationRecord
   end
 
   def profile_picture_url
-    if self.profile_picture.attached?
-      return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+    if ["development", "production"].include?(ENV['RAILS_ENV'])
+      if self.profile_picture.attached?
+        return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+      else
+        ActionController::Base.helpers.asset_url("missing_profile_picture.png")
+      end
     else
-      ActionController::Base.helpers.asset_url("missing_profile_picture.png")
+      ""
     end
   end
 

@@ -163,6 +163,12 @@ export default Show = (props) => {
                     <span className="bi bi-pencil me-2"/>
                     Edit
                   </button>
+                  <button
+                    className="btn btn-danger ms-2"
+                  >
+                    <span className="bi bi-trash ms-2"/>
+                    Delete
+                  </button>
                 </div>
                 <hr/>
               </div>

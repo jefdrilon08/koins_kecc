@@ -1,7 +1,7 @@
 module Administration
   class UsersController < ApplicationController
     before_action :authenticate_user!
-    before_action :load_user!, only: [:show, :edit, :update]
+    before_action :load_user!, only: [:show, :edit]
 
     def index
       @subheader_side_actions = [
@@ -31,30 +31,6 @@ module Administration
       }
 
       render 'pages/react_root'
-    end
-
-    def update
-      if @user.update(user_params)
-        redirect_to administration_user_path(@user)
-      else
-        @subheader_items = [
-          {
-            text: "Administration"
-          },
-          {
-            is_link: true,
-            path: administration_users_path,
-            text: "Users"
-          },
-          {
-            text: "Edit User: #{@user.id}"
-          }
-        ]
-
-        @subheader_side_actions = []
-
-        render :edit
-      end
     end
 
     def show
