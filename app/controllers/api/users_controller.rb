@@ -31,16 +31,16 @@ module Api
     def forgot_password
       email = params[:email]
 
-      cmd = ::Users::ValidateForgotPassword.new(
+      validator = ::Core::Users::ValidateForgotPassword.new(
         email: email
       )
 
-      cmd.execute!
+      validator.execute!
 
-      if cmd.errors.any?
-        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      if validator.invalid?
+        render json: validator.payload, status: :unprocessable_entity
       else
-        user = cmd.user
+        user = User.find_by_email(email)
 
         ProcessForgotPassword.perform_later({
           email: user.email

@@ -64,10 +64,9 @@ import TransferSavingsRecordsShow from "../components/transfer_savings/ShowCompo
 import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
 import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
 import AdministrationUsersForm from "../components/administration/users/Form.js";
-
+import Login from "../components/users/Login.js";
 
 // "init" Objects
-import PagesLogin from "../models/PagesLogin.js";
 import PagesForgotPassword from "../models/PagesForgotPassword.js";
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
 import SavingsAccountsShowWithdrawalRequest from "../models/ShowWithdrawalRequest.js";
@@ -246,7 +245,7 @@ const hooks = {
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
-  "pages/login":                                      [PagesLogin],
+  "pages/login":                                      [Login],
   "pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
@@ -436,8 +435,8 @@ const hooks = {
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
   "psr_schedules/generate":                           [PsrSchedulesGenerate],
-  "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
-  "branch_cash_flow/index":               [BranchCashFlowIndex]
+  "data_stores/assets_liabilities/index":							[AssetsLiabilitiesIndex],
+  "branch_cash_flow/index":                           [BranchCashFlowIndex]
 }
 
 const renderComponent = (Component, payload) => {

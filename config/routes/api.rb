@@ -25,8 +25,8 @@ namespace :api do
   get "/public/areas", to: "public#areas"
 
   # Users
-  post "/users/login", to: "users#login"
-  post "/authenticate", to: "users#login"
+  post "/login", to: "users#login"
+  post "/forgot_password", to: "users#forgot_password"
   post "/users/forgot_password", to: "users#forgot_password"
   post "/users/change_password", to: "users#change_password"
 

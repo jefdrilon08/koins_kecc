@@ -6,9 +6,9 @@ RSpec.describe 'Login' do
   let(:user) { FactoryBot.create(:user) }
   let(:valid_username) { user.username }
   let(:valid_password) { user.password }
-  let(:api_url) { '/api/authenticate' }
+  let(:api_url) { '/api/login' }
 
-  describe "POST /api/authenticate", type: :request do
+  describe "POST /api/login", type: :request do
     context 'invalid calls' do
       it 'returns error on no parameters passed' do
         post api_url

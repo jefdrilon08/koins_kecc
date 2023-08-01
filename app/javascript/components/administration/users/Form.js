@@ -26,9 +26,9 @@ export default Form = (props) => {
       <div className="row">
         <div className="col-md-6 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               First Name
-            </div>
+            </label>
             <input
               value={user.first_name}
               className={`form-control ${hasFormError(errors, 'first_name') ? 'is-invalid' : ''}`}
@@ -46,9 +46,9 @@ export default Form = (props) => {
         </div>
         <div className="col-md-6 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               Last Name
-            </div>
+            </label>
             <input
               value={user.last_name}
               className={`form-control ${hasFormError(errors, 'last_name') ? 'is-invalid' : ''}`}
@@ -68,9 +68,9 @@ export default Form = (props) => {
       <div className="row">
         <div className="col-md-4 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               Email
-            </div>
+            </label>
             <input
               value={user.email}
               className={`form-control ${hasFormError(errors, 'email') ? 'is-invalid' : ''}`}
@@ -88,9 +88,9 @@ export default Form = (props) => {
         </div>
         <div className="col-md-4 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               Username
-            </div>
+            </label>
             <input
               value={user.username}
               className={`form-control ${hasFormError(errors, 'username') ? 'is-invalid' : ''}`}
@@ -108,9 +108,9 @@ export default Form = (props) => {
         </div>
         <div className="col-md-4 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               Identification Number
-            </div>
+            </label>
             <input
               value={user.identification_number}
               className={`form-control ${hasFormError(errors, 'identification_number') ? 'is-invalid' : ''}`}
@@ -128,38 +128,101 @@ export default Form = (props) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-6 col-xs-12">
+        <div className="col-md-4 col-xs-12">
           <div className="form-group">
-            <div className="form-label">
+            <label className="form-label">
               Roles
-            </div>
+            </label>
             {props.roles.map((role) => {
               return (
-                <input
-                  type="checkbox"
-                  key={`role-${role}`}
-                  className="form-check-input"
-                  checked={user.roles.includes(role)}
-                  disabled={isLoading}
-                  onChange={(e) => {
-                    let roles = [...user.roles];
+                <React.Fragment key={`role-${role}`}>
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      checked={user.roles.includes(role)}
+                      disabled={isLoading}
+                      onChange={(e) => {
+                        let roles = [...user.roles];
 
-                    if (roles.includes(role)) {
-                      const roleIndex = roles.indexOf(role);
-                      roles.splice(roleIndex, 1);
-                    } else {
-                      roles.push(role);
-                    }
+                        if (roles.includes(role)) {
+                          const roleIndex = roles.indexOf(role);
+                          roles.splice(roleIndex, 1);
+                        } else {
+                          roles.push(role);
+                        }
 
-                    let _user = {...user};
-                    _user.roles = roles;
-                    setUser(_user);
-                  }}
-                />
+                        let _user = {...user};
+                        _user.roles = roles;
+                        setUser(_user);
+                      }}
+                    />
+                    <label className="form-label ms-2">
+                      {role}
+                    </label>
+                  </div>
+                </React.Fragment>
               )
             })}
             <div className="invalid-feedback">
-              {hasFormError(errors, 'roles') ? errors.first_name.join(', ') : ''}
+              {hasFormError(errors, 'roles') ? errors.roles.join(', ') : ''}
+            </div>
+          </div>
+        </div>
+        <div className="col-md-8 col-xs-12">
+          <div className="form-group">
+            <label className="form-label">
+              Profile Picture
+            </label>
+            <input
+              value={user.profile_picture}
+              type="file"
+              className={`form-control ${hasFormError(errors, 'profile_picture') ? 'is-invalid' : ''}`}
+              disabled={isLoading}
+              onChange={(event) => {
+                let _user = {...user}
+                _user.profile_picture = event.target.value;
+                setUser(_user);
+              }}
+            />
+            <div className="invalid-feedback">
+              {hasFormError(errors, 'profile_picture') ? errors.profile_picture.join(', ') : ''}
+            </div>
+            <label className="form-label mt-2">
+              Incentivized Date
+            </label>
+            <input
+              value={user.incentivized_date}
+              className={`form-control ${hasFormError(errors, 'incentivized_date') ? 'is-invalid' : ''}`}
+              disabled={isLoading}
+              type="date"
+              onChange={(event) => {
+                let _user = {...user}
+                _user.incentivized_date = event.target.value;
+                setUser(_user);
+              }}
+            />
+            <div className="invalid-feedback">
+              {hasFormError(errors, 'incentivized_date') ? errors.incentivized_date.join(', ') : ''}
+            </div>
+            <div className="mt-2"/>
+            <input
+              checked={user.is_regular ? true : false}
+              type="checkbox"
+              className={`form-check-input ${hasFormError(errors, 'is_regular') ? 'is-invalid' : ''}`}
+              disabled={isLoading}
+              onChange={(event) => {
+                let _user = {...user}
+
+                _user.is_regular = !user.is_regular;
+                setUser(_user);
+              }}
+            />
+            <label className="form-label ms-2">
+              Is Regular
+            </label>
+            <div className="invalid-feedback">
+              {hasFormError(errors, 'is_regular') ? errors.is_regular.join(', ') : ''}
             </div>
           </div>
         </div>

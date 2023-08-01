@@ -1,4 +1,3 @@
-/*
 import { getToken, getCurrentUser } from '../services/AuthService';
 
 export const buildHeaders = (args) => {
@@ -14,7 +13,6 @@ export const buildFileUploadHeaders = (args) => {
     'Authorization': `Bearer ${getToken()}`
   }
 }
-*/
 
 export const hasFormError = (errors, key) => {
   return errors[key] && errors[key].length > 0

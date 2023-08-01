@@ -1,4 +1,6 @@
 class PagesController < ApplicationController
+  include ApplicationHelper
+
   before_action :authenticate_user!, except: [:login, :forgot_password, :ping]
 
   def ping
@@ -107,6 +109,10 @@ class PagesController < ApplicationController
   end
 
   def login
+    @payload = {
+      is_microloans: microloans?,
+      is_microinsurance: microinsurance?
+    }
     render 'pages/login', layout: 'plain'
   end
 
