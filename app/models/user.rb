@@ -114,6 +114,10 @@ class User < ApplicationRecord
     }
   end
 
+  def to_h
+    user_object
+  end
+
   def verified?
     is_verified
   end

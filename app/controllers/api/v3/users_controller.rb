@@ -3,7 +3,7 @@ module Api
     class UsersController < ::Api::V3::ApplicationController
       before_action :authenticate_user!
       before_action :authorize_mis!
-      before_action :load_resource!, only: [:update]
+      before_action :load_resource!, only: [:update, :show]
 
       def load_resource!
         @user = User.find_by_id(params[:id])
@@ -11,6 +11,10 @@ module Api
         if @user.blank?
           render json: { message: 'not found' }, status: :not_found
         end
+      end
+
+      def show
+        render json: @user.to_h
       end
 
       def update
