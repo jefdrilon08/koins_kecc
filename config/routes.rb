@@ -18,7 +18,6 @@ Rails.application.routes.draw do
   end
 
   get "/profile", to: "pages#profile", as: :profile
-  get "/forgot_password", to: "pages#forgot_password"
 
   # online applications
   resources :online_applications, only: [:index, :show]
