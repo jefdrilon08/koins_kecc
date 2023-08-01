@@ -320,6 +320,7 @@ const hooks = {
   "administration/users/index":                       [AdministrationUsersIndex],
   "administration/users/show":                        [AdministrationUsersShow],
   "administration/users/new":                         [AdministrationUsersForm],
+  "administration/users/edit":                        [AdministrationUsersForm],
   "administration/loan_products/show":                [AdministrationLoanProductsShow],
   "administration/loan_products/index":               [AdministrationLoanProductsIndex],
   "administration/areas/index":                       [AdministrationAreasIndex],

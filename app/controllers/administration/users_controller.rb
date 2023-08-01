@@ -24,48 +24,13 @@ module Administration
       render 'pages/react_root'
     end
 
-    def create
-      @user = User.new(user_params)
-
-      if @user.save
-        redirect_to administration_user_path(@user)
-      else
-        @subheader_items = [
-          {
-            text: "Administration"
-          },
-          {
-            is_link: true,
-            path: administration_users_path,
-            text: "Users"
-          },
-          {
-            text: "New User"
-          }
-        ]
-
-        @subheader_side_actions = []
-
-        render :new
-      end
-    end
-
     def edit
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          is_link: true,
-          path: administration_users_path,
-          text: "Users"
-        },
-        {
-          text: "Edit User: #{@user.id}"
-        }
-      ]
+      @payload = {
+        roles: User::ROLES,
+        id: params[:id]
+      }
 
-      @subheader_side_actions = []
+      render 'pages/react_root'
     end
 
     def update
@@ -93,20 +58,6 @@ module Administration
     end
 
     def show
-      @subheader_items = [
-        {
-          text: "Administration"
-        },
-        {
-          is_link: true,
-          path: administration_users_path,
-          text: "Users"
-        },
-        {
-          text: "User: #{@user.id}"
-        }
-      ]
-
       @payload = {
         id: @user.id
       }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SkCubeLoading from "../../SkCubeLoading";
 import { fetchUser } from "../../../services/UsersService";
+import { Breadcrumb } from "react-bootstrap";
 
 export default Show = (props) => {
 
@@ -41,6 +42,17 @@ export default Show = (props) => {
   return (
     <React.Fragment>
       <div className="container-fluid">
+        <Breadcrumb>
+          <Breadcrumb.Item active>
+            Administration
+          </Breadcrumb.Item>
+          <Breadcrumb.Item href={`/administration/users`}>
+            Users
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active>
+            {user.username}
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <div className="card mt-2 mb-2">
           <div className="row g-0">
             <div className="col-md-12 col-xs-12">
@@ -137,6 +149,22 @@ export default Show = (props) => {
                     </tr>
                   </tbody>
                 </table>
+                <hr/>
+                <div className="callout">
+                  <h4>
+                    Actions
+                  </h4>
+                  <button
+                    className="btn btn-info"
+                    onClick={() => {
+                      window.location.href=`/administration/users/${user.id}/edit`
+                    }}
+                  >
+                    <span className="bi bi-pencil me-2"/>
+                    Edit
+                  </button>
+                </div>
+                <hr/>
               </div>
             </div>
           </div>
