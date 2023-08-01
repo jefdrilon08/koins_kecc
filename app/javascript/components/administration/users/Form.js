@@ -330,7 +330,11 @@ export default Form = (props) => {
               className="btn btn-secondary ms-2"
               disabled={isLoading}
               onClick={() => {
-                window.location.href = '/administration/users';
+                if (user.id) {
+                  window.location.href = `/administration/users/${user.id}`;
+                } else {
+                  window.location.href = '/administration/users';
+                }
               }}
             >
               Cancel
