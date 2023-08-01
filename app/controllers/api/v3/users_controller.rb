@@ -18,7 +18,7 @@ module Api
 
         if params[:q].present?
           users = users.where(
-            "first_name LIKE lower(:q) OR last_name LIKE lower(:q) OR email LIKE lower(:q)",
+            "lower(first_name) LIKE :q OR lower(last_name) LIKE :q OR lower(email) LIKE :q",
             { q: "%#{params[:q].downcase}%" }
           )
         end

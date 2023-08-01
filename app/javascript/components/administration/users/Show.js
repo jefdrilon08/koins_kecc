@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SkCubeLoading from "../../SkCubeLoading";
 import { fetchUser } from "../../../services/UsersService";
 import { Breadcrumb } from "react-bootstrap";
+import ModalDelete from "./ModalDelete";
 
 export default Show = (props) => {
 
@@ -19,7 +20,8 @@ export default Show = (props) => {
     roles: []
   })
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
+  const [isLoading, setIsLoading]                 = useState(true);
 
   useEffect(() => {
     fetchUser(props.id)
@@ -41,6 +43,13 @@ export default Show = (props) => {
 
   return (
     <React.Fragment>
+      <ModalDelete
+        id={props.id}
+        isOpen={isModalDeleteOpen}
+        setIsOpen={setIsModalDeleteOpen}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      />
       <div className="container-fluid">
         <Breadcrumb>
           <Breadcrumb.Item active>
@@ -165,8 +174,11 @@ export default Show = (props) => {
                   </button>
                   <button
                     className="btn btn-danger ms-2"
+                    onClick={() => {
+                      setIsModalDeleteOpen(true);
+                    }}
                   >
-                    <span className="bi bi-trash ms-2"/>
+                    <span className="bi bi-trash me-2"/>
                     Delete
                   </button>
                 </div>
