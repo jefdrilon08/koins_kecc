@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { hasFormError } from "../../helpers/AppHelper";
 import kmba_logo from '../../../assets/images/kmba_logo.png';
 import logo from '../../../assets/images/logo.png';
@@ -12,10 +12,46 @@ export default Login = (props) => {
   const [errors, setErrors]                                       = useState({});
   const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
 
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleLogin();
+      }
+    }
+
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.addEventListener('keydown', keyDownHandler);
+    }
+  }, []);
+
   const {
     is_microloans,
     is_microinsurance
   } = props;
+
+  const handleLogin = () => {
+    setIsLoading(true);
+    setErrors({});
+
+    login({ username, password })
+      .then((payload) => {
+        console.log(payload);
+
+        let token = payload.data.token;
+        let user = payload.data.user;
+
+        createSession({ token, user });
+        window.location.href = '/';
+      }).catch((payload) => {
+        console.log(payload.response.data);
+        setIsLoading(false);
+        setErrors(payload.response.data);
+      })
+  }
+
   return (
     <div className="d-flex align-items-center" style={{ height: "100vh" }}>
       <ModalForgotPassword
@@ -80,23 +116,7 @@ export default Login = (props) => {
                     className="btn btn-primary"
                     disabled={isLoading}
                     onClick={() => {
-                      setIsLoading(true);
-                      setErrors({});
-
-                      login({ username, password })
-                        .then((payload) => {
-                          console.log(payload);
-
-                          let token = payload.data.token;
-                          let user = payload.data.user;
-
-                          createSession({ token, user });
-                          window.location.href = '/';
-                        }).catch((payload) => {
-                          console.log(payload.response.data);
-                          setIsLoading(false);
-                          setErrors(payload.response.data);
-                        })
+                      handleLogin();
                     }}
                   >
                     <span className="bi bi-shield-check me-2"/>
