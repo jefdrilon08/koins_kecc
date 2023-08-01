@@ -13,6 +13,12 @@ module Api
         end
       end
 
+      def index
+        users = User.select("*")
+
+        render json: users.map{ |o| o.to_h }
+      end
+
       def delete
         @user.destroy!
 

@@ -4,5 +4,6 @@ namespace :api do
     put "/users/:id", to: "users#update"
     get "/users/:id", to: "users#show"
     delete "/users/:id", to: "users#delete"
+    get "/users", to: "users#index"
   end
 end
