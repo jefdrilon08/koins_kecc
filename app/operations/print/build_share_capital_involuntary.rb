@@ -1,40 +1,27 @@
 module Print
-	class BuildInvoluntaryLetter
+	class BuildShareCapitalInvoluntary
 		def initialize(config)
 			@config = config[:config]
-	
 			@member = Member.find(@config["member_id"])
-			@loan_records = @config["loan_records"]
-			@member_accounts = @config["member_accounts"]
 			@member_data = @member.data.with_indifferent_access
+			@savings_accounts = @config["savings_accounts"]
+			@loan_records     = @config["loan_records"]
+			@insurance_account = @config["insurance_accounts"]
+			@equity_accounts   = @config["equity_accounts"]
 		end 
 
 		def execute!
-		#	raise @member_accounts.inspect
-			if @member_accounts.present?
-				@last_savings_deposit = @member_accounts.sort_by{|key| key["last_transaction"] }.reverse.first
-			end
-			
-			@last_loan_payment = nil
-			
-			if @loan_records.present?
-			 @loan_records.sort_by{|key| 
-					if key["last_loan_payment"].present?
-						@last_loan_payment = key["last_loan_payment"]
-					end
-					}.reverse.first
-			end
 
-
-
-			
-			
-			@total_loan_balance = 0
+				@total_loan_balance = 0
 					@loan_records.each do |lr|
 						principal_balance = lr["principal_balance"]
 						interest_balance = lr["interest_balance"]
 						@total_loan_balance += principal_balance.to_f + interest_balance.to_f
 					end
+
+
+
+
 					
 			@data = {
 				member_full_name: @member.first_name + " " + @member.middle_name + " " + @member.last_name,
@@ -43,12 +30,10 @@ module Print
 				member_address: @member_data[:address][:street] + " "+@member_data[:address][:district]+ " "+ @member_data[:address][:city] + " "+ @member_data[:address][:region],
 				total_loan_balance: @total_loan_balance.to_f.round(2),
 				loan_records: @loan_records,
-				member_account: @member_accounts,
-				last_savings_deposit: @last_savings_deposit["last_transaction"],
-				last_loan_payment_transaction: @last_loan_payment
+				savings_accounts: @savings_accounts,
+				insurance_accounts: @insurance_account,
+				equity_accounts: @equity_accounts
 			}
-
-
 			@data
 		end
 	end

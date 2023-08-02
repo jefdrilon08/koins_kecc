@@ -505,6 +505,10 @@ Rails.application.routes.draw do
     get "/assets_liabilities/:id", to: "assets_liabilities#show"
     delete "/assets_liabilities/:id",to: "assets_liabilities#destroy"
 
+
+    get "/share_capital_involuntary", to: "share_capital_involuntary#index"
+    get "/share_capital_involuntary/:id", to: "share_capital_involuntary#show"
+
    
   end
   

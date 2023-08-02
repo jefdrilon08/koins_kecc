@@ -227,7 +227,9 @@ import BankTransferIndex from "../models/BankTransferIndex.js";
 import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
 import ProjectTypeSummaryIndex from "../models/ProjectTypeSummaryIndex.js";
 import AssetsLiabilitiesIndex from "../models/AssetsLiabilitiesIndex.js";
-import BranchCashFlowIndex	from "../models/BranchCashFlowIndex.js"
+import BranchCashFlowIndex	from "../models/BranchCashFlowIndex.js";
+import ShareCapitalInvoluntaryIndex from "../models/ShareCapitalInvoluntary.js";
+import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.js";
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -435,7 +437,9 @@ const hooks = {
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
   "psr_schedules/generate":                           [PsrSchedulesGenerate],
   "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
-  "branch_cash_flow/index":               [BranchCashFlowIndex]
+  "branch_cash_flow/index":               												[BranchCashFlowIndex],
+  "data_stores/share_capital_involuntary/index": 					[ShareCapitalInvoluntaryIndex],
+  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow]
 }
 
 const renderComponent = (Component, payload) => {

@@ -82,14 +82,14 @@
             CIN: 16201628521
 %strong{style: "font-size: 13.32px"}
   %center
-    ABISO NG PAGTATANGAL SA KOOPERATIBA
+    ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
 %br
-%div.just-font{style: "font-size: 14px"}
+%div.just-font{style: "font-size: 10.66px"}
   %br
     %b
       #{Date.today.strftime("%B %d, %Y")}
 %br
-%div.just-font{style: "font-size: 14px"}
+%div.just-font{style: "font-size: 10.66px"}
   %br
     %b
       #{@data[:member_full_name].upcase}
@@ -100,27 +100,14 @@
     %b
       #{@data[:member_address]}
 %br
-%p{style: "font-size: 14px"}
+%p{style: "font-size: 10.66px"}
   %b
     G./Gng. #{@data[:member_full_name]}:
-%p{style: "font-size: 14px"}
-  Ikinalulungkot ko pong ipagbigay-alam na sa kabila ng aming paunang abiso ukol sa iyong posibleng pagkatanggal bilang miyembro ng K-Coop, ay hindi kami nakatanggap ng anumang tugon mula sa iyo. Kung kaya, ipinababatid po namin na simula
-  %b 
-    #{@data[:as_of].to_date.strftime("%B %d, %Y")}
-  , ikaw ay pormal ng itinitiwalag bilang miyembro ng kooperatiba dahil sa mga sumusunod na kadahilanan ayon sa itinatakda ng ating By-laws:
-  
-
-
+%p{style: "font-size: 10.66px"}
+  Nais naming ipagbigay-alam na sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan:
   %ul.list-group
-    - if @data[:last_savings_deposit].present?
-      %li.list-group-item{style: "font-size: 14px"}
-        %input{:required => "", :type => "checkbox"}>/ 
-        &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
-        %b
-          #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
-        hanggang sa kasalukuyan
     -if @data[:loan_records].any?
-      %li.list-group-item{style: "font-size: 14px"}
+      %li.list-group-item{style: "font-size: 10.66px"}
         %input{:required => "", :type => "checkbox"}>/
         &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
         -if @data[:loan_records].any?
@@ -129,41 +116,56 @@
               %br
                 %b
                   #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
-    %li.list-group-item{style: "font-size: 14px"}
+    %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
       &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba
-    %li.list-group-item{style: "font-size: 14px"}
+    %li.list-group-item{style: "font-size: 10.66px"}
       %input{:required => "", :type => "checkbox"}>/
       &nbsp&nbsp Paggawa ng anumang gawain, o pagkukulang na nakapipinsala sa interes o kapakanan ng kooperatiba
-%br
-%p{style: "font-size: 14px"}
-  Maraming Salamat.
-
-%br
-%p{style: "font-size: 14px"}
-  Gumagalang,
-
-%div.just-font{style: "font-size: 14px"}
-  = image_tag "signatures/taga_pangulo.bmp", class: "img-responsive" , size: "80"
+%p{style: "font-size: 10.66px"}
+  Ayon sa mga polisiya, ang mga ito ay sapat na dahilan upang ikaw ay tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Dahil dito, ikaw ay aming binibigyan hanggang sa petsang 
+  %b
+    #{(Date.today + 30.days).to_date.strftime("%B %d, %Y")}
+  upang makipag-ugnayan sa amin upang maipaliwanag kung bakit ikaw ay hindi dapat tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Ang hindi mo pagtugon sa sulat na ito ay maaring magdulot ng mga sumusunod:
+  %ul.list-group
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong natitirang savings o/at share capital ay papatawan ng dormancy fee
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong natitirang savings o/at share capital ay ilalapat sa natitira mong pagkakautang
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong pagiging miyembro sa kooperatiba ay tuluyan ng puputulin
+%p{style: "font-size: 10.66px"}
+  Kung patuloy mong ipagwawalang-bahala ang sulat na ito, mapipilitan kaming gawin ang mga hakbang na binaggit sa itaas at tuluyan kang tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Inaasahan namin ang iyong maagap na pagtugon ukol sa bagay na ito.
+%ul.list-inline
+  %li.list-inline{style: "font-size: 10.66px"}
+    Naghanda:
+  %li.list-inline{style: "font-size: 10.66px"}
+    Binigyan Pansin:
+  %li.list-inline{style: "font-size: 10.66px"}
+    Pinagtibay:
+%ul.signatories
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng SOM
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng CM
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng SM
+%div.just-font{style: "font-size: 10.66px"}
   %br
-    #{Settings.taga_pangulo}
+    TINANGGAP: __________________/_____________________/_________________
   %br
-    Tagapangulo
-%br
-
-%p{style: "font-size: 14px"}
-  Binigyan Pansin:
-
-%div.just-font{style: "font-size: 14px"}
-  = image_tag "signatures/kalihim_0322.bmp", class: "img-responsive" , size: "80"
-  %br{style: "font-size: 14px"}
-    #{Settings.kalihim}
-  %br{style: "font-size: 14px"}
-    Kalihim
-
- 
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspPangalan at Lagda/Relasyon Sa Miyembro/Petsa
 %div.footer
   %br
     %b
-      ANNEX 3: ABISO NG PAGTATANGGAL SA KOOPERATIBA
+      ANNEX 1: ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
   
