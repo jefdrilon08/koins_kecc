@@ -83,7 +83,7 @@ RSpec.describe 'Toggle User Branch' do
           branch_id: branch.id
         ).first
 
-        expect(user_branch.active).to eq(nil)
+        expect(user_branch.active).to eq(true)
       end
     end
   end
