@@ -144,6 +144,33 @@ class Member < ApplicationRecord
     end
   end
 
+  def face_amount
+    self.data.with_indifferent_access[:recognition_date].present?
+    now = Time.now
+    
+    value1 = 2000
+    value2 = 6000
+    value3 = 10000
+    value4 = 30000
+    value5 = 50000
+
+
+    number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
+    
+    
+    if number_of_days <= 91
+      "₱#{value1}.00"
+    elsif number_of_days >= 92 && number_of_days <= 365 
+      "₱#{value2}.00"
+    elsif number_of_days >= 366 && number_of_days <= 730
+      "₱#{value3}.00"
+    elsif number_of_days >= 731 && number_of_days <= 1895
+      "₱#{value4}.00"
+    elsif number_of_days >= 1896
+      "₱#{value5}.00"
+    end
+  end
+
   def interest_start_date
     if self.data.with_indifferent_access[:restoration_records].blank?
       return self.data.with_indifferent_access[:recognition_date]

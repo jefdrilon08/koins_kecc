@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date, :is_reclassified]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date, :is_reclassified]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -134,6 +134,29 @@ module Api
           change_by: current_user.full_name
         ).execute!
         render json: { id: member.id }
+      end
+    end
+
+    def is_reclassified
+      member               = Member.find(params[:id])
+      is_reclassified      = params[:is_reclassified]
+      config  = {
+        member: member,
+        user: current_user,
+        is_reclassified: is_reclassified
+      }
+      errors = ::Members::ValidateReclassified.new(
+        member: member,
+        is_reclassified: is_reclassified
+      ).execute!
+
+      if errors.any?
+        render json: errors, status: 400
+      else
+        ::Members::ReclassifiedMember.new(
+          member: member,
+          is_reclassified: is_reclassified
+        ).execute!
       end
     end
 

@@ -6,6 +6,7 @@ namespace :api do
   post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
+  get "/public/development_values", to: "public#development_values"
 
   # API for KEZAR
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
@@ -43,6 +44,7 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/reinstate", to: "members#reinstate"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
+  post "/members/is_reclassified", to: "members#is_reclassified"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
@@ -291,6 +293,7 @@ namespace :api do
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
+    post "/members/is_reclassified", to: "members#is_reclassified"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"

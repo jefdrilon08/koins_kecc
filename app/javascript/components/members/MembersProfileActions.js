@@ -4,24 +4,26 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 export default function MembersProfileActions(props) {
-  const [isLoading, setIsLoading]                 = useState(false);
-  const [isModalUnlockOpen, setIsModalUnlockOpen] = useState(false);
-  const [isModalSurveyOpen, setIsModalSurveyOpen] = useState(false);
-  const [surveyId, setSurveyId]                   = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
-  const [errors, setErrors]                       = useState([]);
-  const [modifiable, setModifiable]               = useState(props.member.modifiable);
-  const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
-  const [isModalDelete, setIsModalDelete]         = useState(false);
-  const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
+  const [isLoading, setIsLoading]                                               = useState(false);
+  const [isModalUnlockOpen, setIsModalUnlockOpen]                               = useState(false);
+  const [isModalSurveyOpen, setIsModalSurveyOpen]                               = useState(false);
+  const [surveyId, setSurveyId]                                                 = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
+  const [errors, setErrors]                                                     = useState([]);
+  const [modifiable, setModifiable]                                             = useState(props.member.modifiable);
+  const [isModalBalikKasapiOpen, setModalBalikKasapiOpen]                       = useState(false);
+  const [isModalDelete, setIsModalDelete]                                       = useState(false);
+  const [isModalReinstateOpen, setModalReinstateOpen]                           = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
-  const [dateReinstated, setDateReinstated]       = useState('');
-  const [dateStopped, setDateStopped]       = useState('');
-  const [dateRecognition, setDateRecognition]               = useState("");
-  const [isModalMakePaymentOpen, setModalMakePaymentOpen] = useState(false);
-  const [makePayment, setMakePayment]       = useState('');
+  const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
+  const [dateReinstated, setDateReinstated]                                     = useState('');
+  const [dateStopped, setDateStopped]                                           = useState('');
+  const [dateRecognition, setDateRecognition]                                   = useState("");
+  const [reClassified, setreClassified]                                         = useState('');
+  const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
+  const [makePayment, setMakePayment]                                           = useState('');
 
-  const [isModalProfilePictureOpen, setModalProfilePictureOpen] = useState(false);
-  const [profilePicture, setProfilePicture]       = useState('');
+  const [isModalProfilePictureOpen, setModalProfilePictureOpen]                 = useState(false);
+  const [profilePicture, setProfilePicture]                                     = useState('');
 
   const options = [
   {
@@ -37,6 +39,33 @@ export default function MembersProfileActions(props) {
     value: "Members Benefit",
   }
   ];
+
+  const handleReclassfiedClicked = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      is_reclassified: reClassified
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+    axios.post(
+      '/api/members/is_reclassified',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully ReClassified Member");
+      window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
 
   const handleDateRecognitionClicked = () => {
     setIsLoading(true);
@@ -349,6 +378,59 @@ export default function MembersProfileActions(props) {
         </Modal.Footer>
 
       </Modal>
+
+      <Modal
+        show={isModalReclassifiedOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Reclassified Member
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Please select "YES" to ReClassified this Member
+              </label>
+              <select
+                id="dropdown"
+                className="form-control"
+                value={reClassified}
+                disabled={isLoading}
+                onChange={(event) => { setreClassified(event.target.value) } }
+              >
+                <option value="">-- Select --</option>
+                <option value="YES">YES</option>
+              </select>
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleReclassfiedClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalReclassifiedOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
+
 
       <Modal
         show={isModalRecognitonDateOpen}
@@ -808,6 +890,28 @@ export default function MembersProfileActions(props) {
                 )
               }            
             })()}
+          </div>
+        </div>
+      </div>
+
+      <hr/>
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Reclassified
+            </strong>
+            <p>
+              Reclassified Member
+            </p>
+              <button
+                className="btn btn-primary"
+                  onClick={() => {
+                    setModalReclassifiedOpen(true)
+                  }}
+                  >
+                Reclassified
+              </button>
           </div>
         </div>
       </div>
