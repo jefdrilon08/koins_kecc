@@ -2283,7 +2283,7 @@ namespace :adjust do
     @as_of            = Date.today
 
     @start_date = Date.today.beginning_of_year
-    @end_date = @start_date.end_of_month
+    @end_date = @as_of.end_of_month
 
 
     if ENV['CURRENT_DATE'].present?

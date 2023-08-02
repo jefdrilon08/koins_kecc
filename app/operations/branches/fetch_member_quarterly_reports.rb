@@ -5,7 +5,7 @@ module Branches
       @as_of    = @config[:as_of].try(:to_date) || Date.today
       # live
       @start_date = Date.today.beginning_of_year
-      @end_date = @start_date.end_of_month
+      @end_date = @as_of.end_of_month
       
       if @start_date.present? && @end_date.present?
         @active_members             = Member.where("data ->> 'recognition_date' <= ? AND insurance_status IN (?)", @end_date, ["inforce", "lapsed"])
