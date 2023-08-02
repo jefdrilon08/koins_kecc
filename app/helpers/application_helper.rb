@@ -29,6 +29,10 @@ module ApplicationHelper
     current_user.roles.include?("REMOTE-BK")
   end
 
+  def is_remote_fm_user?
+    current_user.roles.include?("REMOTE-FM")
+  end
+
   def is_bk?
     current_user.roles.include?("BK")
   end
