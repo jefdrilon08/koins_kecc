@@ -23,4 +23,10 @@ FactoryBot.define do
     short_name  { Faker::Name.first_name }
     user        { FactoryBot.create(:user) }
   end
+
+  factory :user_branch do
+    user    { FactoryBot.create(:user) }
+    branch  { FactoryBot.create(:branch) }
+    active  { true }
+  end
 end
