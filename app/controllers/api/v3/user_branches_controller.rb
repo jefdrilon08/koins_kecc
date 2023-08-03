@@ -23,11 +23,13 @@ module Api
         if user.blank?
           render json: { message: 'not found' }, status: :not_found
         else
-          user_branches = UserBranch.where(
+          cmd = ::Core::UserBranches::Fetch.new(
             user_id: user.id
-          ).map{ |o| o.to_h }
+          )
 
-          render json: user_branches
+          cmd.execute!
+
+          render json: cmd.user_branches
         end
       end
 
@@ -38,7 +40,13 @@ module Api
 
         cmd.execute!
 
-        render json: { active: cmd.user_branch.active ? true : nil }
+        cmd = ::Core::UserBranches::Fetch.new(
+          user_id: @user_branch.user_id
+        )
+
+        cmd.execute!
+
+        render json: cmd.user_branches
       end
     end
   end

@@ -3,6 +3,7 @@ import SkCubeLoading from "../../SkCubeLoading";
 import { fetchUser } from "../../../services/UsersService";
 import { Breadcrumb } from "react-bootstrap";
 import ModalDelete from "./ModalDelete";
+import BranchManager from "./BranchManager";
 
 export default Show = (props) => {
 
@@ -158,6 +159,10 @@ export default Show = (props) => {
                     </tr>
                   </tbody>
                 </table>
+                <hr/>
+                <BranchManager
+                  id={props.id}
+                />
                 <hr/>
                 <div className="callout">
                   <h4>

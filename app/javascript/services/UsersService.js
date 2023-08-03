@@ -13,6 +13,18 @@ export const fetchUserBranches = (id) => {
   )
 }
 
+export const toggleUserBranch = (id) => {
+  return axios.post(
+    `${BASE_URL}/api/v3/user_branches/toggle`,
+    {
+      id: id
+    },
+    {
+      headers: buildFileUploadHeaders()
+    }
+  )
+}
+
 export const deleteUser = (id) => {
   return axios.delete(
     `${BASE_URL}/api/v3/users/${id}`,

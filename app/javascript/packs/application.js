@@ -32,7 +32,6 @@ import GeneralLedgerComponent from "../components/accounting/GeneralLedgerCompon
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
 import DataStoresPatronageRefundShowComponent from "../components/data_stores/patronage_refund/ShowComponent";
-import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
 import ManualAgingShowComponent from "../components/data_stores/manual_aging/ShowComponent.js";

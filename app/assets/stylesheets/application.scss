@@ -2,7 +2,6 @@
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
-@import "react-toggle/style";
 @import 'leaflet.scss';
 
 // Local imports
@@ -13,6 +12,7 @@
 @import "./member";
 @import "./accordion";
 @import "./bootstrap-overrides";
+@import "./toggle-switch";
 
 .clickable {
   cursor: pointer;
