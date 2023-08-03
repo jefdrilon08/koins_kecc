@@ -3,28 +3,14 @@ module Core
     class Toggle
       attr_accessor :user_branch
 
-      def initialize(branch_id:, user_id:)
-        @branch_id  = branch_id
-        @user_id    = user_id
+      def initialize(user_branch:)
+        @user_branch = user_branch
       end
 
       def execute!
-        @user_branch = UserBranch.where(
-          user_id:    @user_id,
-          branch_id:  @branch_id
-        ).first
-
-        if @user_branch.blank?
-          @user_branch = UserBranch.create(
-            user:   User.find(@user_id),
-            branch: Branch.find(@branch_id),
-            active: true
-          )
-        else
-          @user_branch.update!(
-            active: @user_branch.active ? true : nil
-          )
-        end
+        @user_branch.update!(
+          active: !@user_branch.active
+        )
 
         @user_branch
       end

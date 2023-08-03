@@ -3,31 +3,28 @@ module Api
     class UserBranchesController < ::Api::V3::ApplicationController
       before_action :authenticate_user!
       before_action :authorize_mis!
+      before_action :load_resource!, only: [:toggle]
+
+      def load_resource!
+        if params[:id].blank?
+          render json: { id: ['required'] }, status: :unprocessable_entity
+        else
+          @user_branch = UserBranch.find_by_id(params[:id])
+
+          if @user_branch.blank?
+            render json: { message: 'not found' }, status: :not_found
+          end
+        end
+      end
 
       def toggle
-        validator = ::Core::UserBranches::ValidateToggle.new(
-          branch_id:  params[:branch_id],
-          user_id:    params[:user_id] 
+        cmd = ::Core::UserBranches::Toggle.new(
+          user_branch: @user_branch
         )
 
-        validator.execute!
+        cmd.execute!
 
-        if validator.valid?
-          cmd = ::Core::UserBranches::Toggle.new(
-            branch_id:  params[:branch_id],
-            user_id:    params[:user_id]
-          )
-
-          cmd.execute!
-
-          if cmd.user_branch.active
-            render json: { active: true }
-          else
-            render json: { active: nil }
-          end
-        else
-          render json: validator.payload, status: :unprocessable_entity
-        end
+        render json: { active: cmd.user_branch.active ? true : nil }
       end
     end
   end

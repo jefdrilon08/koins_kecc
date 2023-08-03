@@ -9,4 +9,13 @@ class UserBranch < ApplicationRecord
   
   def load_defaults
   end
+
+  def to_h
+    {
+      id: id,
+      user: user.to_h,
+      branch: branch.to_h,
+      active: active
+    }
+  end
 end

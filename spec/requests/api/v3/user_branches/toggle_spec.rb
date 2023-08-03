@@ -5,6 +5,7 @@ RSpec.describe 'Toggle User Branch' do
 
   let(:user) { FactoryBot.create(:user, roles: ['MIS'], username: 'admin') }
   let(:branch) { FactoryBot.create(:branch) }
+  let(:user_branch) { FactoryBot.create(:user_branch, user: user, branch: branch) }
   let(:oas_user) { FactoryBot.create(:user, roles: ['OAS'], username: 'oas') }
   let(:valid_user_headers) { build_jwt_header(user.generate_jwt) }
   let(:oas_user_headers) { build_jwt_header(oas_user.generate_jwt) }
@@ -33,32 +34,25 @@ RSpec.describe 'Toggle User Branch' do
         expect(response).to have_http_status(:unprocessable_entity)
 
         # Required fields
-        expect(payload['branch'][0]).to eq('required')
-        expect(payload['user'][0]).to eq('required')
+        expect(payload['id'][0]).to eq('required')
       end
 
       it 'fails if not found' do
         params = {
-          user_id: 'non-existent',
-          branch_id: 'non-existent'
+          id: 'non-existent'
         }
 
         post api_url, params: params, headers: valid_user_headers
 
         payload = JSON.parse(response.body)
-        expect(response).to have_http_status(:unprocessable_entity)
-
-        # Required fields
-        expect(payload['branch'][0]).to eq('not found')
-        expect(payload['user'][0]).to eq('not found')
+        expect(response).to have_http_status(:not_found)
       end
     end
 
     context 'valid calls' do
       it 'succeeds to toggle a user_branch' do
         params = {
-          user_id: user.id,
-          branch_id: branch.id
+          id: user_branch.id
         }
 
         post api_url, params: params, headers: valid_user_headers
@@ -66,24 +60,18 @@ RSpec.describe 'Toggle User Branch' do
         payload = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
 
-        user_branch = UserBranch.where(
-          user_id: user.id,
-          branch_id: branch.id
-        ).first
+        _user_branch = UserBranch.find(user_branch.id)
 
-        expect(user_branch.active).to eq(true)
+        expect(_user_branch.active).to eq(false)
 
         post api_url, params: params, headers: valid_user_headers
 
         payload = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
 
-        user_branch = UserBranch.where(
-          user_id: user.id,
-          branch_id: branch.id
-        ).first
+        _user_branch = UserBranch.find(user_branch.id)
 
-        expect(user_branch.active).to eq(true)
+        expect(_user_branch.active).to eq(true)
       end
     end
   end
