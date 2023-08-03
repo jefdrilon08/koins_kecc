@@ -291,9 +291,10 @@ export default class FormBeneficiaries extends React.Component {
           isOpen={this.state.modalIsOpen}
           style={customStyles}
         >
-          <h3>
-            Beneficiary Form
-          </h3>
+          <div class="modal-header">
+            <h3 class="modal-title">Beneficiary Form</h3>
+          </div>
+
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -353,7 +354,6 @@ export default class FormBeneficiaries extends React.Component {
                 <label>Is Primary?</label>
                 <input
                   type="checkbox"
-                  className="form-control"
                   onChange={this.handlePrimaryChanged.bind(this)}
                 />
               </div>
