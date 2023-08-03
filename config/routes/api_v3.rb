@@ -9,5 +9,8 @@ namespace :api do
 
     # User Branch Toggle
     post "/user_branches/toggle"
+
+    # Import Members
+    post "/members/import_members", to: "members#import_members"
   end
 end
