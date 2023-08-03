@@ -17,6 +17,20 @@ module Api
         end
       end
 
+      def index
+        user = User.find_by_id(params[:id]) 
+
+        if user.blank?
+          render json: { message: 'not found' }, status: :not_found
+        else
+          user_branches = UserBranch.where(
+            user_id: user.id
+          ).map{ |o| o.to_h }
+
+          render json: user_branches
+        end
+      end
+
       def toggle
         cmd = ::Core::UserBranches::Toggle.new(
           user_branch: @user_branch

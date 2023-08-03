@@ -4,6 +4,15 @@ import {
 } from 'env';
 import { buildHeaders, buildFileUploadHeaders } from '../helpers/AppHelper';
 
+export const fetchUserBranches = (id) => {
+  return axios.get(
+    `${BASE_URL}/api/v3/user_branches/${id}/fetch`,
+    {
+      headers: buildFileUploadHeaders()
+    }
+  )
+}
+
 export const deleteUser = (id) => {
   return axios.delete(
     `${BASE_URL}/api/v3/users/${id}`,

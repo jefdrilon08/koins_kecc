@@ -1,23 +1,15 @@
-import React from 'react';
-import $ from 'jquery';
+import React, { useState, useEffect } from 'react';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 
 import SkCubeLoading from '../../SkCubeLoading';
 
-export default class BranchManagerComponent extends React.Component {
-  constructor(props) {
-    super(props);
+export default BranchManager = () => {
+  const [userBranches, setUserBranches] = useState([]);
+  const [isLoading, setIsLoading]       = useState(true);
 
-    this.state  = {
-      userBranches: [],
-      isLoading: true
-    }
-  }
-
-  componentWillMount() {
-    this.fetchUserBranches();
-  }
+  useEffect(() => {
+  }, [])
 
   fetchUserBranches() {
     var url     = "/api/v1/administration/user_branches"

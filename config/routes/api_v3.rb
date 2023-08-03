@@ -8,7 +8,8 @@ namespace :api do
     get "/users", to: "users#index"
 
     # User Branch Toggle
-    post "/user_branches/toggle"
+    post "/user_branches/toggle", to: "user_branches#toggle"
+    get "/user_branches/:id/fetch", to: "user_branches#index"
 
     # Import Members
     post "/members/import_members", to: "members#import_members"
