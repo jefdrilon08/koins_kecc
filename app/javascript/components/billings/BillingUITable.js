@@ -584,6 +584,7 @@ export default class BillingUITable extends React.Component {
           Loan Product: &nbsp;
           <span className="text-muted">
             {currentTransaction.loan_product.name}
+            
           </span>
         </h5>
       );
@@ -793,7 +794,9 @@ export default class BillingUITable extends React.Component {
         >
           <Modal.Header closeButton>
             <Modal.Title>
+              <a href={"/members/" + currentMember.id+"/display"} target='_blank'>
               {currentMember.full_name}
+              </a>
             </Modal.Title>
           </Modal.Header>
 
