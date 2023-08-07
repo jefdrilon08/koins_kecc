@@ -176,14 +176,20 @@ export default function MembersProfileHome(props) {
                 </b>
               </div>
             </li>
-            <li className="list-group-item">
-              Face Amount
-              <div className="value text-muted">
-                <b>
-                  {props.faceAmount ? props.faceAmount: "N/A"}
-                </b>
-              </div>
-            </li>
+              {(() => {
+              if(JSON.stringify(configData, null, 2) == 'true')  {
+                return (
+                  <li className="list-group-item">
+                    Face Amount
+                    <div className="value text-muted">
+                      <b>
+                        {props.faceAmount ? props.faceAmount: "N/A"}
+                      </b>
+                    </div>
+                  </li>
+                )
+              }
+            })()}  
           </ul>
         </div>
         <div className="col-md-9">
