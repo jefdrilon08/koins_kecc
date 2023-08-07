@@ -38,7 +38,7 @@ module Reports
               personal_savings  = value[:psa_balance].to_f.round(2)
               rsa_balance       = value[:rsa_balance].to_f.round(2)
               gk_balance        = value[:gk_balance].to_f.round(2)
-              rf_balace         = value[:rf_balace].to_f.round(2)
+              rf_balace         = value[:rf_balance].to_f.round(2)
               lf_balance        = value[:lf_balance].to_f.round(2)
               share_cap         = value[:equity_balance].to_f.round(2)
               cbu_balance       = value[:cbu_balance].to_f.round(2)
