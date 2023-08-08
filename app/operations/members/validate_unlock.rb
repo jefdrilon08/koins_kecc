@@ -6,7 +6,7 @@ module Members
       @config = config
       @member = @config[:member]
       @user   = @config[:user]
-      @valid_roles  = ["MIS", "BK", "SBK"]
+      @valid_roles  = ["MIS", "BK", "SBK", "AO"]
 
       # @valid_roles = ::Users::FetchValidRoles.new(
       #   module_name: "unlock_member_modification"
