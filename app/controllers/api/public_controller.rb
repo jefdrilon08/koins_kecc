@@ -82,11 +82,6 @@ module Api
       end
     end
 
-    def development_values
-      development_data = YAML.load_file('config/settings/production.yml')
-      render json: development_data["activate_microinsurance"] 
-    end 
-
     def api_centers
       branch_id = params[:branch_id]   
       branch_center = Center.select("id, name").where(branch_id:  branch_id)            
