@@ -189,6 +189,33 @@ module Api
         end
       end
 
+      def update_or_ar_number
+        savings_insurance_transfer_collection = SavingsInsuranceTransferCollection.where(id: params[:id]).first
+        or_number                            = params[:or_number]
+        ar_number                            = params[:ar_number]
+
+        config  = {
+          savings_insurance_transfer_collection: savings_insurance_transfer_collection,
+          ar_number: ar_number,
+          or_number: or_number,
+          user: current_user
+        }
+
+        errors  = ::SavingsInsuranceTransferCollections::ValidateUpdateOrArNumber.new(
+                    config: config
+                  ).execute!
+
+        if errors[:full_messages].any?
+          render json: { errors: errors }, status: 400
+        else
+          ::SavingsInsuranceTransferCollections::UpdateOrArNumber.new(
+            config: config
+          ).execute!
+
+          render json: { message: "ok" }
+        end
+      end
+
       def save
         if !Settings.activate_microinsurance
           branch            = Branch.where(id: params[:branch_id]).first
