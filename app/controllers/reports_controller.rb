@@ -431,6 +431,26 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
+  def claims_processing_time_report
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Claims Processing Time Report" }
+    ]
+  end
+
+  def claims_processing_time_report_excel
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @branch = params[:branch]
+
+    filename = "claims_processing_time_report.xlsx"
+
+    excel = Reports::GenerateClaimsProcessingTimeReport.new(start_date: @start_date, end_date: @end_date, branch: @branch).execute!
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+  
   def savings_insurance_transfer_reports
     @subheader_items = [
       { text: "Other Reports" },

@@ -129,6 +129,26 @@ module Api
         render json: data
       end
 
+      def claims_processing_time_report
+        branch        = params[:branch]
+        start_date    = params[:start_date]
+        end_date      = params[:end_date]
+
+        data = Reports::GenerateClaimsProcessingTimeReport.new(
+                  branch_id: branch,
+                  start_date: start_date,
+                  end_date: end_date
+                ).execute!
+
+        data[:download_url] = claims_processing_time_report_path(
+                         ddd       branch_id: branch,
+                                start_date: start_date,
+                                download: true,
+                                end_date: end_date
+                              )
+
+        render json: data
+      end
 
     end
   end
