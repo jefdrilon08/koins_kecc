@@ -11,6 +11,8 @@ module Members
       @center                 = Center.where(id: @member_data[:center_id]).first
       @membership_arrangement = MembershipArrangement.where(id: @member_data[:membership_arrangement_id]).first
       @membership_type        = MembershipType.where(id: @member_data[:membership_type_id]).first
+
+      
     end
 
     def execute!
@@ -86,8 +88,18 @@ module Members
           key: "date_of_birth",
           message: "Date of birth required"
         }
+      elsif @member_data[:date_of_birth].present?
+        date_of_birth = @member_data[:date_of_birth]
+        date_format = Date.parse(date_of_birth)
+        age = Date.today.year - date_format.year   
+        if age < 18 
+          @errors[:messages] << {
+            key: "date_of_birth",
+            message: "Member Age is not 18 Above"
+          }
+        end
       end
-
+   
       # Validate gender
       if @member_data[:gender].blank?
         @errors[:messages] << {
