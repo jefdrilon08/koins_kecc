@@ -44,6 +44,7 @@ module Members
         total_balance = 0.0
         matured_loans_counts = 0
 
+
         #check years of membership
         @closing_date = @mm_rec.date_paid + @number_of_years.years
         if DateTime.now.to_date < @closing_date
@@ -88,7 +89,9 @@ module Members
               message: "Member have a total #{a.sum.round(2)} accrued interest to pay and Total Equity Balance is not enough"
             }
           end
-        elsif a.any? and total_active_loans > 0 
+        end
+
+        if a.any? and total_active_loans > 0 
           if total_active_loans > matured_loans_counts
             active_loans.each do |o|
               @errors[:messages] << {
@@ -105,7 +108,10 @@ module Members
                 } 
             end
           end
-        elsif a.nil? and total_active_loans > 0
+        end
+
+
+        if a == [] and total_active_loans > 0
           if total_active_loans > matured_loans_counts
              active_loans.each do |o|
               @errors[:messages] << {
@@ -114,10 +120,12 @@ module Members
               } 
             end
           elsif total_active_loans == matured_loans_counts and @total_equity_balance < total_balance
+            active_loans.each do |o|
              @errors[:messages] << {
                 key: "loan_#{o.id}",
                 message: "All Active loans are Matured but the Total Equity Balance is not enough"
-              } 
+              }
+            end 
           end
         end
 
