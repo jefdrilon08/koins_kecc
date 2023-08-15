@@ -6,13 +6,13 @@ namespace :api do
   post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
-  get "/public/development_values", to: "public#development_values"
 
   # API for KEZAR
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
   get "/public/api_centers/:branch_id", to: "public#centers"
+  get "/yml_values/production_values", to: "yml_values#production_values"
 
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"

@@ -9,7 +9,7 @@ export default function MembersProfileHome(props) {
   const [configData, setConfigData] = useState();
 
   useEffect(() => {
-    axios.get('/api/public/development_values')
+    axios.get('/api/yml_values/production_values')
       .then(response => setConfigData(response.data))
       .catch(error => console.error(error));
   }, []);
