@@ -206,6 +206,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
     post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
+    post "/savings_insurance_transfer_collections/update_or_ar_number", to: "savings_insurance_transfer_collections#update_or_ar_number"
 
 
     # Accounting Codes
@@ -703,6 +704,7 @@ namespace :api do
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
     get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
+    get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
     #claims
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"

@@ -9,6 +9,10 @@ module SavingsInsuranceTransferCollections
       @insurance_subtype = @data["insurance_subtype"]
       @accounting_fund_gen_fund = "8a512ccd-20a8-457f-a7ac-ab6bd76bb814"
       @accounting_fund_opt_fund = "d99d1c46-d426-41fa-ba95-b57b6ca27d1d"
+      @or_number = @data["or_number"]
+      @ar_number = @data["ar_number"]
+
+      # raise @or_number.inspect
 
       @book         = "JVB"
       @book1        = "CRB"
@@ -116,8 +120,8 @@ module SavingsInsuranceTransferCollections
 
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -144,8 +148,8 @@ module SavingsInsuranceTransferCollections
 
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -172,8 +176,8 @@ module SavingsInsuranceTransferCollections
 
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -199,8 +203,8 @@ module SavingsInsuranceTransferCollections
 
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -226,8 +230,8 @@ module SavingsInsuranceTransferCollections
             branch_name: @branch.name,
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -253,8 +257,8 @@ module SavingsInsuranceTransferCollections
             branch_name: @branch.name,
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -280,8 +284,8 @@ module SavingsInsuranceTransferCollections
             branch_name: @branch.name,
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -307,8 +311,8 @@ module SavingsInsuranceTransferCollections
             branch_name: @branch.name,
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
