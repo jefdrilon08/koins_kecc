@@ -14,21 +14,18 @@ RSpec.describe 'Show User' do
       it 'fails if user is not logged in' do
         get "#{api_url}/#{user.id}", params: {}
 
-        payload = JSON.parse(response.body)
         expect(response).to have_http_status(:forbidden)
       end
 
       it 'fails if user is not MIS' do
         get "#{api_url}/#{user.id}", params: {}, headers: oas_user_headers
 
-        payload = JSON.parse(response.body)
         expect(response).to have_http_status(:unauthorized)
       end
 
       it 'fails for user not found' do
         get "#{api_url}/non-existent", params: {}, headers: valid_user_headers
 
-        payload = JSON.parse(response.body)
         expect(response).to have_http_status(:not_found)
       end
     end
@@ -37,7 +34,6 @@ RSpec.describe 'Show User' do
       it 'succeeds on returning a user' do
         get "#{api_url}/#{user.id}", params: {}, headers: valid_user_headers
 
-        payload = JSON.parse(response.body)
         expect(response).to have_http_status(:ok)
       end
     end
