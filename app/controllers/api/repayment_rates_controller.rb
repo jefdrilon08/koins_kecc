@@ -21,7 +21,7 @@ module Api
     end
 
     def show
-      render json: @repayment_record
+      render json: @repayment_rate
     end
   end
 end

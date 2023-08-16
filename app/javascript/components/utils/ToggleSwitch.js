@@ -9,7 +9,7 @@ export default ToggleSwitch = (props) => {
         className="toggle-switch-checkbox"
         name={props.name}
         id={props.name}
-        defaultChecked={props.defaultChecked}
+        checked={props.checked}
         onChange={props.onChange}
       />
       <label

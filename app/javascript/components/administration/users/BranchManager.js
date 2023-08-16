@@ -55,7 +55,7 @@ export default BranchManager = (props) => {
                           <ToggleSwitch
                             name={`branch-${userBranch.branch.name}`}
                             key={`user-branch-toggle-${userBranch.id}`}
-                            defaultChecked={userBranch.active}
+                            checked={userBranch.active}
                             onChange={() => {
                               toggleUserBranch(userBranch.id)
                                 .then((payload) => {
@@ -78,5 +78,5 @@ export default BranchManager = (props) => {
         }
       })()}
     </React.Fragment>
-  )
+  );
 }

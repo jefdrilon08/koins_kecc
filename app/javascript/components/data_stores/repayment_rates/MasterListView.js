@@ -1,16 +1,13 @@
 import React from 'react';
 import {numberWithCommas} from '../../utils/helpers';
 
-export default class MasterListView extends React.Component {
-  constructor(props) {
-    super(props);
+export default MasterListView = (props) => {
+  let {
+    data
+  } = props;
 
-    this.state  = {
-    }
-  }
-
-  renderDataRows() {
-    var loans = this.props.data.data.records;
+  const renderDataRows = () => {
+    var loans = data.records;
     var rows  = [];
 
     var totalLoanAmount       = 0.00;
@@ -94,52 +91,50 @@ export default class MasterListView extends React.Component {
     return rows;
   }
 
-  render() {
-    return  (
-      <div>
-        <h5>
-          Master List of Loans
-        </h5>
+  return  (
+    <div>
+      <h5>
+        Master List of Loans
+      </h5>
 
-        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.8em"}}>
-          <thead>
-            <tr>
-              <th>
-              </th>
-              <th style={{width: "20%"}}>
-                Name
-              </th>
-              <th>
-                Center
-              </th>
-              <th>
-                Loan Product
-              </th>
-              <th>
-                Date Released
-              </th>
-              <th>
-                Maturity Date
-              </th>
-              <th className="text-end">
-                Loan Amount
-              </th>
-              <th className="text-end">
-                Principal Balance
-              </th>
-              <th className="text-end">
-                Interest Balance
-              </th>
-              <th className="text-end">
-                Total Balance
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderDataRows()}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+      <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.8em"}}>
+        <thead>
+          <tr>
+            <th>
+            </th>
+            <th style={{width: "20%"}}>
+              Name
+            </th>
+            <th>
+              Center
+            </th>
+            <th>
+              Loan Product
+            </th>
+            <th>
+              Date Released
+            </th>
+            <th>
+              Maturity Date
+            </th>
+            <th className="text-end">
+              Loan Amount
+            </th>
+            <th className="text-end">
+              Principal Balance
+            </th>
+            <th className="text-end">
+              Interest Balance
+            </th>
+            <th className="text-end">
+              Total Balance
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderDataRows()}
+        </tbody>
+      </table>
+    </div>
+  );
 }

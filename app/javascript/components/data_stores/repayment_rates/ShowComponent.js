@@ -34,11 +34,13 @@ export default ShowComponent = (props) => {
 
     fetchRepaymentRate(id, {...data})
       .then((payload) => {
+        console.log(payload);
+        let _data = payload.data.data;
         setIsLoading(false);
-        setData(payload.data);
-        setCenters(payload.data.centers);
-        setLoanProducts(payload.data.loan_products);
-        setOfficers(payload.data.officers);
+        setData(_data);
+        setCenters(_data.centers);
+        setLoanProducts(_data.loan_products);
+        setOfficers(_data.officers);
       }).catch((payload) => {
         console.log(payload);
         alert("Something went wrong when fetching data store");
@@ -90,7 +92,7 @@ export default ShowComponent = (props) => {
         />
       </div>
     );
-  } else if(this.state.currentView == "AOR") {
+  } else if (currentView == "AOR") {
     return  (
       <div>
         <Filter
@@ -111,7 +113,7 @@ export default ShowComponent = (props) => {
         />
       </div>
     );
-  } else if(this.state.currentView == "ML") {
+  } else if (currentView == "ML") {
     return  (
       <div>
         <Filter
@@ -136,7 +138,7 @@ export default ShowComponent = (props) => {
     return  (
       <div>
         <p>
-          Invalid view name: {this.state.currentView}
+          Invalid view name: {currentView}
         </p>
       </div>
     );
