@@ -22,6 +22,30 @@ export default ShowComponent = (props) => {
     id
   } = props;
 
+  const filterData = () => {
+    let fData = {...data};
+
+    if (currentCenterId) {
+      fData.records = fData.records.filter((o) => {
+        return o.center.id == currentCenterId;
+      });
+    }
+
+    if (currentOfficerId) {
+      fData.records = fData.records.filter((o) => {
+        return o.officer.id == currentOfficerId;
+      });
+    }
+
+    if (currentLoanProductId) {
+      fData.records = fData.records.filter((o) => {
+        return o.loan_product.id == currentLoanProductId;
+      });
+    }
+
+    return fData;
+  }
+
   const fetch = (options) => {
     var data  = {
       center_id: currentCenterId,
@@ -88,7 +112,7 @@ export default ShowComponent = (props) => {
         />
         <hr/>
         <RepaymentRatesView
-          data={data}
+          data={filterData()}
         />
       </div>
     );
@@ -109,7 +133,7 @@ export default ShowComponent = (props) => {
         />
         <hr/>
         <AgingOfReceivablesView
-          data={data}
+          data={filterData()}
         />
       </div>
     );
@@ -130,7 +154,7 @@ export default ShowComponent = (props) => {
         />
         <hr/>
         <MasterListView
-          data={data}
+          data={filterData()}
         />
       </div>
     );
