@@ -12,10 +12,7 @@ export const login = (args) => {
     {
       username: args.username,
       password: args.password
-    },
-    {
-      headers: buildHeaders()
-    },
+    }
   )
 }
 

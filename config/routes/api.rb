@@ -296,12 +296,9 @@ namespace :api do
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
-    post "/members/register", to: "members#register"
-    post "/members/register_member", to: "members#register_member"
     get "/members/process_members_file", to: "members#process_members_file"
     get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
-    post "/members/register_member", to: "members#register_member"
     post "/members/save_make_payment", to: "members#save_make_payment"
     get "/risk_profiles/fetch_daily_metric", to: "risk_profiles#fetch_daily_metric"
 

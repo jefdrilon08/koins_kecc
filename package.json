@@ -51,7 +51,6 @@
   "browserslist": [
     "defaults"
   ],
-  "devDependencies": {},
   "scripts": {
     "start": "node build.js --watch --dev",
     "build-production": "node build.js",
