@@ -211,7 +211,7 @@ export default RepaymentRatesView = (props) => {
           <div className="text-end">
             <label style={{marginRight: "12px"}}>
               Total Records: 
-              <span className="badge badge-secondary">
+              <span className="badge bg-secondary">
                 {numRecords}
               </span>
             </label>
@@ -223,7 +223,7 @@ export default RepaymentRatesView = (props) => {
             </label>
             <label>
               Number of Advanced:
-              <span className="badge badge-info">
+              <span className="badge bg-info">
                 {numAdvanced}
               </span>
             </label>
