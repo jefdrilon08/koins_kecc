@@ -200,7 +200,7 @@ export default AgingOfReceivablesView = (props) => {
           </tr>
         </thead>
         <tbody>
-          {this.renderDataRows()}
+          {renderDataRows()}
         </tbody>
       </table>
     </div>

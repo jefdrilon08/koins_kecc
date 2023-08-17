@@ -2,6 +2,9 @@ namespace :api do
   # Repayment Rates
   get "/repayment_rates/:id", to: "repayment_rates#show"
 
+  # Manual Aging
+  get "/manual_aging/:id", to: "manual_aging#show"
+
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules

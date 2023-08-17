@@ -1,251 +1,171 @@
-import React from 'react';
-import $ from 'jquery';
-import moment from 'moment';
-import Select from 'react-select';
-import Toggle from 'react-toggle';
+import React, { useState, useEffect } from 'react';
 import "react-toggle/style.css";
 
 import SkCubeLoading from '../../SkCubeLoading';
-import ErrorDisplay from '../../ErrorDisplay';
-import {numberWithCommas} from '../../utils/helpers';
 import Filter from './Filter';
 import MasterListView from './MasterListView';
 import ManualAgingView from './ManualAgingView';
 import AgingOfReceivablesView from './AgingOfReceivablesView';
+import { fetchManualAging } from '../../../services/ManualAgingService';
 
-export default class ShowComponent extends React.Component {
-  constructor(props) {
-    super(props);
+export default ShowComponent = (props) => {
+  const [isLoading, setIsLoading]                       = useState(true);
+  const [data, setData]                                 = useState(false);
+  const [centers, setCenters]                           = useState([]);
+  const [officers, setOfficers]                         = useState([]);
+  const [loanProducts, setLoanProducts]                 = useState([]);
+  const [currentOfficerId, setCurrentOfficerId]         = useState("");
+  const [currentCenterId, setCurrentCenterId]           = useState("");
+  const [currentLoanProductId, setCurrentLoanProductId] = useState("");
+  const [currentView, setCurrentView]                   = useState("RR");
 
-    this.state  = {
-      isLoading: true,
-      data: false,
-      errors: false,
-      centers: [],
-      officers: [],
-      currentOfficerId: "",
-      currentCenterId: "",
-      currentLoanProductId: "",
-      currentView: "RR"
-    };
+  let {
+    id
+  } = props;
+
+  const filterData = () => {
+    let fData = {...data};
+
+    if (currentCenterId) {
+      fData.records = fData.records.filter((o) => {
+        return o.center.id == currentCenterId;
+      });
+    }
+
+    if (currentOfficerId) {
+      fData.records = fData.records.filter((o) => {
+        return o.officer.id == currentOfficerId;
+      });
+    }
+
+    if (currentLoanProductId) {
+      fData.records = fData.records.filter((o) => {
+        return o.loan_product.id == currentLoanProductId;
+      });
+    }
+
+    return fData;
   }
 
-  fetch(options) {
-    var context       = this;
-    var centerId      = options.centerId;
-    var loanProductId = options.loanProductId;
-    var officerId     = options.officerId;
-
+  const fetch = (options) => {
     var data  = {
-      id: this.props.id,
-      center_id: centerId,
-      loan_product_id: loanProductId,
-      officer_id: officerId
+      center_id: currentCenterId,
+      loan_product_id: currentLoanProductId,
+      officer_id: currentOfficerId
     }
 
     console.log("fetch (data):");
     console.log(data);
 
-    this.setState({
-      currentCenterId: centerId,
-      currentLoanProductId: loanProductId,
-      currentOfficerId: officerId
-    });
-
-    $.ajax({
-      url: "/api/v1/data_stores/manual_aging/fetch",
-      data: data,
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
-
-        context.setState({
-          isLoading: false,
-          data: response
-        });
-      },
-      error: function(response) {
-        console.log(response);
+    fetchManualAging(id, {...data})
+      .then((payload) => {
+        console.log(payload);
+        let _data = payload.data.data;
+        setIsLoading(false);
+        setData(_data);
+        setCenters(_data.centers);
+        setLoanProducts(_data.loan_products);
+        setOfficers(_data.officers);
+      }).catch((payload) => {
+        console.log(payload);
         alert("Something went wrong when fetching data store");
-      }
-    });
+      })
   }
 
-  componentDidMount() {
-    var context = this;
+  useEffect(() => {
+    fetch();
+  }, []);
 
-    $.ajax({
-      url: "/api/v1/data_stores/manual_aging/fetch",
-      data: {
-        id: context.props.id
-      },
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
-
-        var centers       = response.data.centers;
-
-        context.setState({
-          isLoading: false,
-          data: response,
-          centers: centers
-        });
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Something went wrong when fetching data store");
-      }
-    });
+  const handleCenterChanged = (event) => {
+    setCurrentCenterId(event.target.value);
   }
 
-  renderErrorDisplay() {
-    if(this.state.errors) {
-      return  (
-        <ErrorDisplay
-          errors={this.state.errors}
-        />
-      );
-    }
+  const handleOfficerChanged = (event) => {
+    setCurrentOfficerId(event.target.value);
   }
 
-  handleCenterChanged(event) {
-    this.fetch({
-      centerId: event.target.value,
-      officerId: this.state.currentOfficerId,
-      loanProductId: this.state.currentLoanProductId
-    });
+  const handleLoanProductChanged = (event) => {
+    setCurrentLoanProductId(event.target.value);
   }
 
-  handleOfficerChanged(event) {
-    this.fetch({
-      centerId: this.state.currentCenterId,
-      officerId: event.target.value,
-      loanProductId: this.state.currentLoanProductId
-    });
+  const handleViewToggled = (viewName) => {
+    setCurrentView(viewName);
   }
 
-  handleLoanProductChanged(event) {
-    this.fetch({
-      centerId: this.state.currentCenterId,
-      officerId: this.state.currentOfficerId,
-      loanProductId: event.target.value
-    });
-  }
-
-  renderFilter() {
-    var centerOptions   = [
-       <option key={"center-select"} value="">
-        -- SELECT --
-      </option>
-    ];
-
-    for(var i = 0; i < this.state.centers.length; i++) {
-      centerOptions.push(
-        <option key={"center-" + i} value={this.state.centers[i].id}>
-          {this.state.centers[i].name}
-        </option>
-      );
-    }
-
+  if (isLoading) {
+    return (
+      <SkCubeLoading/>
+    );
+  } else if (currentView == "RR") {
     return  (
-      <div className="row">
-        <div className="col">
-          <div className="form-group">
-            <label>
-              Center:
-            </label>
-            <select 
-              value={this.state.currentCenterId} 
-              onChange={this.handleCenterChanged.bind(this)} 
-              className="form-control"
-            >
-              {centerOptions}
-            </select>
-          </div>
-        </div>
+      <div>
+        <Filter
+          currentView={currentView} 
+          handleViewToggled={handleViewToggled}
+          centers={centers}
+          officers={officers}
+          loanProducts={loanProducts}
+          currentCenterId={currentCenterId}
+          currentLoanProductId={currentLoanProductId}
+          handleCenterChanged={handleCenterChanged}
+          handleLoanProductChanged={handleLoanProductChanged}
+          handleOfficerChanged={handleOfficerChanged}
+        />
+        <hr/>
+        <ManualAgingView
+          data={filterData()}
+        />
       </div>
     );
-  }
-
-  handleViewToggled(viewName) {
-    this.setState({
-      currentView: viewName
-    });
-  }
-
-  render() {
-    if(this.state.isLoading) {
-      return  (
-        <SkCubeLoading/>
-      );
-    } else if(this.state.currentView == "RR") {
-      return  (
-        <div>
-          <Filter
-            currentView={this.state.currentView} 
-            handleViewToggled={this.handleViewToggled.bind(this)}
-            centers={this.state.data.data.centers}
-            officers={this.state.data.data.officers}
-            loanProducts={this.state.data.data.loan_products}
-            currentCenterId={this.state.currentCenterId}
-            currentLoanProductId={this.state.currentLoanProductId}
-            handleCenterChanged={this.handleCenterChanged.bind(this)}
-            handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
-          />
-          <ManualAgingView
-            data={this.state.data}
-          />
-        </div>
-      );
-    } else if(this.state.currentView == "AOR") {
-      return  (
-        <div>
-          <Filter
-            currentView={this.state.currentView} 
-            handleViewToggled={this.handleViewToggled.bind(this)}
-            centers={this.state.data.data.centers}
-            officers={this.state.data.data.officers}
-            loanProducts={this.state.data.data.loan_products}
-            currentCenterId={this.state.currentCenterId}
-            currentLoanProductId={this.state.currentLoanProductId}
-            handleCenterChanged={this.handleCenterChanged.bind(this)}
-            handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
-          />
-          <AgingOfReceivablesView
-            data={this.state.data}
-          />
-        </div>
-      );
-    } else if(this.state.currentView == "ML") {
-      return  (
-        <div>
-          <Filter
-            currentView={this.state.currentView} 
-            handleViewToggled={this.handleViewToggled.bind(this)}
-            centers={this.state.data.data.centers}
-            officers={this.state.data.data.officers}
-            loanProducts={this.state.data.data.loan_products}
-            currentCenterId={this.state.currentCenterId}
-            currentLoanProductId={this.state.currentLoanProductId}
-            handleCenterChanged={this.handleCenterChanged.bind(this)}
-            handleLoanProductChanged={this.handleLoanProductChanged.bind(this)}
-            handleOfficerChanged={this.handleOfficerChanged.bind(this)}
-          />
-          <MasterListView
-            data={this.state.data}
-          />
-        </div>
-      );
-    } else {
-      return  (
-        <div>
-          <p>
-            Invalid view name: {this.state.currentView}
-          </p>
-        </div>
-      );
-    }
+  } else if (currentView == "AOR") {
+    return  (
+      <div>
+        <Filter
+          currentView={currentView} 
+          handleViewToggled={handleViewToggled}
+          centers={centers}
+          officers={officers}
+          loanProducts={loanProducts}
+          currentCenterId={currentCenterId}
+          currentLoanProductId={currentLoanProductId}
+          handleCenterChanged={handleCenterChanged}
+          handleLoanProductChanged={handleLoanProductChanged}
+          handleOfficerChanged={handleOfficerChanged}
+        />
+        <hr/>
+        <AgingOfReceivablesView
+          data={filterData()}
+        />
+      </div>
+    );
+  } else if (currentView == "ML") {
+    return  (
+      <div>
+        <Filter
+          currentView={currentView} 
+          handleViewToggled={handleViewToggled}
+          centers={centers}
+          officers={officers}
+          loanProducts={loanProducts}
+          currentCenterId={currentCenterId}
+          currentLoanProductId={currentLoanProductId}
+          handleCenterChanged={handleCenterChanged}
+          handleLoanProductChanged={handleLoanProductChanged}
+          handleOfficerChanged={handleOfficerChanged}
+        />
+        <hr/>
+        <MasterListView
+          data={filterData()}
+        />
+      </div>
+    );
+  } else {
+    return  (
+      <div>
+        <p>
+          Invalid view name: {currentView}
+        </p>
+      </div>
+    );
   }
 }
