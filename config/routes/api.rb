@@ -168,6 +168,7 @@ namespace :api do
     post "additional_share/update_amount", to: "additional_share#update_amount"
     post "additional_share/approve", to: "additional_share#approve"
     post "additional_share/add_particular", to: "additional_share#add_particular"
+    post "additional_share/delete_member", to: "additional_share#delete_member"
 
     #billing_for_writeoff_collection
     post "/billing_for_writeoff_collection/create", to: "billing_for_writeoff_collection#create"
