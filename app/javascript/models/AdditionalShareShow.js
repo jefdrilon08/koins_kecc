@@ -13,10 +13,13 @@ var $modalApproveTransaction;
 var $btnApprove;
 var $btnAddParticular;
 var $inputParticular;
-
+var $btnDelete;
+var $modalDeleteMember;
 var _memberAccountId;
 var _memberId;
-
+var $btnConfirmDeleteMember;
+var currentMember           = "";
+var currentMemberId         = "";
 var $message;
 var templateErrorList;
 
@@ -31,7 +34,9 @@ var _cacheDom = function() {
      document.getElementById("modal-approve-transaction")
    )
 
-	
+   $modalDeleteMember = new bootstrap.Modal(document.getElementById("modal-delete-member"));
+
+	 $btnDelete         = $(".btn-delete-member");
    $btnAdd			      = $("#btn-add");
    $btnApprove			  = $("#btn-approve");	
    $btnConfirmProcess = $("#btn-confirm-process");
@@ -45,10 +50,70 @@ var _cacheDom = function() {
    $btnAddParticular  = $("#btn-add-particular");
    $inputParticular   = $("#particular");
    $message  			    = $(".message");
-	
+   $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
+	 $displayMember          = $(".display-member");
 };
 
 var _bindEvents = function() {
+  $btnDelete.on("click",function(){
+    $message.html("");
+    console.log($(this).data);
+    currentMember           = $(this).data("member-name");
+    currentMemberId         = $(this).data("member-id");
+    _id = $(this).data("id");  
+    $displayMember.html(currentMember);
+    $modalDeleteMember.show();
+  });
+
+  $btnConfirmDeleteMember.on("click",function(){
+
+    $message.html("Loading...");
+    $btnConfirmDeleteMember.prop("disabled", true);
+
+    var data  = {
+      id: _id,
+      member_id: currentMemberId,
+      authenticity_token: _authenticityToken
+    };
+    
+    $.ajax({
+      url: "/api/v1/additional_share/delete_member",
+      method: "POST",
+      data: data,
+      success: function(response){
+        $message.html("Success!");
+        window.location.reload();
+      },
+
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"]
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmDeleteMember.prop("disabled", false);
+        }
+      }
+
+
+    });
+
+
+  });
+
+
+
+
+
   $btnAdd.on("click", function() {
    _memberId = $selectMember.val();
    _id = $(this).data("id");	  

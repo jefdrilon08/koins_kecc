@@ -65,7 +65,7 @@ module Api
 
       def approve
         record = DataStore.find(params[:id])
-      config = {
+        config = {
         data_store: record.id,          
         user: current_user.id
         }        
@@ -83,6 +83,21 @@ module Api
           render json: { message: "ok" }
 
         end
+      end
+
+      def delete_member
+        data_store = DataStore.find(params[:id])
+        member_id = params[:member_id]
+
+        config = {
+          data_store_id: data_store.id,
+          member_id: member_id
+        }
+        if data_store.status == "pending"
+          ::AdditionalShare::DeleteMember.new(config: config).execute!
+          render json: {message: "ok"}
+        end
+
       end
     end
   end
