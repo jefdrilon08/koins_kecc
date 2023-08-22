@@ -7,14 +7,15 @@ module Members
       @user = @config[:user]
 
       @member = Member.find(@data[:member][:id])
-      @matured_loans = Loan.where(member_id: @member.id,status: "active")
-      @accrued_loan = Loan.where("member_id = ? and data->>'accrued_interest' != ?","#{@member.id}","nil")
+      @active_loans = Loan.where(member_id: @member.id,status: "active")
+      @accrued_loan = Loan.where("member_id = ? and data->>'accrued_interest' != ? ","#{@member.id}","nil")
+     
       @member_data  = @member.data.with_indifferent_access
      
     end
 
     def execute!
-      if @matured_loans.any? or @accrued_loan.any?
+      if @active_loans.any? or @accrued_loan.any?
       
         process_loan_payments!
       end
@@ -128,8 +129,8 @@ module Members
       
       total_equity_balance = 0.0
       total_loan_balance = 0.0
-      if @matured_loans.any?
-        @matured_loans.each do |ml|
+      if @active_loans.any?
+        @active_loans.each do |ml|
           total_loan_balance = ml.total_balance.to_f
         end
       end
@@ -138,8 +139,11 @@ module Members
       if @accrued_loan.any? 
         @accrued_loan.each do |ac|
           accrued = Loan.find(ac.id)
-          accrued_balance = accrued.data.with_indifferent_access[:accrued_interest][:total_accrued_interest]
-          total_loan_balance += accrued_balance.to_f
+          accrued_data = accrued.data.with_indifferent_access
+          if accrued_data[:accrued_interest][:total_accrued_interest_balance].to_f == 0.0
+            accrued_balance = accrued_data[:accrued_interest][:total_accrued_interest]
+            total_loan_balance += accrued_balance.to_f
+          end
         end
       end    
       
@@ -162,9 +166,9 @@ module Members
 
    
       if total_equity_balance.round(2).to_f >= total_loan_balance.round(2).to_f
-        #matured_Loans
-        if @matured_loans.any?
-          @matured_loans.each do |ml|
+        #active_loans
+        if @active_loans.any?
+          @active_loans.each do |ml|
             loans = Loan.find(ml.id)
             loan_data = loans.data.with_indifferent_access
             loan_data[:is_tapal] = true
@@ -244,10 +248,12 @@ module Members
           @accrued_loan.each do |ac|
             loans = Loan.find(ac.id)
             loan_data = loans.data.with_indifferent_access
-            loan_data[:accrued_interest]["status"] = "paid"
-            loan_data[:accrued_interest]["total_accrued_interest_balance"] = loan_data[:accrued_interest]["total_accrued_interest"]
-            loan_data[:is_tapal] = true
-            loans.update(data: loan_data)
+            if loan_data[:accrued_interest][:total_accrued_interest_balance].to_f == 0.0
+              loan_data[:accrued_interest]["status"] = "paid"
+              loan_data[:accrued_interest]["total_accrued_interest_balance"] = loan_data[:accrued_interest]["total_accrued_interest"]
+              loan_data[:is_tapal] = true
+              loans.update!(data: loan_data)
+            end
           end
         end
       end
