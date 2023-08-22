@@ -10,7 +10,7 @@ module Members
       @center = @member.center
       @active_loans = Loan.active.where(member_id: @member.id)
       @loan         =  Loan.where(member_id: @member.id)
-      @accrued_loan = Loan.where("member_id = ? and data->>'accrued_interest' != ?","#{@member.id}","nil")
+      @accrued_loan = Loan.where("member_id = ? and data->>'accrued_interest' != ? ","#{@member.id}","nil")
       @loan_product_settings = Settings.loan_products
       @current_date = ::Utils::GetCurrentDate.new(
                           config: {
@@ -242,7 +242,7 @@ module Members
 
       deposit_amount  = deposit_amount - @closing_fee
 
-      #matured_loans
+      #active_loans
       if @active_loans.present?
         @active_loans.each do |al|
           loan_product_id = al.loan_product_id
@@ -287,21 +287,24 @@ module Members
       #accrued interest
       if @accrued_loan.any?
         @accrued_loan.each do |ac|
-          accrued_total_balance = ac.data.with_indifferent_access[:accrued_interest][:total_accrued_interest].to_f
-          loan_product = LoanProduct.find(ac.loan_product_id)
-          
-          @loan_product_settings.each do |lp|
-            if lp[:loan_product_id] == loan_product.id
-              interest_receivable_accounting_code_id = AccountingCode.find(lp[:interest_receivable_accounting_code_id])
-              if deposit_amount > 0
+          accrued_data = ac.data.with_indifferent_access
+          if accrued_data[:accrued_interest]["total_accrued_interest_balance"].to_f == 0.0 
+            accrued_total_balance = accrued_data[:accrued_interest][:total_accrued_interest].to_f
+            loan_product = LoanProduct.find(ac.loan_product_id)
+            
+            @loan_product_settings.each do |lp|
+              if lp[:loan_product_id] == loan_product.id
+                interest_receivable_accounting_code_id = AccountingCode.find(lp[:interest_receivable_accounting_code_id])
+                if deposit_amount > 0
 
-                journal_entries << {
-                  accounting_code_id: interest_receivable_accounting_code_id.id,
-                  code: interest_receivable_accounting_code_id.code,
-                  name: interest_receivable_accounting_code_id.name,
-                  amount: accrued_total_balance
-                }
-                deposit_amount -= accrued_total_balance
+                  journal_entries << {
+                    accounting_code_id: interest_receivable_accounting_code_id.id,
+                    code: interest_receivable_accounting_code_id.code,
+                    name: interest_receivable_accounting_code_id.name,
+                    amount: accrued_total_balance
+                  }
+                  deposit_amount -= accrued_total_balance
+                end
               end
             end
           end
