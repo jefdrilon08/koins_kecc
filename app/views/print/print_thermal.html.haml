@@ -66,7 +66,7 @@
   %br
   S.O: #{User.find(Center.find(@billing[:center]).user_id).full_name}
   %br
-  %strong COLLECTION REPORT
+  
   %br
   %br
   %table.table.table-bordered.table-sm
@@ -86,107 +86,205 @@
         %th.text-center{width: "3%" }
           TOTAL
     %tbody
-      - @billing[:data][:records].each do |r|
-        
-        
-        - member_total_cp     = 0.00
-        - member_grand_total  = 0.00
-        - withdraw_payment    = 0.00
-        - total_payment       = 0.00
-        - total_fix_payment   = 0.00
-        - total_loan_payment  = 0.00
-        - savings             = 0.00
-        - liferf              = 0.00
-        - grand_total_liferf       = 0.00
+      -if @billing[:data][:special_report] == true
+        %h3
+          %strong Collection Report / Special Report
+          - @billing[:data][:records].each do |r|
+
+            - member_total_cp     = 0.00
+            - member_grand_total  = 0.00
+            - withdraw_payment    = 0.00
+            - total_payment       = 0.00
+            - total_fix_payment   = 0.00
+            - total_loan_payment  = 0.00
+            - savings             = 0.00
+            - liferf              = 0.00
+            - grand_total_liferf       = 0.00
 
 
-        
+            - if r[:total_collected] > 0
+              %tr
+                %td{style: "font-size: 14px"}
+                  /#{Member.find(r[:member][:id]).identification_number}
+                  - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
+                    *
+                  #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
+                - r[:records].each do |rr|
+                  - if rr[:record_type] == "WP"
+                    - member_grand_total += rr[:amount].to_f
+                    - withdraw_payment += rr[:amount]
+                    - grand_total_wp += withdraw_payment
+                    - grand_total_cp += member_total_cp
+                  - else
+                    - member_total_cp += rr[:amount].to_f
+                    - member_grand_total += rr[:amount].to_f
+                    - total_payment += rr[:amount].to_f
+
+                - r[:records].each do |tt|
+                  - if tt[:record_type] == "WP"
+                    - total_cash_collection_c =+ grand_total_cp
+                    - total_cash_collection_x =+ grand_total_wp
+                    - total_cash_collection =+ total_cash_collection_c -= total_cash_collection_x 
+
+                - r[:records].each do |xx|
+                  - if xx[:record_type] == "SAVINGS"
+                    - savings += xx[:amount].to_f
+                    - grand_total_savings += xx[:amount].to_f
+
+                - r[:records].each do |ss|
+                  - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
+                    - liferf += ss[:amount].to_f
+                    - grand_total_liferf += liferf
+                    - total_life_rf += ss[:amount].to_f
+
+                - r[:records].each do |cc|
+                  - if cc[:record_type] == "LOAN_PAYMENT"
+                    - total_loan_payment += cc[:amount].to_f
+                    - grand_total_loan_payment += cc[:amount].to_f      
+                %td.text-end{style: "font-size: 16px"}
+                  - if total_loan_payment.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(total_loan_payment.to_f.round(2),unit:'')}
+                %td.text-end{style: "font-size: 16px"}
+                  - if savings.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(savings.to_f.round(2),unit: '')}
+                %td.text-end{style: "font-size: 16px"}
+                  - if liferf.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(liferf.to_f.round(2),unit: '')}
+                %td.text-end{style: "font-size: 16px"}
+                  - if withdraw_payment.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(withdraw_payment.to_f.round(2),unit: '')}
+                %td.text-end{style: "font-size: 16px"}
+                  - if total_payment.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(total_payment.to_f.round(2),unit: '')}
         %tr
-          %td{style: "font-size: 14px"}
-            /#{Member.find(r[:member][:id]).identification_number}
-            - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
-              *
-              %table(style="background-color: #f1f1f1;")
-            #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
-          - r[:records].each do |rr|
-            - if rr[:record_type] == "WP"
-              - member_grand_total += rr[:amount].to_f
-              - withdraw_payment += rr[:amount]
-              - grand_total_wp += withdraw_payment
-              - grand_total_cp += member_total_cp
-            - else
-              - member_total_cp += rr[:amount].to_f
-              - member_grand_total += rr[:amount].to_f
-              - total_payment += rr[:amount].to_f
+          %th
+            TOTAL
+          %th.text-end
+            #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
 
-          - r[:records].each do |tt|
-            - if tt[:record_type] == "WP"
-              - total_cash_collection_c =+ grand_total_cp
-              - total_cash_collection_x =+ grand_total_wp
-              - total_cash_collection =+ total_cash_collection_c -= total_cash_collection_x 
-
-          - r[:records].each do |xx|
-            - if xx[:record_type] == "SAVINGS"
-              - savings += xx[:amount].to_f
-              - grand_total_savings += xx[:amount].to_f
-
-          - r[:records].each do |ss|
-            - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
-              - liferf += ss[:amount].to_f
-              - grand_total_liferf += liferf
-              - total_life_rf += ss[:amount].to_f
-
-          - r[:records].each do |cc|
-            - if cc[:record_type] == "LOAN_PAYMENT"
-              - total_loan_payment += cc[:amount].to_f
-              - grand_total_loan_payment += cc[:amount].to_f
-
-              
+      -else @billing[:data][:special_report] == nil
+        %h3
+          %strong COLLECTION REPORT
+          - @billing[:data][:records].each do |r|
             
+            
+            - member_total_cp     = 0.00
+            - member_grand_total  = 0.00
+            - withdraw_payment    = 0.00
+            - total_payment       = 0.00
+            - total_fix_payment   = 0.00
+            - total_loan_payment  = 0.00
+            - savings             = 0.00
+            - liferf              = 0.00
+            - grand_total_liferf       = 0.00
 
-          %td.text-end{style: "font-size: 16px"}
-            - if total_loan_payment.to_f == 0
-              - x = " - "
-              #{x}
-            - else
-              #{number_to_currency(total_loan_payment.to_f.round(2),unit:'')}
-          %td.text-end{style: "font-size: 16px"}
-            - if savings.to_f == 0
-              - x = " - "
-              #{x}
-            - else
-              #{number_to_currency(savings.to_f.round(2),unit: '')}
-          %td.text-end{style: "font-size: 16px"}
-            - if liferf.to_f == 0
-              - x = " - "
-              #{x}
-            - else
-              #{number_to_currency(liferf.to_f.round(2),unit: '')}
-          %td.text-end{style: "font-size: 16px"}
-            - if withdraw_payment.to_f == 0
-              - x = " - "
-              #{x}
-            - else
-              #{number_to_currency(withdraw_payment.to_f.round(2),unit: '')}
-          %td.text-end{style: "font-size: 16px"}
-            - if total_payment.to_f == 0
-              - x = " - "
-              #{x}
-            - else
-              #{number_to_currency(total_payment.to_f.round(2),unit: '')}
-    %tr
-      %th
-        TOTAL
-      %th.text-end
-        #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
-      %th.text-end
-        #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
-      %th.text-end
-        #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
-      %th.text-end
-        #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
-      %th.text-end
-        #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
+
+            
+            %tr
+              %td{style: "font-size: 14px"}
+                /#{Member.find(r[:member][:id]).identification_number}
+                - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
+                  *
+                  %table(style="background-color: #f1f1f1;")
+                #{r[:member][:last_name]}, #{r[:member][:first_name][0]}
+              - r[:records].each do |rr|
+                - if rr[:record_type] == "WP"
+                  - member_grand_total += rr[:amount].to_f
+                  - withdraw_payment += rr[:amount]
+                  - grand_total_wp += withdraw_payment
+                  - grand_total_cp += member_total_cp
+                - else
+                  - member_total_cp += rr[:amount].to_f
+                  - member_grand_total += rr[:amount].to_f
+                  - total_payment += rr[:amount].to_f
+
+              - r[:records].each do |tt|
+                - if tt[:record_type] == "WP"
+                  - total_cash_collection_c =+ grand_total_cp
+                  - total_cash_collection_x =+ grand_total_wp
+                  - total_cash_collection =+ total_cash_collection_c -= total_cash_collection_x 
+
+              - r[:records].each do |xx|
+                - if xx[:record_type] == "SAVINGS"
+                  - savings += xx[:amount].to_f
+                  - grand_total_savings += xx[:amount].to_f
+
+              - r[:records].each do |ss|
+                - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
+                  - liferf += ss[:amount].to_f
+                  - grand_total_liferf += liferf
+                  - total_life_rf += ss[:amount].to_f
+
+              - r[:records].each do |cc|
+                - if cc[:record_type] == "LOAN_PAYMENT"
+                  - total_loan_payment += cc[:amount].to_f
+                  - grand_total_loan_payment += cc[:amount].to_f      
+              %td.text-end{style: "font-size: 16px"}
+                - if total_loan_payment.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(total_loan_payment.to_f.round(2),unit:'')}
+              %td.text-end{style: "font-size: 16px"}
+                - if savings.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(savings.to_f.round(2),unit: '')}
+              %td.text-end{style: "font-size: 16px"}
+                - if liferf.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(liferf.to_f.round(2),unit: '')}
+              %td.text-end{style: "font-size: 16px"}
+                - if withdraw_payment.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(withdraw_payment.to_f.round(2),unit: '')}
+              %td.text-end{style: "font-size: 16px"}
+                - if total_payment.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(total_payment.to_f.round(2),unit: '')}
+        %tr
+          %th
+            TOTAL
+          %th.text-end
+            #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
 .row
 .col
   Grand Total:

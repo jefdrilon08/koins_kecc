@@ -12,19 +12,28 @@ module Billings
       @records  = @data[:records]
     end
 
+    def special_report!  
+
+      @data[:special_report] = true
+      @billing.update(data:@data)   
+    end
+
     def execute!
+     
       @records.each_with_index do |r, i|
         r[:records].each_with_index do |o, ii|
           if o[:enabled] and o[:amount].to_f.round(2) > 0.00
             #o[:amount]  = 0.00
             @records[i][:records][ii][:amount] = 0.00
           end
+
         end
       end
 
       @data[:records] = @records
-
+      special_report!
       recompute_totals!
+      
 
       # Update accounting_entry
       @data[:accounting_entry]  = ::Billings::BuildAccountingEntry.new(

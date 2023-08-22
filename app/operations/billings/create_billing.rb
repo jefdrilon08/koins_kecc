@@ -48,6 +48,8 @@ module Billings
 #      end
 
       @data = {
+        special_report:nil,
+        print_count:0,
         or_number: "",
         ar_number: "",
         records: [],

@@ -37,6 +37,9 @@ var $btnConfirmZeroOut;
 var $btnExcel;
 var $modalZeroOut;
 
+var $checkSpecialReport;
+var $checksp = "";
+
 var $message;
 var templateErrorList;
 
@@ -98,6 +101,8 @@ var _cacheDom = function() {
   $btnZeroOut         = $("#btn-zero-out");
   $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
 
+  $checkSpecialReport = $("#check-special-report");
+
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
 };
@@ -107,8 +112,17 @@ var _bindEvents = function() {
     $modalZeroOut.show();
     $message.html("");
   });
+  $checkSpecialReport.on("click",function(){
+   $checksp = "true"
+   alert($checksp);
+  });
 
   $btnConfirmZeroOut.on("click", function() {
+    //alert($checkSpecialReport.val());
+    alert($special_report_val);
+     var $special_report_val = $checksp
+
+
     $message.html("Loading...");
 
     $btnConfirmZeroOut.prop("disabled", true);
@@ -119,6 +133,7 @@ var _bindEvents = function() {
       dataType: 'json',
       data: {
         id: id,
+        value_special_report: $checksp,
         authenticity_token: authenticityToken
       },
       success: function(response) {
