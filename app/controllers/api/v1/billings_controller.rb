@@ -226,7 +226,8 @@ module Api
 
         config  = {
           billing: billing,
-          user: current_user
+          user: current_user,
+          special_report: params[:value_special_report]
         }
 
         errors  = ::Billings::ValidateZeroOut.new(
@@ -246,8 +247,9 @@ module Api
             activity_type: "modification",
             data: {
               user_id: current_user.id,
-              billing_id: billing.id
-            }
+              billing_id: billing.id,
+              
+                          }
           )
 
           render json: { message: "ok" }
