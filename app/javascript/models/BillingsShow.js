@@ -114,12 +114,10 @@ var _bindEvents = function() {
   });
   $checkSpecialReport.on("click",function(){
    $checksp = "true"
-   alert($checksp);
   });
 
   $btnConfirmZeroOut.on("click", function() {
-    //alert($checkSpecialReport.val());
-    alert($special_report_val);
+
      var $special_report_val = $checksp
 
 
