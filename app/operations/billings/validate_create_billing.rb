@@ -38,6 +38,20 @@ module Billings
         }
       end
 
+      if @branch.present? and @center.present? and Billing.where(branch_id: @branch.id, center_id: @center.id, status: "save").count > 0
+        @errors[:messages] << {
+          key: "billing",
+          message: "Please resolve save billings for #{@center.to_s} / #{@branch.to_s} before creating a new billing."
+        }
+      end
+
+      if @branch.present? and @center.present? and Billing.where(branch_id: @branch.id, center_id: @center.id, status: "checked").count > 0
+        @errors[:messages] << {
+          key: "billing",
+          message: "Please resolve checked billings for #{@center.to_s} / #{@branch.to_s} before creating a new billing."
+        }
+      end
+
       if @collection_date.blank?
         @errors[:messages] << {
           key: "collection_date",
