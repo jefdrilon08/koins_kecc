@@ -108,9 +108,19 @@
             - savings             = 0.00
             - liferf              = 0.00
             - grand_total_liferf       = 0.00
+            - total_savings = 0.0
+            - total_insurance = 0.0
+            - total_wp = 0.0 
 
+            - r[:records].each do |rr|
+              - if rr[:record_type] == "SAVINGS"
+                - total_savings += rr[:amount].to_f
+              - elsif rr[:record_type] == "INSURANCE"
+                - total_insurance += rr[:amount].to_f
+              - elsif rr[:record_type] == "WP"
+                - total_wp += rr[:amount].to_f
 
-            - if r[:total_collected] > 0
+            - if r[:total_collected] > 0.0 || r[:total_loan_payment] > 0.0 or total_savings.to_f > 0.0 || total_insurance.to_f > 0.0 || total_wp.to_f > 0.0 
               %tr
                 %td{style: "font-size: 14px"}
                   /#{Member.find(r[:member][:id]).identification_number}
