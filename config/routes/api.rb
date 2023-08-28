@@ -1,4 +1,7 @@
 namespace :api do
+  # Onlint Applications
+  post "/register", to: "online_applications#register"
+
   # Repayment Rates
   get "/repayment_rates/:id", to: "repayment_rates#show"
 
