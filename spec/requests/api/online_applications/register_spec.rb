@@ -36,6 +36,21 @@ RSpec.describe 'Register' do
       end
 
       it 'returns error on duplicate application' do
+        online_application
+
+        invalid_params = {
+          email: online_application.email,
+          mobile_number: online_application.mobile_number
+        }
+
+        post api_url, params: invalid_params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['email']).to eq(['duplicate value'])
+        expect(payload['mobile_number']).to eq(['duplicate value'])
       end
 
       it 'returns error on invalid values' do

@@ -31,7 +31,8 @@ module OnlineApplications
       housing_num_months:,
       mothers_last_name:,
       mothers_first_name:,
-      previous_mfi_experience:, legal_dependents:,
+      previous_mfi_experience:, 
+      legal_dependents:,
       beneficiaries:
     )
       super()
@@ -130,12 +131,16 @@ module OnlineApplications
         @payload[:email] << "required"
       elsif (@email =~ URI::MailTo::EMAIL_REGEXP).nil?
         @payload[:email] << "invalid value"
+      elsif OnlineApplication.where(email: @email).count > 0 or Member.where(email: @email).count > 0
+        @payload[:email] << "duplicate value"
       end
 
       if @mobile_number.blank?
         @payload[:mobile_number] << "required"
       elsif not @mobile_number.match(/\+639[0-9]{9}$/)
         @payload[:mobile_number] << "invalid value"
+      elsif OnlineApplication.where(mobile_number: @mobile_number).count > 0 or Member.where(mobile_number: @mobile_number).count > 0
+        @payload[:mobile_number] << "duplicate value"
       end
 
       if @address_region.blank?

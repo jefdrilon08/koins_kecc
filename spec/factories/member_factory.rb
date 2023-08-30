@@ -32,16 +32,13 @@ FactoryBot.define do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
     middle_name { Faker::Name.middle_name }
-    gender { 'female' }
+    gender { 'Female' }
     date_of_birth { Date.today - 20.years }
     civil_status { 'single' }
     mobile_number { '+639181111111' }
-    identification_number { Faker::Internet.username }
     place_of_birth { 'Manila' }
-    status { 'pending' }
-    member_type { 'Regular' }
+    status { 'for_verification' }
     data { {} }
-    meta { {} }
     email { Faker::Internet.email }
     agreed_to_dp_terms { true }
     membership_type { FactoryBot.create(:membership_type) }
