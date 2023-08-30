@@ -1706,7 +1706,6 @@ namespace :adjust do
       
       if branch.member_counter != 0
         puts "Updating #{branch.name} ..."
-        
         result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                     SELECT DISTINCT ON(member_accounts.id)
                       member_accounts.id AS member_account_id,
@@ -1740,7 +1739,7 @@ namespace :adjust do
                     ORDER BY
                       member_accounts.id, account_transactions.transacted_at DESC
                   EOS
-
+        
         sets  = result.map{ |o|
                   member_id                 = o.fetch("member_id")
                   default_periodic_payment  = 15
@@ -1835,16 +1834,18 @@ namespace :adjust do
                   "('#{member_id}', '#{new_status}')"
                 }.join(",")
 
-        query = "
-          UPDATE members AS m SET
-            insurance_status = c.new_status
-          FROM (values
-            #{sets}
-          ) AS c(member_id, new_status)
-          WHERE c.member_id = m.id::text
-        "
+         if sets.present?
+          query = "
+            UPDATE members AS m SET
+              insurance_status = c.new_status
+            FROM (values
+              #{sets}
+            ) AS c(member_id, new_status)
+            WHERE c.member_id = m.id::text
+          "
 
-        ActiveRecord::Base.connection.execute(query)
+          ActiveRecord::Base.connection.execute(query)
+        end
 
         puts "Done."
       end
