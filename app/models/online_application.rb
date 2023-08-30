@@ -1,4 +1,10 @@
 class OnlineApplication < ApplicationRecord
+  GENDERS = [
+    "Male",
+    "Female",
+    "Others"
+  ]
+
   STATUSES = [
     "for_verification",
     "verified",

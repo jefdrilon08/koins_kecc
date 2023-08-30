@@ -4,6 +4,7 @@ RSpec.describe 'Register' do
   include ApiHelpers
 
   let (:api_url) { '/api/register' }
+  let (:online_application) { FactoryBot.create(:online_application) }
 
   describe "POST /register" do
     context 'invalid calls' do
@@ -32,6 +33,9 @@ RSpec.describe 'Register' do
         expect(payload['tin_number']).to eq(['required'])
         expect(payload['pag_ibig_number']).to eq(['required'])
         expect(payload['phil_health_number']).to eq(['required'])
+      end
+
+      it 'returns error on duplicate application' do
       end
 
       it 'returns error on invalid values' do

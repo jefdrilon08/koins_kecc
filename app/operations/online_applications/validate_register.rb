@@ -31,8 +31,7 @@ module OnlineApplications
       housing_num_months:,
       mothers_last_name:,
       mothers_first_name:,
-      previous_mfi_experience:,
-      legal_dependents:,
+      previous_mfi_experience:, legal_dependents:,
       beneficiaries:
     )
       super()
@@ -117,18 +116,26 @@ module OnlineApplications
 
       if @gender.blank?
         @payload[:gender] << "required"
+      elsif not OnlineApplication::GENDERS.include?(@gender)
+        @payload[:gender] << "invalid value"
       end
 
       if @date_of_birth.blank?
         @payload[:date_of_birth] << "required"
+      elsif not @date_of_birth.match(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)
+        @payload[:date_of_birth] << "invalid value"
       end
 
       if @email.blank?
         @payload[:email] << "required"
+      elsif (@email =~ URI::MailTo::EMAIL_REGEXP).nil?
+        @payload[:email] << "invalid value"
       end
 
       if @mobile_number.blank?
         @payload[:mobile_number] << "required"
+      elsif not @mobile_number.match(/\+639[0-9]{9}$/)
+        @payload[:mobile_number] << "invalid value"
       end
 
       if @address_region.blank?
@@ -165,18 +172,26 @@ module OnlineApplications
 
       if @sss_number.blank?
         @payload[:sss_number] << "required"
+      elsif not @sss_number.match(/^[0-9]{10}$/)
+        @payload[:sss_number] << "invalid value"
       end
 
       if @tin_number.blank?
         @payload[:tin_number] << "required"
+      elsif not @tin_number.match(/^\d{9,12}$/)
+        @payload[:tin_number] << "invalid value"
       end
 
       if @pag_ibig_number.blank?
         @payload[:pag_ibig_number] << "required"
+      elsif not @pag_ibig_number.match(/^d{12}/)
+        @payload[:pag_ibig_number] << "invalid value"
       end
 
       if @phil_health_number.blank?
         @payload[:phil_health_number] << "required"
+      elsif not @phil_health_number.match(/^\d{12}$/)
+        @payload[:phil_health_number] << "invalid value"
       end
 
       count_errors!

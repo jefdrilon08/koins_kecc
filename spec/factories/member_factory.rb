@@ -1,4 +1,9 @@
 FactoryBot.define do
+  factory :membership_arrangement do
+    name { "KA-TEST" }
+    data { { } }
+  end
+
   factory :membership_type do
     name { "Regular" }
   end
