@@ -21,7 +21,7 @@ module Members
       a = []
       Loan.where(member_id: @member.id).each do |g|
         if g.data.with_indifferent_access[:accrued_interest].present?
-          if g.data.with_indifferent_access[:accrued_interest]["status"] != "paid"
+          if g.data.with_indifferent_access[:accrued_interest]["status"] != "paid" and g.data.with_indifferent_access[:accrued_interest]["status"] != "remove"
             a << g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest].to_f - g.data.with_indifferent_access[:accrued_interest][:total_accrued_interest_balance].to_f
           end
         end
