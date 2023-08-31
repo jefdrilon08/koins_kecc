@@ -5,6 +5,7 @@ import Select from 'react-select';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
 
+
 import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
 import {numberWithCommas} from '../../utils/helpers';
@@ -179,11 +180,11 @@ export default class ShowComponent extends React.Component {
 
       for(var i = 0; i < member_data.length; i++) {
         rows.push(
-          <tr key={"member_data-item-" + i}>
+          <tr key={"member_data-item-" + i} style={{width: "20px" }}>
             <td>
             {i+1}
             </td>
-            <td className="text-left">
+            <td className="text-left" style={{width: "250px" }}>
               <a href={"/members/" + member_data[i].id+"/display"} target='_blank' >
               {member_data[i].last_name + ", " + member_data[i].first_name + " " + member_data[i].middle_name} </a>
             </td>
@@ -204,38 +205,42 @@ export default class ShowComponent extends React.Component {
               {member_data[i].loan_status}
             </td>
             <td className="text-end">
-              {member_data[i].principal_balance}
+              {numberWithCommas(member_data[i].principal_balance)}
             </td>
             <td className="text-end">
-              {member_data[i].interest_balance}
+              {numberWithCommas(member_data[i].interest_balance)}
             </td>
             <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].psa_id} target='_blank'>
-              {member_data[i].psa_balance}</a>
+              {numberWithCommas(member_data[i].psa_balance)}</a>
             </td>
             <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].rsa_id} target='_blank'>
-              {member_data[i].rsa_balance}</a>
+              {numberWithCommas(member_data[i].rsa_balance)}</a>
+            </td>
+            <td className="text-end">
+              <a href={"/savings_accounts/" + member_data[i].mbs_id} target='_blank'>
+              {numberWithCommas(member_data[i].mbs_balance)}</a>
             </td>
             <td className="text-end">
               <a href={"/savings_accounts/" + member_data[i].gk_id} target='_blank'>
-              {member_data[i].gk_balance}</a>
+              {numberWithCommas(member_data[i].gk_balance)}</a>
             </td>
             <td className="text-end">
               <a href={"/insurance_accounts/" + member_data[i].rf_id} target='_blank'>
-              {member_data[i].rf_balance}</a>
+              {numberWithCommas(member_data[i].rf_balance)}</a>
             </td>
             <td className="text-end">
-              <a href={"/insurance_accounts/" + member_data[i].lf_id} target='_blank'>
-              {member_data[i].lf_balance}</a>
+              <a href={"/insurance_accounts/" + member_data[i].eq_id} target='_blank'>
+              {numberWithCommas(member_data[i].eq_balance)}</a>
             </td>
             <td className="text-end">
               <a href={"/equity_accounts/" + member_data[i].cbu_id} target='_blank'>
-              {member_data[i].cbu_balance}</a>
+              {numberWithCommas(member_data[i].cbu_balance)}</a>
             </td>
             <td className="text-end">
               <a href={"/equity_accounts/" + member_data[i].equity_id} target='_blank'>
-              {member_data[i].equity_balance}</a>
+              {numberWithCommas(member_data[i].equity_balance)}</a>
             </td>
             <td className="text-center">
               {member_data[i].center['name']}
@@ -251,7 +256,7 @@ export default class ShowComponent extends React.Component {
  renderHeader() {
     var headers = [];
     headers.push(
-      <th key="num" className="text-center">
+      <th key="num" className="text-center" >
         
       </th>
     );
@@ -307,6 +312,11 @@ export default class ShowComponent extends React.Component {
       </th>
     );
     headers.push(
+      <th key="rsa-balance" className="text-center">
+       MBS Balance
+      </th>
+    );
+    headers.push(
       <th key="gk-balance" className="text-center">
        GK Bal
       </th>
@@ -318,7 +328,7 @@ export default class ShowComponent extends React.Component {
     );
     headers.push(
       <th key="lf-balance" className="text-center">
-       LF Bal
+       Equity Account Balance
       </th>
     );
     headers.push(
@@ -350,6 +360,7 @@ export default class ShowComponent extends React.Component {
       return  (
         <div>
         {this.renderFilter()}
+        <div className="tableWritoff">
           <table className="table table-lg table-bordered table-responsive">
             <thead>
             <tr>
@@ -360,6 +371,7 @@ export default class ShowComponent extends React.Component {
              {this.renderMembersData()}
             </tbody>
           </table>
+          </div>
         </div>
       );
     }

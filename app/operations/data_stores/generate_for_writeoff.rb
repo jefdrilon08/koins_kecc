@@ -37,14 +37,16 @@ module DataStores
                         loan_status: o.fetch("loan_status"),
                         rsa_id: o.fetch("kimpok_id"),
                         rsa_balance: o.fetch("kimpok").try(:round, 2),
+                        mbs_id: o.fetch("mbs_id"),
+                        mbs_balance: o.fetch("mbs_balance").try(:round, 2),
                         psa_id: o.fetch("psa_id"),
                         psa_balance: o.fetch("psa_balance").try(:round, 2),
                         gk_id: o.fetch("gk_id"),
                         gk_balance: o.fetch("gk_balance"),
                         rf_id: o.fetch("rf_id"),
                         rf_balance: o.fetch("rf_balance"),
-                        lf_id: o.fetch("lf_id"),
-                        lf_balance: o.fetch("lf_balance"),
+                        eq_id: o.fetch("eq_id"),
+                        eq_balance: o.fetch("eq_balance"),
                         cbu_id: o.fetch("cbu_id"),
                         cbu_balance: o.fetch("cbu").try(:round, 2),
                         equity_id: o.fetch("share_cap_id"),
@@ -76,10 +78,12 @@ module DataStores
                     loans.interest_balance as interest_balance,                
                     loans.maturity_date as maturity_date,
                     loans.status as loan_status,
-                    psa.id as psa_id,
-                    psa.balance as psa_balance,
+                    mbs.id as mbs_id,
+                    mbs.balance as mbs_balance,
                     savings_account.id as kimpok_id,
                     savings_account.balance as kimpok,
+                    psa.id as psa_id,
+                    psa.balance as psa_balance,
                     cbu_account.id as cbu_id,
                     cbu_account.balance as cbu,
                     equity_accounts.id as share_cap_id,
@@ -88,19 +92,20 @@ module DataStores
                     gk_account.balance as gk_balance,
                     rf_accounts.id as rf_id,
                     rf_accounts.balance as rf_balance,
-                    lf_accounts.id as lf_id,
-                    lf_accounts.balance as lf_balance,
+                    eq_accounts.id as eq_id,
+                    eq_accounts.balance as eq_balance,
                     centers.id as center_id, 
                     centers.name as center_name 
                     from loans as loans 
                     INNER JOIN members as members on members.id = loans.member_id 
+                    inner join member_accounts as mbs on mbs.member_id = members.id and mbs.account_subtype = 'Maintaining Balance Savings'
                     inner join member_accounts as psa on psa.member_id = members.id and psa.account_subtype = 'Personal Savings Account'
                     inner join member_accounts as savings_account on savings_account.member_id = members.id and savings_account.account_subtype = 'K-IMPOK'
                     inner join member_accounts as cbu_account on cbu_account.member_id = members.id and cbu_account.account_type = 'EQUITY' and cbu_account.account_subtype='CBU'
                     inner join member_accounts as equity_accounts on equity_accounts.member_id = members.id and equity_accounts.account_type = 'EQUITY' and equity_accounts.account_subtype='Share Capital'
                     inner join member_accounts as gk_account on gk_account.member_id = members.id and gk_account.account_type= 'SAVINGS' and gk_account.account_subtype='Golden K'
                     inner join member_accounts as rf_accounts on rf_accounts.member_id = members.id and rf_accounts.account_type= 'INSURANCE' and rf_accounts.account_subtype = 'Retirement Fund'
-                    inner join member_accounts as lf_accounts on lf_accounts.member_id = members.id and lf_accounts.account_type= 'INSURANCE' and lf_accounts.account_subtype = 'Life Insurance Fund'
+                    inner join member_accounts as eq_accounts on eq_accounts.member_id = members.id and eq_accounts.account_type= 'INSURANCE' and eq_accounts.account_subtype = 'Equity Value'
                     inner join centers on centers.id = members.center_id 
                     where Extract('year' from loans.maturity_date) <= (#{@year.to_i - @number_of_years.to_i} ) and
                     loans.status= 'active' and 
