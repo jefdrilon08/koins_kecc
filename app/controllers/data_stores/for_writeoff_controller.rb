@@ -9,6 +9,7 @@ module DataStores
 
 	  def index
       super
+      
       @subheader_items = [
         {
           text: "Data Store"

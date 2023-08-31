@@ -24,8 +24,9 @@ module Reports
             sheet.add_row ["TIN Number: #{Settings.company_tin_number}"] , style: @header_cells
             sheet.add_row ["#{@data[:branch]} - #{@data[:year]}"], style: @header_cells
             sheet.add_row []
-            sheet.add_row ["","MEMBERS","IDENTIFICATION NUMBER","CENTER","MEMBER STATUS","LOAN PRODUCT","MATURITY DATE","LOAN STATUS","PRINCIPAL BALANCE","INTEREST BALANCE","PSA BALANCE","RSA BALANCE","GK BALANCE","RF BALANCE","LF_BALANCE","SHARE CAPITAL BALANCE","CBU BALANCE"], style: @title_cells
+            sheet.add_row ["","UUID","MEMBERS","IDENTIFICATION_NUMBER","CENTER","MEMBER_STATUS","LOAN_PRODUCT","MATURITY_DATE","LOAN_STATUS","PRINCIPAL_BALANCE","INTEREST_BALANCE","PSA_BALANCE","RSA_BALANCE","MBS_BALANCE","GK_BALANCE","RF_BALANCE","EQUITY_BALANCE","SHARE_CAPITAL_BALANCE","CBU_BALANCE"], style: @title_cells
             records[:records].each_with_index do |value, index|
+              id            = value[:id]
               member_name   = value[:last_name] + " " + value[:first_name] +", "+value[:middle_name]
               member_id     = value[:member_id]
               member_center = value[:center]["name"]
@@ -37,12 +38,13 @@ module Reports
               interest_balance  = value[:interest_balance].to_f.round(2)
               personal_savings  = value[:psa_balance].to_f.round(2)
               rsa_balance       = value[:rsa_balance].to_f.round(2)
+              mbs_balance       = value[:mbs_balance].to_f.round(2)
               gk_balance        = value[:gk_balance].to_f.round(2)
               rf_balace         = value[:rf_balance].to_f.round(2)
-              lf_balance        = value[:lf_balance].to_f.round(2)
+              eq_balance        = value[:eq_balance].to_f.round(2)
               share_cap         = value[:equity_balance].to_f.round(2)
               cbu_balance       = value[:cbu_balance].to_f.round(2)
-              sheet.add_row ["#{index + 1}","#{member_name}","#{member_id}","#{member_center}","#{member_status}","#{member_loan}","#{maturity_date}","#{loan_status}","#{principal_balance}","#{interest_balance}","#{personal_savings}","#{rsa_balance}","#{gk_balance}","#{rf_balace}","#{lf_balance}","#{share_cap}","#{cbu_balance}"], style: @data_row
+              sheet.add_row ["#{index + 1}","#{id}","#{member_name}","#{member_id}","#{member_center}","#{member_status}","#{member_loan}","#{maturity_date}","#{loan_status}","#{principal_balance}","#{interest_balance}","#{personal_savings}","#{rsa_balance}","#{mbs_balance}","#{gk_balance}","#{rf_balace}","#{eq_balance}","#{share_cap}","#{cbu_balance}"], style: @data_row
             end
           end
         end

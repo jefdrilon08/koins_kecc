@@ -130,3 +130,45 @@ label {
 .headcol:before {
   content: 'Row ';
 }
+
+
+
+.tableWritoff {
+  overflow: auto;
+  height: 700px;
+  width: 100%;
+}
+
+.tableWritoff table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tableWritoff th,
+.tableWritoff td {
+  padding: 8px 16px;
+}
+.tableWritoff td:first-child,  
+.tableWritoff th:first-child {
+  position:sticky;
+  left:0;
+  z-index:1;
+  background-color:#f1f1f1;
+}
+.tableWritoff td:nth-child(2), 
+.tableWritoff th:nth-child(2)  { 
+  position:sticky;
+  left:50px;
+  z-index:1;
+  background-color:#f1f1f1;
+  }
+.tableWritoff th {
+  position: sticky;
+  top: 0;
+  background: #f1f1f1;
+  z-index:2
+}
+.tableWritoff th:first-child ,  
+.tableWritoff th:nth-child(2) {
+  z-index:3
+}
