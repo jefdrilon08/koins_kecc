@@ -288,7 +288,7 @@ module Members
       if @accrued_loan.any?
         @accrued_loan.each do |ac|
           accrued_data = ac.data.with_indifferent_access
-          if accrued_data[:accrued_interest]["total_accrued_interest_balance"].to_f == 0.0 
+          if accrued_data[:accrued_interest]["total_accrued_interest_balance"].to_f == 0.0 and accrued_data[:accrued_interest]["status"] != "remove" and  accrued_data[:accrued_interest]["status"] != "paid"
             accrued_total_balance = accrued_data[:accrued_interest][:total_accrued_interest].to_f
             loan_product = LoanProduct.find(ac.loan_product_id)
             
