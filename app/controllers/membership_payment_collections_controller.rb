@@ -86,7 +86,7 @@ class MembershipPaymentCollectionsController < ApplicationController
       }
     ]
 
-    if @membership_payment_collection.pending? && helpers.sbk_mis_bk_oas && current_user.roles.any?
+    if @membership_payment_collection.pending? && helpers.sbk_mis_bk_oas? && current_user.roles.any?
       @subheader_side_actions << {
         link: membership_payment_collection_path(@membership_payment_collection),
         class: "fa fa-times",
