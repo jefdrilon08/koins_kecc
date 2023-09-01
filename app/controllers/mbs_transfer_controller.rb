@@ -40,7 +40,7 @@ class MbsTransferController < DataStoreController
   
     @subheader_side_actions = []    
     if @data_store.status == 'pending'
-      if helpers.sbk_mis_bk_oas          
+      if helpers.sbk_mis_bk_oas?         
           @subheader_side_actions << {      
             id: "",
             link: "/mbs_transfer/#{@data_store.id}",
