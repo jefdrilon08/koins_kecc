@@ -20,6 +20,10 @@
 .btn-nav-square-md {
   @extend .btn, .btn-primary, .btn-square-md, .d-flex, .align-items-center, .justify-content-center, .mx-auto;
 }
+.navbar-expand-lg-extend{
+  padding-right: 16px;
+  padding-left: 16px;
+}
 
 .btn-square-md {
   max-width: 100% !important;

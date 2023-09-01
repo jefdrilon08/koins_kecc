@@ -78,19 +78,21 @@ class WithdrawalCollectionsController < ApplicationController
       }
     ]
 
-    if @withdrawal_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK"))
-      @subheader_side_actions << {
-        link: withdrawal_collection_path(@withdrawal_collection.id),
-        class: "fa fa-times",
-        data: { method: :delete, confirm: "Are you sure?" },
-        text: "Delete"
-      }
+    if @withdrawal_collection.pending? && helpers.sbk_bk_mis_user
 
       @subheader_side_actions << {
         link: "#",
         class: "fa fa-check",
         id: "btn-approve",
         text: "Approve"
+      }
+    end
+    if @withdrawal_collection.pending? && helpers.sbk_mis_bk_oas?
+        @subheader_side_actions << {
+        link: withdrawal_collection_path(@withdrawal_collection.id),
+        class: "fa fa-times",
+        data: { method: :delete, confirm: "Are you sure?" },
+        text: "Delete"
       }
     end
 

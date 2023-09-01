@@ -32,6 +32,10 @@ module ApplicationHelper
   def is_bk?
     current_user.roles.include?("BK")
   end
+
+  def sbk_mis_bk_oas?
+      sbk_mis_bk_oas = ["MIS", "SBK", "BK", "OAS"].include? current_user.roles.last
+  end
   
   def sbk_mis_user
     sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last
