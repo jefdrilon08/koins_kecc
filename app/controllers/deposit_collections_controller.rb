@@ -99,7 +99,7 @@ class DepositCollectionsController < ApplicationController
       }
     end
 
-    if @deposit_collection.pending? && (current_user.roles.include?("MIS") || current_user.roles.include?("BK") || current_user.roles.include?("SBK") || current_user.roles.include?("REMOTE-BK") || current_user.roles.include?("REMOTE-FM"))
+    if @deposit_collection.pending? && helpers.sbk_mis_bk_oas?
       @subheader_side_actions << {
         class: "fa fa-times",
         link: deposit_collection_path(@deposit_collection.id),
