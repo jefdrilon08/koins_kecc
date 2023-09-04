@@ -19,9 +19,13 @@ FactoryBot.define do
     civil_status { 'single' }
     mobile_number { '+639181111111' }
     identification_number { Faker::Internet.username }
+    username { identification_number }
     place_of_birth { 'Manila' }
     status { 'pending' }
     member_type { 'Regular' }
+    password { 'password' }
+    password_confirmation { 'password' }
+    encrypted_password { Member.new(password: password).encrypted_password }
     data { {} }
     meta { {} }
     email { Faker::Internet.email }
