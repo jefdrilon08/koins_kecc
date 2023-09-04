@@ -100,18 +100,11 @@ module Api
         recognition_date: recognition_date
       ).execute!
       if errors.any?
-        ender json: errors, status: 400
+        render json: errors, status: 400
       else
         data  = member.data.with_indifferent_access
           
           data[:recognition_date] = recognition_date
-          if member.pending? && member.insurance_pending?
-            status = "active"
-            insurance_status = "inforce"
-          else
-            status = member.status
-            insurance_status = member.status
-          end
           if member.identification_number.present?
             identification_number = member.identification_number
           else
@@ -123,15 +116,12 @@ module Api
           end
           member.update!(
             data: data,
-            status: status,
-            insurance_status: insurance_status,
             identification_number: identification_number,
             modifiable: nil
           )
         ::Members::UpdateRecognitionDate.new(
           member: member,
-          recognition_date: recognition_date,
-          change_by: current_user.full_name
+          recognition_date: recognition_date
         ).execute!
         render json: { id: member.id }
       end
