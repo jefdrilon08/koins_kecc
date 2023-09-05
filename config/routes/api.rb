@@ -706,6 +706,7 @@ namespace :api do
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
     get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
     get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
+    get "/reports/reclassified_report", to: "reports#reclassified_report  "
     #claims
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"

@@ -451,6 +451,26 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
   
+    def reclassified_report
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Claims Processing Time Report" }
+    ]
+  end
+
+  def reclassified_report_excel
+      # @start_date = params[:start_date]
+      # @end_date = params[:end_date]
+      @branch = params[:branch]
+
+    filename = "reclassified_report.xlsx"
+
+    excel = Reports::GenerateReclassifiedReport.new(branch: @branch).execute!
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
+
   def savings_insurance_transfer_reports
     @subheader_items = [
       { text: "Other Reports" },
