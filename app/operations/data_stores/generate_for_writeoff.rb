@@ -49,8 +49,8 @@ module DataStores
                         eq_balance: o.fetch("eq_balance"),
                         cbu_id: o.fetch("cbu_id"),
                         cbu_balance: o.fetch("cbu").try(:round, 2),
-                        equity_id: o.fetch("share_cap_id"),
-                        equity_balance: o.fetch("share_cap").try(:round, 2),
+                        sharecap_id: o.fetch("share_cap_id"),
+                        sharecap_balance: o.fetch("share_cap").try(:round, 2),
                         center: {
                            id: o.fetch("center_id"), 
                            name: o.fetch("center_name")
@@ -86,8 +86,8 @@ module DataStores
                     psa.balance as psa_balance,
                     cbu_account.id as cbu_id,
                     cbu_account.balance as cbu,
-                    equity_accounts.id as share_cap_id,
-                    equity_accounts.balance as share_cap,
+                    sharecap_accounts.id as share_cap_id,
+                    sharecap_accounts.balance as share_cap,
                     gk_account.id as gk_id,
                     gk_account.balance as gk_balance,
                     rf_accounts.id as rf_id,
@@ -102,7 +102,7 @@ module DataStores
                     inner join member_accounts as psa on psa.member_id = members.id and psa.account_subtype = 'Personal Savings Account'
                     inner join member_accounts as savings_account on savings_account.member_id = members.id and savings_account.account_subtype = 'K-IMPOK'
                     inner join member_accounts as cbu_account on cbu_account.member_id = members.id and cbu_account.account_type = 'EQUITY' and cbu_account.account_subtype='CBU'
-                    inner join member_accounts as equity_accounts on equity_accounts.member_id = members.id and equity_accounts.account_type = 'EQUITY' and equity_accounts.account_subtype='Share Capital'
+                    inner join member_accounts as sharecap_accounts on sharecap_accounts.member_id = members.id and sharecap_accounts.account_type = 'EQUITY' and sharecap_accounts.account_subtype='Share Capital'
                     inner join member_accounts as gk_account on gk_account.member_id = members.id and gk_account.account_type= 'SAVINGS' and gk_account.account_subtype='Golden K'
                     inner join member_accounts as rf_accounts on rf_accounts.member_id = members.id and rf_accounts.account_type= 'INSURANCE' and rf_accounts.account_subtype = 'Retirement Fund'
                     inner join member_accounts as eq_accounts on eq_accounts.member_id = members.id and eq_accounts.account_type= 'INSURANCE' and eq_accounts.account_subtype = 'Equity Value'

@@ -239,8 +239,8 @@ export default class ShowComponent extends React.Component {
               {numberWithCommas(member_data[i].cbu_balance)}</a>
             </td>
             <td className="text-end">
-              <a href={"/equity_accounts/" + member_data[i].equity_id} target='_blank'>
-              {numberWithCommas(member_data[i].equity_balance)}</a>
+              <a href={"/equity_accounts/" + member_data[i].sharecap_id} target='_blank'>
+              {numberWithCommas(member_data[i].sharecap_balance)}</a>
             </td>
             <td className="text-center">
               {member_data[i].center['name']}
