@@ -3,16 +3,21 @@ require 'rails_helper'
 RSpec.describe 'Members Login' do
   let(:member) { FactoryBot.create(:member) }
   let(:api_url) { '/api/members/login' }
+  let(:valid_member) {
+    FactoryBot.create(
+      :member,
+      status: 'active'
+    )
+  }
 
   describe "POST /api/members/login", type: :request do
     context 'invalid calls' do
       it 'returns error on no parameters passed' do
         post api_url
 
-        expect(response).to have_http_status(:unprocessable_entity)
-
         payload = JSON.parse(response.body)
 
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(payload['username']).to eq(['username required'])
         expect(payload['password']).to eq(['password required'])
       end
@@ -49,24 +54,20 @@ RSpec.describe 'Members Login' do
 
         payload = JSON.parse(response.body)
 
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(payload['password']).to eq(['invalid password'])
       end
     end
 
     context 'valid calls' do
-      valid_usernamme = 'test_member'
-      valid_password = 'test_password'
+      it 'returns success' do
+        valid_member.update!(status: 'active')
+        post api_url, params: { username: valid_member.username, password: valid_member.password }
 
-      valid_member = FactoryBot.create(
-        :member,
-        username: valid_username,
-        password: test_password,
-        password_confirmation: test_password
-      )
+        payload = JSON.parse(response.body)
 
-      post api_url, params: { username: valid_username, password: valid_password }
-
-      expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 end

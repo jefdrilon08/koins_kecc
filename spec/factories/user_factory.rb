@@ -9,5 +9,6 @@ FactoryBot.define do
     password { 'password' }
     password_confirmation { 'password' }
     encrypted_password { User.new(password: password).encrypted_password }
+    is_verified { true }
   end
 end

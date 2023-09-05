@@ -405,14 +405,14 @@ module Api
       password  = params[:password]
 
       cmd = ::Members::ValidateLogin.new(
-              username: username,
-              password: password
-            )
+        username: username,
+        password: password
+      )
 
       cmd.execute!
 
-      if cmd.errors.any?
-        render json: { errors: cmd.errors }, status: :unprocessable_entity
+      if cmd.invalid?
+        render json: cmd.errors, status: :unprocessable_entity
       else
         render json: { token: cmd.token, member: cmd.member.user_object }
       end

@@ -50,6 +50,7 @@ RSpec.describe 'Login' do
     context 'valid calls' do
       it 'successfully logs in' do
         post api_url, params: { username: valid_username, password: valid_password }
+        payload = JSON.parse(response.body)
 
         expect(response).to have_http_status(:ok)
       end

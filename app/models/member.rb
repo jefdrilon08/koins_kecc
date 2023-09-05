@@ -621,6 +621,18 @@ class Member < ApplicationRecord
       meta: self.meta
     }
   end
+
+  def user_object
+    {
+      id: id,
+      username: username,
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      full_name: full_name,
+      identification_number: identification_number
+    }
+  end
   
   def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)
     relation = self
