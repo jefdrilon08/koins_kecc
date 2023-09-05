@@ -400,24 +400,6 @@ module Api
       end
     end
 
-    def login
-      username  = params[:username]
-      password  = params[:password]
-
-      cmd = ::Members::ValidateLogin.new(
-        username: username,
-        password: password
-      )
-
-      cmd.execute!
-
-      if cmd.invalid?
-        render json: cmd.errors, status: :unprocessable_entity
-      else
-        render json: { token: cmd.token, member: cmd.member.user_object }
-      end
-    end
-
     def total_funds
       amount = @member.member_accounts.savings.sum(:balance).to_f
 

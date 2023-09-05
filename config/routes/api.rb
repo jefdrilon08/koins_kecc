@@ -40,7 +40,7 @@ namespace :api do
 
   # Members
   get "/members", to: "members#index"
-  post "/members/login", to: "members#login"
+  post "/members/login", to: "v3/members#login"
   post "/members/change_password", to: "members#change_password"
   get "/members/active_loans", to: "members#active_loans"
   get "/members/total_active_loan_balance", to: "members#total_active_loan_balance"
