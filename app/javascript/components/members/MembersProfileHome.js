@@ -39,13 +39,24 @@ export default function MembersProfileHome(props) {
                     </button>
                   )
                 }
-                return (
-                  <button class="btn-danger">
-                    <b>
-                      DORMANT    
-                    </b>
-                  </button>
-                )  
+                else if(props.member.insurance_status == 'dormant') {
+                  return (
+                    <button class="btn-danger">
+                      <b>
+                        DORMANT    
+                      </b>
+                    </button>
+                  )
+                }
+                else if(props.member.insurance_status == 'pending') {
+                  return (
+                    <button class="btn-light">
+                      <b>
+                        PENDING    
+                      </b>
+                    </button>
+                  )
+                }
               }    
             })()}
             <li className="list-group-item">

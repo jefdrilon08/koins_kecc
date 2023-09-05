@@ -8,7 +8,7 @@ module Members
 
     def execute!
       if !@recognition_date.present?
-        @errors << "Reinstatement date required!"
+        @errors << "Recognition_date Date required!"
       end
 
       @errors
