@@ -34,6 +34,7 @@ module Pages
           "Center", 
           "Length of Membership", 
           "Certificate Number", 
+          "Mobile Number", 
           "LIFE",
           "Coverage Date", 
           "LIFE Number of Weeks Due", 
@@ -60,7 +61,7 @@ module Pages
               @members = @members.where(insurance_status: @insurance_status)
             end
 
-            if @members.count > 0
+            if @members.count > 0 
               sheet.add_row []
               sheet.add_row [ center.name ], style: label_cell
             
@@ -129,8 +130,9 @@ module Pages
                       member.status,
                       member.insurance_status,
                       member.center.name,
-                      member.length_of_stay,
+                      member.length_of_stay_report,
                       member.identification_number,
+                      member.mobile_number,
                       lif_account,
                       lif_coverage.try(:to_date).strftime("%b %d, %Y"),
                       lif_num_weeks_past_due,
@@ -144,7 +146,7 @@ module Pages
                       member.try(:date_of_birth).try(:to_date).strftime("%b %d, %Y"),
                       member.age,
                       member.member_type
-                      ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
+                      ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
                   else
                     sheet.add_row [
                       member.full_name,
@@ -152,8 +154,9 @@ module Pages
                       member.status,
                       member.insurance_status,
                       member.center.name,
-                      member.length_of_stay,
+                      member.length_of_stay_report,
                       member.identification_number,
+                      member.mobile_number,
                       lif_account,
                       lif_coverage.try(:to_date).strftime("%b %d, %Y"),
                       lif_num_weeks_past_due,
@@ -167,7 +170,7 @@ module Pages
                       member.try(:date_of_birth).try(:to_date).strftime("%b %d, %Y"),
                       member.age,
                       member.member_type
-                    ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
+                    ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
                   end  
                 end
               end
