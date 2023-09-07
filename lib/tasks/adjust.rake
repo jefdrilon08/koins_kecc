@@ -1786,6 +1786,10 @@ namespace :adjust do
                         new_status = "resigned"  
                       end
 
+                      if status == "archived" && current_balance == 0.0
+                        new_status = "transferred"  
+                      end
+
                       if current_balance == 0.0 && insurance_date_resigned.present?
                         new_status = "resigned"
                       end
@@ -1824,6 +1828,10 @@ namespace :adjust do
                         new_status = "inforce"
                       end
                     end
+                  
+                  elsif status == "archived" && current_balance == 0.0
+                    new_status = "transferred" 
+  
                   else
                     new_status = "pending"
                   end
