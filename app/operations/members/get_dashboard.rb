@@ -6,13 +6,13 @@ module Members
       @member = member
 
       @payload = {
-        available_balance: 0.00
+        total_funds: 0.00
       }
     end
 
     def execute!
       # Savings
-      @payload[:available_balance] = @member.member_accounts.sum(:balance).to_f
+      @payload[:total_funds] = @member.member_accounts.sum(:balance).to_f
     end
   end
 end
