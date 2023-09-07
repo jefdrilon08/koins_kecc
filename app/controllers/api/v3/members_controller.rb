@@ -1,8 +1,20 @@
 module Api
   module V3
     class MembersController < ::Api::V3::ApplicationController
-      before_action :authenticate_user!, except: [:login]
-      before_action :authorize_mis!, except: [:login]
+      before_action :authenticate_user!, except: [:login, :dashboard]
+      before_action :authorize_mis!, except: [:login, :dashboard]
+      before_action :authenticate_member!, only: [:dashboard]
+      before_action :authorize_active_member!, only: [:dashboard]
+
+      def dashboard
+        cmd = ::Members::GetDashboard.new(
+          member: @current_member
+        )
+
+        cmd.execute!
+
+        render json: cmd.payload
+      end
 
       def login
         username  = params[:username]

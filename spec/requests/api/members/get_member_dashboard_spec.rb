@@ -5,7 +5,7 @@ RSpec.describe 'Get Member Dashboard Info' do
 
   let (:member) { FactoryBot.create(:member, status: 'active') }
   let (:invalid_member) { FactoryBot.create(:member) }
-  let (:api_url) { "/api/members/dashboard" }
+  let (:api_url) { "/api/v3/members/dashboard" }
   let (:valid_member_headers) { build_jwt_header(member.generate_jwt) }
   let (:invalid_member_headers) { build_jwt_header(invalid_member.generate_jwt) }
 
@@ -26,6 +26,7 @@ RSpec.describe 'Get Member Dashboard Info' do
 
     context 'valid calls' do
       it 'succeeds to return dashboard data' do
+        member.update!(status: 'active')
         get "#{api_url}", headers: valid_member_headers
 
         expect(response).to have_http_status(:ok)
