@@ -2,6 +2,7 @@ namespace :api do
   namespace :v3 do
     # Members
     get "/members/dashboard", to: "members#dashboard"
+    get "/members/savings", to: "members#savings"
 
     # User Management
     post "/users", to: "users#create"
