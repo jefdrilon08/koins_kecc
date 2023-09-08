@@ -23,6 +23,7 @@ export default class BillingUITable extends React.Component {
       memberRecords: false,
       modalIsOpen: false,
       modalArIsOpen: false,
+      modalTotal: 0.00,
       isLoading: false,
       errors: false,
       grandTotal: 0.00,
@@ -622,6 +623,56 @@ export default class BillingUITable extends React.Component {
       </ul>
     )
   }
+  renderTotalModal(){
+    var memberRecords = this.state.memberRecords
+    var modalTotal = this.state.modalTotal;
+    const renderRecords = [];
+
+    Array.from(memberRecords).forEach((record, index)=>{
+      if (record.record_type == "LOAN_PAYMENT" && record.enabled == true) {
+        modalTotal = modalTotal + parseFloat(this.state.memberRecords[index].amount)
+          
+      }
+      else if ((record.record_type == "SAVINGS" && record.enabled == true)){
+        modalTotal = modalTotal + parseFloat(this.state.memberRecords[index].amount)
+        
+      }
+      else if ((record.record_type == "LOAN_PAYMENT" && record.enabled == true)) {
+        modalTotal = modalTotal + parseFloat(this.state.memberRecords[index].amount)
+        
+      }
+      else if ((record.record_type == "EQUITY" && record.enabled == true)) {
+        modalTotal = modalTotal + parseFloat(this.state.memberRecords[index].amount)
+        
+      }
+      else if ((record.record_type == "WP" && record.enabled == true)) {
+        modalTotal = modalTotal - parseFloat(this.state.memberRecords[index].amount)
+      }
+      else if ((record.record_type == "INSURANCE" && record.enabled == true)) {
+        modalTotal = modalTotal + parseFloat(this.state.memberRecords[index].amount)
+      }
+    })
+
+    renderRecords.push(
+      <div>
+        <label className='form-label'> TOTAL CASH PAYMENT </label>
+        <input 
+        type="number"
+        className='form-control'
+        disabled='true'
+        value={modalTotal}
+        />
+      </div>
+
+    )
+
+    return (
+      <ul>
+        {renderRecords}
+      </ul>
+    )
+
+  }
   renderWithdrawTransaction() {
     var memberRecords = this.state.memberRecords;
     const renderRecords = [];
@@ -751,7 +802,6 @@ export default class BillingUITable extends React.Component {
                     else return {...val, amount: text.target.value}
                   })
                 }))
-                
               }}
               
               />
@@ -1045,6 +1095,10 @@ export default class BillingUITable extends React.Component {
             <div className='mb-3'>
               <h6>Withdraw</h6>
               {this.renderWithdrawTransaction()}
+            </div>
+            <div className='mb-3'>
+              <h6>TOTAL</h6>
+              {this.renderTotalModal()}
             </div>
           </Modal.Body>
           <Modal.Footer>
