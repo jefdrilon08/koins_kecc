@@ -72,13 +72,23 @@ module Billings
                 end
                 #WP
                 if rec[:record_type] == "WP" and rec[:enabled] == true
-                   @member_account = MemberAccount.find(rec[:member_account_id])
-                    if @member_account.balance.to_f - rec[:amount].to_f < @member_account.maintaining_balance.to_f
-                        @errors[:messages] << {
-                            key: "member_accounts",
-                            message: "not enough funds to withdraw #{rec[:amount]}. Balance: #{@member_account.balance}. Maintaning balance: #{@member_account.maintaining_balance}"
-                        }
-                    elsif @member_account.blank?
+                   member_account = MemberAccount.find(rec[:member_account_id])
+                    # 
+                    if member_account.balance > member_account.maintaining_balance.to_f
+                        if (member_account.balance.to_f - rec[:amount].to_f) < member_account.maintaining_balance.to_f
+                            @errors[:messages] << {
+                                key: "member_accounts",
+                                message: "not enough funds to withdraw #{rec[:amount]}. Balance: #{member_account.balance}. Maintaning balance: #{member_account.maintaining_balance}"
+                            }
+                        end
+                    elsif member_account.balance.to_f < member_account.maintaining_balance.to_f
+                        if rec[:amount].to_f > member_account.balance
+                            @errors[:messages] << {
+                                key: "member_accounts",
+                                message: "not enough funds to withdraw #{rec[:amount]}. Balance: #{member_account.balance}."
+                            }
+                        end
+                    elsif member_account.blank?
                         @errors[:messages] << {
                             key: "member_accounts",
                             message: "Member Account not found"

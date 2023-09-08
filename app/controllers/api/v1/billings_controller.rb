@@ -322,7 +322,8 @@ module Api
         config = {
           billing: billing,
           current_member: current_member,
-          member_records: member_record
+          member_records: member_record,
+          current_user: current_user
         }
 
         errors = ::Billings::ValidateModifyMemberRecord.new(config: config).execute!
