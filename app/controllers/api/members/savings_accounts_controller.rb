@@ -1,22 +1,17 @@
 module Api
   module Members
-    class SavingsAccountsController < ::Api::FrontController
+    class SavingsAccountsController < ::Api::V3::ApplicationController
       before_action :authenticate_member!
+      before_action :authorize_active_member!
 
       def index
-        accounts  = @member.member_accounts.savings
+        cmd = ::Members::GetSavings.new(
+          member: @current_member
+        )
 
-        total_balance = accounts.sum(:balance).to_f
+        cmd.execute!
 
-        accounts  = accounts.map{ |o|
-                      {
-                        id: o.id,
-                        balance: o.balance.to_f,
-                        type: o.account_subtype
-                      }
-                    }
-
-        render json: { total_balance: total_balance, accounts: accounts }
+        render json: cmd.payload
       end
 
       def show
