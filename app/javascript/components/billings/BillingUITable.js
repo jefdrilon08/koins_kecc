@@ -540,12 +540,14 @@ export default class BillingUITable extends React.Component {
   }
 
   handleMemberClicked(member, memberRecords) {
-
-    this.setState({
-      modalArIsOpen: true,
-      currentMember: member,
-      memberRecords: memberRecords
-    });
+    var status = this.props.data.status;
+    if (status == "pending"){
+      this.setState({
+        modalArIsOpen: true,
+        currentMember: member,
+        memberRecords: memberRecords
+      });
+    }
 
   }
 
