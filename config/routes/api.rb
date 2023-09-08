@@ -44,12 +44,12 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/reinstate", to: "members#reinstate"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
+  post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"  
   post "/members/is_reclassified", to: "members#is_reclassified"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
   post "/members/form_make_payments", to: "members#form_make_payments"
-
 
   # Messages
   post "/messages", to: "messages#create"
@@ -295,6 +295,7 @@ namespace :api do
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
+    post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
     post "/members/is_reclassified", to: "members#is_reclassified"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"

@@ -1,6 +1,6 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date, :is_reclassified]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date, :is_reclassified, :claims_copy_pdf]
     before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date, :is_reclassified]
 
     def save
@@ -125,6 +125,13 @@ module Api
         ).execute!
         render json: { id: member.id }
       end
+    end
+
+    def claims_copy_pdf
+      @member             = Member.find(params[:id])
+      @date_of_death      = params[:date_of_death]
+
+      session[:date_of_death] = @date_of_death
     end
 
     def is_reclassified

@@ -15,9 +15,12 @@ export default function MembersProfileActions(props) {
   const [isModalReinstateOpen, setModalReinstateOpen]                           = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
   const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
+  const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
+
   const [dateReinstated, setDateReinstated]                                     = useState('');
   const [dateStopped, setDateStopped]                                           = useState('');
   const [dateRecognition, setDateRecognition]                                   = useState("");
+  const [dateOfDeath, setDateOfDeath]                                           = useState("");
   const [reClassified, setreClassified]                                         = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
   const [makePayment, setMakePayment]                                           = useState('');
@@ -87,6 +90,35 @@ export default function MembersProfileActions(props) {
       console.log(res);
       alert("Successfully Update Recognition Date");
       window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
+  const handleDateofDeath = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      date_of_death: dateOfDeath
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/claims_copy_pdf',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Generating Claims");
+      headers;
+      window.location.href="/members/" + props.memberId + "/claims_copy_pdf/";
     }).catch((error) => {
       console.log(error.response);
       setErrors(error.response.data.errors);
@@ -470,6 +502,52 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalRecognitonDateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={isModalClaimsCopyPDFOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Claim Copy PDF
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+                Date of Death
+              </label>
+              <input
+                className="form-control"
+                value={dateOfDeath}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateOfDeath(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleDateofDeath();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalClaimsCopyPDFOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -911,6 +989,29 @@ export default function MembersProfileActions(props) {
                   }}
                   >
                 Reclassified
+              </button>
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <hr/>
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Claims Copy PDF
+            </strong>
+            <p>
+              Claims Copy PDF
+            </p>
+              <button
+                className="btn btn-primary"
+                  onClick={() => {
+                    setModalClaimsCopyPDFOpen(true)
+                  }}
+                  >
+                Claims Copy PDF
               </button>
           </div>
         </div>

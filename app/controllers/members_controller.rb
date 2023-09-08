@@ -113,6 +113,28 @@ class MembersController < ApplicationController
         end
       end
   end
+
+  def claims_copy_pdf
+    @member = Member.find(params[:id])
+    @member_id = @member[:id]  
+    @insurance_account = MemberAccount.where(member_id: @member_id)
+    @lif = "Life Insurance Fund"
+    @lif_insurance_account = MemberAccount.where(account_subtype: @lif, member_id: @member_id).first
+    @rf = "Retirement Fund"
+    @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member_id).first
+    @date_of_death = session[:date_of_death].to_date
+    
+    config = {
+      member: @member,
+      lif_insurance_account: @lif_insurance_account,
+      rf_insurance_account: @rf_insurance_account,
+      date_of_death: @date_of_death
+    }
+
+    @payment_meta = Members::GenerateInsuranceAccountDetailsForLifAndRf.new(
+      config: config
+    ).execute!
+  end
   
   def member_registry_excel
 
