@@ -306,17 +306,35 @@ module Api
       def modify_member_record
         billing         = Billing.find(params[:id])
         current_member  = params[:current_member]
+        member_records  = params[:member_records]
+       
+        member_record = member_records.values.map do |items| 
+          items[:amount]= items[:amount].to_f
+          if items[:enabled] == "true"
+            items[:enabled] = true
+          elsif items[:enabled] == "false"
+            items[:enabled] = false
+          end
+         items
+        end
 
-        cmd = ::Billings::ModifyMemberRecord.new(
+
+        config = {
           billing: billing,
-          current_member: current_member
-        )
+          current_member: current_member,
+          member_records: member_record
+        }
 
-        cmd.execute!
+        errors = ::Billings::ValidateModifyMemberRecord.new(config: config).execute!
+        
+        if errors[:messages].any?
+          render json: {errors: errors}, status: 400
+        else
+          billing = ::Billings::ModifyMemberRecord.new(config: config).execute!
+          render json: billing
+        end
 
-        billing = cmd.billing
-
-        render json: billing
+        
       end
 
       def modify_transaction_record
