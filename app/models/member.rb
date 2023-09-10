@@ -376,7 +376,10 @@ class Member < ApplicationRecord
 
   def load_defaults
     if self.new_record?
-      self.status = "pending"
+      if self.status.blank?
+        self.status = "pending"
+      end
+
       self.insurance_status = "pending"
     
       if self.data.with_indifferent_access[:recognition_date].present?

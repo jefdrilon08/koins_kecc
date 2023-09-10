@@ -3,6 +3,20 @@ module Api
     class SavingsAccountsController < ::Api::V3::ApplicationController
       before_action :authenticate_member!
       before_action :authorize_active_member!
+      before_action :load_account!, only: [:show]
+
+      def load_account!
+        @savings_account = MemberAccount.find_by_id_and_account_type(
+          params[:id],
+          "SAVINGS"
+        )
+
+        if @savings_account.blank?
+          render json: { message: 'not found' }, status: :not_found
+        elsif @savings_account.member_id != @current_member.id
+          render json: { message: 'unauthorized' }, status: :unauthorized
+        end
+      end
 
       def index
         cmd = ::Members::GetSavings.new(
@@ -15,23 +29,13 @@ module Api
       end
 
       def show
-        id = params[:id]
+        cmd = ::Members::BuildSavingsAccount.new(
+          savings_account: @savings_account
+        )
 
-        if id.blank?
-          render json: { errors: ["id required"] }, status: :unprocessable_entity
-        else
-          savings_account = MemberAccount.find_by_id_and_member_id_and_account_type(id, @member.id, "SAVINGS")
+        cmd.execute!
 
-          if savings_account.blank?
-            render json: { errors: ["insurance account not found"] }, status: :unprocessable_entity
-          else
-            cmd = ::Members::BuildSavingsAccount.new(savings_account: savings_account)
-
-            cmd.execute!
-
-            render json: cmd.data
-          end
-        end
+        render json: cmd.data
       end
 
       def more_payments
