@@ -1681,16 +1681,7 @@ namespace :adjust do
 
   task :update_insurance_status => :environment do
     
-    # live code
     current_date = Date.today
-    
-    # for 1st reporting purposes
-    # @start_date = Date.today.beginning_of_year
-    # current_date = @start_date.end_of_quarter
-
-    # for 2nd and 3rd reporting purposes
-    # @start_date = Date.today.beginning_of_year
-    # current_date = Date.today.end_of_quarter
 
     if ENV['CURRENT_DATE'].present?
       current_date = ENV['CURRENT_DATE'].to_date
@@ -1831,7 +1822,10 @@ namespace :adjust do
                   
                   elsif status == "archived" && current_balance == 0.0
                     new_status = "transferred" 
-  
+                  
+                  elsif status == "resigned" && current_balance == 0.0
+                    new_status = "resigned"  
+
                   else
                     new_status = "pending"
                   end
