@@ -1,0 +1,41 @@
+%table.table.table-sm.table-hover.table-bordered
+  %thead
+    %tr
+      %th
+        Branch
+      %th
+        Center
+      %th
+        Date Initialized
+      %th.text-center
+        Status
+      %th.text-center
+        Actions
+    %tbody
+      - @accrued_interest.each do |o|
+        %tr
+          %td
+            #{Branch.find(o.branch_id).name}
+          %td
+            #{Center.find(o.center_id).name}
+          %td
+            #{o.collection_date}
+          %td
+            - if @status["pending"]
+              .badge.bg-danger
+                Pending
+            - elsif @status["approved"]
+              .badge.bg-success
+                Approved
+            - elsif @status["processing"]
+              .badge.badge-info
+                Processing
+            - elsif @status["save"]
+              .badge.badge-secondary
+                Save
+            - elsif @status["checked"]
+              .badge.badge-secondary
+                Checked
+          %td
+            = link_to "accrued_payment_collections/#{o.id}" , target: "_blank" , class: 'btn btn-primary' do
+              .bi.bi-search
