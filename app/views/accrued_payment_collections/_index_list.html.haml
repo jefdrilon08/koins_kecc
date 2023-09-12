@@ -21,21 +21,22 @@
           %td
             #{o.collection_date}
           %td
-            - if @status["pending"]
+            - if o[:status] == "processing"
               .badge.bg-danger
                 Pending
-            - elsif @status["approved"]
-              .badge.bg-success
-                Approved
-            - elsif @status["processing"]
-              .badge.badge-info
-                Processing
-            - elsif @status["save"]
-              .badge.badge-secondary
-                Save
-            - elsif @status["checked"]
-              .badge.badge-secondary
-                Checked
+            - elsif o[:status] == "done"
+              .badge.badge-success
+                Done
+            - elsif o[:status] == "pending"
+              .badge.badge-danger
+                pending
+            - elsif o[:status] == "approved"
+              .badge.badge-success
+                approved
+            - elsif o[:status] == "error"
+              .badge.badge-danger
+                Error
+            
           %td
             = link_to "accrued_payment_collections/#{o.id}" , target: "_blank" , class: 'btn btn-primary' do
               .bi.bi-search
