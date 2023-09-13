@@ -16,16 +16,6 @@ module Api
         render json: cmd.payload
       end
 
-      def savings
-        cmd = ::Members::GetSavings.new(
-          member: @current_member
-        )
-
-        cmd.execute!
-
-        render json: cmd.payload
-      end
-
       def login
         username  = params[:username]
         password  = params[:password]
