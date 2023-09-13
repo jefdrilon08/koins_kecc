@@ -1,4 +1,4 @@
-module Members
+module MemberAccounts
   class BuildSavingsAccount
     attr_accessor :savings_account,
                   :data

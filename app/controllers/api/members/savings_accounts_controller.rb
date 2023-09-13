@@ -3,7 +3,7 @@ module Api
     class SavingsAccountsController < ::Api::V3::ApplicationController
       before_action :authenticate_member!
       before_action :authorize_active_member!
-      before_action :load_account!, only: [:show]
+      before_action :load_account!, only: [:show, :transactions]
 
       def load_account!
         @savings_account = MemberAccount.find_by_id_and_account_type(
@@ -29,7 +29,7 @@ module Api
       end
 
       def show
-        cmd = ::Members::BuildSavingsAccount.new(
+        cmd = ::MemberAccounts::BuildSavingsAccount.new(
           savings_account: @savings_account
         )
 
@@ -38,48 +38,18 @@ module Api
         render json: cmd.data
       end
 
-      def more_payments
-        id      = params[:id]
+      def transactions
         last_id = params[:last_id]
 
-        if id.blank?
-          render json: { errors: ["id required"] }, status: :unprocessable_entity
-        elsif last_id.blank?
-          render json: { errors: ["last_id required"] }, status: :unprocessable_entity
-        else
-          savings_account = MemberAccount.find_by_id_and_member_id_and_account_type(id, @member.id, "SAVINGS")
+        cmd = ::MemberAccounts::BuildTransactions.new(
+          member: @current_member,
+          member_account: @savings_account,
+          last_id: last_id
+        )
 
-          if savings_account.blank?
-            render json: { errors: ["insurance account not found"] }, status: :unprocessable_entity
-          else
-            last_transaction = AccountTransaction.find(last_id)
+        cmd.execute!
 
-            payments  = AccountTransaction.where(
-                          subsidiary_id: id
-                        ).where.not(
-                          id: last_id
-                        ).where(
-                          "DATE(transacted_at) <= ?",
-                          last_transaction.transacted_at.to_date
-                        ).order("transacted_at DESC, created_at DESC").limit(20).map{ |o|
-                          {
-                            id: o.id,
-                            amount: o.amount.to_f,
-                            transaction_type: o.transaction_type,
-                            transacted_at: o.transacted_at.strftime("%b %d, %Y"),
-                            is_interest: o.interest? ? "yes" : "no"
-                          }
-                        }
-
-            last_id = nil
-
-            if payments.last
-              last_id = payments.last[:id]
-            end
-
-            render json: { payments: payments, last_id: last_id }
-          end
-        end
+        render json: cmd.data
       end
     end
   end

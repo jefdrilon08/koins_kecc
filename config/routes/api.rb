@@ -104,6 +104,7 @@ namespace :api do
     # Savings
     get "/savings_accounts", to: "savings_accounts#index"
     get "/savings_accounts/:id", to: "savings_accounts#show"
+    get "/savings_accounts/:id/transactions", to: "savings_accounts#transactions"
     get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
    
     # Equities
