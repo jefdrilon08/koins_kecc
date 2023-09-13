@@ -99,13 +99,12 @@ namespace :api do
     # Insurance
     get "/insurance_accounts", to: "insurance_accounts#index"
     get "/insurance_accounts/:id", to: "insurance_accounts#show"
-    get "/insurance_accounts/:id/more_payments/:last_id", to: "insurance_accounts#more_payments"
+    get "/insurance_accounts/:id/transactions", to: "insurance_accounts#transactions"
    
     # Savings
     get "/savings_accounts", to: "savings_accounts#index"
     get "/savings_accounts/:id", to: "savings_accounts#show"
     get "/savings_accounts/:id/transactions", to: "savings_accounts#transactions"
-    get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
    
     # Equities
     get "/equities_accounts", to: "equities_accounts#index"

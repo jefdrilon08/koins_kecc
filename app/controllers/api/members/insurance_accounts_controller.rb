@@ -1,85 +1,55 @@
 module Api
   module Members
-    class InsuranceAccountsController < ::Api::FrontController
+    class InsuranceAccountsController < ::Api::V3::ApplicationController
       before_action :authenticate_member!
+      before_action :authorize_active_member!
+      before_action :load_account!, only: [:show, :transactions]
+
+      def load_account!
+        @insurance_account = MemberAccount.find_by_id_and_account_type(
+          params[:id],
+          "INSURANCE"
+        )
+
+        if @insurance_account.blank?
+          render json: { message: 'not found' }, status: :not_found
+        elsif @insurance_account.member_id != @current_member.id
+          render json: { message: 'unauthorized' }, status: :unauthorized
+        end
+      end
 
       def index
-        accounts  = @member.member_accounts.insurance
+        cmd = ::Members::GetInsurance.new(
+          member: @current_member
+        )
 
-        total_balance = accounts.sum(:balance).to_f
+        cmd.execute!
 
-        accounts  = accounts.map{ |o|
-                      {
-                        id: o.id,
-                        balance: o.balance.to_f,
-                        type: o.account_subtype
-                      }
-                    }
-
-        render json: { total_balance: total_balance, accounts: accounts }
+        render json: cmd.payload
       end
 
       def show
-        id = params[:id]
+        cmd = ::Members::BuildInsuranceAccount.new(
+          insurance_account: @insurance_account
+        )
 
-        if id.blank?
-          render json: { errors: ["id required"] }, status: :unprocessable_entity
-        else
-          insurance_account = MemberAccount.find_by_id_and_member_id_and_account_type(id, @member.id, "INSURANCE")
+        cmd.execute!
 
-          if insurance_account.blank?
-            render json: { errors: ["insurance account not found"] }, status: :unprocessable_entity
-          else
-            cmd = ::Members::BuildInsuranceAccount.new(insurance_account: insurance_account)
-
-            cmd.execute!
-
-            render json: cmd.data
-          end
-        end
+        render json: cmd.data
       end
 
-      def more_payments
-        id      = params[:id]
+      def transactions
         last_id = params[:last_id]
 
-        if id.blank?
-          render json: { errors: ["id required"] }, status: :unprocessable_entity
-        elsif last_id.blank?
-          render json: { errors: ["last_id required"] }, status: :unprocessable_entity
-        else
-          insurance_account = MemberAccount.find_by_id_and_member_id_and_account_type(id, @member.id, "INSURANCE")
+        cmd = ::MemberAccounts::BuildTransactions.new(
+          member: @current_member,
+          member_account: @insurance_account,
+          last_id: last_id
+        )
 
-          if insurance_account.blank?
-            render json: { errors: ["insurance account not found"] }, status: :unprocessable_entity
-          else
-            last_transaction = AccountTransaction.find(last_id)
+        cmd.execute!
 
-            payments  = AccountTransaction.where(
-                          subsidiary_id: id
-                        ).where.not(
-                          id: last_id
-                        ).where(
-                          "DATE(transacted_at) <= ?",
-                          last_transaction.transacted_at.to_date
-                        ).order("transacted_at DESC, created_at DESC").limit(20).map{ |o|
-                          {
-                            id: o.id,
-                            amount: o.amount.to_f,
-                            transaction_type: o.transaction_type,
-                            transacted_at: o.transacted_at.strftime("%b %d, %Y")
-                          }
-                        }
-
-            last_id = nil
-
-            if payments.last
-              last_id = payments.last[:id]
-            end
-
-            render json: { payments: payments, last_id: last_id }
-          end
-        end
+        render json: cmd.data
       end
     end
   end
