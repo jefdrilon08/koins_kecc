@@ -107,9 +107,9 @@ namespace :api do
     get "/savings_accounts/:id/transactions", to: "savings_accounts#transactions"
    
     # Equities
-    get "/equities_accounts", to: "equities_accounts#index"
-    get "/equities_accounts/:id", to: "equities_accounts#show"
-    get "/equities_accounts/:id/more_payments/:last_id", to: "equities_accounts#more_payments"
+    get "/equity_accounts", to: "equity_accounts#index"
+    get "/equity_accounts/:id", to: "equity_accounts#show"
+    get "/equity_accounts/:id/transactions", to: "equity_accounts#transactions"
   end
 
   namespace :v2 do
