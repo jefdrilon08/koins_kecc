@@ -22,6 +22,12 @@ RSpec.describe 'Fetch Member Loans' do
 
         expect(response).to have_http_status(:unauthorized)
       end
+
+      it 'fails if status passed is invalid' do
+        get "#{api_url}?status=invalid", headers: valid_member_headers
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     context 'valid calls' do

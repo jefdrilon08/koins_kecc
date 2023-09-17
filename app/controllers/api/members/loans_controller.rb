@@ -18,13 +18,19 @@ module Api
       end
 
       def index
-        cmd = ::Members::GetLoans.new(
-          member: @current_member
-        )
+        status = params[:status] || "active"
 
-        cmd.execute!
+        if not Loan::STATUSES.include?(status)
+          render json: { message: 'invalid status' }, status: :unprocessable_entity
+        else
+          cmd = ::Members::GetLoans.new(
+            member: @current_member
+          )
 
-        render json: cmd.payload
+          cmd.execute!
+
+          render json: cmd.payload
+        end
       end
 
       def show
