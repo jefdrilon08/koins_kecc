@@ -95,6 +95,7 @@ namespace :api do
   namespace :members do
     # Loans
     get "/loans/:id", to: "loans#show"
+    get "/loans", to: "loans#index"
 
     # Insurance
     get "/insurance_accounts", to: "insurance_accounts#index"

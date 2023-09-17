@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe 'Fetch Savings Accounts' do
+RSpec.describe 'Fetch Member Loans' do
   include ApiHelpers
 
   let (:member) { FactoryBot.create(:member, status: 'active') }
   let (:invalid_member) { FactoryBot.create(:member) }
-  let (:api_url) { "/api/members/savings_accounts" }
+  let (:api_url) { "/api/members/loans" }
   let (:valid_member_headers) { build_jwt_header(member.generate_jwt) }
   let (:invalid_member_headers) { build_jwt_header(invalid_member.generate_jwt) }
 
-  describe "GET /api/members/savings_accounts", type: :request do
+  describe "GET /api/members/loans", type: :request do
     context 'invalid calls' do
       it 'fails if member is not logged in' do
         get "#{api_url}"
@@ -25,7 +25,7 @@ RSpec.describe 'Fetch Savings Accounts' do
     end
 
     context 'valid calls' do
-      it 'succeeds to return savings accounts data' do
+      it 'succeeds to return loans data' do
         get "#{api_url}", headers: valid_member_headers
 
         expect(response).to have_http_status(:ok)
