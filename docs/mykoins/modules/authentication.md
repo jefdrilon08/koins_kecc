@@ -9,13 +9,31 @@ Login using a member's username and password. A member account must meet the fol
 
 ## Technical Documentation
 
-### **URL Endpoint**: `POST /api/members/login`
+### URL Endpoint
+
+**`POST /api/members/login`**
 
 ### Required Parameters
 
 1. `username`: Username of the member
 2. `password`: Password of the member
 
-### Invalid Responses
+### Valid Response
 
-### Valid Responses
+Returns the token of the user
+
+```
+{
+    "token": "jwt-token",
+    "member": {
+        "username": "x",
+        "first_name": "x",
+        "middle_name": "x",
+        "last_name": "x",
+        "full_name": "x",
+        "identification_number": "x",
+        "branch": "x",
+        "center": "x"
+    }
+}
+```
