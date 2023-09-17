@@ -6,13 +6,14 @@ module Api
       before_action :load_loan!, only: [:show]
 
       def load_loan!
-        @loan = ReadOnlyLoan.find_by_id_and_member_id(
-          id: params[:id],
-          member_id: @current_member.id
+        @loan = Loan.find_by_id(
+          params[:id]
         )
 
         if @loan.blank?
           render json: { message: 'not found' }, status: :not_found
+        elsif @loan.member_id != @current_member.id
+          render json: { message: 'unauthorized' }, status: :unauthorized
         end
       end
 
