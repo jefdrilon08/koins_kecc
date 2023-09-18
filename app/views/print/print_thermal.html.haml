@@ -340,9 +340,10 @@
   .col
     ______________________________
     .strong
-      #{User.find(Center.find(@billing[:center]).user_id).full_name}
+      / #{User.find(Center.find(@billing[:center]).user_id).full_name}
+       #{@current_user[:first_name]} #{@current_user[:last_name]}
       %br
-      Socio Economic Officer
+      Collected by :
       %br
       %br
       %br

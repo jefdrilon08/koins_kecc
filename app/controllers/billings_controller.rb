@@ -39,6 +39,8 @@ class BillingsController < ApplicationController
   end
 
   def show
+    @current_user = current_user
+
     @billing  = ReadOnlyBilling.find(params[:id])
 
     if @billing.processing?
