@@ -1,0 +1,40 @@
+%table.table.table-sm.table-bordered
+  %thead
+    %tr
+      %th #
+      %th Branch
+      %th Center
+      %th Collection Date
+      %th Status
+      %th Action
+  %tbody
+    - @full_payment_billing.each_with_index do |fyb, i|
+      %tr
+        %td
+          #{ i + 1 }
+        %td
+          #{Branch.find((fyb.meta['branch_id'])).name}
+        %td
+          #{Center.find(fyb.meta['center_id']).name}
+        %td
+          #{fyb.meta['collection_date']}
+        %td
+          - if fyb.pending?
+            .badge.bg-danger
+              Pending
+          - elsif fyb.approved?
+            .badge.bg-success
+              Approved
+          - elsif o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.save?
+            .badge.badge-secondary
+              Save
+          - elsif o.checked?
+            .badge.badge-secondary
+              Checked
+        
+        %td
+          = link_to billing_for_full_payment_path(fyb.id), class: 'btn btn-primary' do
+            .bi.bi-search
