@@ -36,10 +36,6 @@ class BillingForFullPaymentsController < ApplicationController
       elsif params[:status].present?
         @status = params[:status]
         @full_payment_billing = @full_payment_billing.where(status: @status)
-
-      elsif params[:select_branch].present and params[:select_center].present?
-      @full_payment_billing = @full_payment_billing.where("meta ->> 'branch_id' IN (?) and 'center_id' = ?", @branch.id, @center.id)
-
       
       end 
   end
