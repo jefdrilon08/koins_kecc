@@ -31,6 +31,7 @@ var $btnPrint;
 var $btnPrintWp;
 var $modalPrint;
 var $btnPrintThermal;
+var $btnPdf;
 
 var $btnZeroOut;
 var $btnConfirmZeroOut;
@@ -94,6 +95,7 @@ var _cacheDom = function() {
   $btnUncheck         = $("#btn-uncheck");
   $btnConfirmUncheck  = $("#btn-confirm-uncheck");
 
+  $btnPdf     = $("#btn-print-pdf");
   $btnPrint   = $("#btn-print");
   $btnPrintWp = $("#btn-print-wp");
   $btnPrintThermal = $("#btn-termal");
@@ -346,6 +348,16 @@ var _bindEvents = function() {
     window.open("/print?type=" + type + "&id=" + id);
   });
   $btnPrintThermal.on("click", function() {
+    $modalPrint.show();
+    $message.html("");
+
+    var type = "print_thermal";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + id);
+  });
+  
+  $btnPdf.on("click", function() {
     $modalPrint.show();
     $message.html("");
 

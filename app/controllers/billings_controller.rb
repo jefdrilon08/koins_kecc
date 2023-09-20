@@ -89,6 +89,7 @@ class BillingsController < ApplicationController
             class: "fa fa-times",
             text: "Zero Out"
           }
+
        
         end
 
@@ -134,6 +135,16 @@ class BillingsController < ApplicationController
       end
 
 
+      if @billing.approved?
+          if helpers.sbk_bk_mis_user
+            @subheader_side_actions << {
+            link: "#",
+            class: "fa fa-print",
+            id: "btn-print-pdf",
+            text: "Print PDF"
+          }
+          end
+      end
 
       @subheader_side_actions << {
         link: "#",
