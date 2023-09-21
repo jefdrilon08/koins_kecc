@@ -7,9 +7,20 @@ select2($);
 
 var authenticityToken;
 
+var $btnDelete;
+var $modalDeleteMember;
+var $displayMember
+var $message;
+
+var currentMember           = "";
+var currentMemberId         = "";
+
+var $btnConfirmDeleteMember;
+
 var $btnAdd;
 var _memberId;
 var _id;
+
 var templateErrorList;
 var _urlAddParticular = "/api/v1/mbs_transfer/add_particular";
 
@@ -22,7 +33,8 @@ var _cacheDom = function() {
      document.getElementById("modal-approve-transaction")
    )
 
-
+$modalDeleteMember = new bootstrap.Modal(document.getElementById("modal-delete-member"))
+  $btnDelete = $(".btn-delete-member");
   $btnAdd	    = $("#btn-add");
   $btnApprove			  = $("#btn-approve");	
   $btnConfirmProcess = $("#btn-confirm-process");
@@ -36,12 +48,66 @@ var _cacheDom = function() {
   $accountSubType		= $("#accountSubType");
   $btnAddParticular  = $("#btn-add-particular");
   $inputParticular   = $("#particular");
+  $btnConfirmDeleteMember = $("#btn-confirm-delete-member");
+  $displayMember          = $(".display-member");
  
   templateErrorList = $("#template-error-list").html();
 }
 
 var _bindEvents = function() {
+
+  $btnDelete.on("click", function(){
+    $message.html("");
+    console.log($(this).data);
+    currentMember           = $(this).data("member-name");
+    currentMemberId         = $(this).data("member-id");
+    _id = $(this).data("id");
+    $displayMember.html(currentMember);
+    $modalDeleteMember.show();
+  });
+
+  $btnConfirmDeleteMember.on("click", function(){
     
+    $message.html("Loading...");
+    $btnConfirmDeleteMember.prop("disabled", true);
+
+
+    var data = {
+      id: _id,
+      member_id: currentMemberId,
+      authenticity_token: authenticityToken
+    };
+
+    $.ajax({
+      url: "/api/v1/mbs_transfer/delete_member",
+      method: "POST",
+      data: data,
+      success: function(response){
+        $message.html("Success!");
+        window.location.reload();
+      },
+
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"]
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmDeleteMember.prop("disabled", false);
+        }
+      }
+    });
+
+  });
   $btnAdd.on("click", function() {
    _memberId = $selectMember.val();
    _id = $(this).data("id");	
