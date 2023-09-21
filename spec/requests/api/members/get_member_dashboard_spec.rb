@@ -26,7 +26,6 @@ RSpec.describe 'Get Member Dashboard Info' do
 
     context 'valid calls' do
       it 'succeeds to return dashboard data' do
-        member.update!(status: 'active')
         get "#{api_url}", headers: valid_member_headers
 
         expect(response).to have_http_status(:ok)
