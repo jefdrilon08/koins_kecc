@@ -32,5 +32,8 @@
 
           %td.text-right
             #{number_to_currency(o[:total_add_capital], unit: '')}
+          %td
+            -if @data_store.status == 'pending'
+              .btn.btn-danger.btn-delete-member.btn-sm.btn-block{:type => "button", data: {id: @data_store.id,member_name: o[:name], member_id: o[:member_id]}} DELETE
 
  
