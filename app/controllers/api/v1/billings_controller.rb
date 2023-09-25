@@ -32,7 +32,7 @@ module Api
         data        = billing.try(:data).try(:with_indifferent_access)
         particular  = params[:particular]
 
-        if billing.save?
+        if billing.pending?
           data[:accounting_entry][:particular]  = particular
 
           billing.update!(
