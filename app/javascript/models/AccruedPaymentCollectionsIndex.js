@@ -55,8 +55,8 @@ var _cacheDom = function() {
     document.getElementById("modal-new-transaction")
   );
 
-  $selectBranch             = $("#branch-select");
-  $selectCenter             = $("#center-select");
+  $selectBranch             = $("#select-branch");
+  $selectCenter             = $("#select-center");
   $selectProcessCenter      = $("#select-process-center");
   $inputDateInitialized     = $("#input-date-initialized");
   $inputNumberOfDays        = $("#input-number-of-days");
