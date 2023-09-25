@@ -403,7 +403,8 @@ export default class ManagementOverviewMii extends React.Component {
       </table>
     );
   }
-renderOverviewTableSummary() {
+
+  renderOverviewTableSummary() {
     var areas   = this.state.data.areas;
     var rows    = [];
     var colSpan = 13;
@@ -422,11 +423,30 @@ renderOverviewTableSummary() {
     var tDormantMembers   = 0;
     var tResignedActiveMembers = 0;
 
+    var kmbaAssociatetTotalLife                 = 0.00;
+    var kmbaAssociatetTotalRf                   = 0.00;              
+    var kmbaAssociatetActiveMembers             = 0.00;        
+    var kmbaAssociatetInforceMembers            = 0.00;     
+    var kmbaAssociatetLapsedMembers             = 0.00;             
+    var kmbaAssociatetPendingMembers            = 0.00;            
+    var kmbaAssociatetDormantMembers            = 0.00;            
+    var kmbaAssociatetResignedActiveMembers     = 0.00;
+
+    var kcoopAssociatetTotalLife                 = 0.00;
+    var kcoopAssociatetTotalRf                   = 0.00;              
+    var kcoopAssociatetActiveMembers             = 0.00;        
+    var kcoopAssociatetInforceMembers            = 0.00;     
+    var kcoopAssociatetLapsedMembers             = 0.00;             
+    var kcoopAssociatetPendingMembers            = 0.00;            
+    var kcoopAssociatetDormantMembers            = 0.00;            
+    var kcoopAssociatetResignedActiveMembers     = 0.00;      
+      
+
     rows.push(
       <tr style={{backgroundColor: areaColor}}>
         <th className="text-center" colSpan={colSpan}>
           <h4>        
-            Members Report Summary
+            MEMBERS REPORT SUMMARY
           </h4>  
         </th>
       </tr>
@@ -509,6 +529,30 @@ renderOverviewTableSummary() {
           aDormantMembers   += branches[k].data.dormant_members.total;
           aResignedActiveMembers += branches[k].data.resigned_active_members.total;
 
+          if (i < 3) {
+            kmbaAssociatetTotalLife                   += branches[k].data.total_life
+            kmbaAssociatetTotalRf                     += branches[k].data.total_rf
+            kmbaAssociatetActiveMembers               += branches[k].data.active_members.total;
+            kmbaAssociatetInforceMembers              += branches[k].data.inforce_members.total;
+            kmbaAssociatetLapsedMembers               += branches[k].data.lapsed_members.total;
+            kmbaAssociatetPendingMembers              += branches[k].data.pending_members.total;
+            kmbaAssociatetDormantMembers              += branches[k].data.dormant_members.total;
+            kmbaAssociatetResignedActiveMembers       += branches[k].data.resigned_active_members.total;
+            var areaName = "KMBA Associate";
+
+          } else {
+            kcoopAssociatetTotalLife                   += branches[k].data.total_life
+            kcoopAssociatetTotalRf                     += branches[k].data.total_rf
+            kcoopAssociatetActiveMembers               += branches[k].data.active_members.total;
+            kcoopAssociatetInforceMembers              += branches[k].data.inforce_members.total;
+            kcoopAssociatetLapsedMembers               += branches[k].data.lapsed_members.total;
+            kcoopAssociatetPendingMembers              += branches[k].data.pending_members.total;
+            kcoopAssociatetDormantMembers              += branches[k].data.dormant_members.total;
+            kcoopAssociatetResignedActiveMembers       += branches[k].data.resigned_active_members.total;
+            var areaName = "KCOOP";
+          }
+
+
           tTotalLife        += branches[k].data.total_life
           tTotalRf          += branches[k].data.total_rf
           tActiveMembers    += branches[k].data.active_members.total;
@@ -562,6 +606,58 @@ renderOverviewTableSummary() {
     }
 
     rows.push(
+      <tr key={"subtotal-kmba-associate"} style={{backgroundColor: "#696", color: "#fff"}}>
+        <th>
+          KMBA Associate Sub Total 
+        </th>
+        <th className="text-center">
+          {kmbaAssociatetInforceMembers}
+        </th>
+        <th className="text-center">
+          {kmbaAssociatetLapsedMembers}
+        </th>
+        <th className="text-center">
+          {kmbaAssociatetPendingMembers}
+        </th>
+        <th className="text-center">
+          {kmbaAssociatetDormantMembers}
+        </th>
+        <th className="text-center">
+          {numberWithCommas(kmbaAssociatetTotalLife)}
+        </th>
+        <th className="text-center">
+          {numberWithCommas(kmbaAssociatetTotalRf)}
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr key={"subtotal-kcoop"} style={{backgroundColor: "#696", color: "#fff"}}>
+        <th>
+          Kcoop Sub Total 
+        </th>
+        <th className="text-center">
+          {kcoopAssociatetInforceMembers}
+        </th>
+        <th className="text-center">
+          {kcoopAssociatetLapsedMembers}
+        </th>
+        <th className="text-center">
+          {kcoopAssociatetPendingMembers}
+        </th>
+        <th className="text-center">
+          {kcoopAssociatetDormantMembers}
+        </th>
+        <th className="text-center">
+          {numberWithCommas(kcoopAssociatetTotalLife)}
+        </th>
+        <th className="text-center">
+          {numberWithCommas(kcoopAssociatetTotalRf)}
+        </th>
+      </tr>
+    );
+
+    rows.push(
       <tr key={"grand-total"} style={{backgroundColor: "#000", color: "#fff"}}>
         <td>
           <strong>
@@ -610,7 +706,7 @@ renderOverviewTableSummary() {
     );
   }
 
-renderOverviewTableClaims() {
+  renderOverviewTableClaims() {
     var areas   = this.state.data.areas;
     var rows    = [];
     var colSpan = 13;
@@ -1466,6 +1562,208 @@ renderOverviewTableClaims() {
     );
   }
 
+  renderOverviewTableUploadedDocuments(){
+    var areas   = this.state.data.areas;
+    var rows    = [];
+    var colSpan = 13;
+
+    var areaColor     = "#bad5fd";
+    var clusterColor  = "#c5ffc1";
+    var branchColor   = "#797979";
+
+    var tTotalNumberOfAttachFiles                     = 0.00;
+    var tTotalNumberOfActiveMembers                   = 0.00;
+    var tTotalPercentage                              = 0.00;
+    var tUploadDocummentsCountasOf                    = 0.00;
+
+    var kmbaAssociateTotalUploadDocuments             = 0;
+    var kmbaAssociateTotalNumberOfActiveMembers       = 0;
+    var kmbaAssociateTotalPercentage                  = 0;
+    var kmbaAssociateTotalDocummentsCountasOf         = 0;
+
+    var kcoopTotalUploadDocuments                     = 0;
+    var kcoopTotalNumberOfActiveMembers               = 0;
+    var kcoopTotalPercentage                          = 0;
+    var kcoopTotalDocummentsCountasOf                 = 0;
+   
+    rows.push(
+      <tr style={{backgroundColor: areaColor}}>
+        <th className="text-center" colSpan={colSpan}>
+          <h4>        
+            UPLOADED DOCUMENTS FOR ASSOCIATE AND KCOOP SUMMARY
+          </h4>  
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr style={{backgroundColor: branchColor, color: "white"}}>
+        <th>
+          Area Name
+        </th>
+        <th className="text-center">
+          UPLOADED DOCUMENTS
+        </th>
+        <th className="text-center">
+          ACTIVE MEMBERS
+        </th>
+        <th className="text-center">
+          PERCENTAGE
+        </th>
+        <th className="text-center">
+          As Of (Uploaded Documents Counts)
+        </th>
+      </tr>
+    );
+
+    for(var i = 0; i < areas.length; i++) {
+      
+      var clusters    = areas[i].clusters;
+
+      var aTotalNumberOfAttachFiles        = 0.00;
+      var aTotalNumberOfActiveMembers      = 0.00;
+      var aTotalPercentage                 = 0.00;
+      var aUploadDocummentsCountasOf       = 0.00;
+      
+      for(var j = 0; j < clusters.length; j++) {
+        var branches  = clusters[j].branches;
+
+        var cTotalNumberOfAttachFiles    = 0.00;
+        var cTotalNumberOfActiveMembers  = 0.00;
+        var cTotalPercentage             = 0.00;
+        var cUploadDocummentsCountasOf   = 0.00;
+
+        for(var k = 0; k < branches.length; k++) {
+          if(k == 0) {
+            
+          }
+
+          cTotalNumberOfAttachFiles         += branches[k].data.number_of_attached_files;
+          cTotalNumberOfActiveMembers       += branches[k].data.number_of_active_members;
+          cUploadDocummentsCountasOf         = branches[k].data.uploaded_documents_counts_as_of;
+
+          aTotalNumberOfAttachFiles         += branches[k].data.number_of_attached_files;
+          aTotalNumberOfActiveMembers       += branches[k].data.number_of_active_members;
+          aUploadDocummentsCountasOf         = branches[k].data.uploaded_documents_counts_as_of;
+
+          if (i < 3) {
+            kmbaAssociateTotalUploadDocuments           += branches[k].data.number_of_attached_files;
+            kmbaAssociateTotalNumberOfActiveMembers     += branches[k].data.number_of_active_members;
+            kmbaAssociateTotalDocummentsCountasOf        = branches[k].data.uploaded_documents_counts_as_of;
+            var areaName = "KMBA Associate";
+          } else {
+            kcoopTotalUploadDocuments                   += branches[k].data.number_of_attached_files;
+            kcoopTotalNumberOfActiveMembers             += branches[k].data.number_of_active_members;
+            kcoopTotalDocummentsCountasOf                = branches[k].data.uploaded_documents_counts_as_of;
+            var areaName = "KCOOP";
+          }
+
+          tTotalNumberOfAttachFiles         += branches[k].data.number_of_attached_files;
+          tTotalNumberOfActiveMembers       += branches[k].data.number_of_active_members;
+          tUploadDocummentsCountasOf         = branches[k].data.uploaded_documents_counts_as_of;
+        }
+      }
+
+      rows.push(
+        <tr key={"area-total-" + areas[i].id}>
+          <th>
+           {areas[i].name}
+          </th>
+          <th className="text-center">
+            {aTotalNumberOfAttachFiles}
+          </th>
+          <th className="text-center">
+            {aTotalNumberOfActiveMembers}
+          </th>
+          <th className="text-center">
+            {Math.round((aTotalNumberOfAttachFiles / aTotalNumberOfActiveMembers) * 100)}%
+          </th>
+          <th className="text-center">
+            {aUploadDocummentsCountasOf}
+          </th>
+        </tr>
+      );
+    }
+
+    rows.push(
+      <tr key={"subtotal-kmba-associate"} style={{backgroundColor: "#696", color: "#fff"}}>
+        <th>
+          KMBA Associate Sub Total 
+        </th>
+        <th className="text-center">
+          {kmbaAssociateTotalUploadDocuments}
+        </th>
+        <th className="text-center">
+          {kmbaAssociateTotalNumberOfActiveMembers}
+        </th>
+        <th className="text-center">
+          {Math.round((kmbaAssociateTotalUploadDocuments / kmbaAssociateTotalNumberOfActiveMembers) *100)}%
+        </th>
+        <th className="text-center">
+          {kmbaAssociateTotalDocummentsCountasOf} 
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr key={"subtotal-kcoop"} style={{backgroundColor: "#696", color: "#fff"}}>
+        <th>
+          KCOOP
+        </th>
+        <th className="text-center">
+          {kcoopTotalUploadDocuments}
+        </th>
+        <th className="text-center">
+          {kcoopTotalNumberOfActiveMembers}
+        </th>
+        <th className="text-center">
+           {Math.round((kcoopTotalUploadDocuments / kcoopTotalNumberOfActiveMembers) * 100)}%
+        </th>
+        <th className="text-center">
+          {kcoopTotalDocummentsCountasOf} 
+        </th>
+      </tr>
+    );
+
+    rows.push(
+      <tr key={"grand-total"} style={{backgroundColor: "#000", color: "#fff"}}>
+        <td>
+          <strong>
+            Grand Total
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalNumberOfAttachFiles}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tTotalNumberOfActiveMembers}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {Math.round((tTotalNumberOfAttachFiles / tTotalNumberOfActiveMembers) * 100)}%
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {tUploadDocummentsCountasOf}
+          </strong>
+        </td>
+      </tr>
+    );
+
+    return (
+      <table className="table table-sm table-bordered">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    );
+  }
+
   renderOverviewTableUploadedDocumentsCounts() {
     var areas   = this.state.data.areas;
     var rows    = [];
@@ -1642,6 +1940,8 @@ renderOverviewTableClaims() {
           {this.renderOverviewTableClaimsSummary()}
           <br />
           {this.renderOverviewTableClaims()}
+          <br />
+          {this.renderOverviewTableUploadedDocuments()}
           <br />
           {this.renderOverviewTableUploadedDocumentsCounts()}
         </div>
