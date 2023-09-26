@@ -26,6 +26,7 @@ class BillingsController < ApplicationController
       @status = params[:status]
       @billings = @billings.where(status: @status)
     end
+    @data = @billing.try(:data).try(:with_indifferent_access)
 
     @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
 
@@ -68,7 +69,7 @@ class BillingsController < ApplicationController
       if @billing.pending?
         
 
-        if helpers.so_mis_user
+        if helpers.is_mis_so_fm?
           @subheader_side_actions << {
             link: "#",
             class: "fa fa-print",
@@ -97,7 +98,7 @@ class BillingsController < ApplicationController
 
       if @billing.save?
 
-        if helpers.is_mis_fm?
+        if @data[:save]["id"] != current_user.id and helpers.is_mis_fm? || helpers.is_cm_mis?
           @subheader_side_actions << {
             link: "#",
             class: "fa fa-print",
@@ -106,12 +107,22 @@ class BillingsController < ApplicationController
           }
 
 
+        end
+
+        if @data[:save]["id"] != current_user.id and helpers.is_cm_mis?
           @subheader_side_actions << {
             id: "btn-check",
             link: "#",
             class: "fa fa-check",
             text: "Check"
           }
+        elsif @data[:save]["id"] != current_user.id and helpers.is_mis_fm?
+          @subheader_side_actions << {
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
         end
 
       end
