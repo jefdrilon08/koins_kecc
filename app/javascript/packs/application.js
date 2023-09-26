@@ -168,6 +168,7 @@ import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
 import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfCertificatesAndPolicies.js";
 import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
 import ReportsClaimsProcessingTimeReport from "../models/ReportsClaimsProcessingTimeReport.js";
+import ReportsClaimsProcessingTimeReportSummary from "../models/ReportsClaimsProcessingTimeReportSummary.js";
 import ReportsReclassifiedReport from "../models/ReportsReclassifiedReport.js";
 import ReportsPersonalDocuments from "../models/ReportsPersonalDocuments.js";
 import ReportsClaims from "../models/ReportsClaims.js";
@@ -386,6 +387,7 @@ const hooks = {
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
   "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
+  "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
   "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],
   "reports/personal_documents":                       [ReportsPersonalDocuments],
   "reports/claims":                                   [ReportsClaims],

@@ -596,6 +596,8 @@ Rails.application.routes.draw do
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
   get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report", as: :claims_processing_time_report
   get "/reports/claims_processing_time_report_excel", to: "reports#claims_processing_time_report_excel", as: :claims_processing_time_report_excel
+  get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary", as: :claims_processing_time_report_summary
+  get "/reports/claims_processing_time_report_summary_excel", to: "reports#claims_processing_time_report_summary_excel", as: :claims_processing_time_report_summary_excel
   get "/reports/reclassified_report", to: "reports#reclassified_report", as: :reclassified_report
   get "/reports/reclassified_report_excel", to: "reports#reclassified_report_excel", as: :reclassified_report_excel
   #transfer_savings
