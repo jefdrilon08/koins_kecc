@@ -284,7 +284,7 @@ export default class BillingUIComponent extends React.Component {
   renderParticular() {
     var particular  = this.state.data.data.accounting_entry.particular;
 
-    if(this.state.data.status == "save") {
+    if(this.state.data.status == "pending" || "save") {
       return  (
         <div className="row">
           <div className="col-md-10">

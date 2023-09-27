@@ -1107,7 +1107,7 @@ branch_accounting_codes:
     due_from_accounting_code_id: "bb35f119-bdaf-443a-b680-195613484496"
   -
     branch_id: "08d69d87-566c-444c-9042-bc1c495a7e3d"                              #teresa
-    cash_in_bank_accounting_code_id: "2f6c6af6-b5be-42e5-9a89-805e62377904"
+    cash_in_bank_accounting_code_id: "722bdf86-c0ad-49a3-a17e-deaf59603505"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"

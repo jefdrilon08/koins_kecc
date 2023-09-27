@@ -32,7 +32,7 @@ module Api
         data        = billing.try(:data).try(:with_indifferent_access)
         particular  = params[:particular]
 
-        if billing.save?
+        if billing.pending? || billing.save?
           data[:accounting_entry][:particular]  = particular
 
           billing.update!(
@@ -137,8 +137,18 @@ module Api
           billing: billing,
           user: current_user
         }
-
-          billing.update!(status: "save")
+        errors  = ::Billings::ValidateSave.new(
+                    config: config
+                  ).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          billing = ::Billings::Save.new(
+                    config: config
+                  ).execute!
+           billing.update!(status: "save")
+        end
+         
   
           ActivityLog.create!(
             content: "#{current_user.full_name} save billing",
@@ -200,6 +210,7 @@ module Api
             data: {
               user_id: current_user.id,
               billing_id: billing.id
+
             }
           )
 
