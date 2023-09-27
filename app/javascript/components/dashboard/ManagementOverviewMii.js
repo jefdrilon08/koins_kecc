@@ -1708,7 +1708,7 @@ export default class ManagementOverviewMii extends React.Component {
     rows.push(
       <tr key={"subtotal-kcoop"} style={{backgroundColor: "#696", color: "#fff"}}>
         <th>
-          KCOOP
+          KCOOP Associate Sub Total
         </th>
         <th className="text-center">
           {kcoopTotalUploadDocuments}
