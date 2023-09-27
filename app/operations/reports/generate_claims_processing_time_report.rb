@@ -3,8 +3,8 @@ module Reports
     def initialize(branch:, start_date:, end_date:)
       @start_date = start_date
       @end_date = end_date
-      @branch = branch 
-      
+      @branch = branch
+     
       @p          = Axlsx::Package.new
     end
 
@@ -14,7 +14,77 @@ module Reports
       else
         queryAllBranch
       end
+      template!
+    end
 
+    def query!
+       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+          SELECT 
+            b.name AS branch_name,
+            a.claim_type AS claim_type,
+            a.date_prepared AS date_prepared,
+            a.data ->> 'date_paid' AS date_paid,
+            a.data->>'date_of_death_tpd_accident' AS date_of_death_tpd_accident,
+            a.data->>'date_reported' AS date_reported,
+            a.data->>'date_of_birth' AS date_of_birth,
+            a.data->>'date_of_policy_issue' AS date_of_policy_issue,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_reported')::timestamp) AS date_diff_paid_notif,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_process,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_of_death_tpd_accident')::timestamp) AS date_diff_paid_death,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_completed_documents')::timestamp ) AS date_diff_paid_completed,
+            DATE_PART('day', DATE("date_prepared")::timestamp - DATE(a.data ->> 'date_reported')::timestamp) AS date_diff_process_notif,
+            a.data->>'classification_of_insured' AS classification_of_insured,
+            a.data->>'type_of_insurance_policy' AS type_of_insurance_policy,
+            a.data->>'amount' AS amount,
+            a.data->>'policy_number' AS policy_number,
+            a.data->>'face_amount' AS face_amount
+            
+          FROM Claims a
+          LEFT JOIN branches b ON a.branch_id = b.id
+          WHERE  a.claim_type = 'BLIP' 
+              AND a.status = 'approved'
+              AND b.id = '#{@branch}'
+              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
+          ORDER BY 
+            a.branch_id ASC,
+            a.date_prepared ASC
+        EOS
+    end
+
+    def queryAllBranch
+       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
+          SELECT 
+            b.name AS branch_name,
+            a.claim_type AS claim_type,
+            a.date_prepared AS date_prepared,
+            a.data ->> 'date_paid' AS date_paid,
+            a.data->>'date_of_death_tpd_accident' AS date_of_death_tpd_accident,
+            a.data->>'date_reported' AS date_reported,
+            a.data->>'date_of_birth' AS date_of_birth,
+            a.data->>'date_of_policy_issue' AS date_of_policy_issue,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_reported')::timestamp) AS date_diff_paid_notif,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_process,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_of_death_tpd_accident')::timestamp) AS date_diff_paid_death,
+            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_completed_documents')::timestamp ) AS date_diff_paid_completed,
+            DATE_PART('day', DATE("date_prepared")::timestamp - DATE(a.data ->> 'date_reported')::timestamp) AS date_diff_process_notif,
+            a.data->>'classification_of_insured' AS classification_of_insured,
+            a.data->>'type_of_insurance_policy' AS type_of_insurance_policy,
+            a.data->>'amount' AS amount,
+            a.data->>'policy_number' AS policy_number,
+            a.data->>'face_amount' AS face_amount
+          
+          FROM Claims a
+          LEFT JOIN branches b ON a.branch_id = b.id
+          WHERE  a.claim_type = 'BLIP' 
+              AND a.status = 'approved'
+              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
+          ORDER BY 
+            a.branch_id ASC,
+            a.date_prepared ASC
+        EOS
+    end
+
+    def template!
       @p.workbook do |wb|
         wb.add_worksheet do |sheet|
           header  = wb.styles.add_style(alignment: {horizontal: :left}, b: true)
@@ -33,8 +103,6 @@ module Reports
           sheet.add_row [
             "CLAIMS PROCESSING TIME REPORT"
             ],style: header
-          
-          sheet.add_row []
 
           sheet.add_row [ 
             "BRANCH NAME",
@@ -78,78 +146,10 @@ module Reports
                 face_amount = claim.fetch("face_amount")
               ], style: [nil]             
             end
+         
           end
         end
       @p
     end
-
-    def query!
-       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
-          SELECT 
-            b.name AS branch_name,
-            a.claim_type AS claim_type,
-            a.date_prepared AS date_prepared,
-            a.data ->> 'date_paid' AS date_paid,
-            a.data->>'date_of_death_tpd_accident' AS date_of_death_tpd_accident,
-            a.data->>'date_reported' AS date_reported,
-            a.data->>'date_of_birth' AS date_of_birth,
-            a.data->>'date_of_policy_issue' AS date_of_policy_issue,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_notif,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_process,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_of_death_tpd_accident')::timestamp) AS date_diff_paid_death,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_completed_documents')::timestamp ) AS date_diff_paid_completed,
-            DATE_PART('day', DATE("date_prepared")::timestamp - DATE(a.data ->> 'date_reported')::timestamp) AS date_diff_process_notif,
-            a.data->>'classification_of_insured' AS classification_of_insured,
-            a.data->>'type_of_insurance_policy' AS type_of_insurance_policy,
-            a.data->>'amount' AS amount,
-            a.data->>'policy_number' AS policy_number,
-            a.data->>'face_amount' AS face_amount
-            
-          FROM Claims a
-          LEFT JOIN branches b ON a.branch_id = b.id
-          WHERE  a.claim_type = 'BLIP' 
-              AND a.status = 'approved'
-              AND b.id = '#{@branch}'
-              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-          ORDER BY 
-            a.branch_id ASC,
-            a.date_prepared ASC
-        EOS
-    end
-
-    def queryAllBranch
-       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
-          SELECT 
-            b.name AS branch_name,
-            a.claim_type AS claim_type,
-            a.date_prepared AS date_prepared,
-            a.data ->> 'date_paid' AS date_paid,
-            a.data->>'date_of_death_tpd_accident' AS date_of_death_tpd_accident,
-            a.data->>'date_reported' AS date_reported,
-            a.data->>'date_of_birth' AS date_of_birth,
-            a.data->>'date_of_policy_issue' AS date_of_policy_issue,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_notif,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - "date_prepared"::timestamp ) AS date_diff_paid_process,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_of_death_tpd_accident')::timestamp) AS date_diff_paid_death,
-            DATE_PART('day', DATE(a.data ->> 'date_paid')::timestamp - DATE(data ->> 'date_completed_documents')::timestamp ) AS date_diff_paid_completed,
-            DATE_PART('day', DATE("date_prepared")::timestamp - DATE(a.data ->> 'date_reported')::timestamp) AS date_diff_process_notif,
-            a.data->>'classification_of_insured' AS classification_of_insured,
-            a.data->>'type_of_insurance_policy' AS type_of_insurance_policy,
-            a.data->>'amount' AS amount,
-            a.data->>'policy_number' AS policy_number,
-            a.data->>'face_amount' AS face_amount
-            
-          FROM Claims a
-          LEFT JOIN branches b ON a.branch_id = b.id
-          WHERE  a.claim_type = 'BLIP' 
-              AND a.status = 'approved'
-              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-          ORDER BY 
-            a.branch_id ASC,
-            a.date_prepared ASC
-        EOS
-    end
-
-
   end
 end
