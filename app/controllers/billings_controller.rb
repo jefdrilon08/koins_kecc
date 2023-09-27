@@ -98,32 +98,43 @@ class BillingsController < ApplicationController
 
 
       if @billing.save?
+        if @data[:save].present?
 
-        if @data[:save]["id"] != current_user.id and helpers.is_mis_fm? || helpers.is_cm_mis?
-          @subheader_side_actions << {
-            link: "#",
-            class: "fa fa-print",
-            id: "btn-unsave-billing",
-            text: "UnSave"
-          }
+          if @data[:save]["id"] != current_user.id and helpers.is_mis_fm? || helpers.is_cm_mis?
+            @subheader_side_actions << {
+              link: "#",
+              class: "fa fa-print",
+              id: "btn-unsave-billing",
+              text: "UnSave"
+            }
 
 
-        end
+          end
 
-        if @data[:save]["id"] != current_user.id and helpers.is_cm_mis?
-          @subheader_side_actions << {
-            id: "btn-check",
-            link: "#",
-            class: "fa fa-check",
-            text: "Check"
-          }
-        elsif @data[:save]["id"] != current_user.id and helpers.is_mis_fm?
-          @subheader_side_actions << {
+          if @data[:save]["id"] != current_user.id and helpers.is_cm_mis?
+            @subheader_side_actions << {
               id: "btn-check",
               link: "#",
               class: "fa fa-check",
               text: "Check"
             }
+          elsif @data[:save]["id"] != current_user.id and helpers.is_mis_fm?
+            @subheader_side_actions << {
+                id: "btn-check",
+                link: "#",
+                class: "fa fa-check",
+                text: "Check"
+              }
+          end
+        else
+          if helpers.is_mis_fm?
+            @subheader_side_actions << {
+                id: "btn-check",
+                link: "#",
+                class: "fa fa-check",
+                text: "Check"
+              }
+          end
         end
 
       end
