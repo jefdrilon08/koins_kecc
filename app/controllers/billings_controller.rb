@@ -134,6 +134,12 @@ class BillingsController < ApplicationController
                 class: "fa fa-check",
                 text: "Check"
               }
+            @subheader_side_actions << {
+              link: "#",
+              class: "fa fa-print",
+              id: "btn-unsave-billing",
+              text: "UnSave"
+            }
           end
         end
 
