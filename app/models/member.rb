@@ -164,9 +164,9 @@ class Member < ApplicationRecord
         "₱#{value2}.00"
       elsif number_of_days >= 366 && number_of_days <= 730
         "₱#{value3}.00"
-      elsif number_of_days >= 731 && number_of_days <= 1895
+      elsif number_of_days >= 731 && number_of_days <= 1095
         "₱#{value4}.00"
-      elsif number_of_days >= 1896
+      elsif number_of_days >= 1096
         "₱#{value5}.00"
       end
     end
