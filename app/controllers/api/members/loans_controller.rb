@@ -24,7 +24,8 @@ module Api
           render json: { message: 'invalid status' }, status: :unprocessable_entity
         else
           cmd = ::Members::GetLoans.new(
-            member: @current_member
+            member: @current_member,
+            status: status
           )
 
           cmd.execute!

@@ -30,8 +30,11 @@ module Members
       @payload[:loan_product_type]     = @loan.loan_product_type.try(:name)
 
       # Next date of payment
-      unpaid_records            = @loan.amortization_schedule_entries.unpaid.order("due_date DESC")
-      @payload[:next_payment_date] = unpaid_records.where("due_date <= ?", @current_date).first.try(:due_date).try(:to_date).try(:strftime, "%b %d, %Y")
+      unpaid_records = @loan.amortization_schedule_entries.unpaid.order("due_date DESC")
+      @payload[:next_payment_date] = unpaid_records.where(
+        "due_date <= ?", 
+        @current_date
+      ).first.try(:due_date).try(:to_date).try(:strftime, "%b %d, %Y")
 
       if @payload[:next_payment_date].present? and @payload[:next_payment_date].to_date < @current_date
         @payload[:is_overdue] = "yes"
@@ -43,7 +46,9 @@ module Members
 
       running_balance = @loan.total_dues
 
-      @payload[:amortization_schedule] = @loan.amortization_schedule_entries.order("due_date ASC").map{ |amort|
+      @payload[:amortization_schedule] = @loan.amortization_schedule_entries.order(
+        "due_date ASC"
+      ).map{ |amort|
         running_balance = (running_balance - amort.total_paid)
 
         {
@@ -56,7 +61,9 @@ module Members
         }
       }
 
-      @payload[:payments] = AccountTransaction.where(subsidiary_id: @loan.id).approved_loan_payments.map{ |payment|
+      @payload[:payments] = AccountTransaction.where(
+        subsidiary_id: @loan.id
+      ).approved_loan_payments.map{ |payment|
         {
           id:             payment.id,
           amount:         payment.amount.to_f,
