@@ -5,8 +5,6 @@ module MbsTransfer
       @data_store = DataStore.find(@config[:data_store_id])
       @records = @data_store.data.with_indifferent_access
       @member_id = config[:member_id]
-
-      
     end
     def execute!
       @records[:record].each_with_index do |rec,index|
@@ -44,7 +42,6 @@ module MbsTransfer
                 member_account << mem_rec
               end
             end
-            
             @records[:header].each_with_index do |head,index|
               member_account.each do |mem|
                 if head["accounting_code_id"] == mem["accounting_code_id"]
@@ -58,7 +55,7 @@ module MbsTransfer
                 end
               end
 
-              if head["accounting_code_id"] == "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
+              if head["accounting_code_id"] == "1e849571-b1e3-49d8-af5d-2bcbb4b5c314"
                 share_cap_total_amount = head[:total_amount].to_f - member_share_cap.to_f
                 @records[:header][index] = {
                   name: head["name"],
@@ -73,7 +70,7 @@ module MbsTransfer
             config = {
               data_store_id: @data_store.id
             }
-            accounting_entry = ::AdditionalShare::BuildAccountingEntry.new(config: config).execute!
+            accounting_entry = ::MbsTransfer::BuildAccountingEntry.new(config: config).execute!
 
           end
         end

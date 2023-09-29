@@ -232,6 +232,9 @@ import AssetsLiabilitiesIndex from "../models/AssetsLiabilitiesIndex.js";
 import BranchCashFlowIndex	from "../models/BranchCashFlowIndex.js";
 import ShareCapitalInvoluntaryIndex from "../models/ShareCapitalInvoluntary.js";
 import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.js";
+
+import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
+import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -443,7 +446,9 @@ const hooks = {
   "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
   "branch_cash_flow/index":               												[BranchCashFlowIndex],
   "data_stores/share_capital_involuntary/index": 					[ShareCapitalInvoluntaryIndex],
-  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow]
+  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow],
+  "billing_for_involuntary/index": [BillingForInvoluntaryIndex],
+  "billing_for_involuntary/show": [BillingForInvoluntaryShow]
 }
 
 const renderComponent = (Component, payload) => {
