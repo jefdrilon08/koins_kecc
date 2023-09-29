@@ -36,7 +36,7 @@
     .form-group
       %label.col.control-label
         SY
-        = select_tag :school_year, options_for_select(["2019-2020","2020-2021","2021-2022", "2022-2023"],@claim.data["school_year"]), class: 'form-control', id: 'school-year'
+        = select_tag :school_year, options_for_select(["2019-2020","2020-2021","2021-2022", "2022-2023", "2023-2024"],@claim.data["school_year"]), class: 'form-control', id: 'school-year'
   .col
     .form-group
       %label.col.control-label
