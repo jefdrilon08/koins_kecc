@@ -1,0 +1,23 @@
+#modal-view-details.modal.fade{:tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title
+          %table
+            %thead
+              %tr
+                %th
+                  Member
+            %tbody
+              - @data_view.each_with_index do |o, i|
+                %tr
+                  %td
+                    #{o[:member][:member_name]}
+
+          .message
+      .modal-footer
+        .controls
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel
+

@@ -1,0 +1,36 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th
+        Branch
+      %th.text-center
+        Date
+      %th.text-center
+        status
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/billing_for_involuntary/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          #{o.meta.with_indifferent_access[:branch_name]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:transaction_date]}
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.badge-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.badge-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.badge-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.badge-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.badge-danger
+              Error
