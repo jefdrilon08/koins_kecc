@@ -9,7 +9,10 @@ module BillingForInvoluntary
       @data           = @data_store.data.with_indifferent_access
       @loan_records   = Loan.where(member_id: @member.id, status: "active")
       @member_accounts = MemberAccount.where(member_id: @member.id)
-      @@accounting_entry = @data[:accounting_entry]
+      @accounting_entry = @data[:accounting_entry]
+      @savings_accounting_codes   = Settings.savings_accounting_codes
+      @equity_accounting_codes    = Settings.equity_accounting_codes
+      @loan_product_settings      = Settings.loan_product_accounting_codes
       #@accrued_loan = Loan.where("branch_id = ? and member_id = ? and data ->> 'accrued_interest' IS NOT NULL" , @branch_id, @member.id)
 
 
@@ -18,7 +21,12 @@ module BillingForInvoluntary
     def execute!
 
       add_member!
-
+      @accounting_entry[:debit_journal_entries] = []
+      @accounting_entry[:credit_journal_entries] = []
+      @accounting_entry[:journal_entries]= []
+     
+      #create accounting_entry
+      journal_entries = []
       @data[:records].each do |rec|
 
         @loan_balance = rec[:member][:total_loan_balances].to_f
@@ -26,25 +34,103 @@ module BillingForInvoluntary
         @equity_balance = rec[:member][:total_equity_balances].to_f
         @total_member_account_balances = (@savings_balance + @equity_balance).to_f.round(2)
        
-        if @loan_balance == @total_member_account_balances
-          #raise "sapat".inspect
+        if @loan_balance <= @total_member_account_balances
+          raise "sapat".inspect
         else
+          #hindi sapat ang savings at equity account pambayad sa lahat ng loans
           loan_rec = rec[:member][:loan_records]
+          
+          #check number of loans
           if loan_rec.count > 1 
+            #sort loans by maturity_date
             loan_rec_sort =  loan_rec.sort_by{ |date| date[:maturity_date]}
+            #loan that must paid 1st according to maturity_date
             loan_to_paid = Loan.find(loan_rec_sort.first[:loan_id])
 
-
+            
+            #check the first loan matured if loan_balance is < = > to total of the savings + equity
             if loan_to_paid.total_balance < @total_member_account_balances
-              #raise "true".inspect
+              raise "sobra ang equity + savings sa unang nagmatured na loan".inspect
             else
-              principal_to_paid = loan_to_paid.principal_balance
-              interest_to_paid = loan_to_paid.interest_balance
+              #hindi sapaat ang savings + equity pambayad sa unang nagmatured na loan
+              rec[:member][:member_accounts].each do |ma|
+                if ma[:balance].to_f > 0.0
+                  member_account = MemberAccount.find(ma[:id])
+                  if member_account.account_type == "EQUITY"
+                    @equity_accounting_codes.each do |eq|
+                      if eq.equity_type == member_account.account_subtype
+                        accounting_code = AccountingCode.find(eq[:withdrawal_accounting_code_id])
+                        @accounting_entry[:credit_journal_entries] << {
+                          accounting_code_id: accounting_code.id,
+                          code: accounting_code.code,
+                          name: accounting_code.name,
+                          amount: member_account.balance
+                        }  
+                      end
+                    end
+                   
+                    
+                    
+                  elsif member_account.account_type == "SAVINGS"
+                    @savings_accounting_codes.each do |sav|
+                      if sav.savings_type == member_account.account_subtype
+                        accounting_code = AccountingCode.find(sav[:withdrawal_accounting_code_id])
+                        @accounting_entry[:credit_journal_entries] << {
+                          accounting_code_id: accounting_code.id,
+                          code: accounting_code.code,
+                          name: accounting_code.name,
+                          amount: member_account.balance
+                        }  
+                      end
+                    end
+                  end
+                end
+              end
+              
+              #loan entries
+              @loan_product_settings.each do |lps|
+                if lps.loan_product_id == loan_to_paid.loan_product_id
+                  principal_accounting_code = AccountingCode.find(lps.receivable_accounting_code_id)
+                  interest_accounting_code = AccountingCode.find(lps.interest_receivable_accounting_code_id)
 
-              @total_member_account_balances = @total_member_account_balances.to_f - interest_to_paid.to_f
-              @total_member_account_balances = @total_member_account_balances.to_f - principal_to_paid.to_f
 
-              #raise @total_member_account_balances.to_f.inspect
+                  if @total_member_account_balances.to_f > loan_to_paid.interest_balance.to_f
+                    @accounting_entry[:debit_journal_entries] << {
+                      accounting_code_id: interest_accounting_code.id,
+                      code: interest_accounting_code.code,
+                      name: interest_accounting_code.name,
+                      amount: loan_to_paid.interest_balance.to_f
+                    }
+                    @total_member_account_balances -= loan_to_paid.interest_balance
+                    
+                  else
+                    @accounting_entry[:debit_journal_entries] << {
+                      accounting_code_id: interest_accounting_code.id,
+                      code: interest_accounting_code.code,
+                      name: interest_accounting_code.name,
+                      amount: @total_member_account_balances.to_f
+                    }
+                    @total_member_account_balances = 0.0
+                   
+                  end
+
+                  if @total_member_account_balances.to_f > 0.0
+                    if loan_to_paid.principal_balance.to_f > 0.0
+                      @accounting_entry[:debit_journal_entries] << {
+                        accounting_code_id: principal_accounting_code.id,
+                        code: principal_accounting_code.code,
+                        name: principal_accounting_code.name,
+                        amount: @total_member_account_balances.to_f
+                      }  
+                    end
+                  end
+                
+                end
+              end
+              
+              
+             
+            
             end
 
           else
@@ -57,9 +143,28 @@ module BillingForInvoluntary
 
     
 
-      raise @data[:records].inspect
+      @accounting_entry[:debit_journal_entries].each do |adbj|
 
+        @accounting_entry[:journal_entries] << {
+          id: "",
+          post_type: "DR",
+          accounting_code_id: adbj[:accounting_code_id],
+          accounting_code_name: adbj[:name],
+          amount: adbj[:amount].round(2)
+        }
+      end
 
+      @accounting_entry[:credit_journal_entries].each do |adbj|
+        @accounting_entry[:journal_entries] << {
+          id: "",
+          post_type: "CR",
+          accounting_code_id: adbj[:accounting_code_id],
+          accounting_code_name: adbj[:name],
+          amount: adbj[:amount].round(2)
+        }
+      end
+
+      @accounting_entry
       @data_store[:data] = @data
       @data_store.save!
 
