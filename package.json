@@ -57,6 +57,6 @@
     "build:css": "./node_modules/.bin/sass ./app/assets/stylesheets/application.scss ./app/assets/builds/main.css --no-source-map --load-path=node_modules",
     "build:js": "./node_modules/.bin/esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --sourcemap --outdir=app/assets/builds",
     "build:metafile": "./node_modules/.bin/esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --minify --metafile=./tmp/metafile.json --outdir=app/assets/builds",
-    "build": "./node_modules/.bin/sass ./app/assets/stylesheets/application.scss ./app/assets/builds/main.css --no-source-map --load-path=node_modules && esbuild app/javascript/packs/*.* --bundle --loader:.js=jsx --minify --outdir=app/assets/builds && cp config/settings/production.yml.dist config/settings/production.yml"
+    "build": "cp config/settings/production.yml.dist config/settings/production.yml"
   }
 }
