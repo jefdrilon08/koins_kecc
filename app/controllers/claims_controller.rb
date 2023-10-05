@@ -363,7 +363,7 @@ class ClaimsController < ApplicationController
 
     if @claim.for_posting?
       if ["MIS"].include? current_user.roles.last
-        if ["Evelyn", "Analyn", "Gilbert"].include? current_user.first_name
+        if ["Evelyn", "Analyn", "Maria Victoria"].include? current_user.first_name
           @subheader_side_actions << {
             id: "btn-post",
             link: "#",
