@@ -267,6 +267,11 @@ Rails.application.routes.draw do
   get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"
   delete "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#destroy"
 
+  #billing for involuntary
+  get "/billing_for_involuntary", to: "billing_for_involuntary#index"
+  get "/billing_for_involuntary/:id", to: "billing_for_involuntary#show"
+  delete "/billing_for_involuntary/:id", to: "billing_for_involuntary#destroy"
+
   # billing for writeoff
   get "/billing_for_writeoff", to: "billing_for_writeoff#index"
   get "/billing_for_writeoff/:id", to: "billing_for_writeoff#show"

@@ -1,0 +1,55 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "30%" }
+        Member
+      %th
+        Total Loan Balances
+      %th
+        Total Savings Balances
+      %th
+        Total Equity Balances
+      %th
+        View Details
+      %th
+        Action
+  %tbody
+    - @data_view.each_with_index do |o, i|
+      %tr
+        %td
+          = link_to member_path(o[:member]["member_id"]), target: "_blank" do
+            %strong
+              #{o[:member][:member_name]}
+        %td
+          -if @data_store.status == 'pending'
+            %a.undo{ data: {loan_records: o[:loan_records]},}
+              #{number_to_currency(o[:member][:total_loan_balances], unit: '')}
+        %td
+          #{number_to_currency(o[:member][:total_savings_balances], unit: '')}
+        %td
+          #{number_to_currency(o[:member][:total_equity_balances], unit: '')}
+        %td
+          .btn.btn-info.btn-view-details{:type => "button", data: {id: @data_store.id,member_name: o[:member][:member_name], member_id: o[:member]["member_id"]}}
+            View
+        %td
+          .btn.btn-danger
+            delete
+  %tfoot
+    - total_loan_balances = @data_view.sum { |o| o[:member][:total_loan_balances] }
+    - total_savings_balances = @data_view.sum { |o| o[:member][:total_savings_balances] }
+    - total_equity_balances = @data_view.sum { |o| o[:member][:total_equity_balances] }
+
+    %tr
+      %td
+        %strong
+          TOTAL :
+      %td
+        %strong
+          = number_to_currency(total_loan_balances, unit: '')
+      %td
+        %strong
+          = number_to_currency(total_savings_balances, unit: '')
+      %td
+        %strong
+          = number_to_currency(total_equity_balances, unit: '')
+      %td

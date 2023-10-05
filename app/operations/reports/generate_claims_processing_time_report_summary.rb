@@ -31,7 +31,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM(
           SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0) AS one_three_five_days,
@@ -101,7 +109,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM  
           (SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0) AS one_three_five_days,
@@ -169,7 +185,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM
           (SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0 ) AS one_three_five_days,
@@ -237,7 +261,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM
           (SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0) AS one_three_five_days,
@@ -305,7 +337,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM
           (SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0) AS one_three_five_days,
@@ -373,7 +413,15 @@ module Reports
           two_to_three_days,
           four_to_five_days,
           six_to_ten_days,
-          more_than_ten_days
+          more_than_ten_days,
+          CONCAT(ROUND(((one_three_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_three_five_days_percentage,
+          CONCAT(ROUND(((more_than_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_five_days_percentage,
+          CONCAT(ROUND((((one_three_five_days + more_than_five_days) / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  total_percentage,
+          CONCAT(ROUND(((one_day / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  one_day_percentage,
+          CONCAT(ROUND(((two_to_three_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  two_to_three_days_percentage,
+          CONCAT(ROUND(((four_to_five_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  four_to_five_days_percentage,
+          CONCAT(ROUND(((six_to_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  six_to_ten_days_percentage,
+          CONCAT(ROUND(((more_than_ten_days / (one_three_five_days + more_than_five_days)) * 100), 2), ' %') AS  more_than_ten_days_percentage
         FROM
           (SELECT
             COALESCE(SUM((CASE WHEN summary_class = '1-3-5 DAYS' THEN COUNTS END)), 0) AS one_three_five_days,
@@ -473,7 +521,19 @@ module Reports
                 date_diff_paid_notif = claim.fetch("four_to_five_days"),
                 date_diff_paid_notif = claim.fetch("six_to_ten_days"),
                 date_diff_paid_notif = claim.fetch("more_than_ten_days")
-              ], style: [nil]             
+              ], style: [nil] 
+
+              sheet.add_row [
+                  'PERCENTAGE',
+                  date_diff_paid_notif = claim.fetch("one_three_five_days_percentage"),
+                  date_diff_paid_notif = claim.fetch("more_than_five_days_percentage"),
+                  date_diff_paid_notif = claim.fetch("total_percentage"),
+                  date_diff_paid_notif = claim.fetch("one_day_percentage"),
+                  date_diff_paid_notif = claim.fetch("two_to_three_days_percentage"),
+                  date_diff_paid_notif = claim.fetch("four_to_five_days_percentage"),
+                  date_diff_paid_notif = claim.fetch("six_to_ten_days_percentage"),
+                  date_diff_paid_notif = claim.fetch("more_than_ten_days_percentage")
+                ], style: [nil]      
             end
 
               sheet.add_row []
@@ -504,7 +564,18 @@ module Reports
                   date_diff_paid_process = claim.fetch("four_to_five_days"),
                   date_diff_paid_process = claim.fetch("six_to_ten_days"),
                   date_diff_paid_process = claim.fetch("more_than_ten_days")
-                ], style: [nil]             
+                ], style: [nil]
+                sheet.add_row [
+                  'PERCENTAGE',
+                  date_diff_paid_process = claim.fetch("one_three_five_days_percentage"),
+                  date_diff_paid_process = claim.fetch("more_than_five_days_percentage"),
+                  date_diff_paid_process = claim.fetch("total_percentage"),
+                  date_diff_paid_process = claim.fetch("one_day_percentage"),
+                  date_diff_paid_process = claim.fetch("two_to_three_days_percentage"),
+                  date_diff_paid_process = claim.fetch("four_to_five_days_percentage"),
+                  date_diff_paid_process = claim.fetch("six_to_ten_days_percentage"),
+                  date_diff_paid_process = claim.fetch("more_than_ten_days_percentage")
+                ], style: [nil]              
               end
 
               sheet.add_row []
@@ -535,6 +606,18 @@ module Reports
                   date_diff_paid_death = claim.fetch("four_to_five_days"),
                   date_diff_paid_death = claim.fetch("six_to_ten_days"),
                   date_diff_paid_death = claim.fetch("more_than_ten_days")
+                ], style: [nil] 
+
+                sheet.add_row [
+                  'PERCENTAGE',
+                  date_diff_paid_death = claim.fetch("one_three_five_days_percentage"),
+                  date_diff_paid_death = claim.fetch("more_than_five_days_percentage"),
+                  date_diff_paid_death = claim.fetch("total_percentage"),
+                  date_diff_paid_death = claim.fetch("one_day_percentage"),
+                  date_diff_paid_death = claim.fetch("two_to_three_days_percentage"),
+                  date_diff_paid_death = claim.fetch("four_to_five_days_percentage"),
+                  date_diff_paid_death = claim.fetch("six_to_ten_days_percentage"),
+                  date_diff_paid_death = claim.fetch("more_than_ten_days_percentage")
                 ], style: [nil]             
               end
 
@@ -566,7 +649,19 @@ module Reports
                   date_diff_paid_completed = claim.fetch("four_to_five_days"),
                   date_diff_paid_completed = claim.fetch("six_to_ten_days"),
                   date_diff_paid_completed = claim.fetch("more_than_ten_days")
-                ], style: [nil]             
+                ], style: [nil] 
+                
+                sheet.add_row [
+                  'PERCENTAGE',
+                  date_diff_paid_completed = claim.fetch("one_three_five_days_percentage"),
+                  date_diff_paid_completed = claim.fetch("more_than_five_days_percentage"),
+                  date_diff_paid_completed = claim.fetch("total_percentage"),
+                  date_diff_paid_completed = claim.fetch("one_day_percentage"),
+                  date_diff_paid_completed = claim.fetch("two_to_three_days_percentage"),
+                  date_diff_paid_completed = claim.fetch("four_to_five_days_percentage"),
+                  date_diff_paid_completed = claim.fetch("six_to_ten_days_percentage"),
+                  date_diff_paid_completed = claim.fetch("more_than_ten_days_percentage")
+                ], style: [nil]            
               end
 
               sheet.add_row []
@@ -597,7 +692,19 @@ module Reports
                   date_diff_process_notif = claim.fetch("four_to_five_days"),
                   date_diff_process_notif = claim.fetch("six_to_ten_days"),
                   date_diff_process_notif = claim.fetch("more_than_ten_days")
-                ], style: [nil]             
+                ], style: [nil] 
+
+                sheet.add_row [
+                  'PERCENTAGE',
+                  date_diff_process_notif = claim.fetch("one_three_five_days_percentage"),
+                  date_diff_process_notif = claim.fetch("more_than_five_days_percentage"),
+                  date_diff_process_notif = claim.fetch("total_percentage"),
+                  date_diff_process_notif = claim.fetch("one_day_percentage"),
+                  date_diff_process_notif = claim.fetch("two_to_three_days_percentage"),
+                  date_diff_process_notif = claim.fetch("four_to_five_days_percentage"),
+                  date_diff_process_notif = claim.fetch("six_to_ten_days_percentage"),
+                  date_diff_process_notif = claim.fetch("more_than_ten_days_percentage")
+                ], style: [nil]                 
               end
             end
           end
