@@ -269,16 +269,16 @@ class ClaimsController < ApplicationController
 
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
-        if @claim.prepared_by == "Richard Monteron"
+        if @claim.prepared_by == "Richard Monteron" || @claim.prepared_by == "Mcquen Abellano"
           if ["Aljon", "Jake", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
             @subheader_side_actions << {
-              id: "btn-check",
+              id: "btn-check",  
               link: "#",
               class: "fa fa-check",
               text: "Check"
             }
           end
-        elsif @claim.prepared_by == "Jake Villanueva"
+        elsif @claim.prepared_by == "Jake Villanueva" || @claim.prepared_by == "Adrian San Andres"
           if ["Aljon", "Richard", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
             @subheader_side_actions << {
               id: "btn-check",
