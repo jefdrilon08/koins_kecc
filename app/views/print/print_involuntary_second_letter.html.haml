@@ -112,13 +112,6 @@
 
 
   %ul.list-group
-    - if @data[:last_savings_deposit].present?
-      %li.list-group-item{style: "font-size: 14px"}
-        %input{:required => "", :type => "checkbox"}>/ 
-        &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
-        %b
-          #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
-        hanggang sa kasalukuyan
     -if @data[:loan_records].any?
       %li.list-group-item{style: "font-size: 14px"}
         %input{:required => "", :type => "checkbox"}>/

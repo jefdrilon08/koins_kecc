@@ -21,11 +21,11 @@ module DataStores
       @data_store.data[:record]= @result.map { |o|    
         @loan_records = []
         @member_accounts = []
-        loans = Loan.where("member_id = ? and status = ? and maturity_date <= ?","#{o.fetch("member_id")}","active","#{@as_of}")
+        matured_loans = Loan.where("member_id = ? and status = ? and maturity_date <= ?","#{o.fetch("member_id")}","active","#{@as_of}")
+        active_loans = Loan.where(member_id: o.fetch("member_id"),status: "active" )
         member_accounts = Member.find(o.fetch("member_id")).member_accounts
-        
-        if loans.present?
-          loans.each do |ll|
+        if matured_loans.present? and active_loans.present? and matured_loans.count == active_loans.count
+          matured_loans.each do |ll|
             @loan = Loan.find(ll.id)
 
             last_loan_payment = AccountTransaction.where(subsidiary_id: ll.id,transaction_type: 'loan_payment', status: "approved").order("transacted_at DESC").pluck(:transacted_at).first
@@ -65,12 +65,21 @@ module DataStores
                       last_transaction: @gk_last_transaction.transacted_at.to_date
                     }
             end
+            elsif mem[:account_subtype] == "Maintaining Balance Savings"
+               account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
+              if account_transaction.present?
+                  @kaagapay_last_transaction = account_transaction
+                    @member_accounts<< {
+                        id: mem[:id],
+                        account_subtype: mem[:account_subtype],
+                        balance: mem.balance.to_f,
+                        last_transaction: @kaagapay_last_transaction.transacted_at.to_date
+                      }
+            end
           end
         end #END MEMBER ACCOUNTS
-            if o[:member_type] != "GK"
-              if ((@as_of.to_date - @kimpok_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years 
-                 
-                 temp = {
+            
+                temp = {
                       member_id: o.fetch("member_id"),
                       member_name: o.fetch("last_name") + " " + o.fetch("first_name"),
                       identification_number: o.fetch("id_number"),
@@ -80,21 +89,6 @@ module DataStores
                       member_accounts: @member_accounts
                     }
           
-              end
-            else
-              if ((@as_of.to_date - @gk_last_transaction.transacted_at.to_date).to_i/ 365).to_i >= @number_of_years
-                 
-                 temp = {
-                      member_id: o.fetch("member_id"),
-                      member_name: o.fetch("last_name") + " " + o.fetch("first_name"),
-                      identification_number: o.fetch("id_number"),
-                      member_status: o.fetch("member_status"),
-                      member_type: o.fetch("member_type"),
-                      loan_records: @loan_records,
-                      member_accounts: @member_accounts
-                    }
-              end
-            end
           temp
             
         
