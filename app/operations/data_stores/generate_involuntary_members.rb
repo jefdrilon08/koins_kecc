@@ -65,7 +65,6 @@ module DataStores
                       last_transaction: @gk_last_transaction.transacted_at.to_date
                     }
             end
-            
             elsif mem[:account_subtype] == "Maintaining Balance Savings"
                account_transaction = AccountTransaction.where("subsidiary_id = ? and status = ? and data->>'is_interest' = ? and transaction_type = ?","#{mem.id}","approved","false","deposit").order("transacted_at DESC").first
               if account_transaction.present?
