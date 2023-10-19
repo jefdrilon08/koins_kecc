@@ -7,4 +7,11 @@ class LoanProductCategory < ApplicationRecord
   def to_s
     name
   end
+
+  def to_h
+    {
+      id: id,
+      name: name
+    }
+  end
 end

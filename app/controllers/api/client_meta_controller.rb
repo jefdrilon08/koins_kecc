@@ -4,7 +4,11 @@ module Api
     before_action :authorize_active_member!
 
     def loan_products
-      render json: { }
+      cmd = ::LoanProducts::BuildClientList.new
+
+      cmd.execute!
+
+      render json: cmd.data
     end
   end
 end

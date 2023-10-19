@@ -27,6 +27,7 @@ Allow a member to apply for a loan. This is encapsulated in a model called `Memb
 * `amount`: Amount to be applied
 * `term`: Loan term
 * `num_installments`: Number of installments
+* `data`: json obj for various attributes
 
 ### Utility Endpoints
 
