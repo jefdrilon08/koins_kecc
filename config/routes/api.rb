@@ -114,6 +114,9 @@ namespace :api do
     get "/equity_accounts/:id/transactions", to: "equity_accounts#transactions"
   end
 
+  # Client Meta Services
+  get "/client_meta/loan_products", to: "client_meta#loan_products"
+
   namespace :v2 do
     post "/apply", to: "public#apply"
     post "/branches/save_daily_branch_metric", to: "branches#save_daily_branch_metric"
