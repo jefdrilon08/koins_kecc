@@ -57,7 +57,6 @@ namespace :api do
   post "/members/delete", to: "members#delete"
   post "/members/form_make_payments", to: "members#form_make_payments"
 
-
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
@@ -91,11 +90,13 @@ namespace :api do
 
   # Loans
   post "/loans/restructure", to: "loans#restructure"
-  
+
+  # For member mobile client
   namespace :members do
     # Loans
     get "/loans/:id", to: "loans#show"
     get "/loans", to: "loans#index"
+    post "/loans", to: "loans#create"
 
     # Insurance
     get "/insurance_accounts", to: "insurance_accounts#index"

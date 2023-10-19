@@ -5,11 +5,11 @@ RSpec.describe 'Apply for Loan Online' do
 
   let (:member) { FactoryBot.create(:member, status: 'active') }
   let (:invalid_member) { FactoryBot.create(:member) }
-  let (:api_url) { "/api/members/loan_applications/apply" }
+  let (:api_url) { "/api/members/loans" }
   let (:valid_member_headers) { build_jwt_header(member.generate_jwt) }
   let (:invalid_member_headers) { build_jwt_header(invalid_member.generate_jwt) }
 
-  describe "GET /api/members/loan_applications", type: :request do
+  describe "POST /api/members/loans", type: :request do
     context 'invalid calls' do
       it 'fails if member is not logged in' do
         post "#{api_url}"
@@ -28,11 +28,17 @@ RSpec.describe 'Apply for Loan Online' do
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
+
+      it 'fails if member has an existing pending loan application' do
+        post "#{api_url}", params: {}, headers: valid_member_headers
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
 
     context 'valid calls' do
       it 'succeeds to submit a loan application' do
-        initial_count = LoanApplication.count
+        initial_count = MemberLoanApplication.count
         expected_count = initial_count + 1
 
         valid_params = {
@@ -42,11 +48,10 @@ RSpec.describe 'Apply for Loan Online' do
 
         expect(response).to have_http_status(:ok)
 
-        current_count = LoanApplication.count
+        current_count = MemberLoanApplication.count
 
         expect(current_count).to eq(expected_count)
       end
     end
   end
 end
-

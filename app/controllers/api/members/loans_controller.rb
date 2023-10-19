@@ -17,6 +17,10 @@ module Api
         end
       end
 
+      # Loan Application
+      def create
+      end
+
       def index
         status = params[:status] || "active"
 
