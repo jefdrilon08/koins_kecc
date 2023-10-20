@@ -16,12 +16,17 @@
         %hr
 
         %h4
-          Accounting Entry
-        = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
+          Accounting Entry For Transfer of Equity and Other Savings to RSA
+        = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry_transfer_savings }
+
+        %hr
+
+        %h4
+          Accounting Entry for Loan Payments
+        = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry_loan_payments }
 
 
         
 
-= render partial: "billing_for_involuntary/modals/update_transaction"
-= render partial: "billing_for_involuntary/modals/view_details"
-= render partial: "billing_for_writeoff_collections/modals/approve_transaction"         
+= render partial: "billing_for_involuntary/modals/view_details"   
+= render partial: "billing_for_involuntary/modals/approved"

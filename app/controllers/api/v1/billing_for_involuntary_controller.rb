@@ -18,12 +18,6 @@ module Api
       end
       
       def view_details
-        data_store = DataStore.find(params[:id])
-
-        config = {
-          data_store_id: data_store.id,
-          member_id: member_id
-        }
       end
 
       def add_member
@@ -37,25 +31,59 @@ module Api
         render json: { message: "Done" }
       end
 
-      def add_particular
-        data_store_id     = params[:id]
-        txtParticular    =  params[:txtParticular]
-      
-        data_store = DataStore.find(data_store_id)
-        data_store.data['accounting_entry']['particular'] = txtParticular
-        data_store.save!
-        render json: { message: "Done" }
-
-      end
-      def update_amount
+      def add_particular_to_transfer_savings
         config = {
           data_store_id: params[:id],
-          loan_id: params[:loan_id],
-          payment_amount: params[:payment_amount],
-          member_id: params[:member_id]
+          particular: params[:particular]
         }
-        raise config.inspect
         
+        errors = ::BillingForInvoluntary::ValidateParticular.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else 
+          billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularSavings.new(config: config).execute!
+          render json: {message: "success"}
+        end
+
+      end
+
+      def add_particular_to_loan_payments
+        config = {
+          data_store_id: params[:id],
+          particular: params[:particular]
+        }
+        errors = ::BillingForInvoluntary::ValidateParticular.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else 
+          billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularSavings.new(config: config).execute!
+          render json: {message: "success"}
+        end
+      end
+
+      def approve
+        config = {
+          data_store_id: params[:id],
+          current_user: current_user.id
+        }
+        errors = ::BillingForInvoluntary::ValidateApprove.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else 
+          
+          data_store = DataStore.find(params[:id])
+        
+          data_store.update(status: "processing")
+          
+          args = {
+            data_store: data_store.id,
+            user: current_user.id
+          }
+
+          ProcessApprovedCollectionForInvoluntary.perform_later(args)
+          render json: { message: "ok" }
+        end
+
       end
 
     end

@@ -184,10 +184,9 @@ namespace :api do
     #billing_for_involuntary
     post "/billing_for_involuntary/create", to: "billing_for_involuntary#create"
     post "/billing_for_involuntary/add_member", to: "billing_for_involuntary#add_member"
-    post "/billing_for_involuntary/add_particular", to: "billing_for_involuntary#add_particular"
-    post "/billing_for_involuntary/build_accounting_entry", to: "billing_for_involuntary#build_accounting_entry"
-    post "/billing_for_involuntary/update_amount", to: "billing_for_involuntary#update_amount"
-    post "/billing_for_involuntary/view_details", to: "billing_for_involuntary#view_details"
+    post "/billing_for_involuntary/add_particular_to_transfer_savings",to: "billing_for_involuntary#add_particular_to_transfer_savings"
+    post "/billing_for_involuntary/add_particular_to_loan_payments", to: "billing_for_involuntary#add_particular_to_loan_payments"
+    post "/billing_for_involuntary/approve", to: "billing_for_involuntary#approve"
     
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
