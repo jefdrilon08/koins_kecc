@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :loan_application do
     member            { FactoryBot.create(:member, status: 'active') }
+    amount            { 5000.00 }
     term              { 'weekly' }
     status            { 'pending' }
     num_installments  { 25 }

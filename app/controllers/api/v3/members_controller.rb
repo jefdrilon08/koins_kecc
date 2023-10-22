@@ -1,10 +1,27 @@
 module Api
   module V3
     class MembersController < ::Api::V3::ApplicationController
-      before_action :authenticate_user!, except: [:login, :dashboard, :savings]
-      before_action :authorize_mis!, except: [:login, :dashboard, :savings]
-      before_action :authenticate_member!, only: [:dashboard, :savings]
-      before_action :authorize_active_member!, only: [:dashboard, :savings]
+      before_action :authenticate_user!, except: [
+        :login, 
+        :dashboard, 
+        :savings
+      ]
+
+      before_action :authorize_mis!, except: [
+        :login, 
+        :dashboard, 
+        :savings
+      ]
+
+      before_action :authenticate_member!, only: [
+        :dashboard, 
+        :savings
+      ]
+
+      before_action :authorize_active_member!, only: [
+        :dashboard, 
+        :savings
+      ]
 
       def dashboard
         cmd = ::Members::GetDashboard.new(

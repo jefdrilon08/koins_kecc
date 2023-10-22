@@ -1,7 +1,30 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date]
+    before_action :authenticate_member!, except: [
+      :login, 
+      :apply_online, 
+      :index, 
+      :unlock, 
+      :update_password, 
+      :create_survey, 
+      :balik_kasapi, 
+      :reinstate, 
+      :delete, 
+      :form_make_payments, 
+      :update_recognition_date
+    ]
+
+    before_action :authenticate_user!, only: [
+      :save, 
+      :index, 
+      :unlock, 
+      :update_password, 
+      :create_survey, 
+      :balik_kasapi, 
+      :reinstate, 
+      :form_make_payments, 
+      :update_recognition_date
+    ]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
