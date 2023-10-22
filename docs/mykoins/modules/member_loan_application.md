@@ -19,6 +19,7 @@ Allow a member to apply for a loan. This is encapsulated in a model called `Memb
 
 * `date_applied`: Date member applied for the loan
 * `status`: Defaults to `pending`
+* `member_id`: Reference to the member
 
 ### Required Parameters
 

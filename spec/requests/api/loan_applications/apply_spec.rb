@@ -38,7 +38,7 @@ RSpec.describe 'Apply for Loan Online' do
 
     context 'valid calls' do
       it 'succeeds to submit a loan application' do
-        initial_count = MemberLoanApplication.count
+        initial_count = LoanApplication.count
         expected_count = initial_count + 1
 
         valid_params = {
