@@ -4,6 +4,9 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# Secrets
+config/credentails/development.key
+
 # Ignore bundler config.
 /.bundle
 vendor/bundle/
@@ -81,3 +84,5 @@ yarn-debug.log*
 !/app/assets/builds/.keep
 
 /appspec.yml
+
+/config/credentials/development.key
