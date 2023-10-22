@@ -35,6 +35,7 @@ module Api
         validator.execute!
 
         if validator.valid?
+          render json: { message: 'ok' }
         else
           render json: validator.payload, status: :unprocessable_entity
         end
