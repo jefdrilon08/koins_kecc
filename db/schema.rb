@@ -952,7 +952,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_015440) do
 
   create_table "loan_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "loan_product_id", null: false
-    t.uuid "loan_product_type_id", null: false
     t.decimal "amount", null: false
     t.string "term", null: false
     t.integer "num_installments", null: false
@@ -964,7 +963,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_015440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["loan_product_id"], name: "index_loan_applications_on_loan_product_id"
-    t.index ["loan_product_type_id"], name: "index_loan_applications_on_loan_product_type_id"
     t.index ["member_id"], name: "index_loan_applications_on_member_id"
   end
 
@@ -1706,7 +1704,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_22_015440) do
   add_foreign_key "kjsp_claims", "centers"
   add_foreign_key "kjsp_claims", "members"
   add_foreign_key "legal_dependents", "members"
-  add_foreign_key "loan_applications", "loan_product_types"
   add_foreign_key "loan_applications", "loan_products"
   add_foreign_key "loan_applications", "members"
   add_foreign_key "loan_product_types", "loan_products"

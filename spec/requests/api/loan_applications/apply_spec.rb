@@ -8,6 +8,7 @@ RSpec.describe 'Apply for Loan Online' do
   let (:api_url) { "/api/members/loans" }
   let (:valid_member_headers) { build_jwt_header(member.generate_jwt) }
   let (:invalid_member_headers) { build_jwt_header(invalid_member.generate_jwt) }
+  let (:loan_product) { FactoryBot.create(:loan_product) }
 
   describe "POST /api/members/loans", type: :request do
     context 'invalid calls' do
@@ -27,12 +28,28 @@ RSpec.describe 'Apply for Loan Online' do
         post "#{api_url}", headers: valid_member_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['amount']).to eq(['required'])
+        expect(payload['term']).to eq(['required'])
+        expect(payload['num_installments']).to eq(['required'])
+        expect(payload['date_applied']).to eq(['required'])
       end
 
       it 'fails if member has an existing pending loan application' do
+        existing_loan_application = FactoryBot.create(
+          :loan_application,
+          member: member
+        )
+
         post "#{api_url}", params: {}, headers: valid_member_headers
 
         expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['loan_application']).to eq(['pending application'])
       end
     end
 
@@ -42,13 +59,17 @@ RSpec.describe 'Apply for Loan Online' do
         expected_count = initial_count + 1
 
         valid_params = {
+          loan_product_id:  loan_product.id,
+          num_installments: 25,
+          term:             'weekly',
+          date_applied:     Date.today.strftime("%Y-%m-%d")
         }
 
         post "#{api_url}", params: valid_params, headers: valid_member_headers
 
         expect(response).to have_http_status(:ok)
 
-        current_count = MemberLoanApplication.count
+        current_count = LoanApplication.count
 
         expect(current_count).to eq(expected_count)
       end
