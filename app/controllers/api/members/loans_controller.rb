@@ -19,6 +19,25 @@ module Api
 
       # Loan Application
       def create
+        amount            = params[:amount].try(:to_f)
+        term              = params[:term]
+        num_installments  = params[:num_installments].try(:to_i)
+        loan_product      = LoanProduct.find_by_id(params[:loan_product_id]) 
+
+        validator = ::Members::LoanApplications::ValidateApply.new(
+          member:           @current_member,
+          amount:           @amount,
+          num_installments: num_installments,
+          term:             @term,
+          loan_product:     @loan_product
+        )
+
+        validator.execute!
+
+        if validator.valid?
+        else
+          render json: validator.payload, status: :unprocessable_entity
+        end
       end
 
       def index

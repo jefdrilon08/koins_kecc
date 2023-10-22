@@ -27,6 +27,10 @@ module Members
       end
 
       def execute!
+        if @amount.blank?
+          @payload[:amount] << "required"
+        end
+
         if @member.blank?
           @payload[:member] << "required"
         end

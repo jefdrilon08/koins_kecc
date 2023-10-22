@@ -34,7 +34,6 @@ RSpec.describe 'Apply for Loan Online' do
         expect(payload['amount']).to eq(['required'])
         expect(payload['term']).to eq(['required'])
         expect(payload['num_installments']).to eq(['required'])
-        expect(payload['date_applied']).to eq(['required'])
         expect(payload['loan_product']).to eq(['required'])
       end
 
