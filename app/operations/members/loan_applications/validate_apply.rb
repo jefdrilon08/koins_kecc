@@ -6,7 +6,8 @@ module Members
         amount:,
         term:,
         num_installments:,
-        loan_product:
+        loan_product:,
+        data: {}
       )
         super()
 
@@ -15,6 +16,7 @@ module Members
         @term             = term
         @num_installments = num_installments
         @loan_product     = loan_product
+        @data             = data
 
         @payload = {
           member:           [],
@@ -22,7 +24,8 @@ module Members
           term:             [],
           num_installments: [],
           date_applied:     [],
-          loan_product:     []
+          loan_product:     [],
+          loan_application: []
         }
       end
 
@@ -45,6 +48,10 @@ module Members
 
         if @loan_product.blank?
           @payload[:loan_product] << "required"
+        end
+
+        if @member.present? and LoanApplication.where(member_id: @member.id, status: 'pending').count > 0
+          @payload[:loan_application] << "pending application"
         end
 
         count_errors!

@@ -23,19 +23,34 @@ module Api
         term              = params[:term]
         num_installments  = params[:num_installments].try(:to_i)
         loan_product      = LoanProduct.find_by_id(params[:loan_product_id]) 
+        data              = params[:data] || {}
 
         validator = ::Members::LoanApplications::ValidateApply.new(
           member:           @current_member,
-          amount:           @amount,
+          amount:           amount,
           num_installments: num_installments,
-          term:             @term,
-          loan_product:     @loan_product
+          term:             term,
+          loan_product:     loan_product,
+          data:             data
         )
 
         validator.execute!
 
         if validator.valid?
-          render json: { message: 'ok' }
+          cmd = ::Members::LoanApplications::Apply.new(
+            member:           @current_member,
+            amount:           amount,
+            num_installments: num_installments,
+            term:             term,
+            loan_product:     loan_product,
+            data:             data
+          )
+
+          cmd.execute!
+
+          loan_application = cmd.loan_application
+
+          render json: { reference_number: loan_application.reference_number }
         else
           render json: validator.payload, status: :unprocessable_entity
         end

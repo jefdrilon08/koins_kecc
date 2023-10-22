@@ -72,6 +72,11 @@ RSpec.describe 'Apply for Loan Online' do
         current_count = LoanApplication.count
 
         expect(current_count).to eq(expected_count)
+
+        payload = JSON.parse(response.body)
+
+        # Expect to have reference number
+        expect(payload['reference_number']).not_to eq(nil)
       end
     end
   end
