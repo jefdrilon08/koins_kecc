@@ -5,7 +5,7 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Secrets
-config/credentails/development.key
+config/credentails/*.key
 
 # Ignore bundler config.
 /.bundle
