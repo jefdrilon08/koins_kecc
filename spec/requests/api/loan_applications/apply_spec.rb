@@ -62,6 +62,7 @@ RSpec.describe 'Apply for Loan Online' do
           loan_product_id:  loan_product.id,
           num_installments: 25,
           term:             'weekly',
+          amount:           5000.00,
           date_applied:     Date.today.strftime("%Y-%m-%d")
         }
 

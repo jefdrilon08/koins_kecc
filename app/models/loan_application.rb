@@ -14,4 +14,12 @@ class LoanApplication < ApplicationRecord
   validates :status, presence: true
   validates :reference_number, presence: true, uniqueness: true
   validates :date_applied, presence: true
+
+  before_validation :load_defaults
+
+  def load_defaults
+    if self.status.blank?
+      self.status = 'pending'
+    end
+  end
 end

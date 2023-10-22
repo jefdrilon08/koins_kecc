@@ -19,6 +19,7 @@ module Members
         @loan_product     = loan_product
         @date_applied     = Date.today
         @data             = data
+        @reference_number = Random.hex(3).upcase
 
         @loan_application = LoanApplication.new(
           member:           @member,
@@ -27,7 +28,8 @@ module Members
           date_applied:     @date_applied,
           term:             @term,
           num_installments: @num_installments,
-          data:             @data
+          data:             @data,
+          reference_number: @reference_number
         )
       end
 
