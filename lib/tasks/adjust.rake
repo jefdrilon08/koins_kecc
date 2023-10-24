@@ -1364,7 +1364,7 @@ namespace :adjust do
             new_center.name = center_name.try(:upcase)
             new_center.short_name = center_name.try(:upcase)
             new_center.meeting_day = 1
-            new_center.user = User.where(first_name: "Aljon").first
+            new_center.user = User.where(first_name: "kaiser").first
             new_center.branch = Branch.find(branch_id)
             new_center.save!
 
