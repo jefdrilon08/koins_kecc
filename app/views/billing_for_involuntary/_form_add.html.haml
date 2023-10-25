@@ -8,13 +8,19 @@
       Action
       %button#btn-add.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}" } }
         Add
-
-  %tr
   %tr
     %th 
-      Particular
-      = text_field_tag :particular, "#{@data_store.data['accounting_entry']['particular']}", class: "form-control", id: "particular"
+      Particular of Accounting Entry for transfer of other savings and equity to K-IMPOK
+      %input.form-control{:value => @accounting_entry_transfer_savings[:particular],id: "particular-transfer-savings"}/
     %th
       Action
-      %button#btn-add-particular.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+      %button#btn-add-particular-trans.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+        Save
+  %tr
+    %th
+      Particular of Accounting Entry for Loan Payments
+      %input.form-control{:value => @accounting_entry_loan_payments[:particular],id: "particular-transfer-loan-payments"}/
+    %th
+      Action
+      %button#btn-add-particular-lp.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
         Save

@@ -40,6 +40,7 @@ export default function MembersProfile(props) {
   const [verifiedLoans]                 = useState(props.verified_loans);
   const [inProcessLoans]                = useState(props.in_process_loans);
   const [writeoffLoans]                 = useState(props.writeoff_loans);
+  const [forwriteoffLoans]              = useState(props.for_writeoff_loans);
   const [savingsAccounts]               = useState(props.savings_accounts);
   const [insuranceAccounts]             = useState(props.insurance_accounts);
   const [equityAccounts]                = useState(props.equity_accounts);
@@ -191,6 +192,7 @@ export default function MembersProfile(props) {
                     loanProductsForRestructuring={loanProductsForRestructuring}
                     coMakers={coMakers}
                     accruedInterest={accruedInterest}
+                    forwriteoffLoans={forwriteoffLoans}
                   />
                 </div>
                 <div id="savings_accounts" className="home p-3 tab-pane" role="tabpanel">
