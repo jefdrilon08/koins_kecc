@@ -78,7 +78,9 @@ module DataStores
             end
           end
         end #END MEMBER ACCOUNTS
-            
+            if @loan_records.any?
+
+
                 temp = {
                       member_id: o.fetch("member_id"),
                       member_name: o.fetch("last_name") + " " + o.fetch("first_name"),
@@ -88,7 +90,7 @@ module DataStores
                       loan_records: @loan_records,
                       member_accounts: @member_accounts
                     }
-          
+          end
           temp
             
         
