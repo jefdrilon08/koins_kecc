@@ -4,7 +4,7 @@
       .card-body
         %h5
           Billing for Involuntary #{@data_store.meta["branch_name"]}
-
+        
         - if @data_store["status"] == "pending"
           = render partial: "form_add"
 

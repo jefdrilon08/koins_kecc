@@ -44,11 +44,12 @@
         %td.text-end
           #{number_to_currency(dt[:remaining_savings],unit: '')}
         %td
-          .btn-group{:style => "margin-left: 20px"}
-            .btn.btn-delete.btn-danger.btn-sm{:type =>"button", data: {member_id: dt[:member_id], member_name: dt[:member_name]}} 
-              DELETE
-            .btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}  
-              DETAILS
+          -if @data_store.pending?
+            .btn-group{:style => "margin-left: 20px"}
+              .btn.btn-delete.btn-danger.btn-sm{:type =>"button", data: {member_id: dt[:member_id], member_name: dt[:member_name]}} 
+                DELETE
+              .btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}  
+                DETAILS
     %tr
       %th.text-center
         TOTAL

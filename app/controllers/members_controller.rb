@@ -378,6 +378,12 @@ class MembersController < ApplicationController
       "loan_products.name ASC, loans.cycle ASC"
     )
 
+    @for_writeoff_loans = ReadOnlyLoan.for_writeoff.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
+
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 
     @loan_products  = ReadOnlyLoanProduct.select("*").order("name ASC")
@@ -602,6 +608,20 @@ end
         total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
       }
     }
+
+    @payload[:for_writeoff_loans] = @for_writeoff_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+   
 
     @payload[:savings_accounts] = @savings_accounts.map{ |o|
       {

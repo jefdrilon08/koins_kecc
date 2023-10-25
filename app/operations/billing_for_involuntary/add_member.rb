@@ -112,8 +112,8 @@ module BillingForInvoluntary
               id: lrs.id,
               loan_product: lrs.loan_product.name,
               maturity_date: lrs.maturity_date,
-              interest_balance: @interest_to_paid,
-              principal_balance: @principal_to_paid
+              interest_balance: @interest_to_paid.round(2).to_f,
+              principal_balance: @principal_to_paid.round(2).to_f
               
             }
          end
@@ -158,8 +158,8 @@ module BillingForInvoluntary
               id: lrs.id,
               loan_product: lrs.loan_product.name,
               maturity_date: lrs.maturity_date,
-              interest_balance: @interest_to_paid.to_f,
-              principal_balance: @principal_to_paid.to_f
+              interest_balance: @interest_to_paid.round(2).to_f,
+              principal_balance: @principal_to_paid.round(2).to_f
             }
           end
         end
@@ -179,9 +179,9 @@ module BillingForInvoluntary
           member_accounts: memberAccountArr,
           total_savings: original_total_member_accoount_balance.round(2).to_f,
           total_loan_balances: @total_loan_balances.round(2).to_f,
-          remaining_savings: remaining_balance.to_f,
-          total_loan_payment: @total_loan_payment.to_f,
-          closing_fee_amount: @closing_fee_amount.to_f
+          remaining_savings: remaining_balance.round(2).to_f,
+          total_loan_payment: @total_loan_payment.round(2).to_f,
+          closing_fee_amount: @closing_fee_amount.round(2).to_f
       }
      
       

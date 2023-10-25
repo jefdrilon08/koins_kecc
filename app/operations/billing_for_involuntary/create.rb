@@ -5,6 +5,7 @@ module BillingForInvoluntary
       @branch           = @config[:branch]
       @transaction_date = Date.today
       @data_store_type  = "BILLING_FOR_INVOLUNTARY"
+      @current_user     = User.find(config[:current_user].id)
       @current_date     = ::Utils::GetCurrentDate.new(
                             config: {
                               branch: @branch
@@ -17,7 +18,11 @@ module BillingForInvoluntary
           branch_id: @branch.id,
           branch_name: @branch.name,
           transaction_date: @current_date,
-          date_approved: ""
+          date_approved: "",
+          prepared_by: {
+          id: @current_user.id,
+          name: @current_user.full_name
+          }
         },
         data: {
           accounting_entry_transfer_savings: {

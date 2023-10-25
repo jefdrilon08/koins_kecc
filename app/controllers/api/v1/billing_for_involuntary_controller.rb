@@ -1,4 +1,3 @@
-
 module Api
   module V1
     class BillingForInvoluntaryController < ApplicationController
@@ -56,7 +55,7 @@ module Api
         if errors[:messages].any?
           render json: errors, status: 400
         else 
-          billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularSavings.new(config: config).execute!
+          billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularLoanPayments.new(config: config).execute!
           render json: {message: "success"}
         end
       end

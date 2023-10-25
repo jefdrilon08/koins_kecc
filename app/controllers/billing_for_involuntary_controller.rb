@@ -1,14 +1,16 @@
 class BillingForInvoluntaryController < DataStoreController
   def index
     super
-        @subheader_side_actions = [
-      {
-        id: "btn-new",
-        link: "#",
-        class: "fa fa-plus",
-        text: "New"
-      }
-    ]
+      @subheader_side_actions = [
+        {
+          id: "btn-new",
+          link: "#",
+          class: "fa fa-plus",
+          text: "New"
+        }
+      ]
+
+      
   end
   def show
     @data_store              = DataStore.find(params[:id])
@@ -19,15 +21,20 @@ class BillingForInvoluntaryController < DataStoreController
     @accounting_entry_transfer_savings  = @data[:accounting_entry_transfer_savings]
     @accounting_entry_loan_payments = @data[:accounting_entry_loan_payments]
     @subheader_side_actions = []
+    
 
-    if @data_store.pending?
-      @subheader_side_actions << {
-        id: "btn-approve",
-        link: "#",
-        class: "fa fa-check",
-        text: "Approve"
-      }
+
+    if helpers.bk_mis_user
+      if @data_store.pending?
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
     end
+
 
 
 

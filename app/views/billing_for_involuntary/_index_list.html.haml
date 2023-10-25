@@ -5,7 +5,9 @@
       %th
         Branch
       %th.text-center
-        Date
+        Date Created
+      %th.text-center
+        prepared_by
       %th.text-center
         status
   %thead
@@ -18,6 +20,9 @@
           #{o.meta.with_indifferent_access[:branch_name]}
         %td.text-center
           #{o.meta.with_indifferent_access[:transaction_date]}
+        %td.text-center
+          #{o.meta.with_indifferent_access["prepared_by"]["name"]}
+        
         %td.text-center
           - if o[:status] == "processing"
             .badge.badge-info
