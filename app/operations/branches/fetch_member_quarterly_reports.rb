@@ -82,9 +82,9 @@ module Branches
         @biyuda_female_members    = @biyuda_members.select{|o| o[:gender] == "Female"}
         # length of membership
         @length_of_stay_member_3m         = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i <= 91}
-        @length_of_stay_member_3m_1yr     = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 92 && (Date.parse("2023-03-31").to_date - o.data["recognition_date"].to_date).to_i <= 365}
-        @length_of_stay_member_1yr_2yr    = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 366 && (Date.parse("2023-03-31").to_date - o.data["recognition_date"].to_date).to_i <= 730}
-        @length_of_stay_member_2yrs_3yr   = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 731 && (Date.parse("2023-03-31").to_date - o.data["recognition_date"].to_date).to_i <= 1895}
+        @length_of_stay_member_3m_1yr     = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 92 && (@end_date.to_date - o.data["recognition_date"].to_date).to_i <= 365}
+        @length_of_stay_member_1yr_2yr    = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 366 && (@end_date.to_date - o.data["recognition_date"].to_date).to_i <= 730}
+        @length_of_stay_member_2yrs_3yr   = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 731 && (@end_date.to_date - o.data["recognition_date"].to_date).to_i <= 1895}
         @length_of_stay_member_3yr_above  = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i >= 1896 }
 
       else
