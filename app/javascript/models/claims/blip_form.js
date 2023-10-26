@@ -123,60 +123,46 @@ var blipForm = (function() {
   
 
   $dateOfDeathTpdAccident.on('change', function() {
-    var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
-    var classificationOfInsuredValue = ($classificationOfInsured.val());  
-    var dateOfPolicyIssueValue = ($dateOfPolicyIssue.val());
-    var dateOfDeathTpdAccidentValue = ($dateOfDeathTpdAccident.val());
-    var recognitionDate = new Date(dateOfPolicyIssueValue);
-    var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
-    var currentDate = new Date();
-    var seconds = Math.abs( dateOfResignation - recognitionDate ) / 1000;
-    var daysBetween = Math.abs(((seconds / 60) / 60) / 24);
-    var numberOfDays = Math.floor(daysBetween);
-    var numberOfMonths = Math.floor(daysBetween / 30.44);
-    var years = Math.floor(daysBetween / 365.242199);
-    var months = (numberOfMonths - (years * 12));
+    var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
+    var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
+    var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
+    var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
 
-      if (years < 1){
-        if (months > 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months == 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months < 1) {
-          if (numberOfDays == 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays > 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays < 1){
-            var stay = ""
-            $('#length-of-stay').val(stay)  
-          }
-        }  
-      }else{
-        if (years == 1 && months == 0){
-          var stay = years + " Year"
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months == 1){
-          var stay = years + " Year and, " + months + " months" 
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months > 1){
-          var stay = years + " Year and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months  > 0){
-          var stay = years + " Years and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months == 1){
-          var stay = years + " Years and, " + months + " month"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months < 1){
-          var stay = years + " Years"
-          $('#length-of-stay').val(stay)
+    var years = dateOfDeathTpdAccident.getFullYear() - dateOfPolicyIssue.getFullYear();
+    var months = dateOfDeathTpdAccident.getMonth() - dateOfPolicyIssue.getMonth();
+    var days = dateOfDeathTpdAccident.getDate() - dateOfPolicyIssue.getDate();
+
+    if (days < 0) {
+        months--;
+        var lastDayOfMonth = new Date(dateOfDeathTpdAccident.getFullYear(), dateOfDeathTpdAccident.getMonth(), 0).getDate();
+        days += lastDayOfMonth;
+    }
+
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    var stay = "";
+    if (years > 0) {
+        stay += years + " Year";
+        if (years > 1) {
+            stay += "s";
         }
-      }
+    }
+
+    if (months > 0) {
+        if (stay) {
+            stay += " and ";
+        }
+        stay += months + " Month";
+        if (months > 1) {
+            stay += "s";
+        }
+    }
+
+    $('#length-of-stay').val(stay);
+
  
     // if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member"){ 
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
@@ -260,6 +246,7 @@ var blipForm = (function() {
 
         $('#face-amount').val(value);
       }
+
     });
 
     $returnedContribution.on('change', function() { 
@@ -300,61 +287,65 @@ var blipForm = (function() {
     });
 
     $typeOfInsurancePolicy.on('change', function(){
-      
-      var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
-      var classificationOfInsuredValue = ($classificationOfInsured.val());  
-      var dateOfPolicyIssueValue = ($dateOfPolicyIssue.val());
-      var dateOfDeathTpdAccidentValue = ($dateOfDeathTpdAccident.val());
-      var recognitionDate = new Date(dateOfPolicyIssueValue);
-      var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
-      var currentDate = new Date();
-      var seconds = Math.abs( dateOfResignation - recognitionDate ) / 1000;
-      var daysBetween = Math.abs(((seconds / 60) / 60) / 24);
-      var numberOfDays = Math.floor(daysBetween);
-      var numberOfMonths = Math.floor(daysBetween / 30.44);
-      var years = Math.floor(daysBetween / 365.242199);
-      var months = (numberOfMonths - (years * 12));
+      var typeOfInsurancePolicyValue = $typeOfInsurancePolicy.val();
+      var classificationOfInsuredValue = $classificationOfInsured.val();  
+      var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
+      var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
+      var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
+      var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
+
+      function getMonthsDifference(date1, date2) {
+          const monthsInYear = 12;
+          const diffYear = date2.getFullYear() - date1.getFullYear();
+          const diffMonth = date2.getMonth() - date1.getMonth();
+          return diffYear * monthsInYear + diffMonth;
+      }
+
+      var numberOfMonths = getMonthsDifference(dateOfPolicyIssue, dateOfDeathTpdAccident);
+      var years = Math.floor(numberOfMonths / 12);
+      var months = numberOfMonths % 12;
 
       if (years < 1){
-        if (months > 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months == 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months < 1) {
-          if (numberOfDays == 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays > 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays < 1){
-            var stay = ""
-            $('#length-of-stay').val(stay)  
+          if (months > 1){
+              var stay = months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (months == 1){
+              var stay = months + " Month"
+              $('#length-of-stay').val(stay)
+          } else if (months < 1) {
+              if (numberOfDays == 1){
+                  var stay = numberOfDays + " Day"
+                  $('#length-of-stay').val(stay)
+              } else if (numberOfDays > 1){
+                  var stay = numberOfDays + " Days"
+                  $('#length-of-stay').val(stay)
+              } else if (numberOfDays < 1){
+                  var stay = ""
+                  $('#length-of-stay').val(stay)
+              }
+          }  
+      } else {
+          if (years == 1 && months == 0){
+              var stay = years + " Year"
+              $('#length-of-stay').val(stay)
+          } else if (years == 1 && months == 1){
+              var stay = years + " Year and " + months + " Month" 
+              $('#length-of-stay').val(stay)
+          } else if (years == 1 && months > 1){
+              var stay = years + " Year and " + months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months > 0){
+              var stay = years + " Years and " + months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months == 1){
+              var stay = years + " Years and " + months + " Month"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months < 1){
+              var stay = years + " Years"
+              $('#length-of-stay').val(stay)
           }
-        }  
-      }else{
-        if (years == 1 && months == 0){
-          var stay = years + " Year"
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months == 1){
-          var stay = years + " Year and, " + months + " months" 
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months > 1){
-          var stay = years + " Year and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months  > 0){
-          var stay = years + " Years and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months == 1){
-          var stay = years + " Years and, " + months + " month"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months < 1){
-          var stay = years + " Years"
-          $('#length-of-stay').val(stay)
-        }
       }
+
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
@@ -437,62 +428,67 @@ var blipForm = (function() {
         $('#face-amount').val(value);
       }
     });
+
     $classificationOfInsured.on('change', function(){
-      
-      var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
-      var classificationOfInsuredValue = ($classificationOfInsured.val());  
-      var dateOfPolicyIssueValue = ($dateOfPolicyIssue.val());
-      var dateOfDeathTpdAccidentValue = ($dateOfDeathTpdAccident.val());
-      var recognitionDate = new Date(dateOfPolicyIssueValue);
-      var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
-      var currentDate = new Date();
-      var seconds = Math.abs( dateOfResignation - recognitionDate ) / 1000;
-      var daysBetween = Math.abs(((seconds / 60) / 60) / 24);
-      var numberOfDays = Math.floor(daysBetween);
-      var numberOfMonths = Math.floor(daysBetween / 30.44);
-      var years = Math.floor(daysBetween / 365.242199);
-      var months = (numberOfMonths - (years * 12));
+      var typeOfInsurancePolicyValue = $typeOfInsurancePolicy.val();
+      var classificationOfInsuredValue = $classificationOfInsured.val();  
+      var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
+      var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
+      var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
+      var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
+
+      function getMonthsDifference(date1, date2) {
+          const monthsInYear = 12;
+          const diffYear = date2.getFullYear() - date1.getFullYear();
+          const diffMonth = date2.getMonth() - date1.getMonth();
+          return diffYear * monthsInYear + diffMonth;
+      }
+
+      var numberOfMonths = getMonthsDifference(dateOfPolicyIssue, dateOfDeathTpdAccident);
+      var years = Math.floor(numberOfMonths / 12);
+      var months = numberOfMonths % 12;
 
       if (years < 1){
-        if (months > 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months == 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months < 1) {
-          if (numberOfDays == 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays > 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays < 1){
-            var stay = ""
-            $('#length-of-stay').val(stay)  
+          if (months > 1){
+              var stay = months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (months == 1){
+              var stay = months + " Month"
+              $('#length-of-stay').val(stay)
+          } else if (months < 1) {
+              if (numberOfDays == 1){
+                  var stay = numberOfDays + " Day"
+                  $('#length-of-stay').val(stay)
+              } else if (numberOfDays > 1){
+                  var stay = numberOfDays + " Days"
+                  $('#length-of-stay').val(stay)
+              } else if (numberOfDays < 1){
+                  var stay = ""
+                  $('#length-of-stay').val(stay)
+              }
+          }  
+      } else {
+          if (years == 1 && months == 0){
+              var stay = years + " Year"
+              $('#length-of-stay').val(stay)
+          } else if (years == 1 && months == 1){
+              var stay = years + " Year and " + months + " Month" 
+              $('#length-of-stay').val(stay)
+          } else if (years == 1 && months > 1){
+              var stay = years + " Year and " + months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months > 0){
+              var stay = years + " Years and " + months + " Months"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months == 1){
+              var stay = years + " Years and " + months + " Month"
+              $('#length-of-stay').val(stay)
+          } else if (years > 1 && months < 1){
+              var stay = years + " Years"
+              $('#length-of-stay').val(stay)
           }
-        }  
-      }else{
-        if (years == 1 && months == 0){
-          var stay = years + " Year"
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months == 1){
-          var stay = years + " Year and, " + months + " months" 
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months > 1){
-          var stay = years + " Year and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months  > 0){
-          var stay = years + " Years and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months == 1){
-          var stay = years + " Years and, " + months + " month"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months < 1){
-          var stay = years + " Years"
-          $('#length-of-stay').val(stay)
-        }
       }
+
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
