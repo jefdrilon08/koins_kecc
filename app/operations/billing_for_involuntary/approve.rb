@@ -38,12 +38,11 @@ module BillingForInvoluntary
         
         def update_other_loans!
             @data[:records].each do |rec|
-                loans = Loan.where(member_id: rec[:member_id])
+                loans = Loan.where(member_id: rec[:member_id],status: "active")
                 loans.each do |l|
                     Loan.update(status: "for-writeoff")
                 end
             end
-            @data
         end
         
         def approved_accounting_entry_for_loan_payments!
@@ -201,9 +200,14 @@ module BillingForInvoluntary
                 rec[:member_accounts].each do |mr|
                         
                     if mr[:account_subtype] == "K-IMPOK"
-                        
                         member_account = MemberAccount.find(mr[:id])
-                            ending_balance = member_account.balance.to_f - @total_payment.round(2).to_f
+                        ending_balance = member_account.balance.to_f - @total_payment.round(2).to_f
+
+                        if rec[:closing_fee_amount] > 0.0
+                            ending_balance -= rec[:closing_fee_amount]  
+                            @total_payment += rec[:closing_fee_amount] 
+                        end 
+                       
                             withdraw_account_transaction = AccountTransaction.new(
                                 subsidiary_id: member_account.id,
                                 subsidiary_type: "MemberAccount",
@@ -227,7 +231,10 @@ module BillingForInvoluntary
 
                             withdraw_account_transaction.save!
                             member_account.update!(balance: ending_balance)
+                        
                     end
+
+                  
                 end
                 
                 #update member status
