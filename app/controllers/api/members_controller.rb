@@ -90,6 +90,7 @@ module Api
     def update_recognition_date
       member            = Member.find(params[:id])
       recognition_date  = params[:recognition_date]
+      status            = 'active'
       config  = {
         member: member,
         user: current_user,
@@ -121,7 +122,8 @@ module Api
           )
         ::Members::UpdateRecognitionDate.new(
           member: member,
-          recognition_date: recognition_date
+          recognition_date: recognition_date,
+          status: status
         ).execute!
         render json: { id: member.id }
       end

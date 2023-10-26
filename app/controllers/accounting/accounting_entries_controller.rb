@@ -70,6 +70,16 @@ module Accounting
             },
             class: "fa fa-check"
           }
+        elsif helpers.sbk_mis_user
+          @subheader_side_actions << {
+            id: "btn-approve",
+            link: "#",
+            text: "Approve",
+            data: {
+              id: "#{@accounting_entry.id}"
+            },
+            class: "fa fa-check"
+          } 
         elsif @accounting_entry.book == "CDB"
           user = @accounting_entry.prepared_by.to_s.split(",")
 

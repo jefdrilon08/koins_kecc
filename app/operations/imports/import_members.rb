@@ -4,7 +4,7 @@ module Imports
 
     def initialize(actual_url:)
       @actual_url = actual_url
-      @current_user = User.where("first_name = ? AND last_name = ?","Aljon", "Laureano").first
+      @current_user = User.where("first_name = ? AND last_name = ?","kaiser", "velilia").first
     end
 
     def execute!

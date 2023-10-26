@@ -5,81 +5,113 @@ import * as bootstrap from "bootstrap";
 var _authenticityToken;
 var _id;
 
-var $btnAddBook;
-var $inputBookType;
-var $modalViewDetails;
-var $viewDetails;
-var $$displayMember;
+var $btnDelete;
+var $btnConfirmDelete;
+var $modalDelete;
+
+var $btnApproved;
+var $btnConfirmApproved;
+var $modalApproved;
+
+
+var $btnSaveParticularTransfer;
+var $btnSaveParticularPayments;
+var $inputParticularSavings;
+var $inputParticularPayments;
+
+
+
+var $btnAdd;
+var _memberId;
+var $selectMember;
+
 
 var currentMember           = "";
 var currentMemberId         = "";
-
-var $btnAdd;
-var $btnApprove;
-var $btnConfirmProcess; 
-var $UpdateAmount;
-var $modalUpdate;
-var $modalApproveTransaction;
-var $btnAddParticular;
-var $inputParticular;
-var _urlAddParticular   = "/api/v1/billing_for_involuntary/add_particular";
-var _loanId;
-var _memberId;
-
-
 var $message;
-var templateErrorList;
+  templateErrorList = $("#template-error-list").html();
 
 var _cacheDom = function() {
-
-  $modalUpdate = new bootstrap.Modal(
-    document.getElementById("modal-update-transaction")
-  )
-
-  $modalViewDetails = new bootstrap.Modal(
-    document.getElementById("modal-view-details")
-  )
-	
-  $modalApproveTransaction = new bootstrap.Modal(
-    document.getElementById("modal-approve-transaction")
-  )
-  $btnAddBook             = $("#btn-add-book");
-  $inputBookType          = $("#book_type");
-  $viewDetails        = $("#btn-view-details");
+  console.log(_id);
+ 
   $btnAdd             = $("#btn-add");	
-  $btnConfirmAmount   = $("#btn-confirm-amount")
-  $btnApprove         = $("#btn-approve");
-  $btnConfirmProcess  = $("#btn-confirm-process");
   $selectMember       = $("#select-member");
-  $UpdateAmount       = $(".undo");
-  $paymentAmount      = $("#paymentAmount");		
-  $memberName         = $("#memberName");
-  $memberId           = $("#memberId");
-  $loanType           = $("#loanType");
-  $btnAddParticular   = $("#btn-add-particular");
-  $inputParticular    = $("#particular");
+
+  $btnSaveParticularTransfer = $("#btn-add-particular-trans");
+  $inputParticularSavings = $("#particular-transfer-savings");
+
+  $btnSaveParticularPayments = $("#btn-add-particular-lp");
+  $inputParticularPayments = $("#particular-transfer-loan-payments");
+
+  $btnApproved = $("#btn-approve");
+  $btnConfirmApproved = $("#btn-confirm-approved");
+  $modalApproved = new bootstrap.Modal(document.getElementById("modal-approve"));
+  
+
+
   $message            = $(".message");
+  templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  $btnApproved.on("click", function(){
+    $modalApproved.show();
+  });
 
-  $viewDetails.on("click",function(){
-    $message.html("");
-    console.log($(this).data);
-    currentMember           = $(this).data("member-name");
-    currentMemberId         = $(this).data("member-id");
-    _id = $(this).data("id");
-    $displayMember.html(currentMember);
-    $modalViewDetails.show();
+  $btnConfirmApproved.on("click",function(){
+    var data = {
+      id: _id,
+      authenticity_token: _authenticityToken
+    }
+
+    $btnConfirmApproved.prop("disabled", true);
 
     $.ajax({
-      url: "/api/v1/billing_for_involuntary/view_details",
-      method: 'POST',
+      url: "/api/v1/billing_for_involuntary/approve",
       data: data,
+      method: "POST",
       success: function(response) {
-        $message.html(
-          "Success! Redirecting..."
-        );
+        $message.html("Success! Redirecting...");
+        window.location.href="/billing_for_involuntary";
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+          $btnConfirmApproved.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
+  $btnSaveParticularPayments.on("click",function(){
+    var input = $inputParticularPayments.val();
+    var data = {
+      id: _id,
+      particular: input,
+      authenticity_token: _authenticityToken
+    }
+    $inputParticularPayments.prop("disabled",true);
+
+    $.ajax({
+      url: "/api/v1/billing_for_involuntary/add_particular_to_loan_payments",
+      data: data,
+      method: "POST",
+      success: function(response) {
+        $message.html("Success! Redirecting...");
         window.location.reload();
       },
       error: function(response) {
@@ -89,59 +121,50 @@ var _bindEvents = function() {
         } catch(err) {
           errors  = ["Something went wrong"]
         } finally {
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-          $selectMember.prop("disabled", false);
+          alert(errors);
+          $inputParticularPayments.prop("disabled", false);
+        }
+      }
+
+    });
+
+  });
+
+
+  $btnSaveParticularTransfer.on("click", function() {
+    var input = $inputParticularSavings.val();
+    var data = {
+      id: _id,
+      particular: input,
+      authenticity_token: _authenticityToken
+    }
+
+    $inputParticularSavings.prop("disabled", true);
+
+    $.ajax({
+      url: "/api/v1/billing_for_involuntary/add_particular_to_transfer_savings",
+      data: data,
+      method: "POST",
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"]
+        } finally {
+          alert(errors);
+          $inputParticularSavings.prop("disabled", false);
         }
       }
     });
   });
 
-  $btnAddBook.on("click", function() {
-    //alert("jayson");
-     var txtBookType = $inputBookType.val()   
-     _id = $(this).data("id");    
-      $.ajax({      
-        url: _urlAddBookType,
-        method: "POST",
-        data: {
-    id: _id,
-    txtBookType:  txtBookType,
-          authenticity_token: _authenticityToken
-        },
-        success: function(response) {
-          $message.html("Success!");
-          window.location.reload();
-        },
-        error: function(response) {
-          var errors  = [];
-
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors = ["Something went wrong"];
-          } finally {
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnAddBook.prop("disabled", false);
-          }
-        }
-      });
- 
-  });
-
   $btnAdd.on("click", function() {
     _memberId = $selectMember.val();
-    _id = $(this).data("id");	  
     var data = {
       id: _id,
 	    member_id: _memberId,
@@ -178,136 +201,13 @@ var _bindEvents = function() {
     });	   
   });
 
-  $UpdateAmount.on("click" , function() {
-    console.log($(this));
-	  $modalUpdate.show();
-  });
-   
-  $btnConfirmAmount.on("click", function() {
-    _paymentAmount	= $paymentAmount.val()	     
-    _id 		        = $(this).data("id");	
-    _memberId	      = $memberId.text()
-  
-    var data = {
-		  id: _id,
-		  member_name: $memberName.text(),
-		  member_id: _memberId,   
-		  loan_id: _loanId,   
-		  payment_amount: _paymentAmount,
-		  authenticity_token: _authenticityToken
-	  };
-    $.ajax({
-      url: "/api/v1/billing_for_involuntary/update_amount",
-      method: 'POST',
-      data: data,
-      success: function(response) {
-	      $message.html(
-          "Success! Redirecting..."
-        );  
-        window.location.reload();
-      },
-      error: function(response) {
-        errors = [];
-        alert(JSON.parse(response.responseText).full_messages)
-        try {
-          errors = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors.push("Something went wrong");
-          console.log(response);
-        }
-        $message.html(
-          Mustache.render(   
-          )
-        );
-      }
-    }); 
-  });
-
-  $btnApprove.on("click", function() {
-    _id = $(this).data("id");
-    $modalApproveTransaction.show();
-  });
-
-  $btnConfirmProcess.on("click", function() {
-    var data = {
-      id: _id,
-      authenticity_token: _authenticityToken
-    };
-    $btnConfirmProcess.prop("disabled", true);
-    $message.html("Loading...");
-    console.log(data);
-    $.ajax({
-      url: "/api/v1/billing_for_involuntary/approve",
-      method: 'POST',
-      data: data,
-      success: function(response) {
-        $message.html("Success! Redirecting...");
-        window.location.href="/billing_for_involuntary";
-      },
-      error: function(response) {
-        console.log(response);
-        var errors  = [];
-        try {
-          errors  = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors  = ["Something went wrong"];
-          console.log(err);
-        } finally {
-          console.log(errors);
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-
-          $btnConfirmProcess.prop("disabled", false);
-        }
-      }
-    });
-  });
- 
-  $btnAddParticular.on("click", function() {
-    var txtParticular = $inputParticular.val()
-      _id = $(this).data("id");	  
-      $.ajax({	    
-        url: _urlAddParticular,
-        method: "POST",
-        data: {
-          id: _id,
-          txtParticular: txtParticular,
-          authenticity_token: _authenticityToken
-        },
-        success: function(response) {
-          $message.html("Success!");
-          window.location.reload();
-        },
-        error: function(response) {
-          var errors  = [];
-          try {
-            errors  = JSON.parse(response.responseText).full_messages;
-          } catch(err) {
-            errors = ["Something went wrong"];
-          } finally {
-            $message.html(
-              Mustache.render(
-                templateErrorList,
-                { errors: errors }
-              )
-            );
-
-            $btnAddParticular.prop("disabled", false);
-          }
-        }
-    });
-  });
 
 }
 
 
-var init  = function(config) {
-  _authenticityToken = config.authenticityToken;
-
+var init  = function(options) {
+  _authenticityToken = options.authenticityToken;
+  _id                = options.id
   _cacheDom();
   _bindEvents();
 }

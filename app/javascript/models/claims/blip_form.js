@@ -291,8 +291,11 @@ var blipForm = (function() {
       var classificationOfInsuredValue = $classificationOfInsured.val();  
       var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
       var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
-      var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
-      var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
+
+      var recognitionDate = new Date(dateOfPolicyIssueValue);
+      var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
+      var currentDate = new Date();
+
 
       function getMonthsDifference(date1, date2) {
           const monthsInYear = 12;
@@ -301,7 +304,9 @@ var blipForm = (function() {
           return diffYear * monthsInYear + diffMonth;
       }
 
+
       var numberOfMonths = getMonthsDifference(dateOfPolicyIssue, dateOfDeathTpdAccident);
+
       var years = Math.floor(numberOfMonths / 12);
       var months = numberOfMonths % 12;
 
@@ -434,6 +439,7 @@ var blipForm = (function() {
       var classificationOfInsuredValue = $classificationOfInsured.val();  
       var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
       var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
+
       var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
       var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
 
@@ -444,7 +450,9 @@ var blipForm = (function() {
           return diffYear * monthsInYear + diffMonth;
       }
 
+
       var numberOfMonths = getMonthsDifference(dateOfPolicyIssue, dateOfDeathTpdAccident);
+
       var years = Math.floor(numberOfMonths / 12);
       var months = numberOfMonths % 12;
 

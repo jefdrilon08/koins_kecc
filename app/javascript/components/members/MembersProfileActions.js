@@ -27,6 +27,19 @@ export default function MembersProfileActions(props) {
 
   const [isModalProfilePictureOpen, setModalProfilePictureOpen]                 = useState(false);
   const [profilePicture, setProfilePicture]                                     = useState('');
+  const [configData, setConfigData] = useState();
+  const [customVariable, setCustomVariable] = useState(); // Create a new state variable
+
+  useEffect(() => {
+    axios.get('/api/yml_values/production_values')
+      .then(response => {
+        setConfigData(response.data);
+        setCustomVariable(response.data); // Assign response.data to your custom variable
+        console.log(response.data); // Log the value to the console
+      })
+      .catch(error => console.error(error));
+  }, []);
+
 
   const options = [
   {
@@ -345,6 +358,7 @@ export default function MembersProfileActions(props) {
     })
 
   }
+
   return (
     <>
 
@@ -971,29 +985,35 @@ export default function MembersProfileActions(props) {
           </div>
         </div>
       </div>
+ 
 
-      <hr/>
-      <div className="row">
-        <div className="col">
-          <div className="note note-info">
-            <strong>
-              Reclassified
-            </strong>
-            <p>
-              Reclassified Member
-            </p>
-              <button
-                className="btn btn-primary"
-                  onClick={() => {
-                    setModalReclassifiedOpen(true)
-                  }}
-                  >
-                Reclassified
-              </button>
-          </div>
-        </div>
-      </div>
-      <hr/>
+      {(() => {
+        if (customVariable == true) {
+          <hr/>
+          return(
+            <div className="row">
+              <div className="col">
+                <div className="note note-info">
+                  <strong>
+                    Reclassified
+                  </strong>
+                  <p>
+                    Reclassified Member
+                  </p>
+                    <button
+                      className="btn btn-primary"
+                        onClick={() => {
+                          setModalReclassifiedOpen(true)
+                        }}
+                        >
+                      Reclassified
+                    </button>
+                </div>
+              </div>
+            </div>
+          )   
+        }
+      })()}
 
       <hr/>
       <div className="row">

@@ -91,6 +91,7 @@
 %table.table.table-bordered.table-sm
   %thead
     %tr
+      %th
       %th{ width: "25%" }
         Identification Number
       %th.text-center
@@ -100,7 +101,7 @@
       %th.text-center
         Release Date of Letter
   %tbody
-    -@data[:records].each_with_index do |rec,index|
+    -@data[:records].sort_by { |rec| rec[:center] }.each_with_index do |rec, index|
       %tr
         %td
           #{index + 1}
