@@ -32,8 +32,6 @@ var $message;
   templateErrorList = $("#template-error-list").html();
 
 var _cacheDom = function() {
-  console.log(_id);
- 
   $btnAdd             = $("#btn-add");	
   $selectMember       = $("#select-member");
 
@@ -47,13 +45,65 @@ var _cacheDom = function() {
   $btnConfirmApproved = $("#btn-confirm-approved");
   $modalApproved = new bootstrap.Modal(document.getElementById("modal-approve"));
   
-
+  $btnDelete = $(".btn-delete");
+  $modalDelete = new bootstrap.Modal(document.getElementById("modal-delete"));
+  $btnConfirmDelete = $("#btn-confirm-delete");
 
   $message            = $(".message");
   templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  $btnDelete.on("click", function(){
+    $message.html("");
+    currentMember           = $(this).data("member-name");
+    currentMemberId         = $(this).data("member-id");
+   
+    $modalDelete.show();
+  });
+
+  $btnConfirmDelete.on("click", function(){
+    $message.html("Loading......")
+    $btnConfirmDelete.prop("disabled",true)
+
+    var data = {
+      id: _id,
+      member_id: currentMemberId,
+      authenticity_token: _authenticityToken
+    }
+
+    $.ajax({
+      url: "/api/v1/billing_for_involuntary/delete",
+      method: "POST",
+      data: data,
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+          $btnConfirmApproved.prop("disabled", false);
+        }
+      }
+    });
+
+  });
+
+
   $btnApproved.on("click", function(){
     $modalApproved.show();
   });
@@ -188,13 +238,9 @@ var _bindEvents = function() {
           errors  = JSON.parse(response.responseText).full_messages;
         } catch(err) {
           errors  = ["Something went wrong"]
+
         } finally {
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
+            alert(errors);
           $selectMember.prop("disabled", false);
         }
       }

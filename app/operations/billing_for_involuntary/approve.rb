@@ -26,6 +26,7 @@ module BillingForInvoluntary
             process_transfer_savings!   
             process_loan_payments!   
            
+            update_other_loans!
             
 
             @data_store[:meta]["date_approved"] = DateTime.now.to_date
@@ -34,7 +35,17 @@ module BillingForInvoluntary
             
             @data_store
         end
-
+        
+        def update_other_loans!
+            @data[:records].each do |rec|
+                loans = Loan.where(member_id: rec[:member_id])
+                loans.each do |l|
+                    Loan.update(status: "for-writeoff")
+                end
+            end
+            @data
+        end
+        
         def approved_accounting_entry_for_loan_payments!
             config  = {
                 accounting_entry_data: @accounting_entry_to_payments.with_indifferent_access,
@@ -66,8 +77,7 @@ module BillingForInvoluntary
                           date_paid: @loan_payments_entry[:date_posted]
                         }
                       ).execute!
-
-                    
+                                          
                     @account_transaction = AccountTransaction.new(
                         subsidiary_id: @loan.id,
                         subsidiary_type: "Loan",
@@ -261,6 +271,8 @@ module BillingForInvoluntary
                    @member.member_shares.each do |s|
                      s.update!(is_void: true)
                    end
+
+                   
 
             end
         end

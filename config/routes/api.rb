@@ -187,6 +187,7 @@ namespace :api do
     post "/billing_for_involuntary/add_particular_to_transfer_savings",to: "billing_for_involuntary#add_particular_to_transfer_savings"
     post "/billing_for_involuntary/add_particular_to_loan_payments", to: "billing_for_involuntary#add_particular_to_loan_payments"
     post "/billing_for_involuntary/approve", to: "billing_for_involuntary#approve"
+    post "/billing_for_involuntary/delete", to: "billing_for_involuntary#delete"
     
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"

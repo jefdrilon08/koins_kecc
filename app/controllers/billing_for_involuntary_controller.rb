@@ -24,7 +24,7 @@ class BillingForInvoluntaryController < DataStoreController
     
 
 
-    if helpers.bk_mis_user
+    if helpers.sbk_mis_user
       if @data_store.pending?
         @subheader_side_actions << {
           id: "btn-approve",
