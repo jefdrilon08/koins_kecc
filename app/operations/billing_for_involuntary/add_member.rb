@@ -97,20 +97,22 @@ module BillingForInvoluntary
             date_paid: @data_store[:meta]["transaction_date"]
           }
         ).execute!
+          
        
-        @total_loan_payment = payment_stats[:interest_paid] + payment_stats[:principal_paid]
-        total_member_account_balance = total_member_account_balance - @total_loan_payment
         
-        loanRecArr << {
-            id: lrs.id,
-            loan_product: lrs.loan_product.name,
-            maturity_date: lrs.maturity_date,
-            interest_balance: payment_stats[:interest_paid].round(2).to_f,
-            principal_balance: payment_stats[:principal_paid].round(2).to_f
-          }
-                
+        if payment_stats[:interest_paid] > 0.0
+          loanRecArr << {
+              id: lrs.id,
+              loan_product: lrs.loan_product.name,
+              maturity_date: lrs.maturity_date,
+              interest_balance: payment_stats[:interest_paid].round(2).to_f,
+              principal_balance: payment_stats[:principal_paid].round(2).to_f
+            }
+            @total_loan_payment = payment_stats[:interest_paid] + payment_stats[:principal_paid]
+            total_member_account_balance = total_member_account_balance - @total_loan_payment
+        end
       end
-
+      
       @records = {
           member_id: @member.id,
           member_name: @member.full_name,
