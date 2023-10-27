@@ -39,9 +39,12 @@ module BillingForInvoluntary
         def update_other_loans!
             @data[:records].each do |rec|
                 loans = Loan.where(member_id: rec[:member_id],status: "active")
-                loans.each do |l|
-                    Loan.update(status: "for-writeoff")
-                end
+                    if loans.any?
+                        loans.each do |l|
+                            update_loan = Loan.find(l.id)
+                            update_loan.update!(status: "for-writeoff")
+                        end
+                    end
             end
         end
         
