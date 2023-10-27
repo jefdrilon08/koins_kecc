@@ -110,7 +110,7 @@ module BillingForInvoluntary
               principal_balance: payment_stats[:principal_paid].round(2).to_f
             }
             @total_loan_payment += payment_stats[:interest_paid] + payment_stats[:principal_paid]
-            total_member_account_balance = total_member_account_balance - @total_loan_payment
+            total_member_account_balance = total_member_account_balance - (payment_stats[:interest_paid] + payment_stats[:principal_paid])
         end
       end
       
