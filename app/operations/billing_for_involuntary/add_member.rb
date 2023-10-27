@@ -85,7 +85,7 @@ module BillingForInvoluntary
       end
 
      
-
+      
       loan_rec_sorted.each do |lrs|
         @loan = Loan.find(lrs[:id])
         @total_loan_balances += lrs.total_balance.to_f
@@ -98,7 +98,8 @@ module BillingForInvoluntary
           }
         ).execute!
           
-       
+          
+          # raise payment_stats.inspect
         
         if payment_stats[:interest_paid] > 0.0
           loanRecArr << {
@@ -108,7 +109,7 @@ module BillingForInvoluntary
               interest_balance: payment_stats[:interest_paid].round(2).to_f,
               principal_balance: payment_stats[:principal_paid].round(2).to_f
             }
-            @total_loan_payment = payment_stats[:interest_paid] + payment_stats[:principal_paid]
+            @total_loan_payment += payment_stats[:interest_paid] + payment_stats[:principal_paid]
             total_member_account_balance = total_member_account_balance - @total_loan_payment
         end
       end
