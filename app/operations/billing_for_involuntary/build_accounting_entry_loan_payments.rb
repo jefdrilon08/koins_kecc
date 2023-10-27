@@ -46,10 +46,16 @@ module BillingForInvoluntary
             def build_debit_journal_entries!
                 journal_entries =   []
                     @records.each do |rec|
-                        due_to_members = 0.0
-                        rec[:member_accounts].each do |ma|
-                            due_to_members += ma[:balance]
+                        
+                        
+                        @amount = rec[:total_loan_payment] 
+
+                        if rec[:closing_fee_amount] > 0.0
+                            @amount += rec[:closing_fee_amount]
                         end
+                        
+
+
                         rec[:member_accounts].each do |ma|
                             if ma[:account_type] == "SAVINGS" and ma[:account_subtype] == "K-IMPOK"
                                 @savings_accounting_codes.each do |sav|
@@ -60,7 +66,7 @@ module BillingForInvoluntary
                                         accounting_code_id: acc_code.id,
                                         code: acc_code.code,
                                         name: acc_code.name,
-                                        amount: due_to_members.round(2).to_f
+                                        amount: @amount.round(2).to_f
                                         }
                                     end
                                 end
@@ -79,22 +85,26 @@ module BillingForInvoluntary
             def build_credit_journal_entries!
                 journal_entries = []
                     @records.each do |rec|
+                        total_loan_payment = rec[:total_loan_payment]
+                        
                         rec[:loan_records].each do |lr|
                            loan_product = Loan.find(lr[:id]).loan_product
                            @loan_product_settings.each do |lrs|
                                 if loan_product.id == lrs[:loan_product_id]
                                     interest_accounting_code = AccountingCode.find(lrs[:interest_receivable_accounting_code_id])
                                     receivable_account_code = AccountingCode.find(lrs[:receivable_accounting_code_id])
-                                    if lr[:interest_balance].to_f > 0.0
+                                    if total_loan_payment.to_f > 0.0
+                                        
                                         journal_entries << {
                                             accounting_code_id: interest_accounting_code.id,
                                             code: interest_accounting_code.code,
                                             name: interest_accounting_code.name,
                                             amount: lr[:interest_balance].round(2).to_f
                                         }
+                                        
                                     end
-
-                                    if lr[:principal_balance].to_f > 0.0
+                                   # raise total_loan_payment.inspect
+                                    if total_loan_payment.to_f > 0.0
                                         journal_entries << {
                                             accounting_code_id: receivable_account_code.id,
                                             code: receivable_account_code.code,
@@ -115,7 +125,6 @@ module BillingForInvoluntary
                                 amount: rec[:closing_fee_amount].round(2).to_f
                             }
                         end
-                        
                     end
                 if journal_entries.count > 1
                     journal = journal_entries.group_by {|item| [item[:accounting_code_id]]}.values.flat_map{|items| items.first.merge(amount: items.sum{|h| h[:amount]})}

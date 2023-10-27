@@ -71,6 +71,7 @@ module BillingForInvoluntary
       total_member_account_balance = (@total_savings_balances.round(2) + @total_equity_balances.round(2)).to_f.round(2)
       original_total_member_accoount_balance = total_member_account_balance.to_f
       @total_loan_payment = 0.0
+
       @remaining_balance = total_member_account_balance.to_f
 
       loan_rec_sorted = @loan_records.sort_by{ |date| date[:maturity_date]}
@@ -83,93 +84,34 @@ module BillingForInvoluntary
         total_member_account_balance -= @closing_fee
       end
 
-      
+     
+
       loan_rec_sorted.each do |lrs|
+        @loan = Loan.find(lrs[:id])
         @total_loan_balances += lrs.total_balance.to_f
 
-        #sapat
-        if @remaining_balance.to_f >= lrs.total_balance.to_f
-          if @remaining_balance.to_f > lrs.interest_balance.to_f
-            
-            @interest_to_paid = lrs.interest_balance.to_f
-            @remaining_balance = @remaining_balance.to_f - lrs.interest_balance.to_f
-            @total_loan_payment += @interest_to_paid
-            
-            if @remaining_balance >= lrs.principal_balance.to_f
-              @remaining_balance = @remaining_balance - lrs.principal_balance.to_f
-              @principal_to_paid = lrs.principal_balance.to_f
-              @total_loan_payment += @principal_to_paid
-            elsif @remaining_balance.to_f != 0.0  and @remaining_balance.to_f <= lrs.principal_balance.to_f
-              @principal_to_paid = @remaining_balance.to_f
-              @remaining_balance = 0.0
-              @total_loan_payment += @remaining_balance.to_f
-            end
-
-          end
+        payment_stats = ::Loans::FetchPaymentStats.new(
+          config: {
+            loan: @loan,
+            amount: total_member_account_balance.round(2).to_f,
+            date_paid: @data_store[:meta]["transaction_date"]
+          }
+        ).execute!
+          
+       
         
-          if @interest_to_paid.to_f > 0.0
-            loanRecArr << {
+        if payment_stats[:interest_paid] > 0.0
+          loanRecArr << {
               id: lrs.id,
               loan_product: lrs.loan_product.name,
               maturity_date: lrs.maturity_date,
-              interest_balance: @interest_to_paid.round(2).to_f,
-              principal_balance: @principal_to_paid.round(2).to_f
-              
+              interest_balance: payment_stats[:interest_paid].round(2).to_f,
+              principal_balance: payment_stats[:principal_paid].round(2).to_f
             }
-         end
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        #hindi sapat
-        elsif @remaining_balance.to_f < lrs.total_balance.to_f
-          
-          if @remaining_balance.to_f > lrs.interest_balance.to_f
-
-            @remaining_balance = @remaining_balance - lrs.interest_balance.to_f
-            @interest_to_paid = lrs.interest_balance.to_f
-            @total_loan_payment += @interest_to_paid
-            if @remaining_balance >= lrs.principal_balance.to_f
-              @remaining_balance = @remaining_balance - lrs.principal_balance.to_f  
-              @principal_to_paid = lrs.principal_balance.to_f
-              @total_loan_payment += lrs.principal_to_paid
-            
-            elsif @remaining_balance.to_f <= lrs.principal_balance.to_f and @remaining_balance.to_f != 0.0  
-              @principal_to_paid = @remaining_balance.to_f
-              @remaining_balance = 0.0
-              @total_loan_payment += @principal_to_paid.to_f
-            end
-          
-          elsif @remaining_balance.to_f <= lrs.interest_balance.to_f
-            @interest_to_paid = @remaining_balance.to_f
-            @principal_to_paid = 0.0
-            @remaining_balance = 0.0
-            @total_loan_payment += @interest_to_paid.to_f
-
-          end
-
-          if @interest_to_paid.to_f > 0.0
-            loanRecArr << {
-              id: lrs.id,
-              loan_product: lrs.loan_product.name,
-              maturity_date: lrs.maturity_date,
-              interest_balance: @interest_to_paid.round(2).to_f,
-              principal_balance: @principal_to_paid.round(2).to_f
-            }
-          end
+            @total_loan_payment = payment_stats[:interest_paid] + payment_stats[:principal_paid]
+            total_member_account_balance = total_member_account_balance - @total_loan_payment
         end
-        
-
-      
       end
-      
-        remaining_balance = original_total_member_accoount_balance - @total_loan_payment  
-        
       
       @records = {
           member_id: @member.id,
@@ -179,7 +121,7 @@ module BillingForInvoluntary
           member_accounts: memberAccountArr,
           total_savings: original_total_member_accoount_balance.round(2).to_f,
           total_loan_balances: @total_loan_balances.round(2).to_f,
-          remaining_savings: remaining_balance.round(2).to_f,
+          remaining_savings: total_member_account_balance.round(2).to_f,
           total_loan_payment: @total_loan_payment.round(2).to_f,
           closing_fee_amount: @closing_fee_amount.round(2).to_f
       }

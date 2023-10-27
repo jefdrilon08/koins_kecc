@@ -16,6 +16,20 @@ module Api
         end
       end
       
+      def delete
+        config = {
+          data_store_id: params[:id],
+          member_id: params[:member_id]
+        }
+
+        errors = ::BillingForInvoluntary::ValidateDeleteMember.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          ::BillingForInvoluntary::DeleteMember.new(config: config).execute!
+          render json: {message: "DONE"},status: 200
+        end
+      end
       def view_details
       end
 
@@ -24,10 +38,13 @@ module Api
           data_store_id: params[:id],
           member_id: params[:member_id]
         }
-
+        errors = ::BillingForInvoluntary::ValidateAddMember.new(config: config).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
         ::BillingForInvoluntary::AddMember.new(config: config).execute!
-       
         render json: { message: "Done" }
+        end
       end
 
       def add_particular_to_transfer_savings

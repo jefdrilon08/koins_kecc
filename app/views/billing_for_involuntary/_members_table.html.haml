@@ -8,9 +8,9 @@
       %th.text-center{width: "10%"}
         Total Savings Balances
       %th.text-center{width: "10%"}
-        Total Loan Payments
-      %th.text-center{width: "10%"}
         Closing Fee Amount
+      %th.text-center{width: "10%"}
+        Total Loan Payments
       %th.text-center{width: "15%"}
         Remaining Balance (after Loan Payments)
       %th.text-center{width: "10%"}
@@ -38,9 +38,9 @@
         %td.text-end 
           #{number_to_currency(dt[:total_savings],unit: '')}
         %td.text-end
-          #{number_to_currency(dt[:total_loan_payment],unit: '')}
-        %td.text-end
           #{number_to_currency(dt[:closing_fee_amount],unit: '')}
+        %td.text-end
+          #{number_to_currency(dt[:total_loan_payment],unit: '')}
         %td.text-end
           #{number_to_currency(dt[:remaining_savings],unit: '')}
         %td
@@ -58,9 +58,10 @@
       %th.text-end
         #{number_to_currency(total_sv.round(2).to_f, unit: '')}
       %th.text-end
-        #{number_to_currency(total_lp.round(2).to_f, unit: '')}
-      %th.text-end
         #{number_to_currency(total_cf.round(2).to_f, unit: '')}
+      %th.text-end
+        #{number_to_currency(total_lp.round(2).to_f, unit: '')}
+     
       %th.text-end
         #{number_to_currency(total_rb.round(2).to_f, unit: '')}
       %th
