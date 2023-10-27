@@ -169,76 +169,122 @@ module Members
         #active_loans
         if @active_loans.any?
           @active_loans.each do |ml|
-            loans = Loan.find(ml.id)
-            loan_data = loans.data.with_indifferent_access
+            @loans = Loan.find(ml.id)
+
+            payment_stats = ::Loans::FetchPaymentStats.new(
+              config:{
+                loan: @loans,
+                amount: @loans.total_balance,
+                data_paid: @data[:date_resigned]
+              }
+              ).execute!
+
+            loan_data = @loans.data.with_indifferent_access
             loan_data[:is_tapal] = true
             @account_transaction = AccountTransaction.new(
-              subsidiary_id: loans.id,
+              subsidiary_id: @loans.id,
               subsidiary_type: "Loan",
-              amount: loans.total_balance.to_f,
+              amount: @loans.total_balance.to_f,
               transaction_type: "loan_payment",
               transacted_at: @data[:date_resigned],
-              status: "approved",
-              data: {
-                amort_entries: [],
-                total_principal_paid: loans.principal_balance.to_f,
-                total_interest_paid: loans.interest_balance.to_f,
-                amount_due: loans.total_balance.to_f,
-                approved_by: @user.full_name
-
-              }
-            )
-            @account_transaction.save!
-            @unpaid_ase  = AmortizationScheduleEntry.unpaid.where(
-                      "loan_id = ? AND due_date <= ?", 
-                      loans.id, 
-                      @account_transaction.transacted_at
-                    ).order("due_date ASC")
-          
-            @amort_entries = []
-
-            @unpaid_ase.each do |ase|
-              amort = AmortizationScheduleEntry.find(ase.id)
-              amort_data = {payments: []}
+              status: "approved"
               
-              if ase.data.nil?
-                amort_data[:payments] << {
-                  payment_id: @account_transaction.id,
-                  payment_date: @account_transaction.transacted_at,
-                  principal_paid: ase.principal_balance.to_f,
-                  interest_paid: ase.interest_balance.to_f
-                }
+            )
 
-                @amort_entries << {
-                  id: ase.id,
-                  due_date: ase.due_date,
-                  principal_paid: ase.principal_balance,
-                  interest_paid: ase.interest_balance
-                }
-                
-              else
-                amort_data[:payments] << {
-                  payment_id: @account_transaction.id,
-                  payment_date: @account_transaction.transacted_at,
-                  principal_paid: ase.principal_balance.to_f,
-                  interest_paid: ase.interest_balance.to_f
-                }
+            @amort_data = {
+              amort_entries:[],
+              total_interest_balance: 0.0,
+              total_principal_balance: 0.0,
+              amount_due: 0.0,
+              particular:@data[:accounting_entry][:particular],
+              approved_by:@user.full_name
 
-                 @amort_entries << {
-                  id: ase.id,
-                  due_date: ase.due_date,
-                  principal_paid: ase.principal_balance,
-                  interest_paid: ase.interest_balance
+            }
+
+            @amort_data[:total_interest_balance]  = payment_stats[:interest_paid]
+            @amort_data[:total_principal_balance] = payment_stats[:principal_paid]
+            @amort_data[:amount_due]              = payment_stats[:amount_due]
+            @amort_data[:amort_entries]           = payment_stats[:amort_entries]
+
+
+            @account_transaction.data = @amort_data
+            @account_transaction.save!
+
+            @amort_data[:amort_entries].each do |ae|
+              amort = AmortizationScheduleEntry.find(ae[:id])
+
+              principal_paid = amort.principal_paid
+              interest_paid  = amort.interest_paid
+
+              principal_balance = amort.principal_balance
+              interest_balance  = amort.interest_balance
+
+              is_paid = amort.is_paid
+
+              data = amort.data.try(:with_indifferent_access)
+
+              if data.blank?
+                data = {
+                  payments: []
                 }
-               
               end
 
-              amort.update!(is_paid: true, principal_balance: 0.0, interest_balance: 0.0, principal_paid: ase.principal,interest_paid: ase.interest,data: amort_data)
-              amort
+              data[:payments] <<{
+                payment_id: @account_transaction.id,
+                payment_date: @data[:date_resigned],
+                principal_paid: ae[:principal_paid],
+                interest_paid: ae[:interest_paid]
+              }
+
+              principal_paid  += ae[:principal_paid].try(:to_f).round(2)
+              interest_paid   += ae[:interest_paid].try(:to_f).round(2)
+
+              principal_balance = (amort.principal - principal_paid).round(2)
+              interest_balance = (amort.interest - interest_paid).round(2)
+
+              if principal_balance == 0.00 && interest_balance == 0.00
+                is_paid = true
+              end
+
+              amort.principal_paid      = principal_paid
+              amort.interest_paid       = interest_paid
+              amort.principal_balance   = principal_balance
+              amort.interest_balance    = interest_balance
+              amort.is_paid             = is_paid
+              amort.data                = data
+
+              amort.save!             
             end
 
-            @account_transaction.update(data:{amort_entries: @amort_entries, total_principal_paid: loans.principal_balance, total_interest_paid:loans.interest_balance, amount_due: loans.total_balance ,particular: "",approved_by: "SYSTEM"})
-            loans.update!(status: "paid",principal_balance: 0.0, interest_balance: 0.0, principal_paid: loans.principal, interest_paid: loans.interest,date_completed: @data[:date_resigned],data: loan_data)
+            update_amort = AmortizationScheduleEntry.where(loan_id: @loans.id).order("due_data DESC")
+            @loans.principal_paid = update_amort.sum(:principal_paid).round(2)
+            @loans.interest_paid  = update_amort.sum(:interest_paid).round(2)
+
+            @loans.principal_balance  = (@loans.principal - @loans.principal_paid).round(2)
+            @loans.interest_balance   = (@loans.interest - @loans.interest_paid).round(2)
+
+            max_active_date = @loans.max_active_date
+
+            if max_active_date.blank?
+              max_active_date = update_amort.first.due_date
+            end
+
+            if @data[:date_resigned].to_date > max_active_date
+              max_active_date = @data[:date_resigned].to_date
+            end
+
+            @loans.save!
+
+            if @loans.principal_balance == 0.00 and @loans.interest_balance = 0.00
+              @loans.update!(
+                date_completed: @data[:date_resigned].to_date,
+                status: "paid",
+                max_active_date: @data[:date_resigned].to_date
+                )
+            elsif
+                @loans.update!(status:"paid")
+            end
+            @account_transaction
 
           end
         end
