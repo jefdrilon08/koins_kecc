@@ -34,6 +34,16 @@ class BillingForInvoluntaryController < DataStoreController
         }
       end
     end
+    @subheader_side_actions << {
+          id: "btn-print-entry",
+          link: "#",
+          class: "fa fa-check",
+          text: "Print Entry",
+          data: {
+            id: "#{@data_store.id}"
+        }
+    }
+    
 
 
 

@@ -25,6 +25,7 @@ var $btnAdd;
 var _memberId;
 var $selectMember;
 
+var $btnPrintEntry;
 
 var currentMember           = "";
 var currentMemberId         = "";
@@ -48,12 +49,19 @@ var _cacheDom = function() {
   $btnDelete = $(".btn-delete");
   $modalDelete = new bootstrap.Modal(document.getElementById("modal-delete"));
   $btnConfirmDelete = $("#btn-confirm-delete");
+  $btnPrintEntry         = $("#btn-print-entry");
+
 
   $message            = $(".message");
   templateErrorList = $("#template-error-list").html();
 };
 
 var _bindEvents = function() {
+  $btnPrintEntry.on("click",function(){
+    var data_store = $btnPrintEntry.data('id');
+    window.open("/print?id=" + data_store + "&type=print_entry_involuntary");
+  });
+
   $btnDelete.on("click", function(){
     $message.html("");
     currentMember           = $(this).data("member-name");
