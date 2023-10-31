@@ -4,6 +4,7 @@ module DataStores
       @config     = config
       @user       = @config[:user]
       @data_store = DataStore.find(@config[:id])
+      @data = @data_store.data.with_indifferent_access
       @as_of = @data_store.as_of
       @branch_id = @data_store[:meta]["branch_id"]
       @data = @data_store.data.with_indifferent_access
@@ -13,12 +14,8 @@ module DataStores
 
     def execute!
       query!
-      @temp = {
-        record: []
-      }
-
-
-      @data_store.data[:record]= @result.map { |o|    
+      
+      @data[:record]= @result.map { |o|    
         @loan_records = []
         @member_accounts = []
         matured_loans = Loan.where("member_id = ? and status = ? and maturity_date <= ?","#{o.fetch("member_id")}","active","#{@as_of}")
@@ -95,8 +92,15 @@ module DataStores
             
         
       }
+      @records = []
+      @data[:record].each do |r|
+        if r != nil
+          @records << r
+        end
+      end
+
       
-      @data_store.update(status: "done")
+      @data_store.update(status: "done",data: {record: @records}) 
       @data_store
     end
 
