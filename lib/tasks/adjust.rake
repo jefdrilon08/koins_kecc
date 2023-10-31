@@ -3197,4 +3197,33 @@ namespace :adjust do
 
     puts "Done!"
   end
+  task :fix_wrong_in_account_transaction => :environment do 
+    branch_id = ENV["BRANCH_ID"]
+    members_resigned = Member.where("branch_id = ? and date_resigned >= ? and date_resigned <= ?","#{branch_id}","2023-10-27","2023-10-31")
+    members_resigned.each do |mr|
+      loans = Loan.where("status = ? and date_completed >= ? and date_completed <= ? and member_id = ?","paid", "2023-10-27","2023-10-31","#{mr.id}")
+
+      loans.each do |l|
+        ll= Loan.find(l.id)
+        puts " FIX loan - #{ll.id}"
+        last_account_transaction = AccountTransaction.where(subsidiary_id: "#{ll.id}", status: "approved").order("transacted_at DESC").first
+        account_transaction = AccountTransaction.find(last_account_transaction.id)
+        a_data = account_transaction.data.with_indifferent_access
+        if a_data["total_interest_balance"].present?
+          interest_amount = a_data["total_interest_balance"]
+          a_data.delete("total_interest_balance")
+          a_data["total_interest_paid"] = interest_amount
+        end
+
+        if a_data["total_principal_balance"].present?
+          principal_amount = a_data["total_principal_balance"]
+          a_data.delete("total_principal_balance")
+          a_data["total_principal_paid"] = principal_amount
+        end
+        account_transaction.update!(data: a_data)
+      end
+
+    end
+    puts "done"
+  end
 end
