@@ -201,8 +201,8 @@ module Members
 
             }
 
-            @amort_data[:total_interest_balance]  = payment_stats[:interest_paid]
-            @amort_data[:total_principal_balance] = payment_stats[:principal_paid]
+            @amort_data[:total_interest_paid]  = payment_stats[:interest_paid]
+            @amort_data[:total_principal_paid] = payment_stats[:principal_paid]
             @amort_data[:amount_due]              = payment_stats[:amount_due]
             @amort_data[:amort_entries]           = payment_stats[:amort_entries]
 
