@@ -138,6 +138,8 @@ var blipForm = (function() {
   
 
   $dateOfDeathTpdAccident.on('change', function() {
+    var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
+    var classificationOfInsuredValue = ($classificationOfInsured.val());  
     var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
     var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
     var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
@@ -176,10 +178,7 @@ var blipForm = (function() {
         }
     }
 
-    $('#length-of-stay').val(stay);
-
-
-
+    $('#length-of-stay').val(stay)
  
     // if(typeOfInsurancePolicyValue == "Basic Life" && classificationOfInsuredValue == "Member"){ 
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
@@ -200,6 +199,7 @@ var blipForm = (function() {
           }
 
         $('#face-amount').val(value);
+        $('#total-amount-payable').val(value);
         $returnedContributionField.show();
       } else if(typeOfInsurancePolicyValue == "Accidental Death"  && classificationOfInsuredValue == "Member") {
         if (months < 3 && years < 1){
@@ -219,6 +219,7 @@ var blipForm = (function() {
           }
 
         $('#face-amount').val(value);
+        $('#total-amount-payable').val(value);
         $returnedContributionField.show();
       } else if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Child)" ||typeOfInsurancePolicyValue == "TPD" && classificationOfInsuredValue == "Legal Dependent (Parent)"){
         if (months < 3 && years < 1){
@@ -238,6 +239,7 @@ var blipForm = (function() {
           }
 
         $('#face-amount').val(value);
+        $('#total-amount-payable').val(value);
         $returnedContributionField.hide();
       } else if(typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "Accidental Death" && classificationOfInsuredValue == "Legal Dependent (Parent)") {
         if (months < 3 && years < 1){
@@ -257,6 +259,7 @@ var blipForm = (function() {
           }
 
         $('#face-amount').val(value);
+        $('#total-amount-payable').val(value);
         $returnedContributionField.hide();
       } else if(typeOfInsurancePolicyValue == "MVAH" && classificationOfInsuredValue == "Legal Dependent (Spouse)" || typeOfInsurancePolicyValue == "MVAH" && classificationOfInsuredValue == "Legal Dependent (Child)" || typeOfInsurancePolicyValue == "MVAH" && classificationOfInsuredValue == "Legal Dependent (Parent)" || typeOfInsurancePolicyValue == "MVAH" && classificationOfInsuredValue == "Member") {
         var value = 0.00
@@ -264,6 +267,7 @@ var blipForm = (function() {
         $('#face-amount').val(value);
       }
     });
+
 
     $returnedContribution.on('change', function() { 
       var value = $('#face-amount').val() 
@@ -303,65 +307,49 @@ var blipForm = (function() {
     });
 
     $typeOfInsurancePolicy.on('change', function(){
-      var typeOfInsurancePolicyValue = $typeOfInsurancePolicy.val();
-      var classificationOfInsuredValue = $classificationOfInsured.val();  
+      var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
+      var classificationOfInsuredValue = ($classificationOfInsured.val());  
       var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
       var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
-      var recognitionDate = new Date(dateOfPolicyIssueValue);
-      var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
-      var currentDate = new Date();
+      var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
+      var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
 
-      function getMonthsDifference(date1, date2) {
-          const monthsInYear = 12;
-          const diffYear = date2.getFullYear() - date1.getFullYear();
-          const diffMonth = date2.getMonth() - date1.getMonth();
-          return diffYear * monthsInYear + diffMonth;
+      var years = dateOfDeathTpdAccident.getFullYear() - dateOfPolicyIssue.getFullYear();
+      var months = dateOfDeathTpdAccident.getMonth() - dateOfPolicyIssue.getMonth();
+      var days = dateOfDeathTpdAccident.getDate() - dateOfPolicyIssue.getDate();
+
+      if (days < 0) {
+          months--;
+          var lastDayOfMonth = new Date(dateOfDeathTpdAccident.getFullYear(), dateOfDeathTpdAccident.getMonth(), 0).getDate();
+          days += lastDayOfMonth;
       }
 
-      var numberOfMonths = getMonthsDifference(recognitionDate, dateOfResignation);
-      var years = Math.floor(numberOfMonths / 12);
-      var months = numberOfMonths % 12;
+      if (months < 0) {
+          years--;
+          months += 12;
+      }
 
-      if (years < 1){
-        if (months > 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months == 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months < 1) {
-          if (numberOfDays == 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays > 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays < 1){
-            var stay = ""
-            $('#length-of-stay').val(stay)  
+      var stay = "";
+      if (years > 0) {
+          stay += years + " Year";
+          if (years > 1) {
+              stay += "s";
           }
-        }  
-      }else{
-        if (years == 1 && months == 0){
-          var stay = years + " Year"
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months == 1){
-          var stay = years + " Year and, " + months + " months" 
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months > 1){
-          var stay = years + " Year and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months  > 0){
-          var stay = years + " Years and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months == 1){
-          var stay = years + " Years and, " + months + " month"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months < 1){
-          var stay = years + " Years"
-          $('#length-of-stay').val(stay)
-        }
       }
+
+      if (months > 0) {
+          if (stay) {
+              stay += " and ";
+          }
+          stay += months + " Month";
+          if (months > 1) {
+              stay += "s";
+          }
+      }
+
+      $('#length-of-stay').val(stay)
+
+
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
@@ -444,66 +432,49 @@ var blipForm = (function() {
         $('#face-amount').val(value);
       }
     });
+
     $classificationOfInsured.on('change', function(){
-      var typeOfInsurancePolicyValue = $typeOfInsurancePolicy.val();
-      var classificationOfInsuredValue = $classificationOfInsured.val();  
+      var typeOfInsurancePolicyValue = ($typeOfInsurancePolicy.val());
+      var classificationOfInsuredValue = ($classificationOfInsured.val());  
       var dateOfPolicyIssueValue = $dateOfPolicyIssue.val();
       var dateOfDeathTpdAccidentValue = $dateOfDeathTpdAccident.val();
-      var recognitionDate = new Date(dateOfPolicyIssueValue);
-      var dateOfResignation = new Date(dateOfDeathTpdAccidentValue);
-      var currentDate = new Date();
+      var dateOfPolicyIssue = new Date(dateOfPolicyIssueValue);
+      var dateOfDeathTpdAccident = new Date(dateOfDeathTpdAccidentValue);
 
-      function getMonthsDifference(date1, date2) {
-          const monthsInYear = 12;
-          const diffYear = date2.getFullYear() - date1.getFullYear();
-          const diffMonth = date2.getMonth() - date1.getMonth();
-          return diffYear * monthsInYear + diffMonth;
+      var years = dateOfDeathTpdAccident.getFullYear() - dateOfPolicyIssue.getFullYear();
+      var months = dateOfDeathTpdAccident.getMonth() - dateOfPolicyIssue.getMonth();
+      var days = dateOfDeathTpdAccident.getDate() - dateOfPolicyIssue.getDate();
+
+      if (days < 0) {
+          months--;
+          var lastDayOfMonth = new Date(dateOfDeathTpdAccident.getFullYear(), dateOfDeathTpdAccident.getMonth(), 0).getDate();
+          days += lastDayOfMonth;
       }
 
-      var numberOfMonths = getMonthsDifference(recognitionDate, dateOfResignation);
-      var years = Math.floor(numberOfMonths / 12);
-      var months = numberOfMonths % 12;
+      if (months < 0) {
+          years--;
+          months += 12;
+      }
 
-      if (years < 1){
-        if (months > 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months == 1){
-          var stay = months + " Months"
-          $('#length-of-stay').val(stay)
-        }else if (months < 1) {
-          if (numberOfDays == 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays > 1){
-            var stay = numberOfDays + " Day"
-            $('#length-of-stay').val(stay)  
-          }else if (numberOfDays < 1){
-            var stay = ""
-            $('#length-of-stay').val(stay)  
+      var stay = "";
+      if (years > 0) {
+          stay += years + " Year";
+          if (years > 1) {
+              stay += "s";
           }
-        }  
-      }else{
-        if (years == 1 && months == 0){
-          var stay = years + " Year"
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months == 1){
-          var stay = years + " Year and, " + months + " months" 
-          $('#length-of-stay').val(stay)
-        }else if (years == 1 && months > 1){
-          var stay = years + " Year and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months  > 0){
-          var stay = years + " Years and, " + months + " months"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months == 1){
-          var stay = years + " Years and, " + months + " month"
-          $('#length-of-stay').val(stay)
-        }else if (years > 1 && months < 1){
-          var stay = years + " Years"
-          $('#length-of-stay').val(stay)
-        }
       }
+
+      if (months > 0) {
+          if (stay) {
+              stay += " and ";
+          }
+          stay += months + " Month";
+          if (months > 1) {
+              stay += "s";
+          }
+      }
+
+      $('#length-of-stay').val(stay)
       if(typeOfInsurancePolicyValue == "Basic Life Insurance Plan" && classificationOfInsuredValue == "Member" || typeOfInsurancePolicyValue == "TPD"  && classificationOfInsuredValue == "Member"){  
         if (months < 3 && years < 1){
             var value = 2000.00
