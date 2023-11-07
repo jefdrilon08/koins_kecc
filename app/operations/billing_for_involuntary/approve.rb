@@ -26,7 +26,7 @@ module BillingForInvoluntary
             process_transfer_savings!   
             process_loan_payments!   
            
-            update_other_loans!
+
             
 
             @data_store[:meta]["date_approved"] = DateTime.now.to_date
@@ -34,18 +34,6 @@ module BillingForInvoluntary
             @data_store.update(data: {accounting_entry_transfer_savings: @accounting_entry_to_transfer, accounting_entry_loan_payments: @accounting_entry_to_payments, records: @data[:records]},status: "approved")
             
             @data_store
-        end
-        
-        def update_other_loans!
-            @data[:records].each do |rec|
-                loans = Loan.where(member_id: rec[:member_id],status: "active")
-                    if loans.any?
-                        loans.each do |l|
-                            update_loan = Loan.find(l.id)
-                            update_loan.update!(status: "for-writeoff")
-                        end
-                    end
-            end
         end
         
         def approved_accounting_entry_for_loan_payments!
@@ -159,7 +147,6 @@ module BillingForInvoluntary
                     updated_amort         = AmortizationScheduleEntry.where(loan_id: @loan.id).order("due_date DESC")
                     @loan.principal_paid  = updated_amort.sum(:principal_paid).round(2)
                     @loan.interest_paid   = updated_amort.sum(:interest_paid).round(2)
-
                     @loan.principal_balance = (@loan.principal - @loan.principal_paid).round(2)
                     @loan.interest_balance  = (@loan.interest - @loan.interest_paid).round(2)
 
@@ -175,9 +162,9 @@ module BillingForInvoluntary
                     if @loan_payments_entry[:date_posted] > max_active_date
                         max_active_date = @loan_payments_entry[:date_posted]        
                     end
-
+                    
+                    
                     @loan.save!
-
                     if @loan.principal_balance == 0.00 and @loan.interest_balance == 0.00
                         @loan.update!(
                             date_completed: @loan_payments_entry[:date_posted],
@@ -185,7 +172,8 @@ module BillingForInvoluntary
                             max_active_date: @loan_payments_entry[:date_posted]
                         )
                     else
-                        @loan.update!(status: "for-writeoff")
+                        @loan[:data]["for_writeoff"] = true
+                        @loan.update!(status: "active",data: @loan[:data],max_active_date: DateTime.now.to_date)
                     end
 
                     @account_transaction
@@ -201,20 +189,20 @@ module BillingForInvoluntary
 
                 #withdraw 
                 rec[:member_accounts].each do |mr|
-                        
+        
                     if mr[:account_subtype] == "K-IMPOK"
                         member_account = MemberAccount.find(mr[:id])
-                        ending_balance = member_account.balance.to_f - @total_payment.round(2).to_f
-
+                        ending_balance = member_account.balance.to_f - rec[:total_loan_payment].round(2).to_f
+                        total_payments = rec[:total_loan_payment] 
                         if rec[:closing_fee_amount] > 0.0
                             ending_balance -= rec[:closing_fee_amount]  
-                            @total_payment += rec[:closing_fee_amount] 
+                            total_payments += rec[:closing_fee_amount]
                         end 
                        
                             withdraw_account_transaction = AccountTransaction.new(
                                 subsidiary_id: member_account.id,
                                 subsidiary_type: "MemberAccount",
-                                amount: @total_payment.round(2).to_f,
+                                amount: total_payments.round(2).to_f,
                                 transaction_type: "withdraw",
                                 transacted_at:  @loan_payments_entry[:date_posted],
                                 status: "approved",
@@ -282,8 +270,17 @@ module BillingForInvoluntary
                      s.update!(is_void: true)
                    end
 
-                   
-
+                #update other loans of member
+                member = Member.find(rec[:member_id])
+                
+                member_loans = Loan.where(member_id: member.id, status: "active")
+                
+                member_loans.each do |d|
+                    loans = Loan.find(d.id)
+                    loans_data = loans.data.with_indifferent_access
+                    loans_data[:for_writeoff] = true
+                    loans.update!(data: loans_data, max_active_date: DateTime.now.to_date)
+                end
             end
         end
 
