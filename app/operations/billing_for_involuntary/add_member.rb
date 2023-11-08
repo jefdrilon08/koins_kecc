@@ -101,7 +101,7 @@ module BillingForInvoluntary
           
           # raise payment_stats.inspect
         
-        if payment_stats[:interest_paid] > 0.0
+        if payment_stats[:interest_paid] > 0.0 or payment_stats[:principal_paid] > 0.0
           loanRecArr << {
               id: lrs.id,
               loan_product: lrs.loan_product.name,

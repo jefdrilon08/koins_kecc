@@ -1,12 +1,17 @@
 module BillingForInvoluntary
     class Approve
         def initialize(config:)
-            @data_store = DataStore.find(config[:data_store])
-            @current_user = User.find(config[:current_user])
-            @data = @data_store.data.with_indifferent_access
-            @accounting_entry_to_transfer = @data[:accounting_entry_transfer_savings]
-            @accounting_entry_to_payments = @data[:accounting_entry_loan_payments]
-            @current_user = User.find(config[:current_user])
+            @data_store                             = DataStore.find(config[:data_store])
+            @current_user                           = User.find(config[:current_user])
+            @data                                   = @data_store.data.with_indifferent_access
+            @accounting_entry_to_transfer           = @data[:accounting_entry_transfer_savings]
+            @accounting_entry_to_payments           = @data[:accounting_entry_loan_payments]
+            @current_user                           = User.find(config[:current_user])
+            @date                                   = ::Utils::GetCurrentDate.new(
+                                                       config: {
+                                                          branch: Branch.find(@data_store.meta["branch_id"])
+                                                          }
+                                                    ).execute!
             
         end
         def execute!
@@ -15,12 +20,12 @@ module BillingForInvoluntary
                      
 
             @accounting_entry_to_transfer[:reference_number] =  @transfer_entry[:reference_number]
-            @accounting_entry_to_transfer[:status] =  @transfer_entry[:status]
-            @accounting_entry_to_transfer[:approved_by]=  @transfer_entry[:approved_by]
+            @accounting_entry_to_transfer[:status]           =  @transfer_entry[:status]
+            @accounting_entry_to_transfer[:approved_by]      =  @transfer_entry[:approved_by]
 
             @accounting_entry_to_payments[:reference_number] = @loan_payments_entry[:reference_number]
-            @accounting_entry_to_payments[:status]  =   @loan_payments_entry[:status]
-            @accounting_entry_to_payments[:approved_by] = @loan_payments_entry[:approved_by]
+            @accounting_entry_to_payments[:status]           =   @loan_payments_entry[:status]
+            @accounting_entry_to_payments[:approved_by]      = @loan_payments_entry[:approved_by]
 
             
             process_transfer_savings!   
@@ -73,7 +78,7 @@ module BillingForInvoluntary
                         subsidiary_type: "Loan",
                         amount: @total_payment.round(2).to_f,
                         transaction_type: "loan_payment",
-                        transacted_at: DateTime.now,
+                        transacted_at: @date,
                         status: "approved"
                     )
 
