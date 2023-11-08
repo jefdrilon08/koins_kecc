@@ -17,7 +17,7 @@ module Api
         config = {
             test: params[:as_of]
         }
-        cmd = ::RiskProfiles::BuildDailyMetrics.new(config: config).execute!
+        cmd = ::RiskProfiles::BuildYearEndMetrics.new(config: config).execute!
 
         render json: cmd
       end
