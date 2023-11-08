@@ -98,8 +98,15 @@ module Members
             message: "Member Age is not 18 Above"
           }
         end
+        if Settings.activate_microinsurance
+          if age > 60
+            @errors[:messages] << {
+              key: "date_of_birth",
+              message: "Member Age is 60 Above"
+            }
+          end
+        end
       end
-   
       # Validate gender
       if @member_data[:gender].blank?
         @errors[:messages] << {
