@@ -59,7 +59,7 @@ module Dashboard
                                 # if(branch.id != "b9659f7e-c4d5-4b8b-be3b-508bd7c6a583") # exclude the HEAD OFFICE
 
                                 # SOA LOANS
-                                soaLoansData = DataStore.soa_loans.select("data").where(
+                                soaLoansData = DataStore.soa_loans.where(
                                 "meta->>'branch_id' = ? AND DATE(end_date) <= ? AND status = ?", 
                                 branch.id,
                                 @as_of,
@@ -71,13 +71,20 @@ module Dashboard
                                 totalInterest = 0.00
                                 totalPaid = 0.00
 
-                                # BRANCHES END DATE FOR SOA LOANS AND SOA EXPENSES
+                                # BRANCHES START AND END DATE FOR SOA LOANS AND SOA EXPENSES
+                                startDateSL = ""
+                                startDateSE = ""
+
                                 endDateSL = ""
                                 endDateSE = ""
 
-
+                                # SOA LOANS AND SOA EXPENSES IDs
+                                soaLoansID = ""
+                                soaExpensesID = ""
                     
                                 if soaLoansData
+                                    soaLoansID = soaLoansData.id
+
                                     # puts "soaLoansData: " + branch.id + " " + soaLoansData.data["records"].inspect
                                     soaLoansData.data["records"].map do |rec, irec|
                                         totalPrincipal += rec["total_principal_paid"]
@@ -103,7 +110,8 @@ module Dashboard
                                     grandTotalInterestPaid += totalInterest
                                     grandTotalPaid += totalPaid
 
-                                    # END DATE FOR SOA LOANS
+                                    # START AND END DATE FOR SOA LOANS
+                                    startDateSL = soaLoansData.data["start_date"]
                                     endDateSL = soaLoansData.data["end_date"]
                                     
                                 end
@@ -111,7 +119,7 @@ module Dashboard
 
 
                                 # SOA EXPENSES
-                                soaExpensesData = DataStore.soa_expenses.select("data").where(
+                                soaExpensesData = DataStore.soa_expenses.where(
                                 "meta->>'branch_id' = ? AND DATE(end_date) <= ? AND status = ?", 
                                 branch.id,
                                 @as_of,
@@ -147,14 +155,13 @@ module Dashboard
                                 # end
 
                                 # soaExpensesData.data["records"] = records
-
-                                # puts "soaExpensesData: " + soaExpensesData.inspect
-
-
+                                
                                 # BRANCHES TOTAL FOR SOA EXPENSES
                                 totalDisbursement = 0.00
 
                                 if soaExpensesData
+                                    soaExpensesID = soaExpensesData.id
+
                                     # BRANCHES TOTAL DISBURSEMENT
                                     soaExpensesData.data["records"].map do |rec, irec|
                                         totalDisbursement += rec["principal"].to_f
@@ -169,13 +176,11 @@ module Dashboard
                                     # GRANND TOTAL DISBURSEMENT
                                     grandTotalDisbursementPaid += totalDisbursement
 
-                                    # END DATE FOR SOA EXPENSES
-                                    endDateSE = soaLoansData.data["end_date"]
+                                    # START AND END DATE FOR SOA EXPENSES
+                                    startDateSE = soaExpensesData.data["start_date"]
+                                    endDateSE = soaExpensesData.data["end_date"]
 
                                 end
-
-                                #puts "soaExpensesData: " + soaExpensesData.inspect
-
                                 
                                 
                                 # OUTPUT FOR BRANCHES
@@ -196,8 +201,12 @@ module Dashboard
                                 total_interest_paid: totalInterest,
                                 total_paid: totalPaid,
                                 total_disbursement: totalDisbursement,
+                                start_date_sl: startDateSL,
                                 end_date_sl: endDateSL,
+                                start_date_se: startDateSE,
                                 end_date_se: endDateSE,
+                                soa_loans_id: soaLoansID,
+                                soa_expenses_id: soaExpensesID,
                                 } 
                             },
                         # CLUSTERS
