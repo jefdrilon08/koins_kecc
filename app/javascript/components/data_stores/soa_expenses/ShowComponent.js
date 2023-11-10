@@ -50,6 +50,7 @@ export default class ShowComponent extends React.Component {
       data: data,
       method: 'GET',
       success: function(response) {
+        console.log("response: ", response)
         context.setState({
           isLoading: false,
           data: response
