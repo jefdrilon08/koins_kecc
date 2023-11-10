@@ -65,6 +65,23 @@ function Disbursement(props) {
 
     const borderColor = "#dee2e6";
 
+    const headerSato = "10%";
+    const headerDisbursement = "30%";
+    const headerCollection = "60%";
+
+
+    const rowDisbursementLink = "8%";
+    const rowDisbursementPrincipal = "32%";
+    const rowDisbursementStartDate = "30%";
+    const rowDisbursementEndDate = "30%";
+
+    const rowCollectionLink = "5%";
+    const rowCollectionPrincipal = "21%";
+    const rowCollectionInterest = "21%";
+    const rowCollectionTotal = "21%";
+    const rowCollectionStartDate = "16%";
+    const rowCollectionEndDate = "16%";
+
     useEffect(() => {
         fetch();
 
@@ -149,11 +166,11 @@ function Disbursement(props) {
 
                                                                 {/* HEADERS */}
                                                                 <tr key={"header-" + clusters.id} style={{ backgroundColor: branchColor, color: "white" }}>
-                                                                    <th className="text-center" style={{ width: "15%", verticalAlign: "middle" }}>
+                                                                    <th className="text-center" style={{ width: headerSato, verticalAlign: "middle" }}>
                                                                         Sato
                                                                     </th>
                                                                     {/* DISBURSEMENT TAB */}
-                                                                    <th className="text-center" style={{ width: "25%", verticalAlign: "middle" }}>
+                                                                    <th className="text-center" style={{ width: headerDisbursement, verticalAlign: "middle" }}>
                                                                         <table style={{ width: "100%" }}>
                                                                             <tr>
                                                                                 <th className="text-center" style={{ borderBottom: "0.5px solid", borderColor: borderColor }} colSpan={colSpan}>
@@ -161,38 +178,50 @@ function Disbursement(props) {
                                                                                 </th>
                                                                             </tr>
                                                                             <tr>
-                                                                                <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor,  width: "50%" }}>
+                                                                                <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementLink }}>
+                                                                                    
+                                                                                </th>
+                                                                                <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementPrincipal }}>
                                                                                     Principal
                                                                                 </th>
-                                                                                <th className="text-center" style={{ width: "50%" }}>
-                                                                                    As Of
+                                                                                <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementStartDate }}>
+                                                                                    Start Date
+                                                                                </th>
+                                                                                <th className="text-center" style={{ width: rowDisbursementEndDate }}>
+                                                                                    End Date
                                                                                 </th>
                                                                             </tr>
                                                                         </table>
                                                                     </th>
 
                                                                     {/* COLLECTION TAB */}
-                                                                    <th className="text-center" style={{ width: "60%" }}>
+                                                                    <th className="text-center" style={{ width: headerCollection, verticalAlign: "middle" }}>
                                                                         <table style={{ width: "100%" }}>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <th className="text-center" style={{ borderBottom: "0.5px solid", borderColor: borderColor }} colSpan={colSpan}>
+                                                                                    <th className="text-center" style={{ borderBottom: "0.5px solid", borderColor: borderColor }} colSpan={colSpan+2}>
                                                                                         Collection
                                                                                     </th>
                                                                                 </tr>
 
                                                                                 <tr>
-                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionLink }}>
+                                                                                    
+                                                                                    </th>
+                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionPrincipal }}>
                                                                                         Principal
                                                                                     </th>
-                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionInterest }}>
                                                                                         Interest
                                                                                     </th>
-                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionTotal }}>
                                                                                         Total
                                                                                     </th>
-                                                                                    <th className="text-center" style={{ width: "25%"}}>
-                                                                                        As Of
+                                                                                    <th className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionStartDate }}>
+                                                                                        Start Date
+                                                                                    </th>
+                                                                                    <th className="text-center" style={{ width: rowCollectionEndDate }}>
+                                                                                        End Date
                                                                                     </th>
                                                                                 </tr>
                                                                             </tbody>
@@ -218,7 +247,22 @@ function Disbursement(props) {
                                                                                     <table style={{ width: "100%" }}>
                                                                                         <tbody>
                                                                                             <tr>
-                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "50%" }}>
+                                                                                                <td className="text-center" style={{ width: rowDisbursementLink }}>
+                                                                                                        {/* Disbursement Link Branches */}
+                                                                                                        {branches.soa_expenses_id.length > 0 ? (
+                                                                                                            <a href={'/data_stores/soa_expenses/'+branches.soa_expenses_id} target='_blank'>
+                                                                                                                <div className='bi bi-search'>
+
+                                                                                                                </div>
+                                                                                                            </a>
+                                                                                                        ):(
+                                                                                                            <>
+                                                                                                            </>
+                                                                                                        )
+                                                                                                        }
+                                                                                                </td>
+
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementPrincipal }}>
                                                                                                         
                                                                                                         {/* Disbursement Principal Branches */}
                                                                                                         {branches.total_disbursement.toLocaleString('en-PH', {
@@ -229,7 +273,12 @@ function Disbursement(props) {
                                                                                                     
                                                                                                 </td>
 
-                                                                                                <td className="text-center" style={{ width: "50%" }}>
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementStartDate }}>
+                                                                                                        {/* Disbursement As Of Branches */}
+                                                                                                        {branches.start_date_se}
+                                                                                                </td>
+
+                                                                                                <td className="text-center" style={{ width: rowDisbursementEndDate }}>
                                                                                                         {/* Disbursement As Of Branches */}
                                                                                                         {branches.end_date_se}
                                                                                                 </td>
@@ -243,7 +292,21 @@ function Disbursement(props) {
                                                                                     <table style={{ width: "100%" }}>
                                                                                         <tbody>
                                                                                             <tr>
-                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionLink }}>
+                                                                                                        {/* Collection Link BRANCHES */}
+                                                                                                        {branches.soa_loans_id.length > 0 ? (
+                                                                                                            <a href={'/data_stores/soa_loans/'+branches.soa_loans_id} target='_blank'>
+                                                                                                                <div className='bi bi-search'>
+
+                                                                                                                </div>
+                                                                                                            </a>
+                                                                                                        ):(
+                                                                                                            <>
+                                                                                                            </>
+                                                                                                        )
+                                                                                                        }
+                                                                                                </td>
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionPrincipal }}>
                                                                                                     
                                                                                                         {/* Principal */}
                                                                                                         {branches.total_principal_paid.toLocaleString('en-PH', {
@@ -253,7 +316,7 @@ function Disbursement(props) {
                                                                                                         })}
                                                                                                     
                                                                                                 </td>
-                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionInterest }}>
                                                                                                     
                                                                                                         {/* Interest */}
                                                                                                         {branches.total_interest_paid.toLocaleString('en-PH', {
@@ -263,7 +326,7 @@ function Disbursement(props) {
                                                                                                         })}
                                                                                                     
                                                                                                 </td>
-                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionTotal }}>
                                                                                                     
                                                                                                         {/* Total */}
                                                                                                         {branches.total_paid.toLocaleString('en-PH', {
@@ -273,8 +336,14 @@ function Disbursement(props) {
                                                                                                         })}
                                                                                                     
                                                                                                 </td>
-                                                                                                <td className="text-center" style={{ width: "25%" }}>
-                                                                                                        {/* As Of BRANCHES */}
+
+                                                                                                <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionStartDate }}>
+                                                                                                        {/* Start Date BRANCHES */}
+                                                                                                        {branches.start_date_sl}
+                                                                                                </td>
+
+                                                                                                <td className="text-center" style={{ width: rowCollectionEndDate }}>
+                                                                                                        {/* End Date BRANCHES */}
                                                                                                         {branches.end_date_sl}
                                                                                                 </td>
                                                                                             </tr>
@@ -300,7 +369,13 @@ function Disbursement(props) {
                                                                         <table style={{ width: "100%" }}>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "50%" }}>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementLink }}>
+                                                                                        <strong>
+                                                                                            {/* Disbursement Link CLUSTER */}
+                                                                                            {}
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementPrincipal }}>
                                                                                             
                                                                                         <strong>
                                                                                             {/* CLUSTER Disbursement PrincipalTotal */}
@@ -313,8 +388,12 @@ function Disbursement(props) {
                                                                                         
                                                                                     </td>
 
-                                                                                    <td className="text-center" style={{ width: "50%" }}>
-                                                                                            {/* CLUSTER Disbursement As Of */}
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementStartDate }}>
+                                                                                            {/* CLUSTER Disbursement start Date */}
+                                                                                    </td>
+
+                                                                                    <td className="text-center" style={{ width: rowDisbursementEndDate }}>
+                                                                                            {/* CLUSTER Disbursement End Date*/}
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -325,7 +404,13 @@ function Disbursement(props) {
                                                                         <table style={{ width: "100%" }}>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionLink }}>
+                                                                                        <strong>
+                                                                                            {/* Collection Link CLUSTER */}
+                                                                                            {}
+                                                                                        </strong>
+                                                                                    </td>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionPrincipal }}>
                                                                                         <strong>
                                                                                             {/* Cluster Principal Total */}
                                                                                             {clusters.cluster_total_principal_paid.toLocaleString('en-PH', {
@@ -335,7 +420,7 @@ function Disbursement(props) {
                                                                                             })}
                                                                                         </strong>
                                                                                     </td>
-                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionInterest }}>
                                                                                         <strong>
                                                                                             {/* Cluster Interest Total */}
                                                                                             {clusters.cluster_total_interest_paid.toLocaleString('en-PH', {
@@ -345,7 +430,7 @@ function Disbursement(props) {
                                                                                             })}
                                                                                         </strong>
                                                                                     </td>
-                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionTotal }}>
                                                                                         <strong>
                                                                                             {/* Cluster Total Total */}
                                                                                             {clusters.cluster_total_paid.toLocaleString('en-PH', {
@@ -355,8 +440,12 @@ function Disbursement(props) {
                                                                                             })}
                                                                                         </strong>
                                                                                     </td>
-                                                                                    <td className="text-center" style={{ width: "25%" }}>
-                                                                                            {/* CLUSTER COLLECTION As Of */}
+                                                                                    <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionStartDate }}>
+                                                                                            {/* CLUSTER COLLECTION  Start Date*/}
+                                                                                            
+                                                                                    </td>
+                                                                                    <td className="text-center" style={{ width: rowCollectionEndDate }}>
+                                                                                            {/* CLUSTER COLLECTION End Date */}
                                                                                             
                                                                                     </td>
                                                                                 </tr>
@@ -381,7 +470,13 @@ function Disbursement(props) {
                                                             <table style={{ width: "100%" }}>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "50%" }}>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementLink }}>
+                                                                            <strong>
+                                                                                {/* Disbursement Link AREA */}
+                                                                                {}
+                                                                            </strong>
+                                                                        </td>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementPrincipal }}>
                                                                                 
                                                                             <strong>
                                                                                 {/* Area Disbursement Total */}
@@ -394,8 +489,15 @@ function Disbursement(props) {
                                                                             
                                                                         </td>
 
-                                                                        <td className="text-center" style={{ width: "50%" }}>
-                                                                                {/* Area Disbursement As Of */}
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementStartDate }}>
+                                                                                {/* Area Disbursement start date */}
+                                                                                <strong>
+
+                                                                                </strong>
+                                                                        </td>
+
+                                                                        <td className="text-center" style={{ width: rowDisbursementEndDate }}>
+                                                                                {/* Area Disbursement end date */}
                                                                                 <strong>
 
                                                                                 </strong>
@@ -409,7 +511,13 @@ function Disbursement(props) {
                                                             <table style={{ width: "100%" }}>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionLink }}>
+                                                                            <strong>
+                                                                                {/* Collection Link AREA */}
+                                                                                {}
+                                                                            </strong>
+                                                                        </td>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionPrincipal }}>
                                                                             <strong>
                                                                                 {/* Area Principal Total */}
                                                                                 {areas.areas_total_principal_paid.toLocaleString('en-PH', {
@@ -419,7 +527,7 @@ function Disbursement(props) {
                                                                                 })}
                                                                             </strong>
                                                                         </td>
-                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionInterest }}>
                                                                             <strong>
                                                                                 {/* Area Interest Total */}
                                                                                 {areas.areas_total_interest_paid.toLocaleString('en-PH', {
@@ -429,7 +537,7 @@ function Disbursement(props) {
                                                                                 })}
                                                                             </strong>
                                                                         </td>
-                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionTotal }}>
                                                                             <strong>
                                                                                 {/* Area Total Total */}
                                                                                 {areas.areas_total_paid.toLocaleString('en-PH', {
@@ -439,9 +547,14 @@ function Disbursement(props) {
                                                                                 })}
                                                                             </strong>
                                                                         </td>
-                                                                        <td className="text-center" style={{ width: "25%" }}>
+                                                                        <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionStartDate }}>
                                                                             <strong>
-                                                                                {/* Area As Of */}
+                                                                                {/* Area As Of start date */}
+                                                                            </strong>
+                                                                        </td>
+                                                                        <td className="text-center" style={{ width: rowCollectionEndDate }}>
+                                                                            <strong>
+                                                                                {/* Area As Of end date */}
                                                                             </strong>
                                                                         </td>
                                                                     </tr>
@@ -469,7 +582,13 @@ function Disbursement(props) {
                                                 <table style={{ width: "100%" }}>
                                                     <tbody>
                                                         <tr>
-                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "50%" }}>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementLink }}>
+                                                                <strong>
+                                                                    {/* Disbursement Link GRAND */}
+                                                                    {}
+                                                                </strong>
+                                                            </td>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementPrincipal }}>
                                                                     
                                                                 <strong>
                                                                     {/* Grand Disbursement Total */}
@@ -482,8 +601,15 @@ function Disbursement(props) {
                                                                 
                                                             </td>
 
-                                                            <td className="text-center" style={{ width: "50%" }}>
-                                                                    {/* Grand Disbursement As Of */}
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowDisbursementStartDate }}>
+                                                                    {/* Grand Disbursement Start Date */}
+                                                                    <strong>
+
+                                                                    </strong>
+                                                            </td>
+
+                                                            <td className="text-center" style={{ width: rowDisbursementEndDate }}>
+                                                                    {/* Grand Disbursement End Date */}
                                                                     <strong>
 
                                                                     </strong>
@@ -497,7 +623,13 @@ function Disbursement(props) {
                                                 <table style={{ width: "100%" }}>
                                                     <tbody>
                                                         <tr>
-                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionLink }}>
+                                                                <strong>
+                                                                    {/* Collection Link GRAND */}
+                                                                    {}
+                                                                </strong>
+                                                            </td>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionPrincipal }}>
                                                                 <strong>
                                                                     {/* Grand Principal Total */}
                                                                     {data.grand_total_principal_paid.toLocaleString('en-PH', {
@@ -507,7 +639,7 @@ function Disbursement(props) {
                                                                     })}
                                                                 </strong>
                                                             </td>
-                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionInterest }}>
                                                                 <strong>
                                                                     {/* Grand Interest Total */}
                                                                     {data.grand_total_interest_paid.toLocaleString('en-PH', {
@@ -517,7 +649,7 @@ function Disbursement(props) {
                                                                     })}
                                                                 </strong>
                                                             </td>
-                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: "25%" }}>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionTotal }}>
                                                                 <strong>
                                                                     {/* Grand Total Total */}
                                                                     {data.grand_total_paid.toLocaleString('en-PH', {
@@ -527,9 +659,15 @@ function Disbursement(props) {
                                                                     })}
                                                                 </strong>
                                                             </td>
-                                                            <td className="text-center" style={{ width: "25%" }}>
+                                                            <td className="text-center" style={{ borderRight: "0.5px solid", borderColor: borderColor, width: rowCollectionStartDate }}>
                                                                 <strong>
-                                                                    {/* Grand As Of */}
+                                                                    {/* Grand Start Date */}
+                                                                </strong>
+                                                            </td>
+
+                                                            <td className="text-center" style={{ width: rowCollectionEndDate }}>
+                                                                <strong>
+                                                                    {/* Grand End Date */}
                                                                 </strong>
                                                             </td>
                                                         </tr>
