@@ -1051,18 +1051,67 @@ end
   task :write_off => :environment do
     require 'csv'
     year = ENV['YEAR']
-    @data = DataStore.where("meta->> 'as_of' = ? ","#{year}").order(Arel.sql("meta->>'branch_id'"))
-      CSV.open("#{Rails.root}/tmp/writeoff.csv", "w",:write_headers=> true, :headers => ["BRANCH" , "NUMBER OF MEMBERS WRITEOFF" ,"TOTAL AMOUNT"] ) do |csv|
+    @data = DataStore.billing_for_writeoff.where("meta->> 'as_of' = ? ","#{year}").order(Arel.sql("meta->>'branch_id'"))
+      CSV.open("#{Rails.root}/tmp/writeoff.csv", "w",:write_headers=> true, :headers => ["Member Name","Branch","RSA","MBS","GK","PSA","CBU","SHARE CAPITAL"] ) do |csv|
         @data.each do |b|
           records = b.data.with_indifferent_access[:record]
           @branch = b[:meta]["branch_name"]
-          @count = records.count
-          @amount = 0.0
-          records.each do |rec|
-            @amount += rec[:amount]
+          
+          unique_records = records.uniq { |record| record["member"]["id"]}
+         
+          unique_records.each do |rec|
+            @member = Member.find(rec["member"]["id"])
+            member_account = MemberAccount.where("member_id = ? and account_subtype IN ('K-IMPOK','Maintaining Balance Savings','Golden K','Savings Investment Fund','CBU','Share Capital')","#{@member.id}")
+            member_account.each do |ma|
+              if ma[:account_subtype] == "K-IMPOK"
+                @kimpok = MemberAccount.find(ma.id)
+              elsif ma[:account_subtype] == "Maintaining Balance Savings"
+                @mbs = MemberAccount.find(ma.id)
+              elsif ma[:account_subtype] == "Golden K"
+                @gk = MemberAccount.find(ma.id)
+              elsif ma[:account_subtype] == "Savings Investment Fund"
+                @sif = MemberAccount.find(ma.id)
+              elsif ma[:account_subtype] == "CBU"
+                @cbu = MemberAccount.find(ma.id)
+              elsif ma[:account_subtype] == "Share Capital"
+                @sc = MemberAccount.find(ma.id)
+              end
+            end
+            csv << [@member.full_name,@member.branch.name,@kimpok.balance.to_f.round(2),@mbs.balance.to_f.round(2),@gk.balance.to_f.round(2),@sif.balance.to_f,@cbu.balance.to_f,@sc.balance.to_f]
+            csv << ["LOAN PRODUCT", "PRINCIPAL BALANCE", "INTEREST BALANCE"]
+            writeoff_loans = @member.loans.writeoff
+            writeoff_loans.each do |wl|
+              loan = Loan.find(wl.id)
+              csv << ["#{loan.loan_product.name}","#{loan.principal_balance}","#{loan.interest_balance}"]
+              
+            end
+            csv << []
+          
           end
-          csv << [@branch,@count,@amount]
+         
         end
       end
+  end
+
+  task :remove_writeoff_payment_year_2021 => :environment do 
+    year = "2021"
+    @data = DataStore.billing_for_writeoff.where("meta->> 'as_of' = ? ","#{year}").order(Arel.sql("meta->>'branch_id'"))
+      @data.each do |d|
+        @date_approve = d["meta"]["date_approved"]
+        
+        records = DataStore.find(d.id)
+        records_data = records.data.with_indifferent_access
+        records_data[:record].each do |r|
+          loan = Loan.find(r[:loan][:loan_id])
+          account_transaction = AccountTransaction.where(subsidiary_id: loan.id,transacted_at: @date_approve).first
+          if account_transaction.present?
+            AccountTransaction.find(account_transaction.id).destroy!
+            puts "deleting account_transaction with an ID #{account_transaction.id}"
+            ::Loans::FixAmort.new(loan: loan).execute!
+            loan.update(status: "writeoff")
+          end
+        end
+      end
+  
   end
 end

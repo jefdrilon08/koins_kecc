@@ -42,7 +42,7 @@ module Reports
               gk_balance        = value[:gk_balance].to_f.round(2)
               rf_balace         = value[:rf_balance].to_f.round(2)
               eq_balance        = value[:eq_balance].to_f.round(2)
-              share_cap         = value[:equity_balance].to_f.round(2)
+              share_cap         = value[:sharecap_balance].to_f.round(2)
               cbu_balance       = value[:cbu_balance].to_f.round(2)
               sheet.add_row ["#{index + 1}","#{id}","#{member_name}","#{member_id}","#{member_center}","#{member_status}","#{member_loan}","#{maturity_date}","#{loan_status}","#{principal_balance}","#{interest_balance}","#{personal_savings}","#{rsa_balance}","#{mbs_balance}","#{gk_balance}","#{rf_balace}","#{eq_balance}","#{share_cap}","#{cbu_balance}"], style: @data_row
             end
