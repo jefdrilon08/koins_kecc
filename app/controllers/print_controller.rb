@@ -19,8 +19,8 @@ class PrintController < ApplicationController
     elsif type == "print_entry_involuntary"
       collection_involuntary = params[:id]
       data = ::Print::BuildPrintEntryInvoluntary.new(config: collection_involuntary).execute!
-      collection_involuntary =  data
-      render "print/collection_for_involuntary", layout: "print"
+      @data_store =  data
+      render "print/collection_for_involuntary_entry", layout: "print"
     elsif type == "share_capital_involuntary_letter_list"
       id = params[:id]
       data = ::Print::BuildShareCapitalInvoluntaryMasterList.new(config: id).execute!

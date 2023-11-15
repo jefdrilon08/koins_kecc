@@ -1,0 +1,338 @@
+:css
+  .print-text{
+    font-size: 1.5em;
+  }
+  .print-text.p{
+    font-family: Calibri;
+  }
+  .print-text-book.p {
+    font-family: Calibri;
+  }
+  .print-text-book{
+    font-size: 1.5em;
+  }
+  .print-text-sub.p {
+    font-family: Calibri;
+  }
+  .print-text-sub{
+    font-size: 1.1em;
+  }
+      
+  table.voucher td.amount{
+    text-align: right;
+  }
+
+  table.voucher th.amount{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher th{
+    text-align: right;
+    font-size: 1.5em;
+  }
+  table.voucher td.code{
+    text-align: center;
+    font-size: 1.5em;
+  }
+  table.voucher td{
+    text-align: left;
+    font-size: 1.5em;
+  }
+  table.voucher th.header{
+    font-size: 1.5em;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  table.signatories td.overline{
+    text-decoration: overline;
+    font-size: 1.5em;
+  }
+  table.signatories th
+    {
+    font-size: 1.5em;
+    }
+  hr {
+    border-color: black;
+  }
+  p.signatories{
+    font-size: 1.5em;
+  }
+  b.nothing{
+    font-size: 1.5em;
+  }
+
+%span.print-text
+  %center
+    %p
+      %b
+        #{@data_store[:company_name]} - #{@data_store[:accounting_entry_transfer][:branch]}
+      %br  
+      %b
+        #{@data_store[:company_address]}
+  - if @data_store[:accounting_entry_transfer][:book] == "CRB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH VOUCHER
+  - elsif @data_store[:accounting_entry_transfer][:book] == "JVB"
+    %span.print-text-book  
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            JOURNAL VOUCHER
+  - elsif @data_store[:accounting_entry_transfer][:book] == "CDB"
+    %span.print-text-book
+      %center
+        %div{:style => "border: 1px solid black; width: 490px; padding: 5px 5px 5px 5px;"}
+          %b
+            CASH DISBURSEMENT
+    %br
+%p
+  __________________________________________________________________________________________________________________________________________________________________  
+%left
+  %br
+  %span.print-text-sub
+    %table{:border => "0"}
+      // Remove
+      - if Settings.activate_microloans == true
+        %tr
+          %th{:width => "17%"} System ID:
+          %th{:width => "20%"}
+      %tr
+        // Remove
+        - if Settings.activate_microloans == true  
+          %th{:width => "17%"} Reference No:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["reference_number"]}
+        - if Settings.activate_microinsurance == true
+          %th{:width => "18%"} Ref. No:
+        - if Settings.activate_microloans == true
+          %th{:width => "18%"} Doc. No:  
+        - if Settings.activate_microinsurance == true
+          %th{:width => "25%"} #{@data_store[:accounting_entry_transfer]["sub_reference_number"]}
+          -if @data_store[:accounting_entry_transfer][:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["or_number"]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["check_number"]}
+        - else
+          %th{:width => "20%"} 
+          -if @data_store[:accounting_entry_transfer][:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["or_number"]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_transfer][:check_number]}
+      - if Settings.activate_microloans == true  
+        %tr
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["date_posted"]}
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["date_posted"]}
+      - if Settings.activate_microinsurance == true  
+        %tr
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["date_posted"]}  
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["date_posted"]}
+        -if Settings.activate_microinsurance == true
+          -if @data_store[:accounting_entry_transfer][:book] == "CRB"
+            %th{:width => "17%"} AR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_transfer]["ar_number"]}
+      - if @data_store[:accounting_entry_transfer][:payee].present?
+        %tr
+          %th{:width => "17%"} Payee:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_transfer][:payee]}
+    %hr
+  %center
+    %table.voucher{"border:" => "", :none => ""}
+      %tr
+        %th.header{width: 250} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+        %th.header{width: 550} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+        %th.header{width: 5} 
+        %th.header{width: 180} &emsp;Debit(PHP)&emsp;
+        %th.header{width: 190} &emsp;Credit(PHP)&emsp;
+
+      - @data_store[:accounting_entry_transfer]["debit_journal_entries"].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td.amount
+            #{o[:amount]}
+          %td 
+      - @data_store[:accounting_entry_transfer]["credit_journal_entries"].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td
+          %td.amount
+            #{o[:amount]}
+      %tr
+        %th
+        %th
+        %th 
+        %th.amount ___________
+        %th.amount ___________
+      %tr
+        %th
+        %th
+        %th Total 
+        %th.amount
+          #{@data_store[:accounting_entry_transfer]["total_debit"]}
+        %th.amount
+          #{@data_store[:accounting_entry_transfer]["total_credit"]}
+%center
+  %p
+    __________________________________________________________
+    %br 
+    %b.nothing
+      *** Nothing Follows ***      
+%left  
+  %hr
+  %p.signatories
+    %b
+      Particular:
+    #{@data_store[:accounting_entry_transfer]["particular"]}
+  %br
+  %br
+  %center
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+      
+        %th{width: 350} #{@data_store[:prepared_by]}
+    
+        %th{width: 350} #{@data_store[:accounting_entry_transfer]["approved_by"]}
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %br
+%p
+  __________________________________________________________________________________________________________________________________________________________________
+  %left
+  %br
+  %span.print-text-sub
+    %table{:border => "0"}
+      // Remove
+      - if Settings.activate_microloans == true
+        %tr
+          %th{:width => "17%"} System ID:
+          %th{:width => "20%"}
+      %tr
+        // Remove
+        - if Settings.activate_microloans == true  
+          %th{:width => "17%"} Reference No:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["reference_number"]}
+        - if Settings.activate_microinsurance == true
+          %th{:width => "18%"} Ref. No:
+        - if Settings.activate_microloans == true
+          %th{:width => "18%"} Doc. No:  
+        - if Settings.activate_microinsurance == true
+          %th{:width => "25%"} #{@data_store[:accounting_entry_loans]["sub_reference_number"]}
+          -if @data_store[:accounting_entry_loans][:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["or_number"]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["check_number"]}
+        - else
+          %th{:width => "20%"} 
+          -if @data_store[:accounting_entry_loans][:book] == "CRB"
+            %th{:width => "17%"} OR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["or_number"]}
+          - else
+            %th{:width => "17%"} Check No:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_loans][:check_number]}
+      - if Settings.activate_microloans == true  
+        %tr
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["date_posted"]}
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["date_posted"]}
+      - if Settings.activate_microinsurance == true  
+        %tr
+          %th{:width => "17%"} Date Requested:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["date_posted"]}  
+          %th{:width => "17%"} Date Approved:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["date_posted"]}
+        -if Settings.activate_microinsurance == true
+          -if @data_store[:accounting_entry_loans][:book] == "CRB"
+            %th{:width => "17%"} AR Number:
+            %th{:width => "20%"} #{@data_store[:accounting_entry_loans]["ar_number"]}
+      - if @data_store[:accounting_entry_loans][:payee].present?
+        %tr
+          %th{:width => "17%"} Payee:
+          %th{:width => "20%"} #{@data_store[:accounting_entry_loans][:payee]}
+    %hr
+  %center
+    %table.voucher{"border:" => "", :none => ""}
+      %tr
+        %th.header{width: 250} &nbsp;&nbsp;&nbsp;Account Code&nbsp;&nbsp;&nbsp;
+        %th.header{width: 550} &emsp;&emsp;&emsp;Account Name&emsp;&emsp;&emsp;
+        %th.header{width: 10} 
+        %th.header{width: 180} &emsp;Debit(PHP)&emsp;
+        %th.header{width: 190} &emsp;Credit(PHP)&emsp;
+
+      - @data_store[:accounting_entry_loans]["debit_journal_entries"].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td.amount
+            #{o[:amount]}
+          %td 
+      - @data_store[:accounting_entry_loans]["credit_journal_entries"].each do |o|
+        %tr
+          %td.code #{o[:code]}
+          %td &emsp;&emsp;&emsp; #{o[:name]}
+          %td
+          %td
+          %td.amount
+            #{o[:amount]}
+      %tr
+        %th
+        %th
+        %th 
+        %th.amount ___________
+        %th.amount ___________
+      %tr
+        %th
+        %th
+        %th Total 
+        %th.amount
+          #{@data_store[:accounting_entry_loans]["total_debit"]}
+        %th.amount
+          #{@data_store[:accounting_entry_loans]["total_credit"]}
+%center
+  %p
+    __________________________________________________________
+    %br 
+    %b.nothing
+      *** Nothing Follows ***      
+%left  
+  %hr
+  %p.signatories
+    %b
+      Particular:
+    #{@data_store[:accounting_entry_loans]["particular"]}
+  %br
+  %br
+  %center
+    %table.signatories{"border:" => "", :none => ""}
+      %tr
+      
+        %th{width: 350} #{@data_store[:prepared_by]}
+    
+        %th{width: 350} #{@data_store[:accounting_entry_loans]["approved_by"]}
+      %tr
+        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+  %br
+  %br
+
+:javascript
+  window.print();
