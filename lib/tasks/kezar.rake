@@ -642,17 +642,20 @@ namespace :kezar do
       fetch_more_batches      = true
       end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://payment-jdyjiucdcq-uc.a.run.app/payment/KMBA/upload"
       is_batch                = ENV["BATCH"] || true
-      transaction_type = 'deposit'
-      is_interest = 'false'
-      type = 'Life Insurance Fund','Retirement Fund'
-      branches = '3a74c7d5-54a5-4eec-826d-ab81f76ae31a', '2e2b2b94-5403-45e8-a8c7-036937e3b332'
-      id = 'fc2ae137-6d88-4e2a-a9c8-8e9d3d5657f4', '80c2fcae-14d8-4b44-857d-3c49195f7ca3'
+      transaction_type        = 'deposit'
+      is_interest             = 'false'
+      insurance_status        = 'inforce'
+      status                  = 'active'
+      account_subtype         = 'Life Insurance Fund','Retirement Fund'
+      branches                = '3a74c7d5-54a5-4eec-826d-ab81f76ae31a'
+      member_id               = '0a30de26-163b-48ac-8d90-55db208b240a'
+
       # retrieve the access token to an environment 
       bearer_token            = ENV["ACCESS_TOKEN"]
     # --------------End Declarations--------------# 
 
     account_transactions = AccountTransaction.select(
-      "
+      " 
         account_transactions.id,
         account_transactions.amount as amount,
         account_transactions.id AS reference_number,
@@ -675,20 +678,35 @@ namespace :kezar do
     ).where(
         "
           account_transactions.transaction_type = ?
-          AND account_transactions.data->>'is_interest' = ?
+          AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL) 
+          AND members.insurance_status = ? 
+          AND members.status = ? 
           AND member_accounts.account_subtype IN (?)
           AND branches.id IN (?)
-          AND account_transactions.id IN (?)
+          AND members.id = ?
+          AND 
+            CASE
+              WHEN members.data->'resignation_records' IS NULL THEN
+                DATE(account_transactions.transacted_at) >= DATE(members.data->>'recognition_date')  
+              WHEN ((members.data->'resignation_records'->2->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
+                  DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->2->>'date_resigned')
+              WHEN ((members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
+                  DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->1->>'date_resigned')
+              WHEN members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL THEN
+                DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->0->>'date_resigned')
+            END
         ",
         transaction_type,
         is_interest,
-        type,
+        insurance_status,
+        status,
+        account_subtype,
         branches,
-        id,
+        member_id 
     ).find_in_batches(:batch_size => 50) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
-      
+
       payments = group.map{ |o|
         {
           details: {
@@ -708,6 +726,7 @@ namespace :kezar do
         }
       }
 
+      total = payments.count
       payload = {data: payments}
       Rails.logger.info(puts payload.to_json)
 
@@ -720,11 +739,11 @@ namespace :kezar do
                    :headers => { 
                     'Content-Type' => 'application/json', 
                     'Authorization' => "Bearer #{bearer_token}"  
-                  }
-
+                  },
+                  timeout: 120
                 )
         Rails.logger.info(puts(result))
-    
+        Rails.logger.info(puts(total))
       else
         payload.each do |p|
           Rails.logger.info(puts("Posting to #{end_point}..."))
@@ -734,7 +753,8 @@ namespace :kezar do
                       :headers => { 
                         'Content-Type' => 'application/json', 
                         'Authorization' => "Bearer #{bearer_token}"
-                      }
+                      },
+                      timeout: 120
                     )
           Rails.logger.info(puts(result))
         end
@@ -747,22 +767,22 @@ namespace :kezar do
   task :send_payments => :environment do
     start_date    = ENV["START_DATE"] || Date.today - 1.month
     end_date      = ENV["END_DATE"] || Date.today
-    endpoint      = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://us-central1-rms-kmba.cloudfunctions.net/api/payment/batch/upload"
-    is_batch      = ENV["BATCH"] || true
+    endpoint      = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://usentral1-rms-kmba.cloudfunctions.net/api/payment/batch/upload"
+    is_batch      = ENV["BAH"] || true
     
     account_type      = "INSURANCE"
-    account_subtypes  = ["Life Insurance Fund", "Retirement Fund"]
+    account_btypes  = ["Life Insurance Fund", "Retirent Fund"]
 
-    account_transactions = AccountTransaction.select(
-      "account_transactions.id,
-       members.identification_number, 
-       account_transactions.transacted_at, 
-       account_transactions.amount, 
+    account_transactions = AccountTransaction.select(     
+    "account_transactions.id,
+     members.identification_number, 
+     account_transactions.transacted_at
+       account_transactions.amount,       
        member_accounts.account_subtype, 
-       account_transactions.id, 
+       account_transactns.id, 
        branches.name AS branch_name"
     ).joins(
-      "INNER JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id INNER JOIN members ON members.id = member_accounts.member_id INNER JOIN branches ON branches.id = member_accounts.branch_id"
+      "INN JOIN member_accounts ONember_accounts.id = acunt_transactions.subsidiary_id INNER JOIN mbers ON memrs.id   end = member_accounts.member_id INNER JOIN branches ON branches.id = member_accounts.branch_id"
     ).where(
       "member_accounts.account_type = ? AND member_accounts.account_subtype IN (?) AND DATE(transacted_at) >= ? AND DATE(transacted_at) <= ? ",
       account_type,
@@ -1145,10 +1165,10 @@ namespace :kezar do
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
   task send_to_mba_members: :environment do
     # save new record
-    branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
     branch            = Branch.find(branch_id)
-    start_date        = ENV["START_DATE"]  || '2023-02-01'
-    end_date          = ENV["END_DATE"] || '2023-02-28'
+    # start_date        = ENV["START_DATE"]  || '2023-01-01'
+    # end_date          = ENV["END_DATE"] || '2023-08-31'
     # member            = 'd723aa98-fdd8-4834-b531-ecd6d447dcac'
 
     # update record
@@ -1163,9 +1183,7 @@ namespace :kezar do
 
 
     member_data = Member.where(
-      "DATE(members.data->>'recognition_date') >= ? AND DATE(members.data->>'recognition_date') <= ? AND members.branch_id = ?",
-      start_date,
-      end_date,
+      "members.branch_id = ?",
       branch
     ).find_in_batches(:batch_size => 100) do |group|
 
@@ -1239,13 +1257,13 @@ namespace :kezar do
   end 
 
   task send_to_mba_payments: :environment do
-    # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
-    # branch            = Branch.find(branch_id)
+    branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
+    branch            = Branch.find(branch_id)
 
-    start_date                = ENV["START_DATE"]  || '2023-02-01'
-    end_date                  = ENV["END_DATE"]  || '2023-02-02'
+    start_date                = ENV["START_DATE"]  || '2023-01-01'
+    end_date                  = ENV["END_DATE"]  || '2023-08-31'
     start_recognition         = '2023-01-01'
-    end_recognition           = '2023-01-31'
+    end_recognition           = '2023-08-31'
     is_batch                  = ENV["BATCH"] || true
     # end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
     end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"    
@@ -1277,7 +1295,7 @@ namespace :kezar do
       account_subtypes,
       start_recognition,
       end_recognition
-    ).find_in_batches(:batch_size => 100) do |group|
+    ).find_in_batches(:batch_size => 500) do |group|
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
         {
@@ -1298,8 +1316,10 @@ namespace :kezar do
         result = HTTParty.post(
           end_point,
           body: payload.to_json,
-          :headers => { 'Content-Type' => 'application/json' }
+          :headers => { 'Content-Type' => 'application/json' },
+          timeout: 120
         )
+   
         Rails.logger.info(puts(result))
       else
         payload.each do |p|
@@ -1308,7 +1328,8 @@ namespace :kezar do
           result = HTTParty.post(
             end_point,
             body: p.to_json,
-            :headers => { 'Content-Type' => 'application/json' }
+            :headers => { 'Content-Type' => 'application/json' },
+            timeout: 120
           )
           Rail.logger.info(puts(result))
         end
