@@ -24,7 +24,7 @@ class BillingForInvoluntaryController < DataStoreController
     
 
 
-    if helpers.sbk_mis_user
+    if helpers.sbk_bk_mis_user
       if @data_store.pending?
         @subheader_side_actions << {
           id: "btn-approve",
@@ -34,6 +34,7 @@ class BillingForInvoluntaryController < DataStoreController
         }
       end
     end
+    
     @subheader_side_actions << {
           id: "btn-print-entry",
           link: "#",
