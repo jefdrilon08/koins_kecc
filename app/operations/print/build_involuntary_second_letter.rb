@@ -15,18 +15,6 @@ module Print
 			
 			@last_loan_payment = nil
 			
-			if @loan_records.present?
-			 @loan_records.sort_by{|key| 
-					if key["last_loan_payment"].present?
-						@last_loan_payment = key["last_loan_payment"]
-					end
-					}.reverse.first
-			end
-
-
-
-			
-			
 			@total_loan_balance = 0
 					@loan_records.each do |lr|
 						principal_balance = lr["principal_balance"]
