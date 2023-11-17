@@ -112,6 +112,9 @@ namespace :api do
     get "/equity_accounts", to: "equity_accounts#index"
     get "/equity_accounts/:id", to: "equity_accounts#show"
     get "/equity_accounts/:id/transactions", to: "equity_accounts#transactions"
+
+    # Shares
+    get "/member_shares", to: "member_shares#index"
   end
 
   # Client Meta Services
