@@ -1,5 +1,4 @@
 import React from "react";
-
 import Modal from 'react-modal';
 
 const customStyles  = {
@@ -19,6 +18,7 @@ export default class FormBeneficiaries extends React.Component {
     
     this.state  = {
       modalIsOpen: false,
+      values: null,
       errors: [],
       currentBeneficiary: {
         id: "",
@@ -32,8 +32,21 @@ export default class FormBeneficiaries extends React.Component {
     }
   }
 
+  componentDidMount() {
+    fetch('/api/yml_values/production_values')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ values: data }); 
+        // console.log('Fetched values:', data); 
+      })
+      .catch(error => {
+        console.error('Error fetching YML values:', error);
+      });
+  }
+
   validateCurrentBeneficiary() {
-    var o       = this.state.currentBeneficiary;
+    const values  = this.state.values;
+    var o       = this.state.currentBeneficiary; 
     var errors  = [];
 
     if(!o.first_name) {
@@ -47,6 +60,30 @@ export default class FormBeneficiaries extends React.Component {
     if(!o.date_of_birth) {
       errors.push("date of birth required");
     }
+
+    //get yml_values and validate the age
+    if(values === true){
+        // console.log(values)
+          const birthDate = new Date(o.date_of_birth);
+          const currentDate = new Date();
+          // console.log(birthDate);
+          let age = currentDate.getFullYear() - birthDate.getFullYear();
+
+          if (
+            currentDate.getMonth() < birthDate.getMonth() ||
+            (currentDate.getMonth() === birthDate.getMonth() && currentDate.getDate() < birthDate.getDate())
+          ) {
+            age--; //if date_of_birth has not occurred this year
+          }
+          // console.log(age)
+          // Check if age is less than 18
+          if (age < 18) {
+            errors.push("Age must be 18 years or older.");
+          }
+      }
+    //   else{
+    //     console.log('activate_microinsurance:', values)
+    // } for checking
 
     if(!o.relationship) {
       errors.push("relationship required");
@@ -116,7 +153,7 @@ export default class FormBeneficiaries extends React.Component {
     this.props.updateData(data);
   };
 
-  handleAddClicked() {
+  handleAddClicked = () => {
     this.setState({
       modalIsOpen: true,
       errors: [],
