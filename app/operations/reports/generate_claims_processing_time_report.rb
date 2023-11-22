@@ -44,7 +44,7 @@ module Reports
           WHERE  a.claim_type = 'BLIP' 
               AND a.status = 'approved'
               AND b.id = '#{@branch}'
-              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
+              AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
           ORDER BY 
             a.branch_id ASC,
             a.date_prepared ASC
@@ -77,7 +77,7 @@ module Reports
           LEFT JOIN branches b ON a.branch_id = b.id
           WHERE  a.claim_type = 'BLIP' 
               AND a.status = 'approved'
-              AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
+              AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
           ORDER BY 
             a.branch_id ASC,
             a.date_prepared ASC
