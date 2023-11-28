@@ -66,8 +66,7 @@ module Reports
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
                 AND b.id = '#{@branch}'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
                        
               UNION ALL
                        
@@ -89,8 +88,7 @@ module Reports
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
                 AND b.id = '#{@branch}'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL  
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )  
               ) y
             GROUP BY 
               y.summary_classification
@@ -143,8 +141,8 @@ module Reports
                   LEFT JOIN branches b ON a.branch_id = b.id
                 WHERE  a.claim_type = 'BLIP' 
                   AND a.status = 'approved'
-                  AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                  AND a.data ->> 'date_paid' IS NOT NULL
+                  AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
+
                        
                 UNION ALL
                        
@@ -165,8 +163,8 @@ module Reports
                   LEFT JOIN branches b ON a.branch_id = b.id
                 WHERE  a.claim_type = 'BLIP' 
                   AND a.status = 'approved'
-                  AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                  AND a.data ->> 'date_paid' IS NOT NULL  
+                  AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
+  
               ) y
             GROUP BY 
               y.summary_classification
@@ -219,8 +217,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
                        
               UNION ALL
                        
@@ -241,8 +238,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL  
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )  
             ) y
             GROUP BY 
               y.summary_classification
@@ -295,8 +291,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
                        
               UNION ALL
                        
@@ -317,8 +312,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL  
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )  
               ) y
             GROUP BY 
               y.summary_classification
@@ -371,8 +365,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
                        
               UNION ALL
                      
@@ -393,8 +386,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL  
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )  
               ) y
             GROUP BY 
               y.summary_classification
@@ -447,8 +439,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )
                        
               UNION ALL
                        
@@ -469,8 +460,7 @@ module Reports
                 LEFT JOIN branches b ON a.branch_id = b.id
               WHERE  a.claim_type = 'BLIP' 
                 AND a.status = 'approved'
-                AND (a.date_approved BETWEEN '#{@start_date}' AND '#{@end_date}' )
-                AND a.data ->> 'date_paid' IS NOT NULL  
+                AND (a.date_prepared BETWEEN '#{@start_date}' AND '#{@end_date}' )  
               ) y
             GROUP BY 
               y.summary_classification
