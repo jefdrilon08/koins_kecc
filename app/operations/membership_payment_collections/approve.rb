@@ -24,6 +24,7 @@ module MembershipPaymentCollections
     end
 
     def execute!
+      
       post_accounting_entry!
 
       process_id_payments!
@@ -31,6 +32,7 @@ module MembershipPaymentCollections
       process_equities!
       process_insurance!
       process_savings!
+      process_sms_blast!
 
       @data[:approved_by] = @user.full_name
 
@@ -146,6 +148,20 @@ module MembershipPaymentCollections
                           ).execute!
 
       @accounting_entry
+    end
+
+    def process_sms_blast!
+      @data[:records].each do |rec|
+        member= Member.find(rec[:member]["id"])
+        if member.mobile_number.present?
+          config = {
+            mobile_number: member.mobile_number,
+            content: "Good Day! #{member.full_name}, your membership payment has been posted to our system with reference number: #{@accounting_entry.reference_number} and your memberhsip status has been updated to #{member.status.upcase} with IDENTIFICATION NUMBER: #{member.identification_number}"
+          }
+          ::SmsBlast::Send.new(config: config).execute!
+        end
+      end
+      
     end
   end
 end

@@ -1,5 +1,6 @@
 module Loans
   class Approve
+    include ActionView::Helpers::NumberHelper
     def initialize(config:)
       super()
     
@@ -52,7 +53,7 @@ module Loans
       post_accounting_entry!
 
       perform_deposits!
-     
+      send_sms!
       if @loan_cycles.blank?
         @loan_cycles  = [
           {
@@ -537,6 +538,18 @@ module Loans
       @loan.update!(
         data: data
       )
+    end
+    def send_sms!
+      member = Member.find(@loan.member_id)
+      content = "Good Day! #{member.full_name.upcase}, Your Loan has been approved with Loan Reference Number: #{@loan.pn_number} amounting to #{number_to_currency(@loan.principal,unit: "")} and the first date of payment is #{@loan.first_date_of_payment.to_fs(:long)}  THIS IS A TEST MESSAGE ONLY"
+        if member.mobile_number.present?
+          config = {
+            mobile_number: member.mobile_number,
+            content: content
+          }
+          
+          ::SmsBlast::Send.new(config: config).execute!
+        end
     end
   end
 end
