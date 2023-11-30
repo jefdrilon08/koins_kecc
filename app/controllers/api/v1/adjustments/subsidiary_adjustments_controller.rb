@@ -163,6 +163,7 @@ module Api
             adjustment_record.update!(status: "processing")
 
             ProcessApproveSubsidiaryAdjustment.perform_later({
+
               adjustment_record: adjustment_record.id,
               user_id: current_user.id
             })  
