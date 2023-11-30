@@ -68,9 +68,9 @@ module DepositCollections
           mobile_number: @member.mobile_number,
           content: content
         }
-        raise content.inspect
+        
         ::SmsBlast::Send.new(config: config).execute!
-
+        
       end
     end
 
