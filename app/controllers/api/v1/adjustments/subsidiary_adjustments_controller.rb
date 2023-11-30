@@ -159,9 +159,17 @@ module Api
           if errors[:messages].any?
             render json: errors, status: 400
           else
-            ::Adjustments::SubsidiaryAdjustments::Approve.new(
-              config: config
-            ).execute!
+          
+            adjustment_record.update!(status: "processing")
+
+            ProcessApproveSubsidiaryAdjustment.perform_later({
+              adjustment_record: adjustment_record.id,
+              user_id: current_user.id
+            })  
+
+            #::Adjustments::SubsidiaryAdjustments::Approve.new(
+            #  config: config
+            #).execute!
 
             render json: { message: "ok" }
           end
