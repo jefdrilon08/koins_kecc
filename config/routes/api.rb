@@ -115,6 +115,14 @@ namespace :api do
 
     # Shares
     get "/member_shares", to: "member_shares#index"
+
+    # Survey
+    get "/surveys", to: "surveys#index"
+    post "/surveys/create_survey_mobile", to: "surveys#create_survey_mobile"
+    post "/surveys/fetch_survey_answer", to: "surveys#fetch_survey_answer"
+    post "/surveys/update_survey_answer", to: "surveys#update_survey_answer"
+
+
   end
 
   # Client Meta Services
