@@ -29,9 +29,6 @@
           - elsif o.approved?
             .badge.bg-success
               Approved
-          - elsif o.processing?
-            .badge.bg-warning
-              Processing
         %td
           -if o.data["accounting_entry"].present?
             #{o.data["accounting_entry"]["particular"]}
