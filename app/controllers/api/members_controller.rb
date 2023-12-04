@@ -1,7 +1,7 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :delete, :form_make_payments, :update_recognition_date, :is_reclassified, :claims_copy_pdf]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :form_make_payments, :update_recognition_date, :is_reclassified]
+    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :resign, :delete, :form_make_payments, :update_recognition_date, :is_reclassified, :claims_copy_pdf]
+    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :resign, :form_make_payments, :update_recognition_date, :is_reclassified]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -135,6 +135,29 @@ module Api
 
       session[:date_of_death] = @date_of_death
     end
+
+    def resign
+        member = Member.find(params[:id])
+        date_resigned = params[:date_resigned]
+        reason        = params[:reason]
+        errors        = ::Members::ValidateResign.new(
+                          member: member,
+                          date_resigned: date_resigned
+                        ).execute!
+
+        if errors.size == 0
+          ::Members::Resign.new(
+            member: member,
+            date_resigned: date_resigned,
+            reason: reason,
+            resigned_by: current_user.full_name
+          ).execute!
+
+          render json: { id: member.id }
+        else
+          render json: { errors: errors }, status: 402
+        end
+      end
 
     def is_reclassified
       member               = Member.find(params[:id])

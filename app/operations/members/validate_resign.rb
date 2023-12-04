@@ -3,7 +3,7 @@ module Members
     def initialize(member:, date_resigned:)
       @member             = member
       @date_resigned      = date_resigned
-      @insurance_types    = MemberAccount.insurance.where(id: Settings.member_resignation_types)
+      @insurance_types    = MemberAccount.insurance.where(member_id: Settings.member_resignation_types)
       @insurance_accounts = AccountTransaction.where(subsidiary_id: @insurance_types.pluck(:id))
       @errors             = []
     end
