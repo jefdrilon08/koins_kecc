@@ -46,6 +46,7 @@ namespace :api do
   post "/members/apply_online", to: "members#apply_online"
   post "/members/unlock", to: "members#unlock"
   post "/members/balik_kasapi", to: "members#balik_kasapi"
+  post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
   post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"  
