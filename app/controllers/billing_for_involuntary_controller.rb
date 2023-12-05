@@ -34,7 +34,7 @@ class BillingForInvoluntaryController < DataStoreController
         }
       end
     end
-    
+   
     @subheader_side_actions << {
           id: "btn-print-entry",
           link: "#",
@@ -44,6 +44,22 @@ class BillingForInvoluntaryController < DataStoreController
             id: "#{@data_store.id}"
         }
     }
+    if @data_store.status == 'pending'
+      if helpers.sbk_bk_mis_user        
+          @subheader_side_actions << {      
+            id: "",
+            link: "/billing_for_involuntary/#{@data_store.id}",
+            class: "fa fa-times",           
+            data: {
+                method: :delete,
+                confirm: "Are you sure you want to delete this Involuntary Tagging?"
+            },     
+            text: "Delete"    
+          }
+
+
+        end 
+    end
     
 
 
