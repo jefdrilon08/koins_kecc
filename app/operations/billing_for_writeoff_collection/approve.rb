@@ -12,7 +12,7 @@ module BillingForWriteoffCollection
       @total_payment          = @data[:total_payment]
       @date                   = ::Utils::GetCurrentDate.new(
                                   config: {
-                                    branch: @branch
+                                    branch: Branch.find(@data_store.meta["branch_id"])
                                   }
                                 ).execute!
     end
