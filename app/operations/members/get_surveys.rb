@@ -50,6 +50,7 @@ module Members
           {
             id:           o.id,
             survey_name:  o.survey.name,
+            survey_type_id: o.survey_id,
             updated_at:   o.updated_at.localtime.strftime("%b %d, %Y"),
             isComplete: isComplete
           }
