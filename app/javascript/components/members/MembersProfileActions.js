@@ -16,15 +16,16 @@ export default function MembersProfileActions(props) {
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
   const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
   const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
-
+  const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
   const [dateReinstated, setDateReinstated]                                     = useState('');
   const [dateStopped, setDateStopped]                                           = useState('');
+  const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
+  const [reason, setReason]                                                     = useState('');
   const [dateRecognition, setDateRecognition]                                   = useState("");
   const [dateOfDeath, setDateOfDeath]                                           = useState("");
   const [reClassified, setreClassified]                                         = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
   const [makePayment, setMakePayment]                                           = useState('');
-
   const [isModalProfilePictureOpen, setModalProfilePictureOpen]                 = useState(false);
   const [profilePicture, setProfilePicture]                                     = useState('');
   const [configData, setConfigData] = useState();
@@ -194,6 +195,39 @@ export default function MembersProfileActions(props) {
     ).then((res) => {
       console.log(res);
       alert("Successfully Reinstated");
+      window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
+  const handleResignedInsuranceClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+      date_resigned: dateResignedInsurance,
+      reason: reason
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/resign',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Resigned");
       window.location.href="/members/" + props.memberId + "/display/";
       setIsLoading(false);
     }).catch((error) => {
@@ -716,7 +750,63 @@ export default function MembersProfileActions(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
+      <Modal
+        show={isModalResignFromInsuranceOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Resigned From Insurance
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Date Resigned
+              </label>
+              <input
+                className="form-control"
+                value={dateResignedInsurance}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateResignedInsurance(event.target.value) } }
+              />
+              <label>
+               Reason of resignation
+              </label>
+              <input
+                className="form-control"
+                value={reason}
+                disabled={isLoading}
+                type="text"
+                onChange={(event) => { setReason(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleResignedInsuranceClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalResignFromInsuranceOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal
         show={isModalUnlockOpen}
       >
@@ -1033,6 +1123,28 @@ export default function MembersProfileActions(props) {
                   >
                 Claims Copy PDF
               </button>
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Resigned From Insurance
+            </strong>
+            <p>
+              Resigned From Insurance
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setModalResignFromInsuranceOpen(true)
+              }}
+            >
+              Resigned From Insurance
+            </button>     
           </div>
         </div>
       </div>
