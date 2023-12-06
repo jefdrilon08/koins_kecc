@@ -10,8 +10,8 @@ module Members
         ).order("updated_at DESC")
   
         @payload = {
+          survey_types: [],
           survey_answers: [],
-          date_of_membership: ""
         }
       end
   
@@ -56,7 +56,15 @@ module Members
           }
         }
 
-        @payload[:date_of_membership] = @member.date_of_membership
+        @payload[:survey_types] = Survey.all.map{ |surveytype|
+
+          {
+            label: surveytype.name,
+            value: surveytype.id
+          }
+
+        }
+
       end
     end
   end
