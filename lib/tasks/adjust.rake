@@ -2517,6 +2517,54 @@ namespace :adjust do
     end
   end
 
+  task :process_member_per_center_counts => :environment do
+    @data_store_type  = "MEMBER PER CENTER COUNTS"
+    @as_of            = Date.today
+    
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    # @branches.each do |branch|
+    branch         = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+      puts "Processing #{branch.name}"
+
+      @record = DataStore.member_per_center_counts.where(
+                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                      branch.id,
+                      @as_of
+                    ).first
+
+      if @record.blank?
+        @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      branch: {
+                        id: branch.id,
+                        name: branch.name
+                      },
+                      as_of: @as_of,
+                      data_store_type: @data_store_type
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+        args  = {
+          record: @record,
+          data_store_type: @data_store_type
+        }
+
+        ProcessMemberPerCenterCounts.perform_later(args)
+      end
+      puts "Done!"
+
+  end
+
+
   task :process_insurance_personal_funds => :environment do
     @data_store_type  = "INSURANCE_PERSONAL_FUNDS"
     @as_of            = Date.today
