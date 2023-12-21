@@ -515,7 +515,9 @@ Rails.application.routes.draw do
     get "/share_capital_involuntary", to: "share_capital_involuntary#index"
     get "/share_capital_involuntary/:id", to: "share_capital_involuntary#show"
 
-   
+    get "/member_per_center_counts", to: "member_per_center_counts#index"
+    get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
+    delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
   end
   
   # daily_branch_metrics

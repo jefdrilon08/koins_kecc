@@ -1,0 +1,29 @@
+%h5
+  / Generated As Of: #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+ 
+%table.table.table-bordered.table-hover.table-sm
+  %tr
+    %th.text-center
+      Branch
+    %th.text-center
+      Center
+    %th.text-center
+      Counts Per Center
+    %th.text-center
+      Insurance Status
+    %th.text-center
+      Kcoop Status
+  
+  %tr
+    - @data[:records].each_with_index do |o, i|
+      %tr
+        %td.text-center
+          #{o[:branch_name]}
+        %td.text-center
+          #{o[:center_name]}
+        %td.text-center
+          #{o[:center_member_counts]}
+        %td.text-center
+          #{o[:insurance_status]}
+        %td.text-center
+          #{o[:kcoop_status]}
