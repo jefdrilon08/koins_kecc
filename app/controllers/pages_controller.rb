@@ -332,12 +332,12 @@ class PagesController < ApplicationController
   end
 
   def daily_report_insurance_account_status_excel
-    branch = params[:branch]
-    insurance_status = params[:insurance_status]
+    @branch = params[:branch]
+    @insurance_status = params[:insurance_status]
 
     excel = Pages::GenerateDailyReportInsuranceAccountStatus.new(
-                                                  branch: branch,
-                                                  insurance_status: insurance_status
+                                                  branch: @branch,
+                                                  insurance_status: @insurance_status
                                                 ).execute!
 
     filename  = "insurance_account_status.xlsx"
@@ -345,5 +345,4 @@ class PagesController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-
 end
