@@ -75,8 +75,6 @@ task :involuntary_resignation => :environment do
     puts @data
   end
 
-require 'csv'
-
 task :member_number => :environment do
   br_name = ENV['SATO']
   br_id = Branch.where(name: br_name).ids
