@@ -75,6 +75,39 @@ task :involuntary_resignation => :environment do
     puts @data
   end
 
+require 'csv'
+
+task :member_number => :environment do
+  br_name = ENV['SATO']
+  br_id = Branch.where(name: br_name).ids
+  mem = Member.where("status = 'active' and branch_id = ?", br_id)
+  @data = []
+
+  mem.each do |member|
+    mem_data = member.data
+    data = [
+      member.identification_number,
+      member.full_name,
+      member.center.name,
+      member.mobile_number
+    ]
+    @data << data
+  end
+   csv_file_path = "#{br_name}.csv"
+
+  CSV.open(csv_file_path, 'wb') do |csv|
+
+     csv << ['Identification Number', 'Full Name', 'Center Name', 'Mobile Number', 'Updated Mobile Number']
+
+    @data.each do |row|
+      csv << row
+    end
+  end
+
+  puts "CSV file has been created at #{csv_file_path}"
+end
+
+
   task :accrued_list => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
