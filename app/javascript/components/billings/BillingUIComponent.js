@@ -1,6 +1,5 @@
 import React from 'react';
 import $ from 'jquery';
-import moment from 'moment';
 
 import SkCubeLoading from '../SkCubeLoading';
 import BillingUITable from './BillingUITable';
@@ -73,7 +72,8 @@ export default class BillingUIComponent extends React.Component {
       url: "/api/v1/billings/fetch",
       method: 'GET',
       data: {
-        id: this.props.id
+        id: this.props.id,
+        authenticity_token: context.props.authenticityToken
       },
       success: function(response) {
         context.setState({
@@ -83,7 +83,7 @@ export default class BillingUIComponent extends React.Component {
       },
       error: function(response) {
         console.log(response);
-        alert("Error in fetching billing");
+        alert("Error in fetching billing test");
       }
     });
   }
