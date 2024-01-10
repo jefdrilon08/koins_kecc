@@ -404,7 +404,8 @@ class MembersController < ApplicationController
         age:                    o.age,
         relationship:           o.relationship,
         educational_attainment: o.data['educational_attainment'],
-        course:                 o.data['course']
+        course:                 o.data['course'],
+        gender:                 o.gender
       }
     }
 

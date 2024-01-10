@@ -31,7 +31,8 @@ export default class FormLegalDependents extends React.Component {
         data: {
           educational_attainment: "",
           course: ""
-        }
+        },
+        gender: ""
       }
     }
   }
@@ -56,6 +57,10 @@ export default class FormLegalDependents extends React.Component {
       errors.push("relationship required");
     }
 
+    if(!o.gender) {
+      errors.push("gender required");
+    }
+
     this.setState({
       errors: errors
     });
@@ -76,7 +81,8 @@ export default class FormLegalDependents extends React.Component {
         data: {
           educational_attainment: "",
           course: ""
-        }
+        },
+        gender: ""
       }
     });
   }
@@ -104,7 +110,8 @@ export default class FormLegalDependents extends React.Component {
         data: {
           educational_attainment: "",
           course: ""
-        }
+        },
+        gender: ""
       }
     });
   }
@@ -132,7 +139,8 @@ export default class FormLegalDependents extends React.Component {
           data: {
             educational_attainment: "",
             course: ""
-          }
+          },
+          gender: ""
         }
       });
     }
@@ -173,6 +181,16 @@ export default class FormLegalDependents extends React.Component {
 
     currentLegalDependent.date_of_birth = event.target.value;
     currentLegalDependent.age           = this.getAge(currentLegalDependent.date_of_birth);
+
+    this.setState({
+      currentLegalDependent: currentLegalDependent
+    });
+  }
+
+  handleGenderChanged(event) {
+    var currentLegalDependent = this.state.currentLegalDependent;
+
+    currentLegalDependent.gender = event.target.value;
 
     this.setState({
       currentLegalDependent: currentLegalDependent
@@ -258,6 +276,7 @@ export default class FormLegalDependents extends React.Component {
         var educational_attainment  = legalDependents[i].data.educational_attainment;
         var course                  = legalDependents[i].data.course;
         var age                     = legalDependents[i].age;
+        var gender                  = legalDependents[i].gender;
 
         records.push(
           <tr key={"ld-record-" + i}>
@@ -278,6 +297,9 @@ export default class FormLegalDependents extends React.Component {
             </td>
             <td>
               {course}
+            </td>
+            <td>
+              {gender}
             </td>
             <td>
               <center>
@@ -301,6 +323,7 @@ export default class FormLegalDependents extends React.Component {
               <th>Name</th>
               <th>Date of Birth</th>
               <th>Age</th>
+              <th>Gender</th>
               <th>Relationship</th>
               <th>Educational Attainment</th>
               <th>Course</th>
@@ -334,9 +357,13 @@ export default class FormLegalDependents extends React.Component {
           isOpen={this.state.modalIsOpen}
           style={customStyles}
         >
-          <h5>
-            Impormasyon ng legal na dependent
-          </h5>
+          
+          <div class="modal-header">
+            <h5>
+              Impormasyon ng legal na dependent
+            </h5>
+          </div>
+
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -383,6 +410,36 @@ export default class FormLegalDependents extends React.Component {
             </div>
             <div className="col">
               <div className="form-group">
+                <label>* Kasarian</label>
+                <select
+                  className="form-control"
+                  value={currentLegalDependent.gender}
+                  onChange={this.handleGenderChanged.bind(this)}
+                >
+                  <option value="">-- SELECT --</option>
+                  <option value="Male">MALE</option>
+                  <option value="Female">FEMALE</option>
+                </select>
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>Relasyon</label>
+                <select
+                  className="form-control"
+                  value={currentLegalDependent.relationship}
+                  onChange={this.handleRelationshipChanged.bind(this)}
+                >
+                  <option value="">-- SELECT --</option>
+                  <option value="Child">ANAK</option>
+                  <option value="Spouse">ASAWA</option>
+                  <option value="Parent">MAGULANG</option>
+                  <option value="Sibling">KAPATID</option>
+                </select>
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
                 <label>Antas ng Pag-aaral</label>
                 <select
                   className="form-control"
@@ -404,22 +461,6 @@ export default class FormLegalDependents extends React.Component {
                   value={currentLegalDependent.course}
                   onChange={this.handleCourseChanged.bind(this)}
                 />
-              </div>
-            </div>
-            <div className="col">
-              <div className="form-group">
-                <label>Relasyon</label>
-                <select
-                  className="form-control"
-                  value={currentLegalDependent.relationship}
-                  onChange={this.handleRelationshipChanged.bind(this)}
-                >
-                  <option value="">-- SELECT --</option>
-                  <option value="Child">ANAK</option>
-                  <option value="Spouse">ASAWA</option>
-                  <option value="Parent">MAGULANG</option>
-                  <option value="Sibling">KAPATID</option>
-                </select>
               </div>
             </div>
           </div>

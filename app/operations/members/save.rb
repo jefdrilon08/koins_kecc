@@ -64,6 +64,7 @@ module Members
                 @member.legal_dependents[i].date_of_birth = o[:date_of_birth]
                 @member.legal_dependents[i].relationship  = o[:relationship]
                 @member.legal_dependents[i].data          = o[:data]
+                @member.legal_dependents[i].gender        = o[:gender]
 
                 ld_remaining_uuids << o[:id]
               end
@@ -75,7 +76,8 @@ module Members
                       last_name: o[:last_name],
                       date_of_birth: o[:date_of_birth],
                       relationship: o[:relationship],
-                      data: o[:data]
+                      data: o[:data],
+                      gender: o[:gender]
                     )
 
             @member.legal_dependents << ld
