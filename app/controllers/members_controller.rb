@@ -180,7 +180,8 @@ class MembersController < ApplicationController
       },
       { 
         is_link: true, 
-        path: member_path(@member), 
+        link: "/members/" + @member.id + "/display",
+        # path: member_path(@member), 
         class: "fa fa-times",
         text: "Cancel" }
     ]

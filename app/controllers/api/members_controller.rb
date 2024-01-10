@@ -221,10 +221,10 @@ module Api
         class: "fa fa-times",
         text: "Cancel" }
     ]
-    @payload = {
-      id: @member.id,
-      memberResignationTypes: helpers.member_resignation_types
-    }
+    # @payload = {
+    #   id: @member.id,
+    #   memberResignationTypes: helpers.member_resignation_types
+    # }
   end
 
     def balik_kasapi
