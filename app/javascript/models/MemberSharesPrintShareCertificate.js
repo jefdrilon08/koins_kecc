@@ -16,18 +16,6 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
   $btnPrint.on("click", function() {
-
-    // var adjustment_record = $btnPrint.data('id');
-    $modalPrint.show();
-    $printMessage.html(
-      Mustache.render(
-        loader,
-        {}
-      )
-    );
-
-    $modalPrint.hide();
-
     const urlParams = new URLSearchParams(window.location.search);
     const branchId = urlParams.get('branch_id');
     const centerId = urlParams.get('center_id');
@@ -35,6 +23,21 @@ var _bindEvents = function() {
     const endDate = urlParams.get('end_date');
 
     window.open("/print?type=print_share_certificate&branch_id="+branchId+"&center_id="+centerId+"&start_date="+startDate+"&end_date="+endDate);
+
+    // wait to load the page
+    window.onload = function() {
+      // Your code here
+      // var adjustment_record = $btnPrint.data('id');
+      $modalPrint.show();
+      $printMessage.html(
+        Mustache.render(
+          loader,
+          {}
+        )
+      );
+
+      $modalPrint.hide();
+      };
   });
 };
 

@@ -7,18 +7,21 @@
             .col-md-2
               .form-group
                 %label
-                  Equity Payment Start Date
+                  -# Equity Payment Start Date
+                  Start Date
                 = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
             .col-md-2
               .form-group
                 %label
-                  Equity Payment End Date
+                  -# Equity Payment End Date
+                  End Date
                 = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
             .col-md-2
               .form-group
                 %label
                   SATO
-                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --" 
+                = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select" 
+                -#, prompt: "-- SELECT --" 
             .col-md-2
               .form-group
                 %label
@@ -30,12 +33,13 @@
                   Actions
                 = button_tag type: 'submit', class: 'btn btn-info btn-block' do
                   .bi.bi-search
-            .col-md-2
-              %br
-              .form-group
-                = link_to administration_member_shares_print_path(start_date: params[:start_date], end_date: params[:end_date], center_id: params[:center_id], branch_id: params[:branch_id]), class:'btn btn-print btn-info', target: "_blank" do
-                  .fa.fa-print
-                    Summary
+            - if @member_shares != nil
+              .col-md-2
+                %br
+                .form-group
+                  = link_to administration_member_shares_print_path(start_date: params[:start_date], end_date: params[:end_date], center_id: params[:center_id], branch_id: params[:branch_id]), class:'btn btn-print btn-info', target: "_blank" do
+                    .fa.fa-print
+                      Summary
  
        
 .container-fluid
