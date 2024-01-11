@@ -1,100 +1,119 @@
+%br
 .message
 .row
+  = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
   .col
+    %h6
+      Kasagana-ka Mutual Benefit Association, Inc.
     .form-group
       %h3
-        HIIP Information
+        Hospital Income Insurance Plan (HIIP) 
+%hr
+%br
 .row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-10"}
         Date Prepared
         = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', id: 'date-prepared',type: 'date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
+        Member Name
+        = text_field_tag :member_name, @claim.data["member_name"], class: 'form-control', id: 'member_name', value: @claim.member.full_name
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Gender
+        = text_field_tag :gender, @claim.data["gender"], class: 'form-control', id: 'gender', value: @claim.member.gender  
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
         Certificate No.
-        = text_field_tag :certificate_number, @claim.data["certificate_number"], class: 'form-control', id: 'certificate-number' 
-  .col
+        = text_field_tag :certificate_number, @claim.data["certificate_number"], class: 'form-control', id: 'certificate-number', value: @claim.member.identification_number 
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date of Birth
         = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', id: 'date-of-birth', value: @claim.member.date_of_birth, type: 'date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-4"}
         Age
         = text_field_tag :age, @claim.data["age"], class: 'form-control', id: 'age', value: @claim.member.age
+%br
 .row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Effective Date of Coverage
         = text_field_tag :effective_date_of_coverage, @claim.data["effective_date_of_coverage"], class: 'form-control', id: 'effective-date-of-coverage', type: 'date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Expiration Date of Coverage
         = text_field_tag :expiration_date_of_coverage, @claim.data["expiration_date_of_coverage"], class: 'form-control', id: 'expiration-date-of-coverage', type: 'date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Admitted
         = text_field_tag :date_admitted, @claim.data["date_admitted"], class: 'form-control', id: 'date-admitted', type: 'date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Discharged
         = text_field_tag :date_discharged, @claim.data["date_discharged"], class: 'form-control', id: 'date-discharged', type: 'date'      
-.row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Number of Days to be Paid
         = text_field_tag :number_of_days_tobepaid, @claim.data["number_of_days_tobepaid"], class: 'form-control', id: 'number-of-days-tobepaid'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Amount
         = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
+%br
 .row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
-        Name of Claimant
-        = text_field_tag :name_of_claimant, @claim.data["name_of_claimant"], class: 'form-control', id: 'name-of-claimant'
-  .col
-    .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Reason of Confinement
         = text_field_tag :reason_of_confinement, @claim.data["reason_of_confinement"], class: 'form-control', id: 'reason-of-confinement'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Diagnosis
         = text_field_tag :diagnosis, @claim.data["diagnosis"], class: 'form-control', id: 'diagnosis'
+%br
+.row
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Name of Claimant
+        = text_field_tag :name_of_claimant, @claim.data["name_of_claimant"], class: 'form-control', id: 'name-of-claimant'
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Claims Payment through
+        = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Account Name
+        = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Account Number
+        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'  
 .row
   .col
     .form-group
       %label.col.control-label
         Prepared by
         = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize
-  .col
-    .form-group
-      %label.col.control-label
-        Claims Payment through
-        = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Account Name
-        = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col
-    .form-group
-      %label.col.control-label
-        Account Number
-        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'      
+%br    
 .row
 .col
   .form-actions
