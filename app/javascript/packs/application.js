@@ -127,6 +127,7 @@ import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js"
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
 import MemberSharesShow from "../models/MemberSharesShow.js";
 import MemberSharesForm from "../models/MemberSharesForm.js";
+import MemberSharesPrintShareCertificate from '../models/MemberSharesPrintShareCertificate.js';
 import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
 import ExportTools from "../models/ExportTools.js";
@@ -254,7 +255,7 @@ const hooks = {
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
   "pages/login":                                      [PagesLogin],
-  "pages/forgot_password":                            [PagesForgotPassword],
+"pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
   "accounting/crb":                                   [AccountingBooksIndex],
@@ -338,6 +339,7 @@ const hooks = {
   "administration/surveys/index":                     [AdministrationSurveysIndex],
   "administration/surveys/show":                      [AdministrationSurveysShow],
   "administration/surveys/survey_question_form":      [SurveyQuestionUIComponent],
+  "administration/member_shares/print":               [MemberSharesPrintShareCertificate],
   "members/member_shares/show":                       [MemberSharesShow],
   "members/member_shares/new":                        [MemberSharesForm],
   "pages/billing_per_center":                         [ExportsBillingPerCenter],
@@ -389,7 +391,7 @@ const hooks = {
   "reports/monthly_collection":                       [ReportsMonthlyCollection],
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
-  "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
+"reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
   "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
   "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],
   "reports/personal_documents":                       [ReportsPersonalDocuments],
