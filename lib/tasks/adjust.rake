@@ -1708,6 +1708,9 @@ namespace :adjust do
                       COALESCE(account_transactions.data->>'ending_balance', '0.00')::float AS balance,
                       account_transactions.data->>'is_withdraw_payment' AS is_withdraw_payment,
                       members.data->>'recognition_date' AS recognition_date,
+                      members.data->'reinstatement'->>'reinstatement_date' AS reinstatement_date,
+                      members.data->'reinstatement'->>'old_recognition_date' AS old_recognition_date,
+                      members.data->'reinstatement'->>'date_stop' as date_stop,
                       members.id AS member_id,
                       members.member_type,
                       members.status,
@@ -1732,11 +1735,12 @@ namespace :adjust do
                   EOS
         
         sets  = result.map{ |o|
-                  member_id                 = o.fetch("member_id")
-                  default_periodic_payment  = 15
-                  recognition_date          = o.fetch("recognition_date").try(:to_date)
-                  transactions_count        = o.fetch("acc_trans_count")
-                  
+                  member_id                       = o.fetch("member_id")
+                  default_periodic_payment        = 15
+                  recognition_date                = o.fetch("recognition_date").try(:to_date)
+                  transactions_count              = o.fetch("acc_trans_count")
+                  reinstatement_date               = o.fetch("reinstatement_date").try(:to_date)
+
                   new_status  = "pending"
                   insurance_status  = o.fetch("insurance_status")
                   insurance_date_resigned  = o.fetch("insurance_date_resigned")
@@ -1756,7 +1760,69 @@ namespace :adjust do
                   puts "insurance_date_resigned: #{insurance_date_resigned}"
                   puts "status: #{status}"
 
-                  if recognition_date.present? and last_payment_date.present?
+                  if reinstatement_date.present?
+                    if transactions_count > 0 
+                      num_days                = (current_date - reinstatement_date).to_i
+                      num_weeks               = (num_days / 7).to_i + 1
+                      insured_amount          = num_weeks * default_periodic_payment
+                      amt_past_due            = (current_balance - insured_amount).to_i * -1
+                      days_lapsed             = (current_date - last_payment_date).to_i
+
+                      if member_type == "GK"
+                        new_status = "resigned"
+                      end
+
+                      if current_balance == 0.0 && insurance_status == "resigned"
+                        new_status = "resigned"
+                      end
+
+                      if status == "resigned" && current_balance == 0.0
+                        new_status = "resigned"  
+                      end
+
+                      if status == "archived" && current_balance == 0.0
+                        new_status = "transferred"  
+                      end
+
+                      if current_balance == 0.0 && insurance_date_resigned.present?
+                        new_status = "resigned"
+                      end
+
+                      if status == "resigned" && insurance_date_resigned.present? && current_balance == 0.0
+                        new_status = "resigned"  
+                      end
+
+                      if amt_past_due >= 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        if amt_past_due >= 2340
+                          new_status = "dormant"
+                        end
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed <= 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+
+                      if days_lapsed > 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+                    end
+                  elsif recognition_date.present? and last_payment_date.present?
                     # Code
                     if transactions_count > 0 
                       num_days                = (current_date - recognition_date).to_i
@@ -3261,6 +3327,43 @@ namespace :adjust do
 
     puts "Done!"
   end
+
+  task :add_gender => :environment do
+    @members  = []
+    @dependets = []
+    legal_dependent = LegalDependent.all
+
+    legal_dependent.each do |m|
+      data = {}
+      data[:id] = m.id  
+      data[:first_name] = m.first_name
+      data[:member_id] = m.member_id
+      
+      @members << data
+    end
+    
+    # raise @members.inspect
+    @dependets = @members.map{ |y|
+      {
+        id: y[:id],
+        last_letter: y[:first_name][-1],
+        member_id: y[:member_id]
+      }
+    } 
+    
+    @dependets.each do |dependent|
+      if dependent[:member_id].present? 
+        if ["A", "E", "I", "O", "U"].include?(dependent[:last_letter].upcase)
+          puts "Updating Dependent ID: #{dependent[:id]}"
+          a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Female")
+        else
+          puts "Updating Dependent ID: #{dependent[:id]}"
+          a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Male")
+        end
+      end 
+    end
+  end
+  
   task :fix_wrong_in_account_transaction => :environment do 
     branch_id = ENV["BRANCH_ID"]
     members_resigned = Member.where("branch_id = ? and date_resigned >= ? and date_resigned <= ?","#{branch_id}","2023-10-27","2023-10-31")
