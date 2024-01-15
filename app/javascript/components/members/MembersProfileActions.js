@@ -31,6 +31,8 @@ export default function MembersProfileActions(props) {
   const [configData, setConfigData] = useState();
   const [customVariable, setCustomVariable] = useState(); // Create a new state variable
 
+  const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
+
   useEffect(() => {
     axios.get('/api/yml_values/production_values')
       .then(response => {
@@ -242,6 +244,7 @@ export default function MembersProfileActions(props) {
 
     const payload = {
       id: props.memberId,
+      type: selectedOptionType,
     }
 
     const headers = {
@@ -258,8 +261,9 @@ export default function MembersProfileActions(props) {
       options
     ).then((res) => {
       console.log(res);
-      alert("Payment");
-      window.location.href="/members/" + props.memberId + "/form_make_payments/";
+      // alert("Payment");
+      setModalMakePaymentOpen(false);
+      window.location.href="/members/" + props.memberId + "/form_make_payments/" + selectedOptionType;
       setIsLoading(false);
     }).catch((error) => {
       console.log(error.response);
@@ -667,9 +671,12 @@ export default function MembersProfileActions(props) {
         <Modal.Body>
           <div className="row">
             <div className="form-group">
-              <select className="form-control">
+              <select className="form-control" 
+                onChange={e => {setSelectedOptionType(e.target.value)
+                  console.log("value: ", e.target.value);
+                } }>
                 {options.map((option) => (
-                  <option value={option.value}>{option.label}</option>
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>              
             </div>
@@ -1156,9 +1163,11 @@ export default function MembersProfileActions(props) {
             <strong>
               Clip Make Payment
             </strong>
-            <p>
+            {/* <p>
               Clip Make Payment
-            </p>
+            </p> */}
+            <br/>
+            <br/>
             <button
               className="btn btn-primary"
               onClick={() => {

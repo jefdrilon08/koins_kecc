@@ -180,7 +180,8 @@ class MembersController < ApplicationController
       },
       { 
         is_link: true, 
-        path: member_path(@member), 
+        link: "/members/" + @member.id + "/display",
+        # path: member_path(@member), 
         class: "fa fa-times",
         text: "Cancel" }
     ]
@@ -404,7 +405,8 @@ class MembersController < ApplicationController
         age:                    o.age,
         relationship:           o.relationship,
         educational_attainment: o.data['educational_attainment'],
-        course:                 o.data['course']
+        course:                 o.data['course'],
+        gender:                 o.gender
       }
     }
 
