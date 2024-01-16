@@ -2,7 +2,7 @@ class BillingsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    
+
     @billings = ReadOnlyBilling
       .select("id,or_number,ar_number,branch_id,center_id,collection_date,date_approved,status,total_expected_collections,total_collected")
       .includes(:center, :branch)
@@ -25,6 +25,10 @@ class BillingsController < ApplicationController
     if params[:status].present?
       @status = params[:status]
       @billings = @billings.where(status: @status)
+    end
+    if params[:or_number].present?
+      @or_number = params[:or_number]
+      @billings = @billings.where(or_number: @or_number)
     end
     @data = @billing.try(:data).try(:with_indifferent_access)
 
@@ -67,7 +71,7 @@ class BillingsController < ApplicationController
       @subheader_side_actions = []
 
       if @billing.pending?
-        
+
 
         if helpers.is_mis_so_fm?
           @subheader_side_actions << {
@@ -76,14 +80,14 @@ class BillingsController < ApplicationController
             id: "btn-save-billing",
             text: "Save"
           }
-        
+
           @subheader_side_actions << {
             link: "#",
             class: "fa fa-download",
             id: "btn-termal",
             text: "Print Thermal Printer"
           }
-          
+
           @subheader_side_actions << {
             id: "btn-zero-out",
             link: "#",
@@ -91,7 +95,7 @@ class BillingsController < ApplicationController
             text: "Zero Out"
           }
 
-       
+
         end
 
       end
@@ -144,7 +148,7 @@ class BillingsController < ApplicationController
         end
 
       end
-      
+
       if @billing.checked?
         if helpers.sbk_bk_mis_user
           @subheader_side_actions << {
@@ -194,8 +198,8 @@ class BillingsController < ApplicationController
         id: "btn-excel",
         text: "Download Excel"
       }
-      
-      
+
+
       @payload = {
         id: @billing.id
       }
@@ -230,11 +234,11 @@ class BillingsController < ApplicationController
   end
 
   def excel
-    render json: {download_url: "#{billing_download_excel_path(billing: params[:id])}"} 
+    render json: {download_url: "#{billing_download_excel_path(billing: params[:id])}"}
   end
- 
+
   def billing_excel
-  
+
     billing_excel = ::Billings::BillingDownloadExcel.new(billing: params[:billing]).execute!
     filename = "billing.xlsx"
     billing_excel.serialize "#{Rails.root}/tmp/#{filename}"
