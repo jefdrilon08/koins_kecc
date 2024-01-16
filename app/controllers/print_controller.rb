@@ -361,11 +361,15 @@ class PrintController < ApplicationController
 
     elsif type == "repayment_rates"
 
-     repayment_rate = DataStore.find(params[:id])
+      repayment_rate = DataStore.find(params[:id])
 
-     data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
+      if params[:center_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["center"]["id"] == params[:center_id] }
+      end
 
-     @repayment_rate = data
+      data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
+
+      @repayment_rate = data
 
      render "print/repayment_rate", layout:"print"
     

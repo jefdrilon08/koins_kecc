@@ -112,6 +112,10 @@ export default class ShowComponent extends React.Component {
         alert("Something went wrong when fetching data store");
       }
     });
+
+    $("#btn-print-rp").on("click", function() {
+      console.log("sssssssssssss");
+    });
   }
 
   renderErrorDisplay() {
