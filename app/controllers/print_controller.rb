@@ -14,28 +14,9 @@ class PrintController < ApplicationController
     if type == "print_monthly_incentives"
       monthly_incentive = params[:id]
       data = ::Print::BuildMonthlyIncentive.new(config: monthly_incentive).execute!
+
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
-    elsif type == "print_entry_involuntary"
-      collection_involuntary = params[:id]
-      data = ::Print::BuildPrintEntryInvoluntary.new(config: collection_involuntary).execute!
-      @data_store =  data
-      render "print/collection_for_involuntary_entry", layout: "print"
-    elsif type == "share_capital_involuntary_letter_list"
-      id = params[:id]
-      data = ::Print::BuildShareCapitalInvoluntaryMasterList.new(config: id).execute!
-      @data = data
-      render "print/print_share_capital_involuntary_master_list", layout: "print"
-    elsif type == "print_second_share_capital_involuntary_letter"
-      data_str = params[:data]
-      data = ::Print::BuildShareCapitalInvoluntarySecondLetter.new(config: JSON.parse(data_str)).execute!
-      @data = data
-      render "print/print_share_capital_involuntary_second_letter", layout: "print"
-    elsif type == "print_share_capital_involuntary_letter"
-      data_str = params[:data]
-      data = ::Print::BuildShareCapitalInvoluntary.new(config: JSON.parse(data_str)).execute!
-      @data = data
-      render "print/print_share_capital_involuntary_letter", layout: "print"
     elsif type == "print_second_involuntary_letter"
       data_str = params[:data]
       data = ::Print::BuildInvoluntarySecondLetter.new(config: JSON.parse(data_str)).execute!
@@ -398,6 +379,33 @@ class PrintController < ApplicationController
       @print_kkalinga_bill = data
 
       render "print/print_kkalinga_bill", layout: "print"
+
+
+    elsif type == "print_share_certificate"
+    
+      # @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order(Arel.sql("member_shares.data->> 'date_printed' DESC"))
+
+      @member_shares = MemberShare
+        .printed
+        .includes(member: [:branch, :center])
+        .where(members: { branch_id: @branches.pluck(:id) })
+        .order(Arel.sql("member_shares.data->>'date_printed' DESC"))
+
+      if params[:branch_id].present?
+        @branch_id  = params[:branch_id]
+        #raise @branch_id.inspect
+        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+      end
+      if params[:center_id].present?
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+      end
+      if params[:start_date].present? and params[:end_date].present?
+        #d = (params[:end_date].to_date + 1).to_s
+        @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
+      end
+
+      render "print/print_member_shares", layout: "print"
+
     else
       raise "Invalid type: #{type}"
     end
