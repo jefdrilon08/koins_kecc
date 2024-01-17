@@ -347,10 +347,30 @@ class PrintController < ApplicationController
       if params[:center_id].present?
         repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["center"]["id"] == params[:center_id] }
       end
+      if params[:loan_product_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["loan_product"]["id"] == params[:loan_product_id] }
+      end
+
+      if params[:officer_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["officer"]["id"] == params[:officer_id] }
+      end
+
+
+      # total_principal = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal"] }
+      # total_principal_paid = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal_paid"] }
+      ##### CONTINUE HERE #########
+
+      # puts "DSAASSADSADSADSADSADAS".inspect 
+      # ap repayment_rate.data
+
+      # repayment_rate.data["total_principal"] = total_principal
+
 
       data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
 
       @repayment_rate = data
+
+      
 
      render "print/repayment_rate", layout:"print"
     

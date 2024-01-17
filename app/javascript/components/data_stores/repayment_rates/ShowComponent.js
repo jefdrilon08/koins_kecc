@@ -112,9 +112,21 @@ export default class ShowComponent extends React.Component {
         alert("Something went wrong when fetching data store");
       }
     });
-
+    
     $("#btn-print-rp").on("click", function() {
-      console.log("sssssssssssss");
+      var url = "/print";
+      var params = "?type=repayment_rates&id=" + context.state.data.id;
+      if (context.state.currentCenterId.length > 0){
+        params = params + "&center_id=" + context.state.currentCenterId;
+      }
+      if (context.state.currentLoanProductId.length > 0){
+        params = params + "&loan_product_id=" + context.state.currentLoanProductId;
+      }
+      if (context.state.currentOfficerId.length > 0){
+        params = params + "&officer_id=" + context.state.currentOfficerId;
+      }
+      url = url + params;
+      window.open(url, '_blank', 'noopener');
     });
   }
 

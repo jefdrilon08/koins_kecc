@@ -38,7 +38,7 @@ module DataStores
         #link: "/print?type=repayment_rates&id=#{params[:id]}",
         link: '#',
         class: "fa fa-print",
-        text: "Printsss",
+        text: "Print",
         }
 
       @payload = {
