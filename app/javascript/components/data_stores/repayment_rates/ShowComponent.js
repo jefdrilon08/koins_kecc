@@ -128,6 +128,10 @@ export default class ShowComponent extends React.Component {
       url = url + params;
       window.open(url, '_blank', 'noopener');
     });
+
+    $("#btn-print-rp").on('contextmenu', function(event) {
+      event.preventDefault();
+    });
   }
 
   renderErrorDisplay() {
