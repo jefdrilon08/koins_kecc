@@ -34,6 +34,8 @@ module Print
 				@data[:total_paid_due]							= @repayment_rate_data[:total_paid_due]
 				@data[:total_total_paid]						= @repayment_rate_data[:total_total_paid]
 
+				@data[:total_overall_interest_balance]			= @repayment_rate_data[:total_overall_interest_balance]
+
 				@data[:loan_products]	= @repayment_rate_data[:loan_products]
 				@data[:as_of] 			= @repayment_rate_data[:as_of]
 				@data[:branch]			= @repayment_rate.meta['branch_name'].to_s.upcase

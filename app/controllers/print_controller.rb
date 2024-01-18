@@ -342,11 +342,79 @@ class PrintController < ApplicationController
 
     elsif type == "repayment_rates"
 
-     repayment_rate = DataStore.find(params[:id])
+      repayment_rate = DataStore.find(params[:id])
 
-     data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
+      if params[:center_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["center"]["id"] == params[:center_id] }
+      end
+      if params[:loan_product_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["loan_product"]["id"] == params[:loan_product_id] }
+      end
 
-     @repayment_rate = data
+      if params[:officer_id].present?
+        repayment_rate.data["records"] = repayment_rate.data["records"].select { |rec| rec["officer"]["id"] == params[:officer_id] }
+      end
+
+      total_principal = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal"] }
+      total_principal_paid = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal_paid"] }
+      total_overall_principal_balance = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["overall_principal_balance"] }
+      total_interest = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["interest"] }
+      total_interest_paid = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["interest_paid"] }
+      total_overall_balance = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["overall_balance"] }
+      total_principal_paid_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal_paid_due"] }
+      total_principal_balance = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal_balance"] }
+      total_principal_due  = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["principal_due"] }
+
+      total_total_paid = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["total_paid"] }
+      total_overall_interest_balance = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["overall_interest_balance"] }
+      
+      
+
+      total_interest_paid_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["interest_paid_due"] }
+      total_paid_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["total_paid_due"] }
+      total_total_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["total_due"] }
+
+      if total_total_due != 0
+        total_rr = (total_paid_due / total_total_due) * 100
+      else
+        total_rr = 0
+      end
+      # total_rr = (total_rr * 100)/repayment_rate.data["records"].length.to_f
+
+      if total_principal_due != 0
+        total_principal_rr = (total_principal_paid_due / total_principal_due) * 100
+      # total_principal_rr = (total_principal_rr  * 100 )/repayment_rate.data["records"].length.to_f
+      else
+        total_principal_rr = 0
+      end
+
+
+      repayment_rate.data["total_principal"] = total_principal
+      repayment_rate.data["total_principal_paid"] = total_principal_paid
+      repayment_rate.data["total_overall_principal_balance"] = total_overall_principal_balance
+      repayment_rate.data["total_interest"] = total_interest
+      repayment_rate.data["total_interest_paid"] = total_interest_paid
+      repayment_rate.data["total_overall_balance"] = total_overall_balance
+      repayment_rate.data["total_principal_paid_due"] = total_principal_paid_due
+      repayment_rate.data["total_principal_balance"] = total_principal_balance
+      repayment_rate.data["total_principal_due"] = total_principal_due
+      repayment_rate.data["total_total_paid"] = total_total_paid
+      repayment_rate.data["total_overall_interest_balance"] = total_overall_interest_balance
+
+
+      repayment_rate.data["total_interest_paid_due"] = total_interest_paid_due
+      repayment_rate.data["total_paid_due"] = total_paid_due
+      repayment_rate.data["total_principal_rr"] = total_principal_rr
+      repayment_rate.data["total_rr"] = total_rr
+
+      # puts "DSAASSADSADSADSADSADAS".inspect 
+      # ap repayment_rate.data
+
+      data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
+
+      @repayment_rate = data
+
+      
 
      render "print/repayment_rate", layout:"print"
     

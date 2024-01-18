@@ -1,16 +1,18 @@
 :css
 	@page{size:landscape; margin:20px;
 	}
-%small
-%strong
-%br
-	#{Settings.company_name}
+%center
+	%br
+	%strong
+		#{Settings.company_name} 
+	%br
 	#{Settings.company_address}
-VAT Registration Tin Number: #{Settings.company_tin_number}
-%br
-#{@repayment_rate[:branch]}
-%br
-#{@repayment_rate[:as_of]}
+	%br
+	VAT Registration Tin Number: #{Settings.company_tin_number}
+	%br
+	#{@repayment_rate[:branch]}
+	%br
+	#{@repayment_rate[:as_of]}
 %br
 %table.table.table-sm.table-bordered{:width=>"100%",:border=>"1"}
 	%thead
@@ -53,7 +55,7 @@ VAT Registration Tin Number: #{Settings.company_tin_number}
 				%td.text-end
 					#{number_to_currency(rr['principal_paid'].round(2), unit: "")}
 				%td.text-end
-					#{number_to_currency(rr['interest_due'].round(2), unit: "")}
+					#{number_to_currency(rr['interest_paid'].round(2), unit: "")}
 				%td.text-end
 					#{number_to_currency(rr['overall_interest_balance'].round(2), unit: "")}
 				%td.text-end
@@ -73,14 +75,15 @@ VAT Registration Tin Number: #{Settings.company_tin_number}
 			%th.text-end
 				Total :
 			%th
-			%td
+				-# Blank
+			%th
 				#{number_to_currency(@repayment_rate[:total_principal].round(2), unit: "")}
 			%th
 				#{number_to_currency(@repayment_rate[:total_principal_paid].round(2), unit: "")}
 			%th
-				#{number_to_currency(@repayment_rate[:total_overall_principal_balance].round(2), unit:"")}
+				#{number_to_currency(@repayment_rate[:total_interest_paid].round(2), unit:"")}
 			%th
-				#{number_to_currency(@repayment_rate[:total_interest].round(2), unit: "")}
+				#{number_to_currency(@repayment_rate[:total_overall_interest_balance].round(2), unit: "")}
 			%th
 				#{number_to_currency(@repayment_rate[:total_total_paid].round(2), unit: "")}
 			%th
@@ -92,6 +95,6 @@ VAT Registration Tin Number: #{Settings.company_tin_number}
 			%th
 				#{number_to_currency(@repayment_rate[:total_principal_due].round(2), unit: "")}
 			%th
-				#{number_to_percentage(@repayment_rate[:total_rr], precision: 2)}
+				#{number_to_percentage(@repayment_rate[:total_principal_rr], precision: 2)}
 					
 	
