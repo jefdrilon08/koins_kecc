@@ -3,20 +3,21 @@ module Members
     def initialize(config:)
       super()
 
-      @config       = config
-      @member_data  = @config[:member_data]
-      @user         = @config[:user]
+      @config                 = config
+      @member_data            = @config[:member_data]
+      @user                   = @config[:user]
+      @member_id              = @member_data[:id]
+      @recognition_date       = Member.find(@member_id).recognition_date
 
       @branch                 = Branch.where(id: @member_data[:branch_id]).first
       @center                 = Center.where(id: @member_data[:center_id]).first
       @membership_arrangement = MembershipArrangement.where(id: @member_data[:membership_arrangement_id]).first
       @membership_type        = MembershipType.where(id: @member_data[:membership_type_id]).first
-
-      
     end
 
     def execute!
       # Validate first_name
+
       if @member_data[:first_name].blank?
         @errors[:messages] << {
           key: "first_name",
@@ -99,7 +100,7 @@ module Members
           }
         end
         if Settings.activate_microinsurance
-          if age > 60
+          if age > 60 && @recognition_date.nil?
             @errors[:messages] << {
               key: "date_of_birth",
               message: "Member Age is 60 Above"
