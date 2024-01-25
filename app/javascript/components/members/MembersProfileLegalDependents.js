@@ -19,6 +19,9 @@ export default function MembersProfileLegalDependents(props) {
                     Age
                   </th>
                   <th>
+                    Gender
+                  </th>
+                  <th>
                     Relationship
                   </th>
                   <th>
@@ -41,6 +44,9 @@ export default function MembersProfileLegalDependents(props) {
                       </td>
                       <td>
                         {o.age}
+                      </td>
+                      <td>
+                        {o.gender}
                       </td>
                       <td>
                         {o.relationship}

@@ -46,6 +46,7 @@ namespace :api do
   post "/members/apply_online", to: "members#apply_online"
   post "/members/unlock", to: "members#unlock"
   post "/members/balik_kasapi", to: "members#balik_kasapi"
+  post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
   post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"  
@@ -664,6 +665,7 @@ namespace :api do
 
       post "/assets_liabilities/create", to: "assets_liabilities#create"
       post "/share_capital_involuntary/queue", to: "share_capital_involuntary#queue"
+      post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
     end
 
     namespace :epassbook do

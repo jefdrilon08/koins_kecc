@@ -13,7 +13,7 @@ module Branches
         # GK
         @gk_members                 = Member.where("member_type = ?", "GK")
         @gk_members_ytd             = Member.where("member_type = ? AND insurance_date_resigned >= ? AND insurance_date_resigned <= ?", "GK", @start_date, @end_date)
-        @gk_members_male            = @gk_members_ytd.where("gender = ?", "Male")
+        @gk_members_male            = @gk_members_ytd.where("gender IN (?)", ["Male", "Others"])
         @gk_members_female          = @gk_members_ytd.where("gender = ?", "Female")
         # inforce
         @active_inforce_members     = Member.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "inforce")
@@ -34,7 +34,7 @@ module Branches
         @all_resigned_members         = Member.insurance_resigned.where("insurance_date_resigned <= ?", @end_date)
         @active_resigned_insurance    = Member.active.where("data ->> 'recognition_date' <= ? AND insurance_status = ?", @end_date, "resigned")
         @resigned_old_members         = @all_resigned_members.where("insurance_date_resigned >= ? AND insurance_date_resigned <= ? AND data ->> 'recognition_date' < ?", @start_date, @end_date, @start_date )
-        @resigned_old_members_male    = @resigned_old_members.select{|o| o[:gender] == "Male"}
+        @resigned_old_members_male    = @resigned_old_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @resigned_old_members_female  = @resigned_old_members.select{|o| o[:gender] == "Female"}
         @resigned_ytd                 = @resigned_members + @resigned_old_members
         #resigned MFI
@@ -42,8 +42,12 @@ module Branches
         @resigned_lapsed            = Member.where("status = ? AND insurance_status = ? AND date_resigned <= ?", "resigned", "lapsed", @end_date)
         @resigned_dormant           = Member.where("status = ? AND insurance_status = ? AND date_resigned <= ?", "resigned", "dormant", @end_date)
         @pending                    = Member.where("created_at <= ? AND insurance_status = ? AND member_type = ?", @end_date, "pending", "Regular")
+        
         @new_members                = Member.where("data ->> 'recognition_date' >= ? AND data ->>'recognition_date' <= ? AND insurance_status IN (?)", @start_date, @end_date, ["inforce", "lapsed", "dormant"])
-        @male_members               = @all_inforce_lapsed.select{|o| o[:gender] == "Male"}
+        @new_male_members           = @new_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
+        @new_female_members         = @new_members.select{|o| o[:gender] == "Female"}
+
+        @male_members               = @all_inforce_lapsed.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @female_members             = @all_inforce_lapsed.select{|o| o[:gender] == "Female"}
         @members_with_spouse        = @all_inforce_lapsed.select{|o| o.data["spouse"]["first_name"] != nil && o.data["spouse"]["first_name"] != 'N/A' }
         @members_with_spouse_ytd    = @all_inforce_lapsed.select{|o| o.data["recognition_date"].to_date >= @start_date && o.data["recognition_date"].to_date <= @end_date && o.data["spouse"]["first_name"] != nil && o.data["spouse"]["first_name"] != 'N/A' }        
@@ -52,33 +56,33 @@ module Branches
         @single_members_up          = @all_inforce_lapsed.select{|o| o[:civil_status] == "SINGLE"}
         @single_members_proper      = @all_inforce_lapsed.select{|o| o[:civil_status] == "Single"}
         @single_members             = @single_members_lc + @single_members_up + @single_members_proper
-        @single_male_members        = @single_members.select{|o| o[:gender] == "Male"}
+        @single_male_members        = @single_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @single_female_members      = @single_members.select{|o| o[:gender] == "Female"}
         # Married
         @married_members_up         = @all_inforce_lapsed.select{|o| o[:civil_status] == "KASAL"}
         @married_members_proper     = @all_inforce_lapsed.select{|o| o[:civil_status] == "Kasal"}
         @married_members_english    = @all_inforce_lapsed.select{|o| o[:civil_status] == "married"}
         @married_members            = @married_members_up + @married_members_proper + @married_members_english
-        @married_male_members       = @married_members.select{|o| o[:gender] == "Male"}
+        @married_male_members       = @married_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @married_female_members     = @married_members.select{|o| o[:gender] == "Female"}        
         # Maykinakasama
         @maykinakasama_members_proper  = @all_inforce_lapsed.select{|o| o[:civil_status] == "May Kinakasama"}
         @maykinakasama_members_up      = @all_inforce_lapsed.select{|o| o[:civil_status] == "MAY KINAKASAMA"}
         @maykinakasama_members         = @maykinakasama_members_proper + @maykinakasama_members_up
-        @maykinakasama_male_members    = @maykinakasama_members.select{|o| o[:gender] == "Male"}
+        @maykinakasama_male_members    = @maykinakasama_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @maykinakasama_female_members  = @maykinakasama_members.select{|o| o[:gender] == "Female"}
         # Hiwalay
         @hiwalay_members_proper   = @all_inforce_lapsed.select{|o| o[:civil_status] == "Hiwalay"}
         @hiwalay_members_english  = @all_inforce_lapsed.select{|o| o[:civil_status] == "separated"}
         @hiwalay_members          = @hiwalay_members_proper + @hiwalay_members_english
-        @hiwalay_male_members     = @hiwalay_members.select{|o| o[:gender] == "Male"}
+        @hiwalay_male_members     = @hiwalay_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @hiwalay_female_members   = @hiwalay_members.select{|o| o[:gender] == "Female"}
         # Biyudo/a
         @biyuda_members_proper    = @all_inforce_lapsed.select{|o| o[:civil_status] == "Biyudo/a"}
         @biyuda_members_up        = @all_inforce_lapsed.select{|o| o[:civil_status] == "BIYUDO/A"}
         @biyuda_members_english   = @all_inforce_lapsed.select{|o| o[:civil_status] == "widowed"}
         @biyuda_members           = @biyuda_members_proper + @biyuda_members_up + @biyuda_members_english
-        @biyuda_male_members      = @biyuda_members.select{|o| o[:gender] == "Male"}
+        @biyuda_male_members      = @biyuda_members.select{|o| o[:gender] == "Male" || o[:gender] == "Others"}
         @biyuda_female_members    = @biyuda_members.select{|o| o[:gender] == "Female"}
         # length of membership
         @length_of_stay_member_3m         = @all_inforce_lapsed.select{|o| (@end_date - o.data["recognition_date"].to_date).to_i <= 91}
@@ -103,6 +107,8 @@ module Branches
       @total_active_inforce = 0
       @total_active_dormant = 0
       @total_new = 0
+      @total_new_male = 0
+      @total_new_female = 0
       @total_resigned = 0
       @total_resigned_old = 0
       @total_resigned_old_male = 0
@@ -197,15 +203,17 @@ module Branches
         member[:resigned_old_female_count] = @resigned_old_members_female.select{|o| o[:branch_id] == branch.id}.count
         member[:resigned_ytd_count] = @resigned_ytd.select{|o| o[:branch_id] == branch.id}.count
         member[:new_count] = @new_members.where(branch_id: branch).count
+        member[:new_count_male] = @new_male_members.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
+        member[:new_count_female] = @new_female_members.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
         member[:pending] = @pending.where(branch_id: branch).count
         member[:active_resigned_insurance] = @active_resigned_insurance.where(branch_id: branch).count
-        member[:male_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:male_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
         member[:female_inforce_count] = @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
-        member[:male_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:male_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
         member[:female_dormant_count] = @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count        
-        member[:male_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        member[:male_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
         member[:female_lapsed_count] = @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
-        member[:male_resigned_count] = @resigned_members.where(branch_id: branch, gender: "Male").count
+        member[:male_resigned_count] = @resigned_members.where(branch_id: branch, gender: ["Male", "Others"]).count
         member[:female_resigned_count] = @resigned_members.where(branch_id: branch, gender: "Female").count       
         member[:male_count] = @male_members.select{|o| o[:branch_id] == branch.id}.count
         member[:female_count] = @female_members.select{|o| o[:branch_id] == branch.id}.count
@@ -254,6 +262,9 @@ module Branches
         @total_resigned_ytd += @resigned_ytd.select{|o| o[:branch_id] == branch.id}.count
         @total_all_resigned += @all_resigned_members.where(branch_id: branch).count
         @total_new += @new_members.where(branch_id: branch).count
+        @total_new_male += @new_male_members.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
+        @total_new_female += @new_female_members.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
+
         @total_active += @all_active_members.select{|o| o[:branch_id] == branch.id}.count
         @total_active_lapsed += @all_lapsed.select{|o| o[:branch_id] == branch.id}.count
         @total_active_inforce += @all_inforce.select{|o| o[:branch_id] == branch.id}.count
@@ -273,14 +284,16 @@ module Branches
         @total_valid_dependent_ytd += LegalDependent.joins(:member).where("members.branch_id = ? AND members.data ->> 'recognition_date' <= ? AND members.data ->> 'recognition_date' >= ?", branch, @end_date, @start_date).where("legal_dependents.date_of_birth::date >= ?",20.years.ago).count 
         
         @total_female += @female_members.select{|o| o[:branch_id] == branch.id}.count
-        @total_inforce_male += @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        @total_inforce_male += @all_inforce.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
         @total_inforce_female += @all_inforce.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
-        @total_lapsed_male += @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
+        @total_lapsed_male += @all_lapsed.select{|o| o[:branch_id] == branch.id and (o[:gender] == "Male" or o[:gender] == "Others")}.count
+        # raise a.inspect 
         @total_lapsed_female += @all_lapsed.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count
         @total_dormant_male += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Male"}.count
         @total_dormant_female += @all_dormant.select{|o| o[:branch_id] == branch.id and o[:gender] == "Female"}.count        
-        @total_resigned_male += @resigned_members.where(branch_id: branch, gender: "Male").count
-        @total_resigned_female += @resigned_members.where(branch_id: branch, gender: "Female").count        
+        @total_resigned_male += @resigned_members.where(branch_id: branch, gender: ["Male", "Others"]).count
+        @total_resigned_female += @resigned_members.where(branch_id: branch, gender: "Female").count    
+   
         @total_resigned_inforce += @resigned_inforce.where(branch_id: branch).count
         @total_resigned_lapsed += @resigned_lapsed.where(branch_id: branch).count
         @total_resigned_dormant += @resigned_dormant.where(branch_id: branch).count        
@@ -327,6 +340,8 @@ module Branches
       @total[:total_resigned_ytd] = @total_resigned_ytd
       @total[:total_all_resigned] = @total_all_resigned
       @total[:total_new] = @total_new
+      @total[:total_new_male] = @total_new_male
+      @total[:total_new_female] = @total_new_female
       @total[:total_active] = @total_active
       @total[:total_active_lapsed] = @total_active_lapsed
       @total[:total_active_inforce] = @total_active_inforce

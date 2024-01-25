@@ -24,6 +24,8 @@ var $message;
 var templateErrorList;
 var _id;
 
+var $btnConfirmSave;
+var $btnSave;
 
 var _cacheDom = function() {
   $modalApprove = new bootstrap.Modal(
@@ -46,6 +48,15 @@ var _cacheDom = function() {
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
+
+  $btnSave            = $('#btn-save');
+
+  $modalSaveFormMakePayment = new bootstrap.Modal(
+    document.getElementById("modal-save-form-make-payment")
+  );
+
+  $btnConfirmSave     = $('#btn-confirm-save-form-make-payment');
+
 }
 
 var _bindEvents = function() {
@@ -59,7 +70,8 @@ var _bindEvents = function() {
   $btnConfirmDelete.on("click", function() {
     
     var data = {
-      make_payment_id: _id
+      make_payment_id: _id,
+      authenticity_token: authenticityToken
     }
 
     $.ajax({
@@ -102,8 +114,8 @@ var _bindEvents = function() {
    $btnConfirmApprove.on("click", function() {
     
     var data = {
-                  make_payment_id: _id
-
+                  make_payment_id: _id,
+                  authenticity_token: authenticityToken
                 }
     $.ajax({
       url: "/api/v1/adjustments/make_payments/approve",
@@ -131,6 +143,56 @@ var _bindEvents = function() {
         );
       }
     });
+  });
+
+  $btnSave.on("click", function() {
+    $message.html("");
+    $modalSaveFormMakePayment.show();
+    _id = $(this).data("make-payment-id")
+
+  });
+
+  $btnConfirmSave.on("click", function() {
+
+    var data = {
+      member_id: document.getElementById('btn-save').getAttribute('data-member-id'),
+      book: document.getElementById('book_type').value,
+      particular: document.getElementById('particular').value,
+      or_number: document.getElementById("or_number").value,
+      ar_number: document.getElementById("ar_number").value,
+      make_payment_type: document.getElementById('btn-save').getAttribute("data-make-payment-type"),
+      authenticity_token: authenticityToken,
+    }
+    //console.log("dsadsadasdsadsadsasda: ", data);
+
+    $.ajax({
+      url: "/api/v1/members/save_make_payment",
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        console.log("response: ", response)
+        $message.html("Success! Redirecting");
+        window.location.href="/adjustments/make_payments/" + response.id;
+      },
+      error: function(response) {
+        errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          console.log(response);
+          errors.push("Something went wrong");
+        }
+
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
+      }
+    });
+
   });
 }
 

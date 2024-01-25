@@ -4,7 +4,7 @@ namespace :report do
     br_id   = Branch.where(name: br_name).ids
     trans_date = '2022-07-31'
     @data    = []
-    
+
     member = Member.where("status = 'active' and branch_id = ? and data ->> 'recognition_date' <= ?", br_id , trans_date)
     member.each do |mem|
       recog_date = mem.data['recognition_date']
@@ -21,7 +21,7 @@ namespace :report do
         weeks_lapsed = (days_lapsed / 7).to_i + 1
       end
       data = "#{mem.full_name}|#{mem.center.name}|#{mem.data['recognition_date']}|#{days_lapsed}|#{weeks_lapsed}"
-      
+
       @data << data
     end
     puts @data
@@ -48,7 +48,7 @@ task :loan_pef => :environment do
       data = "#{loans.member.full_name}|#{loans.cycle}|#{cn}|#{sn}|#{la}|#{lp}"
       @data << data
     end
-    
+
   end
   puts @data
 end
@@ -59,7 +59,7 @@ task :involuntary_resignation => :environment do
     @data    = []
 
     member_account = MemberAccount.joins(:member).where("members.status = 'active' and account_type = 'SAVINGS' and members.branch_id = ? and account_subtype IN (?)", br_id, ["K-IMPOK","Golden K","Personal Savings Account"]).ids
-    
+
     member_account.each do |mem_acc|
       mem = MemberAccount.find(mem_acc)
       acc_trans = AccountTransaction.where("subsidiary_id = ? and transaction_type = 'deposit' and data ->> 'is_interest' != 'true'", mem_acc).order(:transacted_at).last
@@ -75,13 +75,44 @@ task :involuntary_resignation => :environment do
     puts @data
   end
 
+task :member_number => :environment do
+  br_name = ENV['SATO']
+  br_id = Branch.where(name: br_name).ids
+  mem = Member.where("status = 'active' and branch_id = ?", br_id)
+  @data = []
+
+  mem.each do |member|
+    mem_data = member.data
+    data = [
+      member.identification_number,
+      member.full_name,
+      member.center.name,
+      member.mobile_number
+    ]
+    @data << data
+  end
+   csv_file_path = "#{br_name}.csv"
+
+  CSV.open(csv_file_path, 'wb') do |csv|
+
+     csv << ['Identification Number', 'Full Name', 'Center Name', 'Mobile Number', 'Updated Mobile Number']
+
+    @data.each do |row|
+      csv << row
+    end
+  end
+
+  puts "CSV file has been created at #{csv_file_path}"
+end
+
+
   task :accrued_list => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
     @data   = []
 
     loan_details   = Loan.where("branch_id = ? and data ->> 'accrued_interest' IS NOT NULL ",br_id).ids
-    
+
     loan_details.each do |ld|
     loans = Loan.find(ld)
     am    = loans.data['accrued_interest']
@@ -89,13 +120,13 @@ task :involuntary_resignation => :environment do
 
     if cb > 0
       status = "Active"
-    else 
+    else
       status = "Paid"
     end
     data  = "#{loans.member.full_name}|#{loans.loan_product.name}|#{am['total_accrued_interest']}|#{am['total_accrued_interest_balance']}|#{cb}|#{status}|#{am['status']}"
     @data << data
 
-    end  
+    end
     puts @data
   end
 
@@ -104,13 +135,13 @@ task :involuntary_resignation => :environment do
     br_id   = Branch.where(name: br_name).ids
     mem = Member.where("status = 'writeoff' and branch_id = ?", br_id)
     @data   = []
-    
+
     mem.each do |member|
     mem_data    = member.data
-    
+
       if status   == 'writeoff'
         status    == 'Delinquent'
-        end  
+        end
 
       data = "#{}|#{member.identification_number}|#{member.full_name}|#{status}|#{member.id}"
       @data << data
@@ -120,7 +151,7 @@ task :involuntary_resignation => :environment do
   puts @data
 
   end
-  
+
   task :member_list_ito => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
@@ -128,7 +159,7 @@ task :involuntary_resignation => :environment do
     member = Member.where("status = 'active' and branch_id = ?" , br_id)
 
     member.each do |mem|
-      
+
     data = "#{mem.center.name}|#{mem.full_name}|#{mem.mobile_number}|#{mem.home_number}"
     @data << data
     end
@@ -200,7 +231,7 @@ puts @data
   task :project_type_report => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
-    @data   = [] 
+    @data   = []
     entry_point = LoanProduct.where(is_entry_point: true).ids
     if br_id.present?
       project_type = Loan.where("status = 'active' and branch_id = ? and project_type_id IS NOT NULL and loan_product_id IN (?)", br_id , entry_point).ids
@@ -238,20 +269,20 @@ puts @data
     st      = loans['status']
     idc     = loans['center_id']
     cn      = Center.find(idc).name
-    
+
     data    = "#{loans.member.full_name}|#{cn}|#{loans.loan_product.name}|#{loans.principal}|#{ib}|#{ss}|#{st}"
 
     @data << data
 
     end
     puts @data
-  end 
+  end
 
   task :loan_project_type => :environment do
     s_date= ENV['s_date']
     br_name = ENV['SATO']
     br_id = Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
     if br_id.present?
       loan_data = Loan.where("status = 'active' and branch_id=? and project_type_id IS NOT NULL" , br_id).pluck(:project_type_id).uniq
     else
@@ -265,7 +296,7 @@ puts @data
         l_count = Loan.where("status = 'active' and project_type_id=?",l).count
       end
       dta = "#{pt}|#{l_count}"
-      #dta = "#{l[:member][:last_name]}, #{l[:member][:first_name]} #{l[:member][:middle_name]}|#{l[:loan_product][:name]}|#{loan_pt}" 
+      #dta = "#{l[:member][:last_name]}, #{l[:member][:first_name]} #{l[:member][:middle_name]}|#{l[:loan_product][:name]}|#{loan_pt}"
       @data << dta
     end
     puts @data
@@ -279,13 +310,13 @@ puts @data
     d_rel = ENV['r_date']
     br_id = Branch.where(name: br_name).ids
     prin_amt = ENV['prin_amt']
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MANUAL_AGING").last
    @data_store_data = @data_store.data.with_indifferent_access
@@ -293,11 +324,11 @@ puts @data
    @data_store_data[:records].each.with_index do |l|
      if l[:loan_product][:name] == loan_type and l[:date_released] >= d_rel
       #if l[:date_released] >= d_rel
-       loan = Loan.find(l[:id])        
+       loan = Loan.find(l[:id])
         mem = Member.find(l[:member][:id])
         dob = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-        strt = mem.data['address']['street'] 
-        dist = mem.data['address']['district'] 
+        strt = mem.data['address']['street']
+        dist = mem.data['address']['district']
         ct = mem.data['address']['city']
         rr = (l[:principal_rr])*100
         installment = loan.num_installments
@@ -311,10 +342,10 @@ puts @data
         end
         m_rate = loan.monthly_interest_rate*12
         x = Loan.find(l[:id])
-        if x.project_type_id.present?   
+        if x.project_type_id.present?
           lp_id = ProjectType.find(x.project_type_id).project_type_category_id
         else
-          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true' and project_type_id IS NOT NULL").last                  
+          a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true' and project_type_id IS NOT NULL").last
           if a.present?
             lp_id =ProjectType.find(a.project_type_id).project_type_category_id
           end
@@ -331,7 +362,7 @@ puts @data
         dta = "#{l[:member][:first_name]}|#{l[:member][:middle_name]}|#{l[:member][:last_name]}|#{mem.gender}|#{dob}|#{"Acquire equipment/ fixed assets"}|#{lp}|#{ct}||#{l[:principal]}|#{month}|#{m_rate}|#{l[:date_released]}|#{mobile_no}|#{l[:overall_principal_balance]}|#{l[:maturity_date]}"
        @data << dta
      end
-     
+
    end
    puts @data
   end
@@ -343,27 +374,27 @@ puts @data
     br_name = ENV['SATO']
     rep_type = ENV['MIDAS']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MANUAL_AGING").last
    @data_store_data = @data_store.data.with_indifferent_access
 
    @data_store_data[:records].each.with_index do |l|
      if l[:loan_product][:name] == 'K - KALAMIDAD'
-       loan = Loan.find(l[:id])        
+       loan = Loan.find(l[:id])
         mem = Member.find(l[:member][:id])
-        strt = mem.data['address']['street'] 
-        dist = mem.data['address']['district'] 
+        strt = mem.data['address']['street']
+        dist = mem.data['address']['district']
         ct = mem.data['address']['city']
         rr = (l[:principal_rr])*100
         x = Loan.find(l[:id])
-        if x.project_type_id.present?   
+        if x.project_type_id.present?
           lp = ProjectType.find(x.project_type_id).name
         else
           a = Loan.joins(:loan_product).where("member_id = '#{l[:member][:id]}' and is_entry_point = 'true' and project_type_id IS NOT NULL").last.project_type_id
@@ -374,7 +405,7 @@ puts @data
        dta = "#{l[:member][:last_name]}, #{l[:member][:first_name]} #{l[:member][:middle_name]}|#{strt} #{dist} #{ct}|#{mem.gender}|#{l[:pn_number]}|#{l[:principal]}|#{l[:overall_principal_balance]}|#{rr}|#{l[:date_released]}|#{l[:maturity_date]}|#{loan.term}|#{loan.num_installments}|#{lp}|#{l[:loan_product][:name]}|#{loan.cycle}"
        @data << dta
      end
-     
+
    end
    puts @data
   end
@@ -384,13 +415,13 @@ puts @data
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "PERSONAL_FUNDS").last
     @data_store_data = @data_store.data.with_indifferent_access
@@ -404,6 +435,255 @@ puts @data
     end
       puts @data
   end
+  task :cap_r => :environment do
+    require 'csv'
+    s_date = ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+
+    @data_store = DataStore.where(
+      "meta->>'branch_id' = ? AND
+       CAST(meta->>'as_of' AS date) = ? AND
+       meta->>'data_store_type' = ?",
+       br_id,
+       s_date,
+       "MEMBER_COUNTS"
+    ).last
+
+    @data = []
+    count_age_18_30 = 0
+    count_age_31_59 = 0
+    count_age_60_above = 0
+
+    # 18 - 39
+    count_male_18_39 = 0
+    count_female_18_39 = 0
+    count_others_18_39 = 0
+    # 40 - 65
+    count_male_40_65 = 0
+    count_female_40_65 = 0
+    count_others_40_65 = 0
+    # 65 above
+    count_others_male_65_above = 0
+    count_others_female_65_above = 0
+    count_others_others_65_above = 0
+
+    @data_store_data = @data_store.data.with_indifferent_access
+
+  def calculate_age(date_of_birth)
+    (Date.today - date_of_birth).to_i / 365
+  end
+
+    # Process inactive members
+    @data_store_data[:counts][:inactive_members][:members].each do |m|
+      mem = Member.find(m[:id])
+      age = calculate_age(mem.date_of_birth)
+        sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"Non-Patronizing Member"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+        @data << j
+      if age <= 31
+        count_age_18_30 += 1
+      elsif age <= 60
+        count_age_31_59 += 1
+      elsif age >= 59
+        count_age_60_above += 1
+      end
+
+      if mem.gender["Male"] && age >= 18 && age <= 39
+        count_male_18_39 += 1
+
+      elsif mem.gender["Female"] && age >= 18 && age <= 39
+        count_female_18_39 += 1
+      elsif mem.gender["Others"] && age >= 18 && age <= 39
+        count_others_18_39 += 1
+      end
+      if mem.gender["Male"] && age >= 40 && age <= 65
+        count_male_40_65 += 1
+
+      elsif mem.gender["Female"] && age >= 40 && age <= 65
+        count_female_40_65 += 1
+
+      elsif mem.gender["Others"] && age >= 40 && age <= 65
+        count_others_40_65 += 1
+
+      end
+      if mem.gender["Male"] && age >= 66
+        count_others_male_65_above += 1
+
+      elsif mem.gender["Female"] && age >= 66
+        count_others_female_65_above += 1
+
+      elsif mem.gender["Others"] && age >= 66
+        count_others_others_65_above += 1
+
+      end
+
+    end
+
+    # Process pure savers
+    @data_store_data[:counts][:pure_savers][:members].each do |m|
+      mem = Member.find(m[:id])
+      age = calculate_age(mem.date_of_birth)
+
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+      @data << j
+      if age <= 31
+        count_age_18_30 += 1
+
+        elsif age <= 60
+          count_age_31_59 += 1
+
+        elsif age >= 59
+          count_age_60_above += 1
+
+      end
+      if mem.gender["Male"] && age >= 18 && age <= 39
+        count_male_18_39 += 1
+
+      elsif mem.gender["Female"] && age >= 18 && age <= 39
+        count_female_18_39 += 1
+
+      elsif mem.gender["Others"] && age >= 18 && age <= 39
+        count_others_18_39 += 1
+
+      end
+      if mem.gender["Male"] && age >= 40 && age <= 65
+        count_male_40_65 += 1
+
+      elsif mem.gender["Female"] && age >= 40 && age <= 65
+        count_female_40_65 += 1
+
+      elsif mem.gender["Others"] && age >= 40 && age <= 65
+        count_others_40_65 += 1
+
+      end
+      if mem.gender["Male"] && age >= 66
+        count_others_male_65_above += 1
+
+      elsif mem.gender["Female"] && age >= 66
+        count_others_female_65_above += 1
+
+      elsif mem.gender["Others"] && age >= 66
+        count_others_others_65_above += 1
+
+      end
+
+    end
+
+    # Process active borrower
+    @data_store_data[:counts][:loaners][:members].each do |m|
+      mem = Member.find(m[:id])
+      age = calculate_age(mem.date_of_birth)
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"Active borrower"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+      @data << j
+      if age <= 31
+        count_age_18_30 += 1
+
+      elsif age <= 60
+        count_age_31_59 += 1
+
+      elsif age >= 59
+        count_age_60_above += 1
+
+      end
+      if mem.gender["Male"] && age >= 18 && age <= 39
+        count_male_18_39 += 1
+
+      elsif mem.gender["Female"] && age >= 18 && age <= 39
+        count_female_18_39 += 1
+
+      elsif mem.gender["Others"] && age >= 18 && age <= 39
+        count_others_18_39 += 1
+
+      end
+      if mem.gender["Male"] && age >= 40 && age <= 65
+        count_male_40_65 += 1
+
+      elsif mem.gender["Female"] && age >= 40 && age <= 65
+        count_female_40_65 += 1
+
+      elsif mem.gender["Others"] && age >= 40 && age <= 65
+        count_others_40_65 += 1
+
+      end
+      if mem.gender["Male"] && age >= 66
+        count_others_male_65_above += 1
+
+      elsif mem.gender["Female"] && age >= 66
+        count_others_female_65_above += 1
+
+      elsif mem.gender["Others"] && age >= 66
+        count_others_others_65_above += 1
+
+      end
+    end
+
+    # Process new member
+    @data_store_data[:counts][:active_members][:members].each do |m|
+      mem = Member.find(m[:id])
+      age = calculate_age(mem.date_of_birth)
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"New member"}|#{mem.date_of_birth}|#{mem.date_of_membership}|#{mem.gender}"
+      @data << j
+      if age <= 31
+        count_age_18_30 += 1
+
+      elsif age <= 60
+        count_age_31_59 += 1
+
+      elsif age >= 59
+        count_age_60_above += 1
+
+      end
+      if mem.gender["Male"] && age >= 18 && age <= 39
+        count_male_18_39 += 1
+
+      elsif mem.gender["Female"] && age >= 18 && age <= 39
+        count_female_18_39 += 1
+
+      elsif mem.gender["Others"] && age >= 18 && age <= 39
+        count_others_18_39 += 1
+
+      end
+      if mem.gender["Male"] && age >= 40 && age <= 65
+        count_male_40_65 += 1
+
+      elsif mem.gender["Female"] && age >= 40 && age <= 65
+        count_female_40_65 += 1
+
+      elsif mem.gender["Others"] && age >= 40 && age <= 65
+        count_others_40_65 += 1
+
+      end
+      if mem.gender["Male"] && age >= 66
+        count_others_male_65_above += 1
+
+      elsif mem.gender["Female"] && age >= 66
+        count_others_female_65_above += 1
+
+      elsif mem.gender["Others"] && age >= 66
+        count_others_others_65_above += 1
+
+      end
+    end
+
+    puts @data
+    puts "Number of members aged between 18 and 30: |#{count_age_18_30}"
+    puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
+    puts "Number of members aged 60 aboved : |#{count_age_60_above}"
+
+    puts "Number of member aged 18 - 39 male |#{count_male_18_39}|#{count_female_18_39}|#{count_others_18_39}"
+    # puts "Number of member aged 18 - 39 female |#{count_female_18_39}"
+    # puts "Number of member aged 18 - 39 others |#{count_others_18_39}"
+
+    puts "Number of member aged 40 - 65 male |#{count_male_40_65}|#{count_female_40_65}|#{count_others_40_65}"
+    # puts "Number of member aged 40 - 65 female |#{count_female_40_65}"
+    # puts "Number of member aged 40 - 65 other |#{count_others_40_65}"
+
+    puts "Number of member aged 65 above male |#{count_others_male_65_above}|#{count_others_female_65_above}|#{count_others_others_65_above}"
+    # puts "Number of member aged 65 above male |#{count_others_female_65_above}"
+    # puts "Number of member aged 65 above male |#{count_others_others_65_above}"
+
+  end
 
   task :member_age => :environment do
     require 'csv'
@@ -412,24 +692,24 @@ puts @data
     br_id= Branch.where(name: br_name).ids
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MEMBER_COUNTS").last
 
     @data = []
     tmp = {}
     tmp[:last_name] = []
-    @data_store_data = @data_store.data.with_indifferent_access  
+    @data_store_data = @data_store.data.with_indifferent_access
       @data_store_data[:counts][:inactive_members][:members].each do |m|
         mem = Member.find(m[:id])
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
         #tmp[:last_name] << m[:last_name]
         tin = mem.data["government_identification_numbers"]["tin_number"]
-        
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"inactive member"}|#{mem.date_of_membership}|#{tin}"       
+
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"inactive member"}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
       @data_store_data[:counts][:pure_savers][:members].each do |m|
@@ -437,8 +717,8 @@ puts @data
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
         #tmp[:last_name] << m[:last_name]
         tin = mem.data["government_identification_numbers"]["tin_number"]
-        
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{tin}"       
+
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
 
@@ -457,20 +737,20 @@ puts @data
         j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"admitted member"}|#{mem.date_of_membership}|#{tin}"
         @data << j
       end
-      puts @data          
+      puts @data
   end
   task :watchlist => :environment do
     s_date= ENV['s_date']
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "WATCHLIST").last
     @data_store_data = @data_store.data.with_indifferent_access
@@ -487,13 +767,13 @@ puts @data
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MEMBER_COUNTS").last
     @data_store_data = @data_store.data.with_indifferent_access
@@ -502,7 +782,7 @@ puts @data
       j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name] }|#{ctr}"
       @data << j
     end
-  
+
       puts @data
   end
 task :midas_closing_record => :environment do
@@ -511,27 +791,27 @@ task :midas_closing_record => :environment do
     br_name = ENV['SATO']
     rep_type = ENV['MIDAS']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MANUAL_AGING").last
    @data_store_data = @data_store.data.with_indifferent_access
 
    @data_store_data[:records].each.with_index do |l|
     loan_data = Loan.find(l[:id])
-    if loan_data.status = "paid" 
+    if loan_data.status = "paid"
     #member_details
       mem = Member.find(loan_data.member_id)
         street      = mem.data["address"]["street"]
         brgy        = mem.data["address"]["district"]
         city        = mem.data["address"]["city"]
         bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-        sss_no      = mem.data["government_identification_numbers"]["sss_number"].to_s.gsub(/[^0-9]/ ,"") 
+        sss_no      = mem.data["government_identification_numbers"]["sss_number"].to_s.gsub(/[^0-9]/ ,"")
         if sss_no.length == 10
           sss = sss_no
         else
@@ -551,7 +831,7 @@ task :midas_closing_record => :environment do
         else
           phil_health = ""
         end
-        
+
         tin_no         = mem.data["government_identification_numbers"]["tin_number"].to_s.gsub(/[^0-9]/ ,"")
         if tin_no.length == 12 || tin_no.length == 9
           tin = tin_no
@@ -582,7 +862,7 @@ task :midas_closing_record => :environment do
         end
         #LOAN PURPOSE
         loan_prod = l[:loan_product][:name]
-        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
+        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'
           loan_purpose = 'NI'
         elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA' or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
           loan_purpose = 'ET'
@@ -594,19 +874,19 @@ task :midas_closing_record => :environment do
           contract_type = 12
         elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
           contract_type = 22
-        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' 
+        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD'
           contract_type = 28
         elsif loan_prod == 'K - BISIKLETA'
           contract_type = 17
         end
         #POD TYPE
         if loan_data.maturity_date.to_date == loan_data.original_maturity_date.to_date
-          pod_type = "50-01"  
+          pod_type = "50-01"
         else
           pod_type = "54-02"
         end
         #mat_date
-        #mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
+        #mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")
         mat_date = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).order(:due_date).last.due_date
         mat_date = mat_date.to_date.strftime("%m/%d/%Y")
         date_rel = loan_data.date_released.to_date.strftime("%m/%d/%Y")
@@ -616,7 +896,7 @@ task :midas_closing_record => :environment do
         n = (s_date.to_date - no_days_par)
         #outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
         #last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
-        
+
         last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1 and transaction_type = 'loan_payment'", l[:id] , s_date).order(:transacted_at).last
         if last_at.nil?
           last_date = s_date
@@ -624,10 +904,10 @@ task :midas_closing_record => :environment do
         else
           last_date = last_at.data['amort_entries'].last["due_date"]
           last_payment = last_at.amount.to_i
-        end  
-        
+        end
+
         outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , last_date).count
-          
+
         monthly_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).first.amount_due * 4
 
         #Overdue_Days
@@ -649,7 +929,7 @@ task :midas_closing_record => :environment do
             end
           else
             overdue_days = 0
-          end  
+          end
         else
           overdue_days = 0
         end
@@ -667,27 +947,27 @@ task :midas_closing_record => :environment do
     br_name = ENV['SATO']
     rep_type = ENV['MIDAS']
     br_id= Branch.where(name: br_name).ids
-    @data = [] 
+    @data = []
 
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MANUAL_AGING").last
    @data_store_data = @data_store.data.with_indifferent_access
 
    @data_store_data[:records].each.with_index do |l|
     loan_data = Loan.find(l[:id])
-    if loan_data.present? 
+    if loan_data.present?
     #member_details
       mem = Member.find(loan_data.member_id)
         street      = mem.data["address"]["street"]
         brgy        = mem.data["address"]["district"]
         city        = mem.data["address"]["city"]
         bday        = mem.date_of_birth.to_date.strftime("%m/%d/%Y")
-        sss_no      = mem.data["government_identification_numbers"]["sss_number"].to_s.gsub(/[^0-9]/ ,"") 
+        sss_no      = mem.data["government_identification_numbers"]["sss_number"].to_s.gsub(/[^0-9]/ ,"")
         if sss_no.length == 10
           sss = sss_no
         else
@@ -707,7 +987,7 @@ task :midas_closing_record => :environment do
         else
           phil_health = ""
         end
-        
+
         tin_no         = mem.data["government_identification_numbers"]["tin_number"].to_s.gsub(/[^0-9]/ ,"")
         if tin_no.length == 12 || tin_no.length == 9
           tin = tin_no
@@ -738,7 +1018,7 @@ task :midas_closing_record => :environment do
         end
         #LOAN PURPOSE
         loan_prod = l[:loan_product][:name]
-        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'         
+        if loan_prod == 'K - EDUKASYON' or loan_prod == 'K - EDUKASYON W2'  or loan_prod == 'K - EDUKASYON W3' or loan_prod == 'K - KALUSUGAN W1'  or loan_prod == 'K - KALUSUGAN W2' or loan_prod == 'K - KALUSUGAN W3' or loan_prod == 'K - KALUSUGAN W4' or loan_prod == 'K - KALUSUGAN W5' or loan_prod == 'K - KALUSUGAN W6' or loan_prod == 'K - KALUSUGAN W7'  or loan_prod == 'K - BAHAY W1' or loan_prod == 'K - BAHAY W2' or loan_prod == 'K - BAHAY W3' or loan_prod == 'K - Noche Buena'
           loan_purpose = 'NI'
         elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA' or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
           loan_purpose = 'ET'
@@ -750,19 +1030,19 @@ task :midas_closing_record => :environment do
           contract_type = 12
         elsif loan_prod == 'K - KABUHAYAN' or loan_prod == 'K - PWD' or loan_prod == 'K - NHA W1' or loan_prod == 'K - NHA W2' or loan_prod == 'K-Toda' or loan_prod == 'K - MAGGAGAWA'or loan_prod == 'Alalay sa K (Business Disruption Loan)' or loan_prod == 'K - SAGIP'
           contract_type = 22
-        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD' 
+        elsif loan_prod == 'K - BENEPISYO W1' or loan_prod == 'K - BENEPISYO W2' or loan_prod == 'K - BENEPISYO W3'  or loan_prod == 'K - KALAMIDAD'
           contract_type = 28
         elsif loan_prod == 'K - BISIKLETA'
           contract_type = 17
         end
         #POD TYPE
         if loan_data.maturity_date.to_date == loan_data.original_maturity_date.to_date
-          pod_type = "50-01"  
+          pod_type = "50-01"
         else
           pod_type = "54-02"
         end
         #mat_date
-        #mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")      
+        #mat_date = loan_data.maturity_date.to_date.strftime("%m/%d/%Y")
         mat_date = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).order(:due_date).last.due_date
         mat_date = mat_date.to_date.strftime("%m/%d/%Y")
         date_rel = loan_data.date_released.to_date.strftime("%m/%d/%Y")
@@ -772,7 +1052,7 @@ task :midas_closing_record => :environment do
         n = (s_date.to_date - no_days_par)
         #outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date <= ? and due_date >= ?" , l[:id] , s_date , n).count
         #last_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).last.amount_due
-        
+
         last_at = AccountTransaction.where("subsidiary_id = ? and transacted_at <= ? and amount >= 1 and transaction_type = 'loan_payment'", l[:id] , s_date).order(:transacted_at).last
         if last_at.nil?
           last_date = s_date
@@ -780,10 +1060,10 @@ task :midas_closing_record => :environment do
         else
           last_date = last_at.data['amort_entries'].last["due_date"]
           last_payment = last_at.amount.to_i
-        end  
-        
+        end
+
         outs_weeks = AmortizationScheduleEntry.where("loan_id = ? and due_date > ?" , l[:id] , last_date).count
-          
+
         monthly_payment = AmortizationScheduleEntry.where("loan_id = ?" , l[:id]).first.amount_due * 4
 
         #Overdue_Days
@@ -805,7 +1085,7 @@ task :midas_closing_record => :environment do
             end
           else
             overdue_days = 0
-          end  
+          end
         else
           overdue_days = 0
         end
@@ -828,7 +1108,7 @@ task :midas_closing_record => :environment do
       end
     end
   end
-  
+
   task :pending_insurance => :environment do
     Member.where("insurance_status = 'pending' and status = 'active' and data->>'recognition_date' IS NOT NULL").each do |pi|
       Member.find(pi.id).update(insurance_status: 'inforce')
@@ -865,15 +1145,15 @@ task :midas_closing_record => :environment do
       cbu_bal         = MemberAccount.where("member_id = ? and account_type = 'EQUITY' and account_subtype = 'CBU'", mems.id).pluck(:balance).map(&:to_d).shift
       sc_for_payment  = req_add_share - cbu_bal
       curr_savings    = MemberAccount.where("member_id = ? and account_type = 'SAVINGS' and account_subtype = 'K-IMPOK'", mems.id).pluck(:balance).map(&:to_d).shift
- 
-      if mem_acc >= s_date and mem_acc <= e_date 
+
+      if mem_acc >= s_date and mem_acc <= e_date
       puts "#{mems.full_name}|#{mem_center}|#{mems.status}|#{mem_acc}|#{mem_equity}|#{req_add_share}|#{cbu_bal}|#{sc_for_payment}|#{curr_savings}"
-      
-        #@data << md   
+
+        #@data << md
       end
       #@data << md
       #md = "#{mems.full_name}|#{mem_center}|#{mems.status}|#{mem_date_of_issue}|#{mem_equity}|#{req_add_share}|#{cbu_bal}|#{sc_for_payment}|#{curr_savings}"
-      
+
     end
     #puts @data
   end
@@ -888,7 +1168,7 @@ task :midas_closing_record => :environment do
     br_id= Branch.where(name: br_name).ids
     @data = []
     mem = Member.joins(:member_shares).where("members.status = 'active' and members.branch_id = ? and member_shares.date_of_issue >= ? and member_shares.date_of_issue <= ?", br_id , s_date , e_date).order(:center_id)
-      
+
     puts "Member Name | Center | Status |Date of Membership | Equity Account Balance | Required Additional Share Capital | CBU Balance | Share Capital For Payment | Current Savings"
     CSV.open("#{Rails.root}/tmp/#{br_name}_#{s_date}_to_#{e_date}_list_of_additioanl_shares.csv", "w",:write_headers=> true, :headers => [] ) do |csv|
     mem.each do |mems|
@@ -902,7 +1182,7 @@ task :midas_closing_record => :environment do
       curr_savings = MemberAccount.where("member_id = ? and account_type = 'SAVINGS' and account_subtype = 'K-IMPOK'", mems.id).pluck(:balance).map(&:to_d).shift
       md = "#{mems.full_name}|#{mem_center}|#{mems.status}|#{mem_date_of_issue}|#{mem_equity}|#{req_add_share}|#{cbu_bal}|#{sc_for_payment}"
       @data << md
-    
+
     end
   end
     puts @data
@@ -933,16 +1213,16 @@ task :midas_closing_record => :environment do
     #mat_date = ENV['mat_date']
     br_name = ENV['SATO']
     br_id= Branch.where(name: br_name).ids
-    @data = []  
-  
+    @data = []
+
     @data_store  = DataStore.where(
-                                        "meta->>'branch_id' = ? AND 
-                                         CAST(meta->>'as_of' AS date) = ? AND 
-                                         meta->>'data_store_type' = ?", 
-                                         br_id, 
+                                        "meta->>'branch_id' = ? AND
+                                         CAST(meta->>'as_of' AS date) = ? AND
+                                         meta->>'data_store_type' = ?",
+                                         br_id,
                                          s_date,
                                          "MANUAL_AGING").last
-  
+
     @data_store_data = @data_store.data.with_indifferent_access
     @data_store_data[:records].each.with_index do |r|
       if r[:loan_product][:name] == 'K - KABUHAYAN'
@@ -966,13 +1246,13 @@ end
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids.shift
     CSV.open("#{Rails.root}/tmp/project_type_report.csv", "w",:write_headers=> true, :headers => ["MEMBER","PROJECT TYPE" ,"PROJECT CATEGORY","CENTER"] ) do |csv|
-    @project = DataStore.where("meta->>'branch_id' = ? AND  
-                                           meta->>'data_store_type' = ? AND status='approved'", 
+    @project = DataStore.where("meta->>'branch_id' = ? AND
+                                           meta->>'data_store_type' = ? AND status='approved'",
                                            br_id,
                                            "PROJECT TYPE")
         @project.each do |dd|
          data_store = DataStore.find(dd[:id])
-       
+
              data_store[:data].each_with_index do |s|
 
               #raise s["details"]["project_type"].inspect:
@@ -984,7 +1264,7 @@ end
               csv << [f_name,pt,ptc,center]
 
              end
-          
+
         end
     end
     puts "DONE"
@@ -993,13 +1273,13 @@ end
 ##### LIST OF RESIGNED #####
   task :generate_resigned_members => :environment do
     require 'csv'
-    req_date= ENV['r_date']  
+    req_date= ENV['r_date']
     br_name= ENV['branch']
     br_id= Branch.where(name: br_name).ids
 
     CSV.open("#{Rails.root}/tmp/from_#{req_date}_#{br_name}_list_of_resigned_members.csv", "w",:write_headers=> true, :headers => ["IDENTIFICATION_NUMBER","NAMES", "DATE RESIGNED"] ) do |csv|
       mem = ap Member.where("status = 'resigned' and branch_id = ? and date_resigned >= ?" , br_id , req_date).pluck(:identification_number , "CONCAT_WS(', ',last_name,first_name)" , "date_resigned" )
-    
+
       mem.each do |mems|
         csv << mems
       end
@@ -1056,9 +1336,9 @@ end
         @data.each do |b|
           records = b.data.with_indifferent_access[:record]
           @branch = b[:meta]["branch_name"]
-          
+
           unique_records = records.uniq { |record| record["member"]["id"]}
-         
+
           unique_records.each do |rec|
             @member = Member.find(rec["member"]["id"])
             member_account = MemberAccount.where("member_id = ? and account_subtype IN ('K-IMPOK','Maintaining Balance Savings','Golden K','Savings Investment Fund','CBU','Share Capital')","#{@member.id}")
@@ -1083,22 +1363,22 @@ end
             writeoff_loans.each do |wl|
               loan = Loan.find(wl.id)
               csv << ["#{loan.loan_product.name}","#{loan.principal_balance}","#{loan.interest_balance}"]
-              
+
             end
             csv << []
-          
+
           end
-         
+
         end
       end
   end
 
-  task :remove_writeoff_payment_year_2021 => :environment do 
+  task :remove_writeoff_payment_year_2021 => :environment do
     year = "2021"
     @data = DataStore.billing_for_writeoff.where("meta->> 'as_of' = ? ","#{year}").order(Arel.sql("meta->>'branch_id'"))
       @data.each do |d|
         @date_approve = d["meta"]["date_approved"]
-        
+
         records = DataStore.find(d.id)
         records_data = records.data.with_indifferent_access
         records_data[:record].each do |r|
@@ -1112,6 +1392,6 @@ end
           end
         end
       end
-  
+
   end
 end

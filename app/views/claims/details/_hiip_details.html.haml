@@ -72,15 +72,16 @@
       %th Number of days to be paid
       %td
         = @data[:number_of_days_tobepaid]
-      %th Prepared By
+      %th Gender
       %td
-        = @claim.prepared_by
+        = @claim.member.gender
     %tr
       %th CB Uploaded Documents
       %td
         = @claim.member.attachment_files.pluck(:file_name).map(&:inspect).join(", ")
-      %th
+      %th Prepared By
       %td
+        = @claim.prepared_by
     %tr
       %th Claims Payment Through
       %td

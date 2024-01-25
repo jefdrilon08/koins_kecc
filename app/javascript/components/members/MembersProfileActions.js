@@ -16,19 +16,22 @@ export default function MembersProfileActions(props) {
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
   const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
   const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
-
+  const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
   const [dateReinstated, setDateReinstated]                                     = useState('');
   const [dateStopped, setDateStopped]                                           = useState('');
+  const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
+  const [reason, setReason]                                                     = useState('');
   const [dateRecognition, setDateRecognition]                                   = useState("");
   const [dateOfDeath, setDateOfDeath]                                           = useState("");
   const [reClassified, setreClassified]                                         = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
   const [makePayment, setMakePayment]                                           = useState('');
-
   const [isModalProfilePictureOpen, setModalProfilePictureOpen]                 = useState(false);
   const [profilePicture, setProfilePicture]                                     = useState('');
   const [configData, setConfigData] = useState();
   const [customVariable, setCustomVariable] = useState(); // Create a new state variable
+
+  const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
 
   useEffect(() => {
     axios.get('/api/yml_values/production_values')
@@ -203,11 +206,45 @@ export default function MembersProfileActions(props) {
     })
   }
 
+  const handleResignedInsuranceClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+      date_resigned: dateResignedInsurance,
+      reason: reason
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/resign',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Resigned");
+      window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
   const handleMakePaymentClicked = () => {
     setIsLoading(true);
 
     const payload = {
       id: props.memberId,
+      type: selectedOptionType,
     }
 
     const headers = {
@@ -224,8 +261,9 @@ export default function MembersProfileActions(props) {
       options
     ).then((res) => {
       console.log(res);
-      alert("Payment");
-      window.location.href="/members/" + props.memberId + "/form_make_payments/";
+      // alert("Payment");
+      setModalMakePaymentOpen(false);
+      window.location.href="/members/" + props.memberId + "/form_make_payments/" + selectedOptionType;
       setIsLoading(false);
     }).catch((error) => {
       console.log(error.response);
@@ -633,9 +671,12 @@ export default function MembersProfileActions(props) {
         <Modal.Body>
           <div className="row">
             <div className="form-group">
-              <select className="form-control">
+              <select className="form-control" 
+                onChange={e => {setSelectedOptionType(e.target.value)
+                  console.log("value: ", e.target.value);
+                } }>
                 {options.map((option) => (
-                  <option value={option.value}>{option.label}</option>
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>              
             </div>
@@ -716,7 +757,63 @@ export default function MembersProfileActions(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
+      <Modal
+        show={isModalResignFromInsuranceOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Resigned From Insurance
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Date Resigned
+              </label>
+              <input
+                className="form-control"
+                value={dateResignedInsurance}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateResignedInsurance(event.target.value) } }
+              />
+              <label>
+               Reason of resignation
+              </label>
+              <input
+                className="form-control"
+                value={reason}
+                disabled={isLoading}
+                type="text"
+                onChange={(event) => { setReason(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleResignedInsuranceClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalResignFromInsuranceOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal
         show={isModalUnlockOpen}
       >
@@ -1042,11 +1139,35 @@ export default function MembersProfileActions(props) {
         <div className="col">
           <div className="note note-info">
             <strong>
-              Clip Make Payment
+              Resigned From Insurance
             </strong>
             <p>
-              Clip Make Payment
+              Resigned From Insurance
             </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setModalResignFromInsuranceOpen(true)
+              }}
+            >
+              Resigned From Insurance
+            </button>     
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Clip Make Payment
+            </strong>
+            {/* <p>
+              Clip Make Payment
+            </p> */}
+            <br/>
+            <br/>
             <button
               className="btn btn-primary"
               onClick={() => {

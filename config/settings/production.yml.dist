@@ -1245,7 +1245,7 @@ branch_accounting_codes:
     due_from_accounting_code_id: "7d01aea2-8e4d-45a1-add4-91b918e7169c"
   -
     branch_id: "6a8b4597-af32-4daa-8484-508ae8790f26"                              #trecemartires
-    cash_in_bank_accounting_code_id: "7a57b55f-2f43-4f8d-84ff-1b9750fff669"
+    cash_in_bank_accounting_code_id: "32dbabd2-b165-4fc4-91d5-4b140654ccde"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -6154,8 +6154,7 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
 
-  -
-    loan_product_id: "993f9d01-fc46-4331-8f02-c4254d6d9dbb"                         # K-KABUHAYAN W3
+  - loan_product_id: "993f9d01-fc46-4331-8f02-c4254d6d9dbb" # K-KABUHAYAN W3
     receivable_accounting_code_id: "5dc4178d-6b2d-404a-9908-950ebc59b361"
     interest_receivable_accounting_code_id: "99a05d29-843b-400e-ab63-4d01ad46d901"
     default_amount: 5000.00
@@ -6171,57 +6170,45 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "ET"
     deductions:
-#      -
-#        name: "Service Fee"
-#        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-#        amount: 0.00
-#        deduction_type: "member_type_deduction_ratio"
-#        business_permit_available: true
-#        business_permit_amount: 500
-#        skip_for_special_loan_fund: "true"
-#        use_for_special_loan_fund: "true"
-#        meta:
-#          member_type: "Regular"
-#          term_map:
-#            weekly:
-#              -
-#                num_installments: 15
-#                ratio: 0.015
-#              -
-#                num_installments: 25
-#                ratio: 0.03
-#              -
-#                num_installments: 35
-#                ratio: 0.045
-#              -
-#                num_installments: 50
-#                ratio: 0.06
-#            monthly:
-#              -
-#                num_installments: 3
-#                ratio: 0.0035
-#              -
-#                num_installments: 6
-#                ratio: 0.007
-#              -
-#                num_installments: 9
-#                ratio: 0.0105
-#              -
-#                num_installments: 12
-#                ratio: 0.0140
-#            semi_monthly:
-#              -
-#                num_installments: 6
-#                ratio: 0.0035
-#              -
-#                num_installments: 12
-#                ratio: 0.007
-#              -
-#                num_installments: 18
-#                ratio: 0.0105
-#              -
-#                num_installments: 24
-#                ratio: 0.0140
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
+                
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -6356,17 +6343,28 @@ loan_products:
           value: 0.00
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
-    special_use_term_interest:
+    use_term_interest:
       -
         term: "weekly"
         min_num_installments: 5
         max_num_installments: 15
-        monthly_interest_rate: 0.050
+        monthly_interest_rate: 0.029
       -
         term: "weekly"
         min_num_installments: 16
         max_num_installments: 25
-        monthly_interest_rate: 0.050
+        monthly_interest_rate: 0.0375
+
+    special_use_term_interest:
+      - term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.029
+      - term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.0375
+        
 #<<<<<<< HEAD
   -
     loan_product_id: "43e1ae2f-b723-4646-816c-5659146cf2ad"                         # KABUHAYAN W4

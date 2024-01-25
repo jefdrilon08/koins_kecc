@@ -529,10 +529,10 @@ export default class ManagementOverview extends React.Component {
               </div>
             </div>
           </div>
-          <MapOverview
+          {/* <MapOverview
             token={this.props.token}
             data={this.state.data}
-          />
+          /> */}
           <hr/>
           {this.renderOverviewTable()}
         </>
