@@ -338,6 +338,10 @@ class LoansController < ApplicationController
       memberId: @loan.member_id,
       data: ::Loans::BuildFormData.new(loan: @loan).execute!
     }
+
+    # To show the mobile number of member
+    @MemberMobileNumber = Member.find(@loan.member_id).mobile_number
+
   end
 
   def amortization_pdf

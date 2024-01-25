@@ -862,6 +862,12 @@ module Api
 
         render json: { message: "ok" }
       end
+
+      def member_mobile_number
+        member      = Member.find(params[:id])
+
+        render json: { mobile_number: member.mobile_number }
+      end
     end
   end
 end
