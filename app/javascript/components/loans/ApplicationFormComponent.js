@@ -34,6 +34,9 @@ export default class ApplicationFormComponent extends React.Component {
       data: false,
       coMakerProfilePicture: false,
       coMakerThreeProfilePicture: false,
+      memberMobileNumber: "",
+      isMobileNumberValid: false,
+      mobileNumberMaxLength: false,
       errors: false
     };
   }
@@ -105,7 +108,63 @@ export default class ApplicationFormComponent extends React.Component {
           loanProductTypes: response.loan_product_types
         });
       }
-    })
+    });
+
+    // Fetch member_mobile_number
+    $.ajax({
+      url: "/api/v1/members/member_mobile_number",
+      data: {
+        id: context.props.memberId
+      },
+      method: 'GET',
+      success: function(response) {
+        // console.log("Got Member Mobile Number");
+        // console.log(response.mobile_number);
+        var mobile_number = response.mobile_number
+        mobile_number = mobile_number.replace(/[&\/\\#,\-\_()$~%.'":*?<>{}]/g, '');
+
+
+        if(mobile_number.substring(0,3) == "639"){
+          context.setState({
+            mobileNumberMaxLength: 12
+          });
+        }
+        else if(mobile_number.substring(0,4) == "+639"){
+          context.setState({
+            mobileNumberMaxLength: 13
+          });
+        }
+        else if(mobile_number.substring(0,2) == "09"){
+          context.setState({
+            mobileNumberMaxLength: 11
+          });
+        }
+        else if(mobile_number.substring(0,1) == "9"){
+          context.setState({
+            mobileNumberMaxLength: 10
+          });
+        }
+
+        var regex = /((\+63)|0|63|)[.\- ]?9[0-9]{2}[.\- ]?[0-9]{3}[.\- ]?[0-9]{4}/
+        if(regex.test(mobile_number)){
+          context.setState({
+            isMobileNumberValid: true
+          });
+        }
+        else{
+          context.setState({
+            isMobileNumberValid: false
+          });
+        }
+
+        context.setState({
+          memberMobileNumber: mobile_number,
+        });
+      },
+      error: function(response) {
+        console.log(response);
+      }
+    });
 
     $.ajax({
       url: "/api/v1/loans/fetch",
@@ -287,6 +346,9 @@ export default class ApplicationFormComponent extends React.Component {
     if(state.coMakerThreeProfilePicture) {
       formData.append('co_maker_three_profile_picture', state.coMakerThreeProfilePicture);
     }
+
+    // FOR MOBILE NUMBER
+    formData.append('mobile_number', state.memberMobileNumber);
 
     formData.append('payload', JSON.stringify(state.data));
     formData.append('authenticity_token', context.props.authenticityToken);
@@ -623,6 +685,94 @@ export default class ApplicationFormComponent extends React.Component {
     }
   }
 
+  handleInputMobileNumberValidator(e){
+    if(/^[0-9 +]*$/.test(e.target.value)){
+      // console.log("type:", e.target.value)
+      this.setState({
+        memberMobileNumber: e.target.value
+      });
+
+      // VALIDATE THE MOBILE NUMBER
+      var regex = /((\+63)|0|63|)[.\- ]?9[0-9]{2}[.\- ]?[0-9]{3}[.\- ]?[0-9]{4}/
+      if(regex.test(e.target.value) && 
+                      !(e.target.value.substring(0,5) == "+6309") && 
+                      !(e.target.value.substring(0,4) == "6309") &&
+                      ((e.target.value.substring(0,3) == "639") || 
+                        (e.target.value.substring(0,4) == "+639") || 
+                        (e.target.value.substring(0,2) == "09") || 
+                        (e.target.value.substring(0,1) == "9") )
+      ){
+        this.setState({
+          isMobileNumberValid: true
+        });
+      }
+      else{
+        this.setState({
+          isMobileNumberValid: false
+        });
+      }
+
+      // RESTRICT THE MAX LENGTH OF MOBILE NUMBER 
+      if(e.target.value.substring(0,3) == "639"){
+        this.setState({
+          mobileNumberMaxLength: 12
+        });
+        // if the mobile number length exceed to limit
+        if(e.target.value.length > 12){
+          this.setState({
+            isMobileNumberValid: false
+          });
+        }
+      }
+      else if(e.target.value.substring(0,4) == "+639"){
+        this.setState({
+          mobileNumberMaxLength: 13
+        });
+
+        // if the mobile number length exceed to limit
+        if(e.target.value.length > 13){
+          this.setState({
+            isMobileNumberValid: false
+          });
+        }
+      }
+      else if(e.target.value.substring(0,2) == "09"){
+        this.setState({
+          mobileNumberMaxLength: 11
+        });
+
+        // if the mobile number length exceed to limit
+        if(e.target.value.length > 11){
+          this.setState({
+            isMobileNumberValid: false
+          });
+        }
+      }
+      else if(e.target.value.substring(0,1) == "9"){
+        this.setState({
+          mobileNumberMaxLength: 11
+        });
+
+        // if the mobile number length exceed to limit
+        if(e.target.value.length == 11 || e.target.value.length > 10){
+          this.setState({
+            isMobileNumberValid: false
+          });
+        }
+
+        // IF THE MOBILE NUMBER IS START WITH 9
+        // this.setState({
+        //   isMobileNumberValid: false
+        // });
+      }
+      else{
+        this.setState({
+          mobileNumberMaxLength: false
+        });
+      }
+    }
+  }
+
   renderCoMakerProfilePicture() {
     if(this.state.coMakerProfilePicture) {
       return (
@@ -758,8 +908,13 @@ export default class ApplicationFormComponent extends React.Component {
           <div className="row">
             <div className="col">
               <div className="form-group">
-                <label>
-                  * PN Number
+                <label style={{ fontWeight: "bold" }}>
+                  <span style={{ color: "red" }}>
+                    {"*"}
+                  </span>
+                  <span>
+                    {" PN Number"}
+                  </span>
                 </label>
                 <input
                   className="form-control"
@@ -784,8 +939,13 @@ export default class ApplicationFormComponent extends React.Component {
             </div>
             <div className="col">
               <div className="form-group">
-                <label>
-                  * Date Prepared
+                <label style={{ fontWeight: "bold" }}>
+                  <span style={{ color: "red" }}>
+                    {"*"}
+                  </span>
+                  <span>
+                    {" Date Prepared"}
+                  </span>
                 </label>
                 <input
                   className="form-control"
@@ -819,8 +979,13 @@ export default class ApplicationFormComponent extends React.Component {
               <div className="row">
                 <div className="col">
                   <div className="form-group">
-                    <label>
-                      * Halaga ng Hinihiram
+                    <label style={{ fontWeight: "bold" }}>
+                      <span style={{ color: "red" }}>
+                        {"*"}
+                      </span>
+                      <span>
+                        {" Halaga ng Hinihiram"}
+                      </span>
                     </label>
                     <input
                       className="form-control"
@@ -889,6 +1054,38 @@ export default class ApplicationFormComponent extends React.Component {
                       <option value="monthly">Monthly</option>
                       <option value="semi-monthly">Semi-monthly</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div className='row'>
+                <div className='col'>
+                  <div className="form-group">
+                    <label style={{ fontWeight: "bold" }}>
+                      <span style={{ color: "red" }}>
+                        {"*"}
+                      </span>
+                      <span>
+                        {" Mobile Number"}
+                      </span>
+                    </label>
+                    
+                    <br />
+                    <label style={{ color: "grey", fontWeight: "bold" }}>
+                      Example: +639xxxxxxxxx | 639xxxxxxxxx | 09xxxxxxxxx | 9xxxxxxxxx
+                    </label>
+                    <div style={{ display: "flex", flexDirection: "row", alignItems: 'center', gap: "10px" }}>
+                      <input
+                        style={{ width: "150px" }}
+                        className="form-control"
+                        value={this.state.memberMobileNumber}
+                        maxLength={this.state.mobileNumberMaxLength}
+                        onChange={e=>{this.handleInputMobileNumberValidator(e)}}
+                      />
+                      <label style={{ color: this.state.isMobileNumberValid ? "green" : "red", fontWeight: "bold" }}>
+                        {this.state.isMobileNumberValid ? "Valid Mobile Number" : "Invalid Mobile Number"}
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1011,7 +1208,7 @@ export default class ApplicationFormComponent extends React.Component {
                 <button
                   className="btn btn-primary"
                   onClick={this.handleSave.bind(this)}
-                  disabled={this.state.isSaving || this.state.isActive}
+                  disabled={(this.state.isSaving || this.state.isActive) || !this.state.isMobileNumberValid}
                 >
                   <span className="bi bi-check"/>
                   Save
