@@ -47,7 +47,10 @@ module Api
         if cmd.invalid?
           render json: cmd.errors, status: :unprocessable_entity
         else
-          render json: { token: cmd.token, member: cmd.member.user_object }
+          member = cmd.member.user_object.with_indifferent_access
+          member["mobile_number"] = cmd.member.mobile_number
+          # render json: { token: cmd.token, member: cmd.member.user_object }
+          render json: { token: cmd.token, member: member }
         end
       end
 
