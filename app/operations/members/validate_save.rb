@@ -6,8 +6,7 @@ module Members
       @config                 = config
       @member_data            = @config[:member_data]
       @user                   = @config[:user]
-      @member_id              = @member_data[:id]
-      @recognition_date       = Member.find(@member_id).recognition_date
+
 
       @branch                 = Branch.where(id: @member_data[:branch_id]).first
       @center                 = Center.where(id: @member_data[:center_id]).first
@@ -100,11 +99,13 @@ module Members
           }
         end
         if Settings.activate_microinsurance
-          if age > 60 && @recognition_date.nil?
-            @errors[:messages] << {
-              key: "date_of_birth",
-              message: "Member Age is 60 Above"
-            }
+          if @member_data[:id].present?
+            if age > 60 && @recognition_date.present?
+              @errors[:messages] << {
+                key: "date_of_birth",
+                message: "Member Age is 60 Above"
+              }
+            end
           end
         end
       end
