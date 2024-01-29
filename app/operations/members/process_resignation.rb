@@ -57,7 +57,12 @@ module Members
       )
 
       # Update all member shares
-      @member.member_shares.each do |s|
+      # @member.member_shares.each do |s|
+      #   s.update!(is_void: true)
+      # end
+
+      # Update all member shares
+      MemberShare.where(member_id: @member.id).each do |s|
         s.update!(is_void: true)
       end
     end
