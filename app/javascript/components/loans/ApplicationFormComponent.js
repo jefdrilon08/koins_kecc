@@ -37,6 +37,7 @@ export default class ApplicationFormComponent extends React.Component {
       memberMobileNumber: "",
       isMobileNumberValid: false,
       mobileNumberMaxLength: false,
+      isMobileNumberExist: false,
       errors: false
     };
   }
@@ -147,9 +148,16 @@ export default class ApplicationFormComponent extends React.Component {
 
         var regex = /((\+63)|0|63|)[.\- ]?9[0-9]{2}[.\- ]?[0-9]{3}[.\- ]?[0-9]{4}/
         if(regex.test(mobile_number)){
-          context.setState({
-            isMobileNumberValid: true
-          });
+          let mobileNumberExist = context.getMobileNumberExist(mobile_number); // check if mobile number is exist
+          // console.log("isMobileNumberExist: ", context.state.isMobileNumberExist);
+          if(!mobileNumberExist){
+            context.setState({
+              isMobileNumberValid: true
+            });
+          }
+          // context.setState({
+          //   isMobileNumberValid: true
+          // });
         }
         else{
           context.setState({
@@ -229,6 +237,36 @@ export default class ApplicationFormComponent extends React.Component {
         />
       );
     }
+  }
+
+  getMobileNumberExist(mobile_number){
+    let context = this;
+  
+    // Fetch member_mobile_number_exist
+    $.ajax({
+      url: "/api/v1/members/mobile_number_exist",
+      data: {
+        mobile_number: mobile_number,
+        id: context.props.memberId
+      },
+      method: 'GET',
+      success: function(response) {
+        // console.log("Got Member Mobile Number");
+        // console.log(response);
+        
+        var is_mobile_number_exist = response.mobile_number_exist;
+
+        // console.log("UYKAP: ", is_mobile_number_exist);
+        context.setState({
+          isMobileNumberExist: is_mobile_number_exist,
+        });
+        
+        return is_mobile_number_exist;
+      },
+      error: function(response) {
+        console.log(response);
+      }
+    });
   }
 
   updateData(data) {
@@ -702,9 +740,15 @@ export default class ApplicationFormComponent extends React.Component {
                         (e.target.value.substring(0,2) == "09") || 
                         (e.target.value.substring(0,1) == "9") )
       ){
-        this.setState({
-          isMobileNumberValid: true
-        });
+        let mobileNumberExist = this.getMobileNumberExist(e.target.value); //Check if member mobile number is exist
+        if(!mobileNumberExist){
+          this.setState({
+            isMobileNumberValid: true
+          });
+        }
+        // this.setState({
+        //   isMobileNumberValid: true
+        // });
       }
       else{
         this.setState({
@@ -1082,8 +1126,8 @@ export default class ApplicationFormComponent extends React.Component {
                         maxLength={this.state.mobileNumberMaxLength}
                         onChange={e=>{this.handleInputMobileNumberValidator(e)}}
                       />
-                      <label style={{ color: this.state.isMobileNumberValid ? "green" : "red", fontWeight: "bold" }}>
-                        {this.state.isMobileNumberValid ? "Valid Mobile Number" : "Invalid Mobile Number"}
+                      <label style={{ color: this.state.isMobileNumberValid ? ( !this.state.isMobileNumberExist ? "green" : "red") : "red", fontWeight: "bold" }}>
+                        {this.state.isMobileNumberValid ? (!this.state.isMobileNumberExist ? "Valid Mobile Number" : "This Mobile Number Is Already Exist") : "Invalid Mobile Number"}
                       </label>
                     </div>
                   </div>
@@ -1208,7 +1252,7 @@ export default class ApplicationFormComponent extends React.Component {
                 <button
                   className="btn btn-primary"
                   onClick={this.handleSave.bind(this)}
-                  disabled={(this.state.isSaving || this.state.isActive) || !this.state.isMobileNumberValid}
+                  disabled={(this.state.isSaving || this.state.isActive) || !this.state.isMobileNumberValid || this.state.isMobileNumberExist}
                 >
                   <span className="bi bi-check"/>
                   Save
