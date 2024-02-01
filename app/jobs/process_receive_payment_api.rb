@@ -26,7 +26,8 @@ class ProcessReceivePaymentApi < ApplicationJob
           amount: o[:amount],                   
           account_subtype: o[:account_subtype],          
           transacted_at: o[:transacted_at],            
-          status: o[:status]                   
+          status: o[:status],
+          external_ref: o[:external_ref]                        
         }
       }
     end
@@ -57,7 +58,8 @@ class ProcessReceivePaymentApi < ApplicationJob
                 ending_balance: 0.0
               },
               created_at: a[:created_at],
-              pdated_at: a[:updated_at]  
+              updated_at: a[:updated_at],
+              external_ref: o[:external_ref]         
             }
             
             cmd = Kmba::SavePayment.new(
@@ -87,7 +89,8 @@ class ProcessReceivePaymentApi < ApplicationJob
                 ending_balance: 0.0
               },
               created_at: a[:created_at],
-              pdated_at: a[:updated_at]  
+              updated_at: a[:updated_at],
+              external_ref: o[:external_ref]         
             }
 
             cmd = Kmba::SavePayment.new(

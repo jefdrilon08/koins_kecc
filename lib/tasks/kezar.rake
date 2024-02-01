@@ -218,10 +218,10 @@ namespace :kezar do
         LEFT JOIN RankedLegalDependents g ON g.member_id = a.id
         LEFT JOIN beneficiaries h ON h.member_id = a.id
 
-        WHERE a.branch_id = '3a74c7d5-54a5-4eec-826d-ab81f76ae31a'
-        AND a.insurance_status = 'inforce'
-        AND a.identification_number IN ('HOKMBA-A01848', 'C1KMBA-A01182', 'HOKMBA-HO00082')
-        -- AND a.identification_number = 'HOKMBA-HO00082'
+        WHERE
+        a.identification_number = 'HOKMBA-A02322'
+        AND a.insurance_status IN ('inforce', 'lapsed') 
+
         GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
         ORDER BY branch_name
         OFFSET #{offset} ROWS FETCH NEXT #{batch_size} ROWS ONLY
@@ -584,7 +584,7 @@ namespace :kezar do
         payload = member_records
         Rails.logger.info(puts payload.to_json)
 
-        # raise payload.inspect
+        raise payload.inspect
         
         if is_batch.present?
           Rails.logger.info(puts("Posting to #{end_point}..."))
@@ -633,23 +633,16 @@ namespace :kezar do
 
   task :payment_body_api => :environment do
     #--------------Start Declarations--------------# 
-      # Set the batch size (number of records per batch)
-      batch_size              = 500
-      # Initialize variables for pagination
-      offset                  = 0
       total_records           = 0
-      # Define a flag to indicate whether to continue fetching more batches
-      fetch_more_batches      = true
       end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://payment-jdyjiucdcq-uc.a.run.app/payment/KMBA/upload"
       is_batch                = ENV["BATCH"] || true
       transaction_type        = 'deposit'
       is_interest             = 'false'
-      insurance_status        = 'inforce'
-      status                  = 'active'
+      insurance_status        = 'inforce','lapsed'
+      # status                  = 'active'
       account_subtype         = 'Life Insurance Fund','Retirement Fund'
-      branches                = '3a74c7d5-54a5-4eec-826d-ab81f76ae31a'
+      branch                  = 'cf74991b-c211-42c6-bdf7-78dd09862f01', '3820dabe-a47e-43ad-9db9-47158e23b75f'
       member_id               = '0a30de26-163b-48ac-8d90-55db208b240a'
-
       # retrieve the access token to an environment 
       bearer_token            = ENV["ACCESS_TOKEN"]
     # --------------End Declarations--------------# 
@@ -679,11 +672,9 @@ namespace :kezar do
         "
           account_transactions.transaction_type = ?
           AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL) 
-          AND members.insurance_status = ? 
-          AND members.status = ? 
+          AND members.insurance_status IN (?) 
           AND member_accounts.account_subtype IN (?)
           AND branches.id IN (?)
-          AND members.id = ?
           AND 
             CASE
               WHEN members.data->'resignation_records' IS NULL THEN
@@ -699,10 +690,8 @@ namespace :kezar do
         transaction_type,
         is_interest,
         insurance_status,
-        status,
         account_subtype,
-        branches,
-        member_id 
+        branch 
     ).find_in_batches(:batch_size => 50) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
@@ -730,7 +719,7 @@ namespace :kezar do
       payload = {data: payments}
       Rails.logger.info(puts payload.to_json)
 
-      # raise payload.inspect
+      #raise payload.inspect
       if is_batch.present?
         Rails.logger.info(puts("Posting to #{end_point}..."))
         result = HTTParty.post(
@@ -760,35 +749,37 @@ namespace :kezar do
         end
       end
     end
-  end
+  end 
 
-
-  # FOR PAYMENTS API 
+  #OLD API PAYMENTS
   task :send_payments => :environment do
-    start_date    = ENV["START_DATE"] || Date.today - 1.month
-    end_date      = ENV["END_DATE"] || Date.today
-    endpoint      = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://usentral1-rms-kmba.cloudfunctions.net/api/payment/batch/upload"
-    is_batch      = ENV["BAH"] || true
-    
+    branch        = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
+    endpoint          = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://us-central1-rms-kmba.cloudfunctions.net/api/payment/batch/upload"
+    is_batch          = ENV["BATCH"] || true
     account_type      = "INSURANCE"
-    account_btypes  = ["Life Insurance Fund", "Retirent Fund"]
+    account_subtypes  = ["Life Insurance Fund", "Retirement Fund"]
+    insurance_status  = ["inforce", "lapsed", "dormant"]
+    branches          = ["3a74c7d5-54a5-4eec-826d-ab81f76ae31a", "2e2b2b94-5403-45e8-a8c7-036937e3b332"]
+    # member_include      = ['C1FAI00010','C1BAT00226','C1TS00479','C2BS00788','C2NOV00815','C2LAG03321','C2CAM00589','E1SMR00067','E1MON01654','E1RHS00794','E2MAS00522','E2PAD01012','E2SUM00959','E3CAI00877','E3BIN00378','E3TAY00653','N1SP00497','N1NOR01305','N2BOC00522','N2MEY01341','N3Pul00332','S1LP03557','S1PAR02601','S1SPL02531','S2TM00652']
 
-    account_transactions = AccountTransaction.select(     
-    "account_transactions.id,
-     members.identification_number, 
-     account_transactions.transacted_at
-       account_transactions.amount,       
+    account_transactions = AccountTransaction.select(
+      "account_transactions.id,
+       members.identification_number, 
+       account_transactions.transacted_at, 
+       account_transactions.amount, 
        member_accounts.account_subtype, 
-       account_transactns.id, 
+       account_transactions.id, 
        branches.name AS branch_name"
     ).joins(
-      "INN JOIN member_accounts ONember_accounts.id = acunt_transactions.subsidiary_id INNER JOIN mbers ON memrs.id   end = member_accounts.member_id INNER JOIN branches ON branches.id = member_accounts.branch_id"
+      "INNER JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id INNER JOIN members ON members.id = member_accounts.member_id INNER JOIN branches ON branches.id = member_accounts.branch_id"
     ).where(
-      "member_accounts.account_type = ? AND member_accounts.account_subtype IN (?) AND DATE(transacted_at) >= ? AND DATE(transacted_at) <= ? ",
+     "member_accounts.account_type = ? 
+     AND member_accounts.account_subtype IN (?)
+     AND member_accounts.branch_id IN (?)
+     AND (account_transactions.data->>'is_interest' = 'false' OR account_transactions.data->>'is_interest' IS NULL)",
       account_type,
       account_subtypes,
-      start_date,
-      end_date,
+      branches
     ).find_in_batches(:batch_size => 500) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
@@ -819,7 +810,7 @@ namespace :kezar do
                    :headers => { 'Content-Type' => 'application/json' }
                 )
         Rails.logger.info(puts(result))
-    
+
       else
         payload.each do |p|
           Rails.logger.info(puts("Posting to #{endpoint}..."))
@@ -835,7 +826,216 @@ namespace :kezar do
     end
   end
 
-  #API Members
+  #OLD API Members
+  task send_members: :environment do
+    # branch_id           = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
+    # branch              = Branch.find(branch_id)
+    is_batch            = ENV["BATCH"] || true 
+    end_point           = ENV['KEZAR_API_SEND_MEMBERDATA'] || "https://us-central1-rms-kmba.cloudfunctions.net/api/membership/batch/upload"
+    insurance_status    = ["inforce", "dormant", "lapsed"]
+    member_include      = ['C1FAI00010','C1BAT00226','C1TS00479','C2BS00788','C2NOV00815','C2LAG03321','C2CAM00589','E1SMR00067','E1MON01654','E1RHS00794','E2MAS00522','E2PAD01012','E2SUM00959','E3CAI00877','E3BIN00378','E3TAY00653','N1SP00497','N1NOR01305','N2BOC00522','N2MEY01341','N3Pul00332','S1LP03557','S1PAR02601','S1SPL02531','S2TM00652']
+    
+    memberdata = Member.select(
+    "
+      DISTINCT ON (members.id) members.id,
+      members.branch_id,
+      members.identification_number AS membernumber,
+      members.last_name AS applicantlastname,
+      members.first_name AS applicantfirstname,
+      members.middle_name AS applicantmiddlename,
+
+      CASE
+        WHEN members.date_of_birth = NULL then ''
+        ELSE TO_CHAR(members.date_of_birth, 'MM/DD/YYYY') 
+      END as dateofbirth,
+
+      CONCAT(date_part('year', age(members.date_of_birth))) as memberage,
+
+      CASE
+        WHEN members.mobile_number IS NULL then '09000000000' 
+        WHEN members.mobile_number = '' then '09000000000'
+        ELSE members.mobile_number    
+      END AS contactnum,
+
+      members.gender AS gender,
+      members.civil_status AS civilstatus,
+      centers.name AS centername,
+      CONCAT(members.data->'address'->>'street',' ',
+      members.data->'address'->>'district',' ',
+      members.data->'address'->>'city',' ',
+      members.data->'address'->>'province',' ',
+      members.data->'address'->>'region',' ',
+      members.data->'address'->>'old_district',' ',
+      members.data->'address'->>'old_city') AS address,
+      'N/A' AS businessaddress,
+      'N/A' AS occupation,
+
+      CASE
+        WHEN members.place_of_birth = '' then 'N/A'
+        WHEN members.place_of_birth IS NULL then 'N/A' 
+        ELSE members.place_of_birth   
+      END AS placeOfBirth,
+
+      'N/A' AS sourceofincome,
+      branches.name AS branchname,
+      '' AS memberaccountid,
+      'approved' as appstatus,
+      branches.id AS branchreferenceid,
+      
+      CASE 
+        WHEN beneficiaries.is_primary = 'true' then CONCAT(beneficiaries.first_name,' ',beneficiaries.middle_name,' ',beneficiaries.last_name)
+        ELSE 'N/A'
+      END as primarybeneficiaryname,
+      
+      CASE
+        WHEN beneficiaries.is_primary = 'true' AND beneficiaries.date_of_birth IS NULL then '01/01/1900'
+        WHEN beneficiaries.date_of_birth IS NULL then '01/01/1900'
+        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.date_of_birth IS NOT NULL then '01/01/1900'
+        ELSE beneficiaries.date_of_birth
+      END as primarydateofbirth,
+        
+      CASE 
+        WHEN beneficiaries.is_primary = 'true' then beneficiaries.relationship 
+        ELSE 'N/A'
+      END as primaryrelationship,
+
+      CASE 
+        WHEN beneficiaries.is_primary IS NULL then CONCAT(beneficiaries.first_name,' ',beneficiaries.middle_name,' ',beneficiaries.last_name)
+        ELSE 'N/A'
+      END as secondarybeneficiaryname,
+      
+      CASE
+        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.date_of_birth IS NULL then '01/01/1900' 
+        WHEN beneficiaries.is_primary IS NULL then beneficiaries.date_of_birth
+        ELSE '01/01/1900'
+      END as secondarydateofbirth,
+            
+      CASE
+        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.relationship IS NULL then 'N/A'  
+        WHEN beneficiaries.is_primary IS NULL then beneficiaries.relationship 
+        ELSE 'N/A'
+      END as secondaryrelationship,
+    
+      CASE
+        WHEN members.data->'spouse'->>'last_name' = '' then 'N/A'
+        WHEN members.data->'spouse'->>'last_name' IS NULL then 'N/A'
+        ELSE members.data->'spouse'->>'last_name'
+      END as spouselastname,
+    
+      CASE
+        WHEN members.data->'spouse'->>'first_name' = '' then 'N/A'
+        WHEN members.data->'spouse'->>'first_name' IS NULL then 'N/A'
+        ELSE members.data->'spouse'->>'first_name' 
+      END as spousefirstname,
+    
+      CASE 
+        WHEN members.data->'spouse'->>'middle_name' = '' then 'N/A'
+        WHEN members.data->'spouse'->>'middle_name' IS NULL then 'N/A' 
+        ELSE members.data->'spouse'->>'middle_name'
+      END as spousemiddlename,
+    
+      CASE
+        WHEN members.data->'spouse'->>'date_of_birth' = '' then '1900-01-01'
+        WHEN members.data->'spouse'->>'date_of_birth' IS NULL then '1900-01-01'
+        ELSE members.data->'spouse'->>'date_of_birth' 
+      END AS spousedateofbirth,
+      'N/A' AS spouseage,
+      'N/A' AS ids,
+      members.data->>'recognition_date' AS blipdate,
+      members.identification_number AS externalref,
+      '' AS appchildrenadultunder
+    "
+    ).joins(
+    "
+      LEFT JOIN branches ON branches.id = members.branch_id 
+      LEFT JOIN centers ON centers.id  = members.center_id
+      LEFT JOIN beneficiaries ON beneficiaries.member_id = members.id
+    "
+    ).where(
+      "members.insurance_status IN (?) AND members.identification_number IN (?)",
+      insurance_status,
+      member_include
+    ).find_in_batches(:batch_size => 500) do |group|
+
+      Rails.logger.info(puts("Uploading #{group.size}"))
+      member = group.map{ |o|
+        {
+          memberNumber: o.membernumber, 
+          applicantLastName: o.applicantlastname,
+          applicantFirstName: o.applicantfirstname,
+          applicantMiddleName: o.applicantmiddlename,
+          dateOfBirth: o.dateofbirth,
+          age: o.memberage,
+          contactNum: o.contactnum,
+          gender: o.gender,
+          civilStatus: o.civilstatus,
+          center: o.centername,
+          address: o.address,
+          businessAddress: o.businessaddress,
+          occupation: o.occupation,
+          placeOfBirth: o.placeofbirth,
+          sourceOfIncome: o.sourceofincome,
+          branch: o.branchname,
+          member_account_id: o.memberaccountid,
+          branch_reference_id: o.branchreferenceid,
+          primaryBeneficiaryName: o.primarybeneficiaryname,
+          primarydateOfBirth: o.primarydateofbirth.to_date.strftime("%m/%d/%Y"),
+          primaryRelationship: o.primaryrelationship,
+          secondaryBeneficiaryName: o.secondarybeneficiaryname,
+          secondarydateOfBirth: o.secondarydateofbirth.to_date.strftime("%m/%d/%Y"),
+          secondaryRelationship: o.secondaryrelationship,
+          spouseLastName: o.spouselastname,
+          spouseFirstName: o.spousefirstname,
+          spouseMiddleName: o.spousemiddlename,
+          spouseDateOfBirth: o.spousedateofbirth.to_date.strftime("%m/%d/%Y"),
+          spouseAge: o.spouseage,
+          ids: o.ids,
+          appStatus: 'approved',
+          blipDate: o.blipdate.to_date.strftime("%m/%d/%Y"),
+          externalRef: o.id,
+          appChildrenAdultUnder: [
+            {
+                "dateofBirth" => "",
+                "name" => "",
+                "relationship" => ""
+            },
+            {
+                "dateofBirth" => "",
+                "name" => "",
+                "relationship" => ""
+            }
+          ] 
+        }
+      }  
+
+      Rails.logger.info(puts(member.to_json))
+
+      payload = member
+
+      if is_batch.present?
+       Rails.logger.info(puts "Posting to #{end_point}....")
+        result = HTTParty.post(
+                  end_point,
+                  body: payload.to_json,
+                  :headers => { 'Content-Type' => 'application/json' }
+        )
+        Rails.logger.info(puts(result))
+      else
+        payload.each do |p|
+          # Posting logic here
+          Rails.logger.info(puts "Posting to #{end_point}....")
+          result = HTTParty.post(
+                    end_point,
+                    body: p.to_json,
+                    :headers => { 'Content-Type' => 'application/json' }
+          )
+          Rail.logger.info(puts(result))
+        end
+      end
+    end
+  end
+
+  #OLD API BATCH Members
   task send_members: :environment do
     start_date        = ENV["START_DATE"]  || Date.today - 1.month
     end_date          = ENV["END_DATE"] || Date.today
@@ -990,7 +1190,7 @@ namespace :kezar do
     end
   end
 
-  #API for Claims
+  #OLD API for Claims
   task send_claims: :environment do
     start_date        = ENV["START_DATE"]  || Date.today - 1.month
     end_date          = ENV["END_DATE"] || Date.today
@@ -1163,10 +1363,16 @@ namespace :kezar do
   end
 
   # RAKE TASK TO TEST THE RECEIVING API OF KOINS
+  # WORKING ON SEND MEMBERS DATA TO TEST SERVER 172.104.179.39
   task send_to_mba_members: :environment do
     # save new record
     branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
     branch            = Branch.find(branch_id)
+    center_id         = ENV["CENTER_ID"] || "e044901c-8fc4-4285-95f0-298d7c21a951"
+    center            = Center.find(center_id)
+
+    # member_id           = Member.find('0c9daa24-24a7-4ebe-9e1d-de7ad5ec9bd8')
+
     # start_date        = ENV["START_DATE"]  || '2023-01-01'
     # end_date          = ENV["END_DATE"] || '2023-08-31'
     # member            = 'd723aa98-fdd8-4834-b531-ecd6d447dcac'
@@ -1177,14 +1383,16 @@ namespace :kezar do
     # start_date        = ENV["START_DATE"]  || '2022-09-09'
     # end_date          = ENV["END_DATE"] || '2022-09-10'
 
-    is_batch          = ENV["BATCH"] || true
+
+    insurance_status    = 'pending'
+    is_batch            = ENV["BATCH"] || true
     # end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://localhost:3000/api/receive_api/save_members_api"
-    end_point         = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
+    end_point           = ENV['KOINS_RECEIVING_MEMBERS'] || "http://172.104.179.39/api/receive_api/save_members_api"
 
 
     member_data = Member.where(
-      "members.branch_id = ?",
-      branch
+      "members.branch_id = ? AND members.center_id = ? AND members.insurance_status = ?",
+      branch, center, insurance_status
     ).find_in_batches(:batch_size => 100) do |group|
 
       Rails.logger.info(puts("Uploading #{group.size}"))
@@ -1228,7 +1436,7 @@ namespace :kezar do
           external_ref: o.external_ref
         }
       }
-
+      
       Rails.logger.info(puts(member.to_json))
 
       payload = member
@@ -1256,18 +1464,25 @@ namespace :kezar do
     end
   end 
 
-  task send_to_mba_payments: :environment do
-    branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
-    branch            = Branch.find(branch_id)
 
-    start_date                = ENV["START_DATE"]  || '2023-01-01'
-    end_date                  = ENV["END_DATE"]  || '2023-08-31'
-    start_recognition         = '2023-01-01'
-    end_recognition           = '2023-08-31'
+  # WORKING ON SEND PAYMENTS TO TEST SERVER 172.104.179.39
+  task send_to_mba_payments: :environment do
+    # branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
+    # branch            = Branch.find(branch_id)
+
+    # center_id         = ENV["BRANCH_ID"] || "c957e3c0-703f-4106-aa2b-689c705bba9d"
+    # center            = Center.find(center_id)
+
+    # start_date                = ENV["START_DATE"]  || '2023-12-01'
+    # end_date                  = ENV["END_DATE"]  || '2023-12-07'
+    # start_recognition         = '2023-01-01'
+    # end_recognition           = '2023-08-31'
     is_batch                  = ENV["BATCH"] || true
-    # end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
+    # end_point               = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
     end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"    
     account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
+    member_id                 = '2f167148-b4c2-45cc-82ae-2e4924fdf64b'
+    is_interest               = 'false'
 
     payment_data = AccountTransaction.select(
       "
@@ -1285,16 +1500,13 @@ namespace :kezar do
       "
     )
     .where(
-      "account_transactions.created_at >= ? 
-      AND account_transactions.created_at <= ? 
-      AND member_accounts.account_subtype IN (?)
-      AND DATE(members.data->>'recognition_date') >= ?
-      AND DATE(members.data->>'recognition_date') <= ?",
-      start_date,
-      end_date,
+      "
+      member_accounts.account_subtype IN (?)
+      AND members.id = ?
+      AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL)",
       account_subtypes,
-      start_recognition,
-      end_recognition
+      member_id,
+      is_interest
     ).find_in_batches(:batch_size => 500) do |group|
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
@@ -1337,94 +1549,95 @@ namespace :kezar do
     end
   end
 
-  task send_to_mba_claims: :environment do
-    # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
-    # branch            = Branch.find(branch_id)
+  # task send_to_mba_claims: :environment do
+  #   # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+  #   # branch            = Branch.find(branch_id)
 
-    start_date                = ENV["START_DATE"]  || '2023-03-01'
-    end_date                  = ENV["END_DATE"] || '2023-03-31'
-    is_batch                  = ENV["BATCH"] || true
-    end_point                 = ENV['KOINS_RECEIVING_CLAIMS'] || "http://localhost:3000/api/receive_api/save_claims_api"
-    claim_type                = ["BLIP", "HIIP"]
-    claim_status              = "approved"
+  #   start_date                = ENV["START_DATE"]  || '2023-03-01'
+  #   end_date                  = ENV["END_DATE"] || '2023-03-31'
+  #   is_batch                  = ENV["BATCH"] || true
+  #   end_point                 = ENV['KOINS_RECEIVING_CLAIMS'] || "http://localhost:3000/api/receive_api/save_claims_api"
+  #   claim_type                = ["BLIP", "HIIP"]
+  #   claim_status              = "approved"
 
-    claim_data = Claim.select(
-      "
-        claims.id,
-        claims.date_prepared,
-        claims.prepared_by,
-        claims.created_at,
-        claims.updated_at,
-        claims.member_id,
-        claims.center_id,
-        claims.branch_id,
-        claims.claim_type,
-        claims.data,
-        claims.status,
-        claims.approved_by,
-        claims.checked_by,
-        claims.date_checked,
-        claims.date_approved,
-        claims.posted_by,
-        claims.date_posted
-      "
-    ).where(
-      "claims.created_at >= ? AND claims.created_at <= ? AND claims.claim_type IN (?) AND claims.status = ?",
-      start_date,
-      end_date,
-      claim_type,
-      claim_status
-    ).find_in_batches(:batch_size => 1) do |group|
+  #   claim_data = Claim.select(
+  #     "
+  #       claims.id,
+  #       claims.date_prepared,
+  #       claims.prepared_by,
+  #       claims.created_at,
+  #       claims.updated_at,
+  #       claims.member_id,
+  #       claims.center_id,
+  #       claims.branch_id,
+  #       claims.claim_type,
+  #       claims.data,
+  #       claims.status,
+  #       claims.approved_by,
+  #       claims.checked_by,
+  #       claims.date_checked,
+  #       claims.date_approved,
+  #       claims.posted_by,
+  #       claims.date_posted
+  #     "
+  #   ).where(
+  #     "claims.created_at >= ? AND claims.created_at <= ? AND claims.claim_type IN (?) AND claims.status = ?",
+  #     start_date,
+  #     end_date,
+  #     claim_type,
+  #     claim_status
+  #   ).find_in_batches(:batch_size => 1) do |group|
 
-      Rails.logger.info(puts("Uploading #{group.size}"))
-      claims = group.map{ |o|
-        {
-          date_prepared: o.date_prepared,
-          prepared_by: o.prepared_by,
-          created_at: o.created_at,
-          updated_at: o.updated_at,
-          member_id: o.member_id,
-          center_id: o.center_id,
-          branch_id: o.branch_id,
-          claim_type: o.claim_type,
-          data: o.data,
-          status: o.status,
-          approved_by: o.approved_by,
-          checked_by: o.checked_by,
-          date_checked: o.date_checked,
-          date_approved: o.date_approved,
-          posted_by: o.posted_by,
-          date_posted: o.date_posted
-        }
-      }
+  #     Rails.logger.info(puts("Uploading #{group.size}"))
+  #     claims = group.map{ |o|
+  #       {
+  #         date_prepared: o.date_prepared,
+  #         prepared_by: o.prepared_by,
+  #         created_at: o.created_at,
+  #         updated_at: o.updated_at,
+  #         member_id: o.member_id,
+  #         center_id: o.center_id,
+  #         branch_id: o.branch_id,
+  #         claim_type: o.claim_type,
+  #         data: o.data,
+  #         status: o.status,
+  #         approved_by: o.approved_by,
+  #         checked_by: o.checked_by,
+  #         date_checked: o.date_checked,
+  #         date_approved: o.date_approved,
+  #         posted_by: o.posted_by,
+  #         date_posted: o.date_posted
+  #       }
+  #     }
 
-      Rails.logger.info(puts(claims.to_json))
+  #     Rails.logger.info(puts(claims.to_json))
       
-      payload = claims
+  #     payload = claims
       
-      if is_batch.present?
-       Rails.logger.info(puts "Posting to #{end_point}....")
-        result = HTTParty.post(
-          end_point,
-          body: payload.to_json,
-          :headers => { 'Content-Type' => 'application/json' }
-        )
-        Rails.logger.info(puts(result))
-      else
-        payload.each do |p|
-          # Posting logic here
-          Rails.logger.info(puts "Posting to #{end_point}....")
-          result = HTTParty.post(
-            end_point,
-            body: p.to_json,
-            :headers => { 'Content-Type' => 'application/json' }
-          )
-          Rail.logger.info(puts(result))
-        end
-      end
-    end
-  end
+  #     if is_batch.present?
+  #      Rails.logger.info(puts "Posting to #{end_point}....")
+  #       result = HTTParty.post(
+  #         end_point,
+  #         body: payload.to_json,
+  #         :headers => { 'Content-Type' => 'application/json' }
+  #       )
+  #       Rails.logger.info(puts(result))
+  #     else
+  #       payload.each do |p|
+  #         # Posting logic here
+  #         Rails.logger.info(puts "Posting to #{end_point}....")
+  #         result = HTTParty.post(
+  #           end_point,
+  #           body: p.to_json,
+  #           :headers => { 'Content-Type' => 'application/json' }
+  #         )
+  #         Rail.logger.info(puts(result))
+  #       end
+  #     end
+  #   end
+  # end
 end
+
 
 
 
@@ -1436,3 +1649,5 @@ end
 
 # ------------ Batch Upload Live Claims ------------
 # bundle exec rails kezar:send_claims KEZAR_API_SEND_CLAIMDATA='https://us-central1-rms-kmba.cloudfunctions.net/api/claim/batch/upload' RAILS_ENV=development
+
+

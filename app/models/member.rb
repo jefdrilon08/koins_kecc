@@ -695,7 +695,8 @@ class Member < ApplicationRecord
       },
       date_resigned: self.date_resigned,
       insurance_date_resigned: self.insurance_date_resigned,
-      meta: self.meta
+      meta: self.meta,
+      external_ref: self.external_ref
     }
   end
   
