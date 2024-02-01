@@ -20,6 +20,7 @@ module Kmba
           data: @payment_data[:data],
           created_at: @payment_data[:created_at],
           updated_at: @payment_data[:updated_at],
+          external_ref: @payment_data[:external_ref]
         )
       end
 

@@ -100,7 +100,8 @@ class ProcessReceiveMemberApi < ApplicationJob
     @config = config 
 
     config.each do |a|
-      @member = Member.where(identification_number: a[:identification_number])
+      member_insurance_status = Member.where(insurance_status: a[:insurance_status])
+      if member_insurance_status = 'pending' 
         member_data = {
           center_id: a[:center_id],
           branch_id: a[:branch_id],
@@ -142,17 +143,11 @@ class ProcessReceiveMemberApi < ApplicationJob
           external_ref: a[:external_ref]
         }
             
-        if @member.count >= 1 
-          cmd = ::Kmba::UpdateMembers.new(
+        cmd = ::Kmba::SaveMembers.new(
             member_data: member_data
           ).execute!
-          @counter_update +=1
-        else
-          cmd = ::Kmba::SaveMembers.new(
-            member_data: member_data
-          ).execute!
-          @counter_save +=1   
-        end
+        @counter_save +=1   
+      end
     end
 
     if @counter_save > 0 and @counter_update > 0

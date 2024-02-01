@@ -15,20 +15,23 @@ module Kmba
       else
         @members.map{ |member|
           
-          center = Center.where(id: member["center_id"])
-          branch = Branch.where(id: member["branch_id"])
+          center        = Center.where(id: member["center_id"])
+          branch        = Branch.where(id: member["branch_id"])
+          external_ref  = Member.where(external_ref: member["external_ref"])
+
+
 
           if member["center_id"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "center_id",
               message: "Center not found"
             }
           elsif center.count == 0
             @errors[:messages] << {
               code: "KMBA-004",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "center_id",
               message: "Center is not valid"
             }
@@ -37,14 +40,14 @@ module Kmba
           if member["branch_id"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "branch_id",
               message: "Branch not Found"
             }
           elsif branch.count == 0
             @errors[:messages] << {
               code: "KMBA-004",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "branch_id",
               message: "Branch is not Valid"
             }
@@ -53,7 +56,7 @@ module Kmba
           if member["first_name"].blank?
             @errors[:messages] << {
               code: "KMBA-001", 
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "first_name", 
               message: "first_name not found"
             }
@@ -70,7 +73,7 @@ module Kmba
           if member["last_name"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              last_name_of: member["identification_number"],
+              last_name_of: member["external_ref"],
               key: "middle_name", 
               message: "Last Name not found"
             }
@@ -79,7 +82,7 @@ module Kmba
           if member["gender"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "gender",
               message: "Gender not found"
             }
@@ -88,7 +91,7 @@ module Kmba
           if member["date_of_birth"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "date_of_birth",
               message: "Date of Birth not found"
             }
@@ -97,7 +100,7 @@ module Kmba
           if member["civil_status"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member["identification_number"],
+              external_ref: member["external_ref"],
               key: "civil_status",
               message: "Civil Status not found"
             }
@@ -106,9 +109,25 @@ module Kmba
           if member["data"]["address"]["street"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              member_id: member[:identification_number],
+              external_ref: member[:external_ref],
               key: "address_street", 
               message: "Address Street not found"
+            }
+          end
+
+          if member["external_ref"].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member[:external_ref],
+              key: "external_ref", 
+              message: "ExternalRef not found"
+            }
+          elsif external_ref.count == 1
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member["external_ref"],
+              key: "external_ref",
+              message: "ExternalRef is already exist!"
             }
           end
 
@@ -116,7 +135,7 @@ module Kmba
           # if member[:data][:address][:district].blank?
           #   @errors[:messages] << {
           #     code: "KMBA-001",
-          #     member_id: member[:identification_number],
+          #     external_ref: member[:external_ref],
           #     key: "address_district",
           #     message: "Address District not found"
           #   }
@@ -125,7 +144,7 @@ module Kmba
           # if member[:data][:address][:city].blank?
           #   @errors[:messages] << {
           #     code: "KMBA-001",
-          #     member_id: member[:identification_number],
+          #     external_ref: member[:external_ref],
           #     key: "address_city",
           #     message: "Address City not found"
           #   }

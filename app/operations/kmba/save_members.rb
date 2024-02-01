@@ -43,10 +43,11 @@ module Kmba
         membership_type_id: @member_data[:membership_type_id],
         referrer_id: @member_data[:referrer_id],
         coordinator_id: @member_data[:coordinator_id],
-        email: @member_data[:email]
+        email: @member_data[:email],
+        external_ref: @member_data[:external_ref]
       )
 
-      Rails.logger.info(puts " New Record is Save ID NO : #{@member_data[:identification_number]}, saved! ", status: 200)
+      Rails.logger.info(puts " New Record is Save ID NO : #{@member_data[:external_ref]}, saved! ", status: 200)
       member_data.save!
     end
   end
