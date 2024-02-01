@@ -13,6 +13,11 @@ module Members
       next_member_counter           = current_counter + 1
       member_identification_number  = @cluster_code + @branch_code + next_member_counter.to_s.rjust(5, "0")
 
+      while Member.where(username: member_identification_number).count >= 1 do
+        next_member_counter = next_member_counter + 1
+        member_identification_number  = @cluster_code + @branch_code + next_member_counter.to_s.rjust(5, "0")
+      end
+
       member_identification_number
     end
   end
