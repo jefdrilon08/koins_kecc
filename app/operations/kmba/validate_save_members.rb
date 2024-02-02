@@ -115,12 +115,37 @@ module Kmba
             }
           end
 
+          if member["data"]["address"]["district"].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member[:external_ref],
+              key: "address_district",
+              message: "Address District not found"
+            }
+          end
+
+          if member["data"]["address"]["city"].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member[:external_ref],
+              key: "address_city",
+              message: "Address City not found"
+            }
+          end
+
           if member["external_ref"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               external_ref: member[:external_ref],
               key: "external_ref", 
               message: "ExternalRef not found"
+            }
+          elsif member["external_ref"] !~ /\A[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\z/
+            @errors[:messages] << {
+              code: "KMBA-002",
+              external_ref: member["external_ref"],
+              key: "external_ref",
+              message: "ExternalRef is not a valid UUID"
             }
           elsif external_ref.count == 1
             @errors[:messages] << {
@@ -130,25 +155,6 @@ module Kmba
               message: "ExternalRef is already exist!"
             }
           end
-
-
-          # if member[:data][:address][:district].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     external_ref: member[:external_ref],
-          #     key: "address_district",
-          #     message: "Address District not found"
-          #   }
-          # end
-
-          # if member[:data][:address][:city].blank?
-          #   @errors[:messages] << {
-          #     code: "KMBA-001",
-          #     external_ref: member[:external_ref],
-          #     key: "address_city",
-          #     message: "Address City not found"
-          #   }
-          # end
         }  
       end
 
