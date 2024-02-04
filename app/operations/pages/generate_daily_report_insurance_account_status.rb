@@ -40,11 +40,14 @@ module Pages
             d.transacted_at AS lif_transaction_date,
             d.amount AS lif_last_transaction_amount,
             b.balance AS lif_sum_amount,
+            CONCAT(e.first_name,' ', e.last_name) as coordinator_name,
+            e.category,
             ROW_NUMBER() OVER(PARTITION BY a.id ORDER BY d.transacted_at DESC) AS row_num
           FROM members a
           INNER JOIN member_accounts b ON b.member_id = a.id
           INNER JOIN centers c ON c.id = a.center_id
           INNER JOIN account_transactions d ON d.subsidiary_id = b.id
+          INNER JOIN referrers e ON e.id = a.coordinator_id
           WHERE 
             d.data->>'is_interest' = 'false'
             AND b.account_subtype = 'Life Insurance Fund'
@@ -72,7 +75,9 @@ module Pages
           -- Life Insurance Fund
           lif_transaction_date,
           lif_last_transaction_amount,
-          lif_sum_amount
+          lif_sum_amount,
+          coordinator_name,
+          category
         FROM LatestTransactions
         WHERE row_num = 1
         ORDER BY center_name
@@ -100,11 +105,14 @@ module Pages
             d.transacted_at AS lif_transaction_date,
             d.amount AS lif_last_transaction_amount,
             b.balance AS lif_sum_amount,
+            CONCAT(e.first_name,' ', e.last_name) as coordinator_name,
+            e.category,
             ROW_NUMBER() OVER(PARTITION BY a.id ORDER BY d.transacted_at DESC) AS row_num
           FROM members a
           INNER JOIN member_accounts b ON b.member_id = a.id
           INNER JOIN centers c ON c.id = a.center_id
           INNER JOIN account_transactions d ON d.subsidiary_id = b.id
+          INNER JOIN referrers e ON e.id = a.coordinator_id
           WHERE 
           d.data->>'is_interest' = 'false'
           AND b.account_subtype = 'Life Insurance Fund'
@@ -130,7 +138,9 @@ module Pages
           EXTRACT(YEAR FROM AGE(NOW(), date_of_birth)) AS age,
           lif_transaction_date,
           lif_last_transaction_amount,
-          lif_sum_amount
+          lif_sum_amount,
+          coordinator_name,
+          category
         FROM LatestTransactions
         WHERE row_num = 1
         ORDER BY center_name, insurance_status
@@ -237,7 +247,8 @@ module Pages
             "Member Type",
             "LIF Last Amount",
             "RF Last Amount",
-            "Date Paid"
+            "Date Paid",
+            "Insurance Coordinator"
           ], style: header
 
           @query.each do |member|
@@ -481,6 +492,7 @@ module Pages
                 member.fetch("lif_last_transaction_amount").to_i,
                 rf_amount_display,
                 member.fetch("lif_transaction_date").try(:to_date).strftime("%b %d, %Y"),
+                member.fetch("coordinator_name")
               ], style: [ left_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, currency_cell_right, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell, right_aligned_cell ]
             end
           end
