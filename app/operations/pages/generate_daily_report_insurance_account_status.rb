@@ -44,10 +44,10 @@ module Pages
             e.category,
             ROW_NUMBER() OVER(PARTITION BY a.id ORDER BY d.transacted_at DESC) AS row_num
           FROM members a
-          INNER JOIN member_accounts b ON b.member_id = a.id
-          INNER JOIN centers c ON c.id = a.center_id
-          INNER JOIN account_transactions d ON d.subsidiary_id = b.id
-          INNER JOIN referrers e ON e.id = a.coordinator_id
+          LEFT JOIN member_accounts b ON b.member_id = a.id
+          LEFT JOIN centers c ON c.id = a.center_id
+          LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
+          LEFT JOIN referrers e ON e.id = a.coordinator_id
           WHERE 
             d.data->>'is_interest' = 'false'
             AND b.account_subtype = 'Life Insurance Fund'
@@ -109,14 +109,14 @@ module Pages
             e.category,
             ROW_NUMBER() OVER(PARTITION BY a.id ORDER BY d.transacted_at DESC) AS row_num
           FROM members a
-          INNER JOIN member_accounts b ON b.member_id = a.id
-          INNER JOIN centers c ON c.id = a.center_id
-          INNER JOIN account_transactions d ON d.subsidiary_id = b.id
-          INNER JOIN referrers e ON e.id = a.coordinator_id
+          LEFT JOIN member_accounts b ON b.member_id = a.id
+          LEFT JOIN centers c ON c.id = a.center_id
+          LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
+          LEFT JOIN referrers e ON e.id = a.coordinator_id
           WHERE 
           d.data->>'is_interest' = 'false'
           AND b.account_subtype = 'Life Insurance Fund'
-          AND a.status IN ('active', 'resigned')
+          AND a.insurance_status IN ('inforce', 'lapsed')
           AND a.branch_id = '#{@branch}'
           AND a.data->>'recognition_date' IS NOT NULL
         )
@@ -168,13 +168,13 @@ module Pages
             b.balance AS lif_sum_amount,
             ROW_NUMBER() OVER(PARTITION BY a.id ORDER BY d.transacted_at DESC) AS row_num
           FROM members a
-          INNER JOIN member_accounts b ON b.member_id = a.id
-          INNER JOIN centers c ON c.id = a.center_id
-          INNER JOIN account_transactions d ON d.subsidiary_id = b.id
+          LEFT JOIN member_accounts b ON b.member_id = a.id
+          LEFT JOIN centers c ON c.id = a.center_id
+          LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
           WHERE 
           d.data->>'is_interest' = 'false'
           AND b.account_subtype = 'Life Insurance Fund'
-          AND a.status IN ('active', 'resigned')
+          AND a.insurance_status IN ('inforce', 'lapsed')
           AND a.data->>'recognition_date' IS NOT NULL
         )
         SELECT
