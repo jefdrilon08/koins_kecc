@@ -24,7 +24,7 @@ module MembershipPaymentCollections
     end
 
     def execute!
-      
+
       post_accounting_entry!
 
       process_id_payments!
@@ -32,6 +32,8 @@ module MembershipPaymentCollections
       process_equities!
       process_insurance!
       process_savings!
+
+      #class sms
       process_sms_blast!
 
       @data[:approved_by] = @user.full_name
@@ -83,7 +85,7 @@ module MembershipPaymentCollections
 
     def process_equities!
       @data_equities.each do |o|
-        config  = { 
+        config  = {
           date_paid: @date_approved,
           equity_payment: o,
           user: @user,
@@ -149,19 +151,24 @@ module MembershipPaymentCollections
 
       @accounting_entry
     end
-
+#sms
     def process_sms_blast!
       @data[:records].each do |rec|
         member= Member.find(rec[:member]["id"])
+
         if member.mobile_number.present?
           config = {
             mobile_number: member.mobile_number,
-            content: "Good Day! #{member.full_name}, your membership payment has been posted to our system with reference number: #{@accounting_entry.reference_number} and your memberhsip status has been updated to #{member.status.upcase} with IDENTIFICATION NUMBER: #{member.identification_number}"
+            #content: "Good Day! #{member.full_name}, your membership payment has been posted to our system with reference number: #{@accounting_entry.reference_number} and your memberhsip status has been updated to #{member.status.upcase} with IDENTIFICATION NUMBER: #{member.identification_number}"
+            content: "Username: #{member.identification_number} \nPassword: password /nPumunta lamang sa https://mykoins.org.ph/ para sa ibang impormasyon."
+
           }
           ::SmsBlast::Send.new(config: config).execute!
+          puts config.inspect
+
         end
       end
-      
+
     end
   end
 end
