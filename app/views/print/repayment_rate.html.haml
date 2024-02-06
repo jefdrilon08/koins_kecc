@@ -59,9 +59,9 @@
 				%td.text-end
 					#{number_to_currency(rr['overall_interest_balance'].round(2), unit: "")}
 				%td.text-end
-					#{number_to_currency(rr['overall_balance'].round(2), unit: "")}
+					#{number_to_currency(rr['total_paid_due'].round(2), unit: "")}
 				%td.text-end
-					#{number_to_currency(rr['principal_paid'].round(2), unit: "")}
+					#{number_to_currency(rr['overall_balance'].round(2), unit: "")}
 				%td.text-end
 					#{number_to_currency(rr['principal_paid_due'].round(2), unit: "")}
 				%td.text-end
