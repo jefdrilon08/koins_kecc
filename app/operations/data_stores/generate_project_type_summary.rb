@@ -43,6 +43,7 @@ module DataStores
         ProjectType.where(project_type_category_id: pdd.id, is_active: true).each do |pt|
           iter = 0
           tmp2 = []
+          gtotal_portfolio = 0.0
          
           mem = h[0].map{ |l|
                               c =  l.fetch(:project_type).select{ |h| h[:project_type_id] == pt.id}
@@ -55,10 +56,11 @@ module DataStores
                                 tmp 
                                 tmp2 << { member: tmp, ptype: c.last  }
                                 iter = iter + c.count
+                                gtotal_portfolio = gtotal_portfolio.to_f + l.fetch(:total_portfolio).to_f
                               end
                         }
           
-          tmp3 << { det_id: pt.id, det: pt.name, i: tmp2.count, memDet: tmp2  }
+          tmp3 << { det_id: pt.id, det: pt.name, i: tmp2.count, memDet: tmp2, grand_portfolio: gtotal_portfolio  }
           #tmp3 << { det_id: pt.id, det: pt.name, i: tmp2.count  }
           
 
