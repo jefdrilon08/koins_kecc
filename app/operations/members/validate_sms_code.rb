@@ -9,7 +9,7 @@ module Members
             super()
             @username = username
             @password = password
-            @code = code
+            @code = code.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
     
             @errors = {
                 username: [],
@@ -28,6 +28,10 @@ module Members
             end
 
             if @code.blank?
+                @errors[:code] << 'code required'
+            end
+
+            if !@code.length == 6 
                 @errors[:code] << 'code required'
             end
 
