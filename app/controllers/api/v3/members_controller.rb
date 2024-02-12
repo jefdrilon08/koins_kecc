@@ -4,13 +4,15 @@ module Api
       before_action :authenticate_user!, except: [
         :login, 
         :dashboard, 
-        :savings
+        :savings,
+        :verify_code
       ]
 
       before_action :authorize_mis!, except: [
         :login, 
         :dashboard, 
-        :savings
+        :savings,
+        :verify_code
       ]
 
       before_action :authenticate_member!, only: [
@@ -48,9 +50,17 @@ module Api
           render json: cmd.errors, status: :unprocessable_entity
         else
           member = cmd.member.user_object.with_indifferent_access
-          member["mobile_number"] = cmd.member.mobile_number
+
+          mobile_number = cmd.member.mobile_number
+          member["mobile_number"] = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
           # render json: { token: cmd.token, member: cmd.member.user_object }
-          render json: { token: cmd.token, member: member }
+          # render json: { token: cmd.token, member: member }
+          if(cmd.member_logged_before) # if this member logged before in koins mobile
+            render json: { token: cmd.token, member: member, member_logged_before: cmd.member_logged_before }
+          else # if not
+            render json: { member: member, member_logged_before: cmd.member_logged_before }
+          end
+            
         end
       end
 
@@ -65,6 +75,32 @@ module Api
           render json: { message: 'ok' }
         else
           render json: validator.payload, status: :unprocessable_entity
+        end
+      end
+
+      def verify_code
+        
+        username  = params[:username]
+        password  = params[:password]
+        code = params[:code]
+        
+        cmd = ::Members::ValidateSmsCode.new(
+          username: username,
+          password: password,
+          code: code
+        )
+
+        cmd.execute!
+        
+        if cmd.invalid?
+          render json: cmd.errors, status: :unprocessable_entity
+        else
+          member = cmd.member.user_object.with_indifferent_access
+
+          mobile_number = cmd.member.mobile_number
+          member["mobile_number"] = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
+
+          render json: { token: cmd.token, member: member }
         end
       end
     end

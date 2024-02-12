@@ -57,6 +57,8 @@ namespace :api do
   post "/members/delete", to: "members#delete"
   post "/members/form_make_payments", to: "members#form_make_payments"
 
+  post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
+
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
