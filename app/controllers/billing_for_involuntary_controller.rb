@@ -10,7 +10,7 @@ class BillingForInvoluntaryController < DataStoreController
         }
       ]
 
-      
+
   end
   def show
     @data_store              = DataStore.find(params[:id])
@@ -21,7 +21,7 @@ class BillingForInvoluntaryController < DataStoreController
     @accounting_entry_transfer_savings  = @data[:accounting_entry_transfer_savings]
     @accounting_entry_loan_payments = @data[:accounting_entry_loan_payments]
     @subheader_side_actions = []
-    
+
 
 
     if helpers.sbk_bk_mis_user
@@ -34,7 +34,7 @@ class BillingForInvoluntaryController < DataStoreController
         }
       end
     end
-   
+
     @subheader_side_actions << {
           id: "btn-print-entry",
           link: "#",
@@ -44,23 +44,32 @@ class BillingForInvoluntaryController < DataStoreController
             id: "#{@data_store.id}"
         }
     }
+    @subheader_side_actions << {
+      id: "btn-print",
+      link: "#",
+      class: "fa fa-check",
+      text: "Print Details",
+      data: {
+        id: "#{@data_store.id}"
+    }
+}
     if @data_store.status == 'pending'
-      if helpers.sbk_bk_mis_user        
-          @subheader_side_actions << {      
+      if helpers.sbk_bk_mis_user
+          @subheader_side_actions << {
             id: "",
             link: "/billing_for_involuntary/#{@data_store.id}",
-            class: "fa fa-times",           
+            class: "fa fa-times",
             data: {
                 method: :delete,
                 confirm: "Are you sure you want to delete this Involuntary Tagging?"
-            },     
-            text: "Delete"    
+            },
+            text: "Delete"
           }
 
 
-        end 
+        end
     end
-    
+
 
 
 
@@ -68,7 +77,7 @@ class BillingForInvoluntaryController < DataStoreController
     @payload = {
       id: @data_store.id
     }
-  end 
+  end
   def destroy
     billing_for_involuntary = DataStore.find(params[:id])
     if billing_for_involuntary.pending?

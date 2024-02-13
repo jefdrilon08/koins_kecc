@@ -1,4 +1,4 @@
-class PrintController < ApplicationController 
+class PrintController < ApplicationController
   before_action :authenticate_user!
 
   def print
@@ -32,9 +32,9 @@ class PrintController < ApplicationController
       data = ::Print::BuildInvoluntaryLetter.new(config: JSON.parse(data_str)).execute!
       @data = data
       render "print/print_involuntary_letter",layout: "print"
-      
+
     elsif type == "print_adjustment_record"
-    
+
       adjustment_record = params[:id]
       data = ::Print::SubsidiaryPrint.new(config: adjustment_record).execute!
        @adjustment_record = data
@@ -48,7 +48,7 @@ class PrintController < ApplicationController
               ).execute!
       @accounting_entry_data  = data
       render "print/accounting_entry", layout: "print"
-      
+
     elsif type == "print_migs"
       migs = DataStore.find(params[:id])
       data = ::Print::BuildPrintMigs.new(
@@ -57,16 +57,26 @@ class PrintController < ApplicationController
       @migs = data
       render "print/print_migs", layout: "print"
 
-    elsif type == "print_pr" 
+    elsif type == "print_pr"
 
       icpr = DataStore.find(params[:id])
-      
+
       data  = ::Print::BuildPrintIcpr.new(
                 icpr: icpr
               ).execute!
-      
+
       @icpr  = data
       render "print/print_icpr", layout: "print"
+
+    elsif type =="print_involuntary_tagging"
+      print_involuntary = params[:id]
+        data = ::Print::BuildPrintInvoluntaryTagging.new(
+          config: print_involuntary
+        ).execute!
+
+      @print_involuntary = data
+      render "print/print_involuntary_tagging", layout: "print"
+
 
     elsif type == "print_entry"
       data_store_entry = DataStore.find(params[:id])
@@ -75,7 +85,7 @@ class PrintController < ApplicationController
               ).execute!
       @data_store_entry  = data
       render "print/print_entry", layout: "print"
-     
+
     elsif type == "accrued_billing"
       accrued_billing = AccruedBilling.find(params[:id])
       data = ::Print::BuildAccruedBilling.new(accrued_billing: accrued_billing ).execute!
@@ -87,7 +97,7 @@ class PrintController < ApplicationController
       data= ::Print::PrintSavingsLedger.new(member_account: savings_account ).execute!
       @member_account = data
       render "print/print_ledger", layout: "print"
- 
+
     elsif type == "claims_voucher"
       accounting_entry = AccountingEntry.find(params[:id])
 
@@ -179,7 +189,7 @@ class PrintController < ApplicationController
 
       @member_share_data  = data
 
-      render "print/member_share_for_mba", layout: "print"  
+      render "print/member_share_for_mba", layout: "print"
     elsif type == "billing"
       billing = Billing.find(params[:id])
 
@@ -229,7 +239,7 @@ class PrintController < ApplicationController
       render "print/general_ledger", layout: "print"
     elsif type == "trial_balance"
       trial_balance = DataStore.find(params[:id])
-     
+
       start_date  = trial_balance[:start_date]
       end_date    = trial_balance[:end_date]
       branch = Branch.find(trial_balance.meta['branch_id'])
@@ -283,7 +293,7 @@ class PrintController < ApplicationController
               ).execute!
 
       @deposit_collection = data
-      
+
       render "print/deposit_collection", layout: "print"
     elsif type == "insurance_fund_transfer_collection"
       insurance_fund_transfer_collection  = InsuranceFundTransferCollection.find(params[:id])
@@ -367,8 +377,8 @@ class PrintController < ApplicationController
 
       total_total_paid = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["total_paid"] }
       total_overall_interest_balance = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["overall_interest_balance"] }
-      
-      
+
+
 
       total_interest_paid_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["interest_paid_due"] }
       total_paid_due = repayment_rate.data["records"].inject(0) { |sum, hash| sum + hash["total_paid_due"] }
@@ -407,17 +417,17 @@ class PrintController < ApplicationController
       repayment_rate.data["total_principal_rr"] = total_principal_rr
       repayment_rate.data["total_rr"] = total_rr
 
-      # puts "DSAASSADSADSADSADSADAS".inspect 
+      # puts "DSAASSADSADSADSADSADAS".inspect
       # ap repayment_rate.data
 
       data = ::Print::BuildRepaymentRates.new(repayment_rate: repayment_rate).execute!
 
       @repayment_rate = data
 
-      
+
 
      render "print/repayment_rate", layout:"print"
-    
+
     elsif type == "print_kbente_bill"
       print_kbente_bill = SavingsInsuranceTransferCollection.find(params[:id])
 
@@ -450,7 +460,7 @@ class PrintController < ApplicationController
 
 
     elsif type == "print_share_certificate"
-    
+
       # @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order(Arel.sql("member_shares.data->> 'date_printed' DESC"))
 
       @member_shares = MemberShare
@@ -462,10 +472,10 @@ class PrintController < ApplicationController
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
         #raise @branch_id.inspect
-        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id)
       end
       if params[:center_id].present?
-        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id])
       end
       if params[:start_date].present? and params[:end_date].present?
         #d = (params[:end_date].to_date + 1).to_s
