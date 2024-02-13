@@ -13,12 +13,17 @@ var $btnApproved;
 var $btnConfirmApproved;
 var $modalApproved;
 
+var $btnDetails;
+var $modalDetails;
+
+var $btnPrint;
+var $modalPrint;
+
 
 var $btnSaveParticularTransfer;
 var $btnSaveParticularPayments;
 var $inputParticularSavings;
 var $inputParticularPayments;
-
 
 
 var $btnAdd;
@@ -51,14 +56,22 @@ var _cacheDom = function() {
   $btnConfirmDelete = $("#btn-confirm-delete");
   $btnPrintEntry         = $("#btn-print-entry");
 
+  $btnPrint = $("#btn-print");
+
+  $btnDetails = $(".btn-details");
+  $modalDetails = new bootstrap.Modal(document.getElementById("modal-view-details"));
 
   $message            = $(".message");
   templateErrorList = $("#template-error-list").html();
+
+  $modalPrint = new bootstrap.Modal(document.getElementById("modal-print"));
+
 };
 
 var _bindEvents = function() {
   $btnPrintEntry.on("click",function(){
     var data_store = $btnPrintEntry.data('id');
+  
     window.open("/print?id=" + data_store + "&type=print_entry_involuntary");
   });
 
@@ -66,8 +79,15 @@ var _bindEvents = function() {
     $message.html("");
     currentMember           = $(this).data("member-name");
     currentMemberId         = $(this).data("member-id");
-   
+    
     $modalDelete.show();
+  });
+  
+  $btnDetails.on("click", function(){
+    $message.html("");
+    currentMember           = $(this).data("member-name");
+    currentMemberId         = $(this).data("member-id");
+    $modalDetails.show();
   });
 
   $btnConfirmDelete.on("click", function(){
@@ -111,6 +131,14 @@ var _bindEvents = function() {
 
   });
 
+$btnPrint.on("click", function(){
+var data_store = $btnPrint.data('id');
+$modalPrint.show();
+$message.html("");
+
+
+window.open("/print?id=" + data_store + "&type=print_involuntary_tagging");
+ });
 
   $btnApproved.on("click", function(){
     $modalApproved.show();

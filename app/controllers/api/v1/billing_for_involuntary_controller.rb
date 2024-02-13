@@ -3,7 +3,7 @@ module Api
     class BillingForInvoluntaryController < ApplicationController
       def create
         branch = Branch.find(params[:branch_id])
-        
+
         config = {
           branch: branch,
           current_user: current_user
@@ -15,7 +15,7 @@ module Api
           billing_for_involuntary = ::BillingForInvoluntary::Create.new(config: config).execute!
         end
       end
-      
+
       def delete
         config = {
           data_store_id: params[:id],
@@ -52,11 +52,11 @@ module Api
           data_store_id: params[:id],
           particular: params[:particular]
         }
-        
+
         errors = ::BillingForInvoluntary::ValidateParticular.new(config: config).execute!
         if errors[:messages].any?
           render json: errors, status: 400
-        else 
+        else
           billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularSavings.new(config: config).execute!
           render json: {message: "success"}
         end
@@ -71,7 +71,7 @@ module Api
         errors = ::BillingForInvoluntary::ValidateParticular.new(config: config).execute!
         if errors[:messages].any?
           render json: errors, status: 400
-        else 
+        else
           billing_for_involuntary = ::BillingForInvoluntary::UpdateParticularLoanPayments.new(config: config).execute!
           render json: {message: "success"}
         end
@@ -85,12 +85,12 @@ module Api
         errors = ::BillingForInvoluntary::ValidateApprove.new(config: config).execute!
         if errors[:messages].any?
           render json: errors, status: 400
-        else 
-          
+        else
+
           data_store = DataStore.find(params[:id])
-        
+
           data_store.update(status: "processing")
-          
+
           args = {
             data_store: data_store.id,
             user: current_user.id
