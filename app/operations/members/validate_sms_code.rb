@@ -50,6 +50,11 @@ module Members
                     user_data = user.data.with_indifferent_access # get the data first
                     user_data["is_logged_before"] = true # change to true
                     user_data.delete(:sms_code) # delete the sms code
+
+                    if(!user_data.key?(:date_logged_in)) # Add the datetime of logged in member
+                        user_data["date_logged_in"] = Time.now # Date and Time now
+                    end
+
                     user.update(data: user_data) # then update
 
                     @member = Member.find_by_username(@username) # to the the updated data of member

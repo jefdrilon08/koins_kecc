@@ -4,7 +4,8 @@ module Members
                   :token,
                   :errors,
                   :member,
-                  :member_logged_before
+                  :member_logged_before,
+                  :member_password_changed
 
     def initialize(username:, password:)
       super()
@@ -46,9 +47,11 @@ module Members
             if(!user_data.key?(:is_logged_before)) # checking if the is_logged_before is not in the data
               user_data["is_logged_before"] = false # add the is_logged_before with false value
 
+              user_data["password_changed"] = false
+
               ####### SEND SMS #########
-              gen_six_digit = rand(100_000..999_999) # generate 6 digit code
-              user_data["sms_code"] = gen_six_digit.to_s # add the sms_code with the generated code
+              # gen_six_digit = rand(100_000..999_999) # generate 6 digit code
+              # user_data["sms_code"] = gen_six_digit.to_s # add the sms_code with the generated code
 
               user.update(data: user_data) # then update
 
@@ -57,9 +60,17 @@ module Members
                 @token  = user.generate_jwt # create the token
 
               else # if this member is not logged in yet
-                ####### SEND SMS ######### (AGAIN)
-                gen_six_digit = rand(100_000..999_999) # generate 6 digit code
-                user_data["sms_code"] = gen_six_digit.to_s # add the sms_code with the generated code
+                if(!user_data.key?(:password_changed))
+                  user_data["password_changed"] = false
+
+                else
+                  if(user_data["password_changed"])
+                    ####### SEND SMS ######### (AGAIN)
+                    gen_six_digit = rand(100_000..999_999) # generate 6 digit code
+                    user_data["sms_code"] = gen_six_digit.to_s # add the sms_code with the generated code
+                  end
+                end
+                
 
                 user.update(data: user_data) # then update
 
@@ -68,6 +79,7 @@ module Members
 
             @member = user
             @member_logged_before = user_data["is_logged_before"]
+            @member_password_changed = user_data["password_changed"]
             
           else
             @errors[:mobile_number] << 'invalid mobile number'

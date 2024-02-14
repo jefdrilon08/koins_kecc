@@ -58,6 +58,7 @@ namespace :api do
   post "/members/form_make_payments", to: "members#form_make_payments"
 
   post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
+  post "/members/member_change_password", to: "v3/members#member_change_password" # for changing of member's password
 
   # Messages
   post "/messages", to: "messages#create"
