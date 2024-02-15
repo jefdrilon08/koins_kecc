@@ -79,8 +79,8 @@ module Api
                   }
  
         render json: JSON.pretty_generate(centers: centers.as_json)
-       end
-     end
+      end
+    end
 
     def api_centers
       branch_id = params[:branch_id]   

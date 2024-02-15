@@ -49,7 +49,7 @@ class MemberAccountValidationsController < ApplicationController
   end
 
   def edit
-    @members = Member.active_and_resigned.where("branch_id = ?", @member_account_validation.branch.id).all.order("last_name ASC")
+    @members = Member.active_and_resigned_and_writeoff.where("branch_id = ?", @member_account_validation.branch.id).all.order("last_name ASC")
 
     @subheader_items = [
       {

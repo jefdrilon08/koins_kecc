@@ -23,6 +23,8 @@
               %th{:classname => "text-center", :width => "25%"}
                 Count
               %th{:classname => "text-center", :width => "25%"}
+                Total Portfolio
+              %th{:classname => "text-center", :width => "25%"}
                 Action
                 
             - d["categ"].each do |dd|
@@ -31,6 +33,8 @@
                   #{dd["det"]}
                 %td{:classname => "text-center", :width => "25%"}
                   #{dd["i"]}
+                %td{:classname => "text-center", :width => "25%"}
+                  #{number_to_currency(dd["grand_portfolio"], unit: "")}
                 %td{:classname => "text-center", :width => "25%"}
                   %a{:href => "/data_stores/project_types_summary/#{@data_store.id}/details_data/#{d["cated_id"]}/cetag_details/#{dd["det_id"]}"}
                     Details

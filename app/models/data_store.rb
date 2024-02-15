@@ -67,7 +67,9 @@ class DataStore < ApplicationRecord
   scope :involuntary_members, -> {where("meta->>'data_store_type' =? ","INVOLUNTARY_MEMBERS")}
   scope :assets_liabilities, -> {where("meta->>'data_store_type' = ?","ASSETS_LIABILITIES")}
   scope :branch_cash_flow, -> {where("meta->>'data_store_type' =? ","branch_cash_flow")}
-
+  scope :share_capital_involuntary, -> {where("meta->>'data_store_type' = ? ","SHARE_CAPITAL_INVOLUNTARY")}
+  scope :billing_for_involuntary, -> {where("meta->>'data_store_type' = ? ","BILLING_FOR_INVOLUNTARY")}
+  scope :member_per_center_counts, -> { where("meta->>'data_store_type' = ?", "MEMBER PER CENTER COUNTS") }
   # For attaching json dumps
   has_one_attached :data_json_dump
 

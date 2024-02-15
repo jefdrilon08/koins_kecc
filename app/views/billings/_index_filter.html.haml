@@ -20,7 +20,12 @@
         %label
           Center
         = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)), :id, :name, @center), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
-    .col-md-2
+    .col-md-1
+      .form-group
+        %label
+          OR number
+        = text_field_tag :or_number, params[:or_number], class: 'form-control'
+    .col-md-1
       .form-group
         %label
           Status

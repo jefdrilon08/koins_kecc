@@ -3,16 +3,36 @@ module Administration
     before_action :authenticate_user!
 
     def index
-      @centers  = Center.select("*").includes(:branch, :user).where(branch_id: @branches.pluck(:id))
 
-      if params[:name].present?
-        @centers = @centers.where(
-                    "lower(name) LIKE ?",
-                     "%#{params[:name].downcase}%"
-                  )
+      @officer  = User.where(roles: ["","SO"]).order("last_name ASC")
+      @centers  = Center.limit(20).includes(:branch, :user).where(branch_id: @branches.pluck(:id))
+      @center_select = Center.all
+
+
+      if params[:branch].present?
+        @centers = Center.where(branch_id: params[:branch])
+       
       end
 
-      @centers  = @centers.order("name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+      if params[:center].present?
+        @centers = Center.where(id: params[:center])
+      end
+
+      if params[:branch].present?
+        @centers = Center.where(branch_id: params[:branch])
+      end
+
+      if params[:user].present?
+        @centers = Center.where(user_id: params[:user])
+      end
+
+
+      if params[:branch].present? and params[:user].present?
+        @centers = Center.where(user_id: params[:user], branch_id: params[:branch])
+      end
+
+
+      @centers_page  = @centers.order("name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
 
       @subheader_items = [
         {

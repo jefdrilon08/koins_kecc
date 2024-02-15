@@ -20,10 +20,11 @@ module Kmba
           data: @payment_data[:data],
           created_at: @payment_data[:created_at],
           updated_at: @payment_data[:updated_at],
+          external_ref: @payment_data[:external_ref]
         )
       end
 
-      Rails.logger.info(puts " New Record is Save ID NO : #{@payment_data[:subsidiary_id]}, saved! ")
+      Rails.logger.info(puts "Payment Saved!, Member Account Number: #{@payment_data[:subsidiary_id]}, saved! ")
       payment_data.save!
       ::MemberAccounts::Rehash.new( member_account:MemberAccount.find(@payment_data[:subsidiary_id])).execute!
     end

@@ -77,6 +77,55 @@ export default ShowComponent = (props) => {
 
   const handleCenterChanged = (event) => {
     setCurrentCenterId(event.target.value);
+    $.ajax({
+      url: "/api/v1/data_stores/repayment_rates/fetch",
+      data: {
+        id: context.props.id
+      },
+      headers: {
+        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log(response);
+
+        var centers       = response.data.centers;
+
+        context.setState({
+          isLoading: false,
+          data: response,
+          centers: centers
+        });
+      },
+      error: function(response) {
+        console.log(response);
+        alert("Something went wrong when fetching data store");
+      }
+    });
+    
+    $("#btn-print-rp").on("click", function() {
+      var url = "/print";
+      var params = "?type=repayment_rates&id=" + context.state.data.id;
+      if (context.state.currentCenterId.length > 0){
+        params = params + "&center_id=" + context.state.currentCenterId;
+      }
+      if (context.state.currentLoanProductId.length > 0){
+        params = params + "&loan_product_id=" + context.state.currentLoanProductId;
+      }
+      if (context.state.currentOfficerId.length > 0){
+        params = params + "&officer_id=" + context.state.currentOfficerId;
+      }
+      url = url + params;
+      window.open(url, '_blank', 'noopener');
+    });
+
+    $("#btn-print-rp").on('contextmenu', function(event) {
+      event.preventDefault();
+    });
   }
 
   const handleOfficerChanged = (event) => {

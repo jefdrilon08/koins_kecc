@@ -11,12 +11,10 @@ module Members
     def execute!
       @member_data[:resignation][:reason] = @reason
       @member.update!(data: @member_data)
-
       @member.update!(
         status: 'resigned', 
         date_resigned: @date_resigned,
         insurance_status: 'resigned',
-        date_resigned: @date_resigned,
         insurance_date_resigned: @date_resigned
       )
     end

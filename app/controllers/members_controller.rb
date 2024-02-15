@@ -114,6 +114,28 @@ class MembersController < ApplicationController
         end
       end
   end
+
+  def claims_copy_pdf
+    @member = Member.find(params[:id])
+    @member_id = @member[:id]  
+    @insurance_account = MemberAccount.where(member_id: @member_id)
+    @lif = "Life Insurance Fund"
+    @lif_insurance_account = MemberAccount.where(account_subtype: @lif, member_id: @member_id).first
+    @rf = "Retirement Fund"
+    @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member_id).first
+    @date_of_death = session[:date_of_death].to_date
+    
+    config = {
+      member: @member,
+      lif_insurance_account: @lif_insurance_account,
+      rf_insurance_account: @rf_insurance_account,
+      date_of_death: @date_of_death
+    }
+
+    @payment_meta = Members::GenerateInsuranceAccountDetailsForLifAndRf.new(
+      config: config
+    ).execute!
+  end
   
   def member_registry_excel
 
@@ -159,7 +181,8 @@ class MembersController < ApplicationController
       },
       { 
         is_link: true, 
-        path: member_path(@member), 
+        link: "/members/" + @member.id + "/display",
+        # path: member_path(@member), 
         class: "fa fa-times",
         text: "Cancel" }
     ]
@@ -357,6 +380,12 @@ class MembersController < ApplicationController
       "loan_products.name ASC, loans.cycle ASC"
     )
 
+    @for_writeoff_loans = ReadOnlyLoan.for_writeoff.includes(:loan_product).where(
+      member_id: params[:id]
+    ).order(
+      "loan_products.name ASC, loans.cycle ASC"
+    )
+
     @loan_balance = @active_loans.sum("principal_balance + interest_balance")
 
     @loan_products  = ReadOnlyLoanProduct.select("*").order("name ASC")
@@ -377,7 +406,8 @@ class MembersController < ApplicationController
         age:                    o.age,
         relationship:           o.relationship,
         educational_attainment: o.data['educational_attainment'],
-        course:                 o.data['course']
+        course:                 o.data['course'],
+        gender:                 o.gender
       }
     }
 
@@ -476,6 +506,7 @@ end
       "membership_arrangement":       @member.membership_arrangement,
       "recognition_date":             @member.recognition_date.try(:strftime, "%b %d, %Y"),
       "length_of_stay":               @member.length_of_stay,
+      "face_amount":                  @member.face_amount, 
       "legal_dependents":             @legal_dependents,
       "beneficiaries":                @beneficiaries,
       "resignation_records":          @resignation_records,
@@ -580,6 +611,20 @@ end
         total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
       }
     }
+
+    @payload[:for_writeoff_loans] = @for_writeoff_loans.map{ |o|
+      {
+        id:             o.id,
+        pn_number:      o.pn_number,
+        loan_product:   o.loan_product.name,
+        cycle:          o.cycle,
+        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
+        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
+        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+      }
+    }
+
+   
 
     @payload[:savings_accounts] = @savings_accounts.map{ |o|
       {

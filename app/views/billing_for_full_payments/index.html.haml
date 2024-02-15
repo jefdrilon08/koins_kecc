@@ -1,31 +1,13 @@
 .row
   .col
     .card
+      %h3 Billing for Full Payments
       .card-body
-        %table.table.table-sm.table-bordered
-          %thead
-            %tr
-              %th #
-              %th Branch
-              %th Center
-              %th Collection Date
-              %th Status
-              %th Action
-          %tbody
-            - @full_payment_billing.each_with_index do |fyb, i|
-              %tr
-                %td
-                  #{ i + 1 }
-                %td
-                  #{Branch.find((fyb.meta['branch_id'])).name}
-                %td
-                  #{Center.find(fyb.meta['center_id']).name}
-                %td
-                  #{fyb.meta['collection_date']}
-                %td
-                  #{fyb.status}
-                %td
-                  = link_to billing_for_full_payment_path(fyb.id), class: 'btn btn-primary' do
-                    .bi.bi-search
+      = render partial: "index_filter"
+      - if @full_payment_billing.any?
+        = render partial: "index_list", locals: {full_payment_billing: @full_payment_billing}
+      - else
+        %p
+          No Record Found
           
 = render partial: "billing_for_full_payments/modals/process_billing"

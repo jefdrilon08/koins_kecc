@@ -1,0 +1,30 @@
+#modal-new.modal.fade
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          New Data Store
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+          
+          .row
+            .col
+              .form-group
+                %label
+                  Branch
+                = select_tag :branch, options_from_collection_for_select(@branches, :id, :name), id: "select-branch", class: "form-control"
+            .col
+              .form-group
+                %label
+                  As of
+                = text_field_tag :as_of, Date.today, type: :date, id: "as-of", class: 'form-control'
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-new.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

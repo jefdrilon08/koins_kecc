@@ -9,6 +9,7 @@ class Loan < ApplicationRecord
     "active",
     "paid",
     "processing",
+    "for-writeoff",
     "writeoff"
   ]
 
@@ -39,6 +40,7 @@ class Loan < ApplicationRecord
   scope :active_or_paid, -> { where(status: ["active", "paid"]) }
   scope :active_or_pending, -> { where(status: ["active", "pending"]) }
   scope :writeoff, -> {where(status: "writeoff")}
+  scope :for_writeoff, -> {where(status: "for-writeoff")}
 
   has_one_attached :application_form
   has_one_attached :co_maker_relative_profile_picture

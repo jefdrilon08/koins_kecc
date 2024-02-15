@@ -1,0 +1,26 @@
+%table.table.table-sm.table-bordered
+  %tr
+    %th
+      Member
+      = select_tag :member, options_for_select(@member_list.collect{|o|[o.full_name_with_center, o.id]}), class: "form-control select-select2", id: "select-member", prompt: "-- SELECT --"
+    
+    %th 
+      Action
+      %button#btn-add.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}" } }
+        Add
+  %tr
+    %th 
+      Particular of Accounting Entry for transfer of other savings and equity to K-IMPOK
+      %input.form-control{:value => @accounting_entry_transfer_savings[:particular],id: "particular-transfer-savings"}/
+    %th
+      Action
+      %button#btn-add-particular-trans.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+        Save
+  %tr
+    %th
+      Particular of Accounting Entry for Loan Payments
+      %input.form-control{:value => @accounting_entry_loan_payments[:particular],id: "particular-transfer-loan-payments"}/
+    %th
+      Action
+      %button#btn-add-particular-lp.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+        Save

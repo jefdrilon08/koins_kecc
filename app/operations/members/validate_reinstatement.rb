@@ -1,8 +1,9 @@
 module Members
   class ValidateReinstatement
-    def initialize(member:, reinstatement_date:)
+    def initialize(member:, reinstatement_date:, date_stop:)
       @member             = member
       @reinstatement_date = reinstatement_date
+      @date_stop          = date_stop
       @errors             = []
     end
 

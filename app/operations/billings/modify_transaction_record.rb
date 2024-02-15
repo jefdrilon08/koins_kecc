@@ -110,6 +110,7 @@ module Billings
       # Recompute
       total_collected = 0.00
       total_loan_payment = 0.00
+      grand_total_loan_payment = 0.00
 
 
       @data[:totals].each_with_index do |t, index|
@@ -183,8 +184,14 @@ module Billings
             r[:records].select{ |rr|
               rr[:record_type] == "LOAN_PAYMENT" and rr[:enabled] == true and t[:key] == rr[:loan_product][:name]
             }.each do |rr|
+
               total_collected += rr[:amount].try(:to_f).round(2)
               @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+
+              grand_total_loan_payment += rr[:amount].try(:to_f).round(2)
+              #raise @data[:grand_total_loan_paymet].inspect
+              @data[:grand_total_loan_paymet] = 0.0
+              @data[:grand_total_loan_paymet] += grand_total_loan_payment.to_f
             end
 
 #            r[:records].each_with_index do |rr, j|
@@ -194,6 +201,8 @@ module Billings
 #              end
 #            end
           end
+
+
         else
           raise "invalid record_type #{t[:record_type]} in totals"
         end

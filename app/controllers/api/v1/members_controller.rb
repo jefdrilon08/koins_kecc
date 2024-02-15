@@ -862,6 +862,39 @@ module Api
 
         render json: { message: "ok" }
       end
+
+      def member_mobile_number
+        member      = Member.find(params[:id])
+
+        render json: { mobile_number: member.mobile_number }
+      end
+
+      def mobile_number_exist
+        mobile_number = params[:mobile_number].slice(-10..) # slice(-10..) to get the last 10 ex. 9123xxxxxx
+        mobile_number_count = Member.where("mobile_number LIKE ?", "%" + mobile_number).count 
+        
+        mobile_number_exist = false
+
+        if mobile_number_count > 0
+
+          if mobile_number_count == 1
+            
+            member = Member.find(params[:id])
+          
+            if member.mobile_number.slice(-10..) == Member.where("mobile_number LIKE ?", "%" + mobile_number).first.mobile_number.slice(-10..)
+              mobile_number_exist = false
+              
+            else
+              mobile_number_exist = true
+            end
+
+          else
+            mobile_number_exist = true
+          end
+        end
+
+        render json: { mobile_number_exist: mobile_number_exist }
+      end
     end
   end
 end

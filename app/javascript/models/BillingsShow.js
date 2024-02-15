@@ -31,11 +31,15 @@ var $btnPrint;
 var $btnPrintWp;
 var $modalPrint;
 var $btnPrintThermal;
+var $btnPdf;
 
 var $btnZeroOut;
 var $btnConfirmZeroOut;
 var $btnExcel;
 var $modalZeroOut;
+
+var $checkSpecialReport;
+var $checksp = "";
 
 var $message;
 var templateErrorList;
@@ -91,12 +95,15 @@ var _cacheDom = function() {
   $btnUncheck         = $("#btn-uncheck");
   $btnConfirmUncheck  = $("#btn-confirm-uncheck");
 
+  $btnPdf     = $("#btn-print-pdf");
   $btnPrint   = $("#btn-print");
   $btnPrintWp = $("#btn-print-wp");
   $btnPrintThermal = $("#btn-termal");
   $btnExcel   = $("#btn-excel");
   $btnZeroOut         = $("#btn-zero-out");
   $btnConfirmZeroOut  = $("#btn-confirm-zero-out");
+
+  $checkSpecialReport = $("#check-special-report");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -107,8 +114,15 @@ var _bindEvents = function() {
     $modalZeroOut.show();
     $message.html("");
   });
+  $checkSpecialReport.on("click",function(){
+   $checksp = "true"
+  });
 
   $btnConfirmZeroOut.on("click", function() {
+
+     var $special_report_val = $checksp
+
+
     $message.html("Loading...");
 
     $btnConfirmZeroOut.prop("disabled", true);
@@ -119,6 +133,7 @@ var _bindEvents = function() {
       dataType: 'json',
       data: {
         id: id,
+        value_special_report: $checksp,
         authenticity_token: authenticityToken
       },
       success: function(response) {
@@ -333,6 +348,16 @@ var _bindEvents = function() {
     window.open("/print?type=" + type + "&id=" + id);
   });
   $btnPrintThermal.on("click", function() {
+    $modalPrint.show();
+    $message.html("");
+
+    var type = "print_thermal";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + id);
+  });
+  
+  $btnPdf.on("click", function() {
     $modalPrint.show();
     $message.html("");
 

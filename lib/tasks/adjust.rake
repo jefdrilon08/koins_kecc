@@ -1364,7 +1364,7 @@ namespace :adjust do
             new_center.name = center_name.try(:upcase)
             new_center.short_name = center_name.try(:upcase)
             new_center.meeting_day = 1
-            new_center.user = User.where(first_name: "Aljon").first
+            new_center.user = User.where(first_name: "kaiser").first
             new_center.branch = Branch.find(branch_id)
             new_center.save!
 
@@ -1681,16 +1681,7 @@ namespace :adjust do
 
   task :update_insurance_status => :environment do
     
-    # live code
     current_date = Date.today
-    
-    # for 1st reporting purposes
-    # @start_date = Date.today.beginning_of_year
-    # current_date = @start_date.end_of_quarter
-
-    # for 2nd and 3rd reporting purposes
-    # @start_date = Date.today.beginning_of_year
-    # current_date = Date.today.end_of_quarter
 
     if ENV['CURRENT_DATE'].present?
       current_date = ENV['CURRENT_DATE'].to_date
@@ -1706,7 +1697,6 @@ namespace :adjust do
       
       if branch.member_counter != 0
         puts "Updating #{branch.name} ..."
-        
         result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
                     SELECT DISTINCT ON(member_accounts.id)
                       member_accounts.id AS member_account_id,
@@ -1718,6 +1708,9 @@ namespace :adjust do
                       COALESCE(account_transactions.data->>'ending_balance', '0.00')::float AS balance,
                       account_transactions.data->>'is_withdraw_payment' AS is_withdraw_payment,
                       members.data->>'recognition_date' AS recognition_date,
+                      members.data->'reinstatement'->>'reinstatement_date' AS reinstatement_date,
+                      members.data->'reinstatement'->>'old_recognition_date' AS old_recognition_date,
+                      members.data->'reinstatement'->>'date_stop' as date_stop,
                       members.id AS member_id,
                       members.member_type,
                       members.status,
@@ -1740,13 +1733,14 @@ namespace :adjust do
                     ORDER BY
                       member_accounts.id, account_transactions.transacted_at DESC
                   EOS
-
+        
         sets  = result.map{ |o|
-                  member_id                 = o.fetch("member_id")
-                  default_periodic_payment  = 15
-                  recognition_date          = o.fetch("recognition_date").try(:to_date)
-                  transactions_count        = o.fetch("acc_trans_count")
-                  
+                  member_id                       = o.fetch("member_id")
+                  default_periodic_payment        = 15
+                  recognition_date                = o.fetch("recognition_date").try(:to_date)
+                  transactions_count              = o.fetch("acc_trans_count")
+                  reinstatement_date               = o.fetch("reinstatement_date").try(:to_date)
+
                   new_status  = "pending"
                   insurance_status  = o.fetch("insurance_status")
                   insurance_date_resigned  = o.fetch("insurance_date_resigned")
@@ -1766,7 +1760,69 @@ namespace :adjust do
                   puts "insurance_date_resigned: #{insurance_date_resigned}"
                   puts "status: #{status}"
 
-                  if recognition_date.present? and last_payment_date.present?
+                  if reinstatement_date.present?
+                    if transactions_count > 0 
+                      num_days                = (current_date - reinstatement_date).to_i
+                      num_weeks               = (num_days / 7).to_i + 1
+                      insured_amount          = num_weeks * default_periodic_payment
+                      amt_past_due            = (current_balance - insured_amount).to_i * -1
+                      days_lapsed             = (current_date - last_payment_date).to_i
+
+                      if member_type == "GK"
+                        new_status = "resigned"
+                      end
+
+                      if current_balance == 0.0 && insurance_status == "resigned"
+                        new_status = "resigned"
+                      end
+
+                      if status == "resigned" && current_balance == 0.0
+                        new_status = "resigned"  
+                      end
+
+                      if status == "archived" && current_balance == 0.0
+                        new_status = "transferred"  
+                      end
+
+                      if current_balance == 0.0 && insurance_date_resigned.present?
+                        new_status = "resigned"
+                      end
+
+                      if status == "resigned" && insurance_date_resigned.present? && current_balance == 0.0
+                        new_status = "resigned"  
+                      end
+
+                      if amt_past_due >= 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        if amt_past_due >= 2340
+                          new_status = "dormant"
+                        end
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97 && amt_past_due < 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed <= 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+
+                      if days_lapsed > 45 && current_balance >= insured_amount && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+
+                      if days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "lapsed"
+                      end
+
+                      if days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97 && insurance_status != "resigned" && member_type != "GK"
+                        new_status = "inforce"
+                      end
+                    end
+                  elsif recognition_date.present? and last_payment_date.present?
                     # Code
                     if transactions_count > 0 
                       num_days                = (current_date - recognition_date).to_i
@@ -1785,6 +1841,10 @@ namespace :adjust do
 
                       if status == "resigned" && current_balance == 0.0
                         new_status = "resigned"  
+                      end
+
+                      if status == "archived" && current_balance == 0.0
+                        new_status = "transferred"  
                       end
 
                       if current_balance == 0.0 && insurance_date_resigned.present?
@@ -1825,6 +1885,13 @@ namespace :adjust do
                         new_status = "inforce"
                       end
                     end
+                  
+                  elsif status == "archived" && current_balance == 0.0
+                    new_status = "transferred" 
+                  
+                  elsif status == "resigned" && current_balance == 0.0
+                    new_status = "resigned"  
+
                   else
                     new_status = "pending"
                   end
@@ -1835,16 +1902,18 @@ namespace :adjust do
                   "('#{member_id}', '#{new_status}')"
                 }.join(",")
 
-        query = "
-          UPDATE members AS m SET
-            insurance_status = c.new_status
-          FROM (values
-            #{sets}
-          ) AS c(member_id, new_status)
-          WHERE c.member_id = m.id::text
-        "
+         if sets.present?
+          query = "
+            UPDATE members AS m SET
+              insurance_status = c.new_status
+            FROM (values
+              #{sets}
+            ) AS c(member_id, new_status)
+            WHERE c.member_id = m.id::text
+          "
 
-        ActiveRecord::Base.connection.execute(query)
+          ActiveRecord::Base.connection.execute(query)
+        end
 
         puts "Done."
       end
@@ -2013,6 +2082,22 @@ namespace :adjust do
       
       if !member.nil?
         member.update!(id: row['uuid'])
+      end
+    end
+  end
+
+  task :update_member_civil_status => :environment do
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+
+    CSV.foreach(file_location, headers: true) do |row|
+      identification_number = row['identification_number']
+      member = Member.where(identification_number: identification_number).first
+      
+      puts "Updating #{identification_number}...#{member.full_name}"   
+      
+      if !member.nil?
+        member.update!(civil_status: row['civil_status'])
       end
     end
   end
@@ -2281,11 +2366,10 @@ namespace :adjust do
   task :process_member_quarterly_reports => :environment do
     @data_store_type  = "MEMBER QUARTERLY REPORTS"
     @as_of            = Date.today
-    # @start_date = Date.today.beginning_of_month
-    # @end_date = @start_date.end_of_month
 
     @start_date = Date.today.beginning_of_year
-      @end_date = @start_date.end_of_quarter
+    @end_date = @as_of.end_of_month
+
 
     if ENV['CURRENT_DATE'].present?
       @as_of = ENV['CURRENT_DATE'].to_date
@@ -2514,6 +2598,54 @@ namespace :adjust do
       puts "Done!"
     end
   end
+
+  task :process_member_per_center_counts => :environment do
+    @data_store_type  = "MEMBER PER CENTER COUNTS"
+    @as_of            = Date.today
+    
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    # @branches.each do |branch|
+    branch         = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+      puts "Processing #{branch.name}"
+
+      @record = DataStore.member_per_center_counts.where(
+                      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+                      branch.id,
+                      @as_of
+                    ).first
+
+      if @record.blank?
+        @record = DataStore.create!(
+                    meta: {
+                      branch_id: branch.id,
+                      branch_name: branch.name,
+                      branch: {
+                        id: branch.id,
+                        name: branch.name
+                      },
+                      as_of: @as_of,
+                      data_store_type: @data_store_type
+                    },
+                    data: {
+                      status: "processing"
+                    }
+                  )
+
+        args  = {
+          record: @record,
+          data_store_type: @data_store_type
+        }
+
+        ProcessMemberPerCenterCounts.perform_later(args)
+      end
+      puts "Done!"
+
+  end
+
 
   task :process_insurance_personal_funds => :environment do
     @data_store_type  = "INSURANCE_PERSONAL_FUNDS"
@@ -3161,5 +3293,104 @@ namespace :adjust do
     end
 
     puts "\nDone."
+  end
+
+  task :member_is_reclassified_adjust => :environment do
+    puts "Checking All Member ..."
+    # csv_format_header (identification_number,associate_identification_number)
+
+    file_location = ENV['MEMBERS_CSV']
+    puts file_location
+    # raise file_location.inspect
+
+    CSV.foreach(file_location, headers: true) do |row|
+      member_identification_number = row['identification_number']
+      is_reclassified = row['is_reclassified']
+
+      member = Member.where(identification_number: member_identification_number)
+      # raise member.inspect
+      member.map { |m|  
+        @member_id = m[:id]
+      }
+
+      member_id = Member.find(@member_id)
+            
+      if member_id.present?
+        puts "Updating Reclassified Member: #{member_identification_number}"   
+        member_data = member_id.data.with_indifferent_access
+        member_data[:is_reclassified] = is_reclassified
+        member.update!(data: member_data)
+      else
+        puts "Id Number not Found"
+      end
+    end
+
+    puts "Done!"
+  end
+
+  task :add_gender => :environment do
+    @members  = []
+    @dependets = []
+    legal_dependent = LegalDependent.all
+
+    legal_dependent.each do |m|
+      data = {}
+      data[:id] = m.id  
+      data[:first_name] = m.first_name
+      data[:member_id] = m.member_id
+      
+      @members << data
+    end
+    
+    # raise @members.inspect
+    @dependets = @members.map{ |y|
+      {
+        id: y[:id],
+        last_letter: y[:first_name][-1],
+        member_id: y[:member_id]
+      }
+    } 
+    
+    @dependets.each do |dependent|
+      if dependent[:member_id].present? 
+        if ["A", "E", "I", "O", "U"].include?(dependent[:last_letter].upcase)
+          puts "Updating Dependent ID: #{dependent[:id]}"
+          a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Female")
+        else
+          puts "Updating Dependent ID: #{dependent[:id]}"
+          a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Male")
+        end
+      end 
+    end
+  end
+  
+  task :fix_wrong_in_account_transaction => :environment do 
+    branch_id = ENV["BRANCH_ID"]
+    members_resigned = Member.where("branch_id = ? and date_resigned >= ? and date_resigned <= ?","#{branch_id}","2023-10-27","2023-10-31")
+    members_resigned.each do |mr|
+      loans = Loan.where("status = ? and date_completed >= ? and date_completed <= ? and member_id = ?","paid", "2023-10-27","2023-10-31","#{mr.id}")
+
+      loans.each do |l|
+        ll= Loan.find(l.id)
+        puts " FIX loan - #{ll.id}"
+        last_account_transaction = AccountTransaction.where(subsidiary_id: "#{ll.id}", status: "approved").order("transacted_at DESC").first
+        account_transaction = AccountTransaction.find(last_account_transaction.id)
+        a_data = account_transaction.data.with_indifferent_access
+        if a_data["total_interest_balance"].present?
+          interest_amount = a_data["total_interest_balance"]
+          a_data.delete("total_interest_balance")
+          a_data["total_interest_paid"] = interest_amount
+        end
+
+        if a_data["total_principal_balance"].present?
+          principal_amount = a_data["total_principal_balance"]
+          a_data.delete("total_principal_balance")
+          a_data["total_principal_paid"] = principal_amount
+        end
+        account_transaction.update!(data: a_data)
+      end
+
+    end
+    puts "done"
   end
 end

@@ -8,6 +8,7 @@ import DashboardMII from './DashboardMII';
 import DashboardManagementMii from './DashboardManagementMii';
 
 import ManagementOverview from './ManagementOverview';
+import Disbursement from './Disbursement';
 
 export default function MainUI(props) {
   const [token]                                 = useState(props.token);
@@ -38,6 +39,11 @@ export default function MainUI(props) {
               Branch Stats
             </a>
           </li>
+          <li className="nav-item">
+            <a href="#disbursement" role="tab" data-bs-toggle="tab" aria-controls="disbursement" className="nav-link">
+              Disbursement
+            </a>
+          </li>
         </ul>
         <div className="tab-content border-start border-bottom border-end">
           <div id="overview" className="overview p-3 tab-pane active show" role="tabpanel">
@@ -47,6 +53,11 @@ export default function MainUI(props) {
           </div>
           <div id="branch-stats" className="branch-stats p-3 tab-pane" role="tabpanel">
             <DashboardOAS
+              token={props.token}
+            />
+          </div>
+          <div id="disbursement" className="disbursement p-3 tab-pane" role="tabpanel">
+            <Disbursement
               token={props.token}
             />
           </div>

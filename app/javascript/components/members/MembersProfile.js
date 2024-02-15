@@ -40,6 +40,7 @@ export default function MembersProfile(props) {
   const [verifiedLoans]                 = useState(props.verified_loans);
   const [inProcessLoans]                = useState(props.in_process_loans);
   const [writeoffLoans]                 = useState(props.writeoff_loans);
+  const [forwriteoffLoans]              = useState(props.for_writeoff_loans);
   const [savingsAccounts]               = useState(props.savings_accounts);
   const [insuranceAccounts]             = useState(props.insurance_accounts);
   const [equityAccounts]                = useState(props.equity_accounts);
@@ -65,6 +66,7 @@ export default function MembersProfile(props) {
   const [coMakers]                      = useState(props.co_makers);
   const [projectType]                   = useState(props.project_type);
   const [accruedInterest]               = useState(props.accrued_interest_data);
+  const [faceAmount]                    = useState(props.face_amount);
 
   return (
     <>
@@ -165,6 +167,7 @@ export default function MembersProfile(props) {
                     membershipArrangement={membershipArrangement}
                     recognitionDate={recognitionDate}
                     lengthOfStay={lengthOfStay}
+                    faceAmount={faceAmount}
                     memberAge={memberAge}
                     dateOfBirth={dateOfBirth}
                     address={address}
@@ -172,8 +175,6 @@ export default function MembersProfile(props) {
                     beneficiaries={beneficiaries}
                     resignationRecords={resignationRecords}
                     projectType={projectType}
-
-
                   />
                 </div>
                 <div id="loans" className="home p-3 tab-pane" role="tabpanel">
@@ -191,6 +192,7 @@ export default function MembersProfile(props) {
                     loanProductsForRestructuring={loanProductsForRestructuring}
                     coMakers={coMakers}
                     accruedInterest={accruedInterest}
+                    forwriteoffLoans={forwriteoffLoans}
                   />
                 </div>
                 <div id="savings_accounts" className="home p-3 tab-pane" role="tabpanel">

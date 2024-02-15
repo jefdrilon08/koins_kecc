@@ -1,4 +1,5 @@
 class BillingForFullPaymentsController < ApplicationController
+  before_action :authenticate_user!
   def index
     
       @full_payment_billing =  DataStore.where(
@@ -23,6 +24,20 @@ class BillingForFullPaymentsController < ApplicationController
           text: "New"
         }
       ]
+      if params[:select_branch].present?
+        @branch = ReadOnlyBranch.find(params[:select_branch])
+        @full_payment_billing = @full_payment_billing.where("meta ->> 'branch_id' IN (?)", @branch.id)
+
+      elsif params[:select_center].present?
+        @center = ReadOnlyCenter.find(params[:select_center])
+        @full_payment_billing = @full_payment_billing.where("meta ->> 'center_id' = ?",@center.id)
+     
+
+      elsif params[:status].present?
+        @status = params[:status]
+        @full_payment_billing = @full_payment_billing.where(status: @status)
+      
+      end 
   end
 
   

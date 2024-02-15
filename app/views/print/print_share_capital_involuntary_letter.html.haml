@@ -1,0 +1,171 @@
+:css
+  @page { size: portrait; margin: 60px;}
+  .just-font br {
+  content: "";
+  display: block;
+  
+  }
+  .text-indent p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    
+  }
+  .list-inline ul{
+  display:block;
+  margin-bottom:2rem;
+  }
+  .list-inline li {
+    display:inline-block;
+    margin-left: 50px;
+    margin-right: 100px;
+
+  }
+  .signatories ul{
+    display:block;
+
+  }
+  .signatories li{
+    display:inline-block;
+    margin-right: 80px;
+    padding-inline-start: 0px;
+  }
+  .member_signatories{
+    
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+
+
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 150px; margin-right: 20px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 13.32px"}
+          KABUHAYAN SA GANAP NA KASARINLAN CREDIT AND SAVINGS COOPERATIVE
+      %br
+        %span
+          %var 4
+          %sup th
+          Floor KMBA Members Center Building
+      %br
+        %span
+          Telephone Numbers: (632) 8442-9607 or 5310-2470 / Fax Number: 
+        %br
+          (632) 8442-9607 loc. 204
+      %br
+        %span
+          %b
+            CDA REG. NO.: 9520-1016000000028521
+      %br
+        %span
+          %b
+            CIN: 16201628521
+%strong{style: "font-size: 13.32px"}
+  %center
+    ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
+%br
+%div.just-font{style: "font-size: 10.66px"}
+  %br
+    %b
+      #{Date.today.strftime("%B %d, %Y")}
+%br
+%div.just-font{style: "font-size: 10.66px"}
+  %br
+    %b
+      #{@data[:member_full_name].upcase}
+  %br
+    %b
+      #{@data[:member_branch].upcase} / #{@data[:member_center]}
+  %br
+    %b
+      #{@data[:member_address]}
+%br
+%p{style: "font-size: 10.66px"}
+  %b
+    G./Gng. #{@data[:member_full_name]}:
+%p{style: "font-size: 10.66px"}
+  Nais naming ipagbigay-alam na sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan:
+  %ul.list-group
+    -if @data[:loan_records].any?
+      %li.list-group-item{style: "font-size: 10.66px"}
+        %input{:required => "", :type => "checkbox"}>/
+        &nbsp&nbsp Hindi pagtupad o pagsunod sa mga obligasyon bilang isang miyembro ng kooperatiba; 
+        -if @data[:loan_records].any?
+          -@data[:loan_records].each do |lr|
+            %div.just-font
+              %br
+                %b
+                  #{lr["loan_product"]} Total Balance (Principal + Interest) #{number_to_currency(lr["principal_balance"].to_f + lr["interest_balance"].to_f,unit: "")} Maturity Date: #{lr["maturity_date"].to_date.strftime("%B %d, %Y")} 
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/
+      &nbsp&nbsp Paglabag sa anumang probisyon ng By-laws o anumang polisiya at patakarang ipinatutupad ng kooperatiba
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/
+      &nbsp&nbsp Paggawa ng anumang gawain, o pagkukulang na nakapipinsala sa interes o kapakanan ng kooperatiba
+%p{style: "font-size: 10.66px"}
+  Ayon sa mga polisiya, ang mga ito ay sapat na dahilan upang ikaw ay tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Dahil dito, ikaw ay aming binibigyan hanggang sa petsang 
+  %b
+    #{(Date.today + 30.days).to_date.strftime("%B %d, %Y")}
+  upang makipag-ugnayan sa amin upang maipaliwanag kung bakit ikaw ay hindi dapat tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Ang hindi mo pagtugon sa sulat na ito ay maaring magdulot ng mga sumusunod:
+  %ul.list-group
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong natitirang savings o/at share capital ay papatawan ng dormancy fee
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong natitirang savings o/at share capital ay ilalapat sa natitira mong pagkakautang
+    %li.list-group-item{style: "font-size: 10.66px"}
+      %input{:required => "", :type => "checkbox"}>/ 
+      &nbsp&nbsp Ang iyong pagiging miyembro sa kooperatiba ay tuluyan ng puputulin
+%p{style: "font-size: 10.66px"}
+  Kung patuloy mong ipagwawalang-bahala ang sulat na ito, mapipilitan kaming gawin ang mga hakbang na binaggit sa itaas at tuluyan kang tanggalin bilang miyembro ng kooperatiba.
+%p{style: "font-size: 10.66px"}
+  Inaasahan namin ang iyong maagap na pagtugon ukol sa bagay na ito.
+%ul.list-inline
+  %li.list-inline{style: "font-size: 10.66px"}
+    Naghanda:
+  %li.list-inline{style: "font-size: 10.66px"}
+    Binigyan Pansin:
+  %li.list-inline{style: "font-size: 10.66px"}
+    Pinagtibay:
+%ul.signatories
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng SOM
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng CM
+  %li.signatories{style: "font-size: 10.66px"}
+    Pangalan at Lagda ng SM
+%div.just-font{style: "font-size: 10.66px"}
+  %br
+    TINANGGAP: __________________/_____________________/_________________
+  %br
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspPangalan at Lagda/Relasyon Sa Miyembro/Petsa
+%div.footer
+  %br
+    %b
+      ANNEX 1: ABISO NG POSIBLENG PAGKATANGGAL SA KOOPERATIBA
+  

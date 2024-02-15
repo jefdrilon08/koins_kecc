@@ -14,7 +14,7 @@ module Api
         data    = billing.try(:data).try(:with_indifferent_access)
         book    = params[:book]
 
-        if billing.pending?
+        if billing.save?
           data[:accounting_entry][:book]  = book
 
           billing.update!(
@@ -32,7 +32,7 @@ module Api
         data        = billing.try(:data).try(:with_indifferent_access)
         particular  = params[:particular]
 
-        if billing.save?
+        if billing.pending? || billing.save?
           data[:accounting_entry][:particular]  = particular
 
           billing.update!(
@@ -137,8 +137,18 @@ module Api
           billing: billing,
           user: current_user
         }
-
-          billing.update!(status: "save")
+        errors  = ::Billings::ValidateSave.new(
+                    config: config
+                  ).execute!
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          billing = ::Billings::Save.new(
+                    config: config
+                  ).execute!
+           billing.update!(status: "save")
+        end
+         
   
           ActivityLog.create!(
             content: "#{current_user.full_name} save billing",
@@ -200,6 +210,7 @@ module Api
             data: {
               user_id: current_user.id,
               billing_id: billing.id
+
             }
           )
 
@@ -226,7 +237,8 @@ module Api
 
         config  = {
           billing: billing,
-          user: current_user
+          user: current_user,
+          special_report: params[:value_special_report]
         }
 
         errors  = ::Billings::ValidateZeroOut.new(
@@ -246,8 +258,9 @@ module Api
             activity_type: "modification",
             data: {
               user_id: current_user.id,
-              billing_id: billing.id
-            }
+              billing_id: billing.id,
+              
+                          }
           )
 
           render json: { message: "ok" }
@@ -304,17 +317,36 @@ module Api
       def modify_member_record
         billing         = Billing.find(params[:id])
         current_member  = params[:current_member]
+        member_records  = params[:member_records]
+       
+        member_record = member_records.values.map do |items| 
+          items[:amount]= items[:amount].to_f
+          if items[:enabled] == "true"
+            items[:enabled] = true
+          elsif items[:enabled] == "false"
+            items[:enabled] = false
+          end
+         items
+        end
 
-        cmd = ::Billings::ModifyMemberRecord.new(
+
+        config = {
           billing: billing,
-          current_member: current_member
-        )
+          current_member: current_member,
+          member_records: member_record,
+          current_user: current_user
+        }
 
-        cmd.execute!
+        errors = ::Billings::ValidateModifyMemberRecord.new(config: config).execute!
+        
+        if errors[:messages].any?
+          render json: {errors: errors}, status: 400
+        else
+          billing = ::Billings::ModifyMemberRecord.new(config: config).execute!
+          render json: billing
+        end
 
-        billing = cmd.billing
-
-        render json: billing
+        
       end
 
       def modify_transaction_record

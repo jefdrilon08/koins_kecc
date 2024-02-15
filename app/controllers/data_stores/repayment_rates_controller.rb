@@ -34,8 +34,9 @@ module DataStores
         { text: "Delete", class: "fa fa-times", link: "/data_stores/repayment_rates/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
       @subheader_side_actions << {
-        id: "btn-print",
-        link: "/print?type=repayment_rates&id=#{params[:id]}",
+        id: "btn-print-rp",
+        #link: "/print?type=repayment_rates&id=#{params[:id]}",
+        link: '#',
         class: "fa fa-print",
         text: "Print",
         }

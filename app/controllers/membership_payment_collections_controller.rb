@@ -86,20 +86,23 @@ class MembershipPaymentCollectionsController < ApplicationController
       }
     ]
 
-    if @membership_payment_collection.pending? && (["BK", "SBK", "MIS"] & current_user.roles).any?
+    if @membership_payment_collection.pending? && helpers.sbk_mis_bk_oas? && current_user.roles.any?
       @subheader_side_actions << {
         link: membership_payment_collection_path(@membership_payment_collection),
         class: "fa fa-times",
         data: { confirm: "Are you sure?", method: :delete },
         text: "Delete"
       }
+    end
 
+    if helpers.sbk_bk_mis_user && current_user.roles.any?
       @subheader_side_actions << {
         link: "#",
         class: "fa fa-check",
         id: "btn-approve",
         text: "Approve"
       }
+      
     end
 
     @payload = {

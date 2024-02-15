@@ -1,0 +1,45 @@
+#modal-view-details.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %table.table.table-bordered.table-sm.table-hover
+          %thead
+            %tr
+              %th.text-center{ width: "20%" }
+                Member
+              %th.text-center{ width: "10%" }
+                Loan Details
+              %th.text-center{ width: "10%" }
+                Amount Paid
+              %th.text-center{ width: "10%" }
+                Total Savings
+          %tbody
+            - @data_view.each do |record|
+              %tr
+                %td.text-center
+                  =link_to member_path(record[:member_id]), target: '_blank' do
+                    #{record[:member_name]}
+                %td.text-center                
+                  %ul
+                    - record[:loan_records].each do |loan|
+                      %li
+                        %p= "Principal: #{loan[:principal_balance]}, #{loan[:loan_product]}"
+                        %br
+                      %li
+                        %p= "Interest: #{loan[:interest_balance]}, #{loan[:loan_product]}"
+                      
+                %td.text-center
+                  %ul
+                    %li
+                      #{number_to_currency(record[:total_loan_payment],unit: '')}
+                    %br
+                    %li
+                      %p= "Closing Fee: #{number_to_currency(record[:closing_fee_amount],unit:'')}"
+                %td.text-center
+                  #{number_to_currency(record[:total_savings],unit: '')}
+                  
+      .modal-footer
+        .controls
+          %button#btn-cancel.btn.btn-primary
+            .fa.fa-check
+            Cancel

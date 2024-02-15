@@ -1,0 +1,207 @@
+:css
+  .print-text {
+    font-size: 1.2em;
+    font-family: calibri;
+  }
+
+  .print-text-book {
+    font-size: 1.4em;
+    font-family: calibri;
+  }
+
+  .print-text-sub {
+    font-size: .9em;
+    font-family: calibri;
+  }
+
+  .signatories{
+    width: 100%;
+  }
+
+  .body1{
+    width: 100%;
+  }
+ 
+  .body2{
+    width: 100%;
+  }
+
+  hr {
+    border-color: black;
+  }
+%span.print-text
+  %left
+    %p
+      %b
+        Kasagana-Ka Mutual Benefit Association&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Claims Copy
+      %bras
+      %b
+        Branch: #{(@member.branch)}
+      %br
+      %b
+        As of: #{Time.now.strftime("%B %d, %Y")}
+  .body
+    %table{:border => "2"}
+      %tr
+        %td{:width => "20%", :align => "center"}
+          %b
+            MEMBER
+        %td{:width => "12%", :align => "center"}
+          %b
+            CENTER
+        %td{:width => "15%", :align => "center"}
+          %b
+            CRT. NO.
+        %td{:width => "13%", :align => "center"}
+          %b
+            RECOGNITION DATE
+        %td{:width => "12%", :align => "center"}
+          %b
+            DATE STOPPED
+        %td{:width => "12%", :align => "center"}
+          %b
+            REINSTATEMENT DATE
+        %td{:width => "12%", :align => "center"}
+          %b
+            DATE OF DEATH
+      %tr
+        %td{:width => "20%", :align => "center"}
+          #{@member.full_name}
+        %td{:width => "12%", :align => "center"}
+          #{@member.center}
+        %td{:width => "15%", :align => "center"}
+          #{@member.identification_number}
+        %td{:width => "13%", :align => "center"}
+          #{(@member.recognition_date)}
+        %td{:width => "12%", :align => "center"}
+        %td{:width => "12%", :align => "center"}
+        %td{:width => "12%", :align => "center"}
+          #{(@payment_meta[:date_of_death]).to_date}
+      %tr
+        %td{:width => "20%", :align => "center", :height => "50%", :colspan => "7"}
+          &nbsp;
+      %tr
+        %td{:width => "20%", :align => "center"}
+          %b
+            TOTAL LIFE
+        %td{:width => "12%", :align => "center"}
+          %b
+            TOTAL RF
+        %td{:width => "15%", :align => "center"}
+          %b
+            TOTAL LIFE PREV MONTH
+        %td{:width => "13%", :align => "center"}
+          %b
+            TOTAL RF PREV MONTH
+        %td{:width => "12%", :align => "center"}
+          %b
+            LIFE PAID CUR MONTH
+        %td{:width => "12%", :align => "center"}
+          %b
+            RF PAID CUR MONTH
+        %td{:width => "12%", :align => "center"}
+          %b
+            &nbsp;
+      %tr
+        %td{:width => "20%", :align => "center"}
+          #{number_to_currency(@payment_meta[:life_current_balance], unit: "")}
+        %td{:width => "12%", :align => "center"}
+          #{number_to_currency(@payment_meta[:rf_current_balance], unit: "")}
+        %td{:width => "15%", :align => "center"}
+        %td{:width => "13%", :align => "center"}
+        %td{:width => "12%", :align => "center"}
+          #{number_to_currency(@payment_meta[:life_current_balance], unit: "")}
+        %td{:width => "12%", :align => "center"}
+          #{number_to_currency(@payment_meta[:rf_current_balance], unit: "")}
+        %td{:width => "12%", :align => "center"}
+      %tr
+        %td{:width => "20%", :align => "center", :height => "50%", :colspan => "7"}
+          &nbsp;
+      %tr
+        %td{:width => "20%", :align => "center"}
+          %b
+            LIFE DUE
+        %td{:width => "12%", :align => "center"}
+          %b
+            RF DUE
+        %td{:width => "15%", :align => "center"}
+          %b
+            LIFE PAST DUE
+        %td{:width => "13%", :align => "center"}
+          %b
+            RF PAST DUE
+        %td{:width => "12%", :align => "center"}
+          %b
+            LIFE WKS DEFAULT
+        %td{:width => "12%", :align => "center"}
+          %b
+            RF WKS DEFAULT
+        %td{:width => "12%", :align => "center"}
+          %b
+            &nbsp;
+      %tr
+        %td{:width => "20%", :align => "center"}
+          #{number_to_currency(@payment_meta[:life_insured_amount], unit: "")}
+        %td{:width => "12%", :align => "center"}
+          #{number_to_currency(@payment_meta[:rf_insured_amount], unit: "")}
+        %td{:width => "15%", :align => "center"}
+          #{number_to_currency(@payment_meta[:life_amt_past_due], unit: "")}
+        %td{:width => "13%", :align => "center"}
+          #{number_to_currency(@payment_meta[:rf_amt_past_due], unit: "")}
+        %td{:width => "12%", :align => "center"}
+          #{@payment_meta[:life_num_weeks_past_due]}
+        %td{:width => "12%", :align => "center"}
+          #{@payment_meta[:rf_num_weeks_past_due]}
+        %td{:width => "12%", :align => "center"}
+      %tr
+        %td{:width => "20%", :align => "center", :height => "50%", :colspan => "7"}
+          &nbsp;  
+      %tr
+        %td{:width => "20%", :align => "center"}
+          %b
+            LIFE PERIOD COVERED
+        %td{:width => "20%", :align => "center"}
+          %b
+            RF PERIOD COVERED
+        %td{:width => "15%", :align => "center"}
+          %b
+            DAYS LAPSED
+        %td{:width => "15%", :align => "center", :colspan => "2"}
+          %b
+            DAY OF STAY
+        %td{:width => "15%", :align => "center", :colspan => "2"}
+          %b
+            FINAL
+      %tr
+        %td{:width => "20%", :align => "center"}
+          #{@payment_meta[:life_coverage_date]}
+        %td{:width => "20%", :align => "center"}
+          #{@payment_meta[:rf_coverage_date]}
+        %td{:width => "15%", :align => "center"}
+          #{@payment_meta[:life_num_weeks_past_due] * 7}
+        %td{:width => "15%", :align => "center", :colspan => "2"}
+          #{@member.length_of_stay}
+        %td{:width => "15%", :align => "center", :colspan => "2"}
+          #{@member.length_of_stay}
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br
+  %br         
+  .signatories
+    .left
+      PREPARED BY:
+      %br
+      %br
+      %u
+        #{current_user.full_name}

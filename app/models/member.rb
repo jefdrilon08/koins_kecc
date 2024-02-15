@@ -92,6 +92,7 @@ class Member < ApplicationRecord
   scope :pending, -> { where(status: "pending").order("last_name ASC") }
   scope :resigned, -> { where(status: "resigned").order("last_name ASC") }
   scope :active_and_resigned, -> { where(status: ["active", "resigned"]).order("last_name ASC") }
+  scope :active_and_resigned_and_writeoff, -> { where(status: ["active", "resigned", "writeoff"]).order("last_name ASC") }
   scope :active_and_resigned_and_pending, -> { where(status: ["active", "resigned", "pending"]).order("last_name ASC") }
   scope :returning, -> { where("status = ? AND previous_date_resigned IS NOT NULL", "active").order("last_name ASC") }
   scope :insurance_resigned, -> { where(insurance_status: "resigned").order("last_name ASC") }
@@ -144,6 +145,34 @@ class Member < ApplicationRecord
     end
   end
 
+  def face_amount
+    if self.data.with_indifferent_access[:recognition_date].present?
+      now = Time.now
+      
+      value1 = 2000
+      value2 = 6000
+      value3 = 10000
+      value4 = 30000
+      value5 = 50000
+
+
+      number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
+      
+      
+      if number_of_days <= 91
+        "₱#{value1}.00"
+      elsif number_of_days >= 92 && number_of_days <= 365 
+        "₱#{value2}.00"
+      elsif number_of_days >= 366 && number_of_days <= 730
+        "₱#{value3}.00"
+      elsif number_of_days >= 731 && number_of_days <= 1095
+        "₱#{value4}.00"
+      elsif number_of_days >= 1096
+        "₱#{value5}.00"
+      end
+    end
+  end
+
   def interest_start_date
     if self.data.with_indifferent_access[:restoration_records].blank?
       return self.data.with_indifferent_access[:recognition_date]
@@ -169,14 +198,14 @@ class Member < ApplicationRecord
   end
 
   def life_number_of_lapsed
-    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first
-      
+    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first  
+    
     if ma.present?
       recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
       current_date = Date.today.to_date
 
       current_balance   = ma.balance
-      num_days = (current_date - recognition_date).to_i
+      num_days = (current_date - recognition_date).to_i  
       num_weeks  = (num_days / 7).to_i + 1
       insured_amount  = num_weeks  * 15
       amt_past_due    = (current_balance - insured_amount) * -1
@@ -417,15 +446,63 @@ class Member < ApplicationRecord
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
   end
 
+  def length_of_stay_report
+    self.data.with_indifferent_access[:recognition_date].present?
+      now = Time.now
+      
+      if (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i < 0
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
+        "#{number_of_days} DAYS"
+      else
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs
+        days_between = seconds_between / 60 / 60 / 24
+        number_of_days = days_between.floor
+        number_of_months = (days_between / 30.44).floor
+        years = (days_between / 365.242199).floor
+        months = number_of_months - (years * 12)
+        
+        if years < 1
+          if months > 1
+            "#{months} MONTHS"
+          elsif months == 1
+            "#{months} MONTH"
+          elsif months < 1
+            if number_of_days == 1 
+              "#{number_of_days} DAY"
+            elsif number_of_days > 1
+              "#{number_of_days} DAYS"
+            elsif number_of_days < 1
+              nil          
+            end
+          end    
+        else
+          if years == 1 && months == 0 
+            "#{years} YEAR"
+          elsif years == 1 && months == 1
+            "#{years} YEAR, #{months} MONTH"
+          elsif years == 1 && months > 1
+            "#{years} YEAR, #{months} MONTHS"
+          elsif years > 1 && months > 1
+            "#{years} YEARS, #{months} MONTHS"
+          elsif years > 1 && months == 1
+            "#{years} YEARS, #{months} MONTH"
+          elsif years > 1 && months < 1
+            "#{years} YEARS"    
+          end
+        end
+      end
+  end
+
   def length_of_stay
     if self.data.with_indifferent_access[:reinstatement].present?
       now = Time.now
       
-      if (now.to_date - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i < 0
-        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_date).to_i
+      if (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i < 0
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement_date][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
         "#{number_of_days} DAYS"
+
       else
-        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement]["reinstatement_date"].to_time).abs 
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_time - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_time).abs
         days_between = seconds_between / 60 / 60 / 24
         number_of_days = days_between.floor
         number_of_months = (days_between / 30.44).floor
@@ -621,7 +698,8 @@ class Member < ApplicationRecord
       },
       date_resigned: self.date_resigned,
       insurance_date_resigned: self.insurance_date_resigned,
-      meta: self.meta
+      meta: self.meta,
+      external_ref: self.external_ref
     }
   end
 

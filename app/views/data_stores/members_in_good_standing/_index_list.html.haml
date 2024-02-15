@@ -13,7 +13,7 @@
       %th.text-center
         Last Updated
   %thead
-    - @records.each do |o|
+    - @records.order(created_at: :desc).each do |o|
       %tr
         %td.text-center
           = link_to "/data_stores/members_in_good_standing/#{o.id}" do

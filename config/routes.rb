@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
+  get "/members/:id/claims_copy_pdf", to: "members#claims_copy_pdf", as: :member_claims_copy_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
   get "/members/:id/form_make_payments/:type", to: "members#form_make_payments", as: :form_make_payments
@@ -264,6 +265,11 @@ Rails.application.routes.draw do
   get "/billing_for_writeoff_collections", to: "billing_for_writeoff_collections#index"
   get "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#show"
   delete "/billing_for_writeoff_collections/:id", to: "billing_for_writeoff_collections#destroy"
+
+  #billing for involuntary
+  get "/billing_for_involuntary", to: "billing_for_involuntary#index"
+  get "/billing_for_involuntary/:id", to: "billing_for_involuntary#show"
+  delete "/billing_for_involuntary/:id", to: "billing_for_involuntary#destroy"
 
   # billing for writeoff
   get "/billing_for_writeoff", to: "billing_for_writeoff#index"
@@ -504,7 +510,13 @@ Rails.application.routes.draw do
     get "/assets_liabilities/:id", to: "assets_liabilities#show"
     delete "/assets_liabilities/:id",to: "assets_liabilities#destroy"
 
-   
+
+    get "/share_capital_involuntary", to: "share_capital_involuntary#index"
+    get "/share_capital_involuntary/:id", to: "share_capital_involuntary#show"
+
+    get "/member_per_center_counts", to: "member_per_center_counts#index"
+    get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
+    delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
   end
   
   # daily_branch_metrics
@@ -589,7 +601,12 @@ Rails.application.routes.draw do
   get "/reports/address_update", to: "reports#address_update", as: :address_update
   get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports", as: :savings_insurance_transfer_reports
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
-
+  get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report", as: :claims_processing_time_report
+  get "/reports/claims_processing_time_report_excel", to: "reports#claims_processing_time_report_excel", as: :claims_processing_time_report_excel
+  get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary", as: :claims_processing_time_report_summary
+  get "/reports/claims_processing_time_report_summary_excel", to: "reports#claims_processing_time_report_summary_excel", as: :claims_processing_time_report_summary_excel
+  get "/reports/reclassified_report", to: "reports#reclassified_report", as: :reclassified_report
+  get "/reports/reclassified_report_excel", to: "reports#reclassified_report_excel", as: :reclassified_report_excel
   #transfer_savings
   get "/transfer_savings", to: "transfer_savings#index"
   get "/transfer_savings/:id", to: "transfer_savings#show" 

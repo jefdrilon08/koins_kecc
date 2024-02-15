@@ -66,10 +66,11 @@ module Pages
 
               member_record[:index]                  = i+1
               member_record[:name]                   = member.full_name_titleize
+              member_record[:mobile_number]          = member.mobile_number
               member_record[:recognition_date]       = member.data['recognition_date']
               member_record[:status]                 = member.status
               member_record[:insurance_status]       = member.insurance_status
-              member_record[:length_of_stay]         = member.length_of_stay
+              member_record[:length_of_stay_report]         = member.length_of_stay_report
               member_record[:identification_number]  = member.identification_number
               member_record[:rf_account]             = @rf_account
               member_record[:rf_coverage]            = @rf_coverage

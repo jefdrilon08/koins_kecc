@@ -126,6 +126,7 @@ import AdministrationSurveysIndex from "../models/AdministrationSurveysIndex.js"
 import AdministrationSurveysShow from "../models/AdministrationSurveysShow.js";
 import MemberSharesShow from "../models/MemberSharesShow.js";
 import MemberSharesForm from "../models/MemberSharesForm.js";
+import MemberSharesPrintShareCertificate from '../models/MemberSharesPrintShareCertificate.js';
 import ExportsBillingPerCenter from "../models/ExportsBillingPerCenter.js";
 import MonthlyNewAndResignedIndex from "../models/MonthlyNewAndResignedIndex.js";
 import ExportTools from "../models/ExportTools.js";
@@ -166,6 +167,9 @@ import ReportsCIC from "../models/ReportsCIC.js";
 import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
 import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfCertificatesAndPolicies.js";
 import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
+import ReportsClaimsProcessingTimeReport from "../models/ReportsClaimsProcessingTimeReport.js";
+import ReportsClaimsProcessingTimeReportSummary from "../models/ReportsClaimsProcessingTimeReportSummary.js";
+import ReportsReclassifiedReport from "../models/ReportsReclassifiedReport.js";
 import ReportsPersonalDocuments from "../models/ReportsPersonalDocuments.js";
 import ReportsClaims from "../models/ReportsClaims.js";
 import UserDemeritsShow from "../models/UserDemeritsShow.js";
@@ -214,19 +218,22 @@ import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
 import MembersProjectTypesIndex from "../models/MembersProjectTypesIndex.js";
 import MembersProjectTypesShow from "../models/MembersProjectTypesShow.js";
-//<<<<<<< HEAD
 import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
 import MbsTransferIndex from "../models/MbsTransferIndex";
 import MbsTransferShow from "../models/MbsTransferShow";
 import InvoluntaryMembersIndex from "../models/InvoluntaryMembersIndex.js";
 import InvoluntaryMembersShow from "../models/InvoluntaryMembersShow.js";
-//=======
 import BankTransferIndex from "../models/BankTransferIndex.js";
 import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
 import ProjectTypeSummaryIndex from "../models/ProjectTypeSummaryIndex.js";
 import AssetsLiabilitiesIndex from "../models/AssetsLiabilitiesIndex.js";
-import BranchCashFlowIndex	from "../models/BranchCashFlowIndex.js"
+import BranchCashFlowIndex	from "../models/BranchCashFlowIndex.js";
+import ShareCapitalInvoluntaryIndex from "../models/ShareCapitalInvoluntary.js";
+import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.js";
+
+import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
+import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -245,6 +252,7 @@ const hooks = {
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
   "pages/login":                                      [Login],
+  "pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
   "accounting/crb":                                   [AccountingBooksIndex],
@@ -330,6 +338,7 @@ const hooks = {
   "administration/surveys/index":                     [AdministrationSurveysIndex],
   "administration/surveys/show":                      [AdministrationSurveysShow],
   "administration/surveys/survey_question_form":      [SurveyQuestionUIComponent],
+  "administration/member_shares/print":               [MemberSharesPrintShareCertificate],
   "members/member_shares/show":                       [MemberSharesShow],
   "members/member_shares/new":                        [MemberSharesForm],
   "pages/billing_per_center":                         [ExportsBillingPerCenter],
@@ -381,6 +390,9 @@ const hooks = {
   "reports/monthly_collection":                       [ReportsMonthlyCollection],
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
+"reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
+  "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
+  "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],
   "reports/personal_documents":                       [ReportsPersonalDocuments],
   "reports/claims":                                   [ReportsClaims],
   "monitoring/accounting_entry_subsidiary_balancing": [AccountingEntrySubsidiaryBalancingComponent],
@@ -434,8 +446,17 @@ const hooks = {
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
   "psr_schedules/generate":                           [PsrSchedulesGenerate],
+<<<<<<< HEAD
   "data_stores/assets_liabilities/index":							[AssetsLiabilitiesIndex],
   "branch_cash_flow/index":                           [BranchCashFlowIndex]
+=======
+  "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
+  "branch_cash_flow/index":               												[BranchCashFlowIndex],
+  "data_stores/share_capital_involuntary/index": 					[ShareCapitalInvoluntaryIndex],
+  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow],
+  "billing_for_involuntary/index": [BillingForInvoluntaryIndex],
+  "billing_for_involuntary/show": [BillingForInvoluntaryShow]
+>>>>>>> master
 }
 
 const renderComponent = (Component, payload) => {

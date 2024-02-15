@@ -11,9 +11,13 @@
       %table.table.table-bordered.table-sm.table-hover
         %tr
           %th
+            no.
+          %th
             Name
           %th
             Center
+          %th
+            Portfolio
         - @cdet.each do |c|
           - c["memDet"].each_with_index do |m, i|
             %tr
@@ -23,5 +27,7 @@
                 #{m["member"]["last_name"]}, #{m["member"]["first_name"]}
               %td
                 #{Center.find(m["member"]["center_id"]).name} 
+              %td
+                #{m["member"]["total_portfolio"]} 
         
 

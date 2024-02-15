@@ -1,0 +1,112 @@
+-if @records.any?
+    -@records.each do |rec|
+        %table.table.table-bordered.table-sm.table-hover{style: ""}
+            %tbody
+                %tr
+                    %th.text-center
+                        Identification Number
+                    %th.text-center
+                        Member Name
+                    %th.text-center
+                        Center
+                    %th.text-center
+                        Member Type
+                %tr
+                    %td.text-center
+                        #{rec[:identification_number]}
+                    %td.text-center
+                        =link_to member_path(rec[:member_id]), target: '_blank' do
+                            #{rec[:member_name]}
+                    %td.text-center
+                        #{Member.find(rec[:member_id]).center.name.upcase}
+                    %td.text-center
+                        #{Member.find(rec[:member_id]).member_type.upcase}
+                %tr
+                    %th.text-center{colspan: 4}
+                        Loan Records
+                %tr
+                    %th.text-center
+                        Loan Product
+                    %th.text-center
+                        Maturity Date
+                    %th.text-center
+                        Total Balance (Principal + Interest)
+                    %th.text-center
+                        Status
+                -rec[:loans_record].each do |lr|
+                    %tr
+                        %td.text-center
+                            = link_to loan_path(lr[:loan_id]),target: '_blank' do
+                                #{lr[:loan_product]}
+                        %td.text-center
+                            #{lr[:maturity_date]}
+                        %td.text-center
+                            #{(lr[:principal_balance] + lr[:interest_balance]).to_f.round(2)}
+                        %td.text-center
+                            #{lr[:loan_status]}
+                %tr
+                    %th.text-center{colspan: 4}
+                        Savings Accounts
+                %tr
+                    %th.text-center{colspan: 2}
+                        Accounts
+                    %th.text-center{colspan: 2}
+                        Balance
+                -rec[:savings_accounts].each do |sa|
+                    %tr
+                        %td.text-center{colspan: 2}
+                            =link_to savings_account_path(sa[:id]),target: '_blank' do
+                                #{sa[:account_subtype]}
+                        
+                        %td.text-center{colspan: 2}
+                            #{sa[:balance]}
+                %tr
+                    %th.text-center{colspan: 4}
+                        Equity Accounts
+                %tr
+                    %th.text-center{colspan: 2}
+                        Accounts
+                    %th.text-center{colspan: 2}
+                        Balance
+                -rec[:equity_accounts].each do |ea|
+                    %tr
+                        %td.text-center{colspan: 2}
+                            =link_to equity_account_path(ea[:id]),target: '_blank' do
+                                #{ea[:account_subtype]}
+                        
+                        %td.text-center{colspan: 2}
+                            #{ea[:balance]}
+                %tr
+                    %th.text-center{colspan: 4}
+                        Insurance Accounts
+                %tr
+                    %th.text-center{colspan: 2}
+                        Accounts
+                    %th.text-center{colspan: 2}
+                        Balance
+                -rec[:insurance_accounts].each do |ia|
+                    %tr
+                        %td.text-center{colspan: 2}
+                            =link_to insurance_account_path(ia[:id]),target: '_blank' do
+                                #{ia[:account_subtype]}
+                        
+                        %td.text-center{colspan: 2}
+                            #{ia[:balance]}
+
+        
+                %tr
+                    %td.text-center{colspan: 2}(style= "width: 50%;")
+                        .btn.btn-primary.btn-print-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loans_record].to_json,savings_accounts: rec[:savings_accounts].to_json,insurance_accounts: rec[:insurance_accounts].to_json, equity_accounts: rec[:equity_accounts].to_json}} PRINT FIRST LETTER
+                    %td.text-center{colspan: 2}(style= "width: 50%;")
+                        .btn.btn-danger.btn-second-letter.btn-sm.btn-block{:type => "button", data:{member_name: rec[:member_name],member_id: rec[:member_id], loan_records: rec[:loans_record].to_json,savings_accounts: rec[:savings_accounts].to_json,insurance_accounts: rec[:insurance_accounts].to_json, equity_accounts: rec[:equity_accounts].to_json}} PRINT SECOND LETTER
+     
+             
+-else
+    %p 
+        NO RECORD FOUND
+
+
+
+
+
+

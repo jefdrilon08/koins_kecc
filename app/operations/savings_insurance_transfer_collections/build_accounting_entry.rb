@@ -7,11 +7,22 @@ module SavingsInsuranceTransferCollections
       @user   = @config[:user]
       @payment_subtype = @data["payment_subtype"]
       @insurance_subtype = @data["insurance_subtype"]
+      @accounting_fund_gen_fund = "8a512ccd-20a8-457f-a7ac-ab6bd76bb814"
+      @accounting_fund_opt_fund = "d99d1c46-d426-41fa-ba95-b57b6ca27d1d"
+      @or_number = @data["or_number"]
+      @ar_number = @data["ar_number"]
+
+      # raise @or_number.inspect
 
       @book         = "JVB"
       @book1        = "CRB"
       @prepared_by  = @user.full_name
 
+      if Settings.activate_microinsurance
+        branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+        @branch = Branch.where(id: branch_id).first
+      end
+      
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
                           branch: @branch
@@ -72,7 +83,7 @@ module SavingsInsuranceTransferCollections
                                                   }.first.deposit_accounting_code_id
                                                 )
         else
-          @payment_subtypes                      = @data[:payment_subtype]
+          @payment_subtypes                   = @data[:payment_subtype]
           @savings_withdrawal_accounting_code = AccountingCode.find(
                                                   Settings.savings_insurance_transfer_accounting_codes.select{ |s|
                                                     s.payment_type == "CASH"
@@ -91,7 +102,91 @@ module SavingsInsuranceTransferCollections
       
       @particular   = default_particular
       if Settings.activate_microinsurance
-        if @payment_subtype == "CASH"
+        if @payment_subtype == "CASH" && @insurance_subtype == "K-KALINGA"
+          @accounting_entry_data  = {
+            book: @book1,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        elsif @payment_subtype == "CASH" && @insurance_subtype == "K-BENTE"
+          @accounting_entry_data  = {
+            book: @book1,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        elsif @payment_subtype == "CASH" && @insurance_subtype == "Hospital Income Insurance Plan"
+          @accounting_entry_data  = {
+            book: @book1,
+            accounting_fund_id: @accounting_fund_opt_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        elsif @payment_subtype == "CASH"
           @accounting_entry_data  = {
             book: @book1,
             date_prepared: @current_date.strftime("%B %d, %Y"),
@@ -105,10 +200,11 @@ module SavingsInsuranceTransferCollections
             journal_entries: [],
             branch_id: @branch.id,
             branch_name: @branch.name,
+
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -116,9 +212,11 @@ module SavingsInsuranceTransferCollections
               payee: ""
             }
           }
-        else
+
+        elsif @payment_subtype == "OTHER-BANK" && @insurance_subtype == "Hospital Income Insurance Plan"          
           @accounting_entry_data  = {
             book: @book,
+            accounting_fund_id: @accounting_fund_opt_fund,
             date_prepared: @current_date.strftime("%B %d, %Y"),
             company_name: Settings.company_name,
             company_address: Settings.company_address,
@@ -132,8 +230,89 @@ module SavingsInsuranceTransferCollections
             branch_name: @branch.name,
             status: "display",
             data: {
-              or_number: "",
-              ar_number: "",
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+        
+        elsif @payment_subtype == "OTHER-BANK" && @insurance_subtype == "K-KALINGA"          
+          @accounting_entry_data  = {
+            book: @book,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+        
+        elsif @payment_subtype == "OTHER-BANK" && @insurance_subtype == "K-BENTE"          
+          @accounting_entry_data  = {
+            book: @book,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        else        
+          @accounting_entry_data  = {
+            book: @book,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",
@@ -142,6 +321,7 @@ module SavingsInsuranceTransferCollections
             }
           }
         end
+        
       else
         @accounting_entry_data  = {
           book: @book,

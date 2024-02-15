@@ -1,9 +1,10 @@
 module Members
   class Reinstate
-    def initialize(member:, reinstatement_date:, reinstate_by:)
+    def initialize(member:, reinstatement_date:, reinstate_by:, date_stop:)
       @member              = member
       @recognition_date    = @member.recognition_date
       @reinstatement_date  = reinstatement_date
+      @date_stop           = date_stop
       @reinstate_by        = reinstate_by
       @member_data         = @member.data.with_indifferent_access
     
@@ -13,6 +14,7 @@ module Members
     def execute!
       @member_data[:recognition_date] = @reinstatement_date
       @member_data[:reinstatement][:reinstatement_date] = @reinstatement_date
+      @member_data[:reinstatement][:date_stop] = @date_stop
       @member_data[:reinstatement][:reinstate_by] = @reinstate_by
       @member_data[:reinstatement][:date_reinstated] = Date.today
       @member_data[:reinstatement][:old_recognition_date] = @recognition_date

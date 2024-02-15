@@ -10,6 +10,13 @@
             %p
               Are you sure you want to zero out this billing?
           .message
+        .modal-body-content
+          .callout.callout-info
+            .form-group
+              .form-check
+                %input#check-special-report.form-check-input{:type => "checkbox"}/
+                %label.form-check-label{:for => "flexCheckDefault"}
+                  It is Special Report?
       .modal-footer
         .controls
           %button#btn-confirm-zero-out.btn.btn-primary

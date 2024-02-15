@@ -4,23 +4,45 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 export default function MembersProfileActions(props) {
-  const [isLoading, setIsLoading]                 = useState(false);
-  const [isModalUnlockOpen, setIsModalUnlockOpen] = useState(false);
-  const [isModalSurveyOpen, setIsModalSurveyOpen] = useState(false);
-  const [surveyId, setSurveyId]                   = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
-  const [errors, setErrors]                       = useState([]);
-  const [modifiable, setModifiable]               = useState(props.member.modifiable);
-  const [isModalBalikKasapiOpen, setModalBalikKasapiOpen] = useState(false);
-  const [isModalDelete, setIsModalDelete]         = useState(false);
-  const [isModalReinstateOpen, setModalReinstateOpen] = useState(false);
+  const [isLoading, setIsLoading]                                               = useState(false);
+  const [isModalUnlockOpen, setIsModalUnlockOpen]                               = useState(false);
+  const [isModalSurveyOpen, setIsModalSurveyOpen]                               = useState(false);
+  const [surveyId, setSurveyId]                                                 = useState(props.surveys.length > 0 ? props.surveys[0].id : "");
+  const [errors, setErrors]                                                     = useState([]);
+  const [modifiable, setModifiable]                                             = useState(props.member.modifiable);
+  const [isModalBalikKasapiOpen, setModalBalikKasapiOpen]                       = useState(false);
+  const [isModalDelete, setIsModalDelete]                                       = useState(false);
+  const [isModalReinstateOpen, setModalReinstateOpen]                           = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
-  const [dateReinstated, setDateReinstated]       = useState('');
-  const [dateRecognition, setDateRecognition]               = useState("");
-  const [isModalMakePaymentOpen, setModalMakePaymentOpen] = useState(false);
-  const [makePayment, setMakePayment]       = useState('');
+  const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
+  const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
+  const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
+  const [dateReinstated, setDateReinstated]                                     = useState('');
+  const [dateStopped, setDateStopped]                                           = useState('');
+  const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
+  const [reason, setReason]                                                     = useState('');
+  const [dateRecognition, setDateRecognition]                                   = useState("");
+  const [dateOfDeath, setDateOfDeath]                                           = useState("");
+  const [reClassified, setreClassified]                                         = useState('');
+  const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
+  const [makePayment, setMakePayment]                                           = useState('');
+  const [isModalProfilePictureOpen, setModalProfilePictureOpen]                 = useState(false);
+  const [profilePicture, setProfilePicture]                                     = useState('');
+  const [configData, setConfigData] = useState();
+  const [customVariable, setCustomVariable] = useState(); // Create a new state variable
 
-  const [isModalProfilePictureOpen, setModalProfilePictureOpen] = useState(false);
-  const [profilePicture, setProfilePicture]       = useState('');
+  const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
+
+  useEffect(() => {
+    axios.get('/api/yml_values/production_values')
+      .then(response => {
+        setConfigData(response.data);
+        setCustomVariable(response.data); // Assign response.data to your custom variable
+        console.log(response.data); // Log the value to the console
+      })
+      .catch(error => console.error(error));
+  }, []);
+
 
   const options = [
   {
@@ -36,6 +58,33 @@ export default function MembersProfileActions(props) {
     value: "Members Benefit",
   }
   ];
+
+  const handleReclassfiedClicked = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      is_reclassified: reClassified
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+    axios.post(
+      '/api/members/is_reclassified',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully ReClassified Member");
+      window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
 
   const handleDateRecognitionClicked = () => {
     setIsLoading(true);
@@ -57,6 +106,35 @@ export default function MembersProfileActions(props) {
       console.log(res);
       alert("Successfully Update Recognition Date");
       window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
+  const handleDateofDeath = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      date_of_death: dateOfDeath
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/claims_copy_pdf',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Generating Claims");
+      headers;
+      window.location.href="/members/" + props.memberId + "/claims_copy_pdf/";
     }).catch((error) => {
       console.log(error.response);
       setErrors(error.response.data.errors);
@@ -100,7 +178,8 @@ export default function MembersProfileActions(props) {
 
     const payload = {
       id: props.memberId,
-      reinstatement_date: dateReinstated
+      reinstatement_date: dateReinstated,
+      date_stop: dateStopped
     }
 
     const headers = {
@@ -127,11 +206,45 @@ export default function MembersProfileActions(props) {
     })
   }
 
+  const handleResignedInsuranceClicked = () => {
+    setIsLoading(true);
+
+    const payload = {
+      id: props.memberId,
+      date_resigned: dateResignedInsurance,
+      reason: reason
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/members/resign',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Resigned");
+      window.location.href="/members/" + props.memberId + "/display/";
+      setIsLoading(false);
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    })
+  }
+
   const handleMakePaymentClicked = () => {
     setIsLoading(true);
 
     const payload = {
       id: props.memberId,
+      type: selectedOptionType,
     }
 
     const headers = {
@@ -148,8 +261,9 @@ export default function MembersProfileActions(props) {
       options
     ).then((res) => {
       console.log(res);
-      alert("Payment");
-      window.location.href="/members/" + props.memberId + "/form_make_payments/";
+      // alert("Payment");
+      setModalMakePaymentOpen(false);
+      window.location.href="/members/" + props.memberId + "/form_make_payments/" + selectedOptionType;
       setIsLoading(false);
     }).catch((error) => {
       console.log(error.response);
@@ -282,6 +396,7 @@ export default function MembersProfileActions(props) {
     })
 
   }
+
   return (
     <>
 
@@ -307,6 +422,18 @@ export default function MembersProfileActions(props) {
                 type="date"
               
                 onChange={(event) => { setDateReinstated(event.target.value) } }
+
+              />
+              <label>
+               Date Stop
+              </label>
+              <input
+                className="form-control"
+                value={dateStopped}
+                disabled={isLoading}
+                type="date"
+              
+                onChange={(event) => { setDateStopped(event.target.value) } }
 
               />
             </div>
@@ -335,6 +462,59 @@ export default function MembersProfileActions(props) {
         </Modal.Footer>
 
       </Modal>
+
+      <Modal
+        show={isModalReclassifiedOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Reclassified Member
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Please select "YES" to ReClassified this Member
+              </label>
+              <select
+                id="dropdown"
+                className="form-control"
+                value={reClassified}
+                disabled={isLoading}
+                onChange={(event) => { setreClassified(event.target.value) } }
+              >
+                <option value="">-- Select --</option>
+                <option value="YES">YES</option>
+              </select>
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleReclassfiedClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalReclassifiedOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
+
 
       <Modal
         show={isModalRecognitonDateOpen}
@@ -374,6 +554,52 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalRecognitonDateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={isModalClaimsCopyPDFOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Claim Copy PDF
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+                Date of Death
+              </label>
+              <input
+                className="form-control"
+                value={dateOfDeath}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateOfDeath(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleDateofDeath();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalClaimsCopyPDFOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -445,9 +671,12 @@ export default function MembersProfileActions(props) {
         <Modal.Body>
           <div className="row">
             <div className="form-group">
-              <select className="form-control">
+              <select className="form-control" 
+                onChange={e => {setSelectedOptionType(e.target.value)
+                  console.log("value: ", e.target.value);
+                } }>
                 {options.map((option) => (
-                  <option value={option.value}>{option.label}</option>
+                  <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
               </select>              
             </div>
@@ -528,7 +757,63 @@ export default function MembersProfileActions(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
+      <Modal
+        show={isModalResignFromInsuranceOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Resigned From Insurance
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Date Resigned
+              </label>
+              <input
+                className="form-control"
+                value={dateResignedInsurance}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setDateResignedInsurance(event.target.value) } }
+              />
+              <label>
+               Reason of resignation
+              </label>
+              <input
+                className="form-control"
+                value={reason}
+                disabled={isLoading}
+                type="text"
+                onChange={(event) => { setReason(event.target.value) } }
+              />
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleResignedInsuranceClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalResignFromInsuranceOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal
         show={isModalUnlockOpen}
       >
@@ -797,6 +1082,79 @@ export default function MembersProfileActions(props) {
           </div>
         </div>
       </div>
+ 
+
+      {(() => {
+        if (customVariable == true) {
+          <hr/>
+          return(
+            <div className="row">
+              <div className="col">
+                <div className="note note-info">
+                  <strong>
+                    Reclassified
+                  </strong>
+                  <p>
+                    Reclassified Member
+                  </p>
+                    <button
+                      className="btn btn-primary"
+                        onClick={() => {
+                          setModalReclassifiedOpen(true)
+                        }}
+                        >
+                      Reclassified
+                    </button>
+                </div>
+              </div>
+            </div>
+          )   
+        }
+      })()}
+
+      <hr/>
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Claims Copy PDF
+            </strong>
+            <p>
+              Claims Copy PDF
+            </p>
+              <button
+                className="btn btn-primary"
+                  onClick={() => {
+                    setModalClaimsCopyPDFOpen(true)
+                  }}
+                  >
+                Claims Copy PDF
+              </button>
+          </div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Resigned From Insurance
+            </strong>
+            <p>
+              Resigned From Insurance
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setModalResignFromInsuranceOpen(true)
+              }}
+            >
+              Resigned From Insurance
+            </button>     
+          </div>
+        </div>
+      </div>
       <hr/>
 
       <div className="row">
@@ -805,9 +1163,11 @@ export default function MembersProfileActions(props) {
             <strong>
               Clip Make Payment
             </strong>
-            <p>
+            {/* <p>
               Clip Make Payment
-            </p>
+            </p> */}
+            <br/>
+            <br/>
             <button
               className="btn btn-primary"
               onClick={() => {

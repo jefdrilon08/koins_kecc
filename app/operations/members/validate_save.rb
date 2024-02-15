@@ -3,9 +3,10 @@ module Members
     def initialize(config:)
       super()
 
-      @config       = config
-      @member_data  = @config[:member_data]
-      @user         = @config[:user]
+      @config                 = config
+      @member_data            = @config[:member_data]
+      @user                   = @config[:user]
+
 
       @branch                 = Branch.where(id: @member_data[:branch_id]).first
       @center                 = Center.where(id: @member_data[:center_id]).first
@@ -15,6 +16,7 @@ module Members
 
     def execute!
       # Validate first_name
+
       if @member_data[:first_name].blank?
         @errors[:messages] << {
           key: "first_name",
@@ -86,8 +88,27 @@ module Members
           key: "date_of_birth",
           message: "Date of birth required"
         }
+      elsif @member_data[:date_of_birth].present?
+        date_of_birth = @member_data[:date_of_birth]
+        date_format = Date.parse(date_of_birth)
+        age = Date.today.year - date_format.year   
+        if age < 18 
+          @errors[:messages] << {
+            key: "date_of_birth",
+            message: "Member Age is not 18 Above"
+          }
+        end
+        if Settings.activate_microinsurance
+          if @member_data[:id].present?
+            if age > 60 && @recognition_date.present?
+              @errors[:messages] << {
+                key: "date_of_birth",
+                message: "Member Age is 60 Above"
+              }
+            end
+          end
+        end
       end
-
       # Validate gender
       if @member_data[:gender].blank?
         @errors[:messages] << {

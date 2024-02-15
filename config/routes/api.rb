@@ -20,10 +20,15 @@ namespace :api do
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
   get "/public/api_centers/:branch_id", to: "public#centers"
+  get "/yml_values/production_values", to: "yml_values#production_values"
 
   # Dashboard
   get "/dashboard/branch_markers", to: "dashboard#branch_markers"
   get "/dashboard/overview", to: "dashboard#overview"
+
+  get "/dashboard/disbursement", to: "dashboard#disbursement"
+  get "/dashboard/disbursement_data", to: "dashboard#disbursement_data"
+
 
   get "/loan_product_types", to: "loan_product_types#index"
   post "/status_check", to: "public#status_check"
@@ -50,8 +55,11 @@ namespace :api do
   post "/members/apply_online", to: "members#apply_online"
   post "/members/unlock", to: "members#unlock"
   post "/members/balik_kasapi", to: "members#balik_kasapi"
+  post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
+  post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"  
+  post "/members/is_reclassified", to: "members#is_reclassified"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
@@ -184,6 +192,7 @@ namespace :api do
     post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
     post "mbs_transfer/add_particular", to: "mbs_transfer#add_particular"
     post "mbs_transfer/approve", to: "mbs_transfer#approve"
+    post "mbs_transfer/delete_member", to: "mbs_transfer#delete_member" 
 
     #additional_share
     post "additional_share/create", to: "additional_share#create"
@@ -191,6 +200,7 @@ namespace :api do
     post "additional_share/update_amount", to: "additional_share#update_amount"
     post "additional_share/approve", to: "additional_share#approve"
     post "additional_share/add_particular", to: "additional_share#add_particular"
+    post "additional_share/delete_member", to: "additional_share#delete_member"
 
     #billing_for_writeoff_collection
     post "/billing_for_writeoff_collection/create", to: "billing_for_writeoff_collection#create"
@@ -201,6 +211,15 @@ namespace :api do
     post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     post "/billing_for_writeoff_collection/add_particular", to: "billing_for_writeoff_collection#add_particular"
     post "/billing_for_writeoff_collection/add_book_type", to: "billing_for_writeoff_collection#add_book_type"
+
+    #billing_for_involuntary
+    post "/billing_for_involuntary/create", to: "billing_for_involuntary#create"
+    post "/billing_for_involuntary/add_member", to: "billing_for_involuntary#add_member"
+    post "/billing_for_involuntary/add_particular_to_transfer_savings",to: "billing_for_involuntary#add_particular_to_transfer_savings"
+    post "/billing_for_involuntary/add_particular_to_loan_payments", to: "billing_for_involuntary#add_particular_to_loan_payments"
+    post "/billing_for_involuntary/approve", to: "billing_for_involuntary#approve"
+    post "/billing_for_involuntary/delete", to: "billing_for_involuntary#delete"
+    
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
@@ -229,6 +248,7 @@ namespace :api do
     post "/savings_insurance_transfer_collections/remove_member", to: "savings_insurance_transfer_collections#remove_member"
     post "/savings_insurance_transfer_collections/approve", to: "savings_insurance_transfer_collections#approve"
     post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
+    post "/savings_insurance_transfer_collections/update_or_ar_number", to: "savings_insurance_transfer_collections#update_or_ar_number"
 
 
     # Accounting Codes
@@ -316,6 +336,8 @@ namespace :api do
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
+    post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
+    post "/members/is_reclassified", to: "members#is_reclassified"
     post "/members/upload_profile_picture", to: "members#upload_profile_picture"
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
@@ -325,7 +347,9 @@ namespace :api do
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
     post "/members/save_make_payment", to: "members#save_make_payment"
     get "/risk_profiles/fetch_daily_metric", to: "risk_profiles#fetch_daily_metric"
-
+    get "/risk_profiles/fetch_prev_metric", to: "risk_profiles#fetch_prev_metric"
+    get "/members/member_mobile_number", to: "members#member_mobile_number"
+    get "/members/mobile_number_exist", to: "members#mobile_number_exist"
 
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
@@ -664,6 +688,8 @@ namespace :api do
       get "/share_capital_summary/fetch", to: "share_capital_summary#fetch"
 
       post "/assets_liabilities/create", to: "assets_liabilities#create"
+      post "/share_capital_involuntary/queue", to: "share_capital_involuntary#queue"
+      post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
     end
 
     namespace :epassbook do
@@ -721,6 +747,9 @@ namespace :api do
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
     get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
+    get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
+    get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary"
+    get "/reports/reclassified_report", to: "reports#reclassified_report  "
     #claims
     post "/claims/save", to: "claims#save"
     post "/claims/create", to: "claims#create"
