@@ -252,7 +252,7 @@ const hooks = {
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
   "pages/login":                                      [Login],
-  "pages/forgot_password":                            [PagesForgotPassword],
+  //"pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
   "accounting/crb":                                   [AccountingBooksIndex],
