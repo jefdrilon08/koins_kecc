@@ -446,17 +446,12 @@ const hooks = {
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
   "psr_schedules/generate":                           [PsrSchedulesGenerate],
-<<<<<<< HEAD
   "data_stores/assets_liabilities/index":							[AssetsLiabilitiesIndex],
-  "branch_cash_flow/index":                           [BranchCashFlowIndex]
-=======
-  "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
-  "branch_cash_flow/index":               												[BranchCashFlowIndex],
-  "data_stores/share_capital_involuntary/index": 					[ShareCapitalInvoluntaryIndex],
-  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow],
-  "billing_for_involuntary/index": [BillingForInvoluntaryIndex],
-  "billing_for_involuntary/show": [BillingForInvoluntaryShow]
->>>>>>> master
+  "branch_cash_flow/index":                           [BranchCashFlowIndex],
+  "data_stores/share_capital_involuntary/index": 			[ShareCapitalInvoluntaryIndex],
+  "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
+  "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
+  "billing_for_involuntary/show":                     [BillingForInvoluntaryShow]
 }
 
 const renderComponent = (Component, payload) => {
