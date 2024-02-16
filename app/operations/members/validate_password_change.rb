@@ -30,7 +30,7 @@ module Members
         if @password_confirmation.blank?
           @errors[:messages] << {
             key: "password_confirmation",
-            message: "password_confirmation not found"
+            message: "password confirmation not found"
           }
         end
   

@@ -58,10 +58,10 @@ module Api
           # render json: { token: cmd.token, member: cmd.member.user_object }
           # render json: { token: cmd.token, member: member }
           
-          if(cmd.member_logged_before) # if this member logged before in koins mobile
-            render json: { token: cmd.token, member: member, member_logged_before: cmd.member_logged_before }
+          if(cmd.token) # if this member has token
+            render json: { token: cmd.token, member: member }
           else # if not
-            render json: { member: member, member_logged_before: cmd.member_logged_before, memberPasswordChanged: cmd.member_password_changed }
+            render json: { member: member, is_otp_verified: cmd.is_otp_verified, is_password_changed: cmd.is_password_changed }
           end
             
         end
@@ -102,7 +102,7 @@ module Api
           mobile_number = cmd.member.mobile_number
           member["mobile_number"] = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
 
-          render json: { token: cmd.token, member: member }
+          render json: { member: member }
         end
       end
 
@@ -123,7 +123,7 @@ module Api
           render json: { errors: cmd.messages }, status: :unprocessable_entity
         else
           member_data = member.data.with_indifferent_access
-          member_data["password_changed"] = true # set to true
+          member_data["is_password_changed"] = true # set to true
           member_data["password_changed_date"] = Time.now # save the date changed
           member.update(data: member_data) # update data
 
