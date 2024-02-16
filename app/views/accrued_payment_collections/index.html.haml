@@ -1,35 +1,14 @@
 .row
   .col
     .card
+      %h3 Accrued Interest Collections
       .card-body
-        /= render partial: "adjustments/moratoriums/index_filter"
+        = render partial: "index_filter"
         - if @accrued_interest.any?
-          %table.table.table-sm.table-hover.table-bordered
-            %thead
-              %tr
-                %th
-                  Branch
-                %th
-                  Center
-                %th
-                  Date Initialized
-                %th.text-center
-                  Status
-                %th.text-center
-                  Actions
-              %tbody
-                - @accrued_interest.each do |o|
-                  %tr
-                    %td
-                      #{Branch.find(o.branch_id).name}
-                    %td
-                      #{Center.find(o.center_id).name}
-                    %td
-                      #{o.collection_date}
-                    %td
-                      #{o.status}
-                    %td
-                      = link_to "accrued_payment_collections/#{o.id}" , target: "_blank" , class: 'btn btn-primary' do
-                        .bi.bi-search
+          = render partial: "index_list", locals: { accrued_interest: @accrued_interest}
+        - else
+          %p
+            No Accrued Interest Found 
+
                       
 = render partial: "accrued_payment_collections/modals/new_transaction"

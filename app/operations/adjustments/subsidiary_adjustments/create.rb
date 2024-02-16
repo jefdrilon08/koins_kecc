@@ -5,6 +5,7 @@ module Adjustments
         @config = config
         @branch = @config[:branch]
         @user   = @config[:user]
+        @accounting_fund_mbf = '1b4efc94-017b-4024-b675-95b4b0763bd0'
 
         @current_date = ::Utils::GetCurrentDate.new(
                           config: {
@@ -22,35 +23,70 @@ module Adjustments
           },
           generated_by: @user
         }
-
-        @data = {
-          records: [],
-          accounting_entry: {
-            book: "JVB",
-            reference_number: "",
-            date_prepared: @current_date,
-            company_name: Settings.company_name,
-            branch: @branch.to_s.upcase,
-            prepared_by: @user.to_s,
-            particular: "",
-            debit_journal_entries: [],
-            credit_journal_entries: [],
-            journal_entries: [],
-            branch_id: @branch.id,
-            branch_name: @branch.name,
-            status: "display",
-            data: {
-              or_number: "",
-              ar_number: "",
-              check_number: "",
-              check_voucher_number: "",
-              date_of_check: "",
-              sub_reference_number: "",
-              payee: ""
+       
+        if Settings.activate_microinsurance
+          branch_id  = Settings.try(:defaults).try(:default_branch).try(:id)
+          @branch = Branch.where(id: branch_id).first
+        end
+  
+        if Settings.activate_microinsurance
+          @data = {
+            records: [],
+            accounting_entry: {
+              book: "JVB",
+              accounting_fund_id: @accounting_fund_mbf,
+              reference_number: "",
+              date_prepared: @current_date,
+              company_name: Settings.company_name,
+              branch: @branch.to_s.upcase,
+              prepared_by: @user.to_s,
+              particular: "",
+              debit_journal_entries: [],
+              credit_journal_entries: [],
+              journal_entries: [],
+              branch_id: @branch.id,
+              branch_name: @branch.name,
+              status: "display",
+              data: {
+                or_number: "",
+                ar_number: "",
+                check_number: "",
+                check_voucher_number: "",
+                date_of_check: "",
+                sub_reference_number: "",
+                payee: ""
+              }
             }
           }
-        }
-
+        else
+          @data = {
+            records: [],
+            accounting_entry: {
+              book: "JVB",
+              reference_number: "",
+              date_prepared: @current_date,
+              company_name: Settings.company_name,
+              branch: @branch.to_s.upcase,
+              prepared_by: @user.to_s,
+              particular: "",
+              debit_journal_entries: [],
+              credit_journal_entries: [],
+              journal_entries: [],
+              branch_id: @branch.id,
+              branch_name: @branch.name,
+              status: "display",
+              data: {
+                or_number: "",
+                ar_number: "",
+                check_number: "",
+                check_voucher_number: "",
+                date_of_check: "",
+                sub_reference_number: "",
+                payee: ""
+              }
+            }
+          }
+        end
         @adjustment_record  = AdjustmentRecord.new(
                                 adjustment_type: "subsidiary",
                                 meta: @meta,

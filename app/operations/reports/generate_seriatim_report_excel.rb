@@ -48,6 +48,7 @@ module Reports
           default_cell = wb.styles.add_style font_name: "Calibri"
 
           sheet.add_row [ 
+            "Branch ID",
             "Certificate Number",
             "Name of Member",
             "Status",
@@ -167,6 +168,7 @@ module Reports
 
             if index == 0
               sheet.add_row [
+                  member.branch_id,
                   member.identification_number,
                   member.full_name_titleize,
                   member.status,
@@ -176,7 +178,7 @@ module Reports
                   value,
                   "weekly",
                   20,
-                  "",
+                  "N/A",
                   ev_amount*2,
                   ev_interest,
                   rf_interest,
@@ -186,6 +188,7 @@ module Reports
                 ], style: [nil, nil,nil,nil, date_format_cell,date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, nil]
               else
                 sheet.add_row [
+                  member.branch_id,
                   member.identification_number,
                   member.full_name_titleize,
                   member.status,
@@ -195,14 +198,14 @@ module Reports
                   value,
                   "weekly",
                   20,
-                  "",
+                  "N/A",
                   ev_amount*2,
                   ev_interest,
                   rf_interest,
                   rf_amount,
                   ev_amount,
                   "",
-                ], style: [nil, nil,nil,nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, nil]
+                ], style: [nil, nil, nil,nil,nil, date_format_cell, date_format_cell,currency_cell_right, nil, currency_cell_right, nil, currency_cell_right, currency_cell_right, currency_cell_right, currency_cell_right, nil]
             end
 
           loans = member.loans.where("status = ? AND date_approved <= ?","active", @as_of)
@@ -245,6 +248,7 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -274,6 +278,7 @@ module Reports
                   "",
                   "",
                   "",
+                  "",
                   loan.pn_number,
                   loan.date_approved,
                   loan.principal,
@@ -284,7 +289,7 @@ module Reports
                   "",
                   loan.maturity_date,
                   loan.num_installments,
-                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
+                ], style: [nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,  date_format_cell, currency_cell_right, nil, nil, nil, currency_cell_right, nil, date_format_cell, nil]
               end
             end
           end

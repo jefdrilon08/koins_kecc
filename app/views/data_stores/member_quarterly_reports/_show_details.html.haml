@@ -46,6 +46,10 @@
     %th.text-center
       New Members
     %th.text-center
+      New Male Members
+    %th.text-center
+      New Female Members
+    %th.text-center
       Resigned YTD
     %th.text-center
       New Resigned YTD
@@ -178,6 +182,10 @@
         %td.text-center
           #{o["new_count"]}
         %td.text-center
+          #{o["new_count_male"]}
+        %td.text-center
+          #{o["new_count_female"]}
+        %td.text-center
           #{o["resigned_ytd_count"]}
         %td.text-center
           #{o["resigned_count"]}
@@ -297,6 +305,10 @@
       #{@data[:total_members][0]["total_pending"]}
     %td.text-center
       #{@data[:total_members][0]["total_new"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_new_male"]}
+    %td.text-center
+      #{@data[:total_members][0]["total_new_female"]}
     %td.text-center
       #{@data[:total_members][0]["total_resigned_ytd"]}
     %td.text-center

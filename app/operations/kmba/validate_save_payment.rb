@@ -13,11 +13,11 @@ module Kmba
           message: "No Payments Record Found!"
         }
       else 
-        @payments.map{ |a|
+        @payments.map{ |payment|
 
-          member = Member.where(identification_number: a[:identification_number])
+          member = Member.where(identification_number: payment["identification_number"])
 
-          if a[:identification_number].blank?
+          if payment["identification_number"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "identification_number", 
@@ -31,7 +31,7 @@ module Kmba
             }
           end
 
-          if a[:amount].blank?
+          if payment["amount"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "amount", 
@@ -39,7 +39,7 @@ module Kmba
             }
           end
 
-          if a[:account_subtype].blank?
+          if payment["account_subtype"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "account_subtype", 
@@ -47,7 +47,7 @@ module Kmba
             }
           end
 
-          if a[:transacted_at].blank?
+          if payment["transacted_at"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "transacted_at", 
@@ -55,7 +55,7 @@ module Kmba
             }
           end
 
-          if a[:status].blank?
+          if payment["status"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
               key: "status", 

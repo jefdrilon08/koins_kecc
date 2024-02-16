@@ -40,7 +40,7 @@ class MbsTransferController < DataStoreController
   
     @subheader_side_actions = []    
     if @data_store.status == 'pending'
-      if helpers.sbk_bk_mis_user          
+      if helpers.sbk_mis_bk_oas?         
           @subheader_side_actions << {      
             id: "",
             link: "/mbs_transfer/#{@data_store.id}",
@@ -52,15 +52,17 @@ class MbsTransferController < DataStoreController
             text: "Delete"    
           }
 
-          @subheader_side_actions << {      
-            id: "btn-approve",
-            link: "#",
-            class: "fa fa-check",           
-            data: {id: @data_store.id},     
-            text: "Approve"    
-          }
-        end      
-    end
+        end 
+    if helpers.sbk_bk_mis_user && current_user.roles.any? 
+        @subheader_side_actions << {      
+        id: "btn-approve",
+        link: "#",
+        class: "fa fa-check",           
+        data: {id: @data_store.id},     
+        text: "Approve"    
+      }       
+    end     
+  end
 
 
     def destroy

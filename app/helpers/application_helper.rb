@@ -14,6 +14,15 @@ module ApplicationHelper
       []
     end
   end
+
+  def is_cm_mis?
+    is_cm_mis = ["MIS", "CM"].include? current_user.roles.last
+  end
+  def is_mis_so_fm?
+    is_mis_so_fm = ["MIS", "SO", "FM"].include? current_user.roles.last
+
+  end
+
   def is_mis?
     is_mis = ["MIS"].include? current_user.roles.last
   end
@@ -29,8 +38,16 @@ module ApplicationHelper
     current_user.roles.include?("REMOTE-BK")
   end
 
+  def is_remote_fm_user?
+    current_user.roles.include?("REMOTE-FM")
+  end
+
   def is_bk?
     current_user.roles.include?("BK")
+  end
+
+  def sbk_mis_bk_oas?
+      sbk_mis_bk_oas = ["MIS", "SBK", "BK", "OAS"].include? current_user.roles.last
   end
   
   def sbk_mis_user

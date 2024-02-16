@@ -14,6 +14,10 @@ var $btnUpdateParticular;
 var $message;
 var templateErrorList;
 
+var $btnUpdateOrArnumber;
+var $inputOrNumber;          
+var $inputArNumber; 
+
 var $inputLoanProductId;
 var $inputPrincipal;
 var $inputTerm;
@@ -65,10 +69,11 @@ var _urlAdd               = "/api/v1/savings_insurance_transfer_collections/add_
 var _urlDelete            = "/api/v1/savings_insurance_transfer_collections/remove_member";
 var _urlApprove           = "/api/v1/savings_insurance_transfer_collections/approve";
 var _urlUpdateParticular  = "/api/v1/savings_insurance_transfer_collections/update_particular";
-
+var _urlUpdateOrArNumber  = "/api/v1/savings_insurance_transfer_collections/update_or_ar_number";
 var _cacheDom = function() {
   $btnAdd               = $("#btn-add");
   $btnUpdateParticular  = $("#btn-update-particular");
+  $btnUpdateOrArnumber  = $("#btn-update-or-ar-number");
   $btnDelete            = $(".btn-delete");
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
@@ -78,6 +83,8 @@ var _cacheDom = function() {
   $selectMember         = $("#select-member");
   $inputAmount          = $("#input-amount");
   $inputParticular      = $("#input-particular");
+  $inputOrNumber        = $("#input-or-number");
+  $inputArNumber        = $("#input-ar-number");
   $message              = $(".message");
   templateErrorList     = $("#template-error-list").html();
   $inputLoanProductId   = $("#input-loan-product-id");
@@ -442,6 +449,55 @@ var _bindEvents = function() {
       }
     });
   });
+
+  $btnUpdateOrArnumber.on("click", function() {
+    var arNumber          = $inputArNumber.val();
+    var orNumber          = $inputOrNumber.val();
+
+    $btnUpdateOrArnumber.prop("disabled", true);
+    $inputArNumber.prop("disabled", true);
+    $inputOrNumber.prop("disabled", true);
+    
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken,
+      or_number: orNumber,
+      ar_number: arNumber
+    };
+
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlUpdateOrArNumber,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnUpdateOrArnumber.prop("disabled", false);
+          $inputArNumber.prop("disabled", false);
+          $inputOrNumber.prop("disabled", false);
+        }
+      }
+    });
+  });
+
 };
 
 var init  = function(options) {

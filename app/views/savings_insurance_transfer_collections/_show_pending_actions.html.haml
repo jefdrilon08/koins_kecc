@@ -117,7 +117,7 @@
       .col-md-3
         .form-group
           %label Relationship to Beneficiary
-          = select_tag :kkalinga_relationship, options_for_select(["Father", "Mother", "Son", "Daughter", "Brother", "Sister", "Husband","Wife","Member"], @kkalinga_relationship), id: 'input-kkalinga-relationship', class: 'form-control'
+          = select_tag :kkalinga_relationship, options_for_select(["Aunt","Brother","Brother in law","Cousin","Daughter","Father","Father in law","Friend","Granddaughter","Grandfather","Grandmother","Grandson","Husband","Member","Mother","Mother in law","Neighbor","Nephew","Niece","Sister","Sister in law","Son","Step Brother","Step Daughter","Step Father","Step Mother","Step Sister","Step Son","Uncle","Wife"], @kkalinga_relationship), id: 'input-kkalinga-relationship', class: 'form-control'
 
 .row
   .col-md-6
@@ -163,3 +163,22 @@
       %button#btn-update-particular.btn.btn-info.btn-block
         .fa.fa-plus
         Save Particular
+- if Settings.activate_microinsurance
+  .row
+    .col-md-5
+      .form-group
+        %label
+          Or Number
+        = text_area_tag :or_number, @or_number, id: 'input-or-number', class: 'form-control'
+    .col-md-5
+      .form-group
+        %label
+          Ar Number
+        = text_area_tag :ar_number, @ar_number, id: 'input-ar-number', class: 'form-control'
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        %button#btn-update-or-ar-number.btn.btn-info.btn-block
+          .fa.fa-plus
+          Save Or/Ar Number

@@ -1,0 +1,41 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        BRANCH
+      %th
+        AS OF
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/share_capital_involuntary/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          %strong
+          #{o.meta.with_indifferent_access[:branch_name]} 
+        %td.text-center
+          #{o.meta.with_indifferent_access[:as_of]}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.bg-success
+              Done
+          - elsif o.error?
+            .badge.bg-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

@@ -48,6 +48,8 @@ module Billings
 #      end
 
       @data = {
+        special_report:nil,
+        print_count:0,
         or_number: "",
         ar_number: "",
         records: [],
@@ -55,6 +57,7 @@ module Billings
         totals: [],
         total_expected_collections: 0.00,
         total_collected: 0.00,
+        grand_total_loan_paymet: 0.00,
         prepared_by: "#{@user.try(:first_name)} #{@user.try(:last_name)}",
 #        checked_by: "#{fm_user.try(:first_name)} #{fm_user.try(:last_name)}",
 #        approved_by: "#{bk_user.try(:first_name)} #{bk_user.try(:last_name)}"
@@ -76,8 +79,9 @@ module Billings
     
         @data[:total_expected_collections]  += data[:total_expected_collections]
         @data[:total_collected]             += data[:total_expected_collections]
-      end
+        @data[:grand_total_loan_paymet]     = 0.0
 
+      end
       load_headers_and_totals!
 
       # Load accounting entry
@@ -111,6 +115,7 @@ module Billings
             if rr[:record_type] == "LOAN_PAYMENT"
               if rr[:loan_product][:id] == o.id
                 total += rr[:amount].to_f.round(2)
+
               end
             end
           end
@@ -121,6 +126,7 @@ module Billings
           key: o.to_s,
           amount: total
         }
+        @data[:grand_total_loan_paymet] += total
       end
 
       @non_entry_point_loan_products.each do |o|
@@ -142,8 +148,10 @@ module Billings
           key: o.to_s,
           amount: total
         }
+        @data[:grand_total_loan_paymet] += total
+        @data[:total_loan_payment]
       end
-
+      
       # DEPOSITS
       ::Billings::NextPayment::SAVINGS_SUBTYPES.each do |o|
         @data[:headers] << "Deposit #{o}"
@@ -217,6 +225,8 @@ module Billings
         key: "WP",
         amount: 0.00
       }
+
+
     end
   end
 end

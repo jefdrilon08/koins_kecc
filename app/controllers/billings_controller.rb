@@ -2,7 +2,7 @@ class BillingsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    
+
     @billings = ReadOnlyBilling
       .select("id,or_number,ar_number,branch_id,center_id,collection_date,date_approved,status,total_expected_collections,total_collected")
       .includes(:center, :branch)
@@ -26,6 +26,11 @@ class BillingsController < ApplicationController
       @status = params[:status]
       @billings = @billings.where(status: @status)
     end
+    if params[:or_number].present?
+      @or_number = params[:or_number]
+      @billings = @billings.where(or_number: @or_number)
+    end
+    @data = @billing.try(:data).try(:with_indifferent_access)
 
     @billings = @billings.order("status DESC, collection_date DESC").page(params[:page]).per(LIST_PAGE_SIZE)
 
@@ -39,6 +44,8 @@ class BillingsController < ApplicationController
   end
 
   def show
+    @current_user = current_user
+
     @billing  = ReadOnlyBilling.find(params[:id])
 
     if @billing.processing?
@@ -64,61 +71,84 @@ class BillingsController < ApplicationController
       @subheader_side_actions = []
 
       if @billing.pending?
-        
 
-        if helpers.so_mis_user
+
+        if helpers.is_mis_so_fm?
           @subheader_side_actions << {
             link: "#",
             class: "fa fa-print",
             id: "btn-save-billing",
             text: "Save"
           }
-        
+
           @subheader_side_actions << {
             link: "#",
             class: "fa fa-download",
             id: "btn-termal",
             text: "Print Thermal Printer"
           }
-          
+
           @subheader_side_actions << {
             id: "btn-zero-out",
             link: "#",
             class: "fa fa-times",
             text: "Zero Out"
           }
-       
-          @subheader_side_actions << {
-            link: billing_path(@billing.id),
-            class: "fa fa-times",
-            data: { method: :delete, confirm: "Are you sure?" },
-            text: "Delete"
-          }
+
+
         end
 
       end
+
 
       if @billing.save?
+        if @data[:save].present?
 
-        if helpers.is_mis_fm?
-          @subheader_side_actions << {
-            link: "#",
-            class: "fa fa-print",
-            id: "btn-unsave-billing",
-            text: "UnSave"
-          }
+          if @data[:save]["id"] != current_user.id and helpers.is_mis_fm? || helpers.is_cm_mis?
+            @subheader_side_actions << {
+              link: "#",
+              class: "fa fa-print",
+              id: "btn-unsave-billing",
+              text: "UnSave"
+            }
 
 
-          @subheader_side_actions << {
-            id: "btn-check",
-            link: "#",
-            class: "fa fa-check",
-            text: "Check"
-          }
+          end
+
+          if @data[:save]["id"] != current_user.id and helpers.is_cm_mis?
+            @subheader_side_actions << {
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
+          elsif @data[:save]["id"] != current_user.id and helpers.is_mis_fm?
+            @subheader_side_actions << {
+                id: "btn-check",
+                link: "#",
+                class: "fa fa-check",
+                text: "Check"
+              }
+          end
+        else
+          if helpers.is_mis_fm?
+            @subheader_side_actions << {
+                id: "btn-check",
+                link: "#",
+                class: "fa fa-check",
+                text: "Check"
+              }
+            @subheader_side_actions << {
+              link: "#",
+              class: "fa fa-print",
+              id: "btn-unsave-billing",
+              text: "UnSave"
+            }
+          end
         end
 
       end
-      
+
       if @billing.checked?
         if helpers.sbk_bk_mis_user
           @subheader_side_actions << {
@@ -137,6 +167,16 @@ class BillingsController < ApplicationController
       end
 
 
+      if @billing.approved?
+          if helpers.sbk_bk_mis_user
+            @subheader_side_actions << {
+            link: "#",
+            class: "fa fa-print",
+            id: "btn-print-pdf",
+            text: "Print PDF"
+          }
+          end
+      end
 
       @subheader_side_actions << {
         link: "#",
@@ -158,12 +198,23 @@ class BillingsController < ApplicationController
         id: "btn-excel",
         text: "Download Excel"
       }
-      
-      
+
+
       @payload = {
         id: @billing.id
       }
     end
+      if @billing.pending?
+        if helpers.is_mis_fm?
+          @subheader_side_actions << {
+            link: billing_path(@billing.id),
+            class: "fa fa-times",
+            data: { method: :delete, confirm: "Are you sure?" },
+            text: "Delete"
+          }
+
+        end
+      end
   end
 
   def destroy
@@ -183,11 +234,11 @@ class BillingsController < ApplicationController
   end
 
   def excel
-    render json: {download_url: "#{billing_download_excel_path(billing: params[:id])}"} 
+    render json: {download_url: "#{billing_download_excel_path(billing: params[:id])}"}
   end
- 
+
   def billing_excel
-  
+
     billing_excel = ::Billings::BillingDownloadExcel.new(billing: params[:billing]).execute!
     filename = "billing.xlsx"
     billing_excel.serialize "#{Rails.root}/tmp/#{filename}"

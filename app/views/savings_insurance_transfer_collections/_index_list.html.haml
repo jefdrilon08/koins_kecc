@@ -16,10 +16,6 @@
       -if Settings.activate_microinsurance
         %th
           Payment Type
-        %th
-          OR Number
-        %th
-          AR Number
       %th
         Insurance Type
       %th.text-end
@@ -55,12 +51,6 @@
         -if Settings.activate_microinsurance
           %td
             #{o.data["payment_subtype"]}
-        -if Settings.activate_microinsurance
-          %td
-            #{o.data["or_number"]}
-        -if Settings.activate_microinsurance
-          %td
-            #{o.data["ar_number"]}
         %td
           #{o.data["insurance_subtype"]}
         %td.text-end

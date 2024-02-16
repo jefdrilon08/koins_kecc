@@ -1,0 +1,68 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center{ width: "20%" }
+        Member
+      %th.text-center{width: "10%"}
+        Total Loan Balances
+      %th.text-center{width: "10%"}
+        Total Savings Balances
+      %th.text-center{width: "10%"}
+        Closing Fee Amount
+      %th.text-center{width: "10%"}
+        Total Loan Payments
+      %th.text-center{width: "15%"}
+        Remaining Balance (after Loan Payments)
+      %th.text-center{width: "10%"}
+        Action
+    
+  %tbody
+    -total_lb = 0.0
+    -total_sv = 0.0
+    -total_lp = 0.0
+    -total_cf = 0.0
+    -total_rb = 0.0
+    - @data_view.each do |dt|
+      -total_lb += dt[:total_loan_balances]
+      -total_sv += dt[:total_savings]
+      -total_lp += dt[:total_loan_payment]
+      -total_cf += dt[:closing_fee_amount]
+      -total_rb += dt[:remaining_savings]
+      %tr
+        %td.text-center
+          %strong
+          =link_to member_path(dt[:member_id]), target: '_blank' do
+            #{dt[:member_name]}
+        %td.text-end
+          #{number_to_currency(dt[:total_loan_balances],unit: '')}
+        %td.text-end 
+          #{number_to_currency(dt[:total_savings],unit: '')}
+        %td.text-end
+          #{number_to_currency(dt[:closing_fee_amount],unit: '')}
+        %td.text-end
+          #{number_to_currency(dt[:total_loan_payment],unit: '')}
+        %td.text-end
+          #{number_to_currency(dt[:remaining_savings],unit: '')}
+        %td
+          -if @data_store.pending?
+            .btn-group{:style => "margin-left: 20px"}
+              .btn.btn-delete.btn-danger.btn-sm{:type =>"button", data: {member_id: dt[:member_id], member_name: dt[:member_name]}} 
+                DELETE
+              /.btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}
+              .btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_id: dt[:member_id], member_name: dt[:member_name], member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}  
+                DETAILS
+    %tr
+      %th.text-center
+        TOTAL
+      %th.text-end
+        #{number_to_currency(total_lb.round(2).to_f, unit: '')}
+      %th.text-end
+        #{number_to_currency(total_sv.round(2).to_f, unit: '')}
+      %th.text-end
+        #{number_to_currency(total_cf.round(2).to_f, unit: '')}
+      %th.text-end
+        #{number_to_currency(total_lp.round(2).to_f, unit: '')}
+     
+      %th.text-end
+        #{number_to_currency(total_rb.round(2).to_f, unit: '')}
+      %th

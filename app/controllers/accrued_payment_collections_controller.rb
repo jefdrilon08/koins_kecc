@@ -2,6 +2,7 @@ class AccruedPaymentCollectionsController < ApplicationController
   before_action :authenticate_user!
 
 	def index
+
 		@subheader_items = [
         {
           text: "Accrued Interest Payment Collection"
@@ -12,6 +13,38 @@ class AccruedPaymentCollectionsController < ApplicationController
       ]
 
       @accrued_interest = AccruedBilling.where(branch_id: @branches.pluck(:id)).order("status DESC , collection_date DESC")
+
+    # #   if params[:status].present?
+    # #     @accrued_interest = AccruedBilling.where(status: params[:status]).order("status DESC , collection_date DESC")
+      
+    # #   elsif params[:branch_select].present?
+    # #     @accrued_interest = AccruedBilling.where(branch_id: params[:branch_select]).order("status DESC , collection_date DESC")
+      
+    # #   elsif params[:center_select].present?
+    # #     @accrued_interest = AccruedBilling.where(center_id: params[:center_select]).order("status DESC , collection_date DESC")
+
+    # # if params[:status].present?
+    # #   @status = params[:status]
+    # #   @accrued_interest = @accrued_interest.where(status: @status)
+    # # end
+
+    #   end
+
+    if params[:branch_select].present?
+      @branch   = ReadOnlyBranch.find(params[:branch_select])
+      @accrued_interest = @accrued_interest.where(branch_id: @branch.id)
+    end
+
+    if params[:center_select].present?
+      @center   = ReadOnlyCenter.find(params[:center_select])
+      @accrued_interest = @accrued_interest.where(center_id: @center.id)
+    end
+
+    if params[:status].present?
+      @status = params[:status]
+      @accrued_interest = @accrued_interest.where(status: @status)
+    end
+
 
 	end
 

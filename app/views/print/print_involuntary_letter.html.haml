@@ -106,13 +106,7 @@
 %p{style: "font-size: 10.66px"}
   Nais naming ipagbigay-alam na sa kasalukuyan, ikaw ay nasa mga sumusunod na kalagayan:
   %ul.list-group
-    - if @data[:last_savings_deposit].present?
-      %li.list-group-item{style: "font-size: 10.66px"}
-        %input{:required => "", :type => "checkbox"}>/ 
-        &nbsp&nbsp Hindi pagtangkilik sa anumang produkto o/at serbisyo ng kooperatiba; mula noong 
-        %b
-          #{@data[:last_savings_deposit].to_date.strftime("%B %d, %Y")} 
-        hanggang sa kasalukuyan
+    %li.list-group-item{style: "font-size: 10.66px"}
     -if @data[:loan_records].any?
       %li.list-group-item{style: "font-size: 10.66px"}
         %input{:required => "", :type => "checkbox"}>/

@@ -9,6 +9,7 @@ module Print
     end
 
     def execute!
+      
       @collector              = Center.find(@billing.center_id).user
 
       @data[:collection_date] = @billing.collection_date
@@ -33,8 +34,15 @@ module Print
       }
 
       @data[:accounting_entry]  = accounting_entry
-   
+
+      counter = @billing[:data]["print_count"].to_i
+      counter = counter + 1
+
+      @data[:data]["print_count"] = counter
+      @billing.update(data: @data[:data])
       @data
+
     end
+
   end
 end

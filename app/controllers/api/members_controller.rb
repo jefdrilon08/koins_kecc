@@ -89,15 +89,18 @@ module Api
     def reinstate
       member = Member.find(params[:id])
       reinstatement_date = params[:reinstatement_date]
+      date_stop = params[:date_stop]
       errors             = ::Members::ValidateReinstatement.new(
                             member: member,
-                            reinstatement_date: reinstatement_date
+                            reinstatement_date: reinstatement_date,
+                            date_stop: date_stop
                           ).execute!
 
       if errors.size == 0
         ::Members::Reinstate.new(
           member: member,
           reinstatement_date: reinstatement_date,
+          date_stop: date_stop,
           reinstate_by: current_user.full_name
         ).execute!
 
@@ -110,6 +113,7 @@ module Api
     def update_recognition_date
       member            = Member.find(params[:id])
       recognition_date  = params[:recognition_date]
+      status            = 'active'
       config  = {
         member: member,
         user: current_user,
@@ -120,18 +124,11 @@ module Api
         recognition_date: recognition_date
       ).execute!
       if errors.any?
-        ender json: errors, status: 400
+        render json: errors, status: 400
       else
         data  = member.data.with_indifferent_access
           
           data[:recognition_date] = recognition_date
-          if member.pending? && member.insurance_pending?
-            status = "active"
-            insurance_status = "inforce"
-          else
-            status = member.status
-            insurance_status = member.status
-          end
           if member.identification_number.present?
             identification_number = member.identification_number
           else
@@ -143,17 +140,68 @@ module Api
           end
           member.update!(
             data: data,
-            status: status,
-            insurance_status: insurance_status,
             identification_number: identification_number,
             modifiable: nil
           )
         ::Members::UpdateRecognitionDate.new(
           member: member,
           recognition_date: recognition_date,
-          change_by: current_user.full_name
+          status: status
         ).execute!
         render json: { id: member.id }
+      end
+    end
+
+    def claims_copy_pdf
+      @member             = Member.find(params[:id])
+      @date_of_death      = params[:date_of_death]
+
+      session[:date_of_death] = @date_of_death
+    end
+
+    def resign
+        member = Member.find(params[:id])
+        date_resigned = params[:date_resigned]
+        reason        = params[:reason]
+        errors        = ::Members::ValidateResign.new(
+                          member: member,
+                          date_resigned: date_resigned
+                        ).execute!
+
+        if errors.size == 0
+          ::Members::Resign.new(
+            member: member,
+            date_resigned: date_resigned,
+            reason: reason,
+            resigned_by: current_user.full_name
+          ).execute!
+
+          render json: { id: member.id }
+        else
+          render json: { errors: errors }, status: 402
+        end
+      end
+
+    def is_reclassified
+      member               = Member.find(params[:id])
+      is_reclassified      = params[:is_reclassified]
+      config  = {
+        member: member,
+        user: current_user,
+        is_reclassified: is_reclassified
+      }
+      errors = ::Members::ValidateReclassified.new(
+        member: member,
+        is_reclassified: is_reclassified
+      ).execute!
+
+      if errors.any?
+        render json: errors, status: 400
+      else
+        ::Members::ReclassifiedMember.new(
+          member: member,
+          is_reclassified: is_reclassified
+        ).execute!
       end
     end
 
@@ -196,10 +244,10 @@ module Api
         class: "fa fa-times",
         text: "Cancel" }
     ]
-    @payload = {
-      id: @member.id,
-      memberResignationTypes: helpers.member_resignation_types
-    }
+    # @payload = {
+    #   id: @member.id,
+    #   memberResignationTypes: helpers.member_resignation_types
+    # }
   end
 
     def balik_kasapi

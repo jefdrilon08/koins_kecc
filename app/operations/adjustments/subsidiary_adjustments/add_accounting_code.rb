@@ -11,6 +11,10 @@ module Adjustments
 
         @data             = @adjustment_record.data.with_indifferent_access
         @accounting_entry = @data[:accounting_entry]
+        if Settings.activate_microinsurance
+          # MBF Accounting Fund
+          @accounting_fund_id = '1b4efc94-017b-4024-b675-95b4b0763bd0'
+        end
       end
 
       def execute!
@@ -54,7 +58,9 @@ module Adjustments
         end
 
         @data[:accounting_entry]  = @accounting_entry
-
+        if Settings.activate_microinsurance
+          @data[:accounting_entry][:accounting_fund_id]  = @accounting_fund_id
+        end
         @adjustment_record.data = @data
 
         @adjustment_record.save!

@@ -42,7 +42,7 @@ var _cacheDom = function() {
   $btnPrint         = $("#btn-print");
   $printMessage       = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
-
+  $modalPrint       = $("#modal-print")
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
 
@@ -64,8 +64,8 @@ var _bindEvents = function() {
   });
   
  $btnPrintPdf.on("click", function() {
-    var print_icpr = $btnPrintPdf.data('id');
-
+    //var print_icpr = $btnPrintPdf.data('id');
+    var print_icpr = document.getElementById("btn-print-pdf").getAttribute('data-id');
     $modalPrint.show();
     $printMessage.html(
       Mustache.render(

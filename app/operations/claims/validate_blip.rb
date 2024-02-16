@@ -44,7 +44,7 @@ module Claims
       end
 
       if @date_prepared.blank?
-        @errors << " Date Prepared field is required"
+        @errors << " Date Processed field is required"
       end
 
       if @policy_number.blank?
@@ -84,7 +84,7 @@ module Claims
       end
 
       if @arrears.blank?
-        @errors << "Arrears field is required"
+        @errors << "Lapsed Amount field is required"
       end
 
       if @cause_of_death_tpd_accident.blank?

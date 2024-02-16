@@ -36,7 +36,13 @@ module Administration
 
     def print
       
-      @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order(Arel.sql("member_shares.data->> 'date_printed' DESC"))
+      # @member_shares  = MemberShare.printed.joins(:member).where("members.branch_id IN (?)", @branches.pluck(:id)).order(Arel.sql("member_shares.data->> 'date_printed' DESC"))
+
+      @member_shares = MemberShare
+        .printed
+        .includes(member: [:branch, :center])
+        .where(members: { branch_id: @branches.pluck(:id) })
+        .order(Arel.sql("member_shares.data->>'date_printed' DESC"))
 
       if params[:branch_id].present?
         @branch_id  = params[:branch_id]
@@ -50,6 +56,15 @@ module Administration
         #d = (params[:end_date].to_date + 1).to_s
         @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
       end
+
+      @subheader_side_actions = []
+         @subheader_side_actions << {
+          id: "btn-print-sc",
+          link: "#",
+          class: "fa fa-print",
+          text: "Print",
+        }
+
     end
 
     def no_certificates
@@ -151,26 +166,33 @@ module Administration
     end
 
     def printed
-      @member_shares = MemberShare
-        .printed
-        .includes(member: [:branch, :center])
-        .where(members: { branch_id: @branches.pluck(:id) })
-        .order(Arel.sql("member_shares.data->>'date_printed' DESC"))
 
-      if params[:branch_id].present?
-        @branch_id  = params[:branch_id]
-        #raise @branch_id.inspect
-        @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
-      end
-      if params[:center_id].present?
-        @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
-      end
-      if params[:start_date].present? and params[:end_date].present?
-        #d = (params[:end_date].to_date + 1).to_s
-        @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
-      end
+      if params[:branch_id].present? or params[:center_id].present? or (params[:start_date].present? and params[:end_date].present?)
+        @member_shares = MemberShare
+          .printed
+          .includes(member: [:branch, :center])
+          .where(members: { branch_id: @branches.pluck(:id) })
+          .order(Arel.sql("member_shares.data->>'date_printed' DESC"))
 
-      @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
+        if params[:branch_id].present?
+          @branch_id  = params[:branch_id]
+          #raise @branch_id.inspect
+          @member_shares  = @member_shares.where("members.branch_id =  ?" , @branch_id) 
+        end
+        if params[:center_id].present?
+          @member_shares  = @member_shares.where("members.center_id =  ?" , params[:center_id]) 
+        end
+        if params[:start_date].present? and params[:end_date].present?
+          #d = (params[:end_date].to_date + 1).to_s
+          @member_shares = @member_shares.where("member_shares.data->> 'date_printed' >= ? and member_shares.data->> 'date_printed' <= ?  ", params[:start_date] , params[:end_date])
+        end
+
+        @member_shares = @member_shares.page(params[:page]).per(LIST_PAGE_SIZE)
+      
+      else
+        @member_shares = nil
+
+      end
 
       @subheader_items = [
         { text: "Administration" },

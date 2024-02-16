@@ -46,16 +46,16 @@
                   %label
                     Insurance Type
                   = select_tag :insurance_type, options_for_select(insurance_subtypes), id: "select-insurance-subtype", class: "form-control"
-              .col-md-6
-                .form-group
-                  %label
-                    OR Number
-                  = text_field_tag :or_number, "", class: 'form-control', id: 'input-or-number'
-              .col-md-6
-                .form-group
-                  %label
-                    AR Number
-                  = text_field_tag :ar_number, "", class: 'form-control', id: 'input-ar-number'
+              / .col-md-6
+              /   .form-group
+              /     %label
+              /       OR Number
+              /     = text_field_tag :or_number, "", class: 'form-control', id: 'input-or-number'
+              / .col-md-6
+              /   .form-group
+              /     %label
+              /       AR Number
+              /     = text_field_tag :ar_number, "", class: 'form-control', id: 'input-ar-number'
 
           .message
       .modal-footer

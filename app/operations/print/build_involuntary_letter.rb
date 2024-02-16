@@ -2,7 +2,7 @@ module Print
 	class BuildInvoluntaryLetter
 		def initialize(config)
 			@config = config[:config]
-
+	
 			@member = Member.find(@config["member_id"])
 			@loan_records = @config["loan_records"]
 			@member_accounts = @config["member_accounts"]
@@ -11,7 +11,9 @@ module Print
 
 		def execute!
 		#	raise @member_accounts.inspect
-			@last_savings_deposit = @member_accounts.sort_by{|key| key["last_transaction"] }.reverse.first
+			if @member_accounts.present?
+				@last_savings_deposit = @member_accounts.sort_by{|key| key["last_transaction"] }.reverse.first
+			end
 			
 			@last_loan_payment = nil
 			

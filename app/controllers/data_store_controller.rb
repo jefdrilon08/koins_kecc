@@ -127,7 +127,7 @@ class DataStoreController < ApplicationController
       "watchlists"                   => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "x_weeks_to_pay"               => { order: "as_of DESC",      meta: %w[branch_name as_of x], data: %w[date_until] },
       "members_in_good_standing"     => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
-      "for_writeoff"                 => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
+      "for_writeoff"                 => { order: "created_at DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "billing_for_writeoff"         => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
       "insurance_personal_funds"     => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "billing_for_writeoff_collections" => { order: "as_of DESC",      meta: %w[branch_name start_date end_date], data: %w[]},
@@ -139,7 +139,9 @@ class DataStoreController < ApplicationController
       "branch_cash_flow" => {order: "as_of DESC", meta: %w[branch_name as_of],data: %w[] },
 
       "member_quarterly_reports"      => { order: "as_of DESC", data: %w[] },
-
+      "share_capital_involuntary"     => {order: "as_of DESC",data: %w[] },
+      "billing_for_involuntary"       => {order: "created_at DESC",      meta: %w[branch_name], data: %w[]},
+      "member_per_center_counts"    => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
 
     }
   end

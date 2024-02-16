@@ -8,6 +8,15 @@ module Members
 
       @branch = @member.branch
       @center = @member.center
+      @active_loans = Loan.active.where(member_id: @member.id)
+      @loan         =  Loan.where(member_id: @member.id)
+      @accrued_loan = Loan.where("member_id = ? and data->>'accrued_interest' != ? ","#{@member.id}","nil")
+      @loan_product_settings = Settings.loan_products
+      @current_date = ::Utils::GetCurrentDate.new(
+                          config: {
+                            branch: Branch.find(@member.branch_id)
+                          }
+                        ).execute!
 
       # Accounting entry details
       @book           = @config[:book] || "JVB"
@@ -69,7 +78,7 @@ module Members
           name: @member.center.name
         },
         equity_accounts: [],
-        date_resigned: Date.today,
+        date_resigned: @current_date,
         particular: default_particular,
         member_resignation_type: {
           name: @member_resignation_types.first.name,
@@ -201,6 +210,11 @@ module Members
     def build_credit_journal_entries!
       journal_entries = []
 
+
+
+
+
+
       # Closing fee
       if @closing_fee  > 0
       journal_entries << {
@@ -227,6 +241,82 @@ module Members
       end
 
       deposit_amount  = deposit_amount - @closing_fee
+
+      #active_loans
+      if @active_loans.present?
+        @active_loans.each do |al|
+          loan_product_id = al.loan_product_id
+          
+         
+
+          @loan_product_settings.each do |lp|
+            if lp[:loan_product_id] == loan_product_id
+              receivable_accounting_code_id = AccountingCode.find(lp[:receivable_accounting_code_id])
+              interest_receivable_accounting_code_id = AccountingCode.find(lp[:interest_receivable_accounting_code_id])
+
+              if deposit_amount > 0
+                journal_entries << {
+                  accounting_code_id: receivable_accounting_code_id.id,
+                  code: receivable_accounting_code_id.code,
+                  name: receivable_accounting_code_id.name,
+                  amount: al.principal_balance.to_f
+                }
+                deposit_amount -= al.principal_balance
+              end
+
+              
+              if deposit_amount > 0
+                journal_entries << {
+                  accounting_code_id: interest_receivable_accounting_code_id.id,
+                  code: interest_receivable_accounting_code_id.code,
+                  name: interest_receivable_accounting_code_id.name,
+                  amount: al.interest_balance.to_f
+                }
+               
+                deposit_amount -= al.interest_balance
+              end
+            end
+          end
+        end
+      end
+
+
+     
+
+
+      #accrued interest
+      if @accrued_loan.any?
+        @accrued_loan.each do |ac|
+          accrued_data = ac.data.with_indifferent_access
+          if accrued_data[:accrued_interest]["total_accrued_interest_balance"].to_f == 0.0 and accrued_data[:accrued_interest]["status"] != "remove" and  accrued_data[:accrued_interest]["status"] != "paid"
+            accrued_total_balance = accrued_data[:accrued_interest][:total_accrued_interest].to_f
+            loan_product = LoanProduct.find(ac.loan_product_id)
+            
+            @loan_product_settings.each do |lp|
+              if lp[:loan_product_id] == loan_product.id
+                interest_receivable_accounting_code_id = AccountingCode.find(lp[:interest_receivable_accounting_code_id])
+                if deposit_amount > 0
+
+                  journal_entries << {
+                    accounting_code_id: interest_receivable_accounting_code_id.id,
+                    code: interest_receivable_accounting_code_id.code,
+                    name: interest_receivable_accounting_code_id.name,
+                    amount: accrued_total_balance
+                  }
+                  deposit_amount -= accrued_total_balance
+                end
+              end
+            end
+          end
+        end
+      end
+
+
+
+
+
+
+
 
       if deposit_amount > 0
         journal_entries << {

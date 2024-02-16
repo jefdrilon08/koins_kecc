@@ -15,6 +15,10 @@
           .col
             = link_to "/accounting/general_ledgers", class: "btn-nav-square-md" do
               General Ledgers
+          - if Settings.activate_microinsurance
+            .col
+              = link_to "/accounting/general_ledger", class: "btn-nav-square-md" do
+                General Ledger
         .mt-4
         %h5
           Books
