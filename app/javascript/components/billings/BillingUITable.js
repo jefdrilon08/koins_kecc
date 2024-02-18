@@ -3,6 +3,7 @@ import { useState } from 'react';
 import $ from 'jquery';
 import ReactTable from 'react-table';
 import Toggle from 'react-toggle';
+import ToggleSwitch from '../utils/ToggleSwitch';
 
 import { numberWithCommas } from '../utils/helpers';
 import { customStyles } from '../utils/consts';
@@ -80,7 +81,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th key={"h-total"} style={{ minWidth: "40px" }} >
+      <th key={"h-total-cp"} style={{ minWidth: "40px" }} >
         <center>
           CP
         </center>
@@ -151,7 +152,7 @@ export default class BillingUITable extends React.Component {
     });
   }
 
-  handleToggled(memberId) {
+  handleToggled(memberId, isChecked) {
     var context = this;
 
     var data = {
@@ -220,9 +221,12 @@ export default class BillingUITable extends React.Component {
         components.push(
           <td key={"c-member-attnd-" + member.id}>
             <center>
-              <Toggle
-                defaultChecked={record.attendance}
-                onChange={this.handleToggled.bind(this, member.id)}
+              <ToggleSwitch
+                 checked={record.attendance}
+                 onChange={
+                  (isChecked) => this.handleToggle(record.member.id, isChecked)
+
+                  } 
               />
             </center>
           </td>
@@ -409,7 +413,7 @@ export default class BillingUITable extends React.Component {
       );
 
       components.push(
-        <td key={"c-member-grand-total-" + member.id} className="text-end">
+        <td key={"c-member-grand-total-lp" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_loan_payment)}
           </strong>
