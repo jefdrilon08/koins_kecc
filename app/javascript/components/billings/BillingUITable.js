@@ -152,7 +152,7 @@ export default class BillingUITable extends React.Component {
     });
   }
 
-  handleToggled(memberId, isChecked) {
+  handleToggled(memberId) {
     var context = this;
 
     var data = {
@@ -222,11 +222,13 @@ export default class BillingUITable extends React.Component {
           <td key={"c-member-attnd-" + member.id}>
             <center>
               <ToggleSwitch
-                 checked={record.attendance}
-                 onChange={
-                  (isChecked) => this.handleToggle(record.member.id, isChecked)
+                key={"c-member-attnd-toggle-switch" + member.id}
+                name={"c-member-attnd-toggle-switch" + member.id}
+                checked={record.attendance}
+                onChange={
+                  () => this.handleToggled(record.member.id)
 
-                  } 
+                } 
               />
             </center>
           </td>
