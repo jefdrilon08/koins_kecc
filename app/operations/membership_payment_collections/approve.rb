@@ -21,6 +21,7 @@ module MembershipPaymentCollections
                             branch: @branch
                           }
                         ).execute!
+        @member = Member.new
     end
 
     def execute!
@@ -33,8 +34,10 @@ module MembershipPaymentCollections
       process_insurance!
       process_savings!
 
+
       #class sms
       process_sms_blast!
+
 
       @data[:approved_by] = @user.full_name
 
@@ -154,21 +157,36 @@ module MembershipPaymentCollections
 #sms
     def process_sms_blast!
       @data[:records].each do |rec|
-        member= Member.find(rec[:member]["id"])
+        member = Member.find(rec[:member]["id"])
 
         if member.mobile_number.present?
+          member_data = member.data.with_indifferent_access
+
+          otp = generate_otp
+
+          member_data["sms_code"] = otp.to_s
+
+          member.update(data:member_data)
+
+          # Generate OTP
+
           config = {
             mobile_number: member.mobile_number,
-            #content: "Good Day! #{member.full_name}, your membership payment has been posted to our system with reference number: #{@accounting_entry.reference_number} and your memberhsip status has been updated to #{member.status.upcase} with IDENTIFICATION NUMBER: #{member.identification_number}"
-            content: "Username: #{member.identification_number} \nPassword: password /nPumunta lamang sa https://mykoins.org.ph/ para sa ibang impormasyon."
-
+            content: "Your OTP for MyK-Coins: #{otp} \nUsername: #{member.identification_number} \nPassword: password"
           }
+
           ::SmsBlast::Send.new(config: config).execute!
           puts config.inspect
-
         end
       end
-
     end
+
+
+    def generate_otp
+      rand(100_000..999_999)
+    end
+
+
+
   end
 end
