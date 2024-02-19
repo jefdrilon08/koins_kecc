@@ -1,5 +1,6 @@
 module Billings
   class Approve
+    include ActionView::Helpers::NumberHelper
     def initialize(config:)
       @config   = config
       @billing  = @config[:billing]
@@ -21,7 +22,7 @@ module Billings
       @data_equity         = @billing.equity
 
 
-      
+
       @data_withdraw_payments = @billing.withdraw_payments
       @data_accounting_entry  = @billing.accounting_entry
 
@@ -39,9 +40,13 @@ module Billings
       process_withdraw_payments!
       process_equity!
 
+
+      process_send_sms!
+
       @data[:approved_by] = @user.full_name
 
       # Update accounting entry with reference number
+
       @data[:accounting_entry][:id]               = @accounting_entry.id
       @data[:accounting_entry][:reference_number] = @accounting_entry.reference_number
       @data[:accounting_entry][:status]           = @accounting_entry.status
@@ -79,7 +84,7 @@ module Billings
     # end
 
     # def issue_ar_number!
-    #   cmd = ::Branches::IssueArNumber.new(  
+    #   cmd = ::Branches::IssueArNumber.new(
     #     branch: @branch
     #   )
 
@@ -118,7 +123,7 @@ module Billings
         ).execute!
       end
     end
-    
+
     def process_equity!
       @data_equity.each do |o|
         config  = {
@@ -128,7 +133,7 @@ module Billings
           particular: @data_accounting_entry[:particular]
         }
 
-      
+
         ::Billings::ApproveEquityDepositHash.new(
           config: config
         ).execute!
@@ -137,7 +142,7 @@ module Billings
 
     def process_withdraw_payments!
       @data_withdraw_payments.each do |o|
-        config  = { 
+        config  = {
           date_paid: @date_approved,
           withdraw_payment: o,
           user: @user,
@@ -191,6 +196,53 @@ module Billings
                           ).execute!
 
       @accounting_entry
+    end
+
+    def process_send_sms!
+      @data[:records].each do |rec|
+        @member = Member.find(rec["member"]["id"])
+        #transactions
+        @total_loan_payment = 0.00
+        @total_cash_payment = 0.00
+        @total_withdraw_payment = 0.00
+        @total_payment = 0.00
+        rec[:records].each do |rl|
+          if rl[:enabled] == true and rl[:record_type] == "LOAN_PAYMENT"
+            @total_loan_payment += rl[:amount].to_f
+          elsif rl[:enabled] == true and rl[:record_type] == "SAVINGS"
+            @total_cash_payment += rl[:amount].to_f
+          elsif rl[:enabled]== true and rl[:record_type] == "INSURANCE"
+            @total_cash_payment += rl[:amount].to_f
+          elsif rl[:enabled] == true and rl[:record_type] == "WP"
+            @total_withdraw_payment += rl[:amount].to_f
+          end
+
+        end
+        @total_payment = @total_cash_payment+@total_loan_payment
+
+        if @total_payment > 0
+          content= "Hi #{@member.first_name}! \nAng iyong hulog #{@total_payment} ay natanggap na ng K-COOP RE##{@accounting_entry[:reference_number]} \ndate: #{@accounting_entry[:date_posted].to_fs(:long)} \nMag-log in sa iyong My k-coins account para sa detalye."
+          config = {
+            mobile_number: @member.mobile_number,
+            content: content
+          }
+          ::SmsBlast::Send.new(config: config).execute!
+          puts config.inspect
+        end
+
+        if @total_withdraw_payment > 0
+          content= "Hi #{@member.first_name}! \nIkaw ay nag-withdraw sa K-COOP ng #{@total_withdraw_payment} na may REF##{@accounting_entry[:reference_number]} \nMag-log in saiyong My k-coins account para sa detalye."
+          config = {
+            mobile_number: @member.mobile_number,
+            content: content
+          }
+          #::SmsBlast::Send.new(config: config).execute!
+          puts config.inspect
+        end
+
+        #content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. \ntransaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nLoan Payment: #{number_to_currency(@total_loan_payment,unit: '')} \nCash Payment: #{number_to_currency(@total_cash_paymnet,unit: '')} \nWithdraw Payment: #{number_to_currency(@total_withdraw_payment,unit: '')} \nTHIS IS A TEST MESSAGE ONLY"
+
+      end
     end
   end
 end

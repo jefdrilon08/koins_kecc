@@ -25,6 +25,7 @@ module DepositCollections
     def execute!
       post_accounting_entry!
       process_deposits!
+      process_sms!
 
       @data[:approved_by] = @user.full_name
 
@@ -45,6 +46,33 @@ module DepositCollections
     end
 
     private
+    def process_sms!
+      @data[:records].each do |rec|
+        @member = Member.find(rec["member"]["id"])
+ 
+        @total_savings = 0.00
+        @total_insurance_payment = 0.00
+        @total_equity = 0.00
+        
+        rec[:records].each do |rl|
+
+          if rl[:enabled] == true and rl[:record_type] == "SAVINGS"
+            @total_savings += rl[:amount].to_f
+          elsif rl[:enabled]== true and rl[:record_type] == "INSURANCE"
+            @total_insurance_payment += rl[:amount].to_f
+          end
+        end
+        
+        content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. transaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nSavings Payment: #{@total_savings} \nInsurance Payment: #{@total_insurance_payment}" 
+        config = {
+          mobile_number: @member.mobile_number,
+          content: content
+        }
+        
+        ::SmsBlast::Send.new(config: config).execute!
+        
+      end
+    end
 
     def process_deposits!
       @data_deposits.each do |o|
