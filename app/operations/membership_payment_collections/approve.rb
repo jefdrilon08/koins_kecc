@@ -175,7 +175,7 @@ module MembershipPaymentCollections
             content: "Your OTP for MyK-Coins: #{otp} \nUsername: #{member.identification_number} \nPassword: password"
           }
 
-          ::SmsBlast::Send.new(config: config).execute!
+          # ::SmsBlast::Send.new(config: config).execute!
           puts config.inspect
         end
       end
