@@ -2,112 +2,114 @@ class ProcessReceivePaymentApi < ApplicationJob
   queue_as :default
 
   def perform(payments)
-    @payments = []
-    @transaction = []
-    config = {}
-    @rf_counter = 0
-    @lif_counter = 0
-    @lif_account_subtype = "Life Insurance Fund"
-    @rf_account_subtype = "Retirement Fund"
+    payments.each do |payment|
+      @branch_id                = payment["branch_id"]
+      @collection_date          = payment["collection_date"].to_date
+      @user                     = payment["user"]
+      @prepared_by              = User.find(@user)
+      @data                     = payment["data"]
+    end
 
-    payments.each do |m|
-      @payment_data = {}
-      @payment_data[:identification_number]     =m["identification_number"]
-      @payment_data[:amount]                    =m["amount"]
-      @payment_data[:account_subtype]           =m["account_subtype"]
-      @payment_data[:transacted_at]             =m["transacted_at"]
-      @payment_data[:status]                    =m["status"]
 
-      @payments << @payment_data 
-           
-      config = @payments.map{ |o|
-        {
-          identification_number: o[:identification_number],    
-          amount: o[:amount],                   
-          account_subtype: o[:account_subtype],          
-          transacted_at: o[:transacted_at],            
-          status: o[:status],
-          external_ref: o[:external_ref]                        
-        }
+    @default_deposit_accounts = Settings.default_deposit_accounts
+
+    @insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::CreateInsuranceFundTransferCollection.new(
+      config: {
+        collection_date: @collection_date,
+        user: @prepared_by,
+        branch_id: @branch_id
       }
+    ).execute!
+
+    @a_data = @insurance_fund_transfer_collection.data.with_indifferent_access
+  
+    create_record
+    @insurance_fund_transfer_collection
+  end
+
+  private
+  
+  def recompute_totals!
+    @insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(@insurance_fund_transfer_collection.id)
+   
+    r_config = {
+      current_member: {
+        id: @member.id
+      },
+      data: @insurance_fund_transfer_collection.data.with_indifferent_access,
+      user: @user,
+      insurance_fund_transfer_collection: @insurance_fund_transfer_collection
+    } 
+
+    data  = ::InsuranceFundTransferCollections::RecomputeTotals.new(
+      config: r_config
+    ).execute!
+    
+    @insurance_fund_transfer_collection.update!(data: data)
+
+    @insurance_fund_transfer_collection
+  end
+
+  def create_record
+    @data.each do |data|
+      @member = Member.find_by(identification_number: data['identification_number'])
+
+      @member_object = {
+        id: @member.id,
+        full_name: @member.full_name,
+        first_name: @member.first_name,
+        middle_name: @member.middle_name,
+        last_name: @member.last_name,
+        identification_number: @member.identification_number
+      }
+
+      @total_collected = 0.00
+      @records = []
+      @default_deposit_accounts.each_with_index do |o, i|
+        member_account  = MemberAccount.where(member_id: @member.id, account_subtype: o.account_subtype, account_type: o.account_type).first
+        enabled         = false
+
+        if member_account
+          enabled = true
+        end
+
+        # raise member_account.inspect
+        if o[:account_subtype] == 'Life Insurance Fund'
+          amount = data['lif_amount']
+          reference_num = data['lif_reference_num']
+        elsif o[:account_subtype] == 'Retirement Fund'
+          amount = data['rf_amount']
+          reference_num = data['rf_reference_num']
+        else
+          amount = 0.00
+        end
+          
+        record_type = o.account_type
+      
+        @records << {
+          amount: amount,
+          enabled: enabled,
+          member_id: @member.id,
+          record_type: o.account_type,
+          account_subtype: o.account_subtype,
+          member_account_id: member_account.try(:id),
+          reference_num: reference_num
+        }
+
+        @total_collected += amount.to_f
+      end
+
+      @a_data[:records] << {
+        member: @member_object,
+        records: @records,
+        total_collected: @total_collected
+      }
+
+      @insurance_fund_transfer_collection.update!(
+        data: @a_data
+      )
+      recompute_totals!  
     end
-
-    # raise config.inspect 
-    config.each do |a|
-      @member = Member.where(identification_number: a[:identification_number])
-      @member.each do |b|
-        if a[:account_subtype] == 'Life Insurance Fund'
-          @subsidiary_id = MemberAccount.where("member_accounts.member_id = ? AND member_accounts.account_subtype IN (?)", b[:id], @lif_account_subtype)
-          @subsidiary_id.each do |c|
-            payment_data = {
-              subsidiary_id: c[:id],
-              subsidiary_type: "MemberAccount",
-              amount: a[:amount],
-              transaction_type: "deposit",
-              transacted_at: a[:transacted_at],
-              status: a[:status],
-              data: {
-                is_withdraw_payment: false,
-                is_fund_transfer: false,
-                is_interest: false,
-                is_adjustment: false,
-                is_for_exit_age: false,
-                is_for_loan_payments: false,
-                accounting_entry_reference_number: nil,
-                beginning_balance: 0.0,
-                ending_balance: 0.0
-              },
-              created_at: a[:created_at],
-              updated_at: a[:updated_at],
-              external_ref: o[:external_ref]         
-            }
-            
-            cmd = Kmba::SavePayment.new(
-              payment_data: payment_data
-            ).execute!
-            @lif_counter += 1
-          end  
-        elsif a[:account_subtype] == 'Retirement Fund'
-          @subsidiary_id = MemberAccount.where("member_accounts.member_id = ? AND member_accounts.account_subtype IN (?)", b[:id], @rf_account_subtype)
-          @subsidiary_id.each do |c|
-            payment_data = {
-              subsidiary_id: c[:id],
-              subsidiary_type: "MemberAccount",
-              amount: a[:amount],
-              transaction_type: "deposit",
-              transacted_at: a[:transacted_at],
-              status: a[:status],
-              data: {
-                is_withdraw_payment: false,
-                is_fund_transfer: false,
-                is_interest: false,
-                is_adjustment: false,
-                is_for_exit_age: false,
-                is_for_loan_payments: false,
-                accounting_entry_reference_number: nil,
-                beginning_balance: 0.0,
-                ending_balance: 0.0
-              },
-              created_at: a[:created_at],
-              updated_at: a[:updated_at],
-              external_ref: o[:external_ref]         
-            }
-
-            cmd = Kmba::SavePayment.new(
-              payment_data: payment_data
-            ).execute!
-            @rf_counter += 1
-          end 
-        end  
-      end    
-    end
-
-    if @rf_counter > 0 && @lif_counter > 0
-      puts "status: 200, code: KMBA-002, RetirementFund: #{@rf_counter} ,LifeInsuranceFund: #{@lif_counter}"
-    elsif @lif_counter > 0
-      puts "status: 200, code: KMBA-002, LifeInsuranceFund: #{@lif_counter}"
-    elsif @rf_counter > 0
-      puts "status: 200, code: KMBA-002, RetirementFund: #{@rf_counter}"
-    end  
+    @insurance_fund_transfer_collection.save!
   end
 end

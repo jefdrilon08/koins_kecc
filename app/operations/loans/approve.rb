@@ -1,8 +1,9 @@
 module Loans
   class Approve
+    include ActionView::Helpers::NumberHelper
     def initialize(config:)
       super()
-    
+
       @loan = config[:loan]
       @user = config[:user]
 
@@ -12,8 +13,8 @@ module Loans
       @term             = @loan.term
       @project_type_id = @loan.project_type_id
 
-      
-      
+
+
       @member       = @loan.member
       @member_data  = @member.data.with_indifferent_access
       @branch       = @member.branch
@@ -52,7 +53,7 @@ module Loans
       post_accounting_entry!
 
       perform_deposits!
-     
+      send_sms!
       if @loan_cycles.blank?
         @loan_cycles  = [
           {
@@ -91,7 +92,7 @@ module Loans
       @member_data[:entry_point_loan_cycle] = @entry_point_loan_cycle
 
       if @project_type_id.present?
-        @member_data[:project_type] = [ 
+        @member_data[:project_type] = [
             { project_type_id: @project_type_id,
               project_type_category_id: @project_type.project_type_category_id,
               details: {
@@ -100,15 +101,15 @@ module Loans
                 latitude_data: 0.0,
                 longtitude_data: 0.0
               }
-            
+
             }
-          
+
         ]
 
       end
 
       @member.update!(data: @member_data)
-      
+
 
       amorts = @loan.amortization_schedule_entries.order("due_date DESC")
 
@@ -136,10 +137,10 @@ module Loans
 
         if s_deduction.name == "KMBA Membership Fee"
           @date_paid = @loan.date_released
-        end 
+        end
 
         if deduction_type == "share_capital_fee"
-        
+
             if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
               total_member_shares = MemberShare.where("member_id = ? and  certificate_for = ? and is_void is null",@member.id, "KCOOP").sum(:number_of_shares)
               @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
@@ -147,7 +148,7 @@ module Loans
               share_capital_account = MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last
 
               partial_number_of_share =  total_member_shares +  @share_capital_deposit.last["number_of_share"]
-            
+
               if s_deduction.max_share < partial_number_of_share
                 share_avail =  s_deduction.max_share  - total_member_shares
                 @need_total_share_to_avail = share_avail
@@ -157,25 +158,25 @@ module Loans
               #raise partial_number_of_share.inspect
               if total_member_shares <= s_deduction.max_share.to_i
                 @total_share_paid =  @need_total_share_to_avail.to_f * s_deduction.amount.to_f
-              
+
               end
-              
-              acc_data = { 
-                          is_withdraw_payment: false, 
-                          is_fund_transfer: false, 
-                          is_interest: false, 
-                          is_adjustment: false, 
-                          is_for_exit_age: false, 
-                          is_for_loan_payments: false, 
-                          accounting_entry_reference_number: nil, 
-                          beginning_balance: "0.0", 
-                          ending_balance: "0.0"  
+
+              acc_data = {
+                          is_withdraw_payment: false,
+                          is_fund_transfer: false,
+                          is_interest: false,
+                          is_adjustment: false,
+                          is_for_exit_age: false,
+                          is_for_loan_payments: false,
+                          accounting_entry_reference_number: nil,
+                          beginning_balance: "0.0",
+                          ending_balance: "0.0"
                         }
 
-              if s_deduction["skip_sc"].present? 
+              if s_deduction["skip_sc"].present?
                 number_of_sharecap = MemberAccount.where(account_subtype: "Share Capital").last.balance.to_f
                 save_account_transaction = AccountTransaction.create!(
-                                                                  subsidiary_id: share_capital_account.id, 
+                                                                  subsidiary_id: share_capital_account.id,
                                                                   subsidiary_type: "MemberAccount",
                                                                   amount: @total_share_paid,
                                                                   transaction_type: "deposit",
@@ -186,10 +187,10 @@ module Loans
                 save_account_transaction.save!
                 ::MemberAccounts::Rehash.new(member_account: share_capital_account).execute!
               else
-                if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i ).to_i > 1 
+                if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i ).to_i > 1
 
                   save_account_transaction = AccountTransaction.create!(
-                                                                  subsidiary_id: share_capital_account.id, 
+                                                                  subsidiary_id: share_capital_account.id,
                                                                   subsidiary_type: "MemberAccount",
                                                                   amount: @total_share_paid,
                                                                   transaction_type: "deposit",
@@ -230,7 +231,7 @@ module Loans
           @member.update!(insurance_status: "inforce")
         elsif deduction_type == "deposit"
           if @member.member_type != "GK"
-            
+
             if s_deduction.special_loan == "true" #for special loan Insurance
               if @loan.data.with_indifferent_access[:advance_insurance_available] == false
                 offset          = s_deduction.meta.offset
@@ -248,7 +249,7 @@ module Loans
                 end
 
                  if amount > 0
-                  
+
                   member_account  = MemberAccount.where(
                                     member_id: @member.id,
                                     account_type: s_deduction.meta.account_type,
@@ -286,7 +287,7 @@ module Loans
                       # For New Loaner
                       member_account.data = { equity_value: (amount / 2).round(2) }
                       member_account.save!
-                      
+
                       account_transaction.data[:equity_value] = (amount / 2).round(2)
                     else
                       # For Reloaner
@@ -295,12 +296,12 @@ module Loans
                       member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
                       member_account.update!(data: member_account_data)
 
-                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)
                     end
 
                     # For Equity Value deposit transaction
                     ev_account = @member.member_accounts.where(account_subtype:"Equity Value").first
-                    
+
                     if ev_account.present?
                       ev_balance = ev_account.balance
 
@@ -385,9 +386,9 @@ module Loans
 #                end #end loan cycle present
 
                 #### DEPOSIT TRANSACTION ####
-        
+
                 if amount > 0
-                  
+
                   member_account  = MemberAccount.where(
                                     member_id: @member.id,
                                     account_type: s_deduction.meta.account_type,
@@ -425,7 +426,7 @@ module Loans
                       # For New Loaner
                       member_account.data = { equity_value: (amount / 2).round(2) }
                       member_account.save!
-                      
+
                       account_transaction.data[:equity_value] = (amount / 2).round(2)
                     else
                       # For Reloaner
@@ -434,12 +435,12 @@ module Loans
                       member_account_data[:equity_value] = ((amount / 2) + equity_value).round(2)
                       member_account.update!(data: member_account_data)
 
-                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)                 
+                      account_transaction.data[:equity_value] = ((amount / 2) + equity_value).round(2)
                     end
 
                     # For Equity Value deposit transaction
                     ev_account = @member.member_accounts.where(account_subtype:"Equity Value").first
-                    
+
                     if ev_account.present?
                       ev_balance = ev_account.balance
 
@@ -503,7 +504,7 @@ module Loans
                   )
 
                   account_transaction.save!
-                end 
+                end
                 #### DEPOSIT TRANSACTION
               end
             end #s_deduction.meta.algo
@@ -537,6 +538,19 @@ module Loans
       @loan.update!(
         data: data
       )
+    end
+    def send_sms!
+      member = Member.find(@loan.member_id)
+      content = "Good Day! #{member.full_name.upcase}, Your Loan has been approved with Loan Reference Number: #{@loan.pn_number} amounting to #{number_to_currency(@loan.principal,unit: "")} and the first date of payment is #{@loan.first_date_of_payment.to_fs(:long)}  THIS IS A TEST MESSAGE ONLY"
+        if member.mobile_number.present?
+          config = {
+            mobile_number: member.mobile_number,
+            content: content
+          }
+
+          #SmsBlast::Send.new(config: config).execute!
+          puts config.inspect
+        end
     end
   end
 end

@@ -2,6 +2,7 @@ module InsuranceFundTransferCollections
   class ApproveInsuranceFundTransferHash
     def initialize(config:)
       @config                     = config
+      @reference_number           =  @config[:insurance_fund_transfer][:reference_num]
       @date_paid                  = @config[:date_paid]
       @insurance_fund_transfer    = @config[:insurance_fund_transfer]
       @user                       = @config[:user]
@@ -9,93 +10,181 @@ module InsuranceFundTransferCollections
       @amount                     = @insurance_fund_transfer[:amount].try(:to_f).round(2)
       @transaction_type           = "deposit"
       @member_account             = MemberAccount.find(@insurance_fund_transfer[:member_account_id])
+       
+      if @reference_number.present?
+        @account_transaction_api = AccountTransaction.new(
+          subsidiary_id: @member_account.id,
+          subsidiary_type: "MemberAccount",
+          amount: @amount,
+          transaction_type: @transaction_type,
+          transacted_at: @date_paid,
+          status: "approved",
+          external_ref: @reference_number
+        )
 
-      @account_transaction  = AccountTransaction.new(
-                                subsidiary_id: @member_account.id,
-                                subsidiary_type: "MemberAccount",
-                                amount: @amount,
-                                transaction_type: @transaction_type,
-                                transacted_at: @date_paid,
-                                status: "approved"
-                              )
-
-      @data = {
-        is_withdraw_payment: false,
-        is_fund_transfer: false,
-        is_interest: false,
-        is_adjustment: false,
-        is_for_exit_age: false,
-        is_for_loan_payments: false,
-        beginning_balance: 0.00,
-        ending_balance: 0.00
-      }
+        @data_api = {
+          is_withdraw_payment: false,
+          is_fund_transfer: false,
+          is_interest: false,
+          is_adjustment: false,
+          is_for_exit_age: false,
+          is_for_loan_payments: false,
+          beginning_balance: 0.00,
+          ending_balance: 0.00
+        }  
+      else
+        @account_transaction  = AccountTransaction.new(
+                                  subsidiary_id: @member_account.id,
+                                  subsidiary_type: "MemberAccount",
+                                  amount: @amount,
+                                  transaction_type: @transaction_type,
+                                  transacted_at: @date_paid,
+                                  status: "approved"
+                                )
+        @data = {
+          is_withdraw_payment: false,
+          is_fund_transfer: false,
+          is_interest: false,
+          is_adjustment: false,
+          is_for_exit_age: false,
+          is_for_loan_payments: false,
+          beginning_balance: 0.00,
+          ending_balance: 0.00
+        }
+      end     
     end
 
     def execute!
-      # Compute beginning and ending balance
-      @data[:beginning_balance] = @member_account.balance.round(2)
-      @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
+      if @reference_number.present?
+        @data_api[:beginning_balance] = @member_account.balance.round(2)
+        @data_api[:ending_balance]    = (@data_api[:beginning_balance] + @amount).round(2)
 
-      # For equity amount computation
-      if @member_account.account_subtype == Settings.life
-        if @member_account.data.present?
-          @member_account_data = @member_account.data.with_indifferent_access
+        # For equity amount computation
+        if @member_account.account_subtype == Settings.life
+          if @member_account.data.present?
+            @member_account_data = @member_account.data.with_indifferent_access
 
-          equity_value = @member_account_data[:equity_value].to_f
+            equity_value = @member_account_data[:equity_value].to_f
 
-          if equity_value.present?
-            @data[:equity_value]                = ((@amount.to_f / 2) + equity_value).round(2)
-            @member_account_data[:equity_value] = ((@amount.to_f / 2) + equity_value).round(2)
+            if equity_value.present?
+              @data_api[:equity_value]                = ((@amount.to_f / 2) + equity_value).round(2)
+              @member_account_data[:equity_value] = ((@amount.to_f / 2) + equity_value).round(2)
 
-            @member_account.update!(data: @member_account_data)
+              @member_account.update!(data: @member_account_data)
+            end
+          end
+
+          # For Equity Value deposit transaction
+          member     = @member_account.member
+          ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+          
+          if ev_account.present?
+            ev_balance = ev_account.balance
+
+            account_transaction  = AccountTransaction.new(
+                                      subsidiary_id: ev_account.id,
+                                      subsidiary_type: "MemberAccount",
+                                      amount: (@amount / 2).round(2),
+                                      transaction_type: "deposit",
+                                      transacted_at: @date_paid,
+                                      status: "approved",
+                                      data: {
+                                        is_withdraw_payment: false,
+                                        is_fund_transfer: false,
+                                        is_interest: false,
+                                        is_adjustment: false,
+                                        is_for_exit_age: false,
+                                        is_for_loan_payments: false,
+                                        accounting_entry_reference_number: nil,
+                                        beginning_balance: ev_balance.to_f,
+                                        ending_balance: (ev_balance.to_f + (@amount /2)).round(2)
+                                      }
+                                    )
+
+            new_balance = (ev_balance.to_f + (@amount / 2)).round(2)
+            ev_account.update(
+              balance: new_balance
+            )
+
+            account_transaction.save!
           end
         end
 
-        # For Equity Value deposit transaction
-        member     = @member_account.member
-        ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
-        
-        if ev_account.present?
-          ev_balance = ev_account.balance
+        # Update account balance
+        new_balance = (@member_account.balance + @amount).round(2)
+        @member_account.update(
+          balance: new_balance
+        )
 
-          account_transaction  = AccountTransaction.new(
-                                    subsidiary_id: ev_account.id,
-                                    subsidiary_type: "MemberAccount",
-                                    amount: (@amount / 2).round(2),
-                                    transaction_type: "deposit",
-                                    transacted_at: @date_paid,
-                                    status: "approved",
-                                    data: {
-                                      is_withdraw_payment: false,
-                                      is_fund_transfer: false,
-                                      is_interest: false,
-                                      is_adjustment: false,
-                                      is_for_exit_age: false,
-                                      is_for_loan_payments: false,
-                                      accounting_entry_reference_number: nil,
-                                      beginning_balance: ev_balance.to_f,
-                                      ending_balance: (ev_balance.to_f + (@amount /2)).round(2)
-                                    }
-                                  )
+        @account_transaction_api.data = @data_api
 
-          new_balance = (ev_balance.to_f + (@amount / 2)).round(2)
-          ev_account.update(
-            balance: new_balance
-          )
+        @account_transaction_api.save!
+      else
+        # Compute beginning and ending balance
+        @data[:beginning_balance] = @member_account.balance.round(2)
+        @data[:ending_balance]    = (@data[:beginning_balance] + @amount).round(2)
 
-          account_transaction.save!
+        # For equity amount computation
+        if @member_account.account_subtype == Settings.life
+          if @member_account.data.present?
+            @member_account_data = @member_account.data.with_indifferent_access
+
+            equity_value = @member_account_data[:equity_value].to_f
+
+            if equity_value.present?
+              @data[:equity_value]                = ((@amount.to_f / 2) + equity_value).round(2)
+              @member_account_data[:equity_value] = ((@amount.to_f / 2) + equity_value).round(2)
+
+              @member_account.update!(data: @member_account_data)
+            end
+          end
+
+          # For Equity Value deposit transaction
+          member     = @member_account.member
+          ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+          
+          if ev_account.present?
+            ev_balance = ev_account.balance
+
+            account_transaction  = AccountTransaction.new(
+                                      subsidiary_id: ev_account.id,
+                                      subsidiary_type: "MemberAccount",
+                                      amount: (@amount / 2).round(2),
+                                      transaction_type: "deposit",
+                                      transacted_at: @date_paid,
+                                      status: "approved",
+                                      data: {
+                                        is_withdraw_payment: false,
+                                        is_fund_transfer: false,
+                                        is_interest: false,
+                                        is_adjustment: false,
+                                        is_for_exit_age: false,
+                                        is_for_loan_payments: false,
+                                        accounting_entry_reference_number: nil,
+                                        beginning_balance: ev_balance.to_f,
+                                        ending_balance: (ev_balance.to_f + (@amount /2)).round(2)
+                                      }
+                                    )
+
+            new_balance = (ev_balance.to_f + (@amount / 2)).round(2)
+            ev_account.update(
+              balance: new_balance
+            )
+
+            account_transaction.save!
+          end
         end
+
+        # Update account balance
+        new_balance = (@member_account.balance + @amount).round(2)
+        @member_account.update(
+          balance: new_balance
+        )
+
+        @account_transaction.data = @data
+
+        @account_transaction.save!
       end
-
-      # Update account balance
-      new_balance = (@member_account.balance + @amount).round(2)
-      @member_account.update(
-        balance: new_balance
-      )
-
-      @account_transaction.data = @data
-
-      @account_transaction.save!
     end
   end
 end

@@ -21,9 +21,11 @@ module MembershipPaymentCollections
                             branch: @branch
                           }
                         ).execute!
+        @member = Member.new
     end
 
     def execute!
+
       post_accounting_entry!
 
       process_id_payments!
@@ -31,6 +33,11 @@ module MembershipPaymentCollections
       process_equities!
       process_insurance!
       process_savings!
+
+
+      #class sms
+      process_sms_blast!
+
 
       @data[:approved_by] = @user.full_name
 
@@ -81,7 +88,7 @@ module MembershipPaymentCollections
 
     def process_equities!
       @data_equities.each do |o|
-        config  = { 
+        config  = {
           date_paid: @date_approved,
           equity_payment: o,
           user: @user,
@@ -147,5 +154,39 @@ module MembershipPaymentCollections
 
       @accounting_entry
     end
+#sms
+    def process_sms_blast!
+      @data[:records].each do |rec|
+        member = Member.find(rec[:member]["id"])
+
+        if member.mobile_number.present?
+          member_data = member.data.with_indifferent_access
+
+          otp = generate_otp
+
+          member_data["sms_code"] = otp.to_s
+
+          member.update(data:member_data)
+
+          # Generate OTP
+
+          config = {
+            mobile_number: member.mobile_number,
+            content: "Your OTP for MyK-Coins: #{otp} \nUsername: #{member.identification_number} \nPassword: password"
+          }
+
+          # ::SmsBlast::Send.new(config: config).execute!
+          puts config.inspect
+        end
+      end
+    end
+
+
+    def generate_otp
+      rand(100_000..999_999)
+    end
+
+
+
   end
 end
