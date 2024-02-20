@@ -1,6 +1,6 @@
 module Api
   module V1
-    class DepositCollectionsController < ApplicationController
+    class DepositCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
       def load_center
