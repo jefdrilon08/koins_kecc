@@ -1,7 +1,11 @@
 module Api
   module V1
     class BillingForFullPaymentsController < ActionController::Base
+<<<<<<< HEAD
       skip_before_action :verify_authenticity_token
+=======
+      before_action :authenticate_user!
+>>>>>>> a9642d2c1ddd1c4ff4a447147851d9bb5867db6a
       
       def create
   
