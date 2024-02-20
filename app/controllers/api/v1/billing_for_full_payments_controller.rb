@@ -1,6 +1,6 @@
 module Api
   module V1
-    class BillingForFullPaymentsController < ApplicationController
+    class BillingForFullPaymentsController < ActionController::Base
       skip_before_action :verify_authenticity_token
       
       def create

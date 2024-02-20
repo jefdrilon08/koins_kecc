@@ -1,7 +1,7 @@
 module Api
   module V1
-    class MembersProjectTypesController < ApplicationController
-      skip_before_action :verify_authenticity_token
+    class MembersProjectTypesController < ActionController::Base
+      before_action :authenticate_user!
       
       def approve
          data_store_id = params[:data_store_id]

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class TransferSavingsController < ApplicationController
+    class TransferSavingsController < ActionController::Base
       before_action :authenticate_user!
 
       def create

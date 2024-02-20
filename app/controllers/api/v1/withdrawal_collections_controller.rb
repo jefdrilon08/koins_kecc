@@ -1,6 +1,6 @@
 module Api
   module V1
-    class WithdrawalCollectionsController < ApplicationController
+    class WithdrawalCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
       def fetch

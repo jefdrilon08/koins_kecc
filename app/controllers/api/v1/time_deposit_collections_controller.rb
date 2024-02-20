@@ -1,6 +1,6 @@
 module Api
   module V1
-    class TimeDepositCollectionsController < ApplicationController
+    class TimeDepositCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
       def modify_book
