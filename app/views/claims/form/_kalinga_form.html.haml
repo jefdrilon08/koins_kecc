@@ -1,116 +1,146 @@
 .message
 .row
+  = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
   .col
+    %h6
+      Kasagana-ka Mutual Benefit Association, Inc.
     .form-group
       %h3
         K-Kalinga Information
+%hr
+%br
 .row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Prepared
         = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', type: 'date', id: 'date-prepared'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Approved
         = text_field_tag :date_approved, @claim.data["date_approved"], class: 'form-control', type: 'date', id: 'date-approved'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date of Death/Incident
         = text_field_tag :date_of_death_or_incident, @claim.data["date_of_death_or_incident"], class: 'form-control', type: 'date', id: 'date-of-death-or-incident'
+%br
 .row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Type of Claims
         = select_tag :reason_of_death, options_for_select(["Accidental Death", "Fire Assistance"], @claim.data["reason_of_death"]), id: 'reason-of-death', class: 'form-control'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Amount
         = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         POC #
         = text_field_tag :poc_number, @claim.data["poc_number"],  class: 'form-control', id: 'poc-number'
-.row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Effective Date
         = text_field_tag :effective_date, @claim.data["effective_date"], class: 'form-control', type: 'date', id: 'effective-date'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Expiration Date
         = text_field_tag :expiration_date, @claim.data["expiration_date"], class: 'form-control', type: 'date', id: 'expiration-date'
 .row
-  .col
-    .form-group
-      %label.col.control-label
-        Name of Insured
-        = text_field_tag :name_of_insured, @claim.data["name_of_insured"], class: 'form-control', id: 'name-of-insured'
-  .col
-    .form-group
-      %label.col.control-label
-        Date of Birth
-        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', type: 'date', id: 'date-of-birth', value: @claim.member.date_of_birth
-  .col
-    .form-group
-      %label.col.control-label
-        Gender
-        = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender', value: @claim.member.gender
-  .col
-    .form-group
-      %label.col.control-label
-        Civil Status
-        = select_tag :civil_status, options_for_select(["SINGLE","MAY KINAKASAMA","KASAL","HIWALAY","BIYUDO/A"]), class: 'form-control', id: 'civil-status', value: @claim.member.civil_status
-.row  
-  .col
-    .form-group
-      %label.col.control-label
-        Insured Address
-        = text_field_tag :insured_address, @claim.data["insured_address"],class: 'form-control', id: 'insured-address', value: @claim.member.full_address_upcase
-  .col
-    .form-group
-      %label.col.control-label
-        Name of Beneficiary
-        = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
-  .col
-    .form-group
-      %label.col.control-label
-        Classification
-        = select_tag :relationship_to_member, options_for_select(["Member", "Non-Member"], @claim.data["relationship_to_member"]), class: 'form-control', id: 'relationship-to-member' 
-.row  
-  .col
-    .form-group
-      %label.col.control-label
-        Prepared by
-        = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by'
-  .col
-    .form-group
-      %label.col.control-label
-        Date of Letter of Approval(LOA)
-        = text_field_tag :date_of_loa, @claim.data["date_of_loa"], class: 'form-control', id: 'date-of-loa', type: 'date'
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Claims Payment through
-        = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-  .col
-    .form-group
-      %label.col.control-label
-        Account Name
-        = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col
-    .form-group
-      %label.col.control-label
-        Account Number
-        = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+  .col{class: "col-md-3"}
+    %br
+    %label.col.control-label
+    Insured Details
+    %hr
+    .row
+      .col{class: "col-md-6"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Name of Insured
+            = text_field_tag :name_of_insured, @claim.data["name_of_insured"], class: 'form-control', id: 'name-of-insured'
+      .col{class: "col-md-6"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Date of Birth
+            = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', type: 'date', id: 'date-of-birth'
+            / = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', type: 'date', id: 'date-of-birth', value: @claim.member.date_of_birth
+
+    .row
+      .col{class: "col-md-6"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Gender
+            = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender', value: @claim.member.gender
+      .col{class: "col-md-6"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Civil Status
+            = select_tag :civil_status, options_for_select(["SINGLE","MAY KINAKASAMA","KASAL","HIWALAY","BIYUDO/A"]), class: 'form-control', id: 'civil-status', value: @claim.member.civil_status
+    .row 
+      .col{class: "col-md-12"}
+      .form-group
+        %label.col.control-label{class: "col-md-12"}
+          Insured Address
+          = text_field_tag :insured_address, @claim.data["insured_address"],class: 'form-control', id: 'insured-address', value: @claim.member.full_address_upcase
+  .col{class: "col-md-3"}
+    %br
+    %label.col.control-label
+    Beneficiary Details
+    %hr
+    .row
+      .col{class: "col-md-12"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Name of Beneficiary
+            = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
+      .col{class: "col-md-12"}
+        .form-group
+          %label.col.control-label{class: "col-md-12"}
+            Classification
+            = select_tag :relationship_to_member, options_for_select(["Member", "Non-Member"], @claim.data["relationship_to_member"]), class: 'form-control', id: 'relationship-to-member'
+  .col{class: "col-md-3"} 
+    %br
+    %label.col.control-label
+    .row  
+      .col{class: "col-md-12"}
+        .form-group
+          %label.col.control-label{class: "col-md-10"}
+            Prepared by
+            = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by', readonly: true
+      .col{class: "col-md-12"}
+        .form-group
+          %label.col.control-label{class: "col-md-10"}
+            Date of Letter of Approval(LOA)
+            = text_field_tag :date_of_loa, @claim.data["date_of_loa"], class: 'form-control', id: 'date-of-loa', type: 'date'
+  .col{class: "col-md-3"} 
+    %br
+    %label.col.control-label
+    Payment Details
+    %hr
+      .row
+        .col{class: "col-md-12"}
+          .form-group
+            %label.col.control-label
+              Claims Payment through
+              = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
+        .col{class: "col-md-12"}
+          .form-group
+            %label.col.control-label
+              Account Name
+              = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
+        .col{class: "col-md-12"}
+          .form-group
+            %label.col.control-label
+              Account Number
+              = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+%br
+%br
 .row
   .col
     .form-actions

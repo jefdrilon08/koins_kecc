@@ -135,7 +135,7 @@ module Claims
       elsif @claim.calamity?
         particular = "Calamity Assistance of #{@claim.member.full_name} from #{branch.name} due to #{@claim_data[:type_of_calamity]}"
       elsif @claim.kalinga?
-        particular = "K-Kalinga Assistance of #{@claim.member.full_name} from #{branch.name} due to #{@claim_data[:reason_of_death]}"
+        particular = "K-Kalinga #{@claim_data[:reason_of_death]} Claim of #{@claim_data[:name_of_beneficiary]}"
       elsif @claim.kjsp?
         if @claim_data[:sem].present?
           particular = "KJSP Allowance for #{@claim_data[:name_of_beneficiary]} (Son/Daughter) of #{@claim.member.full_name}(Mother) from #{branch.name} for #{@claim_data[:sem]} Sem SY #{@claim_data[:school_year]}"
