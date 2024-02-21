@@ -530,6 +530,29 @@ class ReportsController < ApplicationController
     end
   end
 
+  def insurance_loan_bundle_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "KOK Reports" }
+    ]
+  end
+
+  def insurance_loan_bundle_reports_excel
+    @savings_subtype = params[:savings_subtype]
+    @start_date = params[:start_date]
+    @end_date = params[:end_date]
+    @branch = params[:branch_id]
+    @status = params[:status]
+    @branch_name = Branch.where(id: @branch).first.name
+
+    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, status: @status).execute!
+    filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    
+  end
+
 
   def claim_generate_report
     claim_type = params[:claim_type]

@@ -134,7 +134,7 @@ class Member < ApplicationRecord
   end
 
   def full_address_upcase
-    #"#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, #{self.data.with_indifferent_access[:address][:province].upcase} , #{self.data.with_indifferent_access[:address][:region].upcase} , PH"
+    "#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, #{self.data.with_indifferent_access[:address][:province].upcase} , #{self.data.with_indifferent_access[:address][:region].upcase} , PH"
   end
 
   def recognition_date
