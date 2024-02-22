@@ -1,0 +1,43 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+      %th
+        Collection Date
+      %th
+        Date Approved
+      %th
+        Center / Branch
+      %th
+        Status
+      %th.text-end
+        Total Amount
+  %tbody
+    - @insurance_loan_bundle_enrollments.each do |o|
+      %tr
+        %td.text-center
+          = link_to insurance_loan_bundle_enrollment_path(o) do
+            .bi.bi-search
+        %td
+          #{o.collection_date.strftime("%B %d, %Y")}
+        %td
+          #{o.date_approved.try(:strftime, "%B %d, %Y")}
+        %td
+          #{o.center.name} / #{o.branch}  
+        %td
+          - if o.pending?
+            .badge.bg-danger
+              Pending
+          - elsif o.approved?
+            .badge.bg-success
+              Approved
+          - elsif o.error?
+            .badge.bg-danger
+              ERROR
+          - elsif o.processing?
+            .badge.badge-info
+              Processing
+        %td.text-end
+          #{number_to_currency(o.total_amount, unit: '')}
+
+= paginate @insurance_loan_bundle_enrollments

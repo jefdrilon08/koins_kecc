@@ -87,6 +87,10 @@ import MembersIndex from "../models/MembersIndex.js";
 import SurveyAnswer from "../models/SurveyAnswer.js";
 import SavingsInsuranceTransferCollectionsIndex from "../models/SavingsInsuranceTransferCollectionsIndex.js";
 import SavingsInsuranceTransferCollectionsShow from "../models/SavingsInsuranceTransferCollectionsShow.js";
+
+import InsuranceLoanBundleEnrollmentsIndex from "../models/InsuranceLoanBundleEnrollmentsIndex.js";
+import InsuranceLoanBundleEnrollmentsShow from "../models/InsuranceLoanBundleEnrollmentsShow.js";
+
 import InsuranceFundTransferCollectionsIndex from "../models/InsuranceFundTransferCollectionsIndex.js";
 import InsuranceFundTransferCollectionsShow from "../models/InsuranceFundTransferCollectionsShow.js";
 import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCollectionsIndex.js";
@@ -167,6 +171,9 @@ import ReportsCIC from "../models/ReportsCIC.js";
 import ReportsMonthlyCollection from "../models/ReportsMonthlyCollection.js";
 import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfCertificatesAndPolicies.js";
 import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
+
+import ReportsInsuranceLoanBundleReports from "../models/ReportsInsuranceLoanBundleReports.js";
+
 import ReportsClaimsProcessingTimeReport from "../models/ReportsClaimsProcessingTimeReport.js";
 import ReportsClaimsProcessingTimeReportSummary from "../models/ReportsClaimsProcessingTimeReportSummary.js";
 import ReportsReclassifiedReport from "../models/ReportsReclassifiedReport.js";
@@ -275,6 +282,8 @@ const hooks = {
   "withdrawal_collections/show":                      [WithdrawalCollectionsShow, WithdrawalCollectionUIComponent],
   "savings_insurance_transfer_collections/index":     [SavingsInsuranceTransferCollectionsIndex],
   "savings_insurance_transfer_collections/show":      [SavingsInsuranceTransferCollectionsShow],
+  "insurance_loan_bundle_enrollments/index":     	  [InsuranceLoanBundleEnrollmentsIndex],
+  "insurance_loan_bundle_enrollments/show":      	  [InsuranceLoanBundleEnrollmentsShow],
   "insurance_fund_transfer_collections/index":        [InsuranceFundTransferCollectionsIndex],
   "insurance_fund_transfer_collections/show":         [InsuranceFundTransferCollectionsShow, InsuranceFundTransferCollectionUIComponent],
   "insurance_withdrawal_collections/index":           [InsuranceWithdrawalCollectionsIndex],
@@ -390,7 +399,8 @@ const hooks = {
   "reports/monthly_collection":                       [ReportsMonthlyCollection],
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
-"reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
+  "reports/insurance_loan_bundle_reports": 	  		  [ReportsInsuranceLoanBundleReports],
+  "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
   "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
   "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],
   "reports/personal_documents":                       [ReportsPersonalDocuments],

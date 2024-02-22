@@ -1,0 +1,14 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @insurance_loan_bundle_enrollments.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No records found
+
+= render partial: "insurance_loan_bundle_enrollments/modals/new_transaction"
+= render partial: "shared/errors_template"

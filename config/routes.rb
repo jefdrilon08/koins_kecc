@@ -335,6 +335,9 @@ Rails.application.routes.draw do
   # Savings Insurance Transfers
   resources :savings_insurance_transfer_collections, only: [:index, :show, :destroy]
 
+  # Insurance Loan Bundle Enrollments
+  resources :insurance_loan_bundle_enrollments, only: [:index, :show, :destroy]
+
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy] do
     collection { post :upload }
@@ -601,6 +604,8 @@ Rails.application.routes.draw do
   get "/reports/address_update", to: "reports#address_update", as: :address_update
   get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports", as: :savings_insurance_transfer_reports
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
+  get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports", as: :insurance_loan_bundle_reports
+  get "/reports/insurance_loan_bundle_reports_excel", to: "reports#insurance_loan_bundle_reports_excel", as: :insurance_loan_bundle_reports_excel
   get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report", as: :claims_processing_time_report
   get "/reports/claims_processing_time_report_excel", to: "reports#claims_processing_time_report_excel", as: :claims_processing_time_report_excel
   get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary", as: :claims_processing_time_report_summary
