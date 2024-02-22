@@ -224,6 +224,12 @@ namespace :api do
     post "/savings_insurance_transfer_collections/update_particular", to: "savings_insurance_transfer_collections#update_particular"
     post "/savings_insurance_transfer_collections/update_or_ar_number", to: "savings_insurance_transfer_collections#update_or_ar_number"
 
+    # Insurance Loan Bundle Enrollments
+    post "/insurance_loan_bundle_enrollments/save", to: "insurance_loan_bundle_enrollments#save"
+    post "/insurance_loan_bundle_enrollments/add_member", to: "insurance_loan_bundle_enrollments#add_member"
+    post "/insurance_loan_bundle_enrollments/remove_member", to: "insurance_loan_bundle_enrollments#remove_member"
+    post "/insurance_loan_bundle_enrollments/approve", to: "insurance_loan_bundle_enrollments#approve"
+
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
@@ -724,6 +730,9 @@ namespace :api do
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
     get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
+
+    get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports"
+
     get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
     get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary"
     get "/reports/reclassified_report", to: "reports#reclassified_report  "

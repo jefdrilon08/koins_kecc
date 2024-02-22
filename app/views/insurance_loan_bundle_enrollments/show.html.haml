@@ -1,0 +1,16 @@
+.row
+  .col
+    .card
+      .card-body
+        - if @insurance_loan_bundle_enrollment.pending?
+          = render partial: "show_pending_actions"
+          .message
+        %hr
+        - if @records.size == 0
+          %p
+            No records found
+        - else
+          = render partial: "show_list", locals: { records: @records }
+       
+= render partial: "insurance_loan_bundle_enrollments/modals/approve"
+= render partial: "shared/errors_template"
