@@ -1283,6 +1283,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -1511,6 +1512,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         skip_for_special_loan_fund: "true"
@@ -1838,6 +1840,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -2019,6 +2022,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -2313,6 +2317,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -2493,6 +2498,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -2674,6 +2680,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -3037,6 +3044,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
@@ -3995,6 +4003,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.00
         deduction_type: "member_type_deduction_ratio"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
