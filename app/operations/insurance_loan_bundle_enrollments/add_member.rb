@@ -16,8 +16,7 @@ module InsuranceLoanBundleEnrollments
         @gender                                 = @config[:gender]
         @birth_date                             = @config[:birth_date]
         @mobile_no                              = @config[:mobile_no]
-        @civil_status                           = @config[:civil_status]
-        
+        @civil_status                           = @config[:civil_status]        
       else
         @first_name                             = @member.first_name
         @middle_name                            = @member.middle_name
@@ -29,16 +28,12 @@ module InsuranceLoanBundleEnrollments
         @civil_status                           = @member.civil_status
       end
 
-
       @plan_category                          = @config[:plan_category]
       @partner                                = @config[:partner]
       @policy_no                              = @config[:policy_no]
       @effectivity_date                       = @config[:effectivity_date]
       @maturity_date                          = (@effectivity_date.to_date + 1.year) 
-      
       @enrolled_status                        = @config[:enrolled_status]
-      
-      
       @age                                    = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
       
       if @age >= 18 && @age < 66
@@ -56,12 +51,10 @@ module InsuranceLoanBundleEnrollments
       @benif_relationship                     = @config[:benif_relationship]
       @data                                   = @insurance_loan_bundle_enrollment.try(:data).try(:with_indifferent_access)
       @branch                                 = @insurance_loan_bundle_enrollment.branch
- 
-  
     end
 
     def execute!
-       
+      
       @data[:records] << {
         member: {
           id: @member.id,

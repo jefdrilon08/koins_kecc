@@ -1,7 +1,7 @@
 module Reports
   class GenerateInsuranceLoanBundleReports 
  
-    def initialize(branch:, start_date:, end_date:, insurance_subtype:, status:)
+    def initialize(branch:, start_date:, end_date:, status:)
       @start_date = start_date.try(:to_date) 
       @end_date = end_date.try(:to_date) 
       @branch_id = branch
@@ -9,6 +9,8 @@ module Reports
       
       if  @start_date.present? and @end_date.present? and @branch_id.present?
         @kok = InsuranceLoanBundleEnrollment.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ? ", @start_date, @end_date, @branch_id, @status).order("collection_date DESC")
+      elsif @branch_id.present?
+        @kok = InsuranceLoanBundleEnrollment.where("branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
       else
         puts "not valid"
       end
@@ -31,7 +33,7 @@ module Reports
             header_cells = wb.styles.add_style b: true, alignment: { horizontal: :center }, font_name: "Calibri"
             date_format_cell = wb.styles.add_style format_code: "mm-dd-yyyy", font_name: "Calibri", alignment: { horizontal: :right }
             default_cell = wb.styles.add_style font_name: "Calibri"
-            sheet.add_row ["KASAGANA-KA KALINGA DECLARATION"], style: title_cell
+            sheet.add_row ["KASAGANA-KA KOK DECLARATION"], style: title_cell
             sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
             
@@ -66,17 +68,12 @@ module Reports
             @kok.each do |kok|
               kok[:data]["records"].each_with_index do |o, index|
                 sheet.add_row [
-                  "",
-                  "",
-                  "",
-                  kok.center.name,
-                  
                   o["kok_data"]["plan_type"],
                   o["kok_data"]["plan_category"],
                   o["kok_data"]["partner"],
                   o["kok_data"]["policy_no"],
-                  o["kok_data"]["effectivity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),,
-                  o["kok_data"]["maturity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),,
+                  o["kok_data"]["effectivity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  o["kok_data"]["maturity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["kok_data"]["client_type"],
                   o["kok_data"]["first_name"],
                   o["kok_data"]["middle_name"],
@@ -85,15 +82,15 @@ module Reports
                   o["kok_data"]["gender"],
                   o["kok_data"]["enrolled_status"],
                   o["kok_data"]["civil_status"],
-                  o["kok_data"]["birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),,
+                  o["kok_data"]["birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["kok_data"]["age"].to_i,
                   o["kok_data"]["premium_coverage"],
                   o["kok_data"]["mobile_no"],
-                  o["kok_data"]["membership_date"].try(:to_date).try(:strftime, "%b %d, %Y"),,
+                  o["kok_data"]["membership_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["kok_data"]["benif_fname"],
                   o["kok_data"]["benif_mname"],
                   o["kok_data"]["benif_lname"],
-                  o["kok_data"]["benif_birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),,
+                  o["kok_data"]["benif_birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["kok_data"]["benif_gender"],
                   o["kok_data"]["benif_relationship"]       
                   

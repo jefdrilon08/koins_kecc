@@ -74,7 +74,6 @@
               .fa.fa-times
     %tr
       %th
-        Total
       %th
       %th
       %th
@@ -87,8 +86,5 @@
       %th
       %th
       %th
-      %th
-      %th.text-right
-        #{number_to_currency(@insurance_loan_bundle_enrollment.total_amount, unit: '')}
       - if @insurance_loan_bundle_enrollment.pending?
         %th
