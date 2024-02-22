@@ -222,13 +222,10 @@ export default class BillingUITable extends React.Component {
           <td key={"c-member-attnd-" + member.id}>
             <center>
               <ToggleSwitch
-                key={"c-member-attnd-toggle-switch" + member.id}
-                name={"c-member-attnd-toggle-switch" + member.id}
+                key={"c-member-attnd-toggle-switch-" + member.id}
+                name={"c-member-attnd-toggle-switch-" + member.id}
                 checked={record.attendance}
-                onChange={
-                  () => this.handleToggled(record.member.id)
-
-                } 
+                onChange={this.handleToggled.bind(this, member.id)} 
               />
             </center>
           </td>
