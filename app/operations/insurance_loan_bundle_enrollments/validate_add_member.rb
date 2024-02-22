@@ -12,25 +12,33 @@ module InsuranceLoanBundleEnrollments
       @partner            = @config[:partner]
       @policy_no          = @config[:policy_no]
       @effectivity_date   = @config[:effectivity_date]
-      # @maturity_date      = @config[:maturity_date]
       @maturity_date      = @effectivity_date.to_date + 1.year
-
-      # raise @maturity_date.inspect
       @client_type        = @config[:client_type]
-      @first_name         = @config[:first_name]
-      @middle_name        = @config[:middle_name]
-      @last_name          = @config[:last_name]
-      @birth_date         = @config[:birth_date]
-      # raise @birth_date.inspect
-
-      @age                = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
-      @address            = @config[:address]
-      @gender             = @config[:gender]
-      @enrolled_status    = @config[:enrolled_status]
-      @civil_status       = @config[:civil_status]
       
-      @premium_coverage   = @config[:premium_coverage]
+      if @client_type == "DEPENDENT"
+        @first_name                             = @config[:first_name]
+        @middle_name                            = @config[:middle_name]
+        @last_name                              = @config[:last_name]
+        @address                                = @config[:address]
+        @gender                                 = @config[:gender]
+        @birth_date                             = @config[:birth_date]
+        @mobile_no                              = @config[:mobile_no]
+        @civil_status                           = @config[:civil_status]        
+      else
+        @first_name                             = @member.first_name
+        @middle_name                            = @member.middle_name
+        @last_name                              = @member.last_name
+        @address                                = @member.full_address_upcase
+        @gender                                 = @member.gender
+        @birth_date                             = @member.date_of_birth
+        @mobile_no                              = @member.mobile_number
+        @civil_status                           = @member.civil_status
+      end
+        
       @mobile_no          = @config[:mobile_no]
+      @enrolled_status    = @config[:enrolled_status]
+      @age                = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
+      @premium_coverage   = @config[:premium_coverage]
       @membership_date    = @config[:membership_date]
       @benif_fname        = @config[:benif_fname]
       @benif_mname        = @config[:benif_mname]
@@ -40,7 +48,7 @@ module InsuranceLoanBundleEnrollments
       @benif_relationship = @config[:benif_relationship]
 
       @data = @insurance_loan_bundle_enrollment.try(:data).try(:with_indifferent_access)
-
+      # raise @age.inspect
     end
 
     def execute!
@@ -64,6 +72,21 @@ module InsuranceLoanBundleEnrollments
           message: "Member already included"
         }
       end
+
+      if @client_type = "DEPENDENT" and @gender.blank?
+        @errors[:messages] << {
+          key: "gender",
+          message: "Please Select Gender"
+        }
+      end  
+
+      if @client_type = "DEPENDENT" and @civil_status.blank?
+        @errors[:messages] << {
+          key: "gender",
+          message: "Please Select Civil Status"
+        }
+      end  
+
 
       if @age < 18 
         @errors[:messages] << {

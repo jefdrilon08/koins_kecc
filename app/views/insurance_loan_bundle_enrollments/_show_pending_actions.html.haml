@@ -116,12 +116,12 @@
     .col-md-3
       .form-group
         %label Beneficiary Gender       
-        = select_tag :benif_gender, options_for_select(["MALE" , "FEMALE"], @benif_gender), id: 'input-benif-gender', class: 'form-control'
+        = select_tag :benif_gender, options_for_select([['Select Gender', '', {disabled: true, selected: true}]] + ["MALE" , "FEMALE"], @benif_gender), id: 'input-benif-gender', class: 'form-control'
     
     .col-md-3
       .form-group
         %label Beneficiary Relationship
-        = select_tag :benif_relationship, options_for_select(["Aunt","Brother","Brother in law","Cousin","Daughter","Father","Father in law","Friend","Granddaughter","Grandfather","Grandmother","Grandson","Husband","Member","Mother","Mother in law","Neighbor","Nephew","Niece","Sister","Sister in law","Son","Step Brother","Step Daughter","Step Father","Step Mother","Step Sister","Step Son","Uncle","Wife"], @benif_relationship), id: 'input-benif-relationship', class: 'form-control'
+        = select_tag :benif_relationship, options_for_select([['Select Relationship', '', {disabled: true, selected: true}]] + ["Aunt","Brother","Brother in law","Cousin","Daughter","Father","Father in law","Friend","Granddaughter","Grandfather","Grandmother","Grandson","Husband","Member","Mother","Mother in law","Neighbor","Nephew","Niece","Sister","Sister in law","Son","Step Brother","Step Daughter","Step Father","Step Mother","Step Sister","Step Son","Uncle","Wife"], @benif_relationship), id: 'input-benif-relationship', class: 'form-control'
   .row
     .col-md-2
       .form-group
