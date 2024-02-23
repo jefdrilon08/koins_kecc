@@ -2,29 +2,30 @@ class ProcessReceivePaymentApi < ApplicationJob
   queue_as :default
 
   def perform(payments)
+    # raise payments.count.inspect
+
     payments.each do |payment|
       @branch_id                = payment["branch_id"]
       @collection_date          = payment["collection_date"].to_date
       @user                     = payment["user"]
       @prepared_by              = User.find(@user)
       @data                     = payment["data"]
+
+      @default_deposit_accounts = Settings.default_deposit_accounts
+
+      @insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::CreateInsuranceFundTransferCollection.new(
+        config: {
+          collection_date: @collection_date,
+          user: @prepared_by,
+          branch_id: @branch_id
+        }
+      ).execute!
+
+      @a_data = @insurance_fund_transfer_collection.data.with_indifferent_access
+    
+      create_record
+      @insurance_fund_transfer_collection
     end
-
-
-    @default_deposit_accounts = Settings.default_deposit_accounts
-
-    @insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::CreateInsuranceFundTransferCollection.new(
-      config: {
-        collection_date: @collection_date,
-        user: @prepared_by,
-        branch_id: @branch_id
-      }
-    ).execute!
-
-    @a_data = @insurance_fund_transfer_collection.data.with_indifferent_access
-  
-    create_record
-    @insurance_fund_transfer_collection
   end
 
   private
