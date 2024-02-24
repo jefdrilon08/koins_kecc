@@ -1,8 +1,8 @@
 module Api
   module V1
     module Adjustments
-      class MakePaymentsController < ApplicationController
-        skip_before_action :verify_authenticity_token
+      class MakePaymentsController < ApiController
+        before_action :authenticate_user!
         def approve
           @make_payment_details = MakePayment.find(params[:make_payment_id])
           @current_date = ::Utils::GetCurrentDate.new(
