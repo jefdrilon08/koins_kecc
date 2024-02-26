@@ -57,6 +57,58 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
     return headers;
   }
 
+  ApiBuildHeaders(){
+    var headers = [];
+
+    headers.push(
+      <th key={"h-member"} style={{minWidth: "300px"}}>
+        Member
+      </th>
+    );
+
+    headers.push(
+      <th style={{minWidth: "40px"}}>
+        <center>
+          Life Insurance Fund
+        </center>
+      </th>
+    );
+    
+    headers.push(
+      <th style={{minWidth: "40px"}}>
+        <center>
+          Referrence Number
+        </center>
+      </th>
+    );
+
+    headers.push(
+      <th style={{minWidth: "40px"}}>
+        <center>
+          Retirement Fund
+        </center>
+      </th>
+    );
+    
+      headers.push(
+      <th style={{minWidth: "40px"}}>
+        <center>
+          Referrence Number
+        </center>
+      </th>
+    );
+
+    headers.push(
+      <th  key={"h-total"} style={{minWidth: "40px"}}>
+        <center>
+          TOTAL
+        </center>
+      </th>
+    );
+
+    return headers;
+  }
+
   buildRecords() {
     var records = [];
 
@@ -140,6 +192,92 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
     return records;
   }
 
+  ApibuildRecords() {
+    var records = [];
+
+    for(var i = 0; i < this.props.data.data.records.length; i++) {
+      var components  = [];
+      var record      = this.props.data.data.records[i];
+      var member      = record.member;
+
+      var btnDelete = "";
+      if(this.props.data.status == "pending") {
+        btnDelete = (
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={this.handleRemoveRecord.bind(this, member.id)}
+            disabled={this.state.isLoading}
+          >
+            <span className="bi bi-x"/>
+          </button>
+        );
+      }
+
+      var center      = this.props.data.data.records[i].member.center;
+      var centerName  = "";
+
+      if(center) {
+        centerName = center.name;
+      }
+
+      var identificationNumber = this.props.data.data.records[i].member.identification_number;
+
+      components.push(
+        <td key={"c-member-" + member.id}>
+          {btnDelete}
+          <strong>
+            <a href={"/members/" + member.id + "/display"} target="_blank">
+              {this.props.data.data.records[i].member.full_name} ({centerName} || {identificationNumber})
+            </a>
+          </strong>
+        </td>
+      );
+
+      for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
+        var paymentRecord = this.props.data.data.records[i].records[j];
+        console.log(paymentRecord)
+        if(this.props.data.status == "pending") {
+          components.push(
+            <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
+              <strong>
+                <a 
+                  href="#"
+                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                >
+                  {numberWithCommas(paymentRecord.amount)}
+                </a>
+              </strong>
+            </td>,
+            <td><center>{(paymentRecord.reference_num)}</center></td>
+          );
+        } else {
+          components.push(
+            <td key={"na-" + member.id + "-" + j} className="text-end">
+              {numberWithCommas(paymentRecord.amount)}
+            </td>,
+            <td><center>{(paymentRecord.reference_num)}</center></td>
+          )
+        }
+      }
+
+      components.push(
+        <td key={"c-member-total-" + member.id} className="text-end">
+          <strong>
+            {numberWithCommas(this.props.data.data.records[i].total_collected)}
+          </strong>
+        </td>
+      );
+
+      records.push(
+        <tr key={"member-row-" + i}>
+          {components}
+        </tr>
+      );
+    }
+
+    return records;
+  }
+
   buildTotals() {
     var records = [];
 
@@ -158,7 +296,7 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
           <strong>
             {numberWithCommas(totals[i].amount)}
           </strong>
-        </td>
+        </td>,
       );
     }
 
@@ -170,6 +308,47 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
           </strong>
         </div>
       </td>
+    )
+
+    return (
+      <tr key={"totals-row"}>
+        {records}
+      </tr>
+    );
+  }
+
+  ApibuildTotals() {
+    var records = [];
+
+    records.push(
+      <td key="total-label">
+        <strong>
+          TOTAL
+        </strong>
+      </td>
+    );
+
+    var totals  = this.props.data.data.totals;
+    for(var i = 0; i < totals.length; i++) {
+      records.push(
+        <td key={"total-insurance-fund-transfer-payment-" + i} className="text-end">
+          <strong>
+            {numberWithCommas(totals[i].amount)}
+          </strong>
+        </td>,
+        <td></td>
+      );
+    }
+
+    records.push(
+      <td key="grand-total" className="text-end">
+        <div className="badge bg-success">
+          <strong>
+            {numberWithCommas(this.props.data.data.total_collected)}
+          </strong>
+        </div>
+      </td>,
+      <td></td>
     )
 
     return (
@@ -406,7 +585,29 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
     }
   }
 
+  CheckApi(){
+    var hasReferenceNum = false;
+    for(var i = 0; i < this.props.data.data.records.length; i++) {
+      for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
+        var referrenceRecord = this.props.data.data.records[i].records[j];
+
+        if (referrenceRecord.reference_num){
+          hasReferenceNum = true;
+          break; 
+        }
+      }
+
+      if(hasReferenceNum){
+        break;
+      }
+    }
+
+    return hasReferenceNum;
+  }
+
   render() {
+    const shouldRenderApiHeaders = this.CheckApi();
+
     return (
       <>
         <div className="table-responsive">
@@ -420,14 +621,20 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
           <table className="table table-bordered table-hover table-sm">
             <thead>
               <tr>
-                {this.buildHeaders()}
+                  {shouldRenderApiHeaders
+                  ? this.ApiBuildHeaders() 
+                  : this.buildHeaders()}    
               </tr>
             </thead>
             <tbody>
-              {this.buildRecords()}
+               {shouldRenderApiHeaders
+                  ? this.ApibuildRecords() 
+                  : this.buildRecords()}    
             </tbody>
             <tfoot>
-              {this.buildTotals()}
+              {shouldRenderApiHeaders
+                  ? this.ApibuildTotals() 
+                  : this.buildTotals()} 
             </tfoot>
           </table>
         </div>
