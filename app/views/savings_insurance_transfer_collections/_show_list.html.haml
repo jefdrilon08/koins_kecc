@@ -30,8 +30,9 @@
           Date of Birth
         %th
           Date Prepared
-        %th
-          Effectivity Date
+        - if @savings_insurance_transfer_collection.approved?
+          %th
+            Effectivity Date
         %th
           Beneficiary Name
         %th
@@ -76,8 +77,11 @@
             #{o[:kkalinga_data][:kkalinga_date_of_birth]}
           %td
             #{o[:kkalinga_data][:kkalinga_effectivity_date]}
-          %td
-            #{@savings_insurance_transfer_collection.date_approved}
+          - if @savings_insurance_transfer_collection.approved?
+            %td
+              #{o[:kkalinga_data][:kkalinga_effectivity_date]}
+          / %td
+          /   #{@savings_insurance_transfer_collection.date_approved}
           %td
             #{o[:kkalinga_data][:kkalinga_beneficiary_name]}
           %td
