@@ -19,6 +19,8 @@ module Api
       tin_number          = params[:tin_number]
       pag_ibig_number     = params[:pag_ibig_number]
       phil_health_number  = params[:phil_health_number]
+      branch_id           = params[:branch_id]
+      center_id           = params[:center_id]
 
       # File attachments
       files = []
@@ -84,13 +86,15 @@ module Api
         mothers_first_name:       mothers_first_name,
         previous_mfi_experience:  previous_mfi_experience,
         legal_dependents:         legal_dependents,
-        beneficiaries:            beneficiaries
+        beneficiaries:            beneficiaries,
+        branch_id:                branch_id,
+        center_id:                center_id
       )
 
       validator.execute!
 
       if validator.valid?
-        cmd = ::OnlineApplications::Regsiter.new(
+        cmd = ::OnlineApplications::Register.new(
           first_name:               first_name,
           middle_name:              middle_name,
           last_name:                last_name,
@@ -122,12 +126,14 @@ module Api
           mothers_first_name:       mothers_first_name,
           previous_mfi_experience:  previous_mfi_experience,
           legal_dependents:         legal_dependents,
-          beneficiaries:            beneficiaries
+          beneficiaries:            beneficiaries,
+          branch:                   validator.branch,
+          center:                   validator.center
         )
 
         cmd.execute!
 
-        render json: { reference_number: cmd.reference_number }
+        render json: { reference_number: cmd.online_application.reference_number }
       else
         render json: validator.payload, status: :unprocessable_entity
       end

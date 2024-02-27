@@ -57,4 +57,7 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+  #
+  # Set action_dispatch.show_exceptions to :none to avoid deprecation Warning (Rails 7)
+  config.action_dispatch.show_exceptions = :none
 end

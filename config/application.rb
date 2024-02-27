@@ -39,5 +39,8 @@ module Koins
     config.action_controller.asset_host = "#{(ENV['APP_PIPELINE'] == 'staging' || ENV['APP_PIPELINE'] == 'production') ? 'https' : 'http'}://#{ENV['APP_HOST']}"
     config.active_record.dump_schemas = :all
     config.action_controller.forgery_protection_origin_check = false
+
+    # Set action_dispatch.show_exceptions to :none to avoid deprecation Warning (Rails 7)
+    config.action_dispatch.show_exceptions = :none
   end
 end

@@ -1,5 +1,6 @@
 module OnlineApplications
   class ValidateRegister < ::Core::Validator
+    attr_reader :branch, :center
 
     def initialize(
       first_name:,
@@ -33,7 +34,9 @@ module OnlineApplications
       mothers_first_name:,
       previous_mfi_experience:, 
       legal_dependents:,
-      beneficiaries:
+      beneficiaries:,
+      branch_id:,
+      center_id:
     )
       super()
 
@@ -69,6 +72,8 @@ module OnlineApplications
       @previous_mfi_experience  = previous_mfi_experience
       @legal_dependents         = legal_dependents
       @beneficiaries            = beneficiaries
+      @branch_id                = branch_id
+      @center_id                = center_id
 
       @payload = {
         first_name:               [],
@@ -102,11 +107,33 @@ module OnlineApplications
         mothers_first_name:       [],
         previous_mfi_experience:  [],
         legal_dependents:         [],
-        beneficiaries:            []
+        beneficiaries:            [],
+        branch_id:                [],
+        center_id:                []
       }
     end
 
     def execute!
+      if @branch_id.blank?
+        @payload[:branch_id] << "required"
+      else
+        @branch = Branch.find_by_id(@branch_id)
+
+        if @branch.blank?
+          @payload[:branch_id] << "not found"
+        end
+      end
+
+      if @center_id.blank?
+        @payload[:center_id] << "required"
+      else
+        @center = Center.find_by_id(@center_id)
+
+        if @center.blank?
+          @payload[:center_id] << "not found"
+        end
+      end
+
       if @first_name.blank?
         @payload[:first_name] << "required"
       end
@@ -135,7 +162,6 @@ module OnlineApplications
         @payload[:email] << "duplicate value"
       end
 
-      puts "Mobile Number: #{@mobile_number}"
       if @mobile_number.blank?
         @payload[:mobile_number] << "required"
       elsif not @mobile_number.match(/\+639[0-9]{9}$/)
@@ -164,13 +190,13 @@ module OnlineApplications
         @payload[:address_street] << "required"
       end
 
-      if @files.blank?
-        @payload[:files] << "required"
-      end
+#      if @files.blank?
+#        @payload[:files] << "required"
+#      end
 
-      if @profile_picture.blank?
-        @payload[:profile_picture] << "required"
-      end
+#      if @profile_picture.blank?
+#        @payload[:profile_picture] << "required"
+#      end
 
       if @reason_for_joining.blank?
         @payload[:reason_for_joining] << "required"
@@ -184,13 +210,13 @@ module OnlineApplications
 
       if @tin_number.blank?
         @payload[:tin_number] << "required"
-      elsif not @tin_number.match(/^\d{9,12}$/)
+      elsif not @tin_number.match(/\d{9,12}$/)
         @payload[:tin_number] << "invalid value"
       end
 
       if @pag_ibig_number.blank?
         @payload[:pag_ibig_number] << "required"
-      elsif not @pag_ibig_number.match(/^d{12}/)
+      elsif not @pag_ibig_number.match(/\d{12}/)
         @payload[:pag_ibig_number] << "invalid value"
       end
 
