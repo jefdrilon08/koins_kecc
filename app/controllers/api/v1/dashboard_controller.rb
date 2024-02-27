@@ -27,11 +27,13 @@ module Api
                            @branches.first
                          end
 
-        rr = ReadOnlyDataStore
-          .repayment_rates
-          .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
-          .order("updated_at ASC")
-          .last
+        if current_branch.present?
+          rr = ReadOnlyDataStore
+            .repayment_rates
+            .where("meta->>'branch_id' = ? AND status = ?", current_branch.id, "done")
+            .order("updated_at ASC")
+            .last
+        end
 
         if rr.present?
           branch_loans_stats = ::DataStores::BuildBranchLoanStatsFromRr.new(rr_data: rr.data.with_indifferent_access).execute!
