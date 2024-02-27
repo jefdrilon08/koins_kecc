@@ -127,7 +127,7 @@ module Api
 
         cmd.execute!
 
-        render json: cmd.reference_number
+        render json: { reference_number: cmd.reference_number }
       else
         render json: validator.payload, status: :unprocessable_entity
       end

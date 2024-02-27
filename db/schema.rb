@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_10_011014) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_12_075322) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -790,6 +790,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_10_011014) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["branch_id"], name: "index_insurance_fund_transfer_collections_on_branch_id"
     t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
+  end
+
+  create_table "insurance_loan_bundle_enrollments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "collection_date"
+    t.date "date_approved"
+    t.jsonb "data"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.decimal "total_amount", precision: 8, scale: 2, default: "0.0"
+    t.string "approved_by"
+    t.index ["branch_id"], name: "index_insurance_loan_bundle_enrollments_on_branch_id"
+    t.index ["center_id"], name: "index_insurance_loan_bundle_enrollments_on_center_id"
   end
 
   create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
