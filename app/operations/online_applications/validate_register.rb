@@ -135,6 +135,7 @@ module OnlineApplications
         @payload[:email] << "duplicate value"
       end
 
+      puts "Mobile Number: #{@mobile_number}"
       if @mobile_number.blank?
         @payload[:mobile_number] << "required"
       elsif not @mobile_number.match(/\+639[0-9]{9}$/)
