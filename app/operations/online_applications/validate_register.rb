@@ -46,7 +46,7 @@ module OnlineApplications
       @gender                   = gender
       @date_of_birth            = date_of_birth
       @email                    = email
-      @mobile_number            = "+63" + mobile_number # added +63
+      @mobile_number            = mobile_number
       @address_region           = address_region
       @address_province         = address_province
       @address_city             = address_city
