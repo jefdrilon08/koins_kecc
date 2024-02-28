@@ -173,6 +173,24 @@
         %td{:width => "25%"}
           Checked by:
           %br
+          %i DATE: #{@claim.date_checked.try(:strftime, "%b %d, %Y") || ""}
+          %br
+          %br
+          - if @claim.checked_by.nil? 
+            - if @claim.prepared_by == "Richard Monteron"
+              %u
+                Adrian San Andres
+            - elsif @claim.prepared_by == "Jake Villanueva"
+              %u
+                Adrian San Andres
+            - elsif @claim.prepared_by == "Ramon Jr Covilla"
+              %u
+                Adrian San Andres
+            - else
+              ""
+          - else
+            %u
+              #{@claim.checked_by}
           %br
           %u
             Evelyn A. Lagmay / Analyn Shih
