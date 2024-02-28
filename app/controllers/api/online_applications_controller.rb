@@ -6,7 +6,7 @@ module Api
       middle_name         = params[:middle_name]
       last_name           = params[:last_name]
       gender              = params[:gender]
-      date_of_birth       = params[:date_of_birth]
+      date_of_birth       = params[:birthday]
       email               = params[:email]
       mobile_number       = params[:mobile_number]
       address_region      = params[:address_region]

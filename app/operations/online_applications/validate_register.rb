@@ -46,7 +46,7 @@ module OnlineApplications
       @gender                   = gender
       @date_of_birth            = date_of_birth
       @email                    = email
-      @mobile_number            = mobile_number
+      @mobile_number            = "+63" + mobile_number # added +63
       @address_region           = address_region
       @address_province         = address_province
       @address_city             = address_city
@@ -166,7 +166,8 @@ module OnlineApplications
         @payload[:mobile_number] << "required"
       elsif not @mobile_number.match(/\+639[0-9]{9}$/)
         @payload[:mobile_number] << "invalid value"
-      elsif OnlineApplication.where(mobile_number: @mobile_number).count > 0 or Member.where(mobile_number: @mobile_number).count > 0
+      elsif OnlineApplication.where("mobile_number LIKE ?", "%" + @mobile_number.slice(-10..)).count > 0 or Member.where("mobile_number LIKE ?", "%" + @mobile_number.slice(-10..)).count > 0
+        # Changed to this to find the same 9xxxxxxxxxx numbers
         @payload[:mobile_number] << "duplicate value"
       end
 
@@ -216,7 +217,7 @@ module OnlineApplications
 
       if @pag_ibig_number.blank?
         @payload[:pag_ibig_number] << "required"
-      elsif not @pag_ibig_number.match(/\d{12}/)
+      elsif not @pag_ibig_number.match(/^\d{12}/)
         @payload[:pag_ibig_number] << "invalid value"
       end
 
