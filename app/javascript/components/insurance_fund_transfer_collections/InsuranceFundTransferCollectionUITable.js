@@ -69,15 +69,16 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
     headers.push(
       <th style={{minWidth: "40px"}}>
         <center>
-          Life Insurance Fund
+          Referrence Number
         </center>
       </th>
     );
-    
+
+
     headers.push(
       <th style={{minWidth: "40px"}}>
         <center>
-          Referrence Number
+          Life Insurance Fund
         </center>
       </th>
     );
@@ -90,14 +91,6 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
       </th>
     );
     
-      headers.push(
-      <th style={{minWidth: "40px"}}>
-        <center>
-          Referrence Number
-        </center>
-      </th>
-    );
-
     headers.push(
       <th  key={"h-total"} style={{minWidth: "40px"}}>
         <center>
@@ -235,21 +228,38 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
 
       for(var j = 0; j < this.props.data.data.records[i].records.length; j++) {
         var paymentRecord = this.props.data.data.records[i].records[j];
-        console.log(paymentRecord)
+        console.log(paymentRecord.account_subtype)
         if(this.props.data.status == "pending") {
-          components.push(
-            <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
-              <strong>
-                <a 
-                  href="#"
-                  onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
-                >
-                  {numberWithCommas(paymentRecord.amount)}
-                </a>
-              </strong>
-            </td>,
-            <td><center>{(paymentRecord.reference_num)}</center></td>
-          );
+          if(paymentRecord.account_subtype == "Life Insurance Fund") {
+            components.push(
+              <td>
+                <center>{paymentRecord.reference_num}</center>
+              </td>,
+              <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          }
         } else {
           components.push(
             <td key={"na-" + member.id + "-" + j} className="text-end">
@@ -325,7 +335,8 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
         <strong>
           TOTAL
         </strong>
-      </td>
+      </td>,
+      <td></td>
     );
 
     var totals  = this.props.data.data.totals;
@@ -335,8 +346,7 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
           <strong>
             {numberWithCommas(totals[i].amount)}
           </strong>
-        </td>,
-        <td></td>
+        </td>
       );
     }
 
@@ -347,8 +357,7 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
             {numberWithCommas(this.props.data.data.total_collected)}
           </strong>
         </div>
-      </td>,
-      <td></td>
+      </td>
     )
 
     return (
