@@ -5,6 +5,8 @@ module Kmba
     def initialize(member_data:)
       super()
       @member_data = member_data
+      @branch                 = Branch.find(@member_data[:branch_id])
+      @center                 = Center.find(@member_data[:center_id])
     end
 
     def execute!
@@ -49,6 +51,26 @@ module Kmba
 
       Rails.logger.info(puts " New Record is Save ID NO : #{@member_data[:external_ref]}, saved! ", status: 200)
       member_data.save!
+      member_data = Member.find(member_data.id)
+
+      missing_accounts  = ::Members::FetchMissingAccounts.new(
+                            config: {
+                              member: member_data
+                            }
+                          ).execute!
+
+      if missing_accounts.any?
+        ::Members::GenerateMissingAccounts.new(
+          config: { member: member_data }
+        ).execute!
+      end
+
+     
+
+      # Update center of member accounts
+      MemberAccount.where(member_id: member_data.id).each do |a|
+        a.update!(center: @center, branch: @branch)
+      end
     end
   end
 end

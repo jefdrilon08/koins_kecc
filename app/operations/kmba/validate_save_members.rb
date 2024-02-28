@@ -17,8 +17,7 @@ module Kmba
           
           center        = Center.where(id: member["center_id"])
           branch        = Branch.where(id: member["branch_id"])
-          external_ref  = Member.where(external_ref: member["external_ref"])
-
+          external_ref  = Member.where(external_ref: member["external_ref"]).count
 
 
           if member["center_id"].blank?
@@ -104,7 +103,25 @@ module Kmba
               key: "civil_status",
               message: "Civil Status not found"
             }
-          end   
+          end
+
+          if member["mobile_number"].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member["external_ref"],
+              key: "mobile_number",
+              message: "Mobile_number not found"
+            }
+          end
+
+          if member["insurance_status"].blank?
+            @errors[:messages] << {
+              code: "KMBA-001",
+              external_ref: member["external_ref"],
+              key: "insurance_status",
+              message: "Insurance Status not found"
+            }
+          end      
 
           if member["data"]["address"]["street"].blank?
             @errors[:messages] << {
@@ -133,27 +150,29 @@ module Kmba
             }
           end
 
-          if member["external_ref"].blank?
-            @errors[:messages] << {
-              code: "KMBA-001",
-              external_ref: member[:external_ref],
-              key: "external_ref", 
-              message: "ExternalRef not found"
-            }
-          elsif member["external_ref"] !~ /\A[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\z/
-            @errors[:messages] << {
-              code: "KMBA-002",
-              external_ref: member["external_ref"],
-              key: "external_ref",
-              message: "ExternalRef is not a valid UUID"
-            }
-          elsif external_ref.count == 1
-            @errors[:messages] << {
-              code: "KMBA-001",
-              external_ref: member["external_ref"],
-              key: "external_ref",
-              message: "ExternalRef is already exist!"
-            }
+          if member["insurance_status"] == "pending"
+            if member["external_ref"].blank?
+              @errors[:messages] << {
+                code: "KMBA-001",
+                external_ref: member[:external_ref],
+                key: "external_ref", 
+                message: "ExternalRef not found"
+              }
+            elsif member["external_ref"] !~ /\A[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\z/
+              @errors[:messages] << {
+                code: "KMBA-002",
+                external_ref: member["external_ref"],
+                key: "external_ref",
+                message: "ExternalRef is not a valid UUID"
+              }
+            elsif external_ref > 0
+              @errors[:messages] << {
+                code: "KMBA-001",
+                external_ref: member["external_ref"],
+                key: "external_ref",
+                message: "ExternalRef is already exist!"
+              }
+            end
           end
         }  
       end

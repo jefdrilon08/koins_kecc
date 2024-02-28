@@ -77,10 +77,10 @@ class ProcessReceivePaymentApi < ApplicationJob
         # raise member_account.inspect
         if o[:account_subtype] == 'Life Insurance Fund'
           amount = data['lif_amount']
-          reference_num = data['lif_reference_num']
+          reference_num = data['reference_num']
         elsif o[:account_subtype] == 'Retirement Fund'
           amount = data['rf_amount']
-          reference_num = data['rf_reference_num']
+          reference_num = data['reference_num']
         else
           amount = 0.00
         end
