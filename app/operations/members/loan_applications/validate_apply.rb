@@ -7,25 +7,34 @@ module Members
         term:,
         num_installments:,
         loan_product:,
+        co_maker_first_name:,
+        co_maker_last_name:,
+        co_maker_member_id:,
         data: {}
       )
         super()
 
-        @member           = member
-        @amount           = amount
-        @term             = term
-        @num_installments = num_installments
-        @loan_product     = loan_product
-        @data             = data
+        @member               = member
+        @amount               = amount
+        @term                 = term
+        @num_installments     = num_installments
+        @loan_product         = loan_product
+        @data                 = data
+        @co_maker_first_name  = co_maker_first_name
+        @co_maker_last_name   = co_maker_last_name
+        @co_maker_member_id   = co_maker_member_id
 
         @payload = {
-          member:           [],
-          amount:           [],
-          term:             [],
-          num_installments: [],
-          date_applied:     [],
-          loan_product_id:  [],
-          loan_application: []
+          member:               [],
+          amount:               [],
+          term:                 [],
+          num_installments:     [],
+          date_applied:         [],
+          loan_product_id:      [],
+          loan_application:     [],
+          co_maker_first_name:  [],
+          co_maker_last_name:   [],
+          co_maker_member_id:   []
         }
       end
 
@@ -44,6 +53,18 @@ module Members
 
         if @num_installments.blank?
           @payload[:num_installments] << "required"
+        end
+
+        if @co_maker_first_name.blank?
+          @payload[:co_maker_first_name] << "required"
+        end
+
+        if @co_maker_last_name.blank?
+          @payload[:co_maker_last_name] << "required"
+        end
+
+        if @co_maker_member_id.blank?
+          @payload[:co_maker_member_id] << "required"
         end
 
         if @loan_product.blank?

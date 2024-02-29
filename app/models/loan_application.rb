@@ -7,6 +7,7 @@ class LoanApplication < ApplicationRecord
 
   belongs_to :loan_product
   belongs_to :member
+  belongs_to :co_maker_member, class_name: "Member", foreign_key: "co_maker_member_id"
 
   validates :amount, presence: true, numericality: true
   validates :term, presence: true

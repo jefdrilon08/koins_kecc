@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_12_075322) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -977,6 +977,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_075322) do
     t.string "reference_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "co_maker_member_id"
+    t.string "co_maker_first_name", null: false
+    t.string "co_maker_last_name", null: false
     t.index ["loan_product_id"], name: "index_loan_applications_on_loan_product_id"
     t.index ["member_id"], name: "index_loan_applications_on_member_id"
   end
@@ -1721,6 +1724,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_12_075322) do
   add_foreign_key "legal_dependents", "members"
   add_foreign_key "loan_applications", "loan_products"
   add_foreign_key "loan_applications", "members"
+  add_foreign_key "loan_applications", "members", column: "co_maker_member_id"
   add_foreign_key "loan_product_types", "loan_products"
   add_foreign_key "loan_products", "loan_product_categories"
   add_foreign_key "loan_repayment_rates", "branches"
