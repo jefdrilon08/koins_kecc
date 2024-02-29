@@ -139,6 +139,9 @@ namespace :api do
 
     # Loan Products
     get "/loan_products", to: "loan_products#index"
+
+    # Co Makers
+    get "/co_makers", to: "co_makers#index"
   end
 
   # Client Meta Services
