@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import ToggleSwitch from '../utils/ToggleSwitch';
+import jwtDecode from "jwt-decode";
 
 export default function MembersProfileActions(props) {
   const [isLoading, setIsLoading]                                               = useState(false);
@@ -33,6 +35,9 @@ export default function MembersProfileActions(props) {
 
   const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
 
+  const [isMemberSubscribed, setIsMemberSubscribed]                             = useState(false);
+  const user_MIS_BK_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("BK");
+
   useEffect(() => {
     axios.get('/api/yml_values/production_values')
       .then(response => {
@@ -41,6 +46,26 @@ export default function MembersProfileActions(props) {
         console.log(response.data); // Log the value to the console
       })
       .catch(error => console.error(error));
+
+    if(user_MIS_BK_Role){
+      axios.post(
+        '/api/members/is_member_subscribed',
+        {
+          id: props.memberId,
+        },
+        {
+          headers: {
+            'X-KOINS-HQ-TOKEN': props.token
+          }
+        }
+      ).then((res) => {
+        // console.log(res);
+        setIsMemberSubscribed(res.data.is_subscribed);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
   }, []);
 
 
@@ -395,6 +420,31 @@ export default function MembersProfileActions(props) {
       setIsLoading(false);
     })
 
+  }
+
+  const handleMemberSubscription = () =>{
+    const payload = {
+      id: props.memberId
+      }
+
+      const headers = {
+        'X-KOINS-HQ-TOKEN': props.token
+      }
+
+      const options = {
+      headers: headers
+      }
+
+      axios.post(
+        '/api/members/update_member_subscription',
+        payload,
+        options
+      ).then((res) => { 
+        setIsMemberSubscribed(res.data.is_subscribed)
+      }).catch((error) => {
+        setErrors(error.response.data.errors);
+        setIsLoading(false);
+      })
   }
 
   return (
@@ -925,6 +975,28 @@ export default function MembersProfileActions(props) {
 
       <hr/>
 
+      {user_MIS_BK_Role && (
+        <>
+        <div className="row">
+          <div className="col">
+            <div className="note note-info">
+              <strong>
+                Member Subscriptions
+              </strong>
+              <p>
+                Subscription status ng member.
+              </p>
+              <ToggleSwitch
+                name={`member-subscription-id`}
+                checked={isMemberSubscribed}
+                onChange={handleMemberSubscription}
+              />
+            </div>
+          </div>
+        </div>
+        <hr/>
+        </>
+      )}
 
       <div className="row">
         <div className="col">

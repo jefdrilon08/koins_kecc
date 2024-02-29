@@ -64,6 +64,8 @@ namespace :api do
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
   post "/members/form_make_payments", to: "members#form_make_payments"
+  post "/members/is_member_subscribed", to: "members#is_member_subscribed" # for checking the status of member subscription
+  post "/members/update_member_subscription", to: "members#update_member_subscription" # for updating the status of member subscription
 
   post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
   post "/members/member_change_password", to: "v3/members#member_change_password" # for changing of member's password

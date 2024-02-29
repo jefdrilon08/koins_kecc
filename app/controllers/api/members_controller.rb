@@ -11,7 +11,9 @@ module Api
       :reinstate, 
       :delete, 
       :form_make_payments, 
-      :update_recognition_date
+      :update_recognition_date,
+      :is_member_subscribed,
+      :update_member_subscription
     ]
 
     before_action :authenticate_user!, only: [
@@ -23,7 +25,9 @@ module Api
       :balik_kasapi, 
       :reinstate, 
       :form_make_payments, 
-      :update_recognition_date
+      :update_recognition_date,
+      :is_member_subscribed,
+      :update_member_subscription
     ]
 
     def save
@@ -503,6 +507,66 @@ module Api
       cmd.execute!
 
       render json: cmd.data
+    end
+    
+    def is_member_subscribed
+      member = Member.find(params[:id])
+
+      config = {
+        member: member,
+        user:   @user
+      }
+
+      cmd = ::Members::ValidateMemberSubscription.new(
+        config: config
+      )
+
+      cmd.execute!
+
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member_data = member.data.with_indifferent_access
+
+        if !member_data.key?(:subscription)
+          member_data["subscription"] = {}
+          member_data["subscription"]["is_subscribed"] = false
+          member_data["subscription"]["subscribe_created_at"] = Time.now
+          member_data["subscription"]["subscribe_updated_at"] = Time.now
+          member.update(data: member_data)
+        end   
+
+        render json: { message: "ok", is_subscribed: member_data["subscription"]["is_subscribed"] }
+      end
+    end
+
+    def update_member_subscription
+      member = Member.find(params[:id])
+
+      config = {
+        member: member,
+        user:   @user
+      }
+
+      cmd = ::Members::ValidateUpdateMemberSubscription.new(
+        config: config
+      )
+
+      cmd.execute!
+
+      puts "cmd.messagescmd.messages: " + cmd.messages.inspect
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member_data = member.data.with_indifferent_access
+
+        member_data["subscription"]["is_subscribed"] = !member_data["subscription"]["is_subscribed"]
+        member_data["subscription"]["subscribe_updated_at"] = Time.now
+
+        member.update(data: member_data)
+
+        render json: { message: "ok", is_subscribed: member_data["subscription"]["is_subscribed"] }
+      end
     end
   end
 end
