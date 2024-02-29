@@ -82,7 +82,14 @@ module OnlineApplications
         address_street:   @address_street,
         sss_number:       @sss_number,
         tin_number:       @tin_number,
-        pag_ibig_number:  @pag_ibig_number
+        pag_ibig_number:  @pag_ibig_number,
+        spouse: {
+          first_name: @spouse_first_name,
+          middle_name: @spouse_middle_name,
+          last_name: @spouse_last_name,
+          date_of_birth: @spouse_date_of_birth,
+          occupation: @spouse_occupation
+        }
       }
 
       @online_application = OnlineApplication.new(
