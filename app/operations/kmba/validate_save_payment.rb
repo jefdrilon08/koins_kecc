@@ -21,8 +21,8 @@ module Kmba
           if payment["data"].blank?
             @errors[:messages] << {
               code: "KMBA-001",
-              key: "identification_number", 
-              message: "Identification Number Not Found!"
+              key: "data", 
+              message: "Data Not Found!"
             }
           else 
             payment["data"].each do |record|
@@ -81,6 +81,22 @@ module Kmba
         end
       end
 
+      if record["reference_num"].blank?
+        @errors[:messages] << {
+          code: "KMBA-003",
+          key: "reference_num", 
+          message: "Reference Number Not Found!"
+        }
+      end
+
+      if AccountTransaction.where(external_ref: record["reference_num"]).present?
+        @errors[:messages] << {
+          code: "KMBA-004",
+          key: "identification_number", 
+          message: "Account Transaction is Already Exist"
+        }
+      end
+
       if record["lif_amount"].blank?
         @errors[:messages] << {
           code: "KMBA-003",
@@ -96,39 +112,6 @@ module Kmba
           message: "Retirement Fund Amount Not Found!"
         }
       end
-
-      if record["lif_reference_num"].blank?
-        @errors[:messages] << {
-          code: "KMBA-003",
-          key: "lif_reference_num", 
-          message: "Life Insurand Fund Reference Number Not Found!"
-        }
-      end
-
-      if record["rf_reference_num"].blank?
-        @errors[:messages] << {
-          code: "KMBA-003",
-          key: "rf_reference_num", 
-          message: "Retiremend Fund Reference Number Not Found!"
-        }
-      end
-
-      if AccountTransaction.where(external_ref: record["lif_reference_num"]).present?
-        @errors[:messages] << {
-          code: "KMBA-004",
-          key: "identification_number", 
-          message: "Life Insurance Fund, Account Transaction is Already Exist"
-        }
-      end
-
-      if AccountTransaction.where(external_ref: record["rf_reference_num"]).present?
-        @errors[:messages] << {
-          code: "KMBA-004",
-          key: "identification_number", 
-          message: "Retirement Fund, Account Transaction is Already Exist"
-        }
-      end
-
     end
   end
 end

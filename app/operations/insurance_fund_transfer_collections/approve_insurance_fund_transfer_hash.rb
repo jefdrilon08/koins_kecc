@@ -30,7 +30,9 @@ module InsuranceFundTransferCollections
           is_for_exit_age: false,
           is_for_loan_payments: false,
           beginning_balance: 0.00,
-          ending_balance: 0.00
+          ending_balance: 0.00,
+          payment_tpye: "gcash",
+
         }  
       else
         @account_transaction  = AccountTransaction.new(
@@ -49,8 +51,7 @@ module InsuranceFundTransferCollections
           is_for_exit_age: false,
           is_for_loan_payments: false,
           beginning_balance: 0.00,
-          ending_balance: 0.00
-        }
+          ending_balance: 0.00        }
       end     
     end
 
@@ -95,6 +96,7 @@ module InsuranceFundTransferCollections
                                         is_adjustment: false,
                                         is_for_exit_age: false,
                                         is_for_loan_payments: false,
+                                        payment_tpye: "gcash",
                                         accounting_entry_reference_number: nil,
                                         beginning_balance: ev_balance.to_f,
                                         ending_balance: (ev_balance.to_f + (@amount /2)).round(2)

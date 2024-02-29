@@ -54,6 +54,14 @@ module Loans
 
       perform_deposits!
       send_sms!
+      @member_data[:sms_record] = {
+        loan: @loan.id,
+        loan_maturity: @loan.maturity_date,
+        timestamp: Time.now,
+        sms_validation: true
+      }
+
+      #puts "jaysoncandelaria" + @member_data.inspect
       if @loan_cycles.blank?
         @loan_cycles  = [
           {
@@ -543,14 +551,17 @@ module Loans
       member = Member.find(@loan.member_id)
       content = "Good Day! #{member.full_name.upcase}, Your Loan has been approved with Loan Reference Number: #{@loan.pn_number} amounting to #{number_to_currency(@loan.principal,unit: "")} and the first date of payment is #{@loan.first_date_of_payment.to_fs(:long)}  THIS IS A TEST MESSAGE ONLY"
         if member.mobile_number.present?
+
+
           config = {
             mobile_number: member.mobile_number,
             content: content
           }
 
           #SmsBlast::Send.new(config: config).execute!
-          puts config.inspect
+          puts "asddddddddddddddddddddd" + member.inspect
         end
+      end
     end
-  end
+
 end

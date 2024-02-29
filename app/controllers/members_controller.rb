@@ -524,8 +524,8 @@ end
       "status":                       @member.status,
       "reinstated":                   @member.reinstated.try(:strftime, "%b %d, %Y"),
       "project_type":                 @project_type,
-      "accrued_interest_data":        @accrued_interest_data
-      
+      "accrued_interest_data":        @accrued_interest_data,
+      "from_mobile_app":              @member.from_mobile_app  
     }
     
     @payload[:active_loans] = @active_loans.map{ |o|

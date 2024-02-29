@@ -269,8 +269,8 @@ class ClaimsController < ApplicationController
 
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
-        if @claim.prepared_by == "Richard Monteron" || @claim.prepared_by == "Mcquen Abellano" || @claim.prepared_by == "Ramon Jr Covilla"
-          if ["Aljon", "Jake", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
+        if @claim.prepared_by == "Richard Monteron" || 
+          if ["Evelyn", "Adrian", "Mcquen"].include? current_user.first_name
             @subheader_side_actions << {
               id: "btn-check",  
               link: "#",
@@ -278,8 +278,26 @@ class ClaimsController < ApplicationController
               text: "Check"
             }
           end
-        elsif @claim.prepared_by == "Jake Villanueva" || @claim.prepared_by == "Adrian San Andres" || @claim.prepared_by == "Ramon Jr Covilla"
-          if ["Aljon", "Richard", "Evelyn", "Adrian", "Diobert"].include? current_user.first_name
+        elsif @claim.prepared_by == "Mcquen Abellano"
+          if ["Evelyn", "Adrian", "Richard"].include? current_user.first_name
+            @subheader_side_actions << {
+              id: "btn-check",  
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
+          end
+        elsif @claim.prepared_by == "Ramon Jr Covilla"
+          if ["Evelyn", "Adrian", "Richard", "Mcquen"].include? current_user.first_name
+            @subheader_side_actions << {
+              id: "btn-check",  
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
+          end
+        elsif @claim.prepared_by == "Adrian San Andres"
+          if ["Evelyn", "Richard", "Mcquen"].include? current_user.first_name
             @subheader_side_actions << {
               id: "btn-check",
               link: "#",

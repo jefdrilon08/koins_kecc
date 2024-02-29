@@ -173,6 +173,14 @@ class Member < ApplicationRecord
     end
   end
 
+  def from_mobile_app
+    if self.data.with_indifferent_access[:from_mobile_app].present?
+      return self.data.with_indifferent_access[:from_mobile_app]
+    else
+      return nil
+    end
+  end
+
   def interest_start_date
     if self.data.with_indifferent_access[:restoration_records].blank?
       return self.data.with_indifferent_access[:recognition_date]
