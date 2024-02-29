@@ -5,7 +5,11 @@ module Api
       before_action :authorize_active_member!
 
       def index
-        co_makers = Member.where(center_id: @current_member.id).where.not(id: @current_member.id).map{ |o|
+        co_makers = Member.where(
+          center_id: @current_member.center_id
+        ).where.not(
+          id: @current_member.id
+        ).map{ |o|
           o.to_h
         }
 
