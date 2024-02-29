@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.uuid "external_ref"
+    t.string "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"

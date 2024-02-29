@@ -59,6 +59,36 @@ RSpec.describe 'Apply for Loan Online' do
 
         expect(payload['loan_application']).to eq(['pending application'])
       end
+
+      it 'fails if amount is less than minimum of loan product' do
+        params = {
+          loan_product_id:  loan_product.id,
+          amount:           loan_product.min_loan_amount - 1
+        }
+
+        post "#{api_url}", params: params, headers: valid_member_headers
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['amount']).to eq(['invalid amount'])
+      end
+
+      it 'fails if amount is more than max of loan product' do
+        params = {
+          loan_product_id:  loan_product.id,
+          amount:           loan_product.max_loan_amount + 1
+        }
+
+        post "#{api_url}", params: params, headers: valid_member_headers
+
+        expect(response).to have_http_status(:unprocessable_entity)
+
+        payload = JSON.parse(response.body)
+
+        expect(payload['amount']).to eq(['invalid amount'])
+      end
     end
 
     context 'valid calls' do

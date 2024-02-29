@@ -15,7 +15,7 @@ module Members
         super()
 
         @member               = member
-        @amount               = amount
+        @amount               = amount.try(:to_f).try(:round, 2)
         @term                 = term
         @num_installments     = num_installments
         @loan_product         = loan_product
@@ -69,6 +69,14 @@ module Members
 
         if @loan_product.blank?
           @payload[:loan_product_id] << "required"
+        end
+
+        if @loan_product.present? and @amount.present?
+          if @amount < @loan_product.min_loan_amount
+            @payload[:amount] << "invalid amount"
+          elsif @amount > @loan_product.max_loan_amount
+            @payload[:amount] << "invalid amount"
+          end
         end
 
         if @member.present? and LoanApplication.where(member_id: @member.id, status: 'pending').count > 0
