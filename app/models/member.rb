@@ -722,6 +722,10 @@ class Member < ApplicationRecord
       identification_number: identification_number
     }
   end
+
+  def to_h
+    user_object
+  end
   
   def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)
     relation = self
