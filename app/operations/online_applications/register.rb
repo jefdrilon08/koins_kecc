@@ -76,13 +76,19 @@ module OnlineApplications
 
     def execute!
       data = {
-        address_region:   @address_region,
-        address_province: @address_province,
-        address_city:     @address_city,
-        address_street:   @address_street,
-        sss_number:       @sss_number,
-        tin_number:       @tin_number,
-        pag_ibig_number:  @pag_ibig_number,
+        address: {
+          street:   @address_street,
+          district: @address_district,
+          city:     @address_city,
+          region:   @address_region,
+          province: @address_province
+        },
+        government_identification_numbers: {
+          sss_number:       @sss_number,
+          phil_health_number: @phil_health_number,
+          pag_ibig_number:  @pag_ibig_number,
+          tin_number:       @tin_number
+        },
         spouse: {
           first_name: @spouse_first_name,
           middle_name: @spouse_middle_name,
