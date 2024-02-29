@@ -248,7 +248,14 @@ class LoansController < ApplicationController
         }
       end
     end
-
+    if @loan.active? && helpers.is_mis_fm?
+      @subheader_side_actions << {
+        id: "btn-fraud",
+        class: "fa fa-upload",
+        link: "#",
+        text: "Fraud Tagging"
+      }
+    end
 
     if @loan.pending?
       @subheader_side_actions << {
