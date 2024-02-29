@@ -674,20 +674,31 @@ module Loans
               elsif  s_deduction.skip_for_special_loan_fund == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
-                    if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                    if s.num_installments == @num_installments 
+                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
+                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
+                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 else
