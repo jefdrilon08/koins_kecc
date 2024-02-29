@@ -66,7 +66,6 @@ namespace :api do
   post "/members/form_make_payments", to: "members#form_make_payments"
   post "/members/is_member_subscribed", to: "members#is_member_subscribed" # for checking the status of member subscription
   post "/members/update_member_subscription", to: "members#update_member_subscription" # for updating the status of member subscription
-
   post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
   post "/members/member_change_password", to: "v3/members#member_change_password" # for changing of member's password
 
@@ -104,6 +103,9 @@ namespace :api do
   # Loans
   post "/loans/restructure", to: "loans#restructure"
 
+  # Loan Products
+  get "/loan_products", to: "loan_products#index"
+
   # For member mobile client
   namespace :members do
     # Loans
@@ -135,7 +137,8 @@ namespace :api do
     post "/surveys/fetch_survey_answer", to: "surveys#fetch_survey_answer"
     post "/surveys/update_survey_answer", to: "surveys#update_survey_answer"
 
-
+    # Loan Products
+    get "/loan_products", to: "loan_products#index"
   end
 
   # Client Meta Services

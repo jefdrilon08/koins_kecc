@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Delete User' do
   include ApiHelpers
 
-  let(:user) { FactoryBot.create(:user, roles: ['MIS'], username: 'admin') }
-  let(:oas_user) { FactoryBot.create(:user, roles: ['OAS'], username: 'oas') }
+  let(:user) { FactoryBot.create(:user, roles: ['MIS'], username: 'admin', identification_number: 'admin-12345') }
+  let(:oas_user) { FactoryBot.create(:user, roles: ['OAS'], username: 'oas', identification_number: 'oas-12345') }
   let(:valid_user_headers) { build_jwt_header(user.generate_jwt) }
   let(:oas_user_headers) { build_jwt_header(oas_user.generate_jwt) }
   let(:api_url) { '/api/v3/users' }

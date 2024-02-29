@@ -44,7 +44,7 @@ module Members
         else        
           user_data = user.data.with_indifferent_access # get the data first
           # Check if the member is new or old
-          if (Date.parse(user.date_of_membership).strftime("%Y-%m-%d") >= @newMemberDate) # this is new member
+          if (user.date_of_membership.present? and Date.parse(user.date_of_membership).strftime("%Y-%m-%d") >= @newMemberDate) # this is new member
             
             if(user_data.key?(:is_otp_verified)) 
               if(user_data["is_otp_verified"]) # this member done in otp 
