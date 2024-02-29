@@ -24,7 +24,7 @@ module Members
           term:             [],
           num_installments: [],
           date_applied:     [],
-          loan_product:     [],
+          loan_product_id:  [],
           loan_application: []
         }
       end
@@ -47,7 +47,7 @@ module Members
         end
 
         if @loan_product.blank?
-          @payload[:loan_product] << "required"
+          @payload[:loan_product_id] << "required"
         end
 
         if @member.present? and LoanApplication.where(member_id: @member.id, status: 'pending').count > 0

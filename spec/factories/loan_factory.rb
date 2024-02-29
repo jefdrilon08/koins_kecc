@@ -11,6 +11,7 @@ FactoryBot.define do
     min_loan_amount       { 5000 }
     is_entry_point        { true }
     monthly_interest_rate { 0.05 }
+    denomination          { 5000 }
   end
 
   factory :loan do
@@ -31,5 +32,6 @@ FactoryBot.define do
     first_date_of_payment { Date.today + 1.week }
     max_active_date       { Date.today + 2.weeks }
     payment_type          { "cash" }
+    term                  { "weekly" }
   end
 end
