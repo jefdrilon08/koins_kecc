@@ -18,6 +18,21 @@ class LoanApplication < ApplicationRecord
 
   before_validation :load_defaults
 
+  scope :pending, -> { where(status: "pending") }
+  scope :processing, -> { where(status: "processing") }
+  scope :pending_or_processing, -> { where(status: ["pending", "processing"]) }
+
+  def to_h
+    {
+      id: self.id,
+      reference_number: self.reference_number,
+      amount: self.amount,
+      status: self.status,
+      date_applied: self.date_applied.try(:strftime, "%m %d, %Y"),
+      loan_product: self.loan_product.to_h
+    }
+  end
+
   def load_defaults
     if self.status.blank?
       self.status = 'pending'

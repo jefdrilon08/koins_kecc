@@ -142,6 +142,9 @@ namespace :api do
 
     # Co Makers
     get "/co_makers", to: "co_makers#index"
+
+    # Loan Applications
+    get "/loan_applications", to: "loan_applications#index"
   end
 
   # Client Meta Services

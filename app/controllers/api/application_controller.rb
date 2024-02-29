@@ -14,6 +14,7 @@ module Api
         end
       end
     end
+
     def authenticate_user!
       if request.headers["Authorization"].blank?
         render json: { message: "authentication required" }, status: :forbidden
