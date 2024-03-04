@@ -3,23 +3,32 @@ module Api
     # API FOR MEMBERS
     
     def save_members_api   
-      members = JSON.parse(request.body.read)
-      # raise members.inspect
-      errors = ::Kmba::ValidateSaveMembers.new(
-        members: members
-      ).execute!
+      members = request.body.read
 
-      if errors[:full_messages].any?
-        render json: errors, status: 400
-      else 
-        # raise @members.count.inspect
+      if members.blank?
+        render json: { error: 'Member request body is empty, please fill in.' }, status: 400
+      else
         begin
-          ProcessReceiveMemberApi.perform_later(members)
-          render :status => "200", :json => {:Message => "Job Successfully Queued.", :Member_Count => "#{members.count}"}
-        rescue StandardError => e
-          render json: { error: e.message }, status: :unprocessable_entity
+          members = JSON.parse(members)
+
+          if members.nil?
+            render json: { error: 'Invalid JSON format' }, status: 400
+          else
+            errors = ::Kmba::ValidateSaveMembers.new(
+              members: members
+            ).execute!
+
+            if errors[:full_messages].any?
+              render json: { errors: errors[:full_messages] }, status: 400
+            else 
+              ProcessReceiveMemberApi.perform_later(members)
+              render :status => "200", :json => {:Message => "Job Successfully Queued.", :member_count => members.count}
+            end   
+          end
+        rescue JSON::ParserError => e
+          render json: { error: 'Invalid JSON format', details: e.message }, status: 400
         end
-      end  
+      end 
     end
 
     # API FOR PAYMENTS
