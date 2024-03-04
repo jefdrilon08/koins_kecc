@@ -3249,13 +3249,49 @@ loan_products:
       account_subtype: "Maintaining Balance Savings"
       percentage: 0.2
       threshold: 7001.00
+    deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
     midas:
       contract_type: 12
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
-
   -
     loan_product_id: "6b967738-dc57-467d-a51b-7a77de62468f"                         # K-KALUSUGAN W2
     receivable_accounting_code_id: "637df4c9-1d41-4b87-bc16-a8e70e1b93fc"
@@ -3271,7 +3307,44 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
+    deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "22f9d132-820f-4c3d-830e-aaee1c0b206c"                         # K-KALUSUGAN W3
@@ -3289,7 +3362,44 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
+    deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "8b1b3103-2e3b-4308-bc76-cf5fec772f2e"                         # K-KALUSUGAN W4
@@ -3307,7 +3417,44 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
+    deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "ae07e628-b99a-4a4a-a798-252446d59df9"                         # K-KALUSUGAN W5
@@ -3325,7 +3472,44 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: 
+    deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -3475,6 +3659,43 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
+      - name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        sms_amount: 10.0
+        deduction_type: "member_type_deduction_ratio"
+        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              - num_installments: 15
+                ratio: 0.020
+              - num_installments: 25
+                ratio: 0.03
+              - num_installments: 35
+                ratio: 0.045
+              - num_installments: 50
+                ratio: 0.06
+            monthly:
+              - num_installments: 3
+                ratio: 0.0035
+              - num_installments: 6
+                ratio: 0.007
+              - num_installments: 9
+                ratio: 0.0105
+              - num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              - num_installments: 6
+                ratio: 0.0035
+              - num_installments: 12
+                ratio: 0.007
+              - num_installments: 18
+                ratio: 0.0105
+              - num_installments: 24
+                ratio: 0.0140
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -6426,6 +6647,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.0
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -6890,6 +7112,7 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount: 10.0
         deduction_type: "member_type_deduction_ratio"
         business_permit_available: true
         business_permit_amount: 500
