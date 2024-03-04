@@ -250,7 +250,38 @@ incentive_table:
         min: 2100000.00
         max: 9999999.99
         amount: 2000.00
-
+###############################
+# Fraud Tagging               #
+###############################
+midas_type:
+- name: "BAR"
+  particular:
+    - code: "01 - 01"
+      name: "Ride on | loan sharing | dummy loans"
+    - code: "01 - 02"
+      name: "Non - remittance of collections"
+    - code: "01 - 03"
+      name: "Getting commission on loans released by other members"
+    - code: "02 - 01"
+      name: "Absence | disapperance : from the community as declared by an authorized representative of a member"
+    - code: "03 - 01"
+      name: "Under Litigation borrower with existing court cases filed by the institution such as Estafa, Collection of sum of money BP22 and the like"
+    - code: "04 - 01"
+      name: "Written off accounts| Bad Debt of Accounts"
+    - code: "04 - 02"
+      name: "Written off accounts| due to calamity/Pandemic"
+    - code: "05 - 01"
+      name: "Matured Loans : accounts with outstanding balances that have exceeded term of maturity dates"
+    - code: "06 - 01"
+      name: "Drop out: loan accounts paid by the centre, group or co-member"
+    - code: "06 - 02"
+      name: "Drop out: expelled by the centre based on the discretion of each member"
+    - code: "07 - 01"
+      name: "Re-structured Loans: incurred at least 2 missed payments without valid reason"
+    - code: "08 - 01"
+      name: "Past due - reported by Rural banks (1 day after maturiy date)"
+    - code: "99 - 99"
+      name: "Other"
 
 ###############################
 # For KCOOP                   #
