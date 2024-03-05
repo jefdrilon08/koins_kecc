@@ -1,0 +1,115 @@
+= title @online_application.member.full_name
+.row
+  .col
+    .card
+      .card-body
+        %h3
+          #{@online_application.member.full_name}
+        %label{style: "color: red;"}
+          #{@online_application.status}
+        %hr
+          - if @online_application.data["approve_process"].present?
+            - @online_application.data["approve_process"].each do |opp|
+              - if opp["type"] == "assign_branch_by"
+                .alert.alert-info
+                  %p This has already been assigned to #{@online_application.branch.name} SATO by #{opp["name"]} on #{opp["date_assign"]}
+              - elsif opp["type"] == "verify_by"
+                .alert.alert-info
+                  %p This has already been verified by #{opp["name"]} on #{opp["date_assign"]}
+              - else
+                .alert.alert-success
+                  %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
+
+
+        %hr
+
+
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Date Applied
+                %td
+                  #{@online_application.date_applied}
+              %tr
+                %th{ width: "25%" }
+                  Reference Number
+                %td
+                  
+                  = link_to member_path(LoanApplication.find(@online_application.id)) do
+                    #{@online_application.reference_number}
+              %tr
+                %th
+                  Loan Product
+                %td
+                  #{@online_application.loan_product.name}
+              %tr
+                %th
+                  Loan Amount
+                %td
+                  #{@online_application.amount}
+              %tr
+                %th
+                  Loan Term
+                %td
+                  #{@online_application.term}
+              %tr
+                %th
+                  Number of installment
+                %td
+                  #{@online_application.num_installments}
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Co-maker sa bahay
+                %td
+                  #{@online_application.co_maker_last_name}, #{@online_application.co_maker_first_name}
+              %tr
+                %th
+                  Co-maker sa sentro
+                %td
+                  #{Member.find( @online_application.co_maker_member_id).full_name}
+        %h4
+
+        %h4
+
+        %h4
+
+        %hr
+        - if @online_application.pending?
+          .row
+            .col-md-6.col-xs-12
+              %a#btn-for-review{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
+                For Review
+            .col-md-6.col-xs-12
+              %button#btn-reject.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reject
+        - elsif @online_application.for_review?
+          .row
+            .col-md-6.col-xs-12
+              %a#btn-for-approve{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
+                .fa.fa-check
+                For Approve
+            .col-md-6.col-xs-12
+              %button#btn-reject-checking.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reject
+        - elsif @online_application.for_approve?
+          .row
+            .col-md-6.col-xs-12
+              %a#btn-approve{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
+                .fa.fa-check
+                Approved
+            .col-md-6.col-xs-12
+              %button#btn-reject-approve.btn.btn-danger.btn-block
+                .fa.fa-times
+                Reject
+        %h4
+      
+= render partial: "online_loan_applications/modals/verify"
+= render partial: "online_loan_applications/modals/for_review"
+= render partial: "online_loan_applications/modals/for_approve"
+= render partial: "online_loan_applications/modals/approve"

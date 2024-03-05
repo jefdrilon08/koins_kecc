@@ -1,0 +1,14 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_list_summary"
+        .h4
+          Application
+        - if @online_applications.any?
+          = render partial: "index_list", locals: { online_applications: @online_applications }
+          = paginate @online_applications
+        - else
+          %p
+            No online applications found

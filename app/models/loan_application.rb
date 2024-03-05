@@ -1,6 +1,8 @@
 class LoanApplication < ApplicationRecord
   STATUSES = [
     "pending",
+    "for_review",
+    "for_approve",
     "processing",
     "approved"
   ]
@@ -31,6 +33,16 @@ class LoanApplication < ApplicationRecord
       date_applied: self.date_applied.try(:strftime, "%m %d, %Y"),
       loan_product: self.loan_product.to_h
     }
+  end
+  def pending?
+    self.status == "pending"
+  end
+  def for_review?
+    self.status == "for_review"
+  end
+
+  def for_approve?
+    self.status == "for_approve"
   end
 
   def load_defaults

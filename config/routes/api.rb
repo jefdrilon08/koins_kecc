@@ -256,6 +256,11 @@ namespace :api do
     post "/online_applications/verify", to: "online_applications#verify"
     post "/online_applications/assign_branch", to: "online_applications#assign_branch"
 
+    post "/online_loan_applications/verify", to: "online_loan_applications#verify"
+    post "/online_loan_applications/for_review", to: "online_loan_applications#for_review"
+    post "/online_loan_applications/for_approve", to: "online_loan_applications#for_approve"
+    post "/online_loan_applications/approve_loan", to: "online_loan_applications#approve_loan"
+    
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"

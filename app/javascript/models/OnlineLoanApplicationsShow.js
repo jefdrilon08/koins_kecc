@@ -1,0 +1,181 @@
+import Mustache from "mustache";
+import $ from "jquery";
+import * as bootstrap from "bootstrap";
+import "pdfmake/build/pdfmake"
+const pdfMake = window["pdfMake"];
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+import MembershipApplicationFormDocumentBuilder from './MembershipApplicationFormDocumentBuilder.js';
+
+var _id;
+var _authenticityToken;
+var _data;
+
+var $modalProcess;
+var $modalReject;
+var $modalVerify;
+var $modalAssignBranch;
+var $btnVerify;
+var $btnConfirmVerify;
+var $btnProcess;
+var $btnConfirmProcess;
+var $btnReject;
+var $btnConfirmReject;
+var $btnDownloadForm;
+var $btnAssignBranch;
+var $btnConfirmAssignBranch;
+var $message;
+var templateErrorList;
+var templateCenterOptions;
+var $inputReason;
+var _centers = [];
+var $btnForReview;
+var $btnConfirmForReview;
+var $modalForReview;
+
+var $btnForApprove;
+var $modalForApprove;
+var $btnConfirmForApprove;
+
+var $btnApprove;
+
+var _cacheDom = function() {
+
+  $modalVerify = new bootstrap.Modal(
+    document.getElementById("modal-verify")
+  )
+  $modalForReview = new bootstrap.Modal(
+    document.getElementById("modal-for-review")
+  )
+  $modalForApprove = new bootstrap.Modal(
+    document.getElementById("modal-for-approve")
+  )
+  
+  $modalApprove = new bootstrap.Modal(
+    document.getElementById("modal-approve")
+  )
+
+  $btnVerify                          = $("#btn-verify");
+  $btnConfirmVerify                   = $("#btn-confirm-verify");
+ 
+  $btnForReview                       = $("#btn-for-review");
+  $btnConfirmForReview                = $("#btn-confirm-for-review");
+
+  $btnForApprove                      = $("#btn-for-approve");
+  $btnConfirmForApprove               = $("#btn-confirm-for-approve");
+
+  $btnApprove                      = $("#btn-approve");
+  $btnConfirmApprove                = $("#btn-confirm-approve");
+}
+
+var _bindEvents = function() {
+  
+  $btnApprove.on("click", function() {
+    _id = $(this).data('id');
+    $modalApprove.show();
+  });
+  
+  $btnConfirmApprove.on("click", function() {
+  
+  
+    $btnConfirmForReview.prop("disabled", true); 
+    $.ajax({
+      url: "/api/v1/online_loan_applications/approve_loan",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success! Reloading..."); 
+        window.location.reload();
+      }
+    });
+  });
+
+  $btnForApprove.on("click", function() {
+    _id = $(this).data('id');
+    $modalForApprove.show();
+  });
+
+  $btnConfirmForApprove.on("click", function() {
+  
+  
+    $btnConfirmForReview.prop("disabled", true); 
+    $.ajax({
+      url: "/api/v1/online_loan_applications/for_approve",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success! Reloading..."); 
+        window.location.reload();
+      }
+    });
+  });
+
+  $btnForReview.on("click", function() {
+    _id = $(this).data('id');
+    $modalForReview.show();
+  });
+
+
+
+  $btnVerify.on("click", function() {
+    _id = $(this).data('id');
+    $modalVerify.show();
+  });
+  
+  $btnConfirmForReview.on("click", function() {
+  
+  
+    $btnConfirmForReview.prop("disabled", true); 
+    $.ajax({
+      url: "/api/v1/online_loan_applications/for_review",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success! Reloading..."); 
+        window.location.reload();
+      }
+    });
+  });
+  
+  $btnConfirmVerify.on("click", function() {
+  
+    $btnConfirmVerify.prop("disabled", true); 
+    $.ajax({
+      url: "/api/v1/online_loan_applications/verify",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success! Reloading..."); 
+        window.location.reload();
+      }
+    });
+  });
+}
+
+var init = function(options) {
+  //_id                 = options.id;
+  _authenticityToken  = options.authenticityToken;
+  //_data               = options.data;
+
+  _cacheDom();
+  _bindEvents();
+}
+
+export default { init: init };

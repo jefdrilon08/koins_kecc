@@ -2,9 +2,12 @@ module Loans
   class Save
     def initialize(config:, persist: true)
       @config       = config
+    
       @loan_data    = @config[:loan_data]
       @user         = @config[:user]
       @loan_product = LoanProduct.where(id: @loan_data[:loan_product_id]).first
+    
+  
       @member       = Member.where(id: @loan_data[:member_id]).first
       @branch       = Branch.where(id: @loan_data[:branch_id]).first
       @center       = Center.where(id: @loan_data[:center_id]).first

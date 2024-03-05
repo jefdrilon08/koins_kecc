@@ -201,6 +201,7 @@ import Dashboard from "../models/Dashboard.js";
 import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCodeSummariesIndex.js";
 import TrendsIndex from "../models/TrendsIndex.js";
 import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
+import OnlineLoanApplicationsShow from "../models/OnlineLoanApplicationsShow.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
@@ -420,6 +421,7 @@ const hooks = {
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
   "trends/index":                                     [TrendsIndex],
   "online_applications/show":                         [OnlineApplicationsShow],
+  "online_loan_applications/show":                    [OnlineLoanApplicationsShow],
   "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
