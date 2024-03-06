@@ -895,6 +895,42 @@ module Api
 
         render json: { mobile_number_exist: mobile_number_exist }
       end
+
+      def update_mobile_number
+        valid_roles = ["MIS", "FM"]
+
+        if (@current_user.roles & valid_roles).size == 0
+          render json: { errors: "unauthorized action" }, status: 400
+
+        else
+          member = Member.find(params[:id])
+          mobile_number = params[:mobile_number]
+          mobile_number = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}+]/,'')
+
+          mobile_number_count = Member.where("mobile_number LIKE ?", "%" + mobile_number).count
+
+          regex_number = /^[0-9]*$/
+
+          if(mobile_number.length == 10 and regex_number.match(mobile_number) and mobile_number[0] == "9" and mobile_number_count == 0 )
+            mobile_number = "+63" + mobile_number # add +63
+            member.update(mobile_number: mobile_number)
+
+            render json: { message: "Mobile number successfully updated.", mobile_number_exist: false }
+
+          elsif (mobile_number_count > 0)
+            if(member.mobile_number.slice(-10..) == mobile_number and mobile_number_count == 1)
+              render json: { errors: "something went wrong" }, status: 400
+            else
+              render json: { mobile_number_exist: true }
+            end
+            
+          else
+            render json: { errors: "something went wrong" }, status: 400
+          end
+
+        end
+        
+      end
     end
   end
 end
