@@ -48,7 +48,8 @@ module Billings
           middle_name: @member.middle_name,
           last_name: @member.last_name,
           identification_number: @member.identification_number,
-          member_type: @member.member_type
+          member_type: @member.member_type,
+          data: @member.data
         },
         attendance: true,
         total_expected_collections: 0.00,

@@ -377,6 +377,7 @@ namespace :api do
     get "/risk_profiles/fetch_prev_metric", to: "risk_profiles#fetch_prev_metric"
     get "/members/member_mobile_number", to: "members#member_mobile_number"
     get "/members/mobile_number_exist", to: "members#mobile_number_exist"
+    post "members/update_mobile_number", to: "members#update_mobile_number"
 
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
