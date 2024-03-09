@@ -48,7 +48,11 @@
                 %th
                   Loan Amount
                 %td
-                  #{@online_application.amount}
+                  %a.undo{ data: { 
+                                    id: @online_application.id,   
+                                    amount: @online_application.amount
+                                  }, :href => "#"  } 
+                    #{@online_application.amount}
               %tr
                 %th
                   Loan Term
@@ -84,7 +88,7 @@
               %a#btn-for-review{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
                 For Review
             .col-md-6.col-xs-12
-              %button#btn-reject.btn.btn-danger.btn-block
+              %a#btn-reject{  data:{ id: "#{@online_application.id}" }, :href => "#"  }
                 .fa.fa-times
                 Reject
         - elsif @online_application.for_review?
@@ -113,3 +117,5 @@
 = render partial: "online_loan_applications/modals/for_review"
 = render partial: "online_loan_applications/modals/for_approve"
 = render partial: "online_loan_applications/modals/approve"
+= render partial: "online_loan_applications/modals/edit_amount"
+= render partial: "online_loan_applications/modals/reject"

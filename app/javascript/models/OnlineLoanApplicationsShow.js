@@ -30,15 +30,25 @@ var templateErrorList;
 var templateCenterOptions;
 var $inputReason;
 var _centers = [];
+
 var $btnForReview;
 var $btnConfirmForReview;
+var $btnReject;
 var $modalForReview;
 
 var $btnForApprove;
 var $modalForApprove;
 var $btnConfirmForApprove;
+var $modalReject;
 
 var $btnApprove;
+
+var $btnAmount;
+var $modalEditAmount;
+var $txtAmount;
+var $btnConfirmAmount;
+var _amount;
+var $btnConfirmReject;
 
 var _cacheDom = function() {
 
@@ -55,21 +65,91 @@ var _cacheDom = function() {
   $modalApprove = new bootstrap.Modal(
     document.getElementById("modal-approve")
   )
+  
+  $modalEditAmount = new bootstrap.Modal(
+    document.getElementById("modal-edit-amount")
+  )
+  
+  $modalReject = new bootstrap.Modal(
+    document.getElementById("modal-reject")
+  )
 
   $btnVerify                          = $("#btn-verify");
   $btnConfirmVerify                   = $("#btn-confirm-verify");
  
   $btnForReview                       = $("#btn-for-review");
   $btnConfirmForReview                = $("#btn-confirm-for-review");
+  $btnReject                          = $("#btn-reject");
+  $btnConfirmReject                  = $("#btn-confirm-reject");
 
   $btnForApprove                      = $("#btn-for-approve");
   $btnConfirmForApprove               = $("#btn-confirm-for-approve");
 
   $btnApprove                      = $("#btn-approve");
   $btnConfirmApprove                = $("#btn-confirm-approve");
+  
+  $btnAmount                       = $(".undo");
+  $txtAmount                       = $("#bookId");
+  $btnConfirmAmount               = $("#btn-confirm-edit-amount")
 }
 
 var _bindEvents = function() {
+  
+
+  $btnReject.on("click", function() { 
+   
+    _id = $(this).data('id');
+    $modalReject .show();
+
+
+  });
+
+  $btnConfirmReject.on("click", function(){
+
+    
+    $.ajax({
+      url: "/api/v1/online_loan_applications/reject",
+      method: "POST",
+      data: {
+        id: _id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.reload();
+      }
+    });
+
+  });
+
+
+  $btnAmount.on("click", function() {
+    _id = $(this).data('id');
+    _amount = $(this).data('amount');
+
+    $txtAmount.val(_amount);
+    $modalEditAmount.show();
+  });
+
+  $btnConfirmAmount.on("click", function(){
+
+    $.ajax({
+      url: "/api/v1/online_loan_applications/change_amount",
+      method: "POST",
+      data: {
+        id: _id,
+        amount: $txtAmount.val(),
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.reload();
+      }
+    });
+
+  })
   
   $btnApprove.on("click", function() {
     _id = $(this).data('id');

@@ -65,7 +65,7 @@ class OnlineApplication < ApplicationRecord
   end
 
   def city
-    self.data["address"]["city"]
+    "#{self.data["address"]["city"]}"
   end
 
   def province

@@ -3,8 +3,8 @@ class LoanApplication < ApplicationRecord
     "pending",
     "for_review",
     "for_approve",
-    "processing",
-    "approved"
+    "approved",
+    "reject"
   ]
 
   belongs_to :loan_product

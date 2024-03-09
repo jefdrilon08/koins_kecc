@@ -31,6 +31,22 @@ module Api
         end
       end
       
+      def change_amount
+      
+        online_application  = LoanApplication.find(params[:id])
+        online_application.update!(amount: params[:amount].to_f)
+        render json: { message: "ok" }
+     
+      end
+      
+      def reject
+       
+        online_application  = LoanApplication.find(params[:id])
+        online_application.update!(status: "reject")
+        render json: { message: "ok" }
+     
+      end
+      
       def for_review
       
         online_application  = LoanApplication.find(params[:id])

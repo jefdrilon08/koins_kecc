@@ -106,13 +106,14 @@ class OnlineLoanApplicationsController < ApplicationController
 
   
       @subheader_side_actions = []
-
-      @subheader_side_actions << {
-        id: "btn-download-form",
-        class: "fa fa-download",
-        link: "#",
-        text: "Download Form"
+      if @online_application.status == "for_review"
+        @subheader_side_actions << {
+          id: "btn-download-form",
+          class: "fa fa-download",
+          link: "#",
+          text: "Download Form"
       }
+      end
     end
     
     def show_details
