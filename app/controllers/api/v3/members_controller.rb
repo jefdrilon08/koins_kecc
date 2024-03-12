@@ -136,6 +136,18 @@ module Api
           render json: { message: "ok" }
         end
       end
+
+      def project_types
+        project_type_category = JSON.parse(ReadOnlyProjectTypeCategory.where(is_active: true).select('id','name').to_json)
+        
+        project_type_category.each_with_index do |category, catergory_index|
+          project_types = JSON.parse(ProjectType.where(project_type_category_id: category["id"],is_active: true).select('id','name').to_json)
+          project_type_category[catergory_index]["project_types"] = project_types
+          
+        end
+
+        render json: { project_types: project_type_category }
+      end
     end
   end
 end
