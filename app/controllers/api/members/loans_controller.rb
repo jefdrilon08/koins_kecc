@@ -27,6 +27,8 @@ module Api
         co_maker_last_name  = params[:co_maker_last_name]
         co_maker_member_id  = params[:co_maker_member_id]
         data                = params[:data] || {}
+        project_type_category = params[:project_type_category]
+        project_type_id     = params[:project_type_id]
 
         validator = ::Members::LoanApplications::ValidateApply.new(
           member:               @current_member,
@@ -37,13 +39,18 @@ module Api
           co_maker_first_name:  co_maker_first_name,
           co_maker_last_name:   co_maker_last_name,
           co_maker_member_id:   co_maker_member_id,
-          data:                 data
+          data:                 data,
+          project_type_category: project_type_category,
+          project_type_id:      project_type_id
         )
 
         validator.execute!
 
         if validator.valid?
           co_maker_member = Member.find(co_maker_member_id)
+
+          # Added project_type_id field inside data, because no project_type_id field in LoanApplication
+          data["project_type_id"] = project_type_id
 
           cmd = ::Members::LoanApplications::Apply.new(
             member:               @current_member,
@@ -54,7 +61,8 @@ module Api
             co_maker_first_name:  co_maker_first_name,
             co_maker_last_name:   co_maker_last_name,
             co_maker_member:      co_maker_member,
-            data:                 data
+            data:                 data,
+            # project_type_id:      project_type_id
           )
 
           cmd.execute!

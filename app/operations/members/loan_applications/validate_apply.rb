@@ -10,7 +10,9 @@ module Members
         co_maker_first_name:,
         co_maker_last_name:,
         co_maker_member_id:,
-        data: {}
+        data: {},
+        project_type_category:,
+        project_type_id:
       )
         super()
 
@@ -23,6 +25,8 @@ module Members
         @co_maker_first_name  = co_maker_first_name
         @co_maker_last_name   = co_maker_last_name
         @co_maker_member_id   = co_maker_member_id
+        @project_type_category = project_type_category
+        @project_type_id      = project_type_id
 
         @payload = {
           member:               [],
@@ -34,7 +38,14 @@ module Members
           loan_application:     [],
           co_maker_first_name:  [],
           co_maker_last_name:   [],
-          co_maker_member_id:   []
+          co_maker_member_id:   [],
+          clip_beneficiary_first_name: [],
+          clip_beneficiary_middle_name: [],
+          clip_beneficiary_last_name: [],
+          clip_beneficiary_date_of_birth: [],
+          clip_beneficiary_relationship: [],
+          project_type_category: [],
+          project_type_id:      []
         }
       end
 
@@ -70,6 +81,34 @@ module Members
         if @loan_product.blank?
           @payload[:loan_product_id] << "required"
         end
+
+        if @data[:clip_beneficiary][:first_name].blank?
+          @payload[:clip_beneficiary_first_name] << "required"
+        end
+
+        if @data[:clip_beneficiary][:middle_name].blank?
+          @payload[:clip_beneficiary_middle_name] << "required"
+        end
+
+        if @data[:clip_beneficiary][:last_name].blank?
+          @payload[:clip_beneficiary_last_name] << "required"
+        end
+
+        if @data[:clip_beneficiary][:date_of_birth].blank?
+          @payload[:clip_beneficiary_date_of_birth] << "required"
+        end
+
+        if @data[:clip_beneficiary][:relationship].blank?
+          @payload[:clip_beneficiary_relationship] << "required"
+        end
+
+        if @project_type_id.blank?
+          @payload[:project_type_id] << "required"
+        end
+
+        if @project_type_category.blank?
+          @payload[:project_type_category] << "required"
+        end        
 
         if @loan_product.present? and @amount.present?
           if @amount < @loan_product.min_loan_amount

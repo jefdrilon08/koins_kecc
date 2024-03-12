@@ -14,6 +14,7 @@ module Members
         co_maker_member:,
         data: {}
       )
+        # project_type_id:
 
         @member               = member
         @amount               = amount
@@ -26,6 +27,7 @@ module Members
         @co_maker_first_name  = co_maker_first_name
         @co_maker_last_name   = co_maker_last_name
         @co_maker_member      = co_maker_member
+        # @project_type_id      = project_type_id
 
         @loan_application = LoanApplication.new(
           member:               @member,
@@ -38,7 +40,8 @@ module Members
           reference_number:     @reference_number,
           co_maker_first_name:  @co_maker_first_name,
           co_maker_last_name:   @co_maker_last_name,
-          co_maker_member:      @co_maker_member
+          co_maker_member:      @co_maker_member,
+          # project_type_id:      @project_type_id
         )
       end
 

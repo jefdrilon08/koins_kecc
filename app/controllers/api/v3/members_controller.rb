@@ -6,7 +6,8 @@ module Api
         :dashboard, 
         :savings,
         :verify_code,
-        :member_change_password
+        :member_change_password,
+        :project_types
       ]
 
       before_action :authorize_mis!, except: [
@@ -14,7 +15,8 @@ module Api
         :dashboard, 
         :savings,
         :verify_code,
-        :member_change_password
+        :member_change_password,
+        :project_types
       ]
 
       before_action :authenticate_member!, only: [
@@ -148,6 +150,7 @@ module Api
 
         render json: { project_types: project_type_category }
       end
+
     end
   end
 end
