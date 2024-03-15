@@ -76,8 +76,112 @@
                 %td
                   #{Member.find( @online_application.co_maker_member_id).full_name}
         %h4
+        
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th{colspan: "2", style: "text-align: center;"}
+                  SASAGUTAN NG SocioEconomic Office.
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Pag-iimpok(Bilang ng palya sa pag-iimpok)
+                %td
+                  #{@online_application.data["so_file"]["palya_sa_pagiimpok"]}
+              %tr
+                %th{ width: "25%" }
+                  Pagdalo sa Center Meeting(Bilang ng absent)
+                %td
+                  #{@online_application.data["so_file"]["bilang_ng_absent"]}
+              %tr
+                %th
+                  Pag-ganap sa tungkulin bilang co-maker
+                %td
+                  #{@online_application.data["so_file"]["tungkulin_bilang_co_maker"]}
+              %tr
+                %th
+                  Pag-uugali sa pagsama sa Sitdown
+                %td
+                  #{@online_application.data["so_file"]["sit_down"]}
+              %tr
+                %th
+                  Mga kasalukuyang Insurance Product
+                %td
+                  #{@online_application.data["so_file"]["kasalukuyang_insurance"]}
 
         %h4
+        %label
+          Cash Flow
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Pasok ng Pera
+                %th{style: "text-align: center;"}
+                  Kita
+            %tbody
+              %tr
+                %td
+                  Netong kita sa negosyo(labas puhunan at gastos)
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_sa_negosyo"]}
+              %tr
+                %td
+                  Kita mula sa Asawa
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_mula_sa_asawa"]}
+              %tr
+                %td
+                  Kita mula sa iba pang kasama sa bahay
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_mula_sa_kasama"]}
+              %tr
+                %td
+                  Iba pang pinagkakakitaan
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["iba_pang_pinagkakakitaan"]}
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Labas ng Pera
+                %th{style: "text-align: center;"}
+                  Gastos 
+              %tr
+                %td
+                  Gastos sa Pagkain
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_pagkain"]}
+              %tr
+                %td
+                  Gastos Pamasahe/Baon
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_baon"]}
+              %tr
+                %td
+                  Gastos Gamot
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_gamot"]}
+              %tr
+                %td
+                  Bayarin sa Tubig, Kuryente, Internet, LPG at iba pa
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["bayarin_sa_tubig"]}
+              %tr
+                %td
+                  Iba pang Pinagkakagastusan
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["iba_pa"]}
+              %tr
+                %td
+                  Hulugan sa K-Coop
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["hulugan_sa_coop"]}
+              %tr
+                %td
+                  Hulugan bukod sa K-Coop
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["hulugan_bukod_sa_coop"]}
 
         %h4
 

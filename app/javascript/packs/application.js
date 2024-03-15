@@ -202,6 +202,7 @@ import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCode
 import TrendsIndex from "../models/TrendsIndex.js";
 import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
 import OnlineLoanApplicationsShow from "../models/OnlineLoanApplicationsShow.js";
+import OnlineLoanApplicationsEdit from "../models/OnlineLoanApplicationsEdit.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
@@ -422,6 +423,7 @@ const hooks = {
   "trends/index":                                     [TrendsIndex],
   "online_applications/show":                         [OnlineApplicationsShow],
   "online_loan_applications/show":                    [OnlineLoanApplicationsShow],
+  "online_loan_applications/edit":                    [OnlineLoanApplicationsEdit],
   "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],

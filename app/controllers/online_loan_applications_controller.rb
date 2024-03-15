@@ -108,14 +108,27 @@ class OnlineLoanApplicationsController < ApplicationController
       @subheader_side_actions = []
       if @online_application.status == "for_review"
         @subheader_side_actions << {
+          id: "",
+          class: "fa fa-pencil-alt",
+          link: edit_online_loan_application_path(@online_application.id),
+          text: "Edit"
+          }
+        @subheader_side_actions << {
           id: "btn-download-form",
           class: "fa fa-download",
           link: "#",
           text: "Download Form"
-      }
+        }
       end
     end
     
+    def edit
+
+      @online_loan_application       = LoanApplication.find(params[:id])
+      
+
+    end
+
     def show_details
       raise "jef".inspect
     end

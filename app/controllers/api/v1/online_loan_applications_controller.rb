@@ -50,7 +50,10 @@ module Api
       def for_review
       
         online_application  = LoanApplication.find(params[:id])
-        online_application.update!(status: "for_review")
+        online_application_data = online_application.data
+
+
+        online_application.update!(status: "for_review", data: online_application_data)
         render json: { message: "ok" }
      
       end
@@ -62,6 +65,35 @@ module Api
 
         render json: { message: "ok" }
      
+      end
+      
+      def update_details
+        online_loan_application  = LoanApplication.find(params[:id])
+        online_loan_application_data  = online_loan_application.data
+        online_loan_application_data['so_file']['palya_sa_pagiimpok'] =  params[:palya_sa_pagiimpok]
+        online_loan_application_data['so_file']['bilang_ng_absent'] =  params[:bilang_ng_absent]
+        online_loan_application_data['so_file']['sit_down'] =  params[:sit_down]
+        online_loan_application_data['so_file']['kasalukuyang_insurance'] =  params[:kasalukuyang_insurance]
+        online_loan_application_data['so_file']['tungkulin_bilang_co_maker'] =  params[:tungkulin_bilang_co_maker]
+        
+        online_loan_application_data['cash_flow']['kita_sa_negosyo'] =  params[:kita_sa_negosyo]
+        online_loan_application_data['cash_flow']['kita_mula_sa_asawa'] =  params[:kita_mula_sa_asawa]
+        online_loan_application_data['cash_flow']['kita_mula_sa_kasama'] =  params[:kita_mula_sa_kasama]
+        
+        online_loan_application_data['cash_flow']['iba_pang_pinagkakakitaan'] =  params[:iba_pang_pinagkakakitaan]
+
+        online_loan_application_data['cash_flow']['gastos_sa_pagkain'] =  params[:gastos_sa_pagkain]
+        online_loan_application_data['cash_flow']['gastos_sa_baon'] =  params[:gastos_sa_baon]
+        online_loan_application_data['cash_flow']['gastos_sa_gamot'] =  params[:gastos_sa_gamot]
+        online_loan_application_data['cash_flow']['bayarin_sa_tubig'] =  params[:bayarin_sa_tubig]
+        online_loan_application_data['cash_flow']['iba_pa'] =  params[:iba_pa]
+        
+        online_loan_application_data['cash_flow']['hulugan_sa_coop'] =  params[:hulugan_sa_coop]
+        online_loan_application_data['cash_flow']['hulugan_bukod_sa_coop'] =  params[:hulugan_bukod_sa_coop]
+
+        online_loan_application.update!(data: online_loan_application_data)
+
+        raise "jef".inspect
       end
       
       def approve_loan

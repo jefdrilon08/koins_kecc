@@ -51,6 +51,32 @@ module Api
 
           # Added project_type_id field inside data, because no project_type_id field in LoanApplication
           data["project_type_id"] = project_type_id
+          data["cash_flow"] = {
+                      kita_sa_negosyo: 0.0, 
+                      kita_mula_sa_asawa: 0.0, 
+                      
+                      kita_mula_sa_kasama: 0.0, 
+                      iba_pang_pinagkakakitaan: 0.0, 
+
+                      gastos_sa_negosyo: 0.0, 
+                      gastos_sa_pagkain: 0.0, 
+                      gastos_sa_baon: 0.0, 
+                      gastos_sa_gamot: 0.0, 
+                      bayarin_sa_tubig: 0.0, 
+                      iba_pa: 0.0,
+
+                      hulugan_sa_coop: 0.0,
+                      hulugan_bukod_sa_coop: 0.0
+          }
+
+          data["so_file"] = {
+                    palya_sa_pagiimpok: 0,
+                    bilang_ng_absent: 0,
+                    tungkulin_bilang_co_maker: '',
+                    sit_down: '',
+                    kasalukuyang_insurance: ''
+
+          }
 
           cmd = ::Members::LoanApplications::Apply.new(
             member:               @current_member,

@@ -23,7 +23,8 @@ Rails.application.routes.draw do
   resources :online_applications, only: [:index, :show]
   
   # online loan applications
-  resources :online_loan_applications, only: [:index, :show]
+  resources :online_loan_applications, only: [:index, :show, :edit]
+  resources :loan_application
 
   # Trends
   get "/trends", to: "trends#index", as: :trends
