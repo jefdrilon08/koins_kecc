@@ -108,7 +108,7 @@ class OnlineLoanApplicationsController < ApplicationController
       @subheader_side_actions = []
       
       if @online_application.pending?
-        if helpers.so_mis_user
+        if helpers.so_mis_user?
           @subheader_side_actions << {
             id: "btn-for-review",
             class: "fa fa-pencil-alt",
@@ -122,7 +122,7 @@ class OnlineLoanApplicationsController < ApplicationController
 
 
       if @online_application.status == "for_review"
-        if helpers.so_mis_user
+        if helpers.so_mis_user?
           @subheader_side_actions << {
             id: "",
             class: "fa fa-pencil-alt",
@@ -150,7 +150,9 @@ class OnlineLoanApplicationsController < ApplicationController
             link: "#",
             text: "Download Form"
           }
-      else
+      elsif @online_application.status == "for_approve"
+        
+        if helpers.is_mis_fm?
           @subheader_side_actions << {
             id: "btn-approve",
             class: "fa fa-pencil-alt",
@@ -165,6 +167,7 @@ class OnlineLoanApplicationsController < ApplicationController
             data: { id: @online_application.id },
             text: "Reject"
           }
+        end
         
       
       end
