@@ -47,6 +47,25 @@ module Api
      
       end
       
+      def reject_approve
+        online_application  = LoanApplication.find(params[:id])
+        
+        online_application_data = online_application.data
+        online_application_data[:reason_approve_reject] = params[:reason_reject]
+        online_application_data[:date_approve_reject] = Date.today
+        online_application.update!(status: "for_review", data: online_application_data)
+        render json: { id: params[:id] }
+      end
+      
+      def reject_checking
+        online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+        online_application_data[:reason_of_reject] = params[:reason_reject]
+        online_application_data[:date_reject] = Date.today
+        online_application.update!(status: "reject", data: online_application_data)
+        render json: { id: params[:id] }
+      end
+      
       def for_review
       
         online_application  = LoanApplication.find(params[:id])
@@ -92,8 +111,10 @@ module Api
         online_loan_application_data['cash_flow']['hulugan_bukod_sa_coop'] =  params[:hulugan_bukod_sa_coop]
 
         online_loan_application.update!(data: online_loan_application_data)
+        
+        render json: { id: params[:id] }
 
-        raise "jef".inspect
+      
       end
       
       def approve_loan

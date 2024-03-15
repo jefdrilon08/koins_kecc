@@ -187,34 +187,8 @@
 
         %hr
         - if @online_application.pending?
-          .row
-            .col-md-6.col-xs-12
-              %a#btn-for-review{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
-                For Review
-            .col-md-6.col-xs-12
-              %a#btn-reject{  data:{ id: "#{@online_application.id}" }, :href => "#"  }
-                .fa.fa-times
-                Reject
         - elsif @online_application.for_review?
-          .row
-            .col-md-6.col-xs-12
-              %a#btn-for-approve{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
-                .fa.fa-check
-                For Approve
-            .col-md-6.col-xs-12
-              %button#btn-reject-checking.btn.btn-danger.btn-block
-                .fa.fa-times
-                Reject
         - elsif @online_application.for_approve?
-          .row
-            .col-md-6.col-xs-12
-              %a#btn-approve{ data:{ id: "#{@online_application.id}" }, :href => "#"  }
-                .fa.fa-check
-                Approved
-            .col-md-6.col-xs-12
-              %button#btn-reject-approve.btn.btn-danger.btn-block
-                .fa.fa-times
-                Reject
         %h4
       
 = render partial: "online_loan_applications/modals/verify"
@@ -223,3 +197,5 @@
 = render partial: "online_loan_applications/modals/approve"
 = render partial: "online_loan_applications/modals/edit_amount"
 = render partial: "online_loan_applications/modals/reject"
+= render partial: "online_loan_applications/modals/reject_for_checking"
+= render partial: "online_loan_applications/modals/reject_for_approve"
