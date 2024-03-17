@@ -264,7 +264,7 @@ export default class BillingUITable extends React.Component {
           <small className="badge bg-info">
             {this.props.data.data.records[i].member.member_type}
           </small>
-            {"sms_record" in this.props.data.data.records[i].member.data ? (
+            {this.props.data.data.records[i].member.data && "sms_record" in this.props.data.data.records[i].member.data && this.props.data.data.records[i].member.data.sms_record && this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
     <>
       {this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
         <>
