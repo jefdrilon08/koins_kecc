@@ -7,13 +7,30 @@ module Reports
       @branch_id = branch
       @status = status
       
-      if  @start_date.present? and @end_date.present? and @branch_id.present?
-        @kok = InsuranceLoanBundleEnrollment.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ? ", @start_date, @end_date, @branch_id, @status).order("collection_date DESC")
-      elsif @branch_id.present?
-        @kok = InsuranceLoanBundleEnrollment.where("branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
-      else
-        puts "not valid"
+
+
+      @all_kok = InsuranceLoanBundleEnrollment.all
+
+      @all_kok.each do |k|
+        k[:data]["records"].each_with_index do |o, index|
+          @start_date = o["kok_data"]["effectivity_date"]
+        end
+        if @branch_id.present?
+          @kok = @all_kok.where(" branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
+        else
+          @kok = @all_kok
+        end
+        # raise @kok.inspect
       end
+
+      # if  @start_date.present? and @end_date.present? and @branch_id.present?
+      #   @kok = InsuranceLoanBundleEnrollment.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ? ", @start_date, @end_date, @branch_id, @status).order("collection_date DESC")
+      # elsif @branch_id.present?
+      #   @kok = InsuranceLoanBundleEnrollment.where("branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
+      # else
+      #   puts "not valid"
+      # end
+
       @p        = Axlsx::Package.new
     end
 

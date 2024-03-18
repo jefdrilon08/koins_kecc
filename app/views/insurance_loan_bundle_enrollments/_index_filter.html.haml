@@ -1,15 +1,5 @@
 = form_tag "", method: 'GET' do
   .row
-    .col-md-3
-      .form-group
-        %label
-          Start Date
-        = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
-    .col-md-3
-      .form-group
-        %label
-          End Date
-        = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
     .col-md-2
       .form-group
         %label
@@ -18,8 +8,8 @@
     .col-md-2
       .form-group
         %label
-          Status
-        = select_tag :status, options_for_select(InsuranceLoanBundleEnrollment::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+          Query
+        = text_field_tag :q, @q, class: 'form-control', placeholder: 'Name / ID Number'
     .col-md-2
       .form-group
         %label
