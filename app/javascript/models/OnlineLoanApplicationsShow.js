@@ -50,7 +50,6 @@ var $btnConfirmAmount;
 var _amount;
 var $btnConfirmReject;
 
-
 var $btnRejectChecking;
 var $modalRejectChecking;
 var $txtInputReasonChecking;
@@ -119,7 +118,10 @@ var _cacheDom = function() {
   
   $btnAmount                       = $(".undo");
   $txtAmount                       = $("#bookId");
-  $btnConfirmAmount               = $("#btn-confirm-edit-amount")
+  $btnConfirmAmount               = $("#btn-confirm-edit-amount");
+
+  $btnDownloadForm     = $("#btn-download-form");
+
 }
 
 var _bindEvents = function() {
@@ -181,6 +183,15 @@ var _bindEvents = function() {
     $modalReject .show();
 
 
+  });
+
+  $btnDownloadForm.on("click", function(){
+    var id = $(this).data('id');  
+   
+    var type = "print_online_loan_application"
+
+    window.open("/print?type=" + type + "&id=" + id);
+    // alert(id);
   });
 
   $btnConfirmReject.on("click", function(){

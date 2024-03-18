@@ -15,7 +15,6 @@ class OnlineLoanApplicationsController < ApplicationController
     @branch_account = @online_applications_list.pluck(:branch_id).uniq 
     @cluster_account = Cluster.find(Branch.find(@branch_account).pluck(:cluster_id).uniq)
 
-  
     
     Branch.find(@branch_account).each do |bd|
       tmp = { 
@@ -136,6 +135,12 @@ class OnlineLoanApplicationsController < ApplicationController
             data: { id: @online_application.id },
             text: "For Approve"
           }
+        @subheader_side_actions << {
+          id: "btn-download-form",
+          class: "fa fa-download",
+          link: "#",
+          text: "Download Forms", data: {id: @online_application.id}
+        }
           @subheader_side_actions << {
             id: "btn-reject-checking",
             class: "fa fa-pencil-alt",
@@ -168,8 +173,7 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Reject"
           }
         end
-        
-      
+       
       end
     end
     

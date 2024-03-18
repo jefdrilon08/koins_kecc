@@ -1,0 +1,617 @@
+:css
+  @page { size: portrait; margin: 15px; margin-bottom: 0.0rem; margin-top: 1.2rem;}
+  .just-font br {
+  content: "";
+  display: block;
+  
+  }
+  .page-break{
+     display: block;
+  clear: both;
+  page-break-after: avoid;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .img{
+    padding: 10px;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+  .just-font br {
+  content: "";
+  display: block;
+  }
+  .text-indent p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    
+  }
+  .even-row {
+    background-color: #f2f2f2; /* Light gray */
+  }
+
+  .odd-row {
+    background-color: #ffffff; /* White */
+  }
+  .list-inline ul{
+  display:block;
+  margin-bottom:2rem;
+  }
+  .list-inline li {
+    display:inline-block;
+    margin-left: 50px;
+    margin-right: 100px;
+
+  }
+  .signatories ul{
+    display:block;
+
+  }
+  .signatories li{
+    display:inline-block;
+    margin-right: 80px;
+    padding-inline-start: 0px;
+  }
+  .member_signatories{
+    
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+-# %div.header
+-#   .img
+-#     = image_tag "logo_titled.png", :class => "float-right", :style => "width: 65px; margin-right: 1px"
+-#   .img-text
+-#     %div.just-font
+-#       %b
+-#         %span{style: "font-size: 10px"}
+-#           #{Settings.company_name}
+-#           #{Settings.company_address}
+-#         %span{style: "font-size: 10px"}
+-#           VAT Registration Tin Number: #{Settings.company_tin_number}
+%strong{style: "font-size: 9px"}
+%label{style:"font-size: 9px"}
+  Petsa:
+%strong{style: "font-size: 9px"} #{@online_application[:date_applied].to_date.strftime("%A, %B %d, %Y")} 
+%label{style:"font-size: 9px"}
+  Uri ng Loan: 
+%strong{style: " font-size: 9px"} #{@online_application_loan_product}
+%input{style:"font-size: 9px; ", type: "checkbox", name: "checkbox_name", id: "checkbox_id"}
+%label{style:"font-size: 9px; ", for: "checkbox_id"} New
+%input{style:"font-size: 9px; ",type: "checkbox", name: "checkbox_name", id: "checkbox_id"}
+%label{style:"font-size: 9px; ", for: "checkbox_id"} Old
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+
+      %th{colspan: "4" ,style: "width: 150px;   text-align: center; font-size: 8px;"} IMPORMASYON TUNGKOL SA MIYEMBRO
+      %th{colspan: "3" ,style: "width: 250px;   text-align: center; font-size: 8px;"} IMPORMASYON NG PAG-GAGAMITAN NG PERA 
+  %tbody
+    %tr
+      %td{style: "text-align: left; font-size: 8px; "}Pangalan Miyembro
+      %td{colspan: "3", style: "text-align: left; font-size: 8px; "} #{@member_data[:last_name]}, #{@member_data[:first_name]} #{@member_data[:middle_name]}
+      %td{style: "text-align: center; font-size: 8px;"} Bibilhin
+      %td{style: "text-align: center; font-size: 8px;"} Bilang/Dami
+      %td{style: "text-align: center; font-size: 8px;"} Halaga
+
+    %tr
+      %td{style: "text-align: left; font-size: 8px;"} Sentro
+      %td{style: "text-align: left; font-size: 8px;"} #{@center}
+      %td{style: "text-align: left; font-size: 8px;"} Mobile Number
+      %td{style: "text-align: left; font-size: 8px;"} #{@member_data[:mobile_number]}
+      %td
+      %td 
+      %td
+
+    %tr
+      %td{style: "text-align: left; font-size: 8px;"} Halaga ng Hinihiram
+      %td
+      %td{style: "text-align: left; font-size: 8px;"} Loan Term
+      %td 
+      %td 
+      %td 
+      %td
+    %tr
+      %td{style: "text-align: left; font-size: 8px;"} Halaga ng Dating Nahiram
+      %td 
+      %td{style: "text-align: left; font-size: 8px;"} Uri ng Negosyo
+      %td
+      %td 
+      %td 
+      %td 
+    %tr
+      %td{style: "text-align: left; font-size: 8px;"} Uri ng Negosyo
+      %td 
+      %td{style: "text-align: left; font-size: 8px;"} Tagal ng Negosyo
+      %td 
+      %td 
+      %td 
+      %td
+    %tr
+      %td{colspan: "4", style: "text-align: left; font-size: 8px;"} Mga Produkto at serbisyo
+      %td{colspan: "3", style: "text-align: left; font-size: 8px;"} Kabuang halaga
+%div{style: "width: 49%; float: left;"}
+  %table.table.table-bordered.table-sm{style: "width: 100%;"}
+    %thead
+      %tr
+        %strong
+          %th{colspan: "5" ,style: "width: 20%; text-align: center; font-size: 9px;"}KASUNDUAN 
+    %tbody
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 6px;"}
+            Ako na nakahiram ng ____________________(Php_________) sa Kasagana-ka Coop
+            para sa aking negosyo na ________________ ay nangangako sa mga 
+            Sumusunod:
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              1. Babayaran ko ang nasabing halaga, kasama ang interest na Php_____, sa
+              pamamagitan ng paghuhulog linggo - linggo na di bababa sa php______, simula sa
+              __________ hanggang sa ____________.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              2. Ako ay laging mag-iimpok na hindi bababa sa __________ kada linggo.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              3. Ako ay magbabayad sa aking gurantor o co-maker kung aabonohan niya ang hulog ko.
+              Naiintindihan ko na maari niya akong ireklamo sa barangay o hukuman kung hindi ko siya
+              mabayaran.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              4. Kapag ako ay hindi nakabayad sa takdang panahon sa Kasagana-ka Coop ang anumang pondo
+              maging ang aking Share Capital na aking naipon bilang pambayad utang sa kasagana-ka Coop.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              5. Ako ay pumapayag na mag-iwan at hindi ma-withdraw ang savings ko sa halagang halagang
+              20% ng kasalukuyang utang ko sa Kasagana-ka Coop.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              6. Ako ay pumapayag na sumama sa SIT-DOWN at mag SIT-DOWN sa panahon na ako ay hindi makapaghulog
+              sa takdang oras.
+            %p{style: "font-size: 6px; margin-bottom: 0;"}
+              7. Pumapayag ako na maikrelamo o maibahla sa Kasagana-ka Coop sa nararapat na hukuman
+              kung hindi ko masunod ang laman ng kasunduang ito. Kung sakaling mangyari ito ay pumapayag
+              ako na bayaran lahat ng gastos sa pagsasampa at  pagdidinig ng kaso.
+            %p{style: "font-size: 6px;"}
+              8. Naiintindihan ko na maari akong itiwalag sa Kasagana-ka Coop sa pamamagitan ng 
+              Involuntary Termination sa panahon na ako ay hindi makatupad sa aking mga Obligasyon sa pagbabayad.
+            %p{style: "font-size: 6px;"}
+              Sa aking paglagda sa ibaba, aking naiintindihan at pinahihintulutan na iproseso ng K - COOP
+              ang mga impormasyon sa form na ito alinsunod sa RA. NO. 10173 o Data Privacy Act.
+            %p{style: "font-size: 8px; margin-bottom: 0;"}
+              #{@member_data[:last_name]}, #{@member_data[:first_name]}
+            %p{style: "font-size: 6px; "}
+              Pangalan at Lagda ng Miyembro
+
+%div{style: "width: 49%; float: right;"}
+  %table.table.table-bordered.table-sm{style: "width: 100%; margin-bottom: 0px;"}
+    %thead
+      %tr
+        %strong
+          %th{colspan: "5" ,style: "width: 20%;" "text-align: center; font-size: 9px;"} PAGPAPATUNAY NG PANANAGUTAN NG CO-MAKER
+    %tbody
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 8px; margin-bottom: 0;"}
+            Kami na nasa hustong gulang ay nangangakong susubaybayan ang negosyo ni #{@member_data[:last_name]}, #{@member_data[:first_name]}
+            bilang kaniyang co-maker o guarantor kapag hindi siya makapaghulog sa takdang
+            oras ay babayaran ko ang kaniyang hulog kasama ang interes sa Kasagana-ka Coop.
+          %br 
+            %p{style:  "padding-left: 35px; font-size: 9px; margin-bottom: 0px;"}
+              #{@online_application[:co_maker_first_name].upcase}, #{@online_application[:co_maker_last_name].upcase}
+            %p{style: "padding-left: 9px; font-size: 8px; margin-bottom: 0; margin-top: 0;"} Pangalan at Lagda ng Co-maker 1
+            %p{style: "padding-left: 55px; font-size: 8px; margin-bottom: 0; margin-top: 0;"} (Kamag - Anak)
+            %br
+            %p{style: "padding-left: 35px; font-size: 9px; margin-bottom: 0;"} 
+              #{@member_comaker[:last_name]}, #{@member_comaker[:first_name]}
+            %p{style: "padding-left: 9px; font-size: 8px; margin-bottom: 0; margin-top: 0;"} Pangalan at Lagda ng Co-maker 2
+            %p{style: "padding-left: 55px; font-size: 8px; margin-bottom: 0; margin-top: 0;"} (Kasama sa Sentro)
+      %tr
+        %td{colspan: "5"}
+          %strong
+            %p{style: "font-size: 8px; margin-bottom: 0px;"} Mabilis at Maayos ang serbisyo ng Kcoop(Bilugan ang Isa)
+      %tr
+        %td{style: "font-size: 8px;"} 1. Palagi
+        %td{style: "font-size: 8px;"} 2. Madalas
+        %td{style: "font-size: 8px;"} 3. Minsan
+        %td{style: "font-size: 8px;"} 4. Hindi
+      %tr
+        %td{colspan: "5"}
+          %strong
+            %p{style: "font-size: 8px; margin-bottom: 0px;"} Karagdagan Komento at Rekomendasyon
+      %tr
+        %td{style: "width: 15px; height: 25px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 25px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 25px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 25px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 20px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 20px;", colspan: "4"}
+      %tr
+        %td{style: "width: 15%; height: 15px;", colspan: "4"}
+-# //css for the next page
+-# :css
+-#   @page { size: portrait; margin: 60px; }
+-#   .page-break { page-break-before: always; }
+-#   /* Your existing CSS styles */
+
+-# %div.header
+-#   /* Your existing header content */
+
+-# /* First Page */
+-# %h5{style: "text-align: center;"}
+-# /* Your existing content for the first page */
+
+-# /* Page Break */
+-# .page-break
+
+-# /* Next Page */
+%div{style: "width: 49%; float: left;"}
+  %table.table.table-bordered.table-sm{style: "width: 100%;"}
+    %thead
+      %tr
+        %th{colspan: "5" ,style: "width: 20%; text-align: center; font-size: 8px; margin-bottom: 0; margin-top: 0;"} 
+          %label 
+            SASAGUTAN NG SO
+      %tr
+        %td{colspan:"1", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"} 
+          %label
+            Pag iimpok
+        %td{colspan:"3", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"} 
+          %label
+            Bilang ng Palya sa Pag-iimpok: _____
+      %tr
+        %td{colspan:"1", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %label 
+            Pagdalo sa Center meeting
+        %td{colspan:"3", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"} Bilang ng Absent: _____
+      %tr
+        %td{colspan:"1", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %label 
+            Paglago ng Negosyo
+        %td{colspan: "3", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %span{style: "font-family: Arial, sans-serif; font-size: 7px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "may_negosyo", id: "may_negosyo_checkbox", style: "margin-bottom: -2px; margin-right: 5px;"}
+          %label{for: "may_negosyo_checkbox"} &nbsp; May Negosyo
+          %span{style: "margin-left: 20px; font-family: Arial, sans-serif; font-size: 7px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "wala_negosyo", id: "wala_negosyo_checkbox", style: "margin-bottom: -2px; margin-left: -10px;"}
+          %label{for: "wala_negosyo_checkbox"} &nbsp; Wala nang Negosyo
+
+      %tr
+        %td{colspan:"1", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %label 
+            Pag-ganap sa tungkulin bilang Co-maker
+        %td{colspan: "3", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %span{style: "font-family: Arial, sans-serif; font-size: 14px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "oo", id: "oo_checkbox", style: "margin-bottom: -2px; margin-right: 5px;"}
+          %label{for: "oo_checkbox"} &nbsp; Oo
+          %span{style: "margin-left: 20px; font-family: Arial, sans-serif; font-size: 7px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "hindi", id: "hindi_checkbox", style: "margin-bottom: -2px; margin-right: 5px;"}
+          %label{for: "hindi_checkbox"} &nbsp; Hindi
+      %tr
+        %td{colspan:"1", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %label 
+            Pag-uugali at Pagsama sa Sitdown
+        %td{colspan: "3", style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+          %span{style: "font-family: Arial, sans-serif; font-size: 7px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "oo", id: "oo_checkbox", style: "margin-bottom: -2px; margin-right: 5px;"}
+          %label{for: "oo_checkbox"} &nbsp; Oo
+          %span{style: "margin-left: 20px; font-family: Arial, sans-serif; font-size: 7px;"} &nbsp;&nbsp;&nbsp; 
+          %input{type: "checkbox", name: "hindi", id: "hindi_checkbox", style: "margin-bottom: -2px; margin-right: 5px;"}
+          %label{for: "hindi_checkbox"} &nbsp; Hindi
+      %tr
+        %td{colspan: "1",style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0; height: 50px;"}
+          %label
+            Mga Kasalukuyang Insurance Product
+        %td{colspan: "1",style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0; height: 50px;"}
+          %div
+            %input{type: "checkbox", name: "checkbox1", id: "checkbox1", style: "margin-bottom: -2px; margin-right: 5px;"}
+            %label{for: "checkbox1"} &nbsp; K-OK
+            %input{type: "checkbox", name: "checkbox2", id: "checkbox2", style: "margin-bottom: -2px; margin-left: 25px;"}
+            %label{for: "checkbox2"} &nbsp; KHIIP 
+          %div
+            %input{type: "checkbox", name: "checkbox3", id: "checkbox3", style: "margin-bottom: -2px; margin-right: 5px;"}
+            %label{for: "checkbox3"} &nbsp; K-Kalinga
+            %input{type: "checkbox", name: "checkbox4", id: "checkbox4", style: "margin-bottom: -2px; margin-right: 5px;"}
+            %label{for: "checkbox4"} &nbsp; K- bente
+      %tr
+        %td{colspan: "1",style: "text-align: left; font-size: 7px; margin-bottom: 0; margin-top: 0; height: 30px;"}
+          %label
+            Mga Kasalukuyang Insurance Product
+        %td{colspan: "1",style: "text-align: left; font-size: 7px;"}
+          %label
+            Naka Seguro hanggang ________
+                
+        
+
+      
+%div{style: "width: 49%; float: right;"}
+  %table.table.table-bordered.table-sm{style: "width: 100%;"}
+    %thead
+      %tr
+        %th{colspan: "5" ,style: "width: 100%; text-align: center; font-size: 8px;"} PAGPROSESO NG UTANG
+      %tbody
+        %tr
+          %td{colspan: "6", style: "height: 1px;"} 
+            %p{style: "padding-top: 1px; padding-left: 7px; font-size: 10px; margin-bottom: 0; margin-top: 0;"}
+            %br
+            .row
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                _________
+                %strong
+                  Halaga 
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ____________________
+                %strong
+                  Rekomendasyon ng SO
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ______________
+                %strong
+                  Petsa
+        %tr
+          %td{colspan: "6"}
+            %p{style: "padding-left: 5px; font-size: 7px; margin-bottom: 0; margin-top: 0;"}
+            %br
+            .row
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                _________
+                %strong
+                  Halaga 
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ____________________
+                %strong
+                  Sinuri at Binigyang Pansin ni SOM
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ______________
+                %strong
+                  Petsa
+        %tr
+          %td{colspan: "6", style: "height: 5px;"}
+            %p{style: "padding-top: 5px; padding-left: 7px; font-size: 10px; margin-bottom: 0;"}
+            %br
+            .row
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                _________
+                %strong
+                  Halaga ng Balanse 
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ____________________
+                %strong
+                  Natitirang Linggo
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ______________
+                %strong
+                  Petsa ng PRT at PMES
+        %tr
+          %td{colspan: "6", style: "height: 10px;"}
+            %p{style: "padding-top: 10px; padding-left: 7px; font-size: 10px; margin-bottom: 0;margin-bottom: 0;"}
+            %br
+            .row
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                _________
+                %strong
+                  Approved Loan 
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ____________________
+                %strong
+                  Halaga ng MBS/ShareCap
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+              .col{style: "padding-left: 5px; font-size: 7px;"}
+                ______________
+                %strong
+                  Petsa ng PRT at PMES
+        %tr{style: "height: 5px;"}
+          %td{colspan: "1"}
+            %p{style: " padding-top: 50px; padding-left: 10px; font-size: 10px; margin-bottom: 0 ;margin-bottom: 0; text-align: center"}
+              %strong
+                Sinuri at Inihanda ni:
+          %td{colspan: "3"}
+            %p{style: "padding-top: 50px; text-align: center; font-size: 10px; margin-bottom: 0;"}
+              _______________________
+              .row
+                .col{style: " padding-left: 5px; font-size: 8px; text-align: center;  "}
+                  %strong
+                    Pangalan at Lagda ng Acco 
+        %tr{style: "height: 5px;"}
+          %td{colspan: "1"}
+            %p{style: " padding-top: 50px; padding-left: 10px; font-size: 8px; margin-bottom: 0; text-align: center"}
+              %strong
+                Inaprubahan ng CM:
+          %td{colspan: "3"}
+            %p{style: "padding-top: 50px; text-align: center; font-size: 8px; margin-bottom: 0;"}
+              _______________________
+              .row
+                .col{style: " padding-left: 5px; font-size: 8px; text-align: center;  "}
+                  %strong
+                    Pangalan at Lagda ng CM
+        %tr
+          %td{colspan: "5", style: "text-align: center;"}
+            %label
+              %Strong{style: "font-size: 8px;"}
+                PAGTANGGAP NG LOAN NG MIYEMBRO
+        %tr
+          %td{colspan: "4"}
+            %p{style: "padding-left: 10px; font-size: 8px; margin-bottom: 0; margin-top: 0;"}
+              .row
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                  ___________
+                  %strong
+                    Member
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}                
+                  ___________
+                  %strong
+                    DateReleased
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                .col{style: "padding-top: 5px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                  ______________
+                  %strong
+                    First Payment
+%div{style: "width: 49%; float: left;"}
+  %table.table.table-bordered.table-sm{style: "width: 100%;"}
+    %thead
+      %tr
+        %th{colspan: "5" ,style: "width: 20%; text-align: center; font-size: 8px;"} CASH FLOW
+    %tbody
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Lingguhang Pasok ng Pera
+        %td{colspan: "3"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Kita
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Netong kita sa Negosyo (labas puhunan at gastos)
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Kita mula sa Asawa
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Kita mula sa iba pang kasama sa bahay
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Iba pang pinagkakakitaan
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Kabuuan:
+
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Lingguhang Labas ng Pera
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Gastos
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Gastos sa Negosyo (hindi kasama ang puhunan)
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Gastos sa Pagkain
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Gastos Pamasahe/Baon
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Gastos sa Gamot
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Bayarin sa Tubig, Kuryente, Internet, LGP at iba pa
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Iba pang Pinagkakagastusan
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Hulugan sa K-Coop
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            Hulugan bukod sa K-Coop
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Kabuuan:
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Natira sa Cash Flow
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "2"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Kabuuang hulog sa K-Coop kasama ang bagong loan
+        %td{colspan: "3"}
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Lagda ng Miyembro:
+      %tr
+        %td{colspan: "5"}
+          %p{style: "font-size: 7px; margin-bottom: 0;"}
+            %strong
+              Lagda ng mga Center Officers
+      %tr
+        %td{colspan: "4"}
+          %p{style: "padding-left: 7px; font-size: 10px; margin-bottom: 0; margin-top: 0;"}
+            .row
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                ___________
+                %strong
+                  Center Chief
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}                
+                ___________
+                %strong
+                  Treasurer
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+              .col{style: "padding-top: 3px; padding-left: 5px; font-size: 10px; margin-bottom: 0; text-align: center"}
+                ______________
+                %strong
+                  Secretary
