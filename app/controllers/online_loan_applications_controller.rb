@@ -149,12 +149,6 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Reject"
           }
         end
-          @subheader_side_actions << {
-            id: "btn-download-form",
-            class: "fa fa-download",
-            link: "#",
-            text: "Download Form"
-          }
       elsif @online_application.status == "for_approve"
         
         if helpers.is_mis_fm?
