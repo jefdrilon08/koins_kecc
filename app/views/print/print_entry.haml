@@ -211,20 +211,13 @@
         -else
           %th{width: 255}
         -if Settings.activate_microinsurance == true
-          %th{width: 350} #{"SILVIDA ANTIQUERA"}
+          %th{width: 350} #{@data_store_entry[:approved_by]}
         -else
           %th{width: 350} #{@data_store_entry[:approved_by]}
       %tr
         %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
         %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+        %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
   %br
-  %br
-  %center
-    %p.signatories
-      ______________________________________________
-      %br
-      Received By:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Date:
-
 :javascript
   window.print();
