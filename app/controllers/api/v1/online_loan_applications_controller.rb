@@ -47,6 +47,25 @@ module Api
      
       end
       
+      def reject_approve
+        online_application  = LoanApplication.find(params[:id])
+        
+        online_application_data = online_application.data
+        online_application_data[:reason_approve_reject] = params[:reason_reject]
+        online_application_data[:date_approve_reject] = Date.today
+        online_application.update!(status: "for_review", data: online_application_data)
+        render json: { id: params[:id] }
+      end
+      
+      def reject_checking
+        online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+        online_application_data[:reason_of_reject] = params[:reason_reject]
+        online_application_data[:date_reject] = Date.today
+        online_application.update!(status: "reject", data: online_application_data)
+        render json: { id: params[:id] }
+      end
+      
       def for_review
       
         online_application  = LoanApplication.find(params[:id])
@@ -92,8 +111,10 @@ module Api
         online_loan_application_data['cash_flow']['hulugan_bukod_sa_coop'] =  params[:hulugan_bukod_sa_coop]
 
         online_loan_application.update!(data: online_loan_application_data)
+        
+        render json: { id: params[:id] }
 
-        raise "jef".inspect
+      
       end
       
       def approve_loan
@@ -113,6 +134,7 @@ module Api
                       term: online_application.term,
                       pn_number: online_application.reference_number,
                       num_installments: online_application.num_installments,
+                      project_type_id: online_application.data['project_type_id'],
                       status: "pending",
                       data: {
                               voucher:{
@@ -128,7 +150,18 @@ module Api
                               co_maker_one: {
                                 value: co_maker.id,
                                 label: co_maker.full_name,
-                                id: co_maker.id
+                                id: co_maker.id,
+                                first_name: co_maker.first_name , 
+                                middle_name: co_maker.middle_name,
+                                last_name: co_maker.last_name
+                              },
+                              clip_beneficiary: {
+                                first_name: online_application.data['clip_beneficiary']['first_name'],
+                                middle_name: online_application.data['clip_beneficiary']['middle_name'],
+                                last_name: online_application.data['clip_beneficiary']['last_name'],
+                                date_of_birth: "",
+                                relationship: ""
+
                               }
                             }
 

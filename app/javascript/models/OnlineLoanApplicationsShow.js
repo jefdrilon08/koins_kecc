@@ -50,6 +50,15 @@ var $btnConfirmAmount;
 var _amount;
 var $btnConfirmReject;
 
+var $btnRejectChecking;
+var $modalRejectChecking;
+var $txtInputReasonChecking;
+var $btnConfirmRejectCheckingReason;
+
+var $btnRejectApprove;
+var $modalRejectApprove;
+var $btnConfirmRejectApproveReason;
+var $txtInputReasonApprove;
 
 var _cacheDom = function() {
 
@@ -74,6 +83,24 @@ var _cacheDom = function() {
   $modalReject = new bootstrap.Modal(
     document.getElementById("modal-reject")
   )
+  
+  $modalRejectChecking = new bootstrap.Modal(
+    document.getElementById("modal-reject-for-checking")
+  )
+  
+  $modalRejectApprove = new bootstrap.Modal(
+    document.getElementById("modal-reject-for-approve")
+  )
+
+  $btnRejectChecking = $("#btn-reject-checking")
+  $txtInputReasonChecking = $("#input-reason-checking")
+  $btnConfirmRejectCheckingReason = $("#confirm-reject-checking-reason") 
+
+  $btnRejectApprove = $("#btn-reject-approve")
+  
+  $btnConfirmRejectApproveReason = $("#confirm-reject-approve-reason_test")
+  
+  $txtInputReasonApprove = $("#input-reason-approve")
 
   $btnVerify                          = $("#btn-verify");
   $btnConfirmVerify                   = $("#btn-confirm-verify");
@@ -98,8 +125,58 @@ var _cacheDom = function() {
 }
 
 var _bindEvents = function() {
+  $btnRejectApprove.on("click", function(){
+    
+    _id = $(this).data('id');
+    $modalRejectApprove.show();
   
 
+  });
+  
+  $btnConfirmRejectApproveReason.on("click", function(){
+  
+    $.ajax({
+      url: "/api/v1/online_loan_applications/reject_approve",
+      method: "POST",
+      data: {
+        id: _id,
+        reason_reject: $txtInputReasonApprove.val(), 
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.href = "/online_loan_applications";
+      }
+    });
+
+  });
+  
+  $btnRejectChecking.on("click", function(){
+    
+    _id = $(this).data('id');
+    $modalRejectChecking.show();
+
+  });
+  
+  $btnConfirmRejectCheckingReason.on("click", function(){
+  
+    $.ajax({
+      url: "/api/v1/online_loan_applications/reject_checking",
+      method: "POST",
+      data: {
+        id: _id,
+        reason_reject: $txtInputReasonChecking.val(), 
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.href = "/online_loan_applications";
+      }
+    });
+
+  });
   $btnReject.on("click", function() { 
    
     _id = $(this).data('id');
@@ -130,7 +207,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         alert("Success!"); 
-        window.location.reload();
+        window.location.href = "/online_loan_applications";
       }
     });
 
@@ -183,7 +260,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         alert("Success! Reloading..."); 
-        window.location.reload();
+        window.location.href = "/online_loan_applications";
       }
     });
   });
@@ -207,7 +284,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         alert("Success! Reloading..."); 
-        window.location.reload();
+        window.location.href = "/online_loan_applications";
       }
     });
   });

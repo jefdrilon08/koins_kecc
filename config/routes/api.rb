@@ -264,6 +264,8 @@ namespace :api do
     post "/online_loan_applications/change_amount", to: "online_loan_applications#change_amount"
     post "/online_loan_applications/reject", to: "online_loan_applications#reject"
     post "/online_loan_applications/update_details", to: "online_loan_applications#update_details"
+    post "/online_loan_applications/reject_checking", to: "online_loan_applications#reject_checking"
+    post "/online_loan_applications/reject_approve", to: "online_loan_applications#reject_approve"
     
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"

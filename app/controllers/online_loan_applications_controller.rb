@@ -105,12 +105,35 @@ class OnlineLoanApplicationsController < ApplicationController
 
   
       @subheader_side_actions = []
+      
+      if @online_application.pending?
+        if helpers.so_mis_user
+          @subheader_side_actions << {
+            id: "btn-for-review",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "For Review"
+          }
+        end
+      end
+
+
+
       if @online_application.status == "for_review"
-        @subheader_side_actions << {
-          id: "",
-          class: "fa fa-pencil-alt",
-          link: edit_online_loan_application_path(@online_application.id),
-          text: "Edit"
+        if helpers.so_mis_user
+          @subheader_side_actions << {
+            id: "",
+            class: "fa fa-pencil-alt",
+            link: edit_online_loan_application_path(@online_application.id),
+            text: "Edit"
+          }
+          @subheader_side_actions << {
+            id: "btn-for-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "For Approve"
           }
         @subheader_side_actions << {
           id: "btn-download-form",
@@ -118,6 +141,39 @@ class OnlineLoanApplicationsController < ApplicationController
           link: "#",
           text: "Download Forms", data: {id: @online_application.id}
         }
+          @subheader_side_actions << {
+            id: "btn-reject-checking",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Reject"
+          }
+        end
+          @subheader_side_actions << {
+            id: "btn-download-form",
+            class: "fa fa-download",
+            link: "#",
+            text: "Download Form"
+          }
+      elsif @online_application.status == "for_approve"
+        
+        if helpers.is_mis_fm?
+          @subheader_side_actions << {
+            id: "btn-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Approve"
+          }
+          @subheader_side_actions << {
+            id: "btn-reject-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Reject"
+          }
+        end
+       
       end
     end
     

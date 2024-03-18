@@ -106,7 +106,7 @@ var _bindEvents = function() {
       },
       success: function(response) {
         alert("Success!"); 
-        window.location.reload();
+        window.location.href = "/online_loan_applications/" + response.id;
       }
     });
 
