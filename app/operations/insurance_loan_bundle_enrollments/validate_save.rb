@@ -38,14 +38,6 @@ module InsuranceLoanBundleEnrollments
         }
       end
 
-
-      if @branch.present? and @center.present? and InsuranceLoanBundleEnrollment.pending.where(branch_id: @branch.id, center_id: @center.id).count > 0
-        @errors[:messages] << {
-          key: "insurance_loan_bundle_enrollment",
-          message: "Please approve current pending transaction"
-        }
-      end
-
       if @center.present? and Member.active.where(center_id: @center.id).count == 0
         @errors[:messages] << {
           key: "center",
