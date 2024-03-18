@@ -134,6 +134,7 @@ module Api
                       term: online_application.term,
                       pn_number: online_application.reference_number,
                       num_installments: online_application.num_installments,
+                      project_type_id: online_application.data['project_type_id'],
                       status: "pending",
                       data: {
                               voucher:{
@@ -149,7 +150,18 @@ module Api
                               co_maker_one: {
                                 value: co_maker.id,
                                 label: co_maker.full_name,
-                                id: co_maker.id
+                                id: co_maker.id,
+                                first_name: co_maker.first_name , 
+                                middle_name: co_maker.middle_name,
+                                last_name: co_maker.last_name
+                              },
+                              clip_beneficiary: {
+                                first_name: online_application.data['clip_beneficiary']['first_name'],
+                                middle_name: online_application.data['clip_beneficiary']['middle_name'],
+                                last_name: online_application.data['clip_beneficiary']['last_name'],
+                                date_of_birth: "",
+                                relationship: ""
+
                               }
                             }
 

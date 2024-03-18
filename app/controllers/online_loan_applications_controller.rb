@@ -108,7 +108,7 @@ class OnlineLoanApplicationsController < ApplicationController
       @subheader_side_actions = []
       
       if @online_application.pending?
-        if helpers.so_mis_user?
+        if helpers.so_mis_user
           @subheader_side_actions << {
             id: "btn-for-review",
             class: "fa fa-pencil-alt",
@@ -122,7 +122,7 @@ class OnlineLoanApplicationsController < ApplicationController
 
 
       if @online_application.status == "for_review"
-        if helpers.so_mis_user?
+        if helpers.so_mis_user
           @subheader_side_actions << {
             id: "",
             class: "fa fa-pencil-alt",
