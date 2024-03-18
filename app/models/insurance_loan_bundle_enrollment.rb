@@ -78,5 +78,29 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   def member_ids
     self.data.with_indifferent_access[:records].map{ |o| o[:member][:id] }
   end
-  
+
+  def member_name
+    self.data.with_indifferent_access[:records].map{ |o| o[:member][:full_name] }
+  end
+ 
+  def member_dependent_name
+    self.data.with_indifferent_access[:records].map{ |o| o[:kok_data][:full_name_dependent] }
+  end
+
+  def is_dependent?
+    # begin
+      self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "DEPENDENT"
+    # rescue NilClass => e
+    #   logger.error "Caught a NilClass error: #{e.message}"
+    # end
+  end
+
+  def is_principal?
+    self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "PRINCIPAL/MEMBER"
+  end
+
+  def records_count
+    self.data.with_indifferent_access[:records].count
+  end
+
 end

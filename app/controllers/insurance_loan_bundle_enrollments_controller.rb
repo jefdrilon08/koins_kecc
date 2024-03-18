@@ -4,6 +4,24 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
   def index
     @insurance_loan_bundle_enrollments = InsuranceLoanBundleEnrollment.select("*").where(branch_id: @branches.pluck(:id))
 
+    @q        = params[:q]
+    @branch   = Branch.where(id: params[:branch_id]).first
+    
+    if @q.present?
+      @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where(
+        "upper(data->'records'->0->'member'->>'first_name') LIKE :q OR upper(data->'records'->0->'member'->>'last_name') LIKE :q",
+        q: "%#{@q.upcase}%"
+      ) 
+    end
+
+    
+
+
+    if @branch.present?
+      @insurance_loan_bundle_enrollments  = @insurance_loan_bundle_enrollments.where(branch_id: @branch.id)
+    end
+  
+
     if params[:start_date].present? and params[:end_date].present?
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
     end
@@ -108,14 +126,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      if ["MIS", "BK", "SBK"].include? current_user.roles.last
-        @subheader_side_actions << {
-          id: "btn-approve",
-          link: "#",
-          class: "fa fa-check",
-          text: "Approve"
-        }
-      end
+      # if ["MIS", "BK", "SBK"].include? current_user.roles.last
+      #   @subheader_side_actions << {
+      #     id: "btn-approve",
+      #     link: "#",
+      #     class: "fa fa-check",
+      #     text: "Approve"
+      #   }
+      # end
 
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
