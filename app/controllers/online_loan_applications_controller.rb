@@ -15,7 +15,6 @@ class OnlineLoanApplicationsController < ApplicationController
     @branch_account = @online_applications_list.pluck(:branch_id).uniq 
     @cluster_account = Cluster.find(Branch.find(@branch_account).pluck(:cluster_id).uniq)
 
-  
     
     Branch.find(@branch_account).each do |bd|
       tmp = { 
@@ -117,7 +116,7 @@ class OnlineLoanApplicationsController < ApplicationController
           id: "btn-download-form",
           class: "fa fa-download",
           link: "#",
-          text: "Download Form"
+          text: "Download Forms", data: {id: @online_application.id}
         }
       end
     end
