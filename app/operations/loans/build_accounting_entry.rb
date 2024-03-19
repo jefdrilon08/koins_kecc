@@ -390,9 +390,35 @@ module Loans
           elsif @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
             target_member_type  = s_deduction.meta.member_type
             accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
-            amount              = s_deduction.amount.to_f - 10.to_f
+            #amount              = s_deduction.amount.to_f - 10.to_f
             name                = accounting_code.name
             code                = accounting_code.code
+            
+            
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
