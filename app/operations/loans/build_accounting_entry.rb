@@ -1,6 +1,7 @@
 module Loans
   class BuildAccountingEntry
     def initialize(config:)
+      
       @config       = config
       @bank_data    = @config[:bank_data]
       @loan         = @config[:loan]
@@ -109,6 +110,7 @@ module Loans
     end
 
     def execute!
+      
       build_data!
 
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
@@ -215,6 +217,7 @@ module Loans
 
     def build_credit_journal_entries!
       # compute amount released by deducting from @amount
+    
       temp_amount = @amount
 
       journal_entries = []
@@ -383,6 +386,21 @@ module Loans
             }
 
             temp_amount -= amount
+          
+          elsif @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+            target_member_type  = s_deduction.meta.member_type
+            accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
+            amount              = s_deduction.amount.to_f - 10.to_f
+            name                = accounting_code.name
+            code                = accounting_code.code
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: 0.0
+            }
+
 
           #elsif @member.member_type  == target_member_type
           elsif @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
