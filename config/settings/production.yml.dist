@@ -753,6 +753,17 @@ defaults:
       account_subtype: "K-KALINGA"
       amount: 50.00
       mode_of_payment: "yearly"
+
+
+  equity_deposits:
+    -
+      account_subtype: "CBU"
+      amount: 20.00
+    -
+      account_subtype: "Share Capital"
+      amount: 00.00
+
+
   savings_deposits:
     -
       account_subtype: "K-IMPOK"
