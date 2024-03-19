@@ -109,7 +109,7 @@ module Loans
       @receivable_accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
     end
 
-    def ebuild_debit_journal_entriesxecute!
+    def execute!
       
       build_data!
 
