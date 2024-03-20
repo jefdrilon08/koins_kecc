@@ -44,6 +44,9 @@ class LoanApplication < ApplicationRecord
   def for_approve?
     self.status == "for_approve"
   end
+  def approved?
+    self.status == "approved"
+  end
 
   def load_defaults
     if self.status.blank?
