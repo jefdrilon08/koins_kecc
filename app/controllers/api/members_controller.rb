@@ -435,7 +435,7 @@ module Api
                     gender:           payload[:gender],
                     date_of_birth:    payload[:date_of_birth],
                     email:            payload[:email],
-                    mobile_number:    payload[:mobile_number],
+                    mobile_number:    "+63" + payload[:mobile_number], # only this 9xxxxxxxxx mobile number format sent from mobile
                     address_region:   payload[:address_region],
                     address_province: payload[:address_province],
                     address_district: payload[:address_district],
