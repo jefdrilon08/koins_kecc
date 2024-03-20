@@ -1,9 +1,11 @@
 module Reports
   class GenerateInsuranceLoanBundleReports 
  
-    def initialize(branch:, start_date:, end_date:, status:)
-      @start_date = start_date.try(:to_date) 
-      @end_date = end_date.try(:to_date) 
+    # def initialize(branch:, start_date:, end_date:, status:)
+    def initialize(branch:, status:)
+    
+      # @start_date = start_date.try(:to_date) 
+      # @end_date = end_date.try(:to_date) 
       @branch_id = branch
       @status = status
       
@@ -51,7 +53,7 @@ module Reports
             date_format_cell = wb.styles.add_style format_code: "mm-dd-yyyy", font_name: "Calibri", alignment: { horizontal: :right }
             default_cell = wb.styles.add_style font_name: "Calibri"
             sheet.add_row ["KASAGANA-KA KOK DECLARATION"], style: title_cell
-            sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
+            # sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
             
             sheet.add_row [ 

@@ -14,7 +14,7 @@ module InsuranceLoanBundleEnrollments
         @previous_client_type       = @config[:client_type]
         @previous_partner           = @config[:partner]
         @previous_policy_no         = @config[:policy_no]
-        @last_membership_date       = @config[:membership_date]
+        
         @prevoius_member            = @config[:member]
         
         if @previous_client_type == "DEPENDENT"
@@ -28,6 +28,7 @@ module InsuranceLoanBundleEnrollments
           @previous_mobile_no = @config[:mobile_no]
           @previous_birth_date = @config[:birth_date]
           @previous_civil_status = @config[:civil_status]
+          @last_membership_date = @config[:membership_date]
           # @previous_benif_fname = @config[:benif_fname]
           # @previous_benif_lname = @config[:benif_lname]
           # @previous_benif_mname = @config[:benif_mname]
@@ -44,6 +45,7 @@ module InsuranceLoanBundleEnrollments
           @previous_birth_date                             = @member.date_of_birth
           @previous_mobile_no                              = @member.mobile_number
           @previous_civil_status                           = @member.civil_status
+          @last_membership_date                            = @member.date_of_membership
           # @previous_benif_fname = @config[:benif_fname]
           # @previous_benif_lname = @config[:benif_lname]
           # @previous_benif_mname = @config[:benif_mname]
@@ -98,7 +100,7 @@ module InsuranceLoanBundleEnrollments
         @client_type                            = @config[:client_type]
         @partner                                = @config[:partner]
         @policy_no                              = @config[:policy_no]
-        @membership_date                        = @config[:membership_date]
+        
         @member                                 = @config[:member]
         
         if @client_type == "DEPENDENT"
@@ -108,6 +110,7 @@ module InsuranceLoanBundleEnrollments
           @full_name_dependent                    = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
           @full_name                              = @member.full_name_formatted
           @address                                = @config[:address]
+          @membership_date                        = @config[:membership_date]
           @gender                                 = @config[:gender]
           @birth_date                             = @config[:birth_date]
           @mobile_no                              = @config[:mobile_no]
@@ -122,6 +125,7 @@ module InsuranceLoanBundleEnrollments
           @birth_date                             = @member.date_of_birth
           @mobile_no                              = @member.mobile_number
           @civil_status                           = @member.civil_status
+          @membership_date                        = @member.date_of_membership
         end
 
       else

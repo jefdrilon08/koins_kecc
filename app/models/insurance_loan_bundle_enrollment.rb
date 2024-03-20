@@ -103,4 +103,8 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     self.data.with_indifferent_access[:records].count
   end
 
+  def records_last
+    self.data.with_indifferent_access[:records].last
+  end
+
 end

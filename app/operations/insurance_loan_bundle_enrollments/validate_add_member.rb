@@ -14,7 +14,7 @@ module InsuranceLoanBundleEnrollments
         @previous_client_type       = @config[:client_type]
         @previous_partner           = @config[:partner]
         @previous_policy_no         = @config[:policy_no]
-        @last_membership_date       = @config[:membership_date]
+        
         @prevoius_member            = @config[:member]
         # raise @previous_client_type.inspect
 
@@ -26,6 +26,7 @@ module InsuranceLoanBundleEnrollments
           # raise @previous_full_name.inspect
           @previous_last_name = @config[:last_name]
           @previous_middle_name = @config[:middle_name]
+          @last_membership_date       = @config[:membership_date]
           @previous_first_name = @config[:first_name]
           @previous_full_name_dependent = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
           @previous_mobile_no = @config[:mobile_no]
@@ -49,6 +50,7 @@ module InsuranceLoanBundleEnrollments
           @previous_birth_date                             = @prevoius_member.date_of_birth
           @previous_mobile_no                              = @prevoius_member.mobile_number
           @previous_civil_status                           = @prevoius_member.civil_status
+          @last_membership_date                            = @prevoius_member.date_of_membership
           # @previous_benif_fname = @config[:benif_fname]
           # @previous_benif_lname = @config[:benif_lname]
           # @previous_benif_mname = @config[:benif_mname]
@@ -93,13 +95,14 @@ module InsuranceLoanBundleEnrollments
         @client_type                            = @config[:client_type]
         @partner                                = @config[:partner]
         @policy_no                              = @config[:policy_no]
-        @membership_date                        = @config[:membership_date]
+        
         @member                                 = @config[:member]
         if @client_type == "DEPENDENT"
           @first_name                             = @config[:first_name]
           @middle_name                            = @config[:middle_name]
           @last_name                              = @config[:last_name]
           @full_name_dependent                    = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
+          @membership_date                        = @config[:membership_date]
           @full_name                              = @member.full_name_formatted
           @address                                = @config[:address]
           @gender                                 = @config[:gender]
@@ -117,6 +120,7 @@ module InsuranceLoanBundleEnrollments
           @birth_date                             = @member.date_of_birth
           @mobile_no                              = @member.mobile_number
           @civil_status                           = @member.civil_status
+          @membership_date                        = @member.date_of_membership
         end
         @age                = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
         
@@ -238,6 +242,13 @@ module InsuranceLoanBundleEnrollments
         @errors[:messages] << {
           key: "age",
           message: "Your age is not qualified."
+        }
+      end
+
+      if @membership_date.blank?
+        @errors[:messages] << {
+          key: "membership_date",
+          message: "Please fill up membership date"
         }
       end
 
