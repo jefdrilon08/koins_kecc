@@ -10,8 +10,8 @@
         Member
       %th
         Enrolled Person
-      %th
-        Collection Date
+      / %th
+      /   Collection Date
       / %th
       /   Date Approved    
       / %th
@@ -38,8 +38,8 @@
         - else
           %td
             #{"No record found"}
-        %td
-          #{o.collection_date.strftime("%B %d, %Y")}
+        / %td
+        /   #{o.collection_date.strftime("%B %d, %Y")}
         / %td
         /   #{o.date_approved.try(:strftime, "%B %d, %Y")}
         

@@ -38,10 +38,8 @@
         .form-group
           %label Effectivity Date      
           = date_field_tag :effectivity_date, @effectivity_date, id: 'input-effectivity-date', class: 'form-control'  
-      .col-md-3  
-        .form-group
-          %label MembershipDate
-          = date_field_tag :membership_date, @membership_date, id: 'input-membership-date', class: 'form-control'
+      
+      
 
     .row
       .col-md-3
@@ -83,6 +81,10 @@
         .form-group
           / %label Civil Status       
           = select_tag :civil_status, options_for_select([['Select Civil Status', '', {disabled: true, selected: true}]] +["SEPARATED" ,"SINGLE", "MARRIED", "WIDOWED", "SINGLE PARENT", "MARRIED-OFW"], @civil_status), placeholder: "Civil Status", id: 'input-civil-status', class: 'form-control'
+      .col-md-3  
+        .form-group
+          %label MembershipDate for Dependents ONLY
+          = date_field_tag :membership_date, @membership_date, id: 'input-membership-date', class: 'form-control'
       
   .row
     .col-md-3
