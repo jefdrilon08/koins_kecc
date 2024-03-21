@@ -45,7 +45,8 @@ module Members
           clip_beneficiary_date_of_birth: [],
           clip_beneficiary_relationship: [],
           project_type_category: [],
-          project_type_id:      []
+          project_type_id:      [],
+          mobile_number:        []
         }
       end
 
@@ -100,6 +101,32 @@ module Members
 
         if @data[:clip_beneficiary][:relationship].blank?
           @payload[:clip_beneficiary_relationship] << "required"
+        end
+
+
+        mobile_number = @data[:mobile_number]
+        mobile_number_count= Member.where("mobile_number LIKE ?","%" + mobile_number).count
+        mobile_number_exist = false
+
+        if @data[:mobile_number].blank? 
+          @payload[:mobile_number] << "required" 
+
+        elsif mobile_number_count > 0
+          if mobile_number_count == 1
+            member = Member.find(@member.id)
+           
+            if member.mobile_number.slice(-10..) == Member.where("mobile_number LIKE ?","%" + mobile_number).first.mobile_number.slice(-10..)
+              mobile_number_exist = false
+            else 
+              mobile_number_exist =true 
+            end
+          else
+            mobile_number_exist == true
+          end
+
+          if mobile_number_exist
+            @payload[:mobile_number] << "mobile number is already exist!"
+          end
         end
 
         if @project_type_id.blank?
