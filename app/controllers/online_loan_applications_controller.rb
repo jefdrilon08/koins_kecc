@@ -133,13 +133,13 @@ class OnlineLoanApplicationsController < ApplicationController
             class: "fa fa-pencil-alt",
             link: "#",
             data: { id: @online_application.id },
-            text: "For Approve"
+            text: "For Approval"
           }
         @subheader_side_actions << {
           id: "btn-download-form",
           class: "fa fa-download",
           link: "#",
-          text: "Download Forms", data: {id: @online_application.id}
+          text: "Download Form", data: {id: @online_application.id}
         }
           @subheader_side_actions << {
             id: "btn-reject-checking",

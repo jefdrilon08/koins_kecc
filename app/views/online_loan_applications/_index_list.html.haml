@@ -34,6 +34,18 @@
           %td
             #{Member.find(o.member_id).center.name}
           %td
-            #{o.status}
+            %center
+              - if o.for_review?
+                .badge.bg-warning
+                  For Review
+              - elsif o.pending?
+                .badge.bg-danger
+                  Pending
+              - elsif o.for_approve?
+                .badge.bg-success
+                  For Approve
+              - elsif o.approved?
+                .badge.bg-success
+                  Approved
           %td
             #{o.date_applied}
