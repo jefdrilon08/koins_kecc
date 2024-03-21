@@ -158,36 +158,34 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
 
   def upload
     file              = params[:file]
-    branch            = params[:branch_id]
     collection_date   = params[:collection_date]
     prepared_by       = current_user
 
     config = {
       file: file,
-      branch: branch,
       collection_date: collection_date,
       prepared_by: prepared_by
     }
 
     @errors_arr = []
-    # raise config.inspect
-
-    CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
-      insurance_loan_bundle_enrollments = row.to_hash
-      @errors = InsuranceLoanBundleEnrollments::ValidateLoanBundleEnrollmentsFromCsvFile.new(insurance_loan_bundle_enrollments: insurance_loan_bundle_enrollments, config: config).execute!
-   
-      @errors_arr << @errors
+    
+    # Process each row in the file
+    CSV.foreach(file.path, headers: true) do |row|
+      # Validate each row
+      errors = InsuranceLoanBundleEnrollments::ValidateLoanBundleEnrollmentsFromCsvFile.new(row: row).execute!
+      
+      if errors[:messages].any?
+        @errors_arr << errors
+      end
     end
 
-    if @errors[:messages].any?
-      @errors_arr.each do |error|
-        flash[:error] = error[:messages]
-      end
-
+    if @errors_arr.any?
+      flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
       redirect_to upload_loan_bundle_enrollments_path
     else
+      # If no errors, proceed with loading the data
       @insurance_fund_transfer_collection = InsuranceLoanBundleEnrollments::LoadLoanBundleEnrollmentsFromCsvFile.new(config: config).execute!
-      flash[:success] = "Successfully upload fund transfer."
+      flash[:success] = "Successfully uploaded fund transfer."
       redirect_to insurance_loan_bundle_enrollments_path(@insurance_fund_transfer_collection)
     end
   end

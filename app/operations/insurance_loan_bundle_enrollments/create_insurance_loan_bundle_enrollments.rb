@@ -2,7 +2,6 @@ module InsuranceLoanBundleEnrollments
   class CreateInsuranceLoanBundleEnrollments
     def initialize(config:)
       @config                               = config
-
       @collection_date                      = @config[:collection_date].try(:to_date)
       @user                                 = @config[:user]
       @branch                               = Branch.where(id: @config[:branch_id]).first
@@ -18,11 +17,11 @@ module InsuranceLoanBundleEnrollments
       @data = {
         records: [
           member: {
-            id: @config[:id],
-            full_name: @config[:member_full_name],
-            first_name: @config[:member_fname],
-            last_name: @config[:member_lname],
-            middle_name: @config[:member_mname],
+            id: @config[:member_id],
+            full_name: @config[:full_name],
+            first_name: @config[:last_name],
+            last_name: @config[:first_name],
+            middle_name: @config[:middle_name],
             effectivity_date: @config[:effectivity_date]
           },
           kok_data: {
@@ -30,8 +29,8 @@ module InsuranceLoanBundleEnrollments
             gender: @config[:gender],
             address: @config[:address],
             partner: @config[:partner],
-            full_name: @config[:member_full_name] ,
-            last_name: @config[:member_lname],
+            full_name: @config[:full_name] ,
+            last_name: @config[:last_name],
             mobile_no: @config[:mobile_no],
             plan_type: @config[:plan_type],
             policy_no: @config[:policy_no],
