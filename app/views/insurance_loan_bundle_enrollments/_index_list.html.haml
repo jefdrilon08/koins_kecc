@@ -10,12 +10,12 @@
         Member
       %th
         Enrolled Person
-      %th
-        Collection Date
+      / %th
+      /   Collection Date
       / %th
       /   Date Approved    
-      / %th
-      /   Status
+      %th
+        Status
   %tbody
     - @insurance_loan_bundle_enrollments.each do |o|
       %tr
@@ -38,23 +38,23 @@
         - else
           %td
             #{"No record found"}
-        %td
-          #{o.collection_date.strftime("%B %d, %Y")}
+        / %td
+        /   #{o.collection_date.strftime("%B %d, %Y")}
         / %td
         /   #{o.date_approved.try(:strftime, "%B %d, %Y")}
         
-        / %td
-        /   - if o.pending?
-        /     .badge.bg-danger
-        /       Pending
-        /   - elsif o.approved?
-        /     .badge.bg-success
-        /       Approved
-        /   - elsif o.error?
-        /     .badge.bg-danger
-        /       ERROR
-        /   - elsif o.processing?
-        /     .badge.badge-info
-        /       Processing
+        %td
+          - if o.pending?
+            .badge.bg-danger
+              Pending
+          - elsif o.approved?
+            .badge.bg-success
+              Approved
+          - elsif o.error?
+            .badge.bg-danger
+              ERROR
+          - elsif o.processing?
+            .badge.badge-info
+              Processing
 
 = paginate @insurance_loan_bundle_enrollments

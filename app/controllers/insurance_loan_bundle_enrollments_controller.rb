@@ -4,6 +4,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
   def index
     @insurance_loan_bundle_enrollments = InsuranceLoanBundleEnrollment.select("*").where(branch_id: @branches.pluck(:id))
 
+    @center   = Center.where(id: params[:center_id]).first
     @q        = params[:q]
     @branch   = Branch.where(id: params[:branch_id]).first
     
@@ -20,7 +21,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     if @branch.present?
       @insurance_loan_bundle_enrollments  = @insurance_loan_bundle_enrollments.where(branch_id: @branch.id)
     end
-  
+ 
 
     if params[:start_date].present? and params[:end_date].present?
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
@@ -126,14 +127,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      # if ["MIS", "BK", "SBK"].include? current_user.roles.last
-      #   @subheader_side_actions << {
-      #     id: "btn-approve",
-      #     link: "#",
-      #     class: "fa fa-check",
-      #     text: "Approve"
-      #   }
-      # end
+      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
 
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
@@ -148,11 +149,44 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     }
   end
 
-
   def destroy
     @insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollment.find(params[:id])
     @insurance_loan_bundle_enrollment.destroy!
 
     redirect_to insurance_loan_bundle_enrollments_path
+  end
+
+  def upload
+    file              = params[:file]
+    collection_date   = params[:collection_date]
+    prepared_by       = current_user
+
+    config = {
+      file: file,
+      collection_date: collection_date,
+      prepared_by: prepared_by
+    }
+
+    @errors_arr = []
+    
+    # Process each row in the file
+    CSV.foreach(file.path, headers: true) do |row|
+      # Validate each row
+      errors = InsuranceLoanBundleEnrollments::ValidateLoanBundleEnrollmentsFromCsvFile.new(row: row).execute!
+      
+      if errors[:messages].any?
+        @errors_arr << errors
+      end
+    end
+
+    if @errors_arr.any?
+      flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
+      redirect_to upload_loan_bundle_enrollments_path
+    else
+      # If no errors, proceed with loading the data
+      @insurance_fund_transfer_collection = InsuranceLoanBundleEnrollments::LoadLoanBundleEnrollmentsFromCsvFile.new(config: config).execute!
+      flash[:success] = "Successfully uploaded fund transfer."
+      redirect_to insurance_loan_bundle_enrollments_path(@insurance_fund_transfer_collection)
+    end
   end
 end

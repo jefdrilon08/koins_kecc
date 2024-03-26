@@ -2,6 +2,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
+    "for_renewal",
     "processing",
     "error"
   ]
@@ -67,6 +68,10 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     self.status == "approved"
   end
 
+  def for_renewal?
+    self.status == "for_renewal"
+  end
+
   def processing?
     self.status == "processing"
   end
@@ -101,6 +106,10 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   def records_count
     self.data.with_indifferent_access[:records].count
+  end
+
+  def records_last
+    self.data.with_indifferent_access[:records].last
   end
 
 end

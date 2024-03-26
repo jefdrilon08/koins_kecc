@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   get "/upload_deposit", to: "pages#upload_deposit"
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
+  get "/upload_loan_bundle_enrollments", to: "pages#upload_loan_bundle_enrollments"
 
   get "/upload_clip", to: "pages#upload_clip"
 
@@ -340,7 +341,9 @@ Rails.application.routes.draw do
   resources :savings_insurance_transfer_collections, only: [:index, :show, :destroy]
 
   # Insurance Loan Bundle Enrollments
-  resources :insurance_loan_bundle_enrollments, only: [:index, :show, :destroy]
+  resources :insurance_loan_bundle_enrollments, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
 
   # Deposits
   resources :deposit_collections, only: [:index, :show, :destroy] do
