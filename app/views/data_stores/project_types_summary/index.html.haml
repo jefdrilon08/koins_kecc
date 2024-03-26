@@ -2,7 +2,11 @@
   .row
     .col
       .card
-        = render partial: "index_list"
-
+        = render partial: "index_filter"
+        - if @data_store.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No found
 
 = render partial: "data_stores/project_types_summary/modals/new"

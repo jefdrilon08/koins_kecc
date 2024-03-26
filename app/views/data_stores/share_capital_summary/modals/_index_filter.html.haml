@@ -1,0 +1,40 @@
+= form_tag "", method: 'GET' do
+.row
+.col-md-2
+    .form-group
+    %label
+        Start Date
+    = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
+.col-md-2
+    .form-group
+    %label
+        End Date
+    = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
+.col-md-2
+    .form-group
+    %label
+        Branch
+    = select_tag :branch_select, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+.col-md-2
+    .form-group
+    %label
+        Center
+    = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)), :id, :name, @center), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+.col-md-1
+    .form-group
+    %label
+        OR number
+    = text_field_tag :or_number, params[:or_number], class: 'form-control'
+.col-md-1
+    .form-group
+    %label
+        Status
+    = select_tag :status, options_for_select(Billing::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+.col-md-2
+    .form-group
+    %label
+        Actions
+    .form-group
+        .btn-group
+        = button_tag type: 'submit', class: 'btn btn-primary btn-block' do
+            .bi.bi-search
