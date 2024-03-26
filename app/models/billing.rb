@@ -7,6 +7,12 @@ class Billing < ApplicationRecord
     "processing",
     "error"
   ]
+  
+  BILLING_TYPES  = [
+    "regular",
+    "for-writeoff",
+    "for-involutary"
+  ]
 
   belongs_to :center
   belongs_to :branch

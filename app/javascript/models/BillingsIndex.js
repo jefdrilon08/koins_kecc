@@ -31,6 +31,7 @@ var _cacheDom = function() {
 
   $selectBranch         = $("#select-branch");
   $selectCenter         = $("#select-center");
+  $selectBillingType    = $("#select-billing-type");
   $inputCollectionDate  = $("#input-collection-date");
 
   $message  = $(".message");
@@ -47,6 +48,7 @@ var _bindEvents = function() {
     var collectionDate  = $inputCollectionDate.val();
     var branchId        = $selectBranch.val();
     var centerId        = $selectCenter.val();
+    var billing_type    = $selectBillingType.val();
 
     $message.html(
       "Loading..."
@@ -64,7 +66,8 @@ var _bindEvents = function() {
         authenticity_token: _authenticityToken,
         collection_date: collectionDate,
         branch_id: branchId,
-        center_id: centerId
+        center_id: centerId,
+        billing_type: billing_type
       },
       success: function(response) {
         $message.html(
