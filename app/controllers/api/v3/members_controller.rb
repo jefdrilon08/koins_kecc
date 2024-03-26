@@ -61,6 +61,15 @@ module Api
           # render json: { token: cmd.token, member: member }
           
           if(cmd.token) # if this member has token
+
+            current_member = Member.find(cmd.member.id)
+            current_member_data = current_member.data.with_indifferent_access
+
+            if(!current_member_data.key?(:koinsmobile_first_login_date))
+              current_member_data["koinsmobile_first_login_date"] = Time.now
+              current_member.update(data: current_member_data)
+            end
+
             render json: { token: cmd.token, member: member }
           else # if not
             render json: { member: member, is_otp_verified: cmd.is_otp_verified, is_password_changed: cmd.is_password_changed }
