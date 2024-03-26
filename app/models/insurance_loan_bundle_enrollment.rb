@@ -2,6 +2,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
+    "for_renewal",
     "processing",
     "error"
   ]
@@ -65,6 +66,10 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   def approved?
     self.status == "approved"
+  end
+
+  def for_renewal?
+    self.status == "for_renewal"
   end
 
   def processing?

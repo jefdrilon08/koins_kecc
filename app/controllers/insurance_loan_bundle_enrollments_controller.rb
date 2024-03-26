@@ -127,14 +127,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      # if ["MIS", "BK", "SBK"].include? current_user.roles.last
-      #   @subheader_side_actions << {
-      #     id: "btn-approve",
-      #     link: "#",
-      #     class: "fa fa-check",
-      #     text: "Approve"
-      #   }
-      # end
+      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Approve"
+        }
+      end
 
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
