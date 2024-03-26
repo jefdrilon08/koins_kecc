@@ -7,7 +7,8 @@ module Api
         :savings,
         :verify_code,
         :member_change_password,
-        :project_types
+        :project_types,
+        :confirmation_changepass
       ]
 
       before_action :authorize_mis!, except: [
@@ -16,7 +17,8 @@ module Api
         :savings,
         :verify_code,
         :member_change_password,
-        :project_types
+        :project_types,
+        :confirmation_changepass
       ]
 
       before_action :authenticate_member!, only: [
@@ -82,6 +84,10 @@ module Api
           render json: validator.payload, status: :unprocessable_entity
         end
       end
+
+
+
+
 
       def verify_code
         username  = params[:username]
@@ -150,6 +156,36 @@ module Api
 
         render json: { project_types: project_type_category }
       end
+
+      def confirmation_changepass
+
+        username            = params[:username]
+        mobile_number       = params[:mobile_number].gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
+      
+        checkingmember      = Member.where(username: username).where("mobile_number LIKE ?", "%"+ mobile_number).where(status: "active").count
+
+        if checkingmember >= 1
+          member_data = {}
+          member = Member.find_by_username(username)
+
+          if member.data["is_password_changed"]
+            member_data["id"] = member.id
+            member_data["first_name"] = member.first_name
+            member_data["mobile_number"] = member.mobile_number
+            render json: { message: "ok", data:member_data }
+
+          else
+            render json: { message: "This can\'t be process" }
+          end
+          
+        else
+          render json: { message: "not found" }
+        end
+
+      end
+
+
+
 
     end
   end

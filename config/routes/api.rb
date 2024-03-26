@@ -69,7 +69,8 @@ namespace :api do
   post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
   post "/members/member_change_password", to: "v3/members#member_change_password" # for changing of member's password
   get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
-  
+  post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
+
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
