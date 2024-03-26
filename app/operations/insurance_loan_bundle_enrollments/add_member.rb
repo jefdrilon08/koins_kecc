@@ -17,25 +17,25 @@ module InsuranceLoanBundleEnrollments
         
         @prevoius_member            = @config[:member]
         
-        if @previous_client_type == "DEPENDENT"
-          @previous_gender  = @config[:gender]
-          @previous_address = @config[:address]
-          @previous_full_name = @member.full_name_formatted     
-          @previous_last_name = @config[:last_name]
-          @previous_middle_name = @config[:middle_name]
-          @previous_first_name = @config[:first_name]
-          @previous_full_name_dependent = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
-          @previous_mobile_no = @config[:mobile_no]
-          @previous_birth_date = @config[:birth_date]
-          @previous_civil_status = @config[:civil_status]
-          @last_membership_date = @config[:membership_date]
-          # @previous_benif_fname = @config[:benif_fname]
-          # @previous_benif_lname = @config[:benif_lname]
-          # @previous_benif_mname = @config[:benif_mname]
-          # @previous_benif_gender = @config[:benif_gender]
-          # @previous_benif_birth_date  = @config[:benif_birth_date]
-          # @previous_benif_relationship  = @config[:benif_relationship]
-        else
+        # if @previous_client_type == "DEPENDENT"
+        #   @previous_gender  = @config[:gender]
+        #   @previous_address = @config[:address]
+        #   @previous_full_name = @member.full_name_formatted     
+        #   @previous_last_name = @config[:last_name]
+        #   @previous_middle_name = @config[:middle_name]
+        #   @previous_first_name = @config[:first_name]
+        #   @previous_full_name_dependent = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
+        #   @previous_mobile_no = @config[:mobile_no]
+        #   @previous_birth_date = @config[:birth_date]
+        #   @previous_civil_status = @config[:civil_status]
+        #   @last_membership_date = @config[:membership_date]
+        #   # @previous_benif_fname = @config[:benif_fname]
+        #   # @previous_benif_lname = @config[:benif_lname]
+        #   # @previous_benif_mname = @config[:benif_mname]
+        #   # @previous_benif_gender = @config[:benif_gender]
+        #   # @previous_benif_birth_date  = @config[:benif_birth_date]
+        #   # @previous_benif_relationship  = @config[:benif_relationship]
+        # else
           @previous_first_name                             = @member.first_name
           @previous_middle_name                            = @member.middle_name
           @previous_last_name                              = @member.last_name
@@ -52,7 +52,7 @@ module InsuranceLoanBundleEnrollments
           # @previous_benif_gender = @config[:benif_gender]
           # @previous_benif_birth_date  = @config[:benif_birth_date]
           # @previous_benif_relationship  = @config[:benif_relationship]
-        end
+        # end
         
       else
         @last_kok_data_records     = @insurance_loan_bundle_enrollment_data[:records].last
@@ -81,12 +81,12 @@ module InsuranceLoanBundleEnrollments
         @previous_birth_date  = @last_kok_data_records[:kok_data][:birth_date]
         @previous_civil_status = @last_kok_data_records[:kok_data][:civil_status]
 
-        if @previous_client_type == "DEPENDENT"
-          @previous_full_name_dependent = @last_kok_data_records[:kok_data][:full_name_dependent]
+        # if @previous_client_type == "DEPENDENT"
+        #   @previous_full_name_dependent = @last_kok_data_records[:kok_data][:full_name_dependent]
+        #   @previous_full_name = @last_kok_data_records[:kok_data][:full_name]
+        # else
           @previous_full_name = @last_kok_data_records[:kok_data][:full_name]
-        else
-          @previous_full_name = @last_kok_data_records[:kok_data][:full_name]
-        end
+        # end
         @previous_age               = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365)).floor(4)
       end
         
@@ -103,19 +103,19 @@ module InsuranceLoanBundleEnrollments
         
         @member                                 = @config[:member]
         
-        if @client_type == "DEPENDENT"
-          @first_name                             = @config[:first_name]
-          @middle_name                            = @config[:middle_name]
-          @last_name                              = @config[:last_name]
-          @full_name_dependent                    = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
-          @full_name                              = @member.full_name_formatted
-          @address                                = @config[:address]
-          @membership_date                        = @config[:membership_date]
-          @gender                                 = @config[:gender]
-          @birth_date                             = @config[:birth_date]
-          @mobile_no                              = @config[:mobile_no]
-          @civil_status                           = @config[:civil_status]        
-        else
+        # if @client_type == "DEPENDENT"
+        #   @first_name                             = @config[:first_name]
+        #   @middle_name                            = @config[:middle_name]
+        #   @last_name                              = @config[:last_name]
+        #   @full_name_dependent                    = @config[:first_name] + ' ' + @config[:middle_name] + '. ' + @config[:last_name]
+        #   @full_name                              = @member.full_name_formatted
+        #   @address                                = @config[:address]
+        #   @membership_date                        = @config[:membership_date]
+        #   @gender                                 = @config[:gender]
+        #   @birth_date                             = @config[:birth_date]
+        #   @mobile_no                              = @config[:mobile_no]
+        #   @civil_status                           = @config[:civil_status]        
+        # else
           @first_name                             = @member.first_name
           @middle_name                            = @member.middle_name
           @last_name                              = @member.last_name
@@ -126,7 +126,7 @@ module InsuranceLoanBundleEnrollments
           @mobile_no                              = @member.mobile_number
           @civil_status                           = @member.civil_status
           @membership_date                        = @member.date_of_membership
-        end
+        # end
 
       else
         @maturity_date                          = @last_effectivity_date.to_date + 2.year
@@ -143,12 +143,12 @@ module InsuranceLoanBundleEnrollments
         @first_name                             = @previous_first_name
         @middle_name                            = @previous_middle_name
         @last_name                              = @previous_last_name
-        if @client_type == 'DEPENDENT'
-          @full_name_dependent                    = @previous_full_name_dependent
+        # if @client_type == 'DEPENDENT'
+        #   @full_name_dependent                    = @previous_full_name_dependent
+        #   @full_name                              = @previous_full_name
+        # else
           @full_name                              = @previous_full_name
-        else
-          @full_name                              = @previous_full_name
-        end
+        # end
         @address                                = @previous_address
         @gender                                 = @previous_gender
         @birth_date                             = @previous_birth_date
