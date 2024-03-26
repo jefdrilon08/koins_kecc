@@ -10,7 +10,6 @@ class Billing < ApplicationRecord
   
   BILLING_TYPES  = [
     "regular",
-    "for-writeoff",
     "for-involutary"
   ]
 
