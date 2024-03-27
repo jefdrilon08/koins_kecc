@@ -7,6 +7,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 import MembershipApplicationFormDocumentBuilder from './MembershipApplicationFormDocumentBuilder.js';
+import { func } from "prop-types";
 
 var _id;
 var _authenticityToken;
@@ -55,6 +56,15 @@ var $modalRejectChecking;
 var $txtInputReasonChecking;
 var $btnConfirmRejectCheckingReason;
 
+var $btnDecline;
+var $modalDecline;
+var $btnConfirmDecline;
+var $InputReasonDecline;
+
+var $btnCheck;
+var $modalCheck;
+var $btnConfirmCheck;
+
 var $btnRejectApprove;
 var $modalRejectApprove;
 var $btnConfirmRejectApproveReason;
@@ -91,15 +101,23 @@ var _cacheDom = function() {
   $modalRejectApprove = new bootstrap.Modal(
     document.getElementById("modal-reject-for-approve")
   )
+  
+  $modalDecline =  new bootstrap.Modal(
+    document.getElementById("modal-decline-for-approve")
+  )
+  $modalCheck = new bootstrap.Modal(
+    document.getElementById("modal-check")
+  )
 
   $btnRejectChecking = $("#btn-reject-checking")
   $txtInputReasonChecking = $("#input-reason-checking")
   $btnConfirmRejectCheckingReason = $("#confirm-reject-checking-reason") 
 
   $btnRejectApprove = $("#btn-reject-approve")
+  $btnDecline = $("#btn-decline")
   
   $btnConfirmRejectApproveReason = $("#confirm-reject-approve-reason_test")
-  
+  $InputReasonDecline = $("#input-decline-approve")
   $txtInputReasonApprove = $("#input-reason-approve")
 
   $btnVerify                          = $("#btn-verify");
@@ -122,6 +140,10 @@ var _cacheDom = function() {
 
   $btnDownloadForm     = $("#btn-download-form");
 
+  $btnConfirmDecline = $("#confirm-decline");
+  $btnCheck = $("#btn-check");
+  $btnConfirmCheck = $("#confirm-check");
+
 }
 
 var _bindEvents = function() {
@@ -132,6 +154,55 @@ var _bindEvents = function() {
   
 
   });
+  $btnCheck.on("click", function(){
+    //alert("jay");
+    
+
+    $modalCheck.show();
+  })
+  $btnConfirmCheck.on("click", function(){
+    var id = $btnCheck.val();
+    $.ajax({
+      url: "/api/v1/online_loan_applications/check",
+      method: "POST",
+      data: {
+        id:id,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        window.location.reload();
+      }
+    });
+  })
+
+  $btnDecline.on("click", function(){
+    // alert("jay");
+    _id = $(this).data('id');
+  
+
+    $modalDecline.show();
+
+  });
+  $btnConfirmDecline.on("click", function(){
+
+    $.ajax({
+      url: "/api/v1/online_loan_applications/decline",
+      method: "POST",
+      data: {
+        id: _id,
+        reason_reject: $InputReasonDecline.val(), 
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.href = "/online_loan_applications";
+      }
+
+    });
+
+  })
   
   $btnConfirmRejectApproveReason.on("click", function(){
   
@@ -316,6 +387,7 @@ var _bindEvents = function() {
       success: function(response) {
         alert("Success! Reloading..."); 
         window.location.reload();
+
       }
     });
   });
