@@ -115,10 +115,10 @@
             %hr
               .row
                 .col-md-6.col-xs-12
-                  %a#btn-save{ data:{ id: "#{@online_loan_application.id}" }, :href => "#"  }
+                  %a#btn-save.btn.btn-primary{ data:{ id: "#{@online_loan_application.id}" }, :href => "#", style:"width: 200px;"  }
                     Save
                 .col-md-6.col-xs-12
-                  %a#btn-reject{  data:{ id: "#{@online_loan_application.id}" }, :href => "#"  }
+                  %a#btn-reject.btn.btn-danger{  data:{ id: "#{@online_loan_application.id}" }, :href => "#",style:"width: 200px;" }
                     .fa.fa-times
                       Reject
 
