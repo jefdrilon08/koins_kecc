@@ -20,16 +20,16 @@ module Billings
                       center: @center
                     )
       end
-      if @billing.data['billing_type'].present?
-        if @billing.data['billing_type'] == "regular"
+      #if @billing.data['billing_type'].present?
+      #  if @billing.data['billing_type'] == "regular"
           @members  = ReadOnlyMember.active.where(center_id: @center.id)
           
-        elsif @billing.data['billing_type'] == "for-involutary"
-          @members  = ReadOnlyMember.resigned.where("center_id = ? AND (data -> 'resignation' ->> 'type') = ?", @center.id, "involuntary")
+      #  elsif @billing.data['billing_type'] == "for-involutary"
+      #    @members  = ReadOnlyMember.resigned.where("center_id = ? AND (data -> 'resignation' ->> 'type') = ?", @center.id, "involuntary")
         
-        end
+      #  end
 
-      end
+      #end
 
 
 

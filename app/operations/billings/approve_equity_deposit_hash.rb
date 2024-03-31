@@ -23,7 +23,7 @@ module Billings
 
       @data = {
         is_withdraw_payment: false,
-        is_fund_transfer: false,
+      #  is_fund_transfer: false,
         is_interest: false,
         is_adjustment: false,
         is_for_exit_age: false,
@@ -50,12 +50,12 @@ module Billings
       @account_transaction.data = @data
       @account_transaction.save!
 
-      if @member.data.with_indifferent_access[:subscription].present? and @member.data['subscription']['is_subscribed'] == true
-        if new_balance.to_f >= 1000.to_f
+      #if @member.data.with_indifferent_access[:subscription].present? and @member.data['subscription']['is_subscribed'] == true
+       # if new_balance.to_f >= 1000.to_f
           #withdraw_cbu!
           #move_cbu!
-        end
-      end
+       # end
+      #end
 
 
     end
