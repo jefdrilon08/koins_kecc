@@ -166,6 +166,13 @@ class OnlineLoanApplicationsController < ApplicationController
             data: { id: @online_application.id },
             text: "Reject"
           }
+          @subheader_side_actions << {
+            id: "btn-decline",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Decline"
+          }
         end
        
       end

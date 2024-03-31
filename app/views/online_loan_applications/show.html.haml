@@ -5,8 +5,16 @@
       .card-body
         %h3
           #{@online_application.member.full_name}
-        %label{style: "color: red;"}
+        %label{style: "color: red; "}
           #{@online_application.status}
+        %br
+        - if @online_application.data.present? && @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
+          %label{style: "color: green; "}
+            %a Cash Flow Approved by:
+            #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
+        - else
+          %label{style: "color: red; "}
+            Cash Flow Approved by:
         %hr
           - if @online_application.data["approve_process"].present?
             - @online_application.data["approve_process"].each do |opp|
@@ -48,11 +56,15 @@
                 %th
                   Loan Amount
                 %td
-                  %a.undo{ data: { 
-                                    id: @online_application.id,   
-                                    amount: @online_application.amount
-                                  }, :href => "#"  } 
+                  - if @online_application.status == "for_approve" || @online_application.status == "approved" || @online_application.status == "reject"
                     = number_to_currency(@online_application.amount, unit: 'P')
+                  - else
+                    %a.undo{ data: { 
+                                      id: @online_application.id,   
+                                      amount: @online_application.amount
+                                    }, :href => "#" }
+                      = number_to_currency(@online_application.amount, unit: 'P')
+
               %tr
                 %th
                   Loan Term
@@ -82,7 +94,7 @@
             %thead
               %tr
                 %th{colspan: "2", style: "text-align: center;"}
-                  SASAGUTAN NG SocioEconomic Office.
+                  SASAGUTAN NG SOCIO ECONOMIC OFFICER
             %tbody
               %tr
                 %th{ width: "25%" }
@@ -220,6 +232,13 @@
         - elsif @online_application.for_review?
         - elsif @online_application.for_approve?
         %h4
+      - if @online_application.for_approve?
+        .modal-footer
+          .controls
+            %button.btn{"id" => "btn-check", "class" => "btn-primary", "value" => "#{@online_application[:id]}", style: "width: 200px;"}
+              .fa.fa-check
+              Check          
+
       
 = render partial: "online_loan_applications/modals/verify"
 = render partial: "online_loan_applications/modals/for_review"
@@ -229,3 +248,5 @@
 = render partial: "online_loan_applications/modals/reject"
 = render partial: "online_loan_applications/modals/reject_for_checking"
 = render partial: "online_loan_applications/modals/reject_for_approve"
+= render partial: "online_loan_applications/modals/decline"
+= render partial: "online_loan_applications/modals/check"

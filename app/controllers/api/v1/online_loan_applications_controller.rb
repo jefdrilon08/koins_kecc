@@ -56,7 +56,34 @@ module Api
         online_application.update!(status: "for_review", data: online_application_data)
         render json: { id: params[:id] }
       end
-      
+
+      def decline
+        online_application  = LoanApplication.find(params[:id])
+        
+        online_application_data = online_application.data
+        online_application_data[:reason_approve_reject] = params[:reason_reject]
+        online_application_data[:date_approve_reject] = Date.today
+        online_application.update!(status: "reject", data: online_application_data)
+        render json: { id: params[:id] }
+      end
+
+      def check
+        online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+
+
+        online_application_data['check_cash_flow'] = {}
+        online_application_data['check_cash_flow']['check_verify'] = true
+        online_application_data['check_cash_flow']['user'] = current_user.id
+        online_application_data['check_cash_flow']['first_name'] = current_user["first_name"]
+        online_application_data['check_cash_flow']['last_name'] = current_user["last_name"]
+        online_application_data['check_cash_flow']['date_check'] = Date.today
+
+        online_application.update(data:online_application_data)
+        render json: {message: "ok"}
+
+      end
+
       def reject_checking
         online_application  = LoanApplication.find(params[:id])
         online_application_data = online_application.data
