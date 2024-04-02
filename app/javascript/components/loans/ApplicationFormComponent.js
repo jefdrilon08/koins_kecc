@@ -875,7 +875,7 @@ export default class ApplicationFormComponent extends React.Component {
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
       var shareCapitalAvailable = this.state.data.data.share_capital_available || false;
       var serviceFeeAvailable = this.state.data.data.service_fee_available || false;
-      var smsFeeAvailable = this.state.data.data.sms_fee_available || true;
+      var smsFeeAvailable = this.state.data.data.sms_fee_available || false;
 
       console.log(this.props.settings)
 
