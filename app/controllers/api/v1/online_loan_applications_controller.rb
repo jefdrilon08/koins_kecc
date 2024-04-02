@@ -147,6 +147,8 @@ module Api
       def approve_loan
     
         online_application  = LoanApplication.find(params[:id])
+        online_application_data = Member.find(online_application.member_id)
+
         member = Member.find(online_application.member_id)
         member = Member.find(online_application.member_id)
         co_maker = Member.find(online_application.co_maker_member_id) 
@@ -205,8 +207,18 @@ module Api
 
         data = ::Loans::Save.new(config: config).execute!
         online_application.update!(status: "approved")
+  
         render json: { message: "ok" }
-     
+
+      
+        content = "Hi #{online_application_data[:first_name]}! Ang Iyong Loan na P#{online_application.amount} sa KCOOP ay naaprubahan na. Loan Reference # #{online_application.reference_number} Maghintay ng abiso ng SO kung kailan ang Loan Release."
+        sms = {
+          mobile_number: online_application.data["mobile_number"],
+          content: content
+        }
+        ::SmsBlast::Send.new(config: sms).execute!
+        #puts "jaysoooooooooooooooooooon" + sms.inspect
+      
       end
 
       def verify

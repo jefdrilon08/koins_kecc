@@ -102,7 +102,8 @@ class OnlineLoanApplicationsController < ApplicationController
 
   def show
     @online_application       = LoanApplication.find(params[:id])
-
+    @online_application_data = MemberAccount.where(member_id:  @online_application.member_id)
+    
   
       @subheader_side_actions = []
       
@@ -164,14 +165,14 @@ class OnlineLoanApplicationsController < ApplicationController
             class: "fa fa-pencil-alt",
             link: "#",
             data: { id: @online_application.id },
-            text: "Reject"
+            text: "Decline"
           }
           @subheader_side_actions << {
             id: "btn-decline",
             class: "fa fa-pencil-alt",
             link: "#",
             data: { id: @online_application.id },
-            text: "Decline"
+            text: "Reject"
           }
         end
        
