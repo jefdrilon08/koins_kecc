@@ -368,6 +368,7 @@ module Loans
             end
           end
         elsif deduction_type == "member_type_deduction_ratio"
+          
           target_member_type  = s_deduction.meta.member_type
           accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
           amount              = s_deduction.amount
@@ -376,7 +377,14 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-            amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_i
+
+            if @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+            
+              amount = s_deduction.business_permit_amount
+            else
+              amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_i
+            
+            end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -388,6 +396,8 @@ module Loans
             temp_amount -= amount
           
           elsif @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+          #elsif @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+        
             target_member_type  = s_deduction.meta.member_type
             accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
             #amount              = s_deduction.amount.to_f - 10.to_f
@@ -613,7 +623,7 @@ module Loans
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = (s_deduction.sms_amount.to_i).round(2)
+                      #amount = (s_deduction.sms_amount.to_i).round(2)
                     end
 
                   end
