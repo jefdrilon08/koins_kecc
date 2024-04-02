@@ -210,7 +210,7 @@ module Api
   
         render json: { message: "ok" }
 
-      if
+      
         content = "Hi #{online_application_data[:first_name]}! Ang Iyong Loan na P#{online_application.amount} sa KCOOP ay naaprubahan na. Loan Reference # #{online_application.reference_number} Maghintay ng abiso ng SO kung kailan ang Loan Release."
         sms = {
           mobile_number: online_application.data["mobile_number"],
@@ -218,8 +218,7 @@ module Api
         }
         ::SmsBlast::Send.new(config: sms).execute!
         #puts "jaysoooooooooooooooooooon" + sms.inspect
-      end
-
+      
       end
 
       def verify
