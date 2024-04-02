@@ -9,7 +9,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   belongs_to :center
   belongs_to :branch
-
+  
   validates :collection_date, presence: true
 
   before_validation :load_defaults
@@ -93,11 +93,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   end
 
   def is_dependent?
-    # begin
-      self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "DEPENDENT"
-    # rescue NilClass => e
-    #   logger.error "Caught a NilClass error: #{e.message}"
-    # end
+    self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "DEPENDENT"
   end
 
   def is_principal?
