@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class BranchLoansStatsController < ApplicationController
+      class BranchLoansStatsController < ActionController::Base
         before_action :authenticate_user!
 
         def queue

@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class MonthlyNewAndResignedController < ApplicationController
+      class MonthlyNewAndResignedController < ActionController::Base
         before_action :authenticate_user!
 
 

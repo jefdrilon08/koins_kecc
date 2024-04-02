@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class BranchResignationsController < ApplicationController
+      class BranchResignationsController < ActionController::Base
         before_action :authenticate_user!
 
         def fetch

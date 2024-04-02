@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class ManualAgingController < ApplicationController
+      class ManualAgingController < ActionController::Base
         before_action :authenticate_user!
 
         def fetch

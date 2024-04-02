@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class MonthlyIncentivesController < ApplicationController
+      class MonthlyIncentivesController < ActionController::Base
         before_action :authenticate_user!
 
         def queue

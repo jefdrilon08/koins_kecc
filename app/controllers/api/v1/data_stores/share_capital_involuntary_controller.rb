@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class ShareCapitalInvoluntaryController < ApplicationController
+      class ShareCapitalInvoluntaryController < ActionController::Base
         before_action :authenticate_user!
 
         def queue
