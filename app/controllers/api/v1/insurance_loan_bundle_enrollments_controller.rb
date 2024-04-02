@@ -5,12 +5,15 @@ module Api
 
       def approve
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
-
+        @record_id = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"][0]["member"]["id"]
+        # @record_id = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"][0]["member"]["id"]
+        raise @record_id.inspect
         config  = {
           insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
           user: current_user
         }
 
+        # raise @record.inspect
         errors  = ::InsuranceLoanBundleEnrollments::ValidateApprove.new(
                     config: config
                   ).execute!

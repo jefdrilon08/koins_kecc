@@ -109,7 +109,6 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
-    
     @subheader_items = [
       {
         text: "Cash Management"
@@ -135,7 +134,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           text: "Approve"
         }
       end
-
+      
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
         class: "fa fa-times",
@@ -143,6 +142,17 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
         data: { method: :delete, confirm: "Are you sure?" }
       }
     end
+
+    # if @insurance_loan_bundle_enrollment.approved?
+    #   if ["MIS", "BK", "SBK"].include? current_user.roles.last
+    #     @subheader_side_actions << {
+    #       id: "btn-approve",
+    #       link: "#",
+    #       class: "fa fa-check",
+    #       text: "Renew"
+    #     }
+    #   end
+    # end
 
     @payload = {
       id: @insurance_loan_bundle_enrollment.id
