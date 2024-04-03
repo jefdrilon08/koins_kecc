@@ -14,7 +14,7 @@ class ReportsController < ApplicationController
 
     @branches = Branch.all
   end
-  
+
   def address_update
     @siubheader_items = [
       { text: "Other Reports" },
@@ -33,11 +33,11 @@ class ReportsController < ApplicationController
       { text: "Other Reports" },
       { text: "Government Identification Numbers" }
     ]
-    
+
       @branches = Branch.all
       branch_id              = params[:branch_id]
-      if branch_id.present? 
-    
+      if branch_id.present?
+
         @government_identification_numbers = ::Reports::GenerateGovernmentIdentificationNumbers.new(branch_id: branch_id).execute!
       end
 
@@ -148,7 +148,7 @@ class ReportsController < ApplicationController
     ]
   end
 
-  def download_excel_monthly_remittance 
+  def download_excel_monthly_remittance
     if params[:start_date].present? and params[:end_date].present?
       @start_date = params[:start_date]
       @end_date = params[:end_date]
@@ -172,7 +172,7 @@ class ReportsController < ApplicationController
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
-  def download_excel_insurance_interest 
+  def download_excel_insurance_interest
     if params[:start_date].present? and params[:end_date].present?
       @start_date = params[:start_date]
       @end_date = params[:end_date]
@@ -208,7 +208,7 @@ class ReportsController < ApplicationController
     report_package = Reports::GenerateExcelForInsuredLoans.new(data: @data, start_date: @start_date, end_date: @end_date, loan_status: @loan_status, branch_id: @branch.id).execute!
     report_package.serialize "#{Rails.root}/tmp/#{filename}"
 
-   
+
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
 
@@ -228,7 +228,7 @@ class ReportsController < ApplicationController
     branch = params[:branch]
     start_date = params[:start_date]
     end_date = params[:end_date]
-  
+
     excel = Reports::GenerateCollectionsBlipReportExcel.new(branch: branch, start_date: start_date, end_date: end_date).execute!
     filename  = "collections_blip_report.xlsx"
 
@@ -241,14 +241,14 @@ class ReportsController < ApplicationController
     start_date = params[:start_date]
     end_date = params[:end_date]
     branch_name = Branch.where(id: branch).first.name
-  
+
     excel = Reports::GenerateMemberDependentReportExcel.new(start_date: start_date, end_date: end_date, branch: branch).execute!
     filename  = "#{branch_name}_member_dependent_report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-  
+
   def cic_reports
     @start_date = params[:start_date]
     @end_date = params[:end_date]
@@ -268,7 +268,7 @@ class ReportsController < ApplicationController
 
 
     excel = Reports::GenerateMonthlyCollectionReportExcel.new(branch: @branch, start_date: @start_date, end_date: @end_date).execute!
-    
+
     if @branch.present?
       filename  = "#{@branch}_monthly_collection_reports.xlsx"
     else
@@ -290,7 +290,7 @@ class ReportsController < ApplicationController
     classification_of_insured = params[:classification_of_insured]
     start_date = params[:start_date]
     end_date = params[:end_date]
-  
+
     excel = Reports::GenerateClaimsBlipReportExcel.new(branch: branch, category_of_cause_of_death_tpd_accident: category_of_cause_of_death_tpd_accident, type_of_insurance_policy: type_of_insurance_policy, classification_of_insured: classification_of_insured, start_date: start_date, end_date: end_date).execute!
     filename  = "BLIP_claims_report.xlsx"
 
@@ -307,7 +307,7 @@ class ReportsController < ApplicationController
     type_of_loan = params[:type_of_loan]
     start_date = params[:start_date]
     end_date = params[:end_date]
-  
+
     excel = Reports::GenerateClaimsClipReportExcel.new(branch: branch, type_of_loan: type_of_loan, start_date: start_date, end_date: end_date).execute!
     filename  = "CLIP_claims_report.xlsx"
 
@@ -337,7 +337,7 @@ class ReportsController < ApplicationController
 
     excel = Reports::GenerateSubsidiaryLedgerExcel.new(as_of: @as_of, branch: @branch).execute!
     filename  = "subsidiary_ledger.xlsx"
-   
+
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
@@ -401,7 +401,7 @@ class ReportsController < ApplicationController
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   end
-  
+
   def personal_document
   end
 
@@ -499,7 +499,7 @@ class ReportsController < ApplicationController
   end
 
   def savings_insurance_transfer_reports_excel
-    if !Settings.activate_microinsurance  
+    if !Settings.activate_microinsurance
       @savings_subtype = params[:savings_subtype]
       @start_date = params[:start_date]
       @end_date = params[:end_date]
@@ -521,7 +521,7 @@ class ReportsController < ApplicationController
       @branch = params[:branch_id]
       @status = params[:status]
       @branch_name = Branch.where(id: @branch).first.name
-  
+
       excel = Reports::GenerateSavingsInsuranceTransferReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, insurance_subtype: @insurance_subtype, payment_subtype: @payment_subtype, status: @status).execute!
       filename  = "#{@branch_name} Savings Insurance Transfer Report.xlsx"
 
@@ -538,21 +538,19 @@ class ReportsController < ApplicationController
   end
 
   def insurance_loan_bundle_reports_excel
-    @savings_subtype = params[:savings_subtype]
-    # @start_date = params[:start_date]
-    # @end_date = params[:end_date]
-    # @branch = params[:branch_id]
-    # @status = params[:status]
-    @status = "pending"
-    @branch_name = Branch.where(id: @branch).first.name
+    @start_date       = params[:start_date]
+    @end_date         = params[:end_date]
+    @branch_name      = Branch.where(id: @branch).first.name
+    @status           = params[:status]
 
-    # excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, status: @status).execute!
-    excel = Reports::GenerateInsuranceLoanBundleReports.new(branch: @branch, status: @status).execute!
+    # raise @end_date.inspect
+    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, status: @status).execute!
+    # excel = Reports::GenerateInsuranceLoanBundleReports.new(branch: @branch, start_date: @start_date, status: @status).execute!
     filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"
     send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    
+
   end
 
 
@@ -561,7 +559,7 @@ class ReportsController < ApplicationController
     start_date = params[:start_date]
     end_date = params[:end_date]
     branch = params[:branch]
-    
+
     if claim_type == "BLIP"
       excel = Reports::GenerateBlipExcelReport.new(start_date: start_date, end_date: end_date, branch: branch).execute!
       filename  = "blip_report.xlsx"
@@ -605,7 +603,7 @@ class ReportsController < ApplicationController
     end
   end
 
-  
+
   def insurance_interest
     @subheader_items = [
       { text: "Other Reports" },

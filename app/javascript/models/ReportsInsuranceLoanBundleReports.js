@@ -1,15 +1,16 @@
 import $ from "jquery";
 
 var $btnExcel;
-var $filterStartDate;
-var $filterEndDate;
+var $StartDate;
+var $EndDate;
+var status;
 var $branchSelect;
 
 var _cacheDom = function() {
   $btnExcel          = $("#btn-excel");
   $branchSelect      = $("#branch-select");
-  $filterStartDate   = $("#filter-start-date");
-  $filterEndDate     = $("#filter-end-date");
+  $StartDate         = $("#start_date");
+  $EndDate           = $("#end_date");
   $status            = $("#status");
 }
 
@@ -26,10 +27,12 @@ var _bindEvents = function() {
   $btnExcel.on('click', function() {
     var data = {
       branch_id: $branchSelect.val(),
-      start_date: $filterStartDate.val(),
-      end_date: $filterEndDate.val(),
+      start_date: $StartDate.val(),
+      end_date: $EndDate.val(),
       status: $status.val()
     };
+
+    console.log($StartDate)
 
     window.location = "/reports/insurance_loan_bundle_reports_excel?" + encodeQueryData(data);
   });    

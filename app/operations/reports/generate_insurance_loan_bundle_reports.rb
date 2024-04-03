@@ -1,30 +1,68 @@
 module Reports
-  class GenerateInsuranceLoanBundleReports 
- 
-    # def initialize(branch:, start_date:, end_date:, status:)
-    def initialize(branch:, status:)
-    
-      # @start_date = start_date.try(:to_date) 
-      # @end_date = end_date.try(:to_date) 
-      @branch_id = branch
-      @status = status
-      
+  class GenerateInsuranceLoanBundleReports
 
+    def initialize(branch:, start_date:, end_date:, status:)
+      # def initialize(branch:, status:)
+
+      @branch_id              = branch
+      @start_date             = start_date.try(:to_date)
+      @start_date_query       = start_date
+      @end_date               = end_date.try(:to_date)
+      @end_date_query         = end_date
+      @status                 = status
+
+      # raise @end_date.inspect
 
       @all_kok = InsuranceLoanBundleEnrollment.all
+      @kok = []
 
-      @all_kok.each do |k|
-        k[:data]["records"].each_with_index do |o, index|
-          @start_date = o["kok_data"]["effectivity_date"]
+      if @branch_id.present? && @start_date.present? && @end_date.present? && @status.present?
+        #raw from sql
+        sql_query = <<-SQL
+          SELECT
+            record
+          FROM
+          insurance_loan_bundle_enrollments,
+          jsonb_array_elements(data->'records') AS record
+          WHERE
+            branch_id = '#{@branch_id.id}'
+            AND status = '#{@status}'
+            AND (record->'kok_data'->>'effectivity_date')::date >= '#{@start_date_query}'
+            AND (record->'kok_data'->>'effectivity_date')::date <= '#{@end_date_query}'
+        SQL
+        query = ActiveRecord::Base.connection.execute(sql_query)
+        # raise query.to_json.inspect
+        #convertion
+        kok = query.map do |row|
+          record = row['record']
+          parsed_record = JSON.parse(record)
+          member_data = parsed_record['member']
+          kok_data = parsed_record['kok_data']
+            {
+              'member' => member_data,
+              'kok_data' => kok_data
+            }
         end
-        if @branch_id.present?
-          @kok = @all_kok.where(" branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
-        else
-          @kok = @all_kok
+        @query_kok = kok
+      elsif @branch_id.present? && @status.present?
+        data = @all_kok.where("branch_id = ? AND status = ?",@branch_id, @status)
+        data.each do |k|
+          kok_data = k.records_last
+          @kok << kok_data
         end
         # raise @kok.inspect
+      elsif @branch_id.present?
+        data = @all_kok.where("branch_id = ?",@branch_id)
+        data.each do |k|
+          kok_data = k.records_last
+            @kok << kok_data
+        end
+      else
+        @kok = @all_kok
       end
 
+
+      # raise @kok.inspect
       # if  @start_date.present? and @end_date.present? and @branch_id.present?
       #   @kok = InsuranceLoanBundleEnrollment.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ? ", @start_date, @end_date, @branch_id, @status).order("collection_date DESC")
       # elsif @branch_id.present?
@@ -32,12 +70,11 @@ module Reports
       # else
       #   puts "not valid"
       # end
-
-      @p        = Axlsx::Package.new
+      @p = Axlsx::Package.new
     end
 
     def execute!
-      
+
         @p.workbook do |wb|
           wb.add_worksheet do |sheet|
             header  = wb.styles.add_style(alignment: {horizontal: :left}, b: true)
@@ -55,8 +92,8 @@ module Reports
             sheet.add_row ["KASAGANA-KA KOK DECLARATION"], style: title_cell
             # sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
-            
-            sheet.add_row [ 
+
+            sheet.add_row [
               "PlanType",
               "PlanCategory",
               "Partner",
@@ -82,39 +119,71 @@ module Reports
               "Benif_BirthDate",
               "Benif_Gender",
               "Benif_Relationship"
-
             ], style: header
-            @kok.each do |kok|
-              kok[:data]["records"].each_with_index do |o, index|
+
+
+            if @kok.present?
+              @kok.each do |kok|
                 sheet.add_row [
-                  o["kok_data"]["plan_type"],
-                  o["kok_data"]["plan_category"],
-                  o["kok_data"]["partner"],
-                  o["kok_data"]["policy_no"],
-                  o["kok_data"]["effectivity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  o["kok_data"]["maturity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  o["kok_data"]["client_type"],
-                  o["kok_data"]["first_name"],
-                  o["kok_data"]["middle_name"],
-                  o["kok_data"]["last_name"],
-                  o["kok_data"]["address"],
-                  o["kok_data"]["gender"],
-                  o["kok_data"]["enrolled_status"],
-                  o["kok_data"]["civil_status"],
-                  o["kok_data"]["birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  o["kok_data"]["age"].to_i,
-                  o["kok_data"]["premium_coverage"],
-                  o["kok_data"]["mobile_no"],
-                  o["kok_data"]["membership_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  o["kok_data"]["benif_fname"],
-                  o["kok_data"]["benif_mname"],
-                  o["kok_data"]["benif_lname"],
-                  o["kok_data"]["benif_birth_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
-                  o["kok_data"]["benif_gender"],
-                  o["kok_data"]["benif_relationship"]       
-                  
-                ], style: [ left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell, date_format_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell,                   date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell]
+                  kok[:kok_data][:plan_type],
+                  kok[:kok_data][:plan_category],
+                  kok[:kok_data][:partner],
+                  kok[:kok_data][:policy_no],
+                  kok[:kok_data][:effectivity_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:maturity_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:client_type],
+                  kok[:kok_data][:first_name],
+                  kok[:kok_data][:middle_name],
+                  kok[:kok_data][:last_name],
+                  kok[:kok_data][:address],
+                  kok[:kok_data][:gender],
+                  kok[:kok_data][:enrolled_status],
+                  kok[:kok_data][:civil_status],
+                  kok[:kok_data][:birth_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:age].to_i,
+                  kok[:kok_data][:premium_coverage],
+                  kok[:kok_data][:mobile_no],
+                  kok[:kok_data][:membership_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:benif_fname],
+                  kok[:kok_data][:benif_mname],
+                  kok[:kok_data][:benif_lname],
+                  kok[:kok_data][:benif_birth_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:benif_gender],
+                  kok[:kok_data][:benif_relationship]
+                ], style: [ left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell, date_format_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell]
               end
+            else
+              # raise @query_kok.inspect
+              @query_kok.each do |kok|
+                sheet.add_row [
+                  kok['kok_data']['plan_type'],
+                  kok['kok_data']['plan_category'],
+                  kok['kok_data']['partner'],
+                  kok['kok_data']['policy_no'],
+                  kok['kok_data']['effectivity_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['maturity_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['client_type'],
+                  kok['kok_data']['first_name'],
+                  kok['kok_data']['middle_name'],
+                  kok['kok_data']['last_name'],
+                  kok['kok_data']['address'],
+                  kok['kok_data']['gender'],
+                  kok['kok_data']['enrolled_status'],
+                  kok['kok_data']['civil_status'],
+                  kok['kok_data']['birth_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['age'].to_i,
+                  kok['kok_data']['premium_coverage'],
+                  kok['kok_data']['mobile_no'],
+                  kok['kok_data']['membership_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['benif_fname'],
+                  kok['kok_data']['benif_mname'],
+                  kok['kok_data']['benif_lname'],
+                  kok['kok_data']['benif_birth_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['benif_gender'],
+                  kok['kok_data']['benif_relationship']
+                ], style: [ left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell, date_format_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell]
+              end
+
             end
           end
         end
