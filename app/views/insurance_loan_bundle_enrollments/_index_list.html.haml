@@ -34,6 +34,9 @@
           - if o.pending?
             .badge.bg-danger
               Pending
+          - if o.checked?
+            .badge.bg-danger
+              For Approval
           - elsif o.approved?
             .badge.bg-success
               Approved

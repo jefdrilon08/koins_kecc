@@ -1,0 +1,26 @@
+#modal-declined-confirmation.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Declined
+      .modal-body
+        .modal-body-content
+          .callout.callout-info
+            %p
+              Are you sure you want to declined?
+            %p
+              Note:
+          .row
+            .col
+              .form-group
+                = text_area_tag :declined_note, @declined_note, class: "form-control", id: "input-declined-note"
+          .message
+      .modal-footer
+        .controls
+          %button#btn-confirm-declined.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

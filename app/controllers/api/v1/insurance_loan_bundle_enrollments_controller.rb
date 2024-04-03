@@ -5,15 +5,12 @@ module Api
 
       def approve
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
-        @record_id = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"][0]["member"]["id"]
         # @record_id = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"][0]["member"]["id"]
-        raise @record_id.inspect
         config  = {
           insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
           user: current_user
         }
 
-        # raise @record.inspect
         errors  = ::InsuranceLoanBundleEnrollments::ValidateApprove.new(
                     config: config
                   ).execute!
@@ -32,6 +29,41 @@ module Api
           ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
 
           render json: { message: "ok" }
+        end
+      end
+
+      def check
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
+
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          user: current_user
+        }
+        # raise config.inspect
+        if ["MIS", "AO"].include? current_user.roles.last
+          errors  = InsuranceLoanBundleEnrollments::ValidateCheck.new(
+                      config: config
+                    ).execute!
+
+          # raise @errors.inspect
+
+          @approving_user = User.where(first_name: "Silvida", last_name: "Antiquera").first
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Check.new(
+                                        config: config
+                                      ).execute!
+
+            # ::InsuranceLoanBundleEnrollment::NotifyUser.new(insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment, user: @approving_user).execute!
+
+            render json: { message: "Successfully proceed" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+
+          render json: { message: "Unauthorized", errors: errors }, status: 401
         end
       end
 
