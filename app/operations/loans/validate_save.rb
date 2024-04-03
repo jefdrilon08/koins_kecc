@@ -67,10 +67,25 @@ module Loans
       end
 
       # Voucher particular
-      if @loan_data[:data][:voucher][:particular].blank?
+      if @loan_data[:data][:voucher][:bank_check_number].blank?
         @errors[:messages] << {
-          key: "voucher.particular",
-          message: "Voucher particular required"
+          key: "voucher.bank_check_number",
+          message: "Voucher Bank Check Number required"
+        }
+      elsif @loan_data[:data][:voucher][:check_number].blank?
+        @errors[:messages] << {
+          key: "voucher.check_number",
+          message: "Voucher Check Voucher Number required"
+        }
+      elsif @loan_data[:data][:voucher][:date_requested].blank?
+        @errors[:messages] << {
+          key: "voucher.date_requested",
+          message: "Voucher Date Requested required"
+        }
+      elsif @loan_data[:data][:voucher][:date_of_check].blank?
+        @errors[:messages] << {
+          key: "voucher.date_of_check",
+          message: "Voucher Date of Check required"
         }
       end
 
