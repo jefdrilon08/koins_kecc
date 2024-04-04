@@ -8,7 +8,8 @@ module Api
         :verify_code,
         :member_change_password,
         :project_types,
-        :confirmation_changepass
+        :confirmation_changepass,
+        :member_change_old_password
       ]
 
       before_action :authorize_mis!, except: [
@@ -18,17 +19,20 @@ module Api
         :verify_code,
         :member_change_password,
         :project_types,
-        :confirmation_changepass
+        :confirmation_changepass,
+        :member_change_old_password
       ]
 
       before_action :authenticate_member!, only: [
         :dashboard, 
-        :savings
+        :savings,
+        :member_change_old_password
       ]
 
       before_action :authorize_active_member!, only: [
         :dashboard, 
-        :savings
+        :savings,
+        :member_change_old_password
       ]
 
       def dashboard
@@ -193,7 +197,36 @@ module Api
 
       end
 
+      def member_change_old_password
+        old_password = params[:old_password]
+        new_password = params[:new_password]
+        confirm_new_password = params[:confirm_new_password]
+  
+        config = {
+          member: @current_member,
+          old_password: old_password,
+          new_password: new_password,
+          confirm_new_password: confirm_new_password
+        }
+  
+        cmd = ::Members::ValidateMemberChangePassword.new(
+          config: config
+        )
+  
+        cmd.execute!
+  
+        if cmd.messages.any?
+          render json: { errors: cmd.messages }, status: :unprocessable_entity
+        else
+          @current_member.update!(
+            password: new_password,
+            password_confirmation: confirm_new_password
+          )
+  
+          render json: { message: "ok" }
+        end
 
+      end
 
 
     end
