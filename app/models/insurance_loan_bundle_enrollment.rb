@@ -5,6 +5,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "for_checking",
     "for-approval",
     "processing",
+    "declined",
     "error"
   ]
 
@@ -17,9 +18,9 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
-  # scope :for_checking, -> { where(status: "for_checking").order("collection_date ASC") }
-  # scope :approved, -> { where(status: "approved").order("collection_date ASC") }
-
+  scope :for_checking, -> { where(status: "for_checking").order("collection_date ASC") }
+  scope :approved, -> { where(status: "approved").order("collection_date ASC") }
+  scope :declined, -> { where(status: "declined").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?
@@ -69,6 +70,10 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   def checked?
     self.status == "for-approval"
+  end
+
+  def declined?
+    self.status == "declined"
   end
 
   def approved?
