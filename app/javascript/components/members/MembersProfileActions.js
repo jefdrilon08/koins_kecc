@@ -36,11 +36,11 @@ export default function MembersProfileActions(props) {
   const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
 
   const [isMemberSubscribed, setIsMemberSubscribed]                             = useState(false);
-  const user_MIS_BK_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("BK");
+  const user_MIS_BK_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("BK") || jwtDecode(props.token).roles.includes("SBK");
 
   const [isModalMobileNumberOpen, setModalMobileNumberOpen]                     = useState(false);
   const [mobileNumber, setMobileNumber]                                         = useState("9");
-  const user_MIS_FM_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("FM");
+  const user_MIS_FM_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("FM") || jwtDecode(props.token).roles.includes("OAS");
   const [isMobileNumberExist, setIsMobileNumberExist]                           = useState(false);
   const [isMobileNumberValid, setIsMobileNumberValid]                           = useState(false);
   const [currentMobileNumber, setCurrentMobileNumber]                           = useState("9");
