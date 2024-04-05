@@ -92,7 +92,7 @@
         %th.text-center{width: "0.5%" }
           I
         %th.text-center{width: "0.5%" }
-          E
+          CBU
         %th.text-center{width: "3%" }
           WP
         %th.text-center{width: "3%" }
@@ -130,7 +130,7 @@
                   /#{Member.find(r[:member][:id]).identification_number}
                   - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
                     *
-                    #{r[:member][:last_name]}, #{r[:member][:first_name]}
+                  #{r[:member][:last_name]}, #{r[:member][:first_name]}
                 - r[:records].each do |rr|
                   - if rr[:record_type] == "WP"
                     - member_grand_total += rr[:amount].to_f
