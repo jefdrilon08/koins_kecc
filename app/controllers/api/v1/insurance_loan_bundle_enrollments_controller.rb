@@ -39,15 +39,11 @@ module Api
           insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
           user: current_user
         }
-        # raise config.inspect
+       
         if ["MIS", "AO"].include? current_user.roles.last
           errors  = InsuranceLoanBundleEnrollments::ValidateCheck.new(
                       config: config
                     ).execute!
-
-          # raise @errors.inspect
-
-          @approving_user = User.where(first_name: "Silvida", last_name: "Antiquera").first
 
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
@@ -55,8 +51,6 @@ module Api
             insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Check.new(
                                         config: config
                                       ).execute!
-
-            # ::InsuranceLoanBundleEnrollment::NotifyUser.new(insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment, user: @approving_user).execute!
 
             render json: { message: "Successfully proceed" }
           end
@@ -66,6 +60,34 @@ module Api
           render json: { message: "Unauthorized", errors: errors }, status: 401
         end
       end
+
+      def declined
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          user: current_user
+        }
+
+        if ["MIS", "OAS", "FM"].include? current_user.roles.last
+          errors  = InsuranceLoanBundleEnrollments::ValidateDecline.new(
+                      config: config
+                    ).execute!
+   
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Declined.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
 
       def remove_member
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
