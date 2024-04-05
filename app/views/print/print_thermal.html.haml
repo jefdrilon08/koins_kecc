@@ -32,6 +32,8 @@
   .header{
     margin-bottom: 50px;
   }
+- grand_total_equity           = 0.00
+
 - grand_total_wp                = 0.00
 - grand_total_cp                = 0.00
 - grand_total_payment           = 0.00
@@ -83,12 +85,14 @@
         %th.text-center{ width: "3%" }
           Name
         //- @billing[:data][:totals].each do |t|
-        %th.text-center{width: "3%" }
+        %th.text-center{width: "2%" }
           LP
         %th.text-center{width: "1%" }
           S
         %th.text-center{width: "0.5%" }
           I
+        %th.text-center{width: "0.5%" }
+          E
         %th.text-center{width: "3%" }
           WP
         %th.text-center{width: "3%" }
@@ -98,7 +102,7 @@
         %h3
           %strong Collection Report / Special Report
           - @billing[:data][:records].each do |r|
-
+            - tota_equity = 0.00
             - member_total_cp     = 0.00
             - member_grand_total  = 0.00
             - withdraw_payment    = 0.00
@@ -122,11 +126,11 @@
 
             - if r[:total_collected] > 0.0 || r[:total_loan_payment] > 0.0 or total_savings.to_f > 0.0 || total_insurance.to_f > 0.0 || total_wp.to_f > 0.0 
               %tr
-                %td{style: "font-size: 14px"}
+                %td{style: "font-size: 12px"}
                   /#{Member.find(r[:member][:id]).identification_number}
                   - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
                     *
-                  #{r[:member][:last_name]}, #{r[:member][:first_name]}
+                    #{r[:member][:last_name]}, #{r[:member][:first_name]}
                 - r[:records].each do |rr|
                   - if rr[:record_type] == "WP"
                     - member_grand_total += rr[:amount].to_f
@@ -158,7 +162,11 @@
                 - r[:records].each do |cc|
                   - if cc[:record_type] == "LOAN_PAYMENT"
                     - total_loan_payment += cc[:amount].to_f
-                    - grand_total_loan_payment += cc[:amount].to_f      
+                    - grand_total_loan_payment += cc[:amount].to_f
+                - r[:records].each do |ee|
+                  - if ee[:record_type] == "EQUITY"
+                    - tota_equity  += ee[:amount].to_f
+                    - grand_total_equity += ee[:amount].to_f      
                 %td.text-end{style: "font-size: 14px"}
                   - if total_loan_payment.to_f == 0
                     - x = " - "
@@ -178,6 +186,12 @@
                   - else
                     #{number_to_currency(liferf.to_f.round(2),unit: '')}
                 %td.text-end{style: "font-size: 14px"}
+                  - if tota_equity.to_f == 0
+                    - x = " - "
+                    #{x}
+                  - else
+                    #{number_to_currency(tota_equity.to_f.round(2),unit: '')}
+                %td.text-end{style: "font-size: 14px"}
                   - if withdraw_payment.to_f == 0
                     - x = " - "
                     #{x}
@@ -192,12 +206,14 @@
         %tr
           %th
             TOTAL
-          %th.text-end
+          %th.text-end{width: "2%"}
             #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_equity.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
           %th.text-end
@@ -208,7 +224,7 @@
           %strong COLLECTION REPORT
           - @billing[:data][:records].each do |r|
             
-            
+            - tota_equity = 0.00
             - member_total_cp     = 0.00
             - member_grand_total  = 0.00
             - withdraw_payment    = 0.00
@@ -259,7 +275,12 @@
               - r[:records].each do |cc|
                 - if cc[:record_type] == "LOAN_PAYMENT"
                   - total_loan_payment += cc[:amount].to_f
-                  - grand_total_loan_payment += cc[:amount].to_f      
+                  - grand_total_loan_payment += cc[:amount].to_f
+
+              - r[:records].each do |ee|
+                - if ee[:record_type] == "EQUITY"
+                  - tota_equity  += ee[:amount].to_f
+                  - grand_total_equity += ee[:amount].to_f
               %td.text-end{style: "font-size: 14px"}
                 - if total_loan_payment.to_f == 0
                   - x = " - "
@@ -278,6 +299,12 @@
                   #{x}
                 - else
                   #{number_to_currency(liferf.to_f.round(2),unit: '')}
+              %td.text-end{style: "font-size: 14px"}
+                - if tota_equity.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(tota_equity.to_f.round(2),unit: '')}
               %td.text-end{style: "font-size: 14px"}
                 - if withdraw_payment.to_f == 0
                   - x = " - "
@@ -299,6 +326,8 @@
             #{number_to_currency(grand_total_savings.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(total_life_rf.to_f.round(2),unit: '')}
+          %th.text-end
+            #{number_to_currency(grand_total_equity.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
           %th.text-end
