@@ -15,14 +15,10 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       ) 
     end
 
-    
-
-
     if @branch.present?
       @insurance_loan_bundle_enrollments  = @insurance_loan_bundle_enrollments.where(branch_id: @branch.id)
     end
  
-
     if params[:start_date].present? and params[:end_date].present?
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
     end
@@ -109,7 +105,6 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
-    
     @subheader_items = [
       {
         text: "Cash Management"
@@ -127,21 +122,58 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+      if ["OAS", "MIS"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-check",  
+          link: "#",
+          class: "fa fa-check",
+          text: "For-Checking"
+        }
+
+        @subheader_side_actions << {
+              id: "btn-declined",
+              link: "#",
+              class: "fa fa-check",
+              text: "Decline"
+        }
+
+        @subheader_side_actions << {
+              link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
+              class: "fa fa-times",
+              text: "Delete",
+              data: { method: :delete, confirm: "Are you sure?" }
+        }
+      end
+          
+      
+    end
+
+    if @insurance_loan_bundle_enrollment.checked?
+      if ["MIS", "FM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
           class: "fa fa-check",
           text: "Approve"
         }
+        @subheader_side_actions << {
+            id: "btn-declined",
+            link: "#",
+            class: "fa fa-check",
+            text: "Decline"
+        }
       end
+    end
 
-      @subheader_side_actions << {
-        link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
-        class: "fa fa-times",
-        text: "Delete",
-        data: { method: :delete, confirm: "Are you sure?" }
-      }
+    if @insurance_loan_bundle_enrollment.approved?
+      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+        @subheader_side_actions << {
+          id: "btn-approve",
+          link: "#",
+          class: "fa fa-check",
+          text: "Renew"
+        }
+      end
     end
 
     @payload = {

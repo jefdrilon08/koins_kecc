@@ -1,5 +1,5 @@
 module InsuranceLoanBundleEnrollments
-  class ValidateApprove < AppValidator
+  class ValidateCheck < AppValidator
     def initialize(config:)
       super()
 
@@ -15,13 +15,12 @@ module InsuranceLoanBundleEnrollments
         }
       end
 
-      if @insurance_loan_bundle_enrollment.present? and !@insurance_loan_bundle_enrollment.checked?
-        @errors[:messsages] << {
+      if !@insurance_loan_bundle_enrollment.pending?
+        @errors[:messages] << {
           key: "insurance_loan_bundle_enrollment",
-          message: "cannot approve non-pending record"
+          message: "Invalid status"
         }
       end
-
      
       @errors[:messages].each do |m|
         @errors[:full_messages] << m[:message]
@@ -31,3 +30,8 @@ module InsuranceLoanBundleEnrollments
     end
   end
 end
+
+
+
+
+

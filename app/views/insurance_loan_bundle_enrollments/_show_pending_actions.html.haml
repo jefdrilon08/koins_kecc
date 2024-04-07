@@ -37,54 +37,7 @@
       .col-md-3
         .form-group
           %label Effectivity Date      
-          = date_field_tag :effectivity_date, @effectivity_date, id: 'input-effectivity-date', class: 'form-control'  
-      
-      
-    / .row
-    /   .col-md-3
-    /     .form-group
-    /       .h3
-    /         %label DEPENDENT INFORMATION
-    / .row
-    /   .col-md-3  
-    /     .form-group
-    /       / %label First Name    
-    /       = text_field_tag :first_name, @first_name, placeholder: "First Name", id: 'input-first-name', class: 'form-control'
-    /   .col-md-3
-    /     .form-group
-    /       / %label Middle Name       
-    /       = text_field_tag :middle_name, @middle_name, placeholder: "Middle Name", id: 'input-middle-name', class: 'form-control'
-    /   .col-md-3  
-    /     .form-group
-    /       / %label Last Name    
-    /       = text_field_tag :last_name, @last_name, placeholder: "Last Name", id: 'input-last-name', class: 'form-control'
-    /   .col-md-3
-    /     .form-group
-    /       / %label Birth Date      
-    /       = date_field_tag :birth_date, @birth_date, id: 'input-birth-date', class: 'form-control'
-    / .row
-    /   .col-md-3
-    /     .form-group
-    /       / %label Gender       
-    /       = select_tag :gender, options_for_select([['Select Gender', '', {disabled: true, selected: true}]] + ["MALE" , "FEMALE"], @gender), placeholder: "Gender", id: 'input-gender', class: 'form-control'  
-         
-    /   .col-md-3
-    /     .form-group
-    /       / %label Address       
-    /       = text_field_tag :address, @address, placeholder: "Address", id: 'input-address', class: 'form-control'  
-    /   .col-md-3
-    /     .form-group
-    /       / %label Mobile No       
-    /       = text_field_tag :mobile_no, @mobile_no, placeholder: "Mobile No", id: 'input-mobile-no', class: 'form-control'     
-    /   .col-md-3
-    /     .form-group
-    /       / %label Civil Status       
-    /       = select_tag :civil_status, options_for_select([['Select Civil Status', '', {disabled: true, selected: true}]] +["SEPARATED" ,"SINGLE", "MARRIED", "WIDOWED", "SINGLE PARENT", "MARRIED-OFW"], @civil_status), placeholder: "Civil Status", id: 'input-civil-status', class: 'form-control'
-    /   .col-md-3  
-    /     .form-group
-    /       %label MembershipDate for Dependents ONLY
-    /       = date_field_tag :membership_date, @membership_date, id: 'input-membership-date', class: 'form-control'
-      
+          = date_field_tag :effectivity_date, @effectivity_date, id: 'input-effectivity-date', class: 'form-control'        
   .row
     .col-md-3
       .form-group
@@ -107,8 +60,7 @@
       .form-group
         %label Beneficiary Birth Date
         = date_field_tag :benif_birth_date, @benif_birth_date, id: 'input-benif-birth-date', class: 'form-control'
-    
-    
+
   .row
     .col-md-3
       .form-group
@@ -128,15 +80,16 @@
           %button#btn-add.btn.btn-info.btn-block
             .fa.fa-plus
             Add
-  / - else
-  /   .row
-  /     .col-md-2
-  /       .form-group
-  /         %label
-  /           Actions
-  /         %button#btn-add.btn.btn-info.btn-block
-  /           .fa.fa-plus
-  /           RENEW
+  - else
+    .row
+      .col-md-2
+        .form-group
+          %label
+            Actions
+          %button#btn-add.btn.btn-info.btn-block
+            .fa.fa-plus
+            RENEW
+
   - if @insurance_loan_bundle_enrollment.approved?
     .row
       .col-md-2
