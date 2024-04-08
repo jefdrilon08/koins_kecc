@@ -284,7 +284,9 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/add_member", to: "insurance_loan_bundle_enrollments#add_member"
     post "/insurance_loan_bundle_enrollments/remove_member", to: "insurance_loan_bundle_enrollments#remove_member"
     post "/insurance_loan_bundle_enrollments/approve", to: "insurance_loan_bundle_enrollments#approve"
-
+    post "/insurance_loan_bundle_enrollments/pending", to: "insurance_loan_bundle_enrollments#pending"
+    post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
+    post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"

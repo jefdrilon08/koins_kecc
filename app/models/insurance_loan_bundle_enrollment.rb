@@ -2,21 +2,25 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   STATUSES  = [
     "pending",
     "approved",
-    "for_renewal",
+    "for_checking",
+    "for-approval",
     "processing",
+    "declined",
     "error"
   ]
 
   belongs_to :center
   belongs_to :branch
-
+  
   validates :collection_date, presence: true
 
   before_validation :load_defaults
 
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
-
+  scope :for_checking, -> { where(status: "for_checking").order("collection_date ASC") }
+  scope :approved, -> { where(status: "approved").order("collection_date ASC") }
+  scope :declined, -> { where(status: "declined").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?
@@ -64,6 +68,14 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     self.status == "pending"
   end
 
+  def checked?
+    self.status == "for-approval"
+  end
+
+  def declined?
+    self.status == "declined"
+  end
+
   def approved?
     self.status == "approved"
   end
@@ -93,11 +105,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   end
 
   def is_dependent?
-    # begin
-      self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "DEPENDENT"
-    # rescue NilClass => e
-    #   logger.error "Caught a NilClass error: #{e.message}"
-    # end
+    self.data.with_indifferent_access[:records][0][:kok_data][:client_type] == "DEPENDENT"
   end
 
   def is_principal?

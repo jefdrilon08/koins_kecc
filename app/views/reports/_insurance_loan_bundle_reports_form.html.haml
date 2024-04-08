@@ -4,18 +4,18 @@
       .form-group
         %label Branch
         = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
-    / .col
-    /   .form-group
-    /     %label Start Date
-    /     = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "filter-start-date"
-    / .col
-    /   .form-group
-    /     %label End Date
-    /     = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "filter-end-date"
-    / .col
-    /   .form-group
-    /     %label Status
-    /     = select_tag :status, options_for_select(InsuranceLoanBundleEnrollment::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
+    .col
+      .form-group
+        %label Effectivity Date
+        = text_field_tag :start_date, @start_date, class: "form-control", type: "date", id: "start_date"
+    .col
+      .form-group
+        %label End Date
+        = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end_date"
+    .col
+      .form-group
+        %label Status
+        = select_tag :status, options_for_select(InsuranceLoanBundleEnrollment::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
     
     .col
       .form-group
