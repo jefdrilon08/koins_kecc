@@ -458,6 +458,12 @@ class PrintController < ApplicationController
 
       render "print/print_kkalinga_bill", layout: "print"
 
+    elsif type == "print_insurance_loan_bundle_enrollment"
+      print_insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollment.find(params[:id])
+
+      @print_insurance_loan_bundle_enrollment = print_insurance_loan_bundle_enrollment
+      # raise @print_insurance_loan_bundle_enrollment.inspect
+      render "print/print_kok", layout: "print"
 
     elsif type == "print_share_certificate"
 

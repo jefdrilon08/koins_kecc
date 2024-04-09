@@ -7,18 +7,18 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @center   = Center.where(id: params[:center_id]).first
     @q        = params[:q]
     @branch   = Branch.where(id: params[:branch_id]).first
-    
+
     if @q.present?
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where(
         "upper(data->'records'->0->'member'->>'first_name') LIKE :q OR upper(data->'records'->0->'member'->>'last_name') LIKE :q",
         q: "%#{@q.upcase}%"
-      ) 
+      )
     end
 
     if @branch.present?
       @insurance_loan_bundle_enrollments  = @insurance_loan_bundle_enrollments.where(branch_id: @branch.id)
     end
- 
+
 
     if params[:start_date].present? and params[:end_date].present?
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where("collection_date >= ? AND collection_date <= ?", params[:start_date], params[:end_date])
@@ -39,7 +39,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       # if @status == "for checking"
       #   @status = "pending"
       # elsif @status == "posted"
-      #   @status = "approved"  
+      #   @status = "approved"
       # end
       @insurance_loan_bundle_enrollments = @insurance_loan_bundle_enrollments.where(status: @status)
     end
@@ -79,14 +79,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
                 ).order("last_name ASC")
 
     @kok_data = @insurance_loan_bundle_enrollment.data.with_indifferent_access[:kok_data]
-      
+
     if @kok_data.present?
       @plan_type = @kok_data[:plan_type]
       @plan_category = @kok_data[:plan_category]
       @partner = @kok_data[:partner]
       @policy_no = @kok_data[:policy_no]
       @effectivity_date = @kok_data[:effectivity_date]
-      @maturity_date = @effectivity_date.to_date == Date.today + 1.year 
+      @maturity_date = @effectivity_date.to_date == Date.today + 1.year
       @client_type = @kok_data[:client_type]
       @first_name = @kok_data[:first_name]
       @middle_name = @kok_data[:middle_name]
@@ -139,18 +139,28 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
 
 
       @subheader_side_actions << {
-        id: "btn-check",  
+        id: "btn-check",
         link: "#",
         class: "fa fa-check",
         text: "For-Checking"
       }
-          
+
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
         class: "fa fa-times",
         text: "Delete",
         data: { method: :delete, confirm: "Are you sure?" }
       }
+
+      @subheader_side_actions << {
+        id: "btn-print",
+        class: "fa fa-print",
+        text: "Print PDF",
+        data: {
+          id: "#{@insurance_loan_bundle_enrollment}"
+        }
+      }
+
     end
 
     if @insurance_loan_bundle_enrollment.checked?
@@ -162,7 +172,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           text: "Approve"
         }
       end
-      
+
       @subheader_side_actions << {
         link: insurance_loan_bundle_enrollment_path(@insurance_loan_bundle_enrollment.id),
         class: "fa fa-times",
@@ -206,12 +216,12 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     }
 
     @errors_arr = []
-    
+
     # Process each row in the file
     CSV.foreach(file.path, headers: true) do |row|
       # Validate each row
       errors = InsuranceLoanBundleEnrollments::ValidateLoanBundleEnrollmentsFromCsvFile.new(row: row).execute!
-      
+
       if errors[:messages].any?
         @errors_arr << errors
       end
