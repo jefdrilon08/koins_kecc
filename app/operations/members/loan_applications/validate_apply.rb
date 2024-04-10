@@ -67,12 +67,35 @@ module Members
           @payload[:num_installments] << "required"
         end
 
-        if @co_maker_first_name.blank?
-          @payload[:co_maker_first_name] << "required"
-        end
+        # If the member type is GK, its not required to fill the co_maker and clip
+        if @member.member_type != "GK"
+          if @co_maker_first_name.blank?
+            @payload[:co_maker_first_name] << "required"
+          end
+  
+          if @co_maker_last_name.blank?
+            @payload[:co_maker_last_name] << "required"
+          end
 
-        if @co_maker_last_name.blank?
-          @payload[:co_maker_last_name] << "required"
+          if @data[:clip_beneficiary][:first_name].blank?
+            @payload[:clip_beneficiary_first_name] << "required"
+          end
+  
+          if @data[:clip_beneficiary][:middle_name].blank?
+            @payload[:clip_beneficiary_middle_name] << "required"
+          end
+  
+          if @data[:clip_beneficiary][:last_name].blank?
+            @payload[:clip_beneficiary_last_name] << "required"
+          end
+  
+          if @data[:clip_beneficiary][:date_of_birth].blank?
+            @payload[:clip_beneficiary_date_of_birth] << "required"
+          end
+  
+          if @data[:clip_beneficiary][:relationship].blank?
+            @payload[:clip_beneficiary_relationship] << "required"
+          end
         end
 
         if @co_maker_member_id.blank?
@@ -83,25 +106,7 @@ module Members
           @payload[:loan_product_id] << "required"
         end
 
-        if @data[:clip_beneficiary][:first_name].blank?
-          @payload[:clip_beneficiary_first_name] << "required"
-        end
-
-        if @data[:clip_beneficiary][:middle_name].blank?
-          @payload[:clip_beneficiary_middle_name] << "required"
-        end
-
-        if @data[:clip_beneficiary][:last_name].blank?
-          @payload[:clip_beneficiary_last_name] << "required"
-        end
-
-        if @data[:clip_beneficiary][:date_of_birth].blank?
-          @payload[:clip_beneficiary_date_of_birth] << "required"
-        end
-
-        if @data[:clip_beneficiary][:relationship].blank?
-          @payload[:clip_beneficiary_relationship] << "required"
-        end
+        
 
 
         mobile_number = @data[:mobile_number]
