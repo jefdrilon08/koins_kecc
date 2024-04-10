@@ -1,6 +1,6 @@
 import $ from "jquery";
-import DataTable from "datatables.net";
-DataTable($);
+//import DataTable from "datatables.net";
+//DataTable($);
 
 var $dataTable;
 
@@ -10,11 +10,11 @@ var init  = function() {
 };
 
 var _cacheDom = function() {
-  $dataTable  = $("#data-table");
+  //$dataTable  = $("#data-table");
 };
 
 var _bindEvents = function() {
-  $dataTable.DataTable();
+  //$dataTable.DataTable();
 };
 
 

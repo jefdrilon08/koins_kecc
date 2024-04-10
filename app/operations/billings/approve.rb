@@ -220,17 +220,30 @@ module Billings
         end
         @total_payment = @total_cash_payment+@total_loan_payment
 
-        if @total_payment > 0
+        #if @member.data.key?("sms_record") code para kahit wala pang sms record hindi mag error.
+        if @member.data.key?("sms_record")
+         if @member.data["sms_record"]["loan_maturity"].to_date > Date.today && @total_payment > 0
           content= "Hi #{@member.first_name}! \nAng iyong hulog #{@total_payment} ay natanggap na ng K-COOP RE##{@accounting_entry[:reference_number]} \ndate: #{@accounting_entry[:date_posted].to_fs(:long)} \nMag-log in sa iyong My k-coins account para sa detalye."
           config = {
-            mobile_number: @member.mobile_number,
-            content: content
-          }
-          #::SmsBlast::Send.new(config: config).execute!
-          puts config.inspect
-        end
+              mobile_number: @member.mobile_number,
+              content: content
+            }
+            #::SmsBlast::Send.new(config: config).execute!
+            puts config.inspect
 
-        if @total_withdraw_payment > 0
+            #may payment ng sms pero walang payment sa billing
+            elsif @total_payment == 0.0 
+              content= "Hi #{@member.first_name}! \n"
+              config = {
+                mobile_number: @member.mobile_number,
+              content: content
+            }
+            #::SmsBlast::Send.new(config: config).execute!
+            puts config.inspect
+         end
+
+         #withdrawal sms
+         if @total_withdraw_payment > 0
           content= "Hi #{@member.first_name}! \nIkaw ay nag-withdraw sa K-COOP ng #{@total_withdraw_payment} na may REF##{@accounting_entry[:reference_number]} \nMag-log in saiyong My k-coins account para sa detalye."
           config = {
             mobile_number: @member.mobile_number,
@@ -238,10 +251,8 @@ module Billings
           }
           #::SmsBlast::Send.new(config: config).execute!
           puts config.inspect
+         end
         end
-
-        #content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. \ntransaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nLoan Payment: #{number_to_currency(@total_loan_payment,unit: '')} \nCash Payment: #{number_to_currency(@total_cash_paymnet,unit: '')} \nWithdraw Payment: #{number_to_currency(@total_withdraw_payment,unit: '')} \nTHIS IS A TEST MESSAGE ONLY"
-
       end
     end
   end

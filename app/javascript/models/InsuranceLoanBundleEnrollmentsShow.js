@@ -8,7 +8,6 @@ var $btnApprove;
 var $btnConfirmApprove;
 var $modalApprove;
 var $btnCheck;
-var $btnPdf;
 var $btnConfirmCheck;
 var $modalCheck;
 var $btnDeclined;
@@ -62,7 +61,7 @@ var _urlAdd                = "/api/v1/insurance_loan_bundle_enrollments/add_memb
 var _urlDelete             = "/api/v1/insurance_loan_bundle_enrollments/remove_member";
 var _urlApprove            = "/api/v1/insurance_loan_bundle_enrollments/approve";
 var _urlCheckTransaction   = "/api/v1/insurance_loan_bundle_enrollments/check";
-var _urlPendingTransaction = "/api/v1/insurance_loan_bundle_enrollments/pending";
+var _urlDeclineTransaction = "/api/v1/insurance_loan_bundle_enrollments/declined";
 
 var _cacheDom = function() {
 
@@ -92,13 +91,9 @@ var _cacheDom = function() {
     document.getElementById("modal-check-confirmation")
   );
 
-  // $modalPending = new bootstrap.Modal(
-  //   document.getElementById("modal-pending")
-  // );
-  // $modalDeclined = new bootstrap.Modal(
-  //   document.getElementById("modal-declined")
-  // );
-  
+  $modalDeclined = new bootstrap.Modal(
+    document.getElementById("modal-declined-confirmation")
+  );
   
   $selectMember             = $("#select-member");
   $message                  = $(".message");
@@ -157,7 +152,16 @@ var _bindEvents = function() {
       $inputCivilStatus.hide();
     }
 
-  
+  //prind pdf
+  $btnPrint.on("click", function() {
+    $modalPrint.show();
+
+    var type = "print_insurance_loan_bundle_enrollment";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + _id);
+  });
+
   // check
   $btnCheck.on("click", function() {
     $modalCheck.show();
@@ -170,30 +174,11 @@ var _bindEvents = function() {
     $message.html("");
   });
 
-
-  $btnPrint.on("click", function() {
-    $modalPrint.show();
-
-    var type = "print_insurance_loan_bundle_enrollment";
-
-    $modalPrint.hide();
-    window.open("/print?type=" + type + "&id=" + _id);
+  // declined
+  $btnDeclined.on("click", function() {
+    $modalDeclined.show();
+    $message.html("");
   });
-  
-
-  
-
-  // // declined
-  // $btnDeclined.on("click", function() {
-  //   $modalDeclined.show();
-  //   $message.html("");
-  // });
-
-  // // Pending
-  // $btnPending.on("click", function() {
-  //   $modalPending.show();
-  //   $message.html("");
-  // });
 
   $btnConfirmApprove.on("click", function() {
     $btnConfirmApprove.prop("disabled", true);
@@ -234,6 +219,7 @@ var _bindEvents = function() {
     });
   });
 
+  //delete
   $btnDelete.on("click", function() {
     var $btn      = $(this);
     var memberId  = $btn.data("member-id");
@@ -277,6 +263,7 @@ var _bindEvents = function() {
     });
   });
 
+  //Check
   $btnConfirmCheck.on("click", function() {
     $btnConfirmCheck.prop("disabled", true);
 
@@ -316,88 +303,47 @@ var _bindEvents = function() {
     });
   });
 
+  //Declined
+  $btnConfirmDeclined.on("click", function() {
+    $btnConfirmDeclined.prop("disabled", true);
 
-  // // Declined
-  // $btnConfirmDeclined.on("click", function() {
-    
-  //   $message.html("Loading...");
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken
+    };
 
-  //   $btnConfirmDeclined.prop("disabled", true);
-    
-  //   $.ajax({
-  //     url: _urlDeclinedTransaction,
-  //     method: 'POST',
-  //     dataType: 'json',
-  //     data: {
-  //       id: Id,
-  //       authenticity_token: authenticityToken
-  //     },
-  //     success: function(response) {
-  //       $message.html("Success! Redirecting...");
-  //       window.location.reload();
-  //     },
-  //     error: function(response) {
-  //       console.log(response);
-  //       var errors  = [];
-  //       try {
-  //         errors  = JSON.parse(response.responseText).full_messages;
-  //       } catch(err) {
-  //         errors  = ["Something went wrong"];
-  //         console.log(err);
-  //       } finally {
-  //         console.log(errors);
-  //         $message.html(
-  //           Mustache.render(
-  //             templateErrorList,
-  //             { errors: errors }
-  //           )
-  //         );
+    $message.html("Loading...");
 
-  //         $btnConfirmDeclined.prop("disabled", false);
-  //       }
-  //     }
-  //   });
-  // });
+    $.ajax({
+      url: _urlDeclineTransaction,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
 
-  // // Pending
-  // $btnConfirmPending.on("click", function() {
-  //   $btnConfirmPending.prop("disabled", true);
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
 
-  //   $.ajax({
-  //     url: _urlPendingTransaction,
-  //     method: 'POST',
-  //     dataType: 'json',
-  //     data: {
-  //       id: Id,
-  //       authenticity_token: authenticityToken
-  //     },
-  //     success: function(response) {
-  //       $message.html("Success! Redirecting...");
-  //       window.location.reload();
-  //     },
-  //     error: function(response) {
-  //       console.log(response);
-  //       var errors  = [];
-  //       try {
-  //         errors  = JSON.parse(response.responseText).full_messages;
-  //       } catch(err) {
-  //         errors  = ["Something went wrong"];
-  //         console.log(err);
-  //       } finally {
-  //         console.log(errors);
-  //         $message.html(
-  //           Mustache.render(
-  //             templateErrorList,
-  //             { errors: errors }
-  //           )
-  //         );
-
-  //         $btnConfirmPending.prop("disabled", false);
-  //       }
-  //     }
-  //   });
-  // });
-
+          $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+ 
+  //Add
   $btnAdd.on("click", function() {
     var memberId  = $selectMember.val();
     var PlanType              = $inputPlanType.val();

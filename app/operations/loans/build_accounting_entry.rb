@@ -1,6 +1,7 @@
 module Loans
   class BuildAccountingEntry
     def initialize(config:)
+      
       @config       = config
       @bank_data    = @config[:bank_data]
       @loan         = @config[:loan]
@@ -109,6 +110,7 @@ module Loans
     end
 
     def execute!
+      
       build_data!
 
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
@@ -215,6 +217,7 @@ module Loans
 
     def build_credit_journal_entries!
       # compute amount released by deducting from @amount
+    
       temp_amount = @amount
 
       journal_entries = []
@@ -365,6 +368,7 @@ module Loans
             end
           end
         elsif deduction_type == "member_type_deduction_ratio"
+          
           target_member_type  = s_deduction.meta.member_type
           accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
           amount              = s_deduction.amount
@@ -373,7 +377,14 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-            amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_i
+
+            if @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+            
+              amount = s_deduction.business_permit_amount
+            else
+              amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_i
+            
+            end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -383,6 +394,49 @@ module Loans
             }
 
             temp_amount -= amount
+          
+          elsif @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+          #elsif @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+        
+            target_member_type  = s_deduction.meta.member_type
+            accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
+            #amount              = s_deduction.amount.to_f - 10.to_f
+            name                = accounting_code.name
+            code                = accounting_code.code
+            
+            
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
+                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+
+            journal_entries << {
+              accounting_code_id: accounting_code.id,
+              code: code,
+              name: name,
+              amount: amount
+            }
+
 
           #elsif @member.member_type  == target_member_type
           elsif @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
@@ -569,7 +623,7 @@ module Loans
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = (s_deduction.sms_amount.to_i).round(2)
+                      #amount = (s_deduction.sms_amount.to_i).round(2)
                     end
 
                   end
@@ -674,20 +728,31 @@ module Loans
               elsif  s_deduction.skip_for_special_loan_fund == "true"
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
-                    if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
+                    if s.num_installments == @num_installments 
+                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
+                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
+                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
+                    end
+                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
+                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 else

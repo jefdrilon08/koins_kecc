@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class ShareCapitalSummaryController < ApplicationController
+      class ShareCapitalSummaryController < ActionController::Base
         before_action :authenticate_user!
         def create
           @branch = params[:branch_id]

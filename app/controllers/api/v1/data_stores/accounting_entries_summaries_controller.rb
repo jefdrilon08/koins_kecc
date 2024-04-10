@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class AccountingEntriesSummariesController < ApplicationController
+      class AccountingEntriesSummariesController < ApiController
         before_action :authenticate_user!
 
         def queue

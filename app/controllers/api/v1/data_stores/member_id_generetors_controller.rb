@@ -1,8 +1,8 @@
 module Api
   module V1
     module DataStores
-      class MemberIdGeneretorsController < ApplicationController
-        skip_before_action :verify_authenticity_token
+      class MemberIdGeneretorsController < ApiController
+        before_action :authenticate_user!
         def create
           branch_id = params[:branch_id]
           user = current_user

@@ -2,11 +2,6 @@
 
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons";
-@import "select2/src/scss/core";
-@import "select2-bootstrap-5-theme/src/include-all";
-@import "react-toggle/style";
-@import 'mdb-ui-kit/src/scss/mdb.free.scss';
-//@import "jquery.dataTables.min.css";
 @import 'leaflet.scss';
 
 // Local imports
@@ -16,6 +11,13 @@
 @import "./sk-cube-grid";
 @import "./member";
 @import "./accordion";
+@import "./bootstrap-overrides";
+@import "./toggle-switch";
+
+.clickable {
+  cursor: pointer;
+  color: 'blue';
+}
 
 .btn-nav-square-md {
   @extend .btn, .btn-primary, .btn-square-md, .d-flex, .align-items-center, .justify-content-center, .mx-auto;
@@ -135,6 +137,10 @@ label {
   content: 'Row ';
 }
 
+// Federated styles
+input.form-check-input {
+  transition: 0.3s all ease;
+}
 
 
 .tableWritoff {

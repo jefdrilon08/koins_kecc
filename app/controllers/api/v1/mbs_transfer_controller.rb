@@ -1,6 +1,6 @@
 module Api
   module V1
-    class MbsTransferController < ApplicationController
+    class MbsTransferController < ActionController::Base
       before_action :authenticate_user!
       
       def create

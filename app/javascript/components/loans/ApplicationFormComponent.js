@@ -654,6 +654,16 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.setState({ data: data });
   }
+  
+  handleSMSFeeChanged(event) {
+    const target  = event.target;
+    const value   = target.type === 'checkbox' ? target.checked : target.value;
+
+    var data  = this.state.data;
+    data.data.sms_fee_available  = value || false;
+
+    this.setState({ data: data });
+  }
 
   handleCoMakerThreeProfilePictureSelected(event) {
     const context         = this;
@@ -865,6 +875,7 @@ export default class ApplicationFormComponent extends React.Component {
       var advanceInsuranceAvailable = this.state.data.data.advance_insurance_available || false;
       var shareCapitalAvailable = this.state.data.data.share_capital_available || false;
       var serviceFeeAvailable = this.state.data.data.service_fee_available || false;
+      var smsFeeAvailable = this.state.data.data.sms_fee_available || false;
 
       console.log(this.props.settings)
 
@@ -1232,6 +1243,7 @@ export default class ApplicationFormComponent extends React.Component {
               </label>
             </div>
           </div>
+          
           <div className="card">
             <div className="card-body">
               <input 
@@ -1244,6 +1256,23 @@ export default class ApplicationFormComponent extends React.Component {
               </label>
             </div>
           </div>
+          
+          <div className="card">
+            <div className="card-body">
+              <input 
+                type="checkbox" 
+                checked={smsFeeAvailable}
+                onChange={this.handleSMSFeeChanged.bind(this)}
+              />
+              <label>
+                Off SMS Fee
+              </label>
+            </div>
+          </div>
+
+
+
+
           <hr/>
           {this.renderErrorDisplay()}
           <div className="row">

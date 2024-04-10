@@ -1,0 +1,26 @@
+#modal-reject-for-approve.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Reject Application
+      .modal-body
+        .modal-body-content
+          .alert.alert-info
+            %p
+              Are you sure you want to reject this application?
+          .row
+            .col
+              .form-group
+                %label
+                  Reason
+                = text_field_tag :reason, "", class: 'form-control', id: 'input-reason-approve'
+          .message
+      .modal-footer
+        .controls
+          %button#confirm-reject-approve-reason_test.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

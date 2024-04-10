@@ -32,7 +32,6 @@ import GeneralLedgerComponent from "../components/accounting/GeneralLedgerCompon
 import AccountingEntryFormComponent from "../components/accounting/AccountingEntryFormComponent";
 import DataStoresIcprShowComponent from "../components/data_stores/icpr/ShowComponent";
 import DataStoresPatronageRefundShowComponent from "../components/data_stores/patronage_refund/ShowComponent";
-import BranchManagerComponent from "../components/administration/users/BranchManagerComponent";
 import SurveyQuestionUIComponent from "../components/administration/surveys/survey_questions/SurveyQuestionUIComponent.js";
 import RepaymentRatesShowComponent from "../components/data_stores/repayment_rates/ShowComponent.js";
 import ManualAgingShowComponent from "../components/data_stores/manual_aging/ShowComponent.js";
@@ -63,11 +62,12 @@ import VisualizeMonthlyPsr from "../components/visualize/MonthlyPsr.js";
 import TransferSavingsRecordsShow from "../components/transfer_savings/ShowComponent.js";
 import ShareCapitalSummary from "../components/share_capital_summary/ShowComponents.js";
 import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
-
+import AdministrationUsersForm from "../components/administration/users/Form.js";
+import AdministrationUsersIndex from "../components/administration/users/Index.js";
+import AdministrationUsersShow from "../components/administration/users/Show.js";
+import Login from "../components/users/Login.js";
 
 // "init" Objects
-import PagesLogin from "../models/PagesLogin.js";
-import PagesForgotPassword from "../models/PagesForgotPassword.js";
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
 import SavingsAccountsShowWithdrawalRequest from "../models/ShowWithdrawalRequest.js";
 import AccountingCodesIndex from "../models/AccountingCodesIndex.js";
@@ -121,7 +121,6 @@ import ValidationsReport from "../models/ValidationsReport.js";
 import AccountingEntriesShow from "../models/AccountingEntriesShow.js";
 import InsuranceAccountStatusIndex from "../models/InsuranceAccountStatusIndex.js";
 import Seriatim from "../models/Seriatim.js";
-import AdministrationUsersIndex from "../models/AdministrationUsersIndex.js";
 import AdministrationLoanProductsShow from "../models/AdministrationLoanProductsShow.js";
 import AdministrationLoanProductsIndex from "../models/AdministrationLoanProductsIndex.js";
 import AdministrationAreasIndex from "../models/AdministrationAreasIndex.js";
@@ -202,6 +201,8 @@ import Dashboard from "../models/Dashboard.js";
 import MonthlyAccountingCodeSummariesIndex from "../models/MonthlyAccountingCodeSummariesIndex.js";
 import TrendsIndex from "../models/TrendsIndex.js";
 import OnlineApplicationsShow from "../models/OnlineApplicationsShow.js";
+import OnlineLoanApplicationsShow from "../models/OnlineLoanApplicationsShow.js";
+import OnlineLoanApplicationsEdit from "../models/OnlineLoanApplicationsEdit.js";
 import BillingForFullPaymentsIndex from "../models/BillingForFullPaymentsIndex.js";
 import BillingForFullPaymentsShow from "../models/BillingForFullPaymentsShow.js";
 import LoansReverseForm from "../models/LoansReverseForm.js";
@@ -226,14 +227,12 @@ import AdditionalShareShow from "../models/AdditionalShareShow.js";
 import Profile from  "../models/Profile.js";
 import MembersProjectTypesIndex from "../models/MembersProjectTypesIndex.js";
 import MembersProjectTypesShow from "../models/MembersProjectTypesShow.js";
-//<<<<<<< HEAD
 import TransferSavingsIndex from "../models/TransferSavingsIndex.js";
 import TransferSavingsShow from "../models/TransferSavingsShow.js";
 import MbsTransferIndex from "../models/MbsTransferIndex";
 import MbsTransferShow from "../models/MbsTransferShow";
 import InvoluntaryMembersIndex from "../models/InvoluntaryMembersIndex.js";
 import InvoluntaryMembersShow from "../models/InvoluntaryMembersShow.js";
-//=======
 import BankTransferIndex from "../models/BankTransferIndex.js";
 import ShareCapitalSummaryIndex from "../models/ShareCapitalSummaryIndex.js";
 import ProjectTypeSummaryIndex from "../models/ProjectTypeSummaryIndex.js";
@@ -261,8 +260,8 @@ const hooks = {
   "members/survey_answer":                            [SurveyAnswer],
   "members/survey_answer_form":                       [SurveyAnswerUIDisplay],
   "pages/index":                                      [DashboardMainUI, Dashboard],
-  "pages/login":                                      [PagesLogin],
-  "pages/forgot_password":                            [PagesForgotPassword],
+  "pages/login":                                      [Login],
+  //"pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
   "accounting/crb":                                   [AccountingBooksIndex],
@@ -337,7 +336,9 @@ const hooks = {
   "closing_records/index":                            [ClosingRecordsManager],
   "administration/pages/index":                       [AdministrationDashboard],
   "administration/users/index":                       [AdministrationUsersIndex],
-  "administration/users/show":                        [BranchManagerComponent],
+  "administration/users/show":                        [AdministrationUsersShow],
+  "administration/users/new":                         [AdministrationUsersForm],
+  "administration/users/edit":                        [AdministrationUsersForm],
   "administration/loan_products/show":                [AdministrationLoanProductsShow],
   "administration/loan_products/index":               [AdministrationLoanProductsIndex],
   "administration/areas/index":                       [AdministrationAreasIndex],
@@ -421,6 +422,8 @@ const hooks = {
   "monthly_accounting_code_summaries/index":          [MonthlyAccountingCodeSummariesIndex],
   "trends/index":                                     [TrendsIndex],
   "online_applications/show":                         [OnlineApplicationsShow],
+  "online_loan_applications/show":                    [OnlineLoanApplicationsShow],
+  "online_loan_applications/edit":                    [OnlineLoanApplicationsEdit],
   "billing_for_full_payments/index":                  [BillingForFullPaymentsIndex],
   "billing_for_full_payments/show":                   [BillingForFullPaymentsShow],
   "accrued_payment_collections/show":                 [AccruedPaymentCollectionsShow],
@@ -457,12 +460,12 @@ const hooks = {
   "data_stores/involuntary_members/index":            [InvoluntaryMembersIndex],
   "data_stores/involuntary_members/show": 						[InvoluntaryMembersShow],
   "psr_schedules/generate":                           [PsrSchedulesGenerate],
-  "data_stores/assets_liabilities/index":													[AssetsLiabilitiesIndex],
-  "branch_cash_flow/index":               												[BranchCashFlowIndex],
-  "data_stores/share_capital_involuntary/index": 					[ShareCapitalInvoluntaryIndex],
-  "data_stores/share_capital_involuntary/show":  [ShareCapitalInvoluntaryShow],
-  "billing_for_involuntary/index": [BillingForInvoluntaryIndex],
-  "billing_for_involuntary/show": [BillingForInvoluntaryShow]
+  "data_stores/assets_liabilities/index":							[AssetsLiabilitiesIndex],
+  "branch_cash_flow/index":                           [BranchCashFlowIndex],
+  "data_stores/share_capital_involuntary/index": 			[ShareCapitalInvoluntaryIndex],
+  "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
+  "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
+  "billing_for_involuntary/show":                     [BillingForInvoluntaryShow]
 }
 
 const renderComponent = (Component, payload) => {

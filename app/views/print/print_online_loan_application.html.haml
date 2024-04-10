@@ -1,0 +1,284 @@
+:css
+  @page { size: portrait; margin: 15px; margin-bottom: 0.0rem; margin-top: 1.2rem;}
+  .just-font br {
+  content: "";
+  display: block;
+  
+  }
+  .page-break{
+     display: block;
+  clear: both;
+  page-break-after: avoid;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .img{
+    padding: 9px;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+  .just-font br {
+  content: "";
+  display: block;
+  }
+  .text-indent p{
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    
+  }
+  .even-row {
+    background-color: #f2f2f2; /* Light gray */
+  }
+
+  .odd-row {
+    background-color: #ffffff; /* White */
+  }
+  .list-inline ul{
+  display:block;
+  margin-bottom:2rem;
+  }
+  .list-inline li {
+    display:inline-block;
+    margin-left: 50px;
+    margin-right: 100px;
+
+  }
+  .signatories ul{
+    display:block;
+
+  }
+  .signatories li{
+    display:inline-block;
+    margin-right: 80px;
+    padding-inline-start: 0px;
+  }
+  .member_signatories{
+    
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: center;
+  }
+  .img{
+    padding: 20px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+%div.header{style: "margin-bottom: 0px;"}
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 65px; margin-right: 1px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 9px"}
+          #{Settings.company_name}
+          #{Settings.company_address}
+        %span{style: "font-size: 9px"}
+          VAT Registration Tin Number: #{Settings.company_tin_number}
+        %br
+        %span{style: "font-size: 9px"}
+          Telephone Numbers: (632) 8442-9607 or 5310-2470 / Fax Number: (632) 8442-9607 loc. 204
+        %br
+        %span{style: "font-size: 9px"}
+          %b
+            CDA REG. NO.: 9520-1016000000028521
+        %span{style: "font-size: 9px"}
+          %b
+            CIN: 16201628521
+          %br
+    %h4{style: "font-size: 16px; text-align: center;"}
+      LOAN APPLICATION FORM
+%br
+%br
+%div{style: "width: 49%; float: left;"}
+  %strong{style: "font-size: 9px"}
+  %label{style:"font-size: 9px"}
+    Petsa:
+  %strong{style: "font-size: 9px"} #{@online_application[:date_applied].to_date.strftime("%A, %B %d, %Y")} 
+  %label{style:"font-size: 9px"}
+    Uri ng Loan: 
+  %strong{style: " font-size: 9px"} #{@online_application_loan_product}
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th{colspan: "4" ,style: "width: 150px;   text-align: center; font-size: 9px;"} IMPORMASYON TUNGKOL SA MIYEMBRO
+    %tbody
+      %tr
+        %td{style: "text-align: left; font-size: 9px; "}Pangalan Miyembro
+        %td{colspan: "3", style: "text-align: left; font-size: 9px; "} #{@member_data[:last_name]}, #{@member_data[:first_name]} #{@member_data[:middle_name]}
+
+      %tr
+        %td{style: "text-align: left; font-size: 9px;"} Sentro
+        %td{style: "text-align: left; font-size: 9px;"} #{@center}
+        %td{style: "text-align: left; font-size: 9px;"} Mobile Number
+        %td{style: "text-align: left; font-size: 9px;"} #{@member_data[:mobile_number]}
+
+
+      %tr
+        %td{style: "text-align: left; font-size: 9px;"} Halaga ng Hinihiram
+        %td{style: "text-align: left; font-size: 9px;"}
+          #{number_to_currency(@online_application[:amount].to_f, unit:'')}
+        %td{style: "text-align: left; font-size: 9px;"} Loan Term
+        %td{style: "text-align: left; font-size: 9px;"}
+          #{@online_application[:num_installments]}
+      %tr
+        %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
+        %td 
+        %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
+          
+        %td
+   
+
+      %tr
+        %td{style: "text-align: left; font-size: 9px;"} Uri ng Negosyo
+        %td 
+        %td{style: "text-align: left; font-size: 9px;"} Tagal ng Negosyo
+        %td
+      %tr
+        %td{colspan: "4", style: "text-align: left; font-size: 9px;"} Mga Produkto at serbisyo
+      %tr
+        %td{colspan: "4", style: "text-align: center; font-size: 9px;"} IMPORMASYON NG PAG-GAGAMITAN NG PERA
+
+
+      %tr
+        %td{colspan: "2",style: "text-align: center; font-size: 9px;"}Bibilhin
+        %td{colspan: "1",style: "text-align: center; font-size: 9px;"}Bilang/Dami
+        %td{colspan: "1",style: "text-align: center; font-size: 9px;"}Halaga
+      %tr
+        %td{colspan: "2", style: "width: 15px; height: 30px;"}
+        %td{colspan: "1"}
+        %td{colspan: "1"}
+      %tr
+        %td{colspan: "2", style: "width: 15px; height: 30px;"}
+        %td{colspan: "1"}
+        %td{colspan: "1"}
+      %tr
+        %td{colspan: "2", style: "width: 15px; height: 30px;"}
+        %td{colspan: "1"}
+        %td{colspan: "1"}
+      %tr
+        %td{colspan: "2", style: "width: 15px; height: 30px;"}
+        %td{colspan: "1"}
+        %td{colspan: "1"}
+      %tr
+        %td{colspan: "2", style: "width: 15px; height: 30px;"}
+        %td{colspan: "1"}
+        %td{colspan: "1"}
+      %tr
+        %td{colspan: "4", style: "width: 15px; height: 30px; font-size: 9px;"}Kabuuang Halaga
+      %tr
+        
+        %td{colspan: "2", style: "width: 15px; height: 30px; font-size: 9px;"}Mga Kasalukuyang Insurance Product
+        %td{colspan: "2", style: "width: 15px; height: 30px; font-size: 9px;"}Estado ng Blip
+      %tr
+        %td{colspan: "2", style: "height: 20px; font-size: 9px;"}
+          %div
+            %input{type: "checkbox", name: "checkbox1", id: "checkbox1"}
+            %label{for: "checkbox1"} K-OK Updated as of _______
+          %div
+            %input{type: "checkbox", name: "checkbox2", id: "checkbox2"}
+            %label{for: "checkbox2"} K-Kalinga Updated as of _______
+          %div
+            %input{type: "checkbox", name: "checkbox3", id: "checkbox3"}
+            %label{for: "checkbox3"} HIIP Updated as of _______
+          %div
+            %input{type: "checkbox", name: "checkbox4", id: "checkbox4"}
+            %label{for: "checkbox4"} K-Bente Updated as of _______
+          
+        %td{colspan: "2", style: "width: 15px; height: 20px; font-size: 9px;"}
+          Naka SEGURO hanggang sa petsa
+ 
+%div{style: "width: 49%; float: right; margin-bottom: 0px; "}
+  %label{style:"font-size: 9px"}
+    Membership Type:
+  %strong{style: "font-size: 9px"} #{@member_data[:member_type]} 
+  %input{style:"font-size: 9px; ", type: "checkbox", name: "checkbox_name", id: "checkbox_id"}
+  %label{style:"font-size: 9px; ", for: "checkbox_id"} New
+  %input{style:"font-size: 9px; ",type: "checkbox", name: "checkbox_name", id: "checkbox_id"}
+  %label{style:"font-size: 9px; ", for: "checkbox_id"} Renewal
+  %label{style:"font-size: 11px"}
+    %strong Loan Application# #{@online_application[:reference_number]}
+%div{style: "width: 49%; float: right; margin-bottom: 0px; "}
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th{colspan: "5", style: "width: 100%; text-align: center; font-size: 9px;"} PAGPROSESO NG UTANG
+    %tbody
+      %tr
+        %td{colspan: "6",style: "height: 60px;"}
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 40px;"}
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Halaga
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Rekomendasyon ng SO
+            %span{style: "text-decoration: overline;"} Petsa
+      %tr
+        %td{colspan: "6",style: "height: 65px;"}
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 60px;"}
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Halaga
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Sinuri at Binigyang Pansin ni SOM
+            %span{style: "text-decoration: overline;"} Petsa
+      %tr
+        %td{colspan: "6",style: "height: 65px;" }
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 50px;"}
+            %span{style: "text-decoration: overline; padding-right: 30px;"} Halaga ng Balanse
+            %span{style: "text-decoration: overline; padding-right: 30px;"} Natitirang Linggo
+            %span{style: "text-decoration: overline;"} Petsa ng PRT at PMES
+      %tr
+        %td{colspan: "6"}
+          %p{style: "padding-top: 1px; padding-left: 9px; font-size: 9px; margin-bottom: 0;margin-bottom: 0;"}
+          %br
+          .row
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+              _______________
+              Approved Loan 
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+              ____________________
+              Halaga ng MB
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+            .col{style: "padding-left: 5px; font-size: 9px;"}
+              ______________
+              MBS
+            .col{style: "padding-left: 125px; font-size: 9px;"}
+            .col{style: "padding-left: 125px; font-size: 9px;"}
+              ______________
+              SHARE CAP.  
+      %tr
+        %td{colspan: "1"}
+          %p{style: " padding-left: 9px; font-size: 9px; margin-bottom: 0 ;margin-bottom: 0; text-align: center"}
+            Sinuri at Inihanda ni:
+        %td{colspan: "3"}
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 20px;"}
+            %span{style: "text-decoration: overline; padding-right: 20px;"} Pangalan at Lagda ng Acco 
+      %tr
+        %td{colspan: "1"}
+          %p{style: "padding-left: 9px; font-size: 9px; margin-bottom: 0; text-align: center"}
+            Inaprubahan ng CM:
+        %td{colspan: "3"}
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 20px;"}
+            %span{style: "text-decoration: overline; padding-right: 20px;"} Pangalan at Lagda ng CM
+      %tr
+        %td{colspan: "5", style: "text-align: center; height: 100%;"}
+          %label{style: "font-size: 9px; "}
+            PAGTANGGAP NG LOAN NG MIYEMBRO
+      %tr
+        %td{colspan: "4", style: "height: 40px;"}
+          %p{style: "padding-left: 50px; font-size: 9px; margin: 0; padding-top: 20px;"}
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Member
+            %span{style: "text-decoration: overline; padding-right: 50px;"} Date Released
+            %span{style: "text-decoration: overline;"} First Payment

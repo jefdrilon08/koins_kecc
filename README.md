@@ -44,6 +44,18 @@ This will run the following (see `Procfile` for reference):
 * css compiler
 * js compiler
 
+## Using Rails Credentials
+
+As of **Rails 7.2**, `Rails.application.secret_key_base` will be deprecated in favor of credentials. In a nutshell, we will need to generate a `*.enc` file for each environment with `secret_key_base` value stored in it. To do so, execute the following:
+
+```
+EDITOR="vim" rails credentials:edit --environment=development
+```
+
+Change the value of `EDITOR` to your code editor of choice. Change the value of `environment` to the target environment of choice. You will need to do this to make sure you can run tests. This will generate a `*.key` value within `config/credentials` which is ignored by git making it unique for every deployment.
+
+More info here [https://guides.rubyonrails.org/security.html](https://guides.rubyonrails.org/security.html).
+
 ## Scripts
 
 * nginx systemd service: `scripts/nginx.service`
@@ -54,30 +66,6 @@ To initialize nginx via systemd:
 sudo cp scripts/nginx.service /lib/systemd/system/nginx.service
 sudo systemctl enable nginx
 sudo systemctl start nginx
-```
-
-## Importing Database to Heroku (Deprecated)
-
-In order for PG Backups to access and import your dump file you will need to upload it somewhere with an HTTP-accessible URL.
-
-> Note that the `pg:backups restore` command drops any tables and other database objects before recreating them.
-
-Generate a signed URL using the aws console:
-
-```
-aws s3 presign s3://your-bucket-address/your-object
-```
-
-Use the raw file URL in the pg:backups restore command:
-
-```
-heroku pg:backups:restore '<SIGNED URL>' DATABASE_URL
-```
-
-Transfer production database to staging:
-
-```
-heroku pg:copy koins-production DATABASE --remote staging
 ```
 
 ## Notes

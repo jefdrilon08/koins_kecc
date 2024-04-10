@@ -88,7 +88,7 @@ export default function MembersProfile(props) {
                   <img 
                     src={profilePictureUrl}
                     className="img-fluid img-thumbnail mt-4 mb-2"
-                    style={{ width: "150px", zIndex: "1" }}
+                    style={{ width: "150px", zIndex: "1", objectFit: "cover", overflow: "hidden" }}
                   />
                 </div>
                 <div className="ms-4 mt-4">

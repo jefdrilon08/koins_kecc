@@ -1,6 +1,6 @@
 module Api
   module V1
-    class InsuranceMonthlyClosingCollectionsController < ApplicationController
+    class InsuranceMonthlyClosingCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
       def fetch

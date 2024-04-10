@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
+import ToggleSwitch from '../utils/ToggleSwitch';
+import jwtDecode from "jwt-decode";
 
 export default function MembersProfileActions(props) {
   const [isLoading, setIsLoading]                                               = useState(false);
@@ -33,6 +35,17 @@ export default function MembersProfileActions(props) {
 
   const [selectedOptionType, setSelectedOptionType]                             = useState('CLIP');
 
+  const [isMemberSubscribed, setIsMemberSubscribed]                             = useState(false);
+  const user_MIS_BK_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("BK") || jwtDecode(props.token).roles.includes("SBK");
+
+  const [isModalMobileNumberOpen, setModalMobileNumberOpen]                     = useState(false);
+  const [mobileNumber, setMobileNumber]                                         = useState("9");
+  const user_MIS_FM_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("FM") || jwtDecode(props.token).roles.includes("OAS");
+  const [isMobileNumberExist, setIsMobileNumberExist]                           = useState(false);
+  const [isMobileNumberValid, setIsMobileNumberValid]                           = useState(false);
+  const [currentMobileNumber, setCurrentMobileNumber]                           = useState("9");
+  const [success, setSuccess]                                                   = useState(false);
+
   useEffect(() => {
     axios.get('/api/yml_values/production_values')
       .then(response => {
@@ -41,6 +54,61 @@ export default function MembersProfileActions(props) {
         console.log(response.data); // Log the value to the console
       })
       .catch(error => console.error(error));
+
+    if(user_MIS_BK_Role){
+      axios.post(
+        '/api/members/is_member_subscribed',
+        {
+          id: props.memberId,
+        },
+        {
+          headers: {
+            'X-KOINS-HQ-TOKEN': props.token
+          }
+        }
+      ).then((res) => {
+        // console.log(res);
+        setIsMemberSubscribed(res.data.is_subscribed);
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
+    // Fetch member_mobile_number
+    if(user_MIS_FM_Role){
+      axios.get(
+        "/api/v1/members/member_mobile_number",
+        {
+          params: {
+            id: props.memberId
+          }
+        }
+      ).then((response) => {
+        let mobile_number = response.data.mobile_number
+        mobile_number = mobile_number.replace(/[&\/\\#,\-\_()$~%.'":*?<>{}]/g, ''); // Removes the numbers
+  
+        var regex_mobile_number = /((\+63)|0|63|)[.\- ]?9[0-9]{2}[.\- ]?[0-9]{3}[.\- ]?[0-9]{4}/
+        if(regex_mobile_number.test(mobile_number)){
+          // let mobileNumberExist = getMobileNumberExist(mobile_number); // check if mobile number is exist
+
+          // if(!mobileNumberExist){
+          //   setIsMobileNumberValid(true);
+          // }
+
+          setMobileNumber(mobile_number.slice(-10)); // GET ONLY THE LAST 10 VALUE example 9xxxxxxxx
+          setCurrentMobileNumber(mobile_number.slice(-10)); // SAVE THE CURRENT MOBILE NUMBER
+
+          setIsMobileNumberValid(true);
+        }
+        else{
+          setIsMobileNumberValid(false);
+        }
+
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
   }, []);
 
 
@@ -397,6 +465,123 @@ export default function MembersProfileActions(props) {
 
   }
 
+  const handleMemberSubscription = () =>{
+    const payload = {
+      id: props.memberId
+      }
+
+      const headers = {
+        'X-KOINS-HQ-TOKEN': props.token
+      }
+
+      const options = {
+      headers: headers
+      }
+
+      axios.post(
+        '/api/members/update_member_subscription',
+        payload,
+        options
+      ).then((res) => { 
+        setIsMemberSubscribed(res.data.is_subscribed)
+      }).catch((error) => {
+        setErrors(error.response.data.errors);
+        setIsLoading(false);
+      })
+  }
+
+  const getMobileNumberExist = (mobile_number) =>{
+    setIsLoading(true);
+    let mnumber_exist = false;
+    // Fetch member_mobile_number_exist
+    axios.get("/api/v1/members/mobile_number_exist",
+    {
+      params: {
+        mobile_number: mobile_number,
+        id: props.memberId
+      }
+    }).then((response) => { 
+        var is_mobile_number_exist = response.data.mobile_number_exist;
+
+        setIsMobileNumberExist(is_mobile_number_exist);
+        
+        mnumber_exist = is_mobile_number_exist;
+
+    }).catch((error) => {
+      console.log(error);
+    })
+
+    setIsLoading(false);
+    return mnumber_exist;
+  }
+
+  const handleMobileNumberChange = (event) => { 
+    let regex_numbers = /^[0-9]*$/
+    let value = event.target.value
+    if(regex_numbers.test(value)){
+      if(value[0] == "9"){
+        setMobileNumber(value);
+        setIsMobileNumberExist(false);
+
+        if(value.length == 10){
+
+          let mobile_number = value;
+          mobile_number = mobile_number.replace(/[&\/\\#,\-\_()$~%.'":*?<>{}]/g, ''); // Removes the numbers
+    
+          var regex_mobile_number = /((\+63)|0|63|)[.\- ]?9[0-9]{2}[.\- ]?[0-9]{3}[.\- ]?[0-9]{4}/
+          if(regex_mobile_number.test(mobile_number)){
+            // let mobileNumberExist = getMobileNumberExist(mobile_number); // check if mobile number is exist
+
+            setIsMobileNumberValid(true);
+
+            // setMobileNumber(mobile_number.slice(-10)); // GET ONLY THE LAST 10 VALUE example 9xxxxxxxx
+          }
+          else{
+            setIsMobileNumberValid(false);
+          }
+
+        }
+        else{
+          setIsMobileNumberValid(false);
+        }
+      }
+      else{
+        setIsMobileNumberValid(false);
+      }
+    }
+  }
+
+  const handleMobileNumberClicked = () =>{
+    setIsLoading(true);
+    
+    axios.post("/api/v1/members/update_mobile_number",
+    { 
+      mobile_number: mobileNumber,
+      id: props.memberId
+    }).then((response) => { 
+        if(response.status == 200){
+          if(!response.data.mobile_number_exist){
+            setIsLoading(false);
+            setSuccess(true);
+
+            // alert("Successfully changed member mobile number!");
+            window.location.href="/members/" + props.memberId + "/display/";
+          }
+          else{
+            setIsMobileNumberExist(true);
+            setIsLoading(false);
+          }
+          
+        }
+
+        
+    }).catch((error) => {
+      console.log(error);
+      alert(error.message);
+      setIsLoading(false);
+    })
+  }
+
   return (
     <>
 
@@ -650,6 +835,76 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalProfilePictureOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+
+      </Modal>
+
+      <Modal show={isModalMobileNumberOpen} style={{top: "20%"}}>
+        <Modal.Header>
+          <Modal.Title>
+            Change Mobile Number
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <div style={{display: "flex", flexDirection: "row", gap: 10, alignItems: "center", fontSize: 20}}>
+                <label>
+                +63
+                </label>
+                <input
+                  className="form-control"
+                  value={mobileNumber}
+                  disabled={isLoading}
+                  type="text"
+                  maxLength={10}
+                  onChange={(event) => handleMobileNumberChange(event)}
+                />
+              </div>
+              <div style={{display: "flex", flexDirection: "row", gap: 10, alignItems: "center", marginTop: 10}}>
+                <label>
+                  Status: 
+                </label>
+                {isLoading ? (<label style={{color: "#333333"}}>Loading...</label>):(
+                  <>
+                    {success ? (<label style={{color: "green"}}>Success</label>):(
+                      <label style={{ color: isMobileNumberValid ? ( !isMobileNumberExist ? "green" : "red") : "red", fontWeight: "bold" }}>
+                        {isMobileNumberValid ? (!isMobileNumberExist ? "Valid mobile number" : "This mobile number is already exist") : "Invalid mobile number"}
+                      </label>
+                    )}
+                  </>                  
+                )}
+                
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleMobileNumberClicked();
+            }}
+            onKeyDown={(event)=>{
+              if (event.key === 'Enter') {
+                handleMobileNumberClicked();
+              }
+            }}
+            disabled={isLoading || (currentMobileNumber == mobileNumber) || !isMobileNumberValid || isMobileNumberExist || mobileNumber.length != 10}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalMobileNumberOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -925,6 +1180,55 @@ export default function MembersProfileActions(props) {
 
       <hr/>
 
+      {user_MIS_BK_Role && (
+        <>
+        <div className="row">
+          <div className="col">
+            <div className="note note-info">
+              <strong>
+                Member Subscriptions
+              </strong>
+              <p>
+                Subscription status ng member.
+              </p>
+              <ToggleSwitch
+                name={`member-subscription-id`}
+                checked={isMemberSubscribed}
+                onChange={handleMemberSubscription}
+              />
+            </div>
+          </div>
+        </div>
+        <hr/>
+        </>
+      )}
+
+      {user_MIS_FM_Role && (
+        <>
+        <div className="row">
+          <div className="col">
+            <div className="note note-info">
+              <strong>
+                Change Mobile Number
+              </strong>
+              <p>
+                Palitan ang mobile number ni member.
+              </p>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setModalMobileNumberOpen(true)
+                }}
+              >
+                Change Mobile Number
+              </button>     
+            </div>
+          </div>
+        </div>
+        <hr/>
+        </>
+      )}
+      
 
       <div className="row">
         <div className="col">

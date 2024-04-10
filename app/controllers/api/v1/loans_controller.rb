@@ -605,6 +605,18 @@ module Api
           end
         end
       end
+      def fraud_save
+        loan  = Loan.find(params[:id])
+        loan_data = loan.data.with_indifferent_access
+        
+        loan_data['fraud_data'] = {}
+        loan_data['fraud_data']['bar_types'] = params[:bar_types]
+        loan_data['fraud_data']['bar_details'] = params[:bar_details]
+       
+      loan.update(data:loan_data)
+      render json: {message: "ok"}
+       
+      end
 
       def save
         loan_data = JSON.parse(params[:payload]).with_indifferent_access

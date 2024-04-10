@@ -1,16 +1,13 @@
 import React from 'react';
 import {numberWithCommas} from '../../utils/helpers';
 
-export default class AgingOfReceivablesView extends React.Component {
-  constructor(props) {
-    super(props);
+export default AgingOfReceivablesView = (props) => {
+  let {
+    data
+  } = props;
 
-    this.state  = {
-    }
-  }
-
-  renderDataRows() {
-    var loans   = this.props.data.data.records;
+  const renderDataRows = () => {
+    var loans   = data.records;
     var rows    = [];
     var counter = 0;
 
@@ -172,44 +169,37 @@ export default class AgingOfReceivablesView extends React.Component {
     return rows;
   }
 
-  render() {
-    var data  = this.props.data;
-
-    console.log("AoR Data:");
-    console.log(data);
-
-    return  (
-      <div>
-        <table className="table table-sm table-hover table-bordered" style={{fontSize: "0.8em"}}>
-          <thead>
-            <tr>
-              <th className="text-center">
-              </th>
-              <th>
-                Name
-              </th>
-              <th>
-                Product
-              </th>
-              <th>
-                Total
-              </th>
-              <th className="text-end">
-                1-30
-              </th>
-              <th className="text-end">
-                31-365
-              </th>
-              <th className="text-end">
-                365 onwards
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderDataRows()}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  return  (
+    <div>
+      <table className="table table-sm table-hover table-bordered" style={{fontSize: "0.8em"}}>
+        <thead>
+          <tr>
+            <th className="text-center">
+            </th>
+            <th>
+              Name
+            </th>
+            <th>
+              Product
+            </th>
+            <th>
+              Total
+            </th>
+            <th className="text-end">
+              1-30
+            </th>
+            <th className="text-end">
+              31-365
+            </th>
+            <th className="text-end">
+              365 onwards
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderDataRows()}
+        </tbody>
+      </table>
+    </div>
+  );
 }

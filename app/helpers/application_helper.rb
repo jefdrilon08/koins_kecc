@@ -19,7 +19,8 @@ module ApplicationHelper
     is_cm_mis = ["MIS", "CM"].include? current_user.roles.last
   end
   def is_mis_so_fm?
-    is_mis_so_fm = ["MIS", "SO", "FM"].include? current_user.roles.last
+    #is_mis_so_fm = ["MIS", "SO", "FM"].include? current_user.roles.last
+    result = current_user.roles.include?("MIS") || current_user.roles.include?("FM") || current_user.roles.include?("SO")
 
   end
 
@@ -27,7 +28,7 @@ module ApplicationHelper
     is_mis = ["MIS"].include? current_user.roles.last
   end
   def is_mis_fm?
-    is_mis_user = ["MIS", "FM"].include? current_user.roles.last
+    result = current_user.roles.include?("MIS") || current_user.roles.include?("FM")
   end
 
   def is_mis_user?
@@ -59,11 +60,12 @@ module ApplicationHelper
   end
   
   def so_mis_user
-    bk_mis_user = ["MIS","SO"].include? current_user.roles.last
+   result = current_user.roles.include?("MIS") || current_user.roles.include?("SO")
   end
 
   def sbk_bk_mis_user
-    sbk_bk_mis_user = ["SBK","MIS","BK"].include? current_user.roles.last
+    result = current_user.roles.include?("MIS") || current_user.roles.include?("SBK") || current_user.roles.include?("BK")
+    #sbk_bk_mis_user = ["SBK","MIS","BK"].include? current_user.roles.last
   end
 
   def oas_mis_user

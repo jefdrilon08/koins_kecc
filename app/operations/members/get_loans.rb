@@ -2,7 +2,7 @@ module Members
   class GetLoans
     attr_accessor :member,
                   :loans,
-                  :data
+                  :payload
 
     def initialize(member:, status: "active")
       @member = member
@@ -10,14 +10,15 @@ module Members
       @loans  = []
 
       @current_date = Date.today
-@data = {}
+
+      @payload = {}
     end
 
     def execute!
       current_loans = ReadOnlyLoan.where(
-                        status: @status,
-                        member_id: @member.id
-                      ).order("date_approved DESC")
+        status: @status,
+        member_id: @member.id
+      ).order("date_approved DESC")
 
       total_principal         = current_loans.sum(:principal).to_f
       total_interest          = current_loans.sum(:interest).to_f
@@ -33,18 +34,18 @@ module Members
       end
 
       # Build values
-      @data[:total_principal]         = total_principal.to_f
-      @data[:total_interest]          = total_interest.to_f
-      @data[:total_principal_balance] = total_principal_balance.to_f
-      @data[:total_interest_balance]  = total_interest_balance.to_f
-      @data[:total_principal_paid]    = total_principal_paid.to_f
-      @data[:total_interest_paid]     = total_interest_paid.to_f
-      @data[:total_amount]            = total_amount.to_f
-      @data[:total_balance]           = total_balance.to_f
+      @payload[:total_principal]         = total_principal.to_f
+      @payload[:total_interest]          = total_interest.to_f
+      @payload[:total_principal_balance] = total_principal_balance.to_f
+      @payload[:total_interest_balance]  = total_interest_balance.to_f
+      @payload[:total_principal_paid]    = total_principal_paid.to_f
+      @payload[:total_interest_paid]     = total_interest_paid.to_f
+      @payload[:total_amount]            = total_amount.to_f
+      @payload[:total_balance]           = total_balance.to_f
 
-      @data[:loans] = @loans
+      @payload[:loans] = @loans
 
-      @data
+      @payload
     end
 
     private

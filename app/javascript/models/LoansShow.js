@@ -57,6 +57,10 @@ var $inputDateReleased;
 
 var templateErrorList;
 
+var $fraud_tagging;
+var $modalFraud;
+var $btnConfirmFraud;
+
 var $oldDate;
 var $btnDelayAmort;
 var $btnConfirmDelayAmort;
@@ -113,6 +117,7 @@ var _urlForRelease            = "/api/v1/loans/for_release";
 var _urlReject                = "/api/v1/loans/reject";
 var _urlReverse               = "/api/v1/loans/reverse_loan";
 var _urlUploadApplicationForm = "/api/v1/loans/upload_application_form";
+var _urlFraudSave             = "/api/v1/loans/fraud_save";
 
 var _id;
 var _authenticityToken;
@@ -178,6 +183,9 @@ var _cacheDom = function() {
   $modalReverseLoan = new bootstrap.Modal(
     document.getElementById("modal-reverse-loan")
   );
+  $modalFraud = new bootstrap.Modal(
+    document.getElementById("modal-fruad")
+  );
 
   $btnNewAdjustment         = $("#btn-new-adjustment");
   $btnConfirmNewAdjustment  = $("#btn-confirm-new-adjustment");
@@ -236,6 +244,11 @@ var _cacheDom = function() {
   $btnConfirmReverseLoan  = $("#btn-confirm-reverse-loan");
 
   $btnApproveReverseLoan  = $("#btn-approve-reverse-loan");
+  
+  $fraud_tagging = $("#btn-fraud");
+  $btnConfirmFraud = $("#btn-confirm");
+  $bar_type =  $('#select-fraud');
+  $bar_details =  $('#fraud-details');
 
   templateErrorList = $("#template-error-list").html();
 };
@@ -891,7 +904,53 @@ var _bindEvents = function() {
       }
     });
   });
+  $btnConfirmFraud.on("click", function(){
+  var loan_id = $btnConfirmFraud.val();
+  var bar_type = $bar_type.val();
+  var bar_details = $bar_details.val();
+  
+  $.ajax({
+    url: "/api/v1/loans/fraud_save",
+    method: 'POST',
+    dataType: 'json',
+    data: {
+      id: loan_id,
+      bar_types: bar_type,
+      bar_details: bar_details,
+      authenticity_token: _authenticityToken
+    },
+    success: function(response) {
+      $message.html("Success! Redirecting...");
+      window.location.reload();
+    },
+    error: function(response) {
+      console.log(response);
+      var errors  = [];
+      try {
+        errors  = JSON.parse(response.responseText).full_messages;
+      } catch(err) {
+        errors  = ["Something went wrong"];
+        console.log(err);
+      } finally {
+        console.log(errors);
+        $message.html(
+          Mustache.render(
+            templateErrorList,
+            { errors: errors }
+          )
+        );
 
+        $btnConfirmReage.prop("disabled", false);
+      }
+    }
+  });   
+  });
+  
+  $fraud_tagging.on("click", function() {
+    $modalFraud.show();
+    
+   
+  });
   $btnReage.on("click", function() {
     $modalReage.show();
   });

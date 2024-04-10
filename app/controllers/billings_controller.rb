@@ -47,6 +47,7 @@ class BillingsController < ApplicationController
     @current_user = current_user
 
     @billing  = ReadOnlyBilling.find(params[:id])
+    @billing_type = "regular"
 
     if @billing.processing?
       redirect_to billings_path

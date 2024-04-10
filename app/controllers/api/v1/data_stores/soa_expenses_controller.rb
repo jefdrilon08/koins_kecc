@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class SoaExpensesController < ApplicationController
+      class SoaExpensesController < ApiController
         before_action :authenticate_user!
 
         def fetch

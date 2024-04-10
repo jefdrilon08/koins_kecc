@@ -1,7 +1,7 @@
 module Api
   module V1
     class RiskProfilesController < ApiController
-      skip_before_action :verify_authenticity_token
+      #skip_before_action :verify_authenticity_token
       before_action :authenticate_user!, except: [:fetch_daily_metric, :fetch_prev_metric]
 
       def fetch_daily_metric    

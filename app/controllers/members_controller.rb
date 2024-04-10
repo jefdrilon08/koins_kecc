@@ -19,10 +19,10 @@ class MembersController < ApplicationController
     @q        = params[:q]
     @status   = params[:status]
     @restored = params[:restored].present?
-    @center   = Center.where(id: params[:center_id]).first
-    @branch   = Branch.where(id: params[:branch_id]).first
+    @center   = Center.where(id: params[:center_id]).try(:first)
+    @branch   = Branch.where(id: params[:branch_id]).try(:first)
 
-    @centers  = @branches.first.centers
+    @centers  = @branches.first.try(:centers) || []
 
     if @q.present?
       @members = @members.where(
@@ -48,6 +48,7 @@ class MembersController < ApplicationController
     end
 
     @members  = @members.order("status ASC, last_name ASC").page(params[:page]).per(LIST_PAGE_SIZE)
+
     @subheader_items = [
       { text: "Members" },
     ]

@@ -1,6 +1,6 @@
 module Api
   module V1
-    class TransferMemberRecordsController < ApplicationController
+    class TransferMemberRecordsController < ActionController::Base
       before_action :authenticate_user!
 
       def create

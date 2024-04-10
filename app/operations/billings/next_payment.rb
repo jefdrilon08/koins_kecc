@@ -48,7 +48,8 @@ module Billings
           middle_name: @member.middle_name,
           last_name: @member.last_name,
           identification_number: @member.identification_number,
-          member_type: @member.member_type
+          member_type: @member.member_type,
+          data: @member.data
         },
         attendance: true,
         total_expected_collections: 0.00,
@@ -146,19 +147,24 @@ module Billings
                           account_subtype: equity_subtype
                         ).first
      
+    
       if member_account.present?
         data[:enabled]            = true
         data[:member_account_id]  = member_account.id
 
-        #defaults  = 0.0 #Settings.try(:defaults).try(:insurance_deposits)
+        defaults  = Settings.try(:defaults).try(:equity_deposits)
+        #raise defaults.inspect
 
-        #if defaults.present? and @member.loans.size <= 1
-        #  defaults.each do |o|
-        #    if o.account_subtype == equity_subtype
-        #      data[:amount] = o.amount
-        #    end
-        #  end
-        #end
+        if defaults.present? and @member.data['subscription'].present?   and @member.data['subscription']["is_subscribed"] == true
+          defaults.each do |o|
+            if o.account_subtype == equity_subtype
+              data[:amount] = o.amount
+            end
+          end
+        end
+      
+
+
       end
 
       data

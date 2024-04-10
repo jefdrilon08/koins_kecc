@@ -1,6 +1,6 @@
 module Api
   module V1
-    class CommissionCollectionsController < ApplicationController
+    class CommissionCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
       def fetch

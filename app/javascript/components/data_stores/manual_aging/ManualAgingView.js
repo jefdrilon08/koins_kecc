@@ -1,16 +1,25 @@
 import React from 'react';
 import {numberWithCommas, numberAsPercent} from '../../utils/helpers';
 
-export default class ManualAgingView extends React.Component {
-  constructor(props) {
-    super(props);
+export default ManualAgingView = (props) => {
+  let {
+    data
+  } = props;
 
-    this.state  = {
+  let loans       = data.records;
+  let numRecords  = loans.length;
+  let numPastDue  = 0;
+  let numAdvanced = 0;
+
+  for(var i = 0; i < loans.length; i++) {
+    if(loans[i].total_paid > loans[i].total_paid_due) {
+      numAdvanced++;
+    } else if(loans[i].principal_balance > 0) {
+      numPastDue++;
     }
   }
 
-  renderDataRows() {
-    var loans = this.props.data.data.records;
+  const renderDataRows = () => {
     var rows  = [];
 
     var totalPrincipal                = 0.00;
@@ -191,109 +200,91 @@ export default class ManualAgingView extends React.Component {
     return rows;
   }
 
-  render() {
-    var numRecords  = 0;
-    var numPastDue  = 0;
-    var numAdvanced = 0;
-
-    var loans = this.props.data.data.records;
-
-    numRecords  = loans.length;
-
-    for(var i = 0; i < loans.length; i++) {
-      if(loans[i].total_paid > loans[i].total_paid_due) {
-        numAdvanced++;
-      } else if(loans[i].principal_balance > 0) {
-        numPastDue++;
-      }
-    }
-
-    return  (
-      <div>
-        <div className="row">
-          <div className="col-md-6">
-            <h5>
-              Repayment Rates
-            </h5>
-          </div>
-          <div className="col-md-6">
-            <div className="text-end">
-              <label style={{marginRight: "12px"}}>
-                Total Records: 
-                <span className="badge badge-secondary">
-                  {numRecords}
-                </span>
-              </label>
-              <label style={{marginRight: "12px"}}>
-                Number of Past Due:
-                <span className="badge bg-danger">
-                  {numPastDue}
-                </span>
-              </label>
-              <label>
-                Number of Advanced:
-                <span className="badge badge-info">
-                  {numAdvanced}
-                </span>
-              </label>
-            </div>
+  return  (
+    <div>
+      <div className="row">
+        <div className="col-md-6">
+          <h5>
+            Repayment Rates
+          </h5>
+        </div>
+        <div className="col-md-6">
+          <div className="text-end">
+            <label style={{marginRight: "12px"}}>
+              Total Records: 
+              <span className="badge bg-secondary">
+                {numRecords}
+              </span>
+            </label>
+            <label style={{marginRight: "12px"}}>
+              Number of Past Due:
+              <span className="badge bg-danger">
+                {numPastDue}
+              </span>
+            </label>
+            <label>
+              Number of Advanced:
+              <span className="badge bg-info">
+                {numAdvanced}
+              </span>
+            </label>
           </div>
         </div>
-
-        <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.75em"}}>
-          <thead>
-            <tr>
-              <th>
-              </th>
-              <th style={{width: "20%"}}>
-                Name
-              </th>
-              <th>
-                Product
-              </th>
-              <th className="text-end">
-                Principal
-              </th>
-              <th className="text-end">
-                P. Paid
-              </th>
-              <th className="text-end">
-                P. Bal
-              </th>
-              <th className="text-end">
-                Interest
-              </th>
-              <th className="text-end">
-                I. Paid
-              </th>
-              <th className="text-end">
-                I. Bal.
-              </th>
-              <th className="text-end">
-                Total Paid
-              </th>
-              <th className="text-end">
-                Total Bal.
-              </th>
-              <th className="text-end">
-                Paid Due
-              </th>
-              <th className="text-end">
-                Past Due
-              </th>
-              <th className="text-end">
-                Cum. Due
-              </th>
-              <th className="text-center">
-                RR
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderDataRows()}
-          </tbody>
-        </table>
       </div>
-    );
-  }
+
+      <table className="table table-bordered table-hover table-sm" style={{fontSize: "0.75em"}}>
+        <thead>
+          <tr>
+            <th>
+            </th>
+            <th style={{width: "20%"}}>
+              Name
+            </th>
+            <th>
+              Product
+            </th>
+            <th className="text-end">
+              Principal
+            </th>
+            <th className="text-end">
+              P. Paid
+            </th>
+            <th className="text-end">
+              P. Bal
+            </th>
+            <th className="text-end">
+              Interest
+            </th>
+            <th className="text-end">
+              I. Paid
+            </th>
+            <th className="text-end">
+              I. Bal.
+            </th>
+            <th className="text-end">
+              Total Paid
+            </th>
+            <th className="text-end">
+              Total Bal.
+            </th>
+            <th className="text-end">
+              Paid Due
+            </th>
+            <th className="text-end">
+              Past Due
+            </th>
+            <th className="text-end">
+              Cum. Due
+            </th>
+            <th className="text-center">
+              RR
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderDataRows()}
+        </tbody>
+      </table>
+    </div>
+  );
 }

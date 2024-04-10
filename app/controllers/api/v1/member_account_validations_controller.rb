@@ -1,6 +1,6 @@
 module Api
   module V1
-    class MemberAccountValidationsController < ApplicationController
+    class MemberAccountValidationsController < ActionController::Base
       before_action :authenticate_user!
 
       def cancel

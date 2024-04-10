@@ -172,7 +172,8 @@ module MembershipPaymentCollections
 
           config = {
             mobile_number: member.mobile_number,
-            content: "Your OTP for MyK-Coins: #{otp} \nUsername: #{member.identification_number} \nPassword: password"
+            content: "PAGBATI SA BAGONG KASAPI \nHI! #{member.first_name} Ikaw ay ganap ng miyembro ng K-COOP simula ngayong #{Date.today} \nI-download ang MY K-COINS sa GooglePlay: \nUsername: #{member.identification_number} \nPassword: password \nOTP: #{otp}" 
+            #content: "Your OTP for MyK-Coins: #{otp} \nUsername: #{member.identification_number} \nPassword: password"
           }
 
           # ::SmsBlast::Send.new(config: config).execute!

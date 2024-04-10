@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class InsurancePersonalFundsController < ApiController
+      class InsurancePersonalFundsController < ActionController::Base
         before_action :authenticate_app_request!
         before_action :authenticate_core_user!, except: [:fetch]
 

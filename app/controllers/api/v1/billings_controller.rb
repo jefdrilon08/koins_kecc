@@ -1,6 +1,6 @@
 module Api
   module V1
-    class BillingsController < ApplicationController
+    class BillingsController < ActionController::Base
       before_action :authenticate_user!
 
       def fetch
@@ -380,11 +380,13 @@ module Api
         collection_date = params[:collection_date].try(:to_date)
         branch_id       = params[:branch_id]
         center_id       = params[:center_id]
+        billing_type    = params[:billing_type]
 
         config  = {
           collection_date: collection_date,
           branch_id: branch_id,
           center_id: center_id,
+          billing_type: billing_type,
           user: current_user
         }
 
@@ -404,12 +406,15 @@ module Api
                       center: center,
                       status: "processing",
                       data: {
-                        status: "processing"
+                        status: "processing",
+                        billing_type: billing_type
                       }
                     )
 
           billing.save!
 
+        
+          
           ProcessCreateBilling.perform_later({
             id: billing.id,
             user_id: current_user.id

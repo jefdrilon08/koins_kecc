@@ -49,7 +49,7 @@ class User < ApplicationRecord
   has_many :user_branches
   has_many :branches, through: :user_branches
 
-  serialize :roles, Array
+  serialize :roles, type: Array
 
   attr_accessor :login
 
@@ -68,10 +68,14 @@ class User < ApplicationRecord
   end
 
   def profile_picture_url
-    if self.profile_picture.attached?
-      return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+    if ["development", "production"].include?(ENV['RAILS_ENV'])
+      if self.profile_picture.attached?
+        return rails_blob_path(self.profile_picture, disposition: "attachment", only_path: true)
+      else
+        ActionController::Base.helpers.asset_url("missing_profile_picture.png")
+      end
     else
-      ActionController::Base.helpers.asset_url("missing_profile_picture.png")
+      ""
     end
   end
 
@@ -106,12 +110,25 @@ class User < ApplicationRecord
     {
       id: id,
       username: username,
+      email: email,
       first_name: first_name,
       last_name: last_name,
       full_name: full_name,
       identification_number: identification_number,
+      incentivized_date: incentivized_date,
       roles: roles
     }
+  end
+
+  def to_h
+    user_object
+  end
+
+  def to_h_with_pic
+    obj = to_h
+    obj[:profile_picture_url] = profile_picture_url
+
+    obj
   end
 
   def verified?

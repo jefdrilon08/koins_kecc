@@ -1,4 +1,10 @@
 class OnlineApplication < ApplicationRecord
+  GENDERS = [
+    "Male",
+    "Female",
+    "Others"
+  ]
+
   STATUSES = [
     "for_verification",
     "verified",
@@ -59,7 +65,7 @@ class OnlineApplication < ApplicationRecord
   end
 
   def city
-    self.data["address"]["city"]
+    "#{self.data["address"]["city"]}"
   end
 
   def province

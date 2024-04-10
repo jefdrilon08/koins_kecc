@@ -5,39 +5,6 @@ module Api
         before_action :authenticate_app_request!
         before_action :authenticate_core_user!, except: [:fetch]
 
-        def fetch
-          record  = ReadOnlyDataStore.repayment_rates.where(id: params[:id]).first
-
-          if record.blank?
-            render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
-          else
-            records = record.data.with_indifferent_access[:records]
-            #records = record.data_json_dump_url
-
-            if params[:center_id].present?
-              records = records.select{ |o|
-                          o[:center][:id] == params[:center_id]
-                        }
-            end
-
-            if params[:loan_product_id].present?
-              records = records.select{ |o|
-                          o[:loan_product][:id] == params[:loan_product_id]
-                        }
-            end
-
-            if params[:officer_id].present?
-              records = records.select{ |o|
-                          o[:officer][:id] == params[:officer_id]
-                        }
-            end
-
-            record.data["records"] = records
-
-            render json: record
-          end
-        end
-
         def queue
           data_store_type = "REPAYMENT_RATES"
           as_of           = params[:as_of].try(:to_date)

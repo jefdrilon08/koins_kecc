@@ -1,0 +1,28 @@
+
+.h4
+  Online Loan Application
+.row
+  .col
+    .card-body
+      .table-resposive
+        %table.table.table-sm.table-hover
+          %thead
+            %tr
+              %th SATO
+              - @online_application_status.each do |app_status_header|
+                %th 
+                  #{app_status_header}
+        
+          %tbody
+            - @branch_details[:branch_data].each do |b|
+              %tr
+                %td
+                  #{Branch.find(b[:branch_id]).name}
+                - @online_application_status.each do |app_status|
+                  %td
+                    %a.undo{ :href => "?q=&status=" + app_status +  "&branch_id=" + "#{b[:branch_id]}" + "&button=" }
+                      #{b[:test].select{ |a| a[:app_status] == app_status  }.last[:total_number]}
+            
+            
+
+

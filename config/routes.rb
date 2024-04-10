@@ -18,10 +18,13 @@ Rails.application.routes.draw do
   end
 
   get "/profile", to: "pages#profile", as: :profile
-  get "/forgot_password", to: "pages#forgot_password"
 
   # online applications
   resources :online_applications, only: [:index, :show]
+  
+  # online loan applications
+  resources :online_loan_applications, only: [:index, :show, :edit]
+  resources :loan_application
 
   # Trends
   get "/trends", to: "trends#index", as: :trends
@@ -554,6 +557,7 @@ Rails.application.routes.draw do
   draw :administration
   draw :accounting
   draw :api
+  draw :api_v3
 
   #reports
   get '/reports/monthly_remittance', to: 'reports#monthly_remittance', as: :monthly_remittance

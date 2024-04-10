@@ -1,0 +1,126 @@
+= title @online_loan_application.id
+
+%main.c-main
+  .container-fluid
+    .row
+      .col
+        .card
+          .card-body
+            %table.table.table-sm.table-bordered
+              %tr
+                %th{colspan: "2", style: "text-align: center;"}
+                  SASAGUTAN NG SocioEconomic Office. 
+              %tr
+                %td
+                  Pag-iimpok(Bilang ng palya sa pag-iimpok) 
+                %td
+                  = text_field_tag :palya_sa_pagiimpok, @online_loan_application.data["so_file"]["palya_sa_pagiimpok"], class: "form-control", id: "palya-sa-pagiimpok"
+              %tr
+                %td
+                  Pagdalo sa Center Meeting(Bilang ng absent)
+                %td
+                  = text_field_tag :bilang_ng_absent, @online_loan_application.data["so_file"]["bilang_ng_absent"], class: "form-control", id: "bilang-ng-absent"
+              %tr
+                %td
+                  Pag-ganap sa tungkulin bilang co-maker
+                %td
+                  = text_field_tag :tungkulin_bilang_co_maker, @online_loan_application.data["so_file"]["tungkulin_bilang_co_maker"], class: "form-control", id: "tungkulin-bilang-co-maker"
+              %tr
+                %td
+                  Pag-uugali sa pagsama sa Sitdown
+                %td
+                  = text_field_tag :sit_down, @online_loan_application.data["so_file"]["sit_down"], class: "form-control", id: "sit-down"
+              %tr
+                %td
+                  Mga kasalukuyang Insurance Product 
+                %td
+                  = text_field_tag :kasalukuyang_insurance, @online_loan_application.data["so_file"]["kasalukuyang_insurance"], class: "form-control", id: "kasalukuyang-insurance"
+
+            
+            %table.table.table-sm.table-bordered
+              %tr
+                %th{colspan: "2"}
+                  Cash Flow
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Pasok ng Pera
+                %th{style: "text-align: center;"}
+                  Kita
+              %tr
+                %td
+                  Netong kita sa negosyo(labas puhunan at gastos) 
+                %td
+                  = text_field_tag :kita_sa_negosyo, @online_loan_application.data["cash_flow"]["kita_sa_negosyo"], class: "form-control", id: "kita-sa-negosyo"
+              %tr
+                %td
+                  Kita mula sa Asawa 
+                %td
+                  = text_field_tag :kita_mula_sa_asawa, @online_loan_application.data["cash_flow"]["kita_mula_sa_asawa"], class: "form-control", id: "kita-mula-sa-asawa"
+              
+              %tr
+                %td
+                  Kita mula sa iba pang kasama sa bahay 
+                %td
+                  = text_field_tag :kita_mula_sa_kasama, @online_loan_application.data["cash_flow"]["kita_mula_sa_kasama"], class: "form-control", id: "kita-mula-sa-kasama"
+              
+              %tr
+                %td
+                  Iba pang pinagkakakitaan 
+                %td
+                  = text_field_tag :iba_pang_pinagkakakitaan, @online_loan_application.data["cash_flow"]["iba_pang_pinagkakakitaan"], class: "form-control", id: "iba-pang-pinagkakakitaan"
+
+
+            %table.table.table-sm.table-bordered
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Labas ng Pera
+                %th{style: "text-align: center;"}
+                  Gastos
+              %tr
+                %td
+                  Gastos sa pagkain
+                %td
+                  = text_field_tag :gastos_sa_pagkain, @online_loan_application.data["cash_flow"]["gastos_sa_pagkain"], class: "form-control", id: "gastos_sa_pagkain"
+              %tr
+                %td
+                  Gastos Pamasahe/Baon
+                %td
+                  = text_field_tag :gastos_sa_baon, @online_loan_application.data["cash_flow"]["gastos_sa_baon"], class: "form-control", id: "gastos-sa-baon"
+              %tr
+                %td
+                  Gastos Gamot
+                %td
+                  = text_field_tag :gastos_sa_gamot, @online_loan_application.data["cash_flow"]["gastos_sa_gamot"], class: "form-control", id: "gastos-sa-gamot"
+              %tr
+                %td
+                  Bayarin sa Tubig, Kuryente, Internet, LPG at iba pa
+                %td
+                  = text_field_tag :bayarin_sa_tubig, @online_loan_application.data["cash_flow"]["bayarin_sa_tubig"], class: "form-control", id: "bayarin-sa-tubig"
+              %tr
+                %td
+                  Iba pang Pinagkakagastusan
+                %td
+                  = text_field_tag :iba_pa, @online_loan_application.data["cash_flow"]["iba_pa"], class: "form-control", id: "iba-pa"
+              %tr
+                %td
+                  Hulugan sa K-Coop
+                %td
+                  = text_field_tag :hulugan_sa_coop, @online_loan_application.data["cash_flow"]["hulugan_sa_coop"], class: "form-control", id: "hulugan_sa_coop"
+              %tr
+                %td
+                  Hulugan bukod sa K-Coop
+                %td
+                  = text_field_tag :hulugan_bukod_sa_coop, @online_loan_application.data["cash_flow"]["hulugan_bukod_sa_coop"], class: "form-control", id: "hulugan_bukod_sa_coop"
+
+            %hr
+              .row
+                .col-md-6.col-xs-12
+                  %a#btn-save.btn.btn-primary{ data:{ id: "#{@online_loan_application.id}" }, :href => "#", style:"width: 200px;"  }
+                    Save
+                .col-md-6.col-xs-12
+                  %a#btn-reject.btn.btn-danger{  data:{ id: "#{@online_loan_application.id}" }, :href => "#",style:"width: 200px;" }
+                    .fa.fa-times
+                      Reject
+
+
+= render partial: "online_loan_applications/modals/edit_save"

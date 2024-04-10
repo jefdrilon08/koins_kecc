@@ -137,6 +137,10 @@ class Member < ApplicationRecord
     "#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, #{self.data.with_indifferent_access[:address][:province].upcase} , #{self.data.with_indifferent_access[:address][:region].upcase} , PH"
   end
 
+  def full_address
+    "#{self.data.with_indifferent_access[:address][:street]}, #{self.data.with_indifferent_access[:address][:district]}, #{self.data.with_indifferent_access[:address][:city]}, #{self.data.with_indifferent_access[:address][:province]} , #{self.data.with_indifferent_access[:address][:region]} , PH"
+  end
+
   def recognition_date
     if self.data.with_indifferent_access[:recognition_date].present?
       return self.data.with_indifferent_access[:recognition_date].to_date
@@ -413,7 +417,10 @@ class Member < ApplicationRecord
 
   def load_defaults
     if self.new_record?
-      self.status = "pending"
+      if self.status.blank?
+        self.status = "pending"
+      end
+
       self.insurance_status = "pending"
     
       if self.data.with_indifferent_access[:recognition_date].present?
@@ -706,6 +713,22 @@ class Member < ApplicationRecord
       meta: self.meta,
       external_ref: self.external_ref
     }
+  end
+
+  def user_object
+    {
+      id: id,
+      username: username,
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      full_name: full_name,
+      identification_number: identification_number
+    }
+  end
+
+  def to_h
+    user_object
   end
   
   def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)

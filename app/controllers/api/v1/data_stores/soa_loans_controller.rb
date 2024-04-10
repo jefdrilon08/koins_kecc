@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class SoaLoansController < ApplicationController
+      class SoaLoansController < ApiController
         before_action :authenticate_user!
 
         def fetch

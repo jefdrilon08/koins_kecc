@@ -5,8 +5,8 @@ module Branches
     def initialize(config:)
       @config = config
       @branch = @config[:branch]
-      @as_of  = Date.today
-      #@as_of  = @config[:as_of].try(:to_date) || Date.today
+      #@as_of  = Date.today
+      @as_of  = @config[:as_of].try(:to_date) || Date.today
 
       #@manual_aging = @config[:manual_aging] || false
       @manual_aging = false

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -41,7 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.uuid "external_ref"
+    t.string "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
@@ -792,6 +792,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
     t.index ["center_id"], name: "index_insurance_fund_transfer_collections_on_center_id"
   end
 
+  create_table "insurance_loan_bundle_enrollments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "collection_date"
+    t.date "date_approved"
+    t.jsonb "data"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.decimal "total_amount", precision: 8, scale: 2, default: "0.0"
+    t.string "approved_by"
+    t.index ["branch_id"], name: "index_insurance_loan_bundle_enrollments_on_branch_id"
+    t.index ["center_id"], name: "index_insurance_loan_bundle_enrollments_on_center_id"
+  end
+
   create_table "insurance_monthly_closing_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "branch_id"
     t.date "closing_date"
@@ -948,6 +963,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "last_name"
     t.index ["member_id"], name: "index_legal_dependents_on_member_id"
+  end
+
+  create_table "loan_applications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "loan_product_id", null: false
+    t.decimal "amount", null: false
+    t.string "term", null: false
+    t.integer "num_installments", null: false
+    t.uuid "member_id", null: false
+    t.jsonb "data"
+    t.string "status", null: false
+    t.date "date_applied", null: false
+    t.string "reference_number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "co_maker_member_id"
+    t.string "co_maker_first_name", null: false
+    t.string "co_maker_last_name", null: false
+    t.index ["loan_product_id"], name: "index_loan_applications_on_loan_product_id"
+    t.index ["member_id"], name: "index_loan_applications_on_member_id"
   end
 
   create_table "loan_product_categories", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -1688,6 +1722,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_035135) do
   add_foreign_key "kjsp_claims", "centers"
   add_foreign_key "kjsp_claims", "members"
   add_foreign_key "legal_dependents", "members"
+  add_foreign_key "loan_applications", "loan_products"
+  add_foreign_key "loan_applications", "members"
+  add_foreign_key "loan_applications", "members", column: "co_maker_member_id"
   add_foreign_key "loan_product_types", "loan_products"
   add_foreign_key "loan_products", "loan_product_categories"
   add_foreign_key "loan_repayment_rates", "branches"

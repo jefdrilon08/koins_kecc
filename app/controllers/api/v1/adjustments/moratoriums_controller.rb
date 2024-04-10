@@ -1,7 +1,7 @@
 module Api
   module V1
     module Adjustments
-      class MoratoriumsController < ApplicationController
+      class MoratoriumsController < ActionController::Base
         before_action :authenticate_user!
 
         def batch_process

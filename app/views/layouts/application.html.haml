@@ -4,8 +4,8 @@
     %title
       = "[#{App.pipeline.upcase}] " if !App.production?
       = content_for?(:title) ? "#{yield(:title)} - #{App.name}" : "#{App.name}"
-    = stylesheet_link_tag "main"
-    = javascript_include_tag "application"
+    = stylesheet_link_tag "assets/stylesheets/application"
+    = javascript_include_tag "javascript/packs/application"
     = csrf_meta_tags
     = csp_meta_tag
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1, shrink-to-fit=no" }
@@ -19,8 +19,6 @@
       = favicon_link_tag "logo_thumb.png"
 
   %body
-    .position-relative
-      #toast-section.toast-container.top-0.end-0.p-3
     = render partial: "shared/sidebar"
     %section.main-section
       = render partial: "shared/top_navigation"

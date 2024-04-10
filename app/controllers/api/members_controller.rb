@@ -1,7 +1,34 @@
 module Api
   class MembersController < ::Api::FrontController
-    before_action :authenticate_member!, except: [:login, :apply_online, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :resign, :delete, :form_make_payments, :update_recognition_date, :is_reclassified, :claims_copy_pdf]
-    before_action :authenticate_user!, only: [:save, :index, :unlock, :update_password, :create_survey, :balik_kasapi, :reinstate, :resign, :form_make_payments, :update_recognition_date, :is_reclassified]
+    before_action :authenticate_member!, except: [
+      :login, 
+      :apply_online, 
+      :index, 
+      :unlock, 
+      :update_password, 
+      :create_survey, 
+      :balik_kasapi, 
+      :reinstate, 
+      :delete, 
+      :form_make_payments, 
+      :update_recognition_date,
+      :is_member_subscribed,
+      :update_member_subscription
+    ]
+
+    before_action :authenticate_user!, only: [
+      :save, 
+      :index, 
+      :unlock, 
+      :update_password, 
+      :create_survey, 
+      :balik_kasapi, 
+      :reinstate, 
+      :form_make_payments, 
+      :update_recognition_date,
+      :is_member_subscribed,
+      :update_member_subscription
+    ]
 
     def save
       member_data = JSON.parse(params[:member_data]).to_h.with_indifferent_access
@@ -339,7 +366,9 @@ module Api
         q: "%#{q.upcase}%"
       ).order(
         "members.last_name ASC"
-      ).limit(50)
+      ).page(params[:page]).per(
+        LIST_PAGE_SIZE
+      )
 
       render json: { members: members }
     end
@@ -446,24 +475,6 @@ module Api
       end
     end
 
-    def login
-      username  = params[:username]
-      password  = params[:password]
-
-      cmd = ::Members::ValidateLogin.new(
-              username: username,
-              password: password
-            )
-
-      cmd.execute!
-
-      if cmd.errors.any?
-        render json: { errors: cmd.errors }, status: :unprocessable_entity
-      else
-        render json: { token: cmd.token, member: cmd.member.user_object }
-      end
-    end
-
     def total_funds
       amount = @member.member_accounts.savings.sum(:balance).to_f
 
@@ -496,6 +507,66 @@ module Api
       cmd.execute!
 
       render json: cmd.data
+    end
+    
+    def is_member_subscribed
+      member = Member.find(params[:id])
+
+      config = {
+        member: member,
+        user:   @user
+      }
+
+      cmd = ::Members::ValidateMemberSubscription.new(
+        config: config
+      )
+
+      cmd.execute!
+
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member_data = member.data.with_indifferent_access
+
+        if !member_data.key?(:subscription)
+          member_data["subscription"] = {}
+          member_data["subscription"]["is_subscribed"] = false
+          member_data["subscription"]["subscribe_created_at"] = Time.now
+          member_data["subscription"]["subscribe_updated_at"] = Time.now
+          member.update(data: member_data)
+        end   
+
+        render json: { message: "ok", is_subscribed: member_data["subscription"]["is_subscribed"] }
+      end
+    end
+
+    def update_member_subscription
+      member = Member.find(params[:id])
+
+      config = {
+        member: member,
+        user:   @user
+      }
+
+      cmd = ::Members::ValidateUpdateMemberSubscription.new(
+        config: config
+      )
+
+      cmd.execute!
+
+      puts "cmd.messagescmd.messages: " + cmd.messages.inspect
+      if cmd.messages.any?
+        render json: { errors: cmd.messages }, status: :unprocessable_entity
+      else
+        member_data = member.data.with_indifferent_access
+
+        member_data["subscription"]["is_subscribed"] = !member_data["subscription"]["is_subscribed"]
+        member_data["subscription"]["subscribe_updated_at"] = Time.now
+
+        member.update(data: member_data)
+
+        render json: { message: "ok", is_subscribed: member_data["subscription"]["is_subscribed"] }
+      end
     end
   end
 end

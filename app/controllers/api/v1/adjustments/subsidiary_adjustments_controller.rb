@@ -1,7 +1,7 @@
 module Api
   module V1
     module Adjustments
-      class SubsidiaryAdjustmentsController < ApplicationController
+      class SubsidiaryAdjustmentsController < ActionController::Base
         before_action :authenticate_user!
 
         def update_accounting_entry_particular

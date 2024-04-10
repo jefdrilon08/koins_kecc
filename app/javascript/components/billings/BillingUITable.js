@@ -3,6 +3,7 @@ import { useState } from 'react';
 import $ from 'jquery';
 import ReactTable from 'react-table';
 import Toggle from 'react-toggle';
+import ToggleSwitch from '../utils/ToggleSwitch';
 
 import { numberWithCommas } from '../utils/helpers';
 import { customStyles } from '../utils/consts';
@@ -80,7 +81,7 @@ export default class BillingUITable extends React.Component {
     }
 
     headers.push(
-      <th key={"h-total"} style={{ minWidth: "40px" }} >
+      <th key={"h-total-cp"} style={{ minWidth: "40px" }} >
         <center>
           CP
         </center>
@@ -220,9 +221,11 @@ export default class BillingUITable extends React.Component {
         components.push(
           <td key={"c-member-attnd-" + member.id}>
             <center>
-              <Toggle
-                defaultChecked={record.attendance}
-                onChange={this.handleToggled.bind(this, member.id)}
+              <ToggleSwitch
+                key={"c-member-attnd-toggle-switch-" + member.id}
+                name={"c-member-attnd-toggle-switch-" + member.id}
+                checked={record.attendance}
+                onChange={this.handleToggled.bind(this, member.id)} 
               />
             </center>
           </td>
@@ -261,8 +264,36 @@ export default class BillingUITable extends React.Component {
           <small className="badge bg-info">
             {this.props.data.data.records[i].member.member_type}
           </small>
-        </td>
-      );
+            {this.props.data.data.records[i].member.data && "sms_record" in this.props.data.data.records[i].member.data && this.props.data.data.records[i].member.data.sms_record && this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
+    <>
+      {this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
+        <>
+          {/* Check if loan_maturity date is greater than the current date */}
+          {new Date(this.props.data.data.records[i].member.data.sms_record.loan_maturity) > new Date() ? (
+          <small className='badge bg-success'>
+            Sms is Active
+          </small>
+          ) : (
+            <>
+          <small className='badge bg-danger'>
+            Sms is not Active
+          </small>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+        </>
+      )}
+    </>
+    ):(<>
+      <small className='badge bg-danger'>
+        Sms is Inactive
+      </small>
+    </>)}
+
+          </td>
+        );
 
       for (var j = 0; j < this.props.data.data.records[i].records.length; j++) {
 
@@ -409,7 +440,7 @@ export default class BillingUITable extends React.Component {
       );
 
       components.push(
-        <td key={"c-member-grand-total-" + member.id} className="text-end">
+        <td key={"c-member-grand-total-lp" + member.id} className="text-end">
           <strong>
             {numberWithCommas(this.props.data.data.records[i].total_loan_payment)}
           </strong>

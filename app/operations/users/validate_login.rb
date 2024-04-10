@@ -35,6 +35,7 @@ module Users
           @token = @user.generate_jwt
         end
       end
+
       count_errors!
     end
   end

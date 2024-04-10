@@ -1,8 +1,7 @@
 module Api
   module V1
-    class BillingForFullPaymentsController < ApplicationController
-      skip_before_action :verify_authenticity_token
-      
+    class BillingForFullPaymentsController < ActionController::Base
+      before_action :authenticate_user! 
       def create
   
           branch_id = params[:branch_id]

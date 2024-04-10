@@ -1,6 +1,6 @@
 module Api
   module V1
-    class AdditionalShareController < ApplicationController
+    class AdditionalShareController < ActionController::Base
       before_action :authenticate_user!
       
       def create

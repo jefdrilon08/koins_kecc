@@ -1,7 +1,7 @@
 module Api
   module V1
     module DataStores
-      class YearEndClosingsController < ApplicationController
+      class YearEndClosingsController < ActionController::Base
         before_action :authenticate_user!
 
         def approve

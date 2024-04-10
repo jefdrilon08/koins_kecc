@@ -76,7 +76,15 @@ class PrintController < ApplicationController
 
       @print_involuntary = data
       render "print/print_involuntary_tagging", layout: "print"
-
+    elsif type == "print_online_loan_application"
+      @online_application = LoanApplication.find(params[:id])
+      @online_application_loan_product = LoanProduct.find(@online_application.loan_product_id).name
+      @member_data = Member.find(@online_application.member_id)
+      @cycle = Member.find(@online_application.member_id).data.with_indifferent_access
+      @member_comaker = Member.find(@online_application.co_maker_member_id)
+      @center = Center.find(@member_data.center_id).name
+      
+      render "print/print_online_loan_application", layout: "print"
 
     elsif type == "print_entry"
       data_store_entry = DataStore.find(params[:id])

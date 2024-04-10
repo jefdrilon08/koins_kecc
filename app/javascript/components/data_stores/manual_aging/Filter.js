@@ -1,19 +1,24 @@
 import React from 'react';
-
-import Toggle from 'react-toggle';
 import "react-toggle/style.css";
+import ToggleSwitch from '../../utils/ToggleSwitch';
 
-export default class Filter extends React.Component {
-  constructor(props) {
-    super(props);
+export default Filter = (props) => {
+  let {
+    loanProducts,
+    centers,
+    officers,
+    currentView,
+    currentCenterId,
+    currentOfficerId,
+    currentLoanProductId,
+    handleViewToggled,
+    handleCenterChanged,
+    handleOfficerChanged,
+    handleLoanProductChanged
+  } = props;
 
-    this.state  = {
-    }
-  }
-
-  renderLoanProductOptions() {
-    var loanProducts = this.props.loanProducts;
-    var options = [];
+  const renderLoanProductOptions = () => {
+    let options = [];
 
     options.push(
       <option value="" key={"loan-product-select"}>
@@ -21,20 +26,19 @@ export default class Filter extends React.Component {
       </option>
     );
 
-    for(var i = 0; i < loanProducts.length; i++) {
+    loanProducts.forEach((o) => {
       options.push(
-        <option key={"loan-product-" + loanProducts[i].id} value={loanProducts[i].id}>
-          {loanProducts[i].name}
+        <option key={`loan-product-${o.id}`} value={o.id}>
+          {o.name}
         </option>
       );
-    }
+    })
 
     return options;
   }
 
-  renderCenterOptions() {
-    var centers = this.props.centers;
-    var options = [];
+  const renderCenterOptions = () => {
+    let options = [];
 
     options.push(
       <option value="" key={"center-select"}>
@@ -42,19 +46,18 @@ export default class Filter extends React.Component {
       </option>
     );
 
-    for(var i = 0; i < centers.length; i++) {
+    centers.forEach((o) => {
       options.push(
-        <option value={centers[i].id} key={"center-" + centers[i].id}>
-          {centers[i].name}
+        <option value={o.id} key={`center-${o.id}`}>
+          {o.name}
         </option>
       );
-    }
+    })
 
     return options;
   }
 
-  renderOfficerOptions() {
-    var officers = this.props.officers;
+  const renderOfficerOptions = () => {
     var options = [];
 
     options.push(
@@ -63,105 +66,112 @@ export default class Filter extends React.Component {
       </option>
     );
 
-    for(var i = 0; i < officers.length; i++) {
+    officers.forEach((o) => {
       options.push(
-        <option value={officers[i].id} key={"officer-" + officers[i].id}>
-          {officers[i].last_name}, {officers[i].first_name}
+        <option value={o.id} key={`officer-${o.id}`}>
+          {o.last_name}, {o.first_name}
         </option>
       );
-    }
+    })
 
     return options;
   }
 
-  render() {
-    return  (
-      <div className="row">
-        <div className="col-md-3 col-xs-12">
-          <div className="form-group">
-            <label>
-              View Name
-            </label>
-            <div className="row">
-              <div className="col">
-                <Toggle
-                  checked={this.props.currentView == "RR"}
-                  onChange={this.props.handleViewToggled.bind(this, "RR")}
-                  className="btn"
-                />
-                <br/>
-                <label>
-                  RR
-                </label>
-              </div>
-              <div className="col">
-                <Toggle
-                  checked={this.props.currentView == "AOR"}
-                  onChange={this.props.handleViewToggled.bind(this, "AOR")}
-                  className="btn"
-                />
-                <br/>
-                <label>
-                  AoR
-                </label>
-              </div>
-              <div className="col">
-                <Toggle
-                  checked={this.props.currentView == "ML"}
-                  onChange={this.props.handleViewToggled.bind(this, "ML")}
-                  className="btn"
-                />
-                <br/>
-                <label>
-                  ML
-                </label>
-              </div>
+  return  (
+    <div className="row">
+      <div className="col-md-3 col-xs-12">
+        <div className="form-group">
+          <div className="row">
+            <div className="col">
+              <ToggleSwitch
+                name={`current-view-rr`}
+                key={`current-view-rr`}
+                checked={currentView == "RR"}
+                defaultChecked={currentView == "RR"}
+                onChange={() => {
+                  handleViewToggled("RR")
+                }}
+              />
+              <br/>
+              <label>
+                RR
+              </label>
+            </div>
+            <div className="col">
+              <ToggleSwitch
+                name={`current-view-aor`}
+                key={`current-view-aor`}
+                checked={currentView == "AOR"}
+                defaultChecked={currentView == "AOR"}
+                onChange={() => {
+                  handleViewToggled("AOR")
+                }}
+              />
+              <br/>
+              <label>
+                AoR
+              </label>
+            </div>
+            <div className="col">
+              <ToggleSwitch
+                name={`current-view-ml`}
+                key={`current-view-ml`}
+                checked={currentView == "ML"}
+                defaultChecked={currentView == "ML"}
+                onChange={() => {
+                  handleViewToggled("ML")
+                }}
+              />
+              <br/>
+              <label>
+                ML
+              </label>
             </div>
           </div>
         </div>
-        <div className="col-md-3 col-xs-12">
-          <div className="form-group">
-            <label>
-              Center
-            </label>
-            <select
-              className="form-control"
-              value={this.props.currentCenterId}
-              onChange={this.props.handleCenterChanged.bind(this)}
-            >
-              {this.renderCenterOptions()}
-            </select>
-          </div>
-        </div>
-        <div className="col-md-3 col-xs-12">
-          <div className="form-group">
-            <label>
-              Loan Products
-            </label>
-            <select
-              className="form-control"
-              value={this.props.currentLoanProductId}
-              onChange={this.props.handleLoanProductChanged.bind(this)}
-            >
-              {this.renderLoanProductOptions()}
-            </select>
-          </div>
-        </div>
-        <div className="col-md-3 col-xs-12">
-          <div className="form-group">
-            <label>
-              Officers
-            </label>
-            <select
-              className="form-control"
-              value={this.props.currentOfficerId}
-              onChange={this.props.handleOfficerChanged.bind(this)}
-            >
-              {this.renderOfficerOptions()}
-            </select>
-          </div>
+      </div>
+      <div className="col-md-3 col-xs-12">
+        <div className="form-group">
+          <label>
+            Center
+          </label>
+          <select
+            className="form-control"
+            value={currentCenterId}
+            onChange={handleCenterChanged}
+          >
+            {renderCenterOptions()}
+          </select>
         </div>
       </div>
-    );
-  }
+      <div className="col-md-3 col-xs-12">
+        <div className="form-group">
+          <label>
+            Loan Products
+          </label>
+          <select
+            className="form-control"
+            value={currentLoanProductId}
+            onChange={handleLoanProductChanged}
+          >
+            {renderLoanProductOptions()}
+          </select>
+        </div>
+      </div>
+      <div className="col-md-3 col-xs-12">
+        <div className="form-group">
+          <label>
+            Officers
+          </label>
+          <select
+            className="form-control"
+            value={currentOfficerId}
+            onChange={handleOfficerChanged}
+          >
+            {renderOfficerOptions()}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
 }

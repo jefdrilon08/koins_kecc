@@ -19,7 +19,7 @@ module InsuranceLoanBundleEnrollments
         @previous_first_name        = @member.first_name
         @previous_middle_name       = @member.middle_name
         @previous_last_name         = @member.last_name
-        @previous_address           = @member.full_address_upcase
+        @previous_address           = @member.full_address
         @previous_full_name         = @member.full_name_formatted
         @previous_gender            = @member.gender
         @previous_birth_date        = @member.date_of_birth
@@ -68,7 +68,7 @@ module InsuranceLoanBundleEnrollments
         @first_name                             = @member.first_name
         @middle_name                            = @member.middle_name
         @last_name                              = @member.last_name
-        @address                                = @member.full_address_upcase
+        @address                                = @member.full_address
         @full_name                              = @member.full_name_formatted
         @gender                                 = @member.gender
         @birth_date                             = @member.date_of_birth

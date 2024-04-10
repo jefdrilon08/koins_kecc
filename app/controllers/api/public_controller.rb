@@ -56,12 +56,22 @@ module Api
         branches = branches.where(cluster_id: params[:cluster_id])
       end
 
-      branches  = branches.order("name ASC").map{ |o|
-                    {
-                      id: o.id,
-                      name: o.name
-                    }
-                  }
+      branches = branches.order("name ASC").map{ |o|
+        {
+          id: o.id,
+          name: o.name
+        }
+      }
+
+      if params[:with_centers].present?
+        branches = branches.map{ |o|
+          o[:centers] = Center.where(branch_id: o[:id]).map{ |center|
+            center.to_h
+          }
+
+          o
+        }
+      end
 
       render json: JSON.pretty_generate(branches: branches.as_json)
     end

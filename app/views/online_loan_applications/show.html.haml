@@ -1,0 +1,252 @@
+= title @online_application.member.full_name
+.row
+  .col
+    .card
+      .card-body
+        %h3
+          #{@online_application.member.full_name}
+        %label{style: "color: red; "}
+          #{@online_application.status}
+        %br
+        - if @online_application.data.present? && @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
+          %label{style: "color: green; "}
+            %a Cash Flow Approved by:
+            #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
+        - else
+          %label{style: "color: red; "}
+            Cash Flow Approved by:
+        %hr
+          - if @online_application.data["approve_process"].present?
+            - @online_application.data["approve_process"].each do |opp|
+              - if opp["type"] == "assign_branch_by"
+                .alert.alert-info
+                  %p This has already been assigned to #{@online_application.branch.name} SATO by #{opp["name"]} on #{opp["date_assign"]}
+              - elsif opp["type"] == "verify_by"
+                .alert.alert-info
+                  %p This has already been verified by #{opp["name"]} on #{opp["date_assign"]}
+              - else
+                .alert.alert-success
+                  %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
+
+
+        %hr
+
+
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Date Applied
+                %td
+                  #{@online_application.date_applied}
+              %tr
+                %th{ width: "25%" }
+                  Reference Number
+                %td
+                  
+                  = link_to member_path(LoanApplication.find(@online_application.id)) do
+                    #{@online_application.reference_number}
+              %tr
+                %th
+                  Loan Product
+                %td
+                  #{@online_application.loan_product.name}
+              %tr
+                %th
+                  Loan Amount
+                %td
+                  - if @online_application.status == "for_approve" || @online_application.status == "approved" || @online_application.status == "reject"
+                    = number_to_currency(@online_application.amount, unit: 'P')
+                  - else
+                    %a.undo{ data: { 
+                                      id: @online_application.id,   
+                                      amount: @online_application.amount
+                                    }, :href => "#" }
+                      = number_to_currency(@online_application.amount, unit: 'P')
+
+              %tr
+                %th
+                  Loan Term
+                %td
+                  #{@online_application.term}
+              %tr
+                %th
+                  Number of installment
+                %td
+                  #{@online_application.num_installments}
+          %table.table.table-sm.table-bordered
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Co-maker sa bahay
+                %td
+                  #{@online_application.co_maker_last_name}, #{@online_application.co_maker_first_name}
+              %tr
+                %th
+                  Co-maker sa sentro
+                %td
+                  #{Member.find( @online_application.co_maker_member_id).full_name}
+        %h4
+        
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th{colspan: "2", style: "text-align: center;"}
+                  SASAGUTAN NG SOCIO ECONOMIC OFFICER
+            %tbody
+              %tr
+                %th{ width: "25%" }
+                  Pag-iimpok(Bilang ng palya sa pag-iimpok)
+                %td
+                  #{@online_application.data["so_file"]["palya_sa_pagiimpok"]}
+              %tr
+                %th{ width: "25%" }
+                  Pagdalo sa Center Meeting(Bilang ng absent)
+                %td
+                  #{@online_application.data["so_file"]["bilang_ng_absent"]}
+              %tr
+                %th
+                  Pag-ganap sa tungkulin bilang co-maker
+                %td
+                  #{@online_application.data["so_file"]["tungkulin_bilang_co_maker"]}
+              %tr
+                %th
+                  Pag-uugali sa pagsama sa Sitdown
+                %td
+                  #{@online_application.data["so_file"]["sit_down"]}
+              %tr
+                %th
+                  Mga kasalukuyang Insurance Product
+                %td
+                  #{@online_application.data["so_file"]["kasalukuyang_insurance"]}
+
+        %h4
+        %label
+          Cash Flow
+        .table-responsive
+          %table.table.table-sm.table-bordered
+            %thead
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Pasok ng Pera
+                %th{style: "text-align: center;"}
+                  Kita
+            %tbody
+              %tr
+                %td
+                  Netong kita sa negosyo(labas puhunan at gastos)
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_sa_negosyo"]}
+              %tr
+                %td
+                  Kita mula sa Asawa
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_mula_sa_asawa"]}
+              %tr
+                %td
+                  Kita mula sa iba pang kasama sa bahay
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["kita_mula_sa_kasama"]}
+              %tr
+                %td
+                  Iba pang pinagkakakitaan
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["iba_pang_pinagkakakitaan"]}
+              %tr
+                %th{style: "text-align: right;"}
+                  Kabuuhang Halaga pasok ng pera
+                %td{style: "text-align: left;"}
+                  - kita_sa_negosyo = @online_application.data["cash_flow"]["kita_sa_negosyo"].to_f
+                  - kita_mula_sa_asawa = @online_application.data["cash_flow"]["kita_mula_sa_asawa"].to_f
+                  - kita_mula_sa_kasama = @online_application.data["cash_flow"]["kita_mula_sa_kasama"].to_f
+                  - iba_pang_pinagkakakitaan = @online_application.data["cash_flow"]["iba_pang_pinagkakakitaan"].to_f
+                  - kabuuhang_halaga = kita_sa_negosyo + kita_mula_sa_asawa + kita_mula_sa_kasama + iba_pang_pinagkakakitaan
+                  = number_to_currency(kabuuhang_halaga, unit: 'P')
+
+                  
+              %tr
+                %th{style: "text-align: center;"}
+                  Lingguhang Labas ng Pera
+                %th{style: "text-align: center;"}
+                  Gastos 
+              %tr
+                %td
+                  Gastos sa Pagkain
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_pagkain"]}
+              %tr
+                %td
+                  Gastos Pamasahe/Baon
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_baon"]}
+              %tr
+                %td
+                  Gastos Gamot
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["gastos_sa_gamot"]}
+              %tr
+                %td
+                  Bayarin sa Tubig, Kuryente, Internet, LPG at iba pa
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["bayarin_sa_tubig"]}
+              %tr
+                %td
+                  Iba pang Pinagkakagastusan
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["iba_pa"]}
+              %tr
+                %td
+                  Hulugan sa K-Coop
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["hulugan_sa_coop"]}
+              %tr
+                %td
+                  Hulugan bukod sa K-Coop
+                %td{style: "text-align: right;"}
+                  #{@online_application.data["cash_flow"]["hulugan_bukod_sa_coop"]}
+              %tr
+                %th{style: "text-align: right;"}
+                  Kabuuhang labas ng pera
+                %td{style: "text-align: left;"}
+                  - gastos_sa_pagkain = @online_application.data["cash_flow"]["gastos_sa_pagkain"].to_f
+                  - gastos_sa_baon    = @online_application.data["cash_flow"]["gastos_sa_baon"].to_f
+                  - gastos_sa_gamot   = @online_application.data["cash_flow"]["gastos_sa_gamot"].to_f
+                  - bayarin_sa_tubig  = @online_application.data["cash_flow"]["bayarin_sa_tubig"].to_f
+                  - iba_pa            = @online_application.data["cash_flow"]["iba_pa"].to_f
+                  - hulugan_sa_coop   = @online_application.data["cash_flow"]["hulugan_sa_coop"].to_f
+                  - hulugan_bukod_sa_coop = @online_application.data["cash_flow"]["hulugan_bukod_sa_coop"].to_f
+                  - kabuuhang_labas = gastos_sa_pagkain + gastos_sa_baon + gastos_sa_gamot + bayarin_sa_tubig + iba_pa + hulugan_sa_coop + hulugan_bukod_sa_coop
+                  = number_to_currency(kabuuhang_labas, unit: 'P')
+              %tr
+                %th{style: "text-align: right;"}
+                  Kabuuhang natira sa cash flow
+                %td{style: "text-align: right;"}
+                  - total = kabuuhang_halaga - kabuuhang_labas
+                  = number_to_currency(total, unit: 'P')
+        %h4
+
+        %hr
+        - if @online_application.pending?
+        - elsif @online_application.for_review?
+        - elsif @online_application.for_approve?
+        %h4
+      - if @online_application.for_approve?
+        .modal-footer
+          .controls
+            %button.btn{"id" => "btn-check", "class" => "btn-primary", "value" => "#{@online_application[:id]}", style: "width: 200px;"}
+              .fa.fa-check
+              Check          
+
+      
+= render partial: "online_loan_applications/modals/verify"
+= render partial: "online_loan_applications/modals/for_review"
+= render partial: "online_loan_applications/modals/for_approve"
+= render partial: "online_loan_applications/modals/approve"
+= render partial: "online_loan_applications/modals/edit_amount"
+= render partial: "online_loan_applications/modals/reject"
+= render partial: "online_loan_applications/modals/reject_for_checking"
+= render partial: "online_loan_applications/modals/reject_for_approve"
+= render partial: "online_loan_applications/modals/decline"
+= render partial: "online_loan_applications/modals/check"

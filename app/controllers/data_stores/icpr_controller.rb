@@ -3,6 +3,17 @@ module DataStores
     def index
       super
 
+      branch_id = params[:branch_id]
+      status = params[:status]
+
+      if branch_id.present?
+        @record = @records.where(branch_id: branch_id)
+      end
+
+      if status.present?
+        @records = @records.where(status: status)
+      end
+
       @subheader_items = [
         {
           text: "Data Stores"

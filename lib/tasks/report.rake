@@ -451,6 +451,13 @@ puts @data
     ).last
 
     @data = []
+    count_age_18_30_m = 0
+    count_age_18_30_f = 0
+    count_age_31_59_m = 0
+    count_age_31_59_f = 0
+    count_age_60_above_m = 0
+    count_age_60_above_f = 0
+
     count_age_18_30 = 0
     count_age_31_59 = 0
     count_age_60_above = 0
@@ -487,6 +494,20 @@ puts @data
         count_age_31_59 += 1
       elsif age >= 59
         count_age_60_above += 1
+      end
+      # 
+      if  mem.gender["Male"] && age <= 31
+        count_age_18_30_m += 1
+      elsif mem.gender["Female"] && age <= 31
+        count_age_18_30_f += 1
+      elsif mem.gender["Male"] && age >= 31 && age <= 60
+        count_age_31_59_m += 1
+      elsif mem.gender["Female"] && age >= 31 && age <= 60
+        count_age_31_59_f += 1
+      elsif mem.gender["Male"] && age >= 61
+        count_age_60_above_m += 1
+      elsif mem.gender["Female"] && age >= 61
+        count_age_60_above_f += 1
       end
 
       if mem.gender["Male"] && age >= 18 && age <= 39
@@ -527,6 +548,7 @@ puts @data
 
       j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
       @data << j
+      
       if age <= 31
         count_age_18_30 += 1
 
@@ -536,6 +558,19 @@ puts @data
         elsif age >= 59
           count_age_60_above += 1
 
+      end
+      if  mem.gender["Male"]  && age <= 31
+        count_age_18_30_m += 1
+      elsif mem.gender["Female"] && age <= 31
+        count_age_18_30_f += 1
+      elsif mem.gender["Male"] && age >= 31 && age <= 60
+        count_age_31_59_m += 1
+      elsif mem.gender["Female"] && age >= 31 && age <= 60
+        count_age_31_59_f += 1
+      elsif mem.gender["Male"] && age >= 61
+        count_age_60_above_m += 1
+      elsif mem.gender["Female"] && age >= 61
+        count_age_60_above_f += 1
       end
       if mem.gender["Male"] && age >= 18 && age <= 39
         count_male_18_39 += 1
@@ -586,6 +621,19 @@ puts @data
         count_age_60_above += 1
 
       end
+      if  mem.gender["Male"] && age <= 31
+        count_age_18_30_m += 1
+      elsif mem.gender["Female"] && age <= 31
+        count_age_18_30_f += 1
+      elsif mem.gender["Male"] && age >= 31 && age <= 60
+        count_age_31_59_m += 1
+      elsif mem.gender["Female"] && age >= 31 && age <= 60
+        count_age_31_59_f += 1
+      elsif mem.gender["Male"] && age >= 61
+        count_age_60_above_m += 1
+      elsif mem.gender["Female"] && age >= 61
+        count_age_60_above_f += 1
+      end
       if mem.gender["Male"] && age >= 18 && age <= 39
         count_male_18_39 += 1
 
@@ -634,6 +682,19 @@ puts @data
         count_age_60_above += 1
 
       end
+      if  mem.gender["Male"] && age <= 31
+        count_age_18_30_m += 1
+      elsif mem.gender["Female"] && age <= 31
+        count_age_18_30_f += 1
+      elsif mem.gender["Male"] && age >= 31 && age <= 60
+        count_age_31_59_m += 1
+      elsif mem.gender["Female"] && age >= 31 && age <= 60
+        count_age_31_59_f += 1
+      elsif mem.gender["Male"] && age >= 61
+        count_age_60_above_m += 1
+      elsif mem.gender["Female"] && age >= 61
+        count_age_60_above_f += 1
+      end
       if mem.gender["Male"] && age >= 18 && age <= 39
         count_male_18_39 += 1
 
@@ -671,15 +732,22 @@ puts @data
     puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
     puts "Number of members aged 60 aboved : |#{count_age_60_above}"
 
-    puts "Number of member aged 18 - 39 male |#{count_male_18_39}|#{count_female_18_39}|#{count_others_18_39}"
-    # puts "Number of member aged 18 - 39 female |#{count_female_18_39}"
-    # puts "Number of member aged 18 - 39 others |#{count_others_18_39}"
+    puts "Number of members aged between 18 and 30 Male:|#{count_age_18_30_m}"
+    puts "Number of members aged between 18 and 30 Female:|#{count_age_18_30_f}"
+    puts "Number of members aged between 31 and 59 Male:|#{count_age_31_59_m}"
+    puts "Number of members aged between 31 and 59 Female:|#{count_age_31_59_f}"
+    puts "Number of members aged between 60 above Male:|#{count_age_60_above_m}"
+    puts "Number of members aged between 60 above Female:|#{count_age_60_above_f}"
 
-    puts "Number of member aged 40 - 65 male |#{count_male_40_65}|#{count_female_40_65}|#{count_others_40_65}"
-    # puts "Number of member aged 40 - 65 female |#{count_female_40_65}"
-    # puts "Number of member aged 40 - 65 other |#{count_others_40_65}"
+    # puts "Number of member aged 18 - 39 male |#{count_male_18_39}|#{count_female_18_39}|#{count_others_18_39}"
+    # # puts "Number of member aged 18 - 39 female |#{count_female_18_39}"
+    # # puts "Number of member aged 18 - 39 others |#{count_others_18_39}"
 
-    puts "Number of member aged 65 above male |#{count_others_male_65_above}|#{count_others_female_65_above}|#{count_others_others_65_above}"
+    # puts "Number of member aged 40 - 65 male |#{count_male_40_65}|#{count_female_40_65}|#{count_others_40_65}"
+    # # puts "Number of member aged 40 - 65 female |#{count_female_40_65}"
+    # # puts "Number of member aged 40 - 65 other |#{count_others_40_65}"
+
+    # puts "Number of member aged 65 above male |#{count_others_male_65_above}|#{count_others_female_65_above}|#{count_others_others_65_above}"
     # puts "Number of member aged 65 above male |#{count_others_female_65_above}"
     # puts "Number of member aged 65 above male |#{count_others_others_65_above}"
 

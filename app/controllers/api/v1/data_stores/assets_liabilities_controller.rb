@@ -1,7 +1,7 @@
 module Api
 	module V1
 		module DataStores
-			class AssetsLiabilitiesController < ApplicationController
+			class AssetsLiabilitiesController < ActionController::Base
 				def create
 					@data_store_type = "ASSETS_LIABILITIES"
 					@start_date = params[:start_date]

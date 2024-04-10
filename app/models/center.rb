@@ -28,4 +28,12 @@ class Center < ApplicationRecord
   def to_s
     name
   end
+
+  def to_h
+    {
+      id: self.id,
+      name: self.name,
+      branch_id: self.branch_id
+    }
+  end
 end

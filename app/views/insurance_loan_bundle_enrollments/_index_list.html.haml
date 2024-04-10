@@ -9,8 +9,6 @@
       %th
         Member
       %th
-        Enrolled Person    
-      %th
         Status
   %tbody
     - @insurance_loan_bundle_enrollments.each do |o|
@@ -24,22 +22,19 @@
           #{o.center.name}
         %td
           #{o.member_name.uniq.join(",")}
-        - if o.records_count > 0
-          %td
-            #{o.member_name.uniq.join(",")}
-        - else
-          %td
-            #{"No record found"}
         %td
           - if o.pending?
-            .badge.bg-danger
+            .badge.bg-warning
               Pending
           - if o.checked?
-            .badge.bg-danger
+            .badge.bg-info
               For Approval
           - elsif o.approved?
             .badge.bg-success
               Approved
+          - elsif o.declined?
+            .badge.bg-danger
+              Declined
           - elsif o.error?
             .badge.bg-danger
               ERROR

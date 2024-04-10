@@ -1,8 +1,10 @@
 module Api
   module V1
     module DataStores
-      class ProjectTypeSummaryController < ApplicationController
-        skip_before_action :verify_authenticity_token
+      class ProjectTypeSummaryController < ApiController
+    
+        before_action :authenticate_user!
+        #skip_before_action :verify_authenticity_token
         
         def create
           branch_id = params[:branch_id]

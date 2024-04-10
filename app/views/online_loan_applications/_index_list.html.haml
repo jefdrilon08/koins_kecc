@@ -1,0 +1,51 @@
+.table-responsive
+  %table.table.table-sm.table-hover
+    %thead
+      %tr
+        %th
+          Reference Number
+        %th
+          Name
+        %th
+          Mobile Number
+        %th
+          SATO
+        %th
+          Center
+        %th
+          Status
+        %th
+          Date Applied
+    %tbody
+      - @online_applications.each do |o|
+        %tr
+          %td
+            %strong
+              = link_to online_loan_application_path(o.id) do
+                #{o.reference_number}
+          %td
+            %strong
+              = link_to online_loan_application_path(o.id) do
+                #{Member.find(o.member_id).full_name}
+          %td
+            #{Member.find(o.member_id).mobile_number}
+          %td
+            #{Member.find(o.member_id).branch.name}
+          %td
+            #{Member.find(o.member_id).center.name}
+          %td
+            %center
+              - if o.for_review?
+                .badge.bg-warning
+                  For Review
+              - elsif o.pending?
+                .badge.bg-danger
+                  Pending
+              - elsif o.for_approve?
+                .badge.bg-success
+                  For Approve
+              - elsif o.approved?
+                .badge.bg-success
+                  Approved
+          %td
+            #{o.date_applied}

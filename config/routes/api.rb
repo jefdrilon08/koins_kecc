@@ -1,4 +1,12 @@
 namespace :api do
+  # Onlint Applications
+  post "/register", to: "online_applications#register"
+
+  # Repayment Rates
+  get "/repayment_rates/:id", to: "repayment_rates#show"
+
+  # Manual Aging
+  get "/manual_aging/:id", to: "manual_aging#show"
 
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
@@ -30,13 +38,14 @@ namespace :api do
   get "/public/areas", to: "public#areas"
 
   # Users
-  post "/users/login", to: "users#login"
+  post "/login", to: "users#login"
+  post "/forgot_password", to: "users#forgot_password"
   post "/users/forgot_password", to: "users#forgot_password"
   post "/users/change_password", to: "users#change_password"
 
   # Members
   get "/members", to: "members#index"
-  post "/members/login", to: "members#login"
+  post "/members/login", to: "v3/members#login"
   post "/members/change_password", to: "members#change_password"
   get "/members/active_loans", to: "members#active_loans"
   get "/members/total_active_loan_balance", to: "members#total_active_loan_balance"
@@ -55,6 +64,13 @@ namespace :api do
   post "/members/update_password", to: "members#update_password"
   post "/members/delete", to: "members#delete"
   post "/members/form_make_payments", to: "members#form_make_payments"
+  post "/members/is_member_subscribed", to: "members#is_member_subscribed" # for checking the status of member subscription
+  post "/members/update_member_subscription", to: "members#update_member_subscription" # for updating the status of member subscription
+  post "/members/verify_code", to: "v3/members#verify_code" # for verification of sms code
+  post "/members/member_change_password", to: "v3/members#member_change_password" # for changing of member's password
+  get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
+  post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
+  post "/members/member_change_old_password", to: "v3/members#member_change_old_password"
 
   # Messages
   post "/messages", to: "messages#create"
@@ -89,26 +105,53 @@ namespace :api do
 
   # Loans
   post "/loans/restructure", to: "loans#restructure"
-  
+
+  # Loan Products
+  get "/loan_products", to: "loan_products#index"
+
+  # For member mobile client
   namespace :members do
     # Loans
     get "/loans/:id", to: "loans#show"
+    get "/loans", to: "loans#index"
+    post "/loans", to: "loans#create"
 
     # Insurance
     get "/insurance_accounts", to: "insurance_accounts#index"
     get "/insurance_accounts/:id", to: "insurance_accounts#show"
-    get "/insurance_accounts/:id/more_payments/:last_id", to: "insurance_accounts#more_payments"
+    get "/insurance_accounts/:id/transactions", to: "insurance_accounts#transactions"
    
     # Savings
     get "/savings_accounts", to: "savings_accounts#index"
     get "/savings_accounts/:id", to: "savings_accounts#show"
-    get "/savings_accounts/:id/more_payments/:last_id", to: "savings_accounts#more_payments"
+    get "/savings_accounts/:id/transactions", to: "savings_accounts#transactions"
    
     # Equities
-    get "/equities_accounts", to: "equities_accounts#index"
-    get "/equities_accounts/:id", to: "equities_accounts#show"
-    get "/equities_accounts/:id/more_payments/:last_id", to: "equities_accounts#more_payments"
+    get "/equity_accounts", to: "equity_accounts#index"
+    get "/equity_accounts/:id", to: "equity_accounts#show"
+    get "/equity_accounts/:id/transactions", to: "equity_accounts#transactions"
+
+    # Shares
+    get "/member_shares", to: "member_shares#index"
+
+    # Survey
+    get "/surveys", to: "surveys#index"
+    post "/surveys/create_survey_mobile", to: "surveys#create_survey_mobile"
+    post "/surveys/fetch_survey_answer", to: "surveys#fetch_survey_answer"
+    post "/surveys/update_survey_answer", to: "surveys#update_survey_answer"
+
+    # Loan Products
+    get "/loan_products", to: "loan_products#index"
+
+    # Co Makers
+    get "/co_makers", to: "co_makers#index"
+
+    # Loan Applications
+    get "/loan_applications", to: "loan_applications#index"
   end
+
+  # Client Meta Services
+  get "/client_meta/loan_products", to: "client_meta#loan_products"
 
   namespace :v2 do
     post "/apply", to: "public#apply"
@@ -216,6 +259,18 @@ namespace :api do
     post "/online_applications/verify", to: "online_applications#verify"
     post "/online_applications/assign_branch", to: "online_applications#assign_branch"
 
+    post "/online_loan_applications/verify", to: "online_loan_applications#verify"
+    post "/online_loan_applications/for_review", to: "online_loan_applications#for_review"
+    post "/online_loan_applications/for_approve", to: "online_loan_applications#for_approve"
+    post "/online_loan_applications/approve_loan", to: "online_loan_applications#approve_loan"
+    post "/online_loan_applications/change_amount", to: "online_loan_applications#change_amount"
+    post "/online_loan_applications/reject", to: "online_loan_applications#reject"
+    post "/online_loan_applications/update_details", to: "online_loan_applications#update_details"
+    post "/online_loan_applications/reject_checking", to: "online_loan_applications#reject_checking"
+    post "/online_loan_applications/reject_approve", to: "online_loan_applications#reject_approve"
+    post "/online_loan_applications/decline", to: "online_loan_applications#decline"
+    post "/online_loan_applications/check", to: "online_loan_applications#check"
+    
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
@@ -324,17 +379,15 @@ namespace :api do
     post "/members/upload_signature", to: "members#upload_signature"
     post "/members/delete_profile_picture", to: "members#delete_profile_picture"
     post "/members/delete_signature", to: "members#delete_signature"
-    post "/members/register", to: "members#register"
-    post "/members/register_member", to: "members#register_member"
     get "/members/process_members_file", to: "members#process_members_file"
     get "/members/process_beneficiaries_file", to: "members#process_beneficiaries_file"
     get "/members/process_legal_dependents_file", to: "members#process_legal_dependents_file"
-    post "/members/register_member", to: "members#register_member"
     post "/members/save_make_payment", to: "members#save_make_payment"
     get "/risk_profiles/fetch_daily_metric", to: "risk_profiles#fetch_daily_metric"
     get "/risk_profiles/fetch_prev_metric", to: "risk_profiles#fetch_prev_metric"
     get "/members/member_mobile_number", to: "members#member_mobile_number"
     get "/members/mobile_number_exist", to: "members#mobile_number_exist"
+    post "members/update_mobile_number", to: "members#update_mobile_number"
 
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
@@ -394,6 +447,7 @@ namespace :api do
     post "/loans/reverse_loan", to: "loans#reverse_loan"
     post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
     post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
+    post "/loans/fraud_save", to: "loans#fraud_save"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"
