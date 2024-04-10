@@ -137,6 +137,10 @@ class Member < ApplicationRecord
     "#{self.data.with_indifferent_access[:address][:street].upcase}, #{self.data.with_indifferent_access[:address][:district].upcase}, #{self.data.with_indifferent_access[:address][:city].upcase}, #{self.data.with_indifferent_access[:address][:province].upcase} , #{self.data.with_indifferent_access[:address][:region].upcase} , PH"
   end
 
+  def full_address
+    "#{self.data.with_indifferent_access[:address][:street]}, #{self.data.with_indifferent_access[:address][:district]}, #{self.data.with_indifferent_access[:address][:city]}, #{self.data.with_indifferent_access[:address][:province]} , #{self.data.with_indifferent_access[:address][:region]} , PH"
+  end
+
   def recognition_date
     if self.data.with_indifferent_access[:recognition_date].present?
       return self.data.with_indifferent_access[:recognition_date].to_date
