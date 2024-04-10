@@ -57,7 +57,9 @@ module Members
           amount_due:       amort.amount_due,
           total_paid:       amort.total_paid.to_f,
           running_balance:  running_balance.to_f,
-          is_paid:          amort.is_paid ? "yes" : "no"
+          is_paid:          amort.is_paid ? "yes" : "no",
+          principal:        amort.principal.to_f,
+          interest:         amort.interest.to_f
         }
       }
 
