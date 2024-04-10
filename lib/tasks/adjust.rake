@@ -3393,4 +3393,88 @@ namespace :adjust do
     end
     puts "done"
   end
+
+  task :process_kok_loan => :environment do
+    kok = InsuranceLoanBundleEnrollment.all
+    
+    kok.each do |k|
+      kok_data = k.data.with_indifferent_access[:records]
+      kok_last_data = kok_data.last
+
+      insurance_loan_bundle_enrollment      = InsuranceLoanBundleEnrollment.where(id: k[:id]).first
+      plan_type                             = kok_last_data[:kok_data][:plan_type]
+      plan_category                         = kok_last_data[:kok_data][:plan_type],
+      partner                               = kok_last_data[:kok_data][:partner],
+      policy_no                             = kok_last_data[:kok_data][:policy_no],
+      effectivity_date                      = kok_last_data[:kok_data][:effectivity_date],
+      maturity_date                         = kok_last_data[:kok_data][:maturity_date],
+      client_type                           = kok_last_data[:kok_data][:client_type],
+      first_name                            = kok_last_data[:kok_data][:client_type],
+      middle_name                           = kok_last_data[:kok_data][:client_type],
+      last_name                             = kok_last_data[:kok_data][:client_type],
+      address                               = kok_last_data[:kok_data][:address],
+      gender                                = kok_last_data[:kok_data][:gender],
+      enrolled_status                       = kok_last_data[:kok_data][:enrolled_status],
+      civil_status                          = kok_last_data[:kok_data][:civil_status],
+      birth_date                            = kok_last_data[:kok_data][:birth_date],
+      age                                   = kok_last_data[:kok_data][:age],
+      premium_coverage                      = kok_last_data[:kok_data][:premium_coverage],
+      mobile_no                             = kok_last_data[:kok_data][:mobile_no],
+      membership_date                       = kok_last_data[:kok_data][:membership_date],
+      benif_fname                           = kok_last_data[:kok_data][:benif_fname],
+      benif_mname                           = kok_last_data[:kok_data][:benif_mname],
+      benif_lname                           = kok_last_data[:kok_data][:benif_lname],
+      benif_birth_date                      = kok_last_data[:kok_data][:benif_birth_date],
+      benif_gender                          = kok_last_data[:kok_data][:benif_gender],
+      benif_relationship                    = kok_last_data[:kok_data][:benif_relationship],
+      member                                = Member.where(id: kok_last_data[:member][:id]).first,
+
+      config = {
+        insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+        plan_type: plan_type,
+        plan_category: plan_category,
+        partner: partner,
+        policy_no: policy_no,
+        effectivity_date: effectivity_date,
+        maturity_date: maturity_date,
+        client_type: client_type,
+        first_name: first_name,
+        middle_name: middle_name,
+        last_name: last_name,
+        address: address,
+        gender: gender,
+        enrolled_status: enrolled_status,
+        civil_status: civil_status,
+        birth_date: birth_date,
+        age: age,
+        premium_coverage: premium_coverage,
+        mobile_no: mobile_no,
+        membership_date: membership_date,
+        benif_fname: benif_fname,
+        benif_mname: benif_mname,
+        benif_lname: benif_lname,
+        benif_birth_date: benif_birth_date,
+        benif_gender: benif_gender,
+        benif_relationship: benif_relationship,
+        member: member
+      }
+
+      kok_id              = k[:id]
+      maturity_date       = kok_last_data[:kok_data][:maturity_date].to_date
+      five_weeks_ago      = (maturity_date - 35)
+      now                 = Date.today
+
+
+      if now >= five_weeks_ago && now <= maturity_date
+        puts "for-renewal, maturity date #{maturity_date}, id: #{kok_id}"
+        cmd = ::InsuranceLoanBundleEnrollments::MemberRenewal.new(
+          config: config
+        ).execute!
+
+      elsif now > maturity_date
+        puts "lapsed , id: #{kok_id}"
+      end
+    end
+  end
+
 end
