@@ -206,7 +206,7 @@ module Api
                   }
 
         data = ::Loans::Save.new(config: config).execute!
-        online_application.update(status: "approved")
+        online_application.update!(status: "approved")
   
         render json: { message: "ok" }
 
@@ -216,8 +216,8 @@ module Api
           mobile_number: online_application.data["mobile_number"],
           content: content
         }
-        #::SmsBlast::Send.new(config: sms).execute!
-        puts "jaysoooooooooooooooooooon" + sms.inspect
+        ::SmsBlast::Send.new(config: sms).execute!
+        #puts "jaysoooooooooooooooooooon" + sms.inspect
       
       end
 
