@@ -156,7 +156,7 @@ module Api
                       id: nil,
                       branch_id: member.branch_id,
                       center_id: member.center_id,
-                      date_prepared: "2024-03-01",
+                      date_prepared: Date.today,
                       member_id: member.id,
                       principal: online_application.amount,
                       loan_product_id: online_application.loan_product_id,
@@ -188,8 +188,8 @@ module Api
                                 first_name: online_application.data['clip_beneficiary']['first_name'],
                                 middle_name: online_application.data['clip_beneficiary']['middle_name'],
                                 last_name: online_application.data['clip_beneficiary']['last_name'],
-                                date_of_birth: "",
-                                relationship: ""
+                                date_of_birth: online_application.data['clip_beneficiary']['date_of_birth'],
+                                relationship: online_application.data['clip_beneficiary']['relationship']
 
                               }
                             }
@@ -206,7 +206,7 @@ module Api
                   }
 
         data = ::Loans::Save.new(config: config).execute!
-        online_application.update!(status: "approved")
+        online_application.update(status: "approved")
   
         render json: { message: "ok" }
 
@@ -216,8 +216,8 @@ module Api
           mobile_number: online_application.data["mobile_number"],
           content: content
         }
-        ::SmsBlast::Send.new(config: sms).execute!
-        #puts "jaysoooooooooooooooooooon" + sms.inspect
+        #::SmsBlast::Send.new(config: sms).execute!
+        puts "jaysoooooooooooooooooooon" + sms.inspect
       
       end
 
