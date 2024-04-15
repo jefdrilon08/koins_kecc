@@ -11,9 +11,9 @@ module InsuranceLoanBundleEnrollments
       @insurance_loan_bundle_enrollments = InsuranceLoanBundleEnrollment.new(
         branch: @branch,
         center: @center,
-        collection_date: @collection_date                            
+        collection_date: @collection_date
       )
-       
+
       @data = {
         records: [
           member: {
@@ -54,11 +54,12 @@ module InsuranceLoanBundleEnrollments
             full_name_dependent: @config[:full_name_dependent]
           }
         ]
-      }  
+      }
     end
 
     def execute!
       @insurance_loan_bundle_enrollments.data = @data
+      @insurance_loan_bundle_enrollments.update!(status: "approved")
       @insurance_loan_bundle_enrollments.save!
       @insurance_loan_bundle_enrollments
     end
