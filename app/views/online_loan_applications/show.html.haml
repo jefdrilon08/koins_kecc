@@ -8,11 +8,11 @@
         %label{style: "color: red; "}
           #{@online_application.status}
         %br
-        - if @online_application.data.present? && @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
+        - if @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
           %label{style: "color: green; "}
             %a Cash Flow Approved by:
             #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
-        - elsif @online_application.approved?
+        - elsif @online_application.data["check_cash_flow"].present? && @online_application.approved?
           %label{style: "color: green; "}
             %a Cash Flow Approved by:
             #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
