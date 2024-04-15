@@ -20,6 +20,12 @@ var $selectMember;
 var $message;
 var templateErrorList;
 
+// print pdf 
+var $modalPrint;
+var $printMessage;
+var $btnPrintPdf;
+var $btnPrint;
+
 // kok
 var $inputPlanType;
 var $inputPlanCategory;
@@ -64,6 +70,12 @@ var _cacheDom = function() {
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
   $btnCheck             = $("#btn-check");
+    
+  $btnPrint             = $("#btn-print");
+  $printMessage         = $(".print-message");
+  $btnPrintPdf          = $("#btn-print-pdf");
+  $modalPrint           = $("modal-print");
+
   $btnConfirmCheck      = $("#btn-confirm-check");
   $btnDeclined          = $("#btn-declined");
   $btnConfirmDeclined   = $("#btn-confirm-declined");
@@ -139,6 +151,16 @@ var _bindEvents = function() {
       $inputMobileNo.hide();
       $inputCivilStatus.hide();
     }
+
+  //prind pdf
+  $btnPrint.on("click", function() {
+    $modalPrint.show();
+
+    var type = "print_insurance_loan_bundle_enrollment";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + _id);
+  });
 
   // check
   $btnCheck.on("click", function() {

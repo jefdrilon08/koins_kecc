@@ -80,22 +80,22 @@
           %button#btn-add.btn.btn-info.btn-block
             .fa.fa-plus
             Add
-  - else
-    .row
-      .col-md-2
-        .form-group
-          %label
-            Actions
-          %button#btn-add.btn.btn-info.btn-block
-            .fa.fa-plus
-            RENEW
+  / - else
+  /   .row
+  /     .col-md-2
+  /       .form-group
+  /         %label
+  /           Actions
+  /         %button#btn-add.btn.btn-info.btn-block
+  /           .fa.fa-plus
+  /           RENEW
 
-  - if @insurance_loan_bundle_enrollment.approved?
-    .row
-      .col-md-2
-        .form-group
-          %label
-            Actions
-          %button#btn-add.btn.btn-info.btn-block
-            .fa.fa-plus
-            RENEW
+- if @insurance_loan_bundle_enrollment.approved?
+  .row
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        %button#btn-add.btn.btn-info.btn-block
+          .fa.fa-plus
+          RENEW

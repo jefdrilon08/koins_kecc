@@ -5,6 +5,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "for_checking",
     "for-approval",
     "processing",
+    "for-renewal",
     "declined",
     "error"
   ]
@@ -81,7 +82,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   end
 
   def for_renewal?
-    self.status == "for_renewal"
+    self.status == "for-renewal"
   end
 
   def processing?
