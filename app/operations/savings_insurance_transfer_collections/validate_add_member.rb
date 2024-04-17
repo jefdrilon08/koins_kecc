@@ -7,7 +7,7 @@ module SavingsInsuranceTransferCollections
       @savings_insurance_transfer_collection  = @config[:savings_insurance_transfer_collection]
       @member                                 = @config[:member]
       @amount                                 = @config[:amount]
-
+    
       if @savings_insurance_transfer_collection.clip
         @loan_product_id                        = @config[:loan_product_id]
         @principal                              = @config[:principal]
@@ -41,11 +41,14 @@ module SavingsInsuranceTransferCollections
         @kkalinga_beneficiary_name             = @config[:kkalinga_beneficiary_name]
         @poc_number                            = @config[:poc_number]
         @kkalinga_beneficiary_age              = ((@kkalinga_effectivity_date.to_time - @kkalinga_date_of_birth.to_time)/(60*60*24*365)).floor(4)
-
       end
 
       @data = @savings_insurance_transfer_collection.try(:data).try(:with_indifferent_access)
+      @records = @data[:records]
 
+      @member_index_records = @records.select{|r| r[:member][:id] == @member.id}
+      @total_per_member = @member_index_records.map{|c| c[:amount]}.sum
+     
       if @data.present?
         @savings_subtype    = @data[:savings_subtype]
         @insurance_subtype  = @data[:insurance_subtype]
@@ -113,6 +116,13 @@ module SavingsInsuranceTransferCollections
       end
       
       if @savings_account.present? and @savings_account.maintaining_balance > (@savings_account.balance - @amount)
+        @errors[:messages] << {
+          key: "savings_account",
+          message: "Not enough balance for savings #{@savings_subtype} (Maintaining balance: #{@savings_account.maintaining_balance}) for member #{@member.full_name}"
+        }
+      end
+
+      if @savings_account.present? and @savings_account.maintaining_balance > (@savings_account.balance - @total_per_member)
         @errors[:messages] << {
           key: "savings_account",
           message: "Not enough balance for savings #{@savings_subtype} (Maintaining balance: #{@savings_account.maintaining_balance}) for member #{@member.full_name}"
