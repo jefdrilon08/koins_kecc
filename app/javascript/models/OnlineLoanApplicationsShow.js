@@ -342,8 +342,6 @@ var _bindEvents = function() {
   });
 
   $btnConfirmForApprove.on("click", function() {
-  
-  
     $btnConfirmForReview.prop("disabled", true); 
     $.ajax({
       url: "/api/v1/online_loan_applications/for_approve",

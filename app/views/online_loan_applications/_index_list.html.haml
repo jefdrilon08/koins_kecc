@@ -3,11 +3,9 @@
     %thead
       %tr
         %th
-          Reference Number
+          Reference #
         %th
           Name
-        %th
-          Mobile Number
         %th
           SATO
         %th
@@ -16,6 +14,10 @@
           Status
         %th
           Date Applied
+        %th
+          Date Recommend
+        %th
+          Date Approved
     %tbody
       - @online_applications.each do |o|
         %tr
@@ -27,8 +29,6 @@
             %strong
               = link_to online_loan_application_path(o.id) do
                 #{Member.find(o.member_id).full_name}
-          %td
-            #{Member.find(o.member_id).mobile_number}
           %td
             #{Member.find(o.member_id).branch.name}
           %td
@@ -48,4 +48,9 @@
                 .badge.bg-success
                   Approved
           %td
-            #{o.date_applied}
+            #{o.created_at.localtime}
+          - if o.data["so_recommendation"].present? && o.data["check_cash_flow"].present?
+            %td
+              #{o.data["so_recommendation"]["date_check"].to_date.strftime("%A, %B %d, %Y")} - #{o.data["so_recommendation"]["time_check"]}
+            %td
+              #{o.data["check_cash_flow"]["date_check"].to_date.strftime("%A, %B %d, %Y")}
