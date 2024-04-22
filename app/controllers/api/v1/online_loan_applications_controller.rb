@@ -98,17 +98,27 @@ module Api
         online_application  = LoanApplication.find(params[:id])
         online_application_data = online_application.data
 
-
         online_application.update!(status: "for_review", data: online_application_data)
         render json: { message: "ok" }
-     
+
+         
       end
 
       def for_approve     
         online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+
+        online_application_data['so_recommendation'] = {}
+        online_application_data['so_recommendation']['check_verify'] = true
+        online_application_data['so_recommendation']['user'] = current_user.id
+        online_application_data['so_recommendation']['first_name'] = current_user["first_name"]
+        online_application_data['so_recommendation']['last_name'] = current_user["last_name"]
+        online_application_data['so_recommendation']['date_check'] = Date.today
+        online_application_data['so_recommendation']['time_check'] = Time.now.strftime("%I:%M:%S %p")
+
+        
         online_application.update!(status: "for_approve")
         
-
         render json: { message: "ok" }
      
       end
@@ -156,7 +166,7 @@ module Api
                       id: nil,
                       branch_id: member.branch_id,
                       center_id: member.center_id,
-                      date_prepared: "2024-03-01",
+                      date_prepared: Date.today,
                       member_id: member.id,
                       principal: online_application.amount,
                       loan_product_id: online_application.loan_product_id,
@@ -188,8 +198,8 @@ module Api
                                 first_name: online_application.data['clip_beneficiary']['first_name'],
                                 middle_name: online_application.data['clip_beneficiary']['middle_name'],
                                 last_name: online_application.data['clip_beneficiary']['last_name'],
-                                date_of_birth: "",
-                                relationship: ""
+                                date_of_birth: online_application.data['clip_beneficiary']['date_of_birth'],
+                                relationship: online_application.data['clip_beneficiary']['relationship']
 
                               }
                             }

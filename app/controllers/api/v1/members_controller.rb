@@ -897,7 +897,7 @@ module Api
       end
 
       def update_mobile_number
-        valid_roles = ["MIS", "FM"]
+        valid_roles = ["MIS", "FM", "OAS"]
 
         if (@current_user.roles & valid_roles).size == 0
           render json: { errors: "unauthorized action" }, status: 400

@@ -128,8 +128,8 @@
         %td{style: "text-align: left; font-size: 9px;"} Mobile Number
         %td{style: "text-align: left; font-size: 9px;"} #{@member_data[:mobile_number]}
 
-
       %tr
+
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Hinihiram
         %td{style: "text-align: left; font-size: 9px;"}
           #{number_to_currency(@online_application[:amount].to_f, unit:'')}
@@ -137,17 +137,25 @@
         %td{style: "text-align: left; font-size: 9px;"}
           #{@online_application[:num_installments]}
       %tr
+
+         
+        
+      - if @online_application_loan.cycle.nil? || @online_application_loan.cycle.present?
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
-        %td 
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal_paid.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
-          
-        %td
-   
+        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_loan.cycle = 1}
+      - elsif @online_application_loan.cycle.present?
+        %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal_paid.to_f, unit:'')} 
+        %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
+        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_loan.cycle += 1}
+        
 
       %tr
-        %td{style: "text-align: left; font-size: 9px;"} Uri ng Negosyo
-        %td 
-        %td{style: "text-align: left; font-size: 9px;"} Tagal ng Negosyo
+        %td{style: "text-align: left; font-size: 9px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"} Uri ng Negosyo
+        %td{style: "text-align: left; font-size: 9px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"} #{@project_type.name}
+        %td{style: "text-align: left; font-size: 9px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"} Tagal ng Negosyo
         %td
       %tr
         %td{colspan: "4", style: "text-align: left; font-size: 9px;"} Mga Produkto at serbisyo

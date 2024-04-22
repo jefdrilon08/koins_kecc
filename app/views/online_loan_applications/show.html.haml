@@ -8,15 +8,22 @@
         %label{style: "color: red; "}
           #{@online_application.status}
         %br
-        - if @online_application.data.present? && @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
+        - if @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
           %label{style: "color: green; "}
-            %a Cash Flow Approved by:
+            %a{style: "color: red; "} Cash Flow Approved by:
             #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
-        - elsif @online_application.approved?
+        - elsif @online_application.data["check_cash_flow"].present? && @online_application.approved?
           %label{style: "color: green; "}
-            %a Cash Flow Approved by:
-            #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
- 
+            %a{style: "color: red; "} Cash Flow Approved by:
+            #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]} - #{@online_application.data["check_cash_flow"]["date_check"]}
+        %br
+          %label{style: "color: green; "}
+            %a{style: "color: red; "} Date Apply :
+            #{@online_application.date_applied.to_date.strftime("%A, %B %d, %Y")}
+          - if @online_application.data["so_recommendation"].present?
+            %label{style: "color: green; "}
+              %a{style: "color: red; "} Recommend date :
+              #{@online_application.data["so_recommendation"]["date_check"].to_date.strftime("%A, %B %d, %Y")} - #{@online_application.data["so_recommendation"]["time_check"]}
         %hr
           - if @online_application.data["approve_process"].present?
             - @online_application.data["approve_process"].each do |opp|

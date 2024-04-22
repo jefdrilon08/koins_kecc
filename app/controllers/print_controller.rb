@@ -83,7 +83,8 @@ class PrintController < ApplicationController
       @cycle = Member.find(@online_application.member_id).data.with_indifferent_access
       @member_comaker = Member.find(@online_application.co_maker_member_id)
       @center = Center.find(@member_data.center_id).name
-      
+      @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
+      @project_type = ProjectType.find(@online_application.data["project_type_id"])
       render "print/print_online_loan_application", layout: "print"
 
     elsif type == "print_entry"
