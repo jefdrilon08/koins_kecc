@@ -76,14 +76,22 @@ class PrintController < ApplicationController
 
       @print_involuntary = data
       render "print/print_involuntary_tagging", layout: "print"
-    elsif type == "print_online_loan_application"
+    elsif type == "print_online_loan_application" 
       @online_application = LoanApplication.find(params[:id])
       @online_application_loan_product = LoanProduct.find(@online_application.loan_product_id).name
       @member_data = Member.find(@online_application.member_id)
       @cycle = Member.find(@online_application.member_id).data.with_indifferent_access
       @member_comaker = Member.find(@online_application.co_maker_member_id)
       @center = Center.find(@member_data.center_id).name
-      @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
+    
+      @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id, status:'active').last
+     if @online_application_loan.nil?
+      @cyc1 = 1
+      @prev_loan = 0.0 
+     else
+      @cyc =  @online_application_loan.cycle += 1
+     end
+      
       @project_type = ProjectType.find(@online_application.data["project_type_id"])
       render "print/print_online_loan_application", layout: "print"
 

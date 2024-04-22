@@ -140,16 +140,16 @@
 
          
         
-      - if @online_application_loan.cycle.nil? || @online_application_loan.cycle.present?
+      - if @online_application_loan.nil?
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
-        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal_paid.to_f, unit:'')}
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@prev_loan.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
-        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_loan.cycle = 1}
-      - elsif @online_application_loan.cycle.present?
+        %td{style: "text-align: left; font-size: 9px;"} #{@cyc1}
+      - else
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
-        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal_paid.to_f, unit:'')} 
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
-        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_loan.cycle += 1}
+        %td{style: "text-align: left; font-size: 9px;"} #{@cyc}
         
 
       %tr
