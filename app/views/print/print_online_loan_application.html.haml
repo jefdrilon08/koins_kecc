@@ -140,7 +140,7 @@
 
          
         
-      - if @online_application_loan.cycle.nil?
+      - if @online_application_loan.cycle.nil? || @online_application_loan.cycle.present?
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
         %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal_paid.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
