@@ -175,10 +175,20 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Reject"
           }
         end
-       
+       elsif @online_application.status == "approved"
+        if helpers.is_mis_fm?
+          @subheader_side_actions << {
+            id: "btn-reject-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Acco Reject"
+          }
+        end
       end
+
     end
-    
+
     def edit
 
       @online_loan_application       = LoanApplication.find(params[:id])
