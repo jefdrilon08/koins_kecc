@@ -24,7 +24,20 @@
             %label{style: "color: green; "}
               %a{style: "color: red; "} Recommend date :
               #{@online_application.data["so_recommendation"]["date_check"].to_date.strftime("%A, %B %d, %Y")} - #{@online_application.data["so_recommendation"]["time_check"]}
-        %hr
+        - @online_application_data.each do |data|
+          %br
+          - if data.account_subtype == "K-IMPOK"
+            %label{style: "color: green; "}
+              %a{style: "color: red; "} Impok: 
+              = number_to_currency(data.balance, unit: '₱')
+          - elsif data.account_subtype == "Share Capital"
+            %label{style: "color: green; "}
+              %a{style: "color: red; "} Shace Capital: 
+              = number_to_currency(data.balance, unit: '₱')
+          - elsif data.account_subtype == "Maintaining Balance Savings"
+            %label{style: "color: green; "}
+              %a{style: "color: red; "} Maintaining Balance savings: 
+              = number_to_currency(data.balance, unit: '₱')
           - if @online_application.data["approve_process"].present?
             - @online_application.data["approve_process"].each do |opp|
               - if opp["type"] == "assign_branch_by"
@@ -37,7 +50,7 @@
                 .alert.alert-success
                   %p This has already been process by #{opp["name"]} on #{opp["date_assign"]}
 
-
+        
         %hr
 
 
