@@ -50,7 +50,11 @@ module ApplicationHelper
   def sbk_mis_bk_oas?
       sbk_mis_bk_oas = ["MIS", "SBK", "BK", "OAS"].include? current_user.roles.last
   end
-  
+
+  def sbk_mis_bk?
+    sbk_mis_bk_oas = ["MIS", "SBK", "BK"].include? current_user.roles.last
+  end
+
   def sbk_mis_user
     sbk_mis_user = ["SBK","MIS"].include? current_user.roles.last
   end

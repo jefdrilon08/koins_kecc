@@ -177,7 +177,7 @@ class OnlineLoanApplicationsController < ApplicationController
           }
         end
        elsif @online_application.status == "approved"
-        if helpers.is_mis_fm?
+        if helpers.sbk_mis_bk?
           @subheader_side_actions << {
             id: "btn-reject-approve",
             class: "fa fa-pencil-alt",
