@@ -162,6 +162,12 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Approve"
           }
           @subheader_side_actions << {
+            id: "btn-download-form",
+            class: "fa fa-download",
+            link: "#",
+            text: "Download Form", data: {id: @online_application.id}
+          }
+          @subheader_side_actions << {
             id: "btn-reject-approve",
             class: "fa fa-pencil-alt",
             link: "#",

@@ -84,7 +84,7 @@ class PrintController < ApplicationController
       @member_comaker = Member.find(@online_application.co_maker_member_id)
       @center = Center.find(@member_data.center_id).name
     
-      @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id, status:'active').last
+      @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id, status: ["active", "paid"]).last
      if @online_application_loan.nil?
       @cyc1 = 1
       @prev_loan = 0.0 
