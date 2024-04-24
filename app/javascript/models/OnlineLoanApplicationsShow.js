@@ -216,8 +216,6 @@ var _bindEvents = function() {
       $('.message').text('Please provide a reason.');
       return false;
     }
-
-    alert(reason);
     $.ajax({
       url: "/api/v1/online_loan_applications/reject_approve",
       method: "POST",
