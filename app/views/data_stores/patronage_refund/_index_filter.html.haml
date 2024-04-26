@@ -1,0 +1,20 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-5
+      .form-group
+        %label
+          Year
+        = select_tag :year, options_for_select((2019..Date.today.year).to_a.reverse, params[:year]), class: "form-control", id: "filter-select-year" , prompt: "-- SELECT --"
+    .col-md-5
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch_id), class: "form-control select-select2", id: "filter_branch-select", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        .form-group
+          .btn-group.text-right
+            = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+              .bi.bi-search

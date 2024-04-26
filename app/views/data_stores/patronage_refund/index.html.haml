@@ -1,14 +1,20 @@
 = title
 .row
   .col
+    %h4
+      Patronage Refund
     .card
       .card-body
-        - if @records.any?
-          = render partial: "index_list"
-          = paginate @records
+        = render partial: "index_filter"
+        - if @record.any?
+          = render partial: "index_list" 
+          = paginate @record
         - else
           %p
-            No records
-
+            No records found
+ 
 = render partial: "data_stores/patronage_refund/modals/new"
 = render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

@@ -101,7 +101,6 @@ class BillingsController < ApplicationController
 
       end
 
-
       if @billing.save?
         if @data[:save].present?
 

@@ -23,14 +23,14 @@
     .col-md-1
       .form-group
         %label
-          OR number
+          OR Number
         = text_field_tag :or_number, params[:or_number], class: 'form-control'
-    .col-md-1
+    .col-md-2
       .form-group
         %label
           Status
         = select_tag :status, options_for_select(Billing::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
-    .col-md-2
+    .col-md-1
       .form-group
         %label
           Actions

@@ -1,16 +1,16 @@
 = form_tag "", method: 'GET' do
   .row
-    .col-md-2
+    .col-md-4
       .form-group
         %label
           Branch
         = select_tag :select_branch, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
-    .col-md-2
+    .col-md-3
       .form-group
         %label
           Center
         = select_tag :select_center, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)), :id, :name, @center), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
-    .col-md-2
+    .col-md-3
       .form-group
         %label
           Status

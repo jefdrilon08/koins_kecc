@@ -13,7 +13,6 @@ class AccruedPaymentCollectionsController < ApplicationController
       ]
 
       @accrued_interest = AccruedBilling.where(branch_id: @branches.pluck(:id)).order("status DESC , collection_date DESC")
-
     # #   if params[:status].present?
     # #     @accrued_interest = AccruedBilling.where(status: params[:status]).order("status DESC , collection_date DESC")
       
@@ -45,6 +44,7 @@ class AccruedPaymentCollectionsController < ApplicationController
       @accrued_interest = @accrued_interest.where(status: @status)
     end
 
+    @accrued_interest = @accrued_interest.order("status DESC, collection_date DESC").page(params[:page]).per(20)
 
 	end
 

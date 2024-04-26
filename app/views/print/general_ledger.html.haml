@@ -27,7 +27,6 @@
               #{@general_ledger[:branch][:name]}
               %br
               General Ledger from #{@general_ledger[:start_date].to_date.strftime("%B %d, %Y")} to #{@general_ledger[:end_date].to_date.strftime("%B %d, %Y")}
-
   %tbody
     %tr
       %td
@@ -75,25 +74,25 @@
             - entry[:entries].each do |o|
               - current_dr_sum += o[:dr_amount].to_f.round(2)
               - current_cr_sum += o[:cr_amount].to_f.round(2)
-              
-              %tr
-                %td.text-center{ width: "8%" }
-                  %small
-                    #{o[:date_posted]}
-                %td{ width: "2%" }
-                  #{o[:reference_number]} 
-                %td{ width: "2%" }
-                  #{o[:sub_reference_number]}    
-                %td{ width: "2%" }
-                  #{o[:book]}
-                %td{ width: "50%" }
-                  #{o[:particular]}
-                %td.text-end{ width: "8%" }
-                  #{number_to_currency(o[:dr_amount], unit: '')}
-                %td.text-end{ width: "8%" }
-                  #{number_to_currency(o[:cr_amount], unit: '')}
-                %td.text-end{ width: "8%" }
-                  #{number_to_currency(o[:running_balance], unit: '')}
+              - if o[:dr_amount].to_f != 0.00 || o[:cr_amount].to_f != 0.00 || o[:running_balance].to_f !=0.00
+                %tr
+                  %td.text-center{ width: "8%" }
+                    %small
+                      #{o[:date_posted]}
+                  %td{ width: "2%" }
+                    #{o[:reference_number]} 
+                  %td{ width: "2%" }
+                    #{o[:sub_reference_number]}    
+                  %td{ width: "2%" }
+                    #{o[:book]}
+                  %td{ width: "50%" }
+                    #{o[:particular]}
+                  %td.text-end{ width: "8%" }
+                    #{number_to_currency(o[:dr_amount], unit: '')}
+                  %td.text-end{ width: "8%" }
+                    #{number_to_currency(o[:cr_amount], unit: '')}
+                  %td.text-end{ width: "8%" }
+                    #{number_to_currency(o[:running_balance], unit: '')}
 
             %tr
               %th{ colspan: 3 }
