@@ -1,0 +1,30 @@
+class ProcessKokLoan < ApplicationJob
+  queue_as :default
+
+  def perform(config)
+    @config = config
+    insurance_loan_bundle_enrollment         = @config[:insurance_loan_bundle_enrollment]
+    five_weeks_ago                           = @config[:five_weeks_ago]
+    kok_id                                   = @config[:kok_id]
+    maturity_date                            = @config[:maturity_date]
+    now                                      = @config[:now]
+    age                                      = @config[:age]
+
+    # raise insurance_loan_bundle_enrollment.inspect
+    if age <= 75
+      if now >= five_weeks_ago && now <= maturity_date
+        puts "for-renewal, maturity date #{maturity_date}, id: #{kok_id}"
+        cmd = ::InsuranceLoanBundleEnrollments::MemberRenewal.new(
+          config: config
+        ).execute!
+      elsif now > maturity_date
+        puts "lapsed , id: #{kok_id}"
+        cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
+          config: config
+        ).execute!
+      end
+    else
+      raise "Your age is not qualified for Renewal. Member ID : #{insurance_loan_bundle_enrollment.id}".inspect
+    end
+  end
+end

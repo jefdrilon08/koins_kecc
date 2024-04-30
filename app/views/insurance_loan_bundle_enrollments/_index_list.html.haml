@@ -41,5 +41,8 @@
           - elsif o.processing?
             .badge.badge-info
               Processing
+          - elsif o.lapsed?
+            .badge.bg-danger
+              Lapsed
 
 = paginate @insurance_loan_bundle_enrollments
