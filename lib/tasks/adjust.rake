@@ -62,7 +62,7 @@ namespace :adjust do
     offset      = ENV['OFFSET'].try(:to_i) || 8
 
     AccountTransaction.where(
-      "extract(hour FROM transacted_at)::int = ? AND extract(minute FROM transacted_at) = ? AND transacted_at >= ? AND transacted_at <= ? AND amount > 0 AND status = ?", 
+      "extract(hour FROM transacted_at)::int = ? AND extract(minute FROM transacted_at) = ? AND transacted_at >= ? AND transacted_at <= ? AND amount > 0 AND status = ?",
       hour,
       minute,
       start_date,
@@ -181,7 +181,7 @@ namespace :adjust do
   end
 
   task :insert_hiip_from_withdrawal => :environment do
-    puts "Fetching withdrawal collection..."    
+    puts "Fetching withdrawal collection..."
 
     withdrawal_collections = ::Insurance::FetchWithdrawalCollectionForHiip.new().execute!
 
@@ -191,7 +191,7 @@ namespace :adjust do
 
     if ENV['WITHDRAWAL_ID'].present?
       withdrawal_collections = withdrawal_collections.where(id: ENV['WITHDRAWAL_ID'])
-    end    
+    end
 
     values = []
 
@@ -228,7 +228,7 @@ namespace :adjust do
         lock_in_period: nil,
         data: {
                 date_prepared: wc[:date_approved],
-                date_approved: wc[:date_approved]                                          
+                date_approved: wc[:date_approved]
           }
         }
 
@@ -359,13 +359,13 @@ namespace :adjust do
                                                 master_reference_number: row['master_reference_number']
                                                 }
                                               }
-  
-      
+
+
       account_transaction.save!
-      
+
       member_account_ids << account_transaction.subsidiary_id
 
-      puts "Done creating!"  
+      puts "Done creating!"
     end
 
     member_account_ids = member_account_ids.uniq
@@ -377,7 +377,7 @@ namespace :adjust do
 
       ::MemberAccounts::Rehash.new(member_account: acc, account_transactions: account_transactions).execute!
     end
-    
+
     puts "Done!"
   end
 
@@ -522,9 +522,9 @@ namespace :adjust do
       FROM
         members
       INNER JOIN
-        membership_payment_records 
-        ON membership_payment_records.member_id = members.id 
-        AND membership_payment_records.membership_name = '#{membership_name}' 
+        membership_payment_records
+        ON membership_payment_records.member_id = members.id
+        AND membership_payment_records.membership_name = '#{membership_name}'
         AND membership_payment_records.membership_type = '#{membership_type}'
       WHERE
         members.status IN ('active', 'resigned', 'resign')
@@ -576,7 +576,7 @@ namespace :adjust do
 
     puts "Done for #{branch.id}"
   end
-  
+
   task :set_max_active_date_branch => :environment do
     branch  = Branch.find(ENV['BRANCH_ID'])
     current_date_details = ENV['CURRENT_DATE']
@@ -587,7 +587,7 @@ namespace :adjust do
 
     # Do this in batches
     Loan.where(status: ['active']).find_in_batches(batch_size: 2500) do |group|
-     
+
      ids = group.pluck(:id).map{ |o| "'#{o}'" }.join(",")
 
       data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
@@ -610,9 +610,9 @@ namespace :adjust do
                     amortization_schedule_entries.due_date DESC,
                     account_transactions.transacted_at DESC
               EOS
-      
 
-    
+
+
 
       sets  = data.map{ |d|
                 loan_id                 = d.fetch("loan_id")
@@ -666,7 +666,7 @@ namespace :adjust do
 
     # Do this in batches
     Loan.where(status: ['active']).find_in_batches(batch_size: 2500) do |group|
-     
+
      ids = group.pluck(:id).map{ |o| "'#{o}'" }.join(",")
 
       data  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
@@ -689,9 +689,9 @@ namespace :adjust do
                     amortization_schedule_entries.due_date DESC,
                     account_transactions.transacted_at DESC
               EOS
-      
 
-    
+
+
 
       sets  = data.map{ |d|
                 loan_id                 = d.fetch("loan_id")
@@ -735,7 +735,7 @@ namespace :adjust do
 
     puts "Done."
   end
-  
+
   task :repair_personal_funds => :environment do
     data_store      = DataStore.personal_funds.find(ENV["ID"])
     account_type    = ENV["ACCOUNT_TYPE"]
@@ -849,7 +849,7 @@ namespace :adjust do
 
       life_account = member.member_accounts.where(account_subtype:"Life Insurance Fund").first
       ev_account   = member.member_accounts.where(account_subtype:"Equity Value").first
-      
+
       if ev_account.present?
         ev_amount = life_account.balance / 2
         ev_account.update!(balance: ev_amount)
@@ -962,7 +962,7 @@ namespace :adjust do
             loan_product_id: elp.id,
             cycle: loans.where(loan_product_id: elp.id).order("cycle ASC").count
           }
-          
+
           start_counter = loan_cycles.last[:cycle].to_i - loans.where(loan_product_id: elp.id).count
           loans.where(loan_product_id: elp.id).order("date_approved ASC").each do |temp_loan|
             start_counter += 1
@@ -1210,7 +1210,7 @@ namespace :adjust do
     date_paid         = ENV['DATE_PAID'].to_date
     user              = User.find(ENV['USER_ID'])
     particular        = ENV['PARTICULAR']
-    member            = Member.find(ENV['MEMBER_ID']) 
+    member            = Member.find(ENV['MEMBER_ID'])
     amount            = ENV['AMOUNT'].to_f
     record_type       = ENV['RECORD_TYPE']
     account_subtype   = ENV['ACCOUNT_SUBTYPE']
@@ -1302,13 +1302,13 @@ namespace :adjust do
       member = Member.where(identification_number: identification_number).first
 
       if !member.nil?
-        puts "Uploading recognition date: #{recognition_date} for #{member.full_name}"   
+        puts "Uploading recognition date: #{recognition_date} for #{member.full_name}"
         member_data = member.data.with_indifferent_access
         member_data[:recognition_date] = recognition_date
         member.update!(data: member_data)
 
         membership_payment = member.membership_payment_records.where(membership_type: "Insurance", membership_name: "K-MBA").order("date_paid ASC").last
-        
+
         if membership_payment.present?
           membership_payment.update!(date_paid: recognition_date)
         end
@@ -1330,7 +1330,7 @@ namespace :adjust do
       member = Member.where(identification_number: identification_number).first
 
       if !member.nil?
-        puts "Uploading associate id number for #{member.full_name}"   
+        puts "Uploading associate id number for #{member.full_name}"
         member_data = member.data.with_indifferent_access
         member_data[:associate_identification_number] = associate_identification_number
         member.update!(data: member_data)
@@ -1357,7 +1357,7 @@ namespace :adjust do
 
           center_name = row['center_name'].try(:upcase)
           center = Center.where("upper(name) = ? AND branch_id = ?", center_name, branch_id).first
-            
+
           if center.nil?
             new_center = Center.new
 
@@ -1374,7 +1374,7 @@ namespace :adjust do
           end
         end
 
-        puts "Updating branch: #{member.full_name}"   
+        puts "Updating branch: #{member.full_name}"
         member.update!(branch_id: branch_id)
       end
     end
@@ -1385,7 +1385,7 @@ namespace :adjust do
   task :repair_validation_accounting_entry_by_id => :environment do
     puts "Repairing ..."
     is_remote = false
-      
+
     if ENV['IS_REMOTE'].present?
       is_remote = ENV['IS_REMOTE']
     end
@@ -1396,7 +1396,7 @@ namespace :adjust do
     first_name = member_account_validation.prepared_by.split(", ").last
     current_user = User.where("lower(last_name) = ? AND lower(first_name) = ?", last_name.downcase, first_name.downcase).first
     data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
-                                        config: 
+                                        config:
                                         {
                                           branch: member_account_validation.branch,
                                           member_account_validation: member_account_validation,
@@ -1414,7 +1414,7 @@ namespace :adjust do
   task :repair_validation_accounting_entry => :environment do
     puts "Repairing ..."
     is_remote = true
-      
+
     if ENV['IS_REMOTE'].present?
       is_remote = ENV['IS_REMOTE']
     end
@@ -1428,7 +1428,7 @@ namespace :adjust do
     member_account_validations.each do |member_account_validation|
       if member_account_validation.data.present?
         puts "#{member_account_validation.id}"
-        
+
         data = member_account_validation.data.with_indifferent_access
 
         last_name = member_account_validation.prepared_by.split(", ").first
@@ -1442,9 +1442,9 @@ namespace :adjust do
             current_user = User.find("d6050c1c-797b-497a-9ac5-e4a8726c6cbe")
           end
         end
-        
+
         data[:accounting_entry]  = ::MemberAccountValidations::BuildAccountingEntry.new(
-                                            config: 
+                                            config:
                                             {
                                               branch: member_account_validation.branch,
                                               member_account_validation: member_account_validation,
@@ -1452,7 +1452,7 @@ namespace :adjust do
                                               user: current_user
                                             }
                                     ).execute!
-        
+
         member_account_validation.data = data
         member_account_validation.save!
       end
@@ -1477,10 +1477,10 @@ namespace :adjust do
             Dir["#{f}/*"].each do |ff|
               if !File.directory? ff
                 filename  = ff.split('/').last.split('.').first
-                
-                attachments = member.attachment_files  
+
+                attachments = member.attachment_files
                 attachment = attachments.where(file_name: filename).first
-                
+
                 if attachment.nil?
                   if filename != "Thumbs"
                     attachment_file  = AttachmentFile.new(
@@ -1522,9 +1522,9 @@ namespace :adjust do
       if af.file.present?
         puts "Destroying file of #{af.member_id}"
         af.file.purge
-        af.destroy!  
+        af.destroy!
       end
-    end  
+    end
     puts "Done!"
   end
 
@@ -1539,14 +1539,14 @@ namespace :adjust do
 
     branches.each do |branch|
       puts "Deleting files for #{branch.name}"
-      
+
       members = Member.where(branch_id: branch.id, insurance_status: "resigned")
 
       members.each do |member|
         member.attachment_files.each do |af|
           if af.file.present?
             af.file.purge
-            af.destroy!  
+            af.destroy!
           end
         end
       end
@@ -1557,7 +1557,7 @@ namespace :adjust do
 
   # task :update_insurance_status_extended_grace_period => :environment do
   #   current_date = Date.today
-    
+
   #   if ENV['CURRENT_DATE'].present?
   #     current_date = ENV['CURRENT_DATE'].to_date
   #   end
@@ -1610,7 +1610,7 @@ namespace :adjust do
 
   #             if recognition_date.present? and last_payment_date.present?
   #               # Code
-  #               if transactions_count > 0 
+  #               if transactions_count > 0
   #                 current_balance         = o.fetch("balance").to_f.round(2)
   #                 num_days                = (current_date - recognition_date).to_i
   #                 num_weeks               = (num_days / 7).to_i + 1
@@ -1620,7 +1620,7 @@ namespace :adjust do
 
   #                 is_withdraw_payment = o.fetch("is_withdraw_payment")
 
-  #                 if o.fetch("balance").to_f.round(2) == 0.00 && insurance_status == "resigned"  
+  #                 if o.fetch("balance").to_f.round(2) == 0.00 && insurance_status == "resigned"
   #                   new_status = "resigned"
   #                 elsif current_balance == 0.00 && is_withdraw_payment == "true"
   #                   new_status = "resigned"
@@ -1659,7 +1659,7 @@ namespace :adjust do
   #             elsif status == "cleared"
   #               new_status = "cleared"
   #             elsif status == "resigned" && !insurance_date_resigned.nil?
-  #               new_status = "resigned"  
+  #               new_status = "resigned"
   #             end
 
   #             "('#{member_id}', '#{new_status}')"
@@ -1680,7 +1680,7 @@ namespace :adjust do
   # end
 
   task :update_insurance_status => :environment do
-    
+
     current_date = Date.today
 
     if ENV['CURRENT_DATE'].present?
@@ -1691,10 +1691,10 @@ namespace :adjust do
       branches = Branch.where(id: ENV['BRANCH_ID'])
     else
       branches = Branch.all.order("member_counter ASC")
-    end 
+    end
 
     branches.all.each do |branch|
-      
+
       if branch.member_counter != 0
         puts "Updating #{branch.name} ..."
         result  = ActiveRecord::Base.connection.execute(<<-EOS).to_a
@@ -1733,7 +1733,7 @@ namespace :adjust do
                     ORDER BY
                       member_accounts.id, account_transactions.transacted_at DESC
                   EOS
-        
+
         sets  = result.map{ |o|
                   member_id                       = o.fetch("member_id")
                   default_periodic_payment        = 15
@@ -1749,7 +1749,7 @@ namespace :adjust do
                   last_payment_date = o.fetch("transacted_at").try(:to_date)
                   #current_balance   = o.fetch("balance").to_f.round(2)
                   current_balance   = o.fetch("ma_balance").to_f.round(2)
-                  
+
                   puts "ID: #{member_id}"
                   puts "current_balance: #{current_balance}"
                   #puts "ma_current_balance: #{ma_current_balance}"
@@ -1761,7 +1761,7 @@ namespace :adjust do
                   puts "status: #{status}"
 
                   if reinstatement_date.present?
-                    if transactions_count > 0 
+                    if transactions_count > 0
                       num_days                = (current_date - reinstatement_date).to_i
                       num_weeks               = (num_days / 7).to_i + 1
                       insured_amount          = num_weeks * default_periodic_payment
@@ -1777,11 +1777,11 @@ namespace :adjust do
                       end
 
                       if status == "resigned" && current_balance == 0.0
-                        new_status = "resigned"  
+                        new_status = "resigned"
                       end
 
                       if status == "archived" && current_balance == 0.0
-                        new_status = "transferred"  
+                        new_status = "transferred"
                       end
 
                       if current_balance == 0.0 && insurance_date_resigned.present?
@@ -1789,7 +1789,7 @@ namespace :adjust do
                       end
 
                       if status == "resigned" && insurance_date_resigned.present? && current_balance == 0.0
-                        new_status = "resigned"  
+                        new_status = "resigned"
                       end
 
                       if amt_past_due >= 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
@@ -1824,7 +1824,7 @@ namespace :adjust do
                     end
                   elsif recognition_date.present? and last_payment_date.present?
                     # Code
-                    if transactions_count > 0 
+                    if transactions_count > 0
                       num_days                = (current_date - recognition_date).to_i
                       num_weeks               = (num_days / 7).to_i + 1
                       insured_amount          = num_weeks * default_periodic_payment
@@ -1840,11 +1840,11 @@ namespace :adjust do
                       end
 
                       if status == "resigned" && current_balance == 0.0
-                        new_status = "resigned"  
+                        new_status = "resigned"
                       end
 
                       if status == "archived" && current_balance == 0.0
-                        new_status = "transferred"  
+                        new_status = "transferred"
                       end
 
                       if current_balance == 0.0 && insurance_date_resigned.present?
@@ -1852,7 +1852,7 @@ namespace :adjust do
                       end
 
                       if status == "resigned" && insurance_date_resigned.present? && current_balance == 0.0
-                        new_status = "resigned"  
+                        new_status = "resigned"
                       end
 
                       if amt_past_due >= 2340 && insurance_status != "resigned" && current_balance > 0.0 && member_type != "GK"
@@ -1885,12 +1885,12 @@ namespace :adjust do
                         new_status = "inforce"
                       end
                     end
-                  
+
                   elsif status == "archived" && current_balance == 0.0
-                    new_status = "transferred" 
-                  
+                    new_status = "transferred"
+
                   elsif status == "resigned" && current_balance == 0.0
-                    new_status = "resigned"  
+                    new_status = "resigned"
 
                   else
                     new_status = "pending"
@@ -1919,7 +1919,7 @@ namespace :adjust do
       end
     end
   end
-  
+
   task :update_member_insurance_status => :environment do
     puts "Updating member insurance status"
 
@@ -1933,10 +1933,10 @@ namespace :adjust do
       current_date = ENV['CURRENT_DATE'].to_date
     else
       current_date = Date.today
-    end    
+    end
 
     size  = members.size
-    
+
     member_accounts = MemberAccount.where("account_subtype = ? AND member_id IN (?)", "Life Insurance Fund", members.pluck(:id))
     account_transactions = AccountTransaction.savings.where("amount > 0 AND subsidiary_id IN (?)", member_accounts.pluck(:id))
 
@@ -1965,13 +1965,13 @@ namespace :adjust do
             amt_past_due             = (current_balance - insured_amount).to_i * -1
             # num_weeks_past_due       = (amt_past_due / default_periodic_payment)
             days_lapsed              = (current_date - last_payment_date).to_i
-            
+
             if current_balance == 0.00 && latest.data.with_indifferent_access[:is_withdraw_payment] == true
               member.update(insurance_status: "resigned")
             elsif current_balance == 0.00
               member.update(insurance_status: "dormant")
             elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due >= 97
-              member.update(insurance_status: "lapsed")  
+              member.update(insurance_status: "lapsed")
             elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due >= 97
               member.update(insurance_status: "lapsed")
             elsif days_lapsed <= 45 && current_balance >= insured_amount
@@ -1981,14 +1981,14 @@ namespace :adjust do
             elsif days_lapsed <= 45 && current_balance < insured_amount && amt_past_due < 97
               member.update(insurance_status: "inforce")
             elsif days_lapsed > 45 && current_balance < insured_amount && amt_past_due < 97
-              member.update(insurance_status: "inforce")  
+              member.update(insurance_status: "inforce")
             end
           elsif transactions.size == 0
             member.update(insurance_status: "dormant")
           end
         end
       else
-        member.update(insurance_status: "pending") 
+        member.update(insurance_status: "pending")
       end
 
       if member.member_type == "GK"
@@ -2044,9 +2044,9 @@ namespace :adjust do
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
       dob = row['dob'].to_date
-      
-      puts "Updating #{identification_number}...#{member.full_name}"   
-      
+
+      puts "Updating #{identification_number}...#{member.full_name}"
+
       if !member.nil?
         member.update!(date_of_birth: dob)
       end
@@ -2061,9 +2061,9 @@ namespace :adjust do
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
       mobile_number = row['mobile_number']
-      
-      puts "Updating #{identification_number}...#{member.full_name}"   
-      
+
+      puts "Updating #{identification_number}...#{member.full_name}"
+
       if !member.nil?
         member.update!(mobile_number: mobile_number)
       end
@@ -2077,9 +2077,9 @@ namespace :adjust do
     CSV.foreach(file_location, headers: true) do |row|
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
-      
-      puts "Updating #{identification_number}...#{member.full_name}"   
-      
+
+      puts "Updating #{identification_number}...#{member.full_name}"
+
       if !member.nil?
         member.update!(id: row['uuid'])
       end
@@ -2093,9 +2093,9 @@ namespace :adjust do
     CSV.foreach(file_location, headers: true) do |row|
       identification_number = row['identification_number']
       member = Member.where(identification_number: identification_number).first
-      
-      puts "Updating #{identification_number}...#{member.full_name}"   
-      
+
+      puts "Updating #{identification_number}...#{member.full_name}"
+
       if !member.nil?
         member.update!(civil_status: row['civil_status'])
       end
@@ -2107,7 +2107,7 @@ namespace :adjust do
     puts "Searching file #{file_location}"
 
     insurance_account_ids = []
-    
+
     CSV.foreach(file_location, headers: true) do |row|
       uuid = row['id']
       insurance_account_transaction = AccountTransaction.where(id: uuid).first
@@ -2132,7 +2132,7 @@ namespace :adjust do
 
         insurance_account_transaction.save!
         puts "Done creating!"
-        
+
         insurance_account_ids << row['subsidiary_id']
       else
         puts "Updating existing insurance account transaction record #{uuid}..."
@@ -2177,7 +2177,7 @@ namespace :adjust do
     # MemberAccount.where(id: insurance_account_ids, account_type: "INSURANCE").each do |member_account|
     #   ::MemberAccounts::Rehash.new(member_account: member_account, account_transactions: account_transactions).execute!
     # end
-    
+
     puts "Done!"
   end
 
@@ -2214,7 +2214,7 @@ namespace :adjust do
       center = Center.find(row['center_id'])
 
       if !center.nil?
-        puts "Updating: #{center.name}"  
+        puts "Updating: #{center.name}"
         center.update!(name: row['center_name'])
       end
     end
@@ -2229,7 +2229,7 @@ namespace :adjust do
       member = Member.find(row['uuid'])
 
       if !member.nil?
-        puts "Updating: #{member.full_name}"  
+        puts "Updating: #{member.full_name}"
         member.update!(identification_number: row['identification_number'])
       end
     end
@@ -2262,7 +2262,7 @@ namespace :adjust do
 
       if !member.nil?
         if member.resigned?
-          puts "Updating: #{member.full_name}"  
+          puts "Updating: #{member.full_name}"
           member.update!(insurance_date_resigned: row['insurance_date_resigned'].to_date)
         end
       end
@@ -2280,12 +2280,12 @@ namespace :adjust do
       printf("\r(#{i+1}/#{size}): Updating insurance date resigned of member #{o.full_name}... #{progress}%%")
 
       data  = o.data.with_indifferent_access
-      
+
       if data[:insurance_resignation].present?
         data_insurance_date_resigned = data[:insurance_resignation][:date_resigned]
         o.update!(insurance_date_resigned: data_insurance_date_resigned)
       else
-        insurance_date_resigned = o.date_resigned  
+        insurance_date_resigned = o.date_resigned
         o.update!(insurance_date_resigned: insurance_date_resigned)
       end
     end
@@ -2298,17 +2298,17 @@ namespace :adjust do
     current_user = User.first
     member_account_validation.where(data: nil).each do |o|
       data = { accounting_entry: ::MemberAccountValidations::BuildAccountingEntryForImport.new(
-                config: 
+                config:
                 {
-                  user: current_user, 
-                  member_account_validation: o, 
+                  user: current_user,
+                  member_account_validation: o,
                   is_remote: o.is_remote,
                   branch: o.branch,
                   status: o.status,
-                  reference_number: o.reference_number, 
+                  reference_number: o.reference_number,
                   approved_by: o.approved_by
                 }
-              ).execute! 
+              ).execute!
             }
       o.update!(data: data)
     end
@@ -2602,7 +2602,7 @@ namespace :adjust do
   task :process_member_per_center_counts => :environment do
     @data_store_type  = "MEMBER PER CENTER COUNTS"
     @as_of            = Date.today
-    
+
 
     if ENV['CURRENT_DATE'].present?
       @as_of = ENV['CURRENT_DATE'].to_date
@@ -2699,11 +2699,11 @@ namespace :adjust do
 
   task :insert_equity_value_to_life_transactions => :environment do
     puts "Inserting ..."
-    
+
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      @branches = Branch.all  
+      @branches = Branch.all
     end
 
     member_account_ids = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids).ids.uniq
@@ -2713,7 +2713,7 @@ namespace :adjust do
 
     account_transactions.each_with_index do |at, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
-      printf("\r(#{i+1}/#{size}): Insreting for transaction #{at.id}... #{progress}%%")  
+      printf("\r(#{i+1}/#{size}): Insreting for transaction #{at.id}... #{progress}%%")
 
       at_data = at.data.with_indifferent_access
       ev_amount = at_data[:ending_balance].to_f / 2
@@ -2730,7 +2730,7 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      @branches = Branch.all  
+      @branches = Branch.all
     end
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
@@ -2742,10 +2742,10 @@ namespace :adjust do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
 
-      last_transaction = transactions.where("subsidiary_id = ?", ma.id).order("transacted_at ASC").last   
-        
-      if !last_transaction.nil?  
-        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value] 
+      last_transaction = transactions.where("subsidiary_id = ?", ma.id).order("transacted_at ASC").last
+
+      if !last_transaction.nil?
+        latest_ev_amount = last_transaction.data.with_indifferent_access[:equity_value]
         if !ma.member_id.nil?
           if ma.data.nil?
             ma.data = { equity_value: latest_ev_amount }
@@ -2757,7 +2757,7 @@ namespace :adjust do
           end
         end
       end
-    end 
+    end
 
     puts "\nDone!"
   end
@@ -2768,7 +2768,7 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      @branches = Branch.all  
+      @branches = Branch.all
     end
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
@@ -2778,7 +2778,7 @@ namespace :adjust do
     member_accounts.each_with_index do |ma, i|
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
-    
+
       balance = ma.balance.to_f
 
       if balance > 0
@@ -2793,7 +2793,7 @@ namespace :adjust do
           end
         end
       end
-    end 
+    end
 
     puts "\nDone!"
   end
@@ -2804,7 +2804,7 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      @branches = Branch.all  
+      @branches = Branch.all
     end
 
     member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
@@ -2815,15 +2815,15 @@ namespace :adjust do
       progress  = (((i + 1).to_f / size.to_f) * 100).round(2)
       printf("\r(#{i+1}/#{size}): Insreting for member account #{ma.id}... #{progress}%%")
 
-      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last   
-        
-      if !last_transaction.nil?  
+      last_transaction = AccountTransaction.savings.where("subsidiary_id IN (?) AND status = ?", ma.id, "approved").order("transacted_at ASC").last
+
+      if !last_transaction.nil?
         at_data = last_transaction.data.with_indifferent_access
         ev_amount = at_data[:ending_balance].to_f / 2
         at_data[:equity_value] = ev_amount
         last_transaction.update!(data: at_data)
       end
-    end 
+    end
 
     puts "\nDone!"
   end
@@ -2838,17 +2838,17 @@ namespace :adjust do
 
     member_account_validations.each do |member_account_validation|
       member_account_validation.member_account_validation_records.each do |member_account_validation_record|
-        
+
         if member_account_validation_record.policy_loan.nil?
           member_account_validation_record.update!(policy_loan: 0.00)
         end
 
         if member_account_validation_record.equity_value.nil?
           member_account_validation_record.update!(equity_value: 0.00)
-        end        
+        end
       end
     end
-      
+
     puts "Done"
   end
 
@@ -2867,7 +2867,7 @@ namespace :adjust do
     end
 
     claim_data = claim.data.with_indifferent_access
-        
+
     claim_data[:accounting_entry] = {}
     claim_data[:accounting_entry]  = ::Claims::BuildAccountingEntry.new(
                                 config: {
@@ -2878,7 +2878,7 @@ namespace :adjust do
                               ).execute!
 
     claim.update!(data: claim_data)
-      
+
     puts "Done"
   end
 
@@ -2888,33 +2888,33 @@ namespace :adjust do
     @start_date = nil
     @end_date = nil
 
-    if ENV['START_DATE'].present? 
+    if ENV['START_DATE'].present?
       @start_date = ENV['START_DATE'].to_date
     end
 
-    if ENV['END_DATE'].present? 
+    if ENV['END_DATE'].present?
       @end_date = ENV['END_DATE'].to_date
     end
 
     if ENV['BRANCH_ID'].present?
       @branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      @branches = Branch.all  
+      @branches = Branch.all
     end
 
     @branches.each do |branch|
       puts "Inserting for #{branch.name}"
-      
+
       ::MemberAccounts::ComputeEvInterest.new(
                                   config: {
-                                    branch: branch, 
-                                    start_date: @start_date, 
+                                    branch: branch,
+                                    start_date: @start_date,
                                     end_date: @end_date
                                   }
                             ).execute!
 
       puts "Done for #{branch.name}"
-    end  
+    end
 
 
     # member_accounts = MemberAccount.where("account_type = ? AND account_subtype = ? AND status = ? AND branch_id IN (?)", "INSURANCE", "Life Insurance Fund", "active", @branches.ids)
@@ -2926,7 +2926,7 @@ namespace :adjust do
     #   printf("\r(#{i+1}/#{size}): Insreting for member account #{member_account.id}... #{progress}%%")
 
     #   ::MemberAccounts::ComputeEquityValueInterest.new(member_account: member_account, start_date: @start_date, end_date: @end_date).execute!
-    # end 
+    # end
 
     puts "\nDone!"
   end
@@ -2943,7 +2943,7 @@ namespace :adjust do
       branch_names <<  row['branch']
       valid_member_accounts << row['uuid']
     end
-    
+
     branch = Branch.where("lower(name) = ?", branch_names.uniq.first.downcase).first
     to_delete_member_accounts = MemberAccount.where("branch_id = ? AND account_type = ? AND id NOT IN (?)", branch.id, "INSURANCE", valid_member_accounts)
 
@@ -2956,7 +2956,7 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       branches = Branch.where(id: ENV['BRANCH_ID'])
     else
-      branches = Branch.all  
+      branches = Branch.all
     end
 
     branches.each do |branch|
@@ -3048,15 +3048,15 @@ namespace :adjust do
 
     CSV.foreach(file_location, headers: true) do |row|
       member = Member.where(identification_number: row['identification_number']).first
-      
-      if !member.nil? 
+
+      if !member.nil?
         if member.insurance_active?
           rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
           ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
-          
+
           if ev_account.present?
             puts "Inseting EV Interest for #{member.full_name} - #{member.id}"
-            
+
             ev_balance  = ev_account.balance.to_f
             ev_interest = row['ev_interest'].to_f
             ev_new_balance = ev_interest + ev_balance
@@ -3247,7 +3247,7 @@ namespace :adjust do
           rf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ? AND transacted_at <= ?", "true", "2021-09-15".to_date, "2021-09-16".to_date).first
           rf_interest_transaction.destroy!
           ::MemberAccounts::Rehash.new(member_account: rf_account, account_transactions: nil).execute!
-          
+
           rrf_interest_transaction = rf_account.account_transactions.where("data->>'is_interest' = ? AND transacted_at >= ?", "true", "2021-09-17".to_date).first
           rrf_trans_data = rrf_interest_transaction.data.with_indifferent_access
           rrf_interest_transaction_end_balance = rrf_trans_data[:ending_balance].to_f
@@ -3267,12 +3267,12 @@ namespace :adjust do
     if ENV['BRANCH_ID'].present?
       @rf_accounts = MemberAccount.where(account_subtype: "Retirement Fund", branch_id: ENV['BRANCH_ID'])
       @ev_accounts = MemberAccount.where(account_subtype: "Equity Value", branch_id: ENV['BRANCH_ID'])
-    else  
+    else
       @rf_accounts = MemberAccount.where(account_subtype: "Retirement Fund")
       @ev_accounts = MemberAccount.where(account_subtype: "Equity value")
     end
 
-    if !@rf_accounts.nil?  
+    if !@rf_accounts.nil?
       puts "Rehashing RF accounts ..."
       @rf_accounts.each do |rf_account|
         puts "#{rf_account.id} ..."
@@ -3281,7 +3281,7 @@ namespace :adjust do
     end
     puts "Done rf accounts!\n\n"
 
-    if !@ev_accounts.nil?  
+    if !@ev_accounts.nil?
       puts "Rehashing EV accounts ..."
       @ev_accounts.each do |ev_account|
         puts "#{ev_account.id} ..."
@@ -3309,14 +3309,14 @@ namespace :adjust do
 
       member = Member.where(identification_number: member_identification_number)
       # raise member.inspect
-      member.map { |m|  
+      member.map { |m|
         @member_id = m[:id]
       }
 
       member_id = Member.find(@member_id)
-            
+
       if member_id.present?
-        puts "Updating Reclassified Member: #{member_identification_number}"   
+        puts "Updating Reclassified Member: #{member_identification_number}"
         member_data = member_id.data.with_indifferent_access
         member_data[:is_reclassified] = is_reclassified
         member.update!(data: member_data)
@@ -3335,13 +3335,13 @@ namespace :adjust do
 
     legal_dependent.each do |m|
       data = {}
-      data[:id] = m.id  
+      data[:id] = m.id
       data[:first_name] = m.first_name
       data[:member_id] = m.member_id
-      
+
       @members << data
     end
-    
+
     # raise @members.inspect
     @dependets = @members.map{ |y|
       {
@@ -3349,10 +3349,10 @@ namespace :adjust do
         last_letter: y[:first_name][-1],
         member_id: y[:member_id]
       }
-    } 
-    
+    }
+
     @dependets.each do |dependent|
-      if dependent[:member_id].present? 
+      if dependent[:member_id].present?
         if ["A", "E", "I", "O", "U"].include?(dependent[:last_letter].upcase)
           puts "Updating Dependent ID: #{dependent[:id]}"
           a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Female")
@@ -3360,11 +3360,11 @@ namespace :adjust do
           puts "Updating Dependent ID: #{dependent[:id]}"
           a = LegalDependent.find("#{dependent[:id]}").update!(gender: "Male")
         end
-      end 
+      end
     end
   end
-  
-  task :fix_wrong_in_account_transaction => :environment do 
+
+  task :fix_wrong_in_account_transaction => :environment do
     branch_id = ENV["BRANCH_ID"]
     members_resigned = Member.where("branch_id = ? and date_resigned >= ? and date_resigned <= ?","#{branch_id}","2023-10-27","2023-10-31")
     members_resigned.each do |mr|
@@ -3396,7 +3396,7 @@ namespace :adjust do
 
   task :process_kok_loan => :environment do
     kok = InsuranceLoanBundleEnrollment.all
-    
+
     kok.each do |k|
       kok_data = k.data.with_indifferent_access[:records]
       kok_last_data = kok_data.last
@@ -3417,7 +3417,7 @@ namespace :adjust do
       enrolled_status                       = kok_last_data[:kok_data][:enrolled_status],
       civil_status                          = kok_last_data[:kok_data][:civil_status],
       birth_date                            = kok_last_data[:kok_data][:birth_date],
-      age                                   = kok_last_data[:kok_data][:age],
+      age                                   = kok_last_data[:kok_data][:age].to_i,
       premium_coverage                      = kok_last_data[:kok_data][:premium_coverage],
       mobile_no                             = kok_last_data[:kok_data][:mobile_no],
       membership_date                       = kok_last_data[:kok_data][:membership_date],
@@ -3427,7 +3427,13 @@ namespace :adjust do
       benif_birth_date                      = kok_last_data[:kok_data][:benif_birth_date],
       benif_gender                          = kok_last_data[:kok_data][:benif_gender],
       benif_relationship                    = kok_last_data[:kok_data][:benif_relationship],
-      member                                = Member.where(id: kok_last_data[:member][:id]).first,
+      member                                = Member.where(id: kok_last_data[:member][:id]).first
+      kok_id                                = k[:id]
+      maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
+      five_weeks_ago                        = (maturity_date - 28)
+      now                                   = Date.today
+
+      # raise insurance_loan_bundle_enrollment.id.inspect
 
       config = {
         insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
@@ -3436,7 +3442,7 @@ namespace :adjust do
         partner: partner,
         policy_no: policy_no,
         effectivity_date: effectivity_date,
-        maturity_date: maturity_date,
+        maturity_daste: maturity_date,
         client_type: client_type,
         first_name: first_name,
         middle_name: middle_name,
@@ -3456,25 +3462,14 @@ namespace :adjust do
         benif_birth_date: benif_birth_date,
         benif_gender: benif_gender,
         benif_relationship: benif_relationship,
-        member: member
+        member: member,
+        kok_id: kok_id,
+        maturity_date: maturity_date,
+        five_weeks_ago: five_weeks_ago,
+        now: now
       }
 
-      kok_id              = k[:id]
-      maturity_date       = kok_last_data[:kok_data][:maturity_date].to_date
-      five_weeks_ago      = (maturity_date - 35)
-      now                 = Date.today
-
-
-      if now >= five_weeks_ago && now <= maturity_date
-        puts "for-renewal, maturity date #{maturity_date}, id: #{kok_id}"
-        cmd = ::InsuranceLoanBundleEnrollments::MemberRenewal.new(
-          config: config
-        ).execute!
-
-      elsif now > maturity_date
-        puts "lapsed , id: #{kok_id}"
-      end
+      ProcessKokLoan.perform_later(config)
     end
   end
-
 end
