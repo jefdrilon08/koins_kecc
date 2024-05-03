@@ -38,7 +38,7 @@ export default class ApplicationFormComponent extends React.Component {
       memberMobileNumber: "",
       isMobileNumberValid: false,
       mobileNumberMaxLength: false,
-      isMobileNumberExist: false
+      isMobileNumberExist: false,
       errors: false
     };
   }
