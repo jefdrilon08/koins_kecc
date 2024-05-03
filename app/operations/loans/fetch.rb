@@ -18,6 +18,7 @@ module Loans
                   principal: 5000.00,
                   loan_product_id: "",
                   loan_product_type_id: "",
+                  loan_product_tagging_id: "",
                   term: "weekly",
                   pn_number: "",
                   payment_type: "cash",

@@ -25,6 +25,7 @@ export default class ApplicationFormComponent extends React.Component {
       loanProductTypes: [],
       currentLoanProductId: "",
       currentLoanProductTypeId: "",
+
       projectTypeCategories: [],
       projectTypes: [],
       optionTransfer: [],
@@ -37,7 +38,7 @@ export default class ApplicationFormComponent extends React.Component {
       memberMobileNumber: "",
       isMobileNumberValid: false,
       mobileNumberMaxLength: false,
-      isMobileNumberExist: false,
+      isMobileNumberExist: false
       errors: false
     };
   }
@@ -94,7 +95,7 @@ export default class ApplicationFormComponent extends React.Component {
 
     // Fetch loan_product_types
     $.ajax({
-      url: "/api/loan_product_types",
+      url: "/api/loan_product_tagging",
       data: {
         loan_product_id: context.state.currentLoanProductId
       },
@@ -106,7 +107,7 @@ export default class ApplicationFormComponent extends React.Component {
         var data = context.state.data;
 
         context.setState({
-          loanProductTypes: response.loan_product_types
+          loanProductTypes: response.loan_product_tagging
         });
       }
     });
@@ -424,9 +425,9 @@ export default class ApplicationFormComponent extends React.Component {
 
   handleLoanProductType(event) {
     var data  = this.state.data;
-
-    data.loan_product_type_id = event.target.value;
-
+    //data.loan_product_type_id = event.target.value;
+    data.loan_product_tagging_id = event.target.value;
+  
     this.updateData(data);
   }
 
@@ -438,23 +439,24 @@ export default class ApplicationFormComponent extends React.Component {
 
     // Fetch loan_product_types
     $.ajax({
-      url: "/api/loan_product_types",
+      url: "/api/loan_product_taggings",
       data: {
         loan_product_id: data.loan_product_id
       },
       method: 'GET',
       success: function(response) {
         console.log("Got Loan Product Types");
+        
         console.log(response);
         
         var data = context.state.data;
 
-        if(response.loan_product_types.length > 0) {
-          data.loan_product_type_id = response.loan_product_types[0].id;
+        if(response.loan_product_tagging.length > 0) {
+          data.loan_product_tagging_id = response.loan_product_tagging[0].id;
         }
 
         context.setState({
-          loanProductTypes: response.loan_product_types,
+          loanProductTypes: response.loan_product_tagging,
           data: data
         });
       }
@@ -1073,7 +1075,7 @@ export default class ApplicationFormComponent extends React.Component {
                     </label>
                     <select
                       className="form-control"
-                      value={data.loan_product_type_id || "-1"}
+                      value={data.loan_product_tagging_id || "-1"}
                       onChange={this.handleLoanProductType.bind(this)}
                       disabled={this.state.isSaving || this.state.isActive}
                     >

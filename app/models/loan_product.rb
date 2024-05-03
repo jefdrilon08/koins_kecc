@@ -6,6 +6,7 @@ class LoanProduct < ApplicationRecord
 
   belongs_to :loan_product_category, optional: true
   has_many :loan_product_types, dependent: :delete_all
+  has_many :loan_product_taggings, dependent: :delete_all
 
   scope :entry_point, -> { where(is_entry_point: true) }
   scope :non_entry_point, -> { where.not(is_entry_point: true) }

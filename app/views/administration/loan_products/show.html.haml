@@ -82,11 +82,11 @@
 
 
         %h3
-          Loan Product Types
+          Loan Product Taggings
         %hr
-        = link_to new_administration_loan_product_loan_product_type_path(@loan_product.id) do
+        = link_to new_administration_loan_product_loan_product_tagging_path(@loan_product.id) do
           .bi.bi-plus
-          Add Loan Product Type
+          Add Loan Product Tagging
 
         %table.table.table-bordered.table-sm
           %thead
@@ -96,15 +96,15 @@
               %th
                 Actions
           %tbody
-            - @loan_product.loan_product_types.each do |o|
+            - @loan_product.loan_product_taggings.each do |o|
               %tr
                 %td
                   #{o.name}
                 %td
-                  = link_to edit_administration_loan_product_loan_product_type_path(@loan_product, o) do
+                  = link_to edit_administration_loan_product_loan_product_tagging_path(@loan_product, o) do
                     .fa.fa-pencil-alt
                     Edit
-                  = link_to administration_loan_product_loan_product_type_path(@loan_product, o), method: :delete, data: { confirm: "Are you sure?" } do
+                  = link_to administration_loan_product_loan_product_tagging_path(@loan_product, o), method: :delete, data: { confirm: "Are you sure?" } do
                     .fa.fa-times
                     Delete
 

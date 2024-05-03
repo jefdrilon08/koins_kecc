@@ -1,7 +1,6 @@
 module Loans
   class BuildAccountingEntry
     def initialize(config:)
-      
       @config       = config
       @bank_data    = @config[:bank_data]
       @loan         = @config[:loan]
@@ -24,7 +23,7 @@ module Loans
       # Setup loan cycle
       @member_data  = @loan.member.data.with_indifferent_access
       @loan_cycles  = @member_data[:loan_cycles] || []
-
+    
       @entry_point_loan_cycle_count = @member.entry_point_loan_cycle_count
 
       @user = @config[:user]
@@ -110,12 +109,11 @@ module Loans
     end
 
     def execute!
-      
       build_data!
 
       @accounting_entry_data[:credit_journal_entries] = build_credit_journal_entries!
       @accounting_entry_data[:debit_journal_entries]  = build_debit_journal_entries!
-      #raise build_credit_journal_entries!.inspect
+
       # Build journal entries
       @accounting_entry_data[:debit_journal_entries].each do |j|
         @accounting_entry_data[:journal_entries] << {
@@ -217,7 +215,6 @@ module Loans
 
     def build_credit_journal_entries!
       # compute amount released by deducting from @amount
-    
       temp_amount = @amount
 
       journal_entries = []
@@ -227,11 +224,11 @@ module Loans
         deduction_type  = s_deduction.deduction_type
         if deduction_type == "share_capital_fee"
             total_member_shares = MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last.balance.to_f / 100.0
-
+            
             @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}
 
             partial_number_of_share =  total_member_shares.to_i +  @share_capital_deposit.last["number_of_share"]
-
+            
             if s_deduction.max_share < partial_number_of_share
               share_avail =  s_deduction.max_share  - total_member_shares
               @need_total_share_to_avail = share_avail
@@ -241,14 +238,14 @@ module Loans
             #raise partial_number_of_share.inspect
             if total_member_shares <= s_deduction.max_share.to_i
               @total_share_paid =  @need_total_share_to_avail.to_f * s_deduction.amount.to_f
-
+              
             end
             accounting_code = AccountingCode.find("370f5e4f-e4c8-454e-90b2-17919cc5ef92")
             amount          = @total_share_paid
             name            = accounting_code.name
             code            = accounting_code.code
-
-
+            
+          
 
             if s_deduction["skip_sc"].present?
               number_of_sharecap = MemberAccount.where(account_subtype: "Share Capital").last.balance.to_f
@@ -261,10 +258,10 @@ module Loans
                 }
                 temp_amount -= amount
               end
-
+            
             else
               if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i).to_i > 1
-
+      
                 if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
                   journal_entries << {
                     accounting_code_id: accounting_code.id,
@@ -275,8 +272,8 @@ module Loans
                   temp_amount -= amount
                 end
             end
-
-
+            
+            
             end
 
         elsif deduction_type == "straight_one_time"
@@ -368,7 +365,6 @@ module Loans
             end
           end
         elsif deduction_type == "member_type_deduction_ratio"
-          
           target_member_type  = s_deduction.meta.member_type
           accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
           amount              = s_deduction.amount
@@ -377,14 +373,7 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-
-            if @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
-            
-              amount = s_deduction.business_permit_amount
-            else
-              amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_i
-            
-            end
+            amount  = s_deduction.business_permit_amount
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -394,41 +383,38 @@ module Loans
             }
 
             temp_amount -= amount
-          
-          elsif @loan_data[:sms_fee_available].present? and  @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
-          #elsif @loan_data[:sms_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
-        
-            target_member_type  = s_deduction.meta.member_type
-            accounting_code     = AccountingCode.find(s_deduction.accounting_code_id)
-            #amount              = s_deduction.amount.to_f - 10.to_f
-            name                = accounting_code.name
-            code                = accounting_code.code
-            
-            
+ 
+          elsif s_deduction.sms_amount_status.present? and s_deduction.sms_amount_status == true and @loan_data[:sms_fee_available] == false
+          #raise @loan_data[:sms_fee_available].inspect
+          #and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
+            #amount  = s_deduction.sms_amount
+              if s_deduction.skip_term_map == false
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
+                    
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
-                      #amount = s_deduction.sms_amount.to_i.round(2)
+                    
+                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_f
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
-                      #amount = s_deduction.sms_amount.to_i.round(2)
+                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_f
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      amount  = (s.ratio * @amount).round(2)
-                      #amount = s_deduction.sms_amount.to_i.round(2)
+                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_f
                     end
                   end
                 else
                   raise "Invalid term: #{@term}"
                 end
+              else
+                amount = s_deduction.sms_amount.to_f
+              end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
@@ -437,6 +423,7 @@ module Loans
               amount: amount
             }
 
+            temp_amount -= amount
 
           #elsif @member.member_type  == target_member_type
           elsif @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
@@ -445,39 +432,38 @@ module Loans
             amount              = s_deduction.amount
             name                = accounting_code.name
             code                = accounting_code.code
-
+            
             journal_entries << {
               accounting_code_id: accounting_code.id,
               code: code,
               name: name,
               amount: 0.0
             }
+            
 
-            #other loan
-          elsif s_deduction.for_primary_loan.present? and s_deduction.for_primary_loan == true
+          elsif s_deduction.for_primary_loan.present? and s_deduction.for_primary_loan == true 
             primary_loan_id = s_deduction.primary_loan_id
             loan_count = Loan.where("member_id = ? and status = ? and loan_product_id IN (?)", @member.id,"active", primary_loan_id).count
-         #   if loan_count == 0
-
+            if loan_count == 0
+                
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
+                    
                     if s.num_installments == @num_installments
-                      #amount  = (s.ratio * @amount).round(2)
-                      amount = s_deduction.sms_amount.to_i.round(2)
+                    
+                      amount  = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
-                      #amount  = (s.ratio * @amount).round(2)
-                      amount = s_deduction.sms_amount.to_i.round(2)
+                      amount  = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
-                      #amount  = (s.ratio * @amount).round(2)
-                      amount = s_deduction.sms_amount.to_i.round(2)
+                      amount  = (s.ratio * @amount).round(2)
                     end
                   end
                 else
@@ -492,33 +478,30 @@ module Loans
                 }
 
                 temp_amount -= amount
-            #end
+            end
 
-#kabuhayan loan with service fee at sms fee
           elsif s_deduction.skip_for_membership_type.present? and s_deduction.skip_for_membership_type_status == true
             membership_type_present = s_deduction.skip_for_membership_type.select{ |a| a==@member.member_type  }.count
-
+            
             if membership_type_present == 0
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
-
+                    
                     if s.num_installments == @num_installments
+                    
                       amount  = (s.ratio * @amount).round(2)
-                      amount = amount + s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
-                    if s.num_installments == @num_installment
+                    if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = amount + s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = amount + s_deduction.sms_amount.to_i
                     end
                   end
                 else
@@ -533,7 +516,7 @@ module Loans
                 }
 
                 temp_amount -= amount
-
+              
 
             end
 
@@ -569,14 +552,14 @@ module Loans
                   @service_f_original= 0.00
                 end
 
-
+                
                 journal_entries << {
                   accounting_code_id: accounting_code.id,
                   code: code,
                   name: name,
                   amount: amount
                 }
-
+                
                 temp_amount -= amount
                 clip_amount  = amount
                 service_fee  =  temp_amount - temp_amount.to_i #add offset amount to service fee
@@ -597,13 +580,13 @@ module Loans
                   end
                 #end for kyakap
 
-                #for bene-w4
+                #for bene-w4 
                 else
                   accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
                   amount_serv             = service_fee.to_f.round(2)
                   name_serv               = accounting_code_serv.name
                   code_serv               = accounting_code_serv.code
-
+                  
                   journal_entries << {
                     accounting_code_id: accounting_code_serv.id,
                     code: code_serv,
@@ -611,21 +594,18 @@ module Loans
                     amount: amount_serv
                   }
                 end
-
+                
                 temp_amount = temp_amount.to_i
                 @temp_amount= temp_amount
-
+               
                 #end of special loan product
 
-              elsif s_deduction.use_for_special_loan_fund == "true"
+              elsif s_deduction.use_for_special_loan_fund == "true" 
                 if @term == "weekly"
-
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      #amount = (s_deduction.sms_amount.to_i).round(2)
                     end
-
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
@@ -659,7 +639,6 @@ module Loans
                   s_deduction.meta.term_map.weekly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = (s_deduction.sms_amount.to_i).round(2)
                     end
                   end
                 elsif @term == "monthly"
@@ -684,7 +663,7 @@ module Loans
                   name: name,
                   amount: amount
                 }
-
+                
                 temp_amount -= amount
                 clip_amount  = amount
                 service_fee  =  temp_amount - temp_amount.to_i #add offset amount to service fee
@@ -705,13 +684,13 @@ module Loans
                   end
                 #end for kyakap
 
-                #for bene-w4
+                #for bene-w4 
                 else
                   accounting_code_serv    = AccountingCode.find(s_deduction.accounting_code_for_special_loan)
                   amount_serv             = service_fee.to_f.round(2)
                   name_serv               = accounting_code_serv.name
                   code_serv               = accounting_code_serv.code
-
+                  
                   journal_entries << {
                     accounting_code_id: accounting_code_serv.id,
                     code: code_serv,
@@ -719,40 +698,29 @@ module Loans
                     amount: amount_serv
                   }
                 end
-
+                
                 temp_amount = temp_amount.to_i
                 @temp_amount= temp_amount
-
+               
                 #end of special loan product
 
-              elsif  s_deduction.skip_for_special_loan_fund == "true"
+              elsif  s_deduction.skip_for_special_loan_fund == "true" 
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
-                    if s.num_installments == @num_installments 
-                      amount  = (s.ratio * @amount).round(2) + s_deduction.sms_amount.to_i
-                    end
-                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
-                      amount = s_deduction.sms_amount.to_i
+                    if s.num_installments == @num_installments
+                      amount  = (s.ratio * @amount).round(2)
                     end
                   end
                 elsif @term == "monthly"
                   s_deduction.meta.term_map.monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
-                    end
-                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
-                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 elsif @term == "semi-monthly"
                   s_deduction.meta.term_map.semi_monthly.each do |s|
                     if s.num_installments == @num_installments
                       amount  = (s.ratio * @amount).round(2)
-                      amount = (s_deduction.sms_amount.to_i).round(2) + s_deduction.sms_amount.to_i
-                    end
-                    if s_deduction.s_deduction_kalusugan == "kalusugan_ratio"
-                      amount = s_deduction.sms_amount.to_i
                     end
                   end
                 else
@@ -771,14 +739,14 @@ module Loans
             end
           end
         elsif deduction_type == "deposit"
+          
+    
 
-
-
-          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards"
-
+          if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
+           
             #if @member.member_type != "GK-Kaagapay" && @member.member_type != "GK"
             if  @member.member_type != "GK"
-
+            
               if @loan_data[:advance_insurance_available] == false
                 offset          = s_deduction.meta.offset
                 accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
@@ -827,7 +795,7 @@ module Loans
                         raise "Invalid term #{@term}"
                       end #end of term
                       amount  = val * (multiplier + offset)
-
+                      
                 else
                   amount  = val
                 end #loan cycle presents
@@ -839,12 +807,12 @@ module Loans
                 }
 
                 temp_amount -= amount
-
+              
               end #end of advance insurance
             end #end of gk
-          elsif s_deduction.special_loan == "true"
+          elsif s_deduction.special_loan == "true"  
            #for special Loan bene w4
-            if @member.member_type != "GK"
+            if @member.member_type != "GK"  
               lf_amount = @temp_amount * 0.75
               rf_amount = @temp_amount * 0.25
               accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
@@ -891,10 +859,10 @@ module Loans
 #        temp_amount -= amount
 #      end
       if @bank_data.present?
-
+      
         accounting_code = AccountingCode.find(@bank_data[:accounting_entry_id])
         amount = @bank_data[:bank_transfer_amount].to_f
-
+  
         journal_entries << {
                   accounting_code_id: accounting_code.id,
                   code: accounting_code.code,
@@ -906,11 +874,10 @@ module Loans
       # Cash in bank for amount released
       accounting_code = AccountingCode.find(@settings_branch_accounting_codes.cash_in_bank_accounting_code_id)
 
-      #Kbenew1
       if @settings.amount_released_accounting_code_id.present?
         accounting_code = AccountingCode.find(@settings.amount_released_accounting_code_id)
       end
-
+      
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,

@@ -1325,7 +1325,9 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -1554,14 +1556,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
-        business_permit_amount: 500
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
         meta:
           member_type: "Regular"
           term_map:
@@ -1732,6 +1736,62 @@ loan_products:
       loan_purpose: "NI"
     deductions: 
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -1882,14 +1942,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -2064,14 +2126,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -2289,7 +2353,63 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
+    deductions: 
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
 
   -
     loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a"                         # K-BENEPISYO W2
@@ -2307,7 +2427,63 @@ loan_products:
       contract_phase: "AC"
       transaction_type: "NA"
       loan_purpose: "NI"
-    deductions: []
+    deductions: 
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
 
   -
     loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K-BENEPISYO W3
@@ -2326,6 +2502,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       -
         name: "Deposit to hospital income insurance plan"
         accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
@@ -2359,14 +2591,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -2382,7 +2616,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
@@ -2540,14 +2774,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -2563,7 +2799,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
@@ -2722,14 +2958,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -2745,7 +2983,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
@@ -2901,6 +3139,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "ET"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
 #      -
 #        name: "Service Fee"
 #        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
@@ -3086,14 +3380,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        skip_for_special_loan_fund: "false"
-        use_for_special_loan_fund: "false"
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
@@ -3109,7 +3405,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
@@ -3261,42 +3557,61 @@ loan_products:
       percentage: 0.2
       threshold: 7001.00
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
     midas:
       contract_type: 12
@@ -3319,42 +3634,61 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
 
   -
@@ -3374,42 +3708,61 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
 
   -
@@ -3429,42 +3782,61 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
 
   -
@@ -3484,42 +3856,61 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
       -
         name: "MBA-CLIP"
@@ -3670,42 +4061,61 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        sms_amount: 10.0
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
-        s_deduction_kalusugan: "kalusugan_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
       -
         name: "MBA-CLIP"
@@ -3857,6 +4267,62 @@ loan_products:
       loan_purpose: "NI"
     deductions: 
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -4002,6 +4468,62 @@ loan_products:
       loan_purpose: "SE"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -4128,6 +4650,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.0
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -4260,14 +4838,19 @@ loan_products:
         name: "ID Fee"
         accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
         amount: 100.00
-        deduction_type: "straight_one_time"
-     
+        deduction_type: "straight_one_time" 
       -
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
         sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
@@ -4285,33 +4868,33 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
-                ratio: 0.02
+                ratio: 0.0035
               -
                 num_installments: 6
-                ratio: 0.03
+                ratio: 0.007
               -
                 num_installments: 9
-                ratio: 0.045
+                ratio: 0.0105
               -
                 num_installments: 12
-                ratio: 0.6
+                ratio: 0.0140
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.02
+                ratio: 0.0035
               -
                 num_installments: 12
-                ratio: 0.03
+                ratio: 0.007
               -
                 num_installments: 18
-                ratio: 0.045
+                ratio: 0.0105
               -
                 num_installments: 24
-                ratio: 0.06
+                ratio: 0.0140
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -4487,6 +5070,62 @@ loan_products:
       loan_purpose: "ET"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "ID Fee"
         accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
         amount: 100.00
@@ -4659,6 +5298,62 @@ loan_products:
       loan_purpose: "ET"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -4790,6 +5485,62 @@ loan_products:
         accounting_code_id: "f633c71e-7890-4c5c-81b6-0ff0b71728d9"
         amount: 100.00
         deduction_type: "straight_one_time"
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.0
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -4970,6 +5721,62 @@ loan_products:
         amount: 100.00
         deduction_type: "straight_one_time"
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -5140,11 +5947,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
-        #for_primary_loan: true
-        #primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
         meta:
           member_type: "Regular"
           term_map:
@@ -5160,7 +5972,7 @@ loan_products:
                 ratio: 0.045
               -
                 num_installments: 50
-                ratio: 0.6
+                ratio: 0.06
             monthly:
               -
                 num_installments: 3
@@ -5322,14 +6134,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
-        business_permit_amount: 500
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00","90b84b35-b5c3-4b58-8040-55bf7c8be5c5"]
-        restructuring_offset: true
         meta:
           member_type: "Regular"
           term_map:
@@ -5534,6 +6348,62 @@ loan_products:
       loan_purpose: "ET"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -5659,6 +6529,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "SE"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       #-
       #  name: "Service Fee"
       #  accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
@@ -5837,6 +6763,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "SE"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       #-
       #  name: "Service Fee"
       #  accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
@@ -6031,13 +7013,18 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
-          member_type: "Kaagapay"
+          member_type: "Regular"
           term_map:
             weekly:
               -
@@ -6240,13 +7227,16 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
-        business_permit_amount: 500
-        for_primary_loan: true
-        primary_loan_id: ["4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00"]
         restructuring_offset: true
         meta:
           member_type: "Regular"
@@ -6254,43 +7244,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.00
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.00
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.00
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.00
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.00
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.00
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.00
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.00
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.00
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.00
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.00
               -
                 num_installments: 24
-                ratio: 0.0140
-
+                ratio: 0.00
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -6442,10 +7431,16 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "ET"
     deductions:
-      - name: "Service Fee"
+      -
+        name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
         skip_for_special_loan_fund: "true"
@@ -6454,33 +7449,44 @@ loan_products:
           member_type: "Regular"
           term_map:
             weekly:
-              - num_installments: 15
-                ratio: 0.020
-              - num_installments: 25
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
                 ratio: 0.03
-              - num_installments: 35
+              -
+                num_installments: 35
                 ratio: 0.045
-              - num_installments: 50
+              -
+                num_installments: 50
                 ratio: 0.06
             monthly:
-              - num_installments: 3
+              -
+                num_installments: 3
                 ratio: 0.0035
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.007
-              - num_installments: 9
+              -
+                num_installments: 9
                 ratio: 0.0105
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.0140
             semi_monthly:
-              - num_installments: 6
+              -
+                num_installments: 6
                 ratio: 0.0035
-              - num_installments: 12
+              -
+                num_installments: 12
                 ratio: 0.007
-              - num_installments: 18
+              -
+                num_installments: 18
                 ratio: 0.0105
-              - num_installments: 24
+              -
+                num_installments: 24
                 ratio: 0.0140
-                
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -6658,7 +7664,9 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
-        sms_amount: 10.0
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -6839,6 +7847,62 @@ loan_products:
       loan_purpose: "NI"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -6979,6 +8043,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -7123,8 +8243,12 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
-        sms_amount: 10.0
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
         skip_for_special_loan_fund: "true"
@@ -7299,6 +8423,62 @@ loan_products:
       loan_purpose: "NI"
     deductions:
       -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
+      -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
         amount: 0.00
@@ -7456,10 +8636,14 @@ loan_products:
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
         amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
         business_permit_amount: 500
-        service_fee_special_loan: "true"
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
@@ -7624,10 +8808,15 @@ loan_products:
       -
         name: "Service Fee"
         accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
-        amount: 1500
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
         business_permit_available: true
-        business_permit_amount: 1500
+        business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
         meta:
@@ -7636,7 +8825,7 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.015
+                ratio: 0.02
               -
                 num_installments: 25
                 ratio: 0.03
@@ -7832,6 +9021,62 @@ loan_products:
       transaction_type: "NA"
       loan_purpose: "NI"
     deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.06
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
