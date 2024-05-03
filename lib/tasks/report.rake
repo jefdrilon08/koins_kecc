@@ -106,6 +106,7 @@ task :member_number => :environment do
 end
 
 
+
   task :accrued_list => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
@@ -452,9 +453,20 @@ puts @data
 
     @data = []
     count_age_0_16 = 0
+    count_age_0_16_m = 0
+    count_age_0_16_f =0
+
     count_age_17_30 = 0
+    count_age_17_30_m = 0
+    count_age_17_30_f =0
+
     count_age_31_45 = 0
+    count_age_31_45_m = 0
+    count_age_31_45_f = 0
+
     count_age_above_45 = 0
+    count_age_above_45_m = 0
+    count_age_above_45_f = 0
 
     count_age_18_30_m = 0
     count_age_18_30_f = 0
@@ -509,6 +521,24 @@ puts @data
         count_age_31_45 += 1
       else
         count_age_above_45 += 1
+      end
+
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
       end
 
       # if  mem.gender["Male"] && age <= 31
@@ -573,6 +603,24 @@ puts @data
         count_age_above_45 += 1
       end
       
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
+      end
+
       # if age <= 31
       #   count_age_18_30 += 1
 
@@ -656,6 +704,24 @@ puts @data
         count_age_above_45 += 1
       end
 
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
+      end
+
       # if  mem.gender["Male"] && age <= 31
       #   count_age_18_30_m += 1
       # elsif mem.gender["Female"] && age <= 31
@@ -726,6 +792,24 @@ puts @data
       else
         count_age_above_45 += 1
       end
+      
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
+      end
       # if  mem.gender["Male"] && age <= 31
       #   count_age_18_30_m += 1
       # elsif mem.gender["Female"] && age <= 31
@@ -780,6 +864,19 @@ puts @data
     puts "Number of members aged 17 - 30 : |#{count_age_17_30}"
     puts "Number of members aged 31 - 45 : |#{count_age_31_45}"
     puts "Number of members aged 45 aboved : |#{count_age_above_45}"
+
+    puts "Number of members aged 0 - 16 MALE : |#{count_age_0_16_m}"
+    puts "Number of members aged 0 - 16  FEMALE: |#{count_age_0_16_f}"
+
+    puts "Number of members aged 17 - 30 MALE : |#{count_age_17_30_m}"
+    puts "Number of members aged 17 - 30 FEMALE : |#{count_age_17_30_f}"
+
+    puts "Number of members aged 31 - 45 MALE: |#{count_age_31_45_m}"
+    puts "Number of members aged 31 - 45 FEMALE: |#{count_age_31_45_f}"
+
+    puts "Number of members aged 45 aboved MALE: |#{count_age_above_45_m}"
+    puts "Number of members aged 45 aboved FEMALE: |#{count_age_above_45_f}"
+
 
 
     # puts "Number of members aged between 18 and 30 Male:|#{count_age_18_30_m}"
