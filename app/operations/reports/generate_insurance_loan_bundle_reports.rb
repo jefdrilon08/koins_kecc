@@ -11,8 +11,6 @@ module Reports
       @end_date_query         = end_date
       @status                 = status
 
-      # raise @end_date.inspect
-
       @all_kok = InsuranceLoanBundleEnrollment.all
       @kok = []
 
@@ -61,15 +59,6 @@ module Reports
         @kok = @all_kok
       end
 
-
-      # raise @kok.inspect
-      # if  @start_date.present? and @end_date.present? and @branch_id.present?
-      #   @kok = InsuranceLoanBundleEnrollment.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ? ", @start_date, @end_date, @branch_id, @status).order("collection_date DESC")
-      # elsif @branch_id.present?
-      #   @kok = InsuranceLoanBundleEnrollment.where("branch_id = ? AND status = ? ", @branch_id, @status).order("collection_date DESC")
-      # else
-      #   puts "not valid"
-      # end
       @p = Axlsx::Package.new
     end
 
@@ -143,17 +132,16 @@ module Reports
                   kok[:kok_data][:age].to_i,
                   kok[:kok_data][:premium_coverage],
                   kok[:kok_data][:mobile_no],
-                  kok[:kok_data][:membership_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:membership_date],
                   kok[:kok_data][:benif_fname],
                   kok[:kok_data][:benif_mname],
                   kok[:kok_data][:benif_lname],
-                  kok[:kok_data][:benif_birth_date].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok[:kok_data][:benif_birth_date],
                   kok[:kok_data][:benif_gender],
                   kok[:kok_data][:benif_relationship]
                 ], style: [ left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell, date_format_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell]
               end
             else
-              # raise @query_kok.inspect
               @query_kok.each do |kok|
                 sheet.add_row [
                   kok['kok_data']['plan_type'],
@@ -174,11 +162,11 @@ module Reports
                   kok['kok_data']['age'].to_i,
                   kok['kok_data']['premium_coverage'],
                   kok['kok_data']['mobile_no'],
-                  kok['kok_data']['membership_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['membership_date'],
                   kok['kok_data']['benif_fname'],
                   kok['kok_data']['benif_mname'],
                   kok['kok_data']['benif_lname'],
-                  kok['kok_data']['benif_birth_date'].try(:to_date).try(:strftime, "%b %d, %Y"),
+                  kok['kok_data']['benif_birth_date'],
                   kok['kok_data']['benif_gender'],
                   kok['kok_data']['benif_relationship']
                 ], style: [ left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell, date_format_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell]
