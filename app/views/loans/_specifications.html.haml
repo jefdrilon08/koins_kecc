@@ -87,7 +87,9 @@
     %th
       Loan Product Tag:
     %td.text-end
-      #{LoanProductTagging.find(@loan.loan_product_tagging_id).name}
+      - if @loan.loan_product_tagging_id.present?
+        #{LoanProductTagging.find(@loan.loan_product_tagging_id).name}
+      
   %tr
     %th
       Monthly I.R.:
