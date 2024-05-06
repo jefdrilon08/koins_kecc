@@ -1,11 +1,18 @@
 = title
 .row
   .col
+    %h4
+      Share Capital Summary
     .card
       .card-body
-      - if @records.any?
-        = render partial: "index_list"
-      - else
-        %p
-          No Record
+        = render partial: "index_filter"
+        - if @share_capital_summary.any?
+          = render partial: "index_list"
+          = paginate @share_capital_summary
+        - else
+          %p
+            No Record
 = render partial: "data_stores/share_capital_summary/modals/new"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }

@@ -17,6 +17,7 @@ module Loans
       end
 
       #@loan_product_type = LoanProductType.find_by_id(@loan_data[:loan_product_type_id])
+      @loan_product_tagging = LoanProductTagging.find_by_id(@loan_data[:loan_product_tagging_id])
 
       @co_maker_profile_picture       = @config[:co_maker_profile_picture]
       @co_maker_three_profile_picture = @config[:co_maker_three_profile_picture]
@@ -84,12 +85,17 @@ module Loans
           end
         end
       end
-
+      
       @loan.member                = @member
       @loan.branch                = @branch
       @loan.center                = @center
       @loan.loan_product          = @loan_product
       @loan.loan_product_type     = nil #@loan_product_type
+      #if @loan.loan_product_tagging_id.nil?
+      #  @loan.loan_product_tagging_id = nil
+      #else
+      #  @loan.loan_product_tagging_id = @loan_product_tagging.id
+      #end
       @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
 
       if @settings.use_term_interest.present?

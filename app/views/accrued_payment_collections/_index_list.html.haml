@@ -20,23 +20,25 @@
             #{Center.find(o.center_id).name}
           %td
             #{o.collection_date}
-          %td
+          %td.text-center
             - if o[:status] == "processing"
-              .badge.bg-danger
-                Pending
-            - elsif o[:status] == "done"
-              .badge.badge-success
-                Done
+              .badge.bg-info
+                Processing
+            - if o[:status] == "save"
+              .badge.bg-primary
+                Save
+            - elsif o[:status] == "checked"
+              .badge.bg-success
+                Checked
             - elsif o[:status] == "pending"
-              .badge.badge-danger
+              .badge.bg-danger
                 pending
             - elsif o[:status] == "approved"
-              .badge.badge-success
-                approved
+              .badge.bg-success
+                Approved
             - elsif o[:status] == "error"
-              .badge.badge-danger
+              .badge.bg-danger
                 Error
-            
-          %td
+          %td.text-center
             = link_to "accrued_payment_collections/#{o.id}" , target: "_blank" , class: 'btn btn-primary' do
               .bi.bi-search

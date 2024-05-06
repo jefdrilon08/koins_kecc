@@ -52,7 +52,7 @@ module Accounting
                             @f_accounting_fund_id
                           )
       end
-
+      
       @general_ledgers = @general_ledgers.page(params[:page]).per(20)
 
       @subheader_items = [

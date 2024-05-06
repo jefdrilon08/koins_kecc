@@ -1,13 +1,13 @@
 .row
   .col
+    %h3 Billing for Full Payments
     .card
-      %h3 Billing for Full Payments
       .card-body
-      = render partial: "index_filter"
-      - if @full_payment_billing.any?
-        = render partial: "index_list", locals: {full_payment_billing: @full_payment_billing}
-      - else
-        %p
-          No Record Found
-          
+        = render partial: "index_filter"
+        - if @full_payment_billing.any?
+          = render partial: "index_list", locals: {full_payment_billing: @full_payment_billing}
+        - else
+          %p  
+            No Record Found
+            
 = render partial: "billing_for_full_payments/modals/process_billing"

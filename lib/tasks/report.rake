@@ -106,6 +106,7 @@ task :member_number => :environment do
 end
 
 
+
   task :accrued_list => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
@@ -451,6 +452,22 @@ puts @data
     ).last
 
     @data = []
+    count_age_0_16 = 0
+    count_age_0_16_m = 0
+    count_age_0_16_f =0
+
+    count_age_17_30 = 0
+    count_age_17_30_m = 0
+    count_age_17_30_f =0
+
+    count_age_31_45 = 0
+    count_age_31_45_m = 0
+    count_age_31_45_f = 0
+
+    count_age_above_45 = 0
+    count_age_above_45_m = 0
+    count_age_above_45_f = 0
+
     count_age_18_30_m = 0
     count_age_18_30_f = 0
     count_age_31_59_m = 0
@@ -488,56 +505,84 @@ puts @data
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
         j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"Non-Patronizing Member"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
         @data << j
-      if age <= 31
-        count_age_18_30 += 1
-      elsif age <= 60
-        count_age_31_59 += 1
-      elsif age >= 59
-        count_age_60_above += 1
-      end
+      # if age <= 31
+      #   count_age_18_30 += 1
+      # elsif age <= 60
+      #   count_age_31_59 += 1
+      # elsif age >= 59
+      #   count_age_60_above += 1
+      # end
       # 
-      if  mem.gender["Male"] && age <= 31
-        count_age_18_30_m += 1
-      elsif mem.gender["Female"] && age <= 31
-        count_age_18_30_f += 1
-      elsif mem.gender["Male"] && age >= 31 && age <= 60
-        count_age_31_59_m += 1
-      elsif mem.gender["Female"] && age >= 31 && age <= 60
-        count_age_31_59_f += 1
-      elsif mem.gender["Male"] && age >= 61
-        count_age_60_above_m += 1
-      elsif mem.gender["Female"] && age >= 61
-        count_age_60_above_f += 1
+      if age <= 16
+        count_age_0_16 += 1
+      elsif age <= 30
+        count_age_17_30 += 1
+      elsif age <= 45
+        count_age_31_45 += 1
+      else
+        count_age_above_45 += 1
       end
 
-      if mem.gender["Male"] && age >= 18 && age <= 39
-        count_male_18_39 += 1
-
-      elsif mem.gender["Female"] && age >= 18 && age <= 39
-        count_female_18_39 += 1
-      elsif mem.gender["Others"] && age >= 18 && age <= 39
-        count_others_18_39 += 1
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
       end
-      if mem.gender["Male"] && age >= 40 && age <= 65
-        count_male_40_65 += 1
 
-      elsif mem.gender["Female"] && age >= 40 && age <= 65
-        count_female_40_65 += 1
+      # if  mem.gender["Male"] && age <= 31
+      #   count_age_18_30_m += 1
+      # elsif mem.gender["Female"] && age <= 31
+      #   count_age_18_30_f += 1
+      # elsif mem.gender["Male"] && age >= 31 && age <= 60
+      #   count_age_31_59_m += 1
+      # elsif mem.gender["Female"] && age >= 31 && age <= 60
+      #   count_age_31_59_f += 1
+      # elsif mem.gender["Male"] && age >= 61
+      #   count_age_60_above_m += 1
+      # elsif mem.gender["Female"] && age >= 61
+      #   count_age_60_above_f += 1
+      # end
 
-      elsif mem.gender["Others"] && age >= 40 && age <= 65
-        count_others_40_65 += 1
+      # if mem.gender["Male"] && age >= 18 && age <= 39
+      #   count_male_18_39 += 1
 
-      end
-      if mem.gender["Male"] && age >= 66
-        count_others_male_65_above += 1
+      # elsif mem.gender["Female"] && age >= 18 && age <= 39
+      #   count_female_18_39 += 1
+      # elsif mem.gender["Others"] && age >= 18 && age <= 39
+      #   count_others_18_39 += 1
+      # end
+      # if mem.gender["Male"] && age >= 40 && age <= 65
+      #   count_male_40_65 += 1
 
-      elsif mem.gender["Female"] && age >= 66
-        count_others_female_65_above += 1
+      # elsif mem.gender["Female"] && age >= 40 && age <= 65
+      #   count_female_40_65 += 1
 
-      elsif mem.gender["Others"] && age >= 66
-        count_others_others_65_above += 1
+      # elsif mem.gender["Others"] && age >= 40 && age <= 65
+      #   count_others_40_65 += 1
 
-      end
+      # end
+      # if mem.gender["Male"] && age >= 66
+      #   count_others_male_65_above += 1
+
+      # elsif mem.gender["Female"] && age >= 66
+      #   count_others_female_65_above += 1
+
+      # elsif mem.gender["Others"] && age >= 66
+      #   count_others_others_65_above += 1
+
+      # end
 
     end
 
@@ -548,60 +593,87 @@ puts @data
 
       j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
       @data << j
+      if age <= 16
+        count_age_0_16 += 1
+      elsif age <= 30
+        count_age_17_30 += 1
+      elsif age <= 45
+        count_age_31_45 += 1
+      else
+        count_age_above_45 += 1
+      end
       
-      if age <= 31
-        count_age_18_30 += 1
-
-        elsif age <= 60
-          count_age_31_59 += 1
-
-        elsif age >= 59
-          count_age_60_above += 1
-
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
       end
-      if  mem.gender["Male"]  && age <= 31
-        count_age_18_30_m += 1
-      elsif mem.gender["Female"] && age <= 31
-        count_age_18_30_f += 1
-      elsif mem.gender["Male"] && age >= 31 && age <= 60
-        count_age_31_59_m += 1
-      elsif mem.gender["Female"] && age >= 31 && age <= 60
-        count_age_31_59_f += 1
-      elsif mem.gender["Male"] && age >= 61
-        count_age_60_above_m += 1
-      elsif mem.gender["Female"] && age >= 61
-        count_age_60_above_f += 1
-      end
-      if mem.gender["Male"] && age >= 18 && age <= 39
-        count_male_18_39 += 1
 
-      elsif mem.gender["Female"] && age >= 18 && age <= 39
-        count_female_18_39 += 1
+      # if age <= 31
+      #   count_age_18_30 += 1
 
-      elsif mem.gender["Others"] && age >= 18 && age <= 39
-        count_others_18_39 += 1
+      #   elsif age <= 60
+      #     count_age_31_59 += 1
 
-      end
-      if mem.gender["Male"] && age >= 40 && age <= 65
-        count_male_40_65 += 1
+      #   elsif age >= 59
+      #     count_age_60_above += 1
 
-      elsif mem.gender["Female"] && age >= 40 && age <= 65
-        count_female_40_65 += 1
+      # end
+      # if  mem.gender["Male"]  && age <= 31
+      #   count_age_18_30_m += 1
+      # elsif mem.gender["Female"] && age <= 31
+      #   count_age_18_30_f += 1
+      # elsif mem.gender["Male"] && age >= 31 && age <= 60
+      #   count_age_31_59_m += 1
+      # elsif mem.gender["Female"] && age >= 31 && age <= 60
+      #   count_age_31_59_f += 1
+      # elsif mem.gender["Male"] && age >= 61
+      #   count_age_60_above_m += 1
+      # elsif mem.gender["Female"] && age >= 61
+      #   count_age_60_above_f += 1
+      # end
+      # if mem.gender["Male"] && age >= 18 && age <= 39
+      #   count_male_18_39 += 1
 
-      elsif mem.gender["Others"] && age >= 40 && age <= 65
-        count_others_40_65 += 1
+      # elsif mem.gender["Female"] && age >= 18 && age <= 39
+      #   count_female_18_39 += 1
 
-      end
-      if mem.gender["Male"] && age >= 66
-        count_others_male_65_above += 1
+      # elsif mem.gender["Others"] && age >= 18 && age <= 39
+      #   count_others_18_39 += 1
 
-      elsif mem.gender["Female"] && age >= 66
-        count_others_female_65_above += 1
+      # end
+      # if mem.gender["Male"] && age >= 40 && age <= 65
+      #   count_male_40_65 += 1
 
-      elsif mem.gender["Others"] && age >= 66
-        count_others_others_65_above += 1
+      # elsif mem.gender["Female"] && age >= 40 && age <= 65
+      #   count_female_40_65 += 1
 
-      end
+      # elsif mem.gender["Others"] && age >= 40 && age <= 65
+      #   count_others_40_65 += 1
+
+      # end
+      # if mem.gender["Male"] && age >= 66
+      #   count_others_male_65_above += 1
+
+      # elsif mem.gender["Female"] && age >= 66
+      #   count_others_female_65_above += 1
+
+      # elsif mem.gender["Others"] && age >= 66
+      #   count_others_others_65_above += 1
+
+      # end
 
     end
 
@@ -611,59 +683,88 @@ puts @data
       age = calculate_age(mem.date_of_birth)
       j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"Active borrower"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
       @data << j
-      if age <= 31
-        count_age_18_30 += 1
+      # if age <= 31
+      #   count_age_18_30 += 1
 
-      elsif age <= 60
-        count_age_31_59 += 1
+      # elsif age <= 60
+      #   count_age_31_59 += 1
 
-      elsif age >= 59
-        count_age_60_above += 1
+      # elsif age >= 59
+      #   count_age_60_above += 1
 
+      # end
+
+      if age <= 16
+        count_age_0_16 += 1
+      elsif age <= 30
+        count_age_17_30 += 1
+      elsif age <= 45
+        count_age_31_45 += 1
+      else
+        count_age_above_45 += 1
       end
-      if  mem.gender["Male"] && age <= 31
-        count_age_18_30_m += 1
-      elsif mem.gender["Female"] && age <= 31
-        count_age_18_30_f += 1
-      elsif mem.gender["Male"] && age >= 31 && age <= 60
-        count_age_31_59_m += 1
-      elsif mem.gender["Female"] && age >= 31 && age <= 60
-        count_age_31_59_f += 1
-      elsif mem.gender["Male"] && age >= 61
-        count_age_60_above_m += 1
-      elsif mem.gender["Female"] && age >= 61
-        count_age_60_above_f += 1
+
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
       end
-      if mem.gender["Male"] && age >= 18 && age <= 39
-        count_male_18_39 += 1
 
-      elsif mem.gender["Female"] && age >= 18 && age <= 39
-        count_female_18_39 += 1
+      # if  mem.gender["Male"] && age <= 31
+      #   count_age_18_30_m += 1
+      # elsif mem.gender["Female"] && age <= 31
+      #   count_age_18_30_f += 1
+      # elsif mem.gender["Male"] && age >= 31 && age <= 60
+      #   count_age_31_59_m += 1
+      # elsif mem.gender["Female"] && age >= 31 && age <= 60
+      #   count_age_31_59_f += 1
+      # elsif mem.gender["Male"] && age >= 61
+      #   count_age_60_above_m += 1
+      # elsif mem.gender["Female"] && age >= 61
+      #   count_age_60_above_f += 1
+      # end
+      # if mem.gender["Male"] && age >= 18 && age <= 39
+      #   count_male_18_39 += 1
 
-      elsif mem.gender["Others"] && age >= 18 && age <= 39
-        count_others_18_39 += 1
+      # elsif mem.gender["Female"] && age >= 18 && age <= 39
+      #   count_female_18_39 += 1
 
-      end
-      if mem.gender["Male"] && age >= 40 && age <= 65
-        count_male_40_65 += 1
+      # elsif mem.gender["Others"] && age >= 18 && age <= 39
+      #   count_others_18_39 += 1
 
-      elsif mem.gender["Female"] && age >= 40 && age <= 65
-        count_female_40_65 += 1
+      # end
+      # if mem.gender["Male"] && age >= 40 && age <= 65
+      #   count_male_40_65 += 1
 
-      elsif mem.gender["Others"] && age >= 40 && age <= 65
-        count_others_40_65 += 1
+      # elsif mem.gender["Female"] && age >= 40 && age <= 65
+      #   count_female_40_65 += 1
 
-      end
-      if mem.gender["Male"] && age >= 66
-        count_others_male_65_above += 1
+      # elsif mem.gender["Others"] && age >= 40 && age <= 65
+      #   count_others_40_65 += 1
 
-      elsif mem.gender["Female"] && age >= 66
-        count_others_female_65_above += 1
+      # end
+      # if mem.gender["Male"] && age >= 66
+      #   count_others_male_65_above += 1
 
-      elsif mem.gender["Others"] && age >= 66
-        count_others_others_65_above += 1
+      # elsif mem.gender["Female"] && age >= 66
+      #   count_others_female_65_above += 1
 
-      end
+      # elsif mem.gender["Others"] && age >= 66
+      #   count_others_others_65_above += 1
+
+      # end
     end
 
     # Process new member
@@ -672,72 +773,118 @@ puts @data
       age = calculate_age(mem.date_of_birth)
       j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"New member"}|#{mem.date_of_birth}|#{mem.date_of_membership}|#{mem.gender}"
       @data << j
-      if age <= 31
-        count_age_18_30 += 1
+      # if age <= 31
+      #   count_age_18_30 += 1
 
-      elsif age <= 60
-        count_age_31_59 += 1
+      # elsif age <= 60
+      #   count_age_31_59 += 1
 
-      elsif age >= 59
-        count_age_60_above += 1
+      # elsif age >= 59
+      #   count_age_60_above += 1
 
+      # end
+      if age <= 16
+        count_age_0_16 += 1
+      elsif age <= 30
+        count_age_17_30 += 1
+      elsif age <= 45
+        count_age_31_45 += 1
+      else
+        count_age_above_45 += 1
       end
-      if  mem.gender["Male"] && age <= 31
-        count_age_18_30_m += 1
-      elsif mem.gender["Female"] && age <= 31
-        count_age_18_30_f += 1
-      elsif mem.gender["Male"] && age >= 31 && age <= 60
-        count_age_31_59_m += 1
-      elsif mem.gender["Female"] && age >= 31 && age <= 60
-        count_age_31_59_f += 1
-      elsif mem.gender["Male"] && age >= 61
-        count_age_60_above_m += 1
-      elsif mem.gender["Female"] && age >= 61
-        count_age_60_above_f += 1
+      
+      if  mem.gender["Male"] && age <= 16
+        count_age_0_16_m += 1
+      elsif mem.gender["Female"] && age <= 16
+        count_age_0_16_f += 1
+      elsif mem.gender["Male"] && age <= 30
+        count_age_17_30_m += 1
+      elsif mem.gender["Female"] && age <= 30
+        count_age_17_30_f += 1
+      elsif mem.gender["Male"] && age <= 45
+        count_age_31_45_m += 1
+      elsif mem.gender["Female"] && age <= 45
+        count_age_31_45_f += 1
+      elsif mem.gender["Male"] && age >= 46
+        count_age_above_45_m += 1
+      elsif mem.gender["Female"] && age >= 46
+        count_age_above_45_f+= 1
       end
-      if mem.gender["Male"] && age >= 18 && age <= 39
-        count_male_18_39 += 1
+      # if  mem.gender["Male"] && age <= 31
+      #   count_age_18_30_m += 1
+      # elsif mem.gender["Female"] && age <= 31
+      #   count_age_18_30_f += 1
+      # elsif mem.gender["Male"] && age >= 31 && age <= 60
+      #   count_age_31_59_m += 1
+      # elsif mem.gender["Female"] && age >= 31 && age <= 60
+      #   count_age_31_59_f += 1
+      # elsif mem.gender["Male"] && age >= 61
+      #   count_age_60_above_m += 1
+      # elsif mem.gender["Female"] && age >= 61
+      #   count_age_60_above_f += 1
+      # end
+      # if mem.gender["Male"] && age >= 18 && age <= 39
+      #   count_male_18_39 += 1
 
-      elsif mem.gender["Female"] && age >= 18 && age <= 39
-        count_female_18_39 += 1
+      # elsif mem.gender["Female"] && age >= 18 && age <= 39
+      #   count_female_18_39 += 1
 
-      elsif mem.gender["Others"] && age >= 18 && age <= 39
-        count_others_18_39 += 1
+      # elsif mem.gender["Others"] && age >= 18 && age <= 39
+      #   count_others_18_39 += 1
 
-      end
-      if mem.gender["Male"] && age >= 40 && age <= 65
-        count_male_40_65 += 1
+      # end
+      # if mem.gender["Male"] && age >= 40 && age <= 65
+      #   count_male_40_65 += 1
 
-      elsif mem.gender["Female"] && age >= 40 && age <= 65
-        count_female_40_65 += 1
+      # elsif mem.gender["Female"] && age >= 40 && age <= 65
+      #   count_female_40_65 += 1
 
-      elsif mem.gender["Others"] && age >= 40 && age <= 65
-        count_others_40_65 += 1
+      # elsif mem.gender["Others"] && age >= 40 && age <= 65
+      #   count_others_40_65 += 1
 
-      end
-      if mem.gender["Male"] && age >= 66
-        count_others_male_65_above += 1
+      # end
+      # if mem.gender["Male"] && age >= 66
+      #   count_others_male_65_above += 1
 
-      elsif mem.gender["Female"] && age >= 66
-        count_others_female_65_above += 1
+      # elsif mem.gender["Female"] && age >= 66
+      #   count_others_female_65_above += 1
 
-      elsif mem.gender["Others"] && age >= 66
-        count_others_others_65_above += 1
+      # elsif mem.gender["Others"] && age >= 66
+      #   count_others_others_65_above += 1
 
-      end
+      # end
     end
 
     puts @data
-    puts "Number of members aged between 18 and 30: |#{count_age_18_30}"
-    puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
-    puts "Number of members aged 60 aboved : |#{count_age_60_above}"
+    # puts "Number of members aged between 18 and 30: |#{count_age_18_30}"
+    # puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
+    # puts "Number of members aged 60 aboved : |#{count_age_60_above}"
 
-    puts "Number of members aged between 18 and 30 Male:|#{count_age_18_30_m}"
-    puts "Number of members aged between 18 and 30 Female:|#{count_age_18_30_f}"
-    puts "Number of members aged between 31 and 59 Male:|#{count_age_31_59_m}"
-    puts "Number of members aged between 31 and 59 Female:|#{count_age_31_59_f}"
-    puts "Number of members aged between 60 above Male:|#{count_age_60_above_m}"
-    puts "Number of members aged between 60 above Female:|#{count_age_60_above_f}"
+    puts "Number of members aged 0 - 16  : |#{count_age_0_16}"
+    puts "Number of members aged 17 - 30 : |#{count_age_17_30}"
+    puts "Number of members aged 31 - 45 : |#{count_age_31_45}"
+    puts "Number of members aged 45 aboved : |#{count_age_above_45}"
+
+    puts "Number of members aged 0 - 16 MALE : |#{count_age_0_16_m}"
+    puts "Number of members aged 0 - 16  FEMALE: |#{count_age_0_16_f}"
+
+    puts "Number of members aged 17 - 30 MALE : |#{count_age_17_30_m}"
+    puts "Number of members aged 17 - 30 FEMALE : |#{count_age_17_30_f}"
+
+    puts "Number of members aged 31 - 45 MALE: |#{count_age_31_45_m}"
+    puts "Number of members aged 31 - 45 FEMALE: |#{count_age_31_45_f}"
+
+    puts "Number of members aged 45 aboved MALE: |#{count_age_above_45_m}"
+    puts "Number of members aged 45 aboved FEMALE: |#{count_age_above_45_f}"
+
+
+
+    # puts "Number of members aged between 18 and 30 Male:|#{count_age_18_30_m}"
+    # puts "Number of members aged between 18 and 30 Female:|#{count_age_18_30_f}"
+    # puts "Number of members aged between 31 and 59 Male:|#{count_age_31_59_m}"
+    # puts "Number of members aged between 31 and 59 Female:|#{count_age_31_59_f}"
+    # puts "Number of members aged between 60 above Male:|#{count_age_60_above_m}"
+    # puts "Number of members aged between 60 above Female:|#{count_age_60_above_f}"
 
     # puts "Number of member aged 18 - 39 male |#{count_male_18_39}|#{count_female_18_39}|#{count_others_18_39}"
     # # puts "Number of member aged 18 - 39 female |#{count_female_18_39}"

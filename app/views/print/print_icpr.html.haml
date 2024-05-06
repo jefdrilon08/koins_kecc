@@ -96,7 +96,8 @@
           %th.text-center
             CBU Amount Distributed
       %tbody
-        - @icpr[:record].each do |rec|
+      - @icpr[:record].each do |rec|
+        - if rec[:equity_interest_amount].to_f != 0.00 || rec[:savings_distribute].to_f != 0.00 || rec[:cbu_distribute].to_f != 0.00
           %tr
             %td
               #{rec[:last_name]}, #{rec[:first_name]} #{rec[:middle_name]}

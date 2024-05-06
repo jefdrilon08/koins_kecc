@@ -26,7 +26,7 @@ module DataStores
 
       if !@record.error?
         @subheader_items << {
-          text: "SOA Expenses dating #{@meta[:start_date].to_date.strftime("%B %d, %Y")} to #{@meta[:end_date].to_date.strftime("%B %d, %Y")}"
+          text: "SOA Expenses dating #{@meta[:start_date].to_date.strftime("%B %d, %Y")} to #{@meta[:end_date].to_date.strftime("%B %d, %Y")} "
         }
       end
 

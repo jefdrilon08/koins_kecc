@@ -6,6 +6,8 @@
           .col
             %h5
               Non-printed Certificates (#{@member_shares.total_count})
+            .col
+              = render partial: "index_filter"
             - if @member_shares.any?
               %table.table.table-sm.table-bordered
                 %thead
@@ -35,3 +37,6 @@
             - else
               %p
                 No certificates found
+
+
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }   

@@ -102,11 +102,12 @@ class OnlineLoanApplicationsController < ApplicationController
 
   def show
     @online_application       = LoanApplication.find(params[:id])
-    @online_application_data = MemberAccount.where(member_id:  @online_application.member_id)
+    @online_application_data = MemberAccount.where(member_id:  @online_application.member_id, account_type: ["SAVINGS", "EQUITY"], account_subtype: ["K-IMPOK", "Share Capital", "Maintaining Balance Savings"] )
+    # raise @online_application_data.pluck(:account_subtype).inspect
     @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
 
       @subheader_side_actions = []
-      
+
       if @online_application.pending?
         if helpers.so_mis_user
           @subheader_side_actions << {
@@ -161,6 +162,12 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Approve"
           }
           @subheader_side_actions << {
+            id: "btn-download-form",
+            class: "fa fa-download",
+            link: "#",
+            text: "Download Form", data: {id: @online_application.id}
+          }
+          @subheader_side_actions << {
             id: "btn-reject-approve",
             class: "fa fa-pencil-alt",
             link: "#",
@@ -175,10 +182,20 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Reject"
           }
         end
-       
+       elsif @online_application.status == "approved"
+        if helpers.sbk_mis_bk?
+          @subheader_side_actions << {
+            id: "btn-reject-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Acco Reject"
+          }
+        end
       end
+
     end
-    
+
     def edit
 
       @online_loan_application       = LoanApplication.find(params[:id])

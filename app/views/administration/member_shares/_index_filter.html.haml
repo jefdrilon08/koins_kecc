@@ -3,13 +3,8 @@
     .col
       .form-group
         %label
-          Start Date
-        = text_field_tag :book_start_date, params[:book_start_date], class: 'form-control', type: :date
-    .col
-      .form-group
-        %label
-          End Date
-        = text_field_tag :book_end_date, params[:book_end_date], class: 'form-control', type: :date
+          Date Issued
+        = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
     .col
       .form-group
         %label
@@ -19,5 +14,7 @@
       .form-group
         %label
           Actions
-        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
-          .bi.bi-search
+        .form-group
+          .btn-group
+            = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+              .bi.bi-search

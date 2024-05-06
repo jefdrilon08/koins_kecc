@@ -1,5 +1,5 @@
 module Api
-  class LoanProductTypesController < ActionController::API
+  class LoanProductTaggingsController < ActionController::API
     def index
       loan_product_id = params[:loan_product_id]
 
@@ -13,7 +13,7 @@ module Api
         render json: payload, status: :unprocessable_entity
       else
         payload = {
-          loan_product_types: LoanProductTagging.where(loan_product_id: loan_product_id).map{ |o|
+          loan_product_tagging: LoanProductTagging.where(loan_product_id: loan_product_id).map{ |o|
                                 {
                                   id: o.id,
                                   name: o.name

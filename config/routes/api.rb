@@ -31,6 +31,7 @@ namespace :api do
 
 
   get "/loan_product_types", to: "loan_product_types#index"
+  get "/loan_product_taggings", to: "loan_product_taggings#index"
   post "/status_check", to: "public#status_check"
   get "/public/branches", to: "public#branches"
   get "/public/centers", to: "public#centers"

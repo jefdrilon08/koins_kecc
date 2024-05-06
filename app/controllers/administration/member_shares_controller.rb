@@ -1,15 +1,16 @@
 module Administration
   class MemberSharesController < ApplicationController
     before_action :authenticate_user!
-
     def index
       branch_ids = @branches.pluck(:id)
-
+      
+    
       @member_shares = MemberShare
         .not_printed
         .includes(member: :branch)
         .where(members: { branch_id: branch_ids })
 
+       
       @members = Member
         .active
         .left_outer_joins(:member_shares)
@@ -150,6 +151,8 @@ module Administration
     end
 
     def not_printed
+     
+      
       @member_shares = MemberShare
         .not_printed
         .includes(member: :branch)
@@ -158,11 +161,23 @@ module Administration
         .page(params[:page])
         .per(LIST_PAGE_SIZE)
 
+        @branch_id = params[:branch_id] 
+
+        if params[:start_date].present?
+          @member_shares = @member_shares.where("date_of_issue = ?" , params[:start_date])
+        end
+    
+        if @branch_id.present?  
+            @member_shares = @member_shares.where("members.branch_id = ?", @branch_id)
+        end
+
+        
       @subheader_items = [
         { text: "Administration" },
         { text: "Member Shares Monitoring" },
         { text: "Not Printed" }
       ]
+     
     end
 
     def printed

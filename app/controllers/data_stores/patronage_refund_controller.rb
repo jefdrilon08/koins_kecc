@@ -1,6 +1,21 @@
 module DataStores
   class PatronageRefundController < DataStoreController
+
     def index
+      @record = ReadOnlyDataStore.patronage_refund
+
+      @year = params[:year]
+      @branch_id = params[:branch_id] 
+      
+      if @year.present?
+        @record = @record.where("meta->>'year' = ?", @year)
+      end   
+     
+      if @branch_id.present?
+        @record = @record.where("meta->>'branch_id' = ?", @branch_id)
+      end
+
+      @record = @record.order(Arel.sql("meta->>'year' DESC")).page(params[:page]).per(20)
       super
 
       @subheader_items = [
@@ -24,7 +39,7 @@ module DataStores
 
     def show
       super
-      
+
 
       @subheader_items = [
         {

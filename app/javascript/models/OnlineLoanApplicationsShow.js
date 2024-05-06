@@ -185,7 +185,12 @@ var _bindEvents = function() {
 
   });
   $btnConfirmDecline.on("click", function(){
+    var reason = $('#input-decline-approve').val();
 
+    if(reason.trim() == ''){
+      $('.message').text('Please provide a reason.');
+      return false;
+    }
     $.ajax({
       url: "/api/v1/online_loan_applications/decline",
       method: "POST",
@@ -205,7 +210,12 @@ var _bindEvents = function() {
   })
   
   $btnConfirmRejectApproveReason.on("click", function(){
-  
+    var reason = $('#input-reason-approve').val();
+
+    if(reason.trim() == ''){
+      $('.message').text('Please provide a reason.');
+      return false;
+    }
     $.ajax({
       url: "/api/v1/online_loan_applications/reject_approve",
       method: "POST",
@@ -231,7 +241,12 @@ var _bindEvents = function() {
   });
   
   $btnConfirmRejectCheckingReason.on("click", function(){
-  
+    var reason = $('#input-reason-checking').val();
+    
+    if(reason.trim() == ''){
+      $('.message').text('Please provide a reason.');
+      return false;
+    }
     $.ajax({
       url: "/api/v1/online_loan_applications/reject_checking",
       method: "POST",

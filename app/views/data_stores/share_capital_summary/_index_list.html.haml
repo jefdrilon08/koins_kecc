@@ -1,5 +1,3 @@
-.h4
-  Share Capital Summary
 %table.table.table-bordered.table-sm.table-hover
   %thead
     %tr
@@ -10,30 +8,30 @@
         Started
       %th.text-center
         Status
-    %thead
-  - @records.each do |o|
-    %tr
-      %td.text-center
-        = link_to "/data_stores/share_capital_summary/#{o.id}" do
-          .bi.bi-search
-      %td.text-center
-        %strong
+  %thead
+    - @share_capital_summary.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/share_capital_summary/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          %strong
           #{o.meta.with_indifferent_access[:branch_name]}
-      %td.text-center
-        #{o.as_of}
-      %td.text-center
-        - if o[:status] == "processing"
-          .badge.badge-info
-            Processing
-        - elsif o[:status] == "done"
-          .badge.badge-success
-            Done
-        - elsif o[:status] == "pending"
-          .badge.badge-danger
-            pending
-        - elsif o[:status] == "approved"
-          .badge.badge-success
-            approved
-        - elsif o[:status] == "error"
-          .badge.badge-danger
-            Error
+        %td.text-center
+          #{o.as_of}
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.bg-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.bg-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.bg-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.bg-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.bg-danger
+              Error

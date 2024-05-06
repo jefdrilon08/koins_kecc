@@ -20,6 +20,7 @@ class Loan < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :project_type, optional: true
   belongs_to :loan_product_type, optional: true
+  belongs_to :loan_product_taggings, optional: true
 
   validates :status, presence: true, inclusion: { in: STATUSES }
   validates :principal, presence: true, numericality: true

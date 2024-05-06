@@ -1,14 +1,19 @@
-.row
-  .col
-    .card
-      %h3 Accrued Interest Collections
-      .card-body
-        = render partial: "index_filter"
-        - if @accrued_interest.any?
-          = render partial: "index_list", locals: { accrued_interest: @accrued_interest}
-        - else
-          %p
-            No Accrued Interest Found 
+= title
+%h4 
+  Accrued Interest Collections
+.card
+  .card-body
+    = render partial: "index_filter"
+    - if @accrued_interest.any?
+      = render partial: "index_list", locals: { accrued_interest: @accrued_interest}
+      = paginate @accrued_interest
+    - else
+      %p
+        No Accrued Interest Found 
 
                       
 = render partial: "accrued_payment_collections/modals/new_transaction"
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }
