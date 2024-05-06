@@ -5,6 +5,7 @@ module Administration
 
     def new
       @loan_product = LoanProduct.find(params[:loan_product_id])
+    
       @loan_product_type = LoanProductTagging.new
 
       @subheader_items = [
@@ -29,8 +30,9 @@ module Administration
 
     def create
       @loan_product = LoanProduct.find(params[:loan_product_id])
+      
       @loan_product_type = LoanProductTagging.new(loan_product_type_params)
-
+      
       @loan_product_type.loan_product = @loan_product
 
       if @loan_product_type.save

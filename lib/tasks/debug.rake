@@ -1,4 +1,70 @@
 namespace :debug do
+  task :approve_online_loan => :environment do
+      loan_application_id = ENV["BRANCH_ID"]
+    
+        online_application  = LoanApplication.find(loan_application_id)
+        online_application_data = Member.find(online_application.member_id)
+
+        member = Member.find(online_application.member_id)
+        #member = Member.find(online_application.member_id)
+        co_maker = Member.find(online_application.co_maker_member_id) 
+        loan_data = {
+                      id: nil,
+                      branch_id: member.branch_id,
+                      center_id: member.center_id,
+                      date_prepared: Date.today,
+                      member_id: member.id,
+                      principal: online_application.amount,
+                      loan_product_id: online_application.loan_product_id,
+                      term: online_application.term,
+                      pn_number: online_application.reference_number,
+                      num_installments: online_application.num_installments,
+                      project_type_id: online_application.data['project_type_id'],
+                      status: "pending",
+                      data: {
+                              voucher:{
+                                        bank:"",
+                                        bank_check_number: "",
+                                        check_number: "",
+                                        payee:"",
+                                        date_requested: "",
+                                        date_of_check: "",
+                                        particular: ""
+                                      },
+                              co_maker_two: online_application.co_maker_last_name,
+                              co_maker_one: {
+                                value: co_maker.id,
+                                label: co_maker.full_name,
+                                id: co_maker.id,
+                                first_name: co_maker.first_name , 
+                                middle_name: co_maker.middle_name,
+                                last_name: co_maker.last_name
+                              },
+                              clip_beneficiary: {
+                                first_name: online_application.data['clip_beneficiary']['first_name'],
+                                middle_name: online_application.data['clip_beneficiary']['middle_name'],
+                                last_name: online_application.data['clip_beneficiary']['last_name'],
+                                date_of_birth: online_application.data['clip_beneficiary']['date_of_birth'],
+                                relationship: online_application.data['clip_beneficiary']['relationship']
+
+                              }
+                            }
+
+
+                    }
+
+
+        config  = { 
+                    loan_data: loan_data, 
+                    user: User.find("08531705-8e42-4e84-aac6-166d5046f91a"), 
+                    co_maker_profile_picture: nil, 
+                    co_maker_three_profile_picture: nil 
+                  }
+
+        data = ::Loans::Save.new(config: config).execute!
+        online_application.update!(status: "approved")
+
+  end
   task :reamortize_active_loan => :environment do
     branch_id = ENV["BRANCH_ID"]
 
