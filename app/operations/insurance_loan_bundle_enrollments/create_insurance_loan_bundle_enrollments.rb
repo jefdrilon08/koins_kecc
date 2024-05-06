@@ -7,6 +7,7 @@ module InsuranceLoanBundleEnrollments
       @branch                               = Branch.where(id: @config[:branch_id]).first
       @center                               = Center.where(id: @config[:center_id]).first
 
+
       # raise @config[:member_lname].inspect
       @insurance_loan_bundle_enrollments = InsuranceLoanBundleEnrollment.new(
         branch: @branch,
@@ -22,7 +23,7 @@ module InsuranceLoanBundleEnrollments
             first_name: @config[:last_name],
             last_name: @config[:first_name],
             middle_name: @config[:middle_name],
-            effectivity_date: @config[:effectivity_date]
+            effectivity_date: @effectivity_date
           },
           kok_data: {
             age: @config[:age],

@@ -155,7 +155,7 @@ module InsuranceLoanBundleEnrollments
       end
 
       @insurance_loan_bundle_enrollment.update!(data: @data)
-      @insurance_loan_bundle_enrollment.update!(status: "approved")
+      @insurance_loan_bundle_enrollment.update!(status: "for-renewal")
       @insurance_loan_bundle_enrollment
     end
   end
