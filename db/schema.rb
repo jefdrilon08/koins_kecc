@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -43,8 +43,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
-    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
-    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -98,7 +96,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.datetime "updated_at", precision: nil, null: false
     t.uuid "accounting_fund_id"
     t.index ["accounting_fund_id"], name: "index_accounting_entries_on_accounting_fund_id"
-    t.index ["book", "reference_number", "particular"], name: "manual_idx_9"
     t.index ["branch_id", "date_posted"], name: "manual_idx_17", where: "((status)::text = 'approved'::text)"
     t.index ["branch_id"], name: "index_accounting_entries_on_branch_id"
     t.index ["date_prepared"], name: "manual_idx_16"
@@ -173,8 +170,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index "((data ->> 'billing_id'::text)), created_at DESC", name: "manual_idx_13"
-    t.index "((data ->> 'loan_id'::text)), created_at DESC", name: "manual_idx_8"
     t.index "((data ->> 'member_id'::text)), created_at DESC", name: "manual_idx_15"
     t.index ["created_at"], name: "manual_idx_4", order: :desc
   end
@@ -859,9 +854,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.string "status"
     t.date "date_prepared"
     t.date "ae_date_posted"
-    t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
-    t.index ["accounting_entry_id", "post_type", "accounting_code_id"], name: "manual_idx_18"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
     t.index ["accounting_fund_id"], name: "index_journal_entries_on_accounting_fund_id"
     t.index ["branch_id"], name: "index_journal_entries_on_branch_id"
@@ -962,6 +955,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "last_name"
+    t.string "gender"
     t.index ["member_id"], name: "index_legal_dependents_on_member_id"
   end
 
@@ -989,6 +983,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "loan_product_taggings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "loan_product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["loan_product_id"], name: "index_loan_product_taggings_on_loan_product_id"
   end
 
   create_table "loan_product_types", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -1063,6 +1065,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
     t.boolean "is_restructured"
     t.uuid "loan_product_type_id"
     t.boolean "is_online_application"
+    t.string "loan_product_tagging_id"
     t.index ["branch_id"], name: "index_loans_on_branch_id"
     t.index ["center_id"], name: "index_loans_on_center_id"
     t.index ["loan_product_id"], name: "index_loans_on_loan_product_id"
@@ -1725,6 +1728,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_073746) do
   add_foreign_key "loan_applications", "loan_products"
   add_foreign_key "loan_applications", "members"
   add_foreign_key "loan_applications", "members", column: "co_maker_member_id"
+  add_foreign_key "loan_product_taggings", "loan_products"
   add_foreign_key "loan_product_types", "loan_products"
   add_foreign_key "loan_products", "loan_product_categories"
   add_foreign_key "loan_repayment_rates", "branches"
