@@ -23,6 +23,7 @@ export default class ApplicationFormComponent extends React.Component {
       coMakers: [],
       loanProducts: [],
       loanProductTypes: [],
+      loanProductTagging: [],
       currentLoanProductId: "",
       currentLoanProductTypeId: "",
       projectTypeCategories: [],
@@ -107,6 +108,25 @@ export default class ApplicationFormComponent extends React.Component {
 
         context.setState({
           loanProductTypes: response.loan_product_types
+        });
+      }
+    });
+
+    // Fetch loan_product_tagging
+    $.ajax({
+      url: "/api/loan_product_taggings",
+      data: {
+        loan_product_id: context.state.currentLoanProductId
+      },
+      method: 'GET',
+      success: function(response) {
+        console.log("Got Loan Product Types");
+        console.log(response);
+        
+        var data = context.state.data;
+
+        context.setState({
+          loanProductTagging: response.loan_product_taggingg
         });
       }
     });
@@ -429,6 +449,36 @@ export default class ApplicationFormComponent extends React.Component {
 
     this.updateData(data);
   }
+  
+  handleLoanProductTag(event) {
+    var data  = this.state.data;
+
+    data.loan_product_tagging_id = event.target.value;
+
+    this.updateData(data);
+  }
+  
+  renderLoanProductTagging() {
+    var data                = this.state.data;
+    var loanProductTagging  = this.state.loanProductTagging || [];
+    var display             = [];
+    console.log(loanProductTagging)
+    display.push(
+      <option value="" key="empty-loan-product-type">
+        -- SELECT --
+      </option>
+    )
+
+    for(var i = 0; i < loanProductTagging.length; i++) {
+      display.push(
+        <option value={loanProductTagging[i].id} key={"loan-product-tag-" + loanProductTagging[i].id}>
+          {loanProductTagging[i].name}
+        </option>
+      )
+    }
+
+    return display;
+  }
 
   handleLoanProduct(event) {
     var data    = this.state.data;
@@ -438,7 +488,7 @@ export default class ApplicationFormComponent extends React.Component {
 
     // Fetch loan_product_types
     $.ajax({
-      url: "/api/loan_product_types",
+      url: "/api/loan_product_taggings",
       data: {
         loan_product_id: data.loan_product_id
       },
@@ -449,12 +499,12 @@ export default class ApplicationFormComponent extends React.Component {
         
         var data = context.state.data;
 
-        if(response.loan_product_types.length > 0) {
-          data.loan_product_type_id = response.loan_product_types[0].id;
+        if(response.loan_product_tagging.length > 0) {
+          data.loan_product_tagging_id = response.loan_product_tagging[0].id;
         }
 
         context.setState({
-          loanProductTypes: response.loan_product_types,
+          loanProductTagging: response.loan_product_tagging,
           data: data
         });
       }
@@ -506,6 +556,7 @@ export default class ApplicationFormComponent extends React.Component {
 
     return display;
   }
+  
 
   renderNumInstallmentOptions() {
     var term  = this.state.data.term;
@@ -1069,6 +1120,21 @@ export default class ApplicationFormComponent extends React.Component {
                 <div className="col">
                   <div className="form-group">
                     <label>
+                      Loan Product Tag
+                    </label>
+                    <select
+                      className="form-control"
+                      value={data.loan_product_tagging_id || "-1"}
+                      onChange={this.handleLoanProductTag.bind(this)}
+                      disabled={this.state.isSaving || this.state.isActive}
+                    >
+                      {this.renderLoanProductTagging()}
+                    </select>
+                  </div>
+                </div>
+                <!--<div className="col">
+                  <div className="form-group">
+                    <label>
                       Loan Product Type
                     </label>
                     <select
@@ -1080,7 +1146,7 @@ export default class ApplicationFormComponent extends React.Component {
                       {this.renderLoanProductTypes()}
                     </select>
                   </div>
-                </div>
+                </div> -->
                 <div className="col">
                   <div className="form-group">
                     <label>

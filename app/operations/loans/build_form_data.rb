@@ -123,6 +123,9 @@ module Loans
       @data[:address]         = @member.full_address_upcase
       @data[:spouse]          = @member.spouse.upcase
       @data[:project_type]    = @loan.project_type.try(:name)
+    
+      #@data[:loan_product_tagging_id]    = @loan.loan_product_tagging_id
+      
       @data[:principal]       = number_to_currency(@loan.principal, unit: 'Php')
       @data[:interest]        = number_to_currency(@loan.interest, unit: 'Php')
       @data[:co_maker_one]    = @loan.co_maker_one

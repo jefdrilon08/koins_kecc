@@ -99,6 +99,7 @@ module Loans
         principal: @loan.principal.to_f.round(2),
         loan_product_id: @loan.loan_product_id,
         loan_product_type_id: @loan.loan_product_type_id,
+        loan_product_tagging_id: @loan.loan_product_tagging_id,
         term: @loan.term,
         pn_number: @loan.pn_number,
         payment_type: @loan.payment_type,
