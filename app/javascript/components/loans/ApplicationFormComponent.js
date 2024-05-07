@@ -1132,21 +1132,6 @@ export default class ApplicationFormComponent extends React.Component {
                     </select>
                   </div>
                 </div>
-                <!--<div className="col">
-                  <div className="form-group">
-                    <label>
-                      Loan Product Type
-                    </label>
-                    <select
-                      className="form-control"
-                      value={data.loan_product_type_id || "-1"}
-                      onChange={this.handleLoanProductType.bind(this)}
-                      disabled={this.state.isSaving || this.state.isActive}
-                    >
-                      {this.renderLoanProductTypes()}
-                    </select>
-                  </div>
-                </div> -->
                 <div className="col">
                   <div className="form-group">
                     <label>
