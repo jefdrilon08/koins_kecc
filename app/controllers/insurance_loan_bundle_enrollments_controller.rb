@@ -172,13 +172,13 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if @insurance_loan_bundle_enrollment.approved?
+    if @insurance_loan_bundle_enrollment.for_renewal?
       if ["MIS", "BK", "SBK"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
           class: "fa fa-check",
-          text: "Renew"
+          text: "Approve"
         }
       end
     end
