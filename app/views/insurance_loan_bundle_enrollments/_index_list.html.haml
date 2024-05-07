@@ -44,5 +44,8 @@
           - elsif o.lapsed?
             .badge.bg-danger
               Lapsed
+          - elsif o.for_renewal?
+            .badge.bg-secondary
+              For-Renewal
 
 = paginate @insurance_loan_bundle_enrollments

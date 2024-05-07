@@ -3431,9 +3431,9 @@ namespace :adjust do
       kok_id                                = k[:id]
       maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
       five_weeks_ago                        = (maturity_date - 28)
+      status                                = k[:status]
+      # raise maturity_date.inspect
       now                                   = Date.today
-
-      # raise insurance_loan_bundle_enrollment.id.inspect
 
       config = {
         insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
@@ -3466,7 +3466,8 @@ namespace :adjust do
         kok_id: kok_id,
         maturity_date: maturity_date,
         five_weeks_ago: five_weeks_ago,
-        now: now
+        now: now,
+        status: status
       }
 
       ProcessKokLoan.perform_later(config)

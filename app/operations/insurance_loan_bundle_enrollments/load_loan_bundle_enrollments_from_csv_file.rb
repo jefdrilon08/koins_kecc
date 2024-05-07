@@ -1,15 +1,15 @@
-module InsuranceLoanBundleEnrollments  
+module InsuranceLoanBundleEnrollments
   class LoadLoanBundleEnrollmentsFromCsvFile
     def initialize(config:)
       @config               = config
       @file                 = @config[:file]
       @prepared_by          = @config[:prepared_by]
-      @collection_date      = @config[:collection_date]   
+      @collection_date      = @config[:collection_date]
     end
 
-    def execute!    
+    def execute!
       CSV.foreach(@file.path, headers: true) do |row|
-        @branch_id                 = row['branch_id']  
+        @branch_id                 = row['branch_id']
         @center_id                 = row['center_id']
         @member_id                 = row['member_id']
         @full_name                 = row['full_name']
@@ -46,7 +46,7 @@ module InsuranceLoanBundleEnrollments
           config: {
             collection_date: @collection_date,
             user: @prepared_by,
-            branch_id: @branch_id,  
+            branch_id: @branch_id,
             center_id: @center_id,
             member_id: @member_id,
             full_name: @full_name,
@@ -82,4 +82,4 @@ module InsuranceLoanBundleEnrollments
       end
     end
   end
-end  
+end
