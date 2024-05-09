@@ -200,7 +200,22 @@ export default function MembersProfileHome(props) {
                   </li>
                 )
               }
-            })()}  
+            })()}
+            <li className="list-group-item">
+              Resolution Number
+              <div className="value text-muted">
+                <b>
+                  {props.member.status === "active" && props.member.data.new_reso ? 
+  (props.member.data.new_reso.resolution_number ? 
+    props.member.data.new_reso.resolution_number : "N/A") 
+  : (props.member.status === "resigned" && props.member.data.resigned_reso ?
+    (props.member.data.resigned_reso.resolution_number ?
+      props.member.data.resigned_reso.resolution_number : "N/A")
+    : "N/A")
+}
+                </b>
+              </div>
+            </li>  
           </ul>
         </div>
         <div className="col-md-9">

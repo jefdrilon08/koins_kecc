@@ -24,6 +24,7 @@ module Branches
         year: @year,
         month: @month,
         as_of: @as_of,
+        resolution_number: '',
         branch: {
           id: @branch.id,
           name: @branch.name
@@ -117,7 +118,7 @@ module Branches
                                 last_name: m.last_name,
                                 identifiction_number: m.identification_number,
                                 recognition_date: recognition_date,
-                                membership_date: membership_date,
+                                membership_date: membership_date,       
                                 center: {
                                   id: m.center.id,
                                   name: m.center.name

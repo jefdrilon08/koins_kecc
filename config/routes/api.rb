@@ -703,6 +703,7 @@ namespace :api do
       post "/uploaded_documents_counts/queue", to: "uploaded_documents_counts#queue"
       post "/member_quarterly_reports/queue", to: "member_quarterly_reports#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
+      post "/monthly_new_and_resigned/resolution_update", to: "monthly_new_and_resigned#resolution_update"
       get "/monthly_new_and_resigned/fetch", to: "monthly_new_and_resigned#fetch"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
