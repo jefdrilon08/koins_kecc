@@ -264,33 +264,50 @@ export default class BillingUITable extends React.Component {
           <small className="badge bg-info">
             {this.props.data.data.records[i].member.member_type}
           </small>
-            {this.props.data.data.records[i].member.data && "sms_record" in this.props.data.data.records[i].member.data && this.props.data.data.records[i].member.data.sms_record && this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
+          {
+  this.props.data.data.records[i].member.data &&
+  "sms_record" in this.props.data.data.records[i].member.data &&
+  this.props.data.data.records[i].member.data.sms_record &&
+  this.props.data.data.records[i].member.data.sms_record.sms_rec === true ? (
     <>
-      {this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
+      {/* Add validation for sms_validation */}
+      {this.props.data.data.records[i].member.data.sms_record.sms_rec === true ? (
         <>
           {/* Check if loan_maturity date is greater than the current date */}
-          {new Date(this.props.data.data.records[i].member.data.sms_record.loan_maturity) > new Date() ? (
-          <small className='badge bg-success'>
-            Sms is Active
-          </small>
+          {this.props.data.data.records[i].member.data.sms_record.loan_maturity ? (
+            new Date(this.props.data.data.records[i].member.data.sms_record.loan_maturity) > new Date() ? (
+              <small className='badge bg-success'>
+                Sms is Active
+              </small>
+            ) : (
+              <small className='badge bg-danger'>
+                Sms is not Active
+              </small>
+            )
           ) : (
             <>
-          <small className='badge bg-danger'>
-            Sms is not Active
-          </small>
+              <small className='badge bg-danger'>
+                Sms is not Active
+              </small>
             </>
           )}
         </>
       ) : (
         <>
+          <small className='badge bg-danger'>
+            Sms is not Active
+          </small>
         </>
       )}
     </>
-    ):(<>
+  ) : (
+    <>
       <small className='badge bg-danger'>
         Sms is Inactive
       </small>
-    </>)}
+    </>
+  )
+}
 
           </td>
         );

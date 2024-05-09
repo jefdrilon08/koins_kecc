@@ -54,11 +54,13 @@ module Loans
 
       perform_deposits!
       send_sms!
+      
       @member_data[:sms_record] = {
         loan: @loan.id,
         loan_maturity: @loan.maturity_date,
         timestamp: Time.now,
-        sms_validation: true
+        sms_validation: true,
+        sms_rec: true
       }
 
       #puts "jaysoncandelaria" + @member_data.inspect
