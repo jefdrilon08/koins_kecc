@@ -229,7 +229,7 @@ module Billings
                   mobile_number: @member.mobile_number,
                   content: content
                 }
-                #::SmsBlast::Send.new(config: config).execute!
+                ::SmsBlast::Send.new(config: config).execute!
                 puts config.inspect
     
              end
@@ -240,7 +240,7 @@ module Billings
                 mobile_number: @member.mobile_number,
                 content: content
               }
-              #::SmsBlast::Send.new(config: config).execute!
+              ::SmsBlast::Send.new(config: config).execute!
               puts config.inspect
              end
           end 
