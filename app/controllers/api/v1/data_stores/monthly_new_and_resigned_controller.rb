@@ -1,14 +1,12 @@
 module Api
   module V1
     module DataStores
-      class MonthlyNewAndResignedController < ActionController::Base
+      class MonthlyNewAndResignedController < ApiController
         before_action :authenticate_user!
-
+        
 
         def fetch
           record  = DataStore.monthly_new_and_resigned.where(id: params[:id]).first
-          
-
           if record.blank?
             render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
           else
@@ -66,7 +64,53 @@ module Api
             render json: record
           end
         end
+        @at_rec = nil
+        def resolution_update
+          @record  = DataStore.find(params[:id]).data.with_indifferent_access
+          @record["resolution_number"] = params[:reso]
+          
+           
+          
+          
+          #resigned member
+          member_ids_res = @record["resigned_members"].map { |member| member["id"] }
+          member_details_res = Member.where(id: member_ids_res)
+          
+          #new member
+
+          member_ids = @record["new_members"].map { |member| member["id"] }
+          member_details = Member.where(id: member_ids)
+          
+          member_details.each_with_index do |member|
+            member_data = member.data.with_indifferent_access
+
+            
+            member_data['new_reso'] = {}
+            member_data['new_reso']['date_of_membership'] = member.date_of_membership
+            member_data['new_reso']['resolution_number'] = params[:reso]
+            
+            
+            member.update(data: member_data)
+          end
+           
+            member_details_res.each_with_index do |member_res|
+            member_data_res = member_res.data.with_indifferent_access
+              
+            
+            member_data_res['resigned_reso'] = {}
+            member_data_res['resigned_reso']['date_of_membership'] = member_res.date_of_membership
+            member_data_res['resigned_reso']['resolution_number'] = params[:reso]
+            
+            
+            member_res.update(data: member_data_res)
+          end 
+          DataStore.find(params[:id]).update!(data: @record)
+          render json: {message: "ok"}
+        end 
+        
+        
         def queue
+          
           @data_store_type  = "MONTHLY_NEW_AND_RESIGNED"
           @as_of            = params[:as_of].to_date
           @month            = @as_of.month
@@ -85,6 +129,7 @@ module Api
                         meta: {
                           branch_id: @branch.id,
                           branch_name: @branch.name,
+                          resolution_number: '',
                           branch: {
                             id: @branch.id,
                             name: @branch.name
