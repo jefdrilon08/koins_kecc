@@ -9,6 +9,8 @@
       %th
         Member
       %th
+        Maturity Date
+      %th
         Status
   %tbody
     - @insurance_loan_bundle_enrollments.each do |o|
@@ -22,6 +24,12 @@
           #{o.center.name}
         %td
           #{o.member_name.uniq.join(",")}
+        %td 
+          - records = o.records_last
+          - if o.for_renewal?
+            #{records["kok_data"]["effectivity_date"]}
+          - else
+            #{records["kok_data"]["maturity_date"]}
         %td
           - if o.pending?
             .badge.bg-warning
@@ -47,5 +55,8 @@
           - elsif o.for_renewal?
             .badge.bg-secondary
               For-Renewal
+          - elsif o.on_grace_period?
+            .badge.bg-warning
+              On-Grace-Period
 
 = paginate @insurance_loan_bundle_enrollments

@@ -132,12 +132,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           }
         }
 
-        @subheader_side_actions << {
-          id: "btn-check",  
-          link: "#",
-          class: "fa fa-check",
-          text: "For-Checking"
-        }
+        if @insurance_loan_bundle_enrollment.records_count > 0
+            @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: "For-Checking"
+          }
+        end
 
         @subheader_side_actions << {
               id: "btn-declined",
