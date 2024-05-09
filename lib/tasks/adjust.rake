@@ -3430,9 +3430,9 @@ namespace :adjust do
       member                                = Member.where(id: kok_last_data[:member][:id]).first
       kok_id                                = k[:id]
       maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
-      five_weeks_ago                        = (maturity_date - 28)
+      four_weeks_ago                        = (maturity_date - 28)
+      on_grace_period                       = (maturity_date + 60)
       status                                = k[:status]
-      # raise maturity_date.inspect
       now                                   = Date.today
 
       config = {
@@ -3465,7 +3465,8 @@ namespace :adjust do
         member: member,
         kok_id: kok_id,
         maturity_date: maturity_date,
-        five_weeks_ago: five_weeks_ago,
+        four_weeks_ago: four_weeks_ago,
+        on_grace_period: on_grace_period,
         now: now,
         status: status
       }
