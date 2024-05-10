@@ -14,26 +14,31 @@ class ProcessKokLoan < ApplicationJob
     effectivity_date                         = @config[:effectivity_date].to_date
 
     if age <= 75
-      if status == "for-renewal"
+      if status == "approved"
+        #  for renewal
+        if now >= four_weeks_ago && now <= maturity_date
+          cmd = ::InsuranceLoanBundleEnrollments::MemberRenewal.new(
+            config: config
+          ).execute!
+        #  for lapsed
+        elsif now > on_grace_period
+          cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
+            config: config
+          ).execute!
+        # for on grace period
+        elsif now > maturity_date && now <= on_grace_period 
+          cmd = ::InsuranceLoanBundleEnrollments::MemberOnGracePeriodRenewal.new(
+            config: config
+          ).execute!
+        end
+      elsif status == "for-renewal"
         if now >= effectivity_date && now <= on_grace_period
           cmd = ::InsuranceLoanBundleEnrollments::UpdateGracePeriodStatus.new(
             config: config
           ).execute!
-        elsif now > on_grace_period
-          puts "lapsed , id: #{kok_id}"
-          cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
-            config: config
-          ).execute!
         end
-      end
-      if status == "approved"
-        if now >= four_weeks_ago && now <= maturity_date
-          puts "for-renewal, maturity date #{maturity_date}, id: #{kok_id}"
-          cmd = ::InsuranceLoanBundleEnrollments::MemberRenewal.new(
-            config: config
-          ).execute!
-        elsif now > maturity_date
-          puts "lapsed , id: #{kok_id}"
+      elsif status == "on-grace-period"
+        if now > on_grace_period
           cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
             config: config
           ).execute!
