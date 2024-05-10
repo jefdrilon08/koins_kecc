@@ -259,19 +259,19 @@ module Loans
                 temp_amount -= amount
               end
             
-            #else
-              #if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i).to_i > 1
+            else
+              if (@member_data[:entry_point_loan_cycle].to_i + 1.to_i).to_i > 1
       
-                #if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
-                #  journal_entries << {
-                #    accounting_code_id: accounting_code.id,
-                #    code: code,
-                #    name: name,
-                #    amount: amount
-                #  }
-                #  temp_amount -= amount
-                #end
-            #end
+                if @loan.data["share_capital_available"].nil? || @loan.data["share_capital_available"] == false
+                  journal_entries << {
+                    accounting_code_id: accounting_code.id,
+                    code: code,
+                    name: name,
+                    amount: amount
+                  }
+                  temp_amount -= amount
+                end
+            end
             
             
             end
@@ -388,6 +388,10 @@ module Loans
           #raise @loan_data[:sms_fee_available].inspect
           #and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
             #amount  = s_deduction.sms_amount
+            if @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+              amount = s_deduction.sms_amount.to_f
+            else
+
               if s_deduction.skip_term_map == false
                 if @term == "weekly"
                   s_deduction.meta.term_map.weekly.each do |s|
@@ -415,6 +419,7 @@ module Loans
               else
                 amount = s_deduction.sms_amount.to_f
               end
+            end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
