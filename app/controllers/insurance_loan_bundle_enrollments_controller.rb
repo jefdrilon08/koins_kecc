@@ -174,7 +174,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if @insurance_loan_bundle_enrollment.for_renewal?
+    if @insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?
       if ["MIS", "BK", "SBK"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
