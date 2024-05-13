@@ -524,7 +524,7 @@ puts @data
       #   count_age_60_above += 1
       # end
 
-      if age <= 31
+      if age <= 30
         count_age_18_30_j += 1
       elsif age <= 40 
         count_age_31_40_j += 1
@@ -629,7 +629,7 @@ puts @data
       #   count_age_above_45 += 1
       # end
       
-      if age <= 31
+      if age <= 30
         count_age_18_30_j += 1
       elsif age <= 40 
         count_age_31_40_j += 1
@@ -746,7 +746,7 @@ puts @data
       #   count_age_above_45 += 1
       # end
 
-      if age <= 31
+      if age <= 30
         count_age_18_30_j += 1
       elsif age <= 40 
         count_age_31_40_j += 1
@@ -845,7 +845,7 @@ puts @data
       #   count_age_above_45 += 1
       # end
       
-      if age <= 31
+      if age <= 30
         count_age_18_30_j += 1
       elsif age <= 40 
         count_age_31_40_j += 1
@@ -916,8 +916,9 @@ puts @data
 
       # end
     end
-
+    puts "ID NUMBER|NAME|CENTER|MEMBER_STATS|DATE OF MEMBERSHIP|DATE OF BIRTH|GENDER|MEMBER STATUS|AGE|BUSINESS"
     puts @data
+  
     # puts "Number of members aged between 18 and 30: |#{count_age_18_30}"
     # puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
     # puts "Number of members aged 60 aboved : |#{count_age_60_above}"
@@ -925,6 +926,7 @@ puts @data
     puts "Number of members aged 31 - 40  : |#{count_age_31_40_j}"
     puts "Number of members aged 41 - 55  : |#{count_age_41_55_j}"
     puts "Number of members above 56  : |#{count_age_56_j}"
+    puts "Total: |#{count_age_18_30_j + count_age_31_40_j + count_age_41_55_j + count_age_56_j}"
 
     # puts "Number of members aged 0 - 16  : |#{count_age_0_16}"
     # puts "Number of members aged 17 - 30 : |#{count_age_17_30}"
