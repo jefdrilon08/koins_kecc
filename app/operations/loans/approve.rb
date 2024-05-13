@@ -549,9 +549,6 @@ module Loans
         data: data
       )
     end
-    def sms_data
-  
-    end 
     def send_sms!
       member = Member.find(@loan.member_id)
       content = "Good Day! #{member.full_name.upcase}, Your Loan has been approved with Loan Reference Number: #{@loan.pn_number} amounting to #{number_to_currency(@loan.principal,unit: "")} and the first date of payment is #{@loan.first_date_of_payment.to_fs(:long)}  THIS IS A TEST MESSAGE ONLY"
