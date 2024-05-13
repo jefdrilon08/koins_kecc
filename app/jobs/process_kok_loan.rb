@@ -26,7 +26,7 @@ class ProcessKokLoan < ApplicationJob
             config: config
           ).execute!
         # for on grace period
-        elsif now > maturity_date && now <= on_grace_period 
+        elsif now > maturity_date && now <= on_grace_period
           cmd = ::InsuranceLoanBundleEnrollments::MemberOnGracePeriodRenewal.new(
             config: config
           ).execute!
@@ -45,7 +45,9 @@ class ProcessKokLoan < ApplicationJob
         end
       end
     else
-      raise "Your age is not qualified for Renewal. Member ID : #{insurance_loan_bundle_enrollment.id}".inspect
+      cmd = ::InsuranceLoanBundleEnrollments::UpdateOverAgeStatus.new(
+        config: config
+      ).execute!
     end
   end
 end

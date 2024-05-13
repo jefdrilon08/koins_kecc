@@ -9,7 +9,8 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "declined",
     "error",
     "lapsed",
-    "on-grace-period"
+    "on-grace-period",
+    "over-age"
   ]
 
   belongs_to :center
@@ -101,6 +102,10 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   def on_grace_period?
     self.status == "on-grace-period"
+  end
+
+  def over_age?
+    self.status == "over-age"
   end
 
   def member_ids
