@@ -23,16 +23,22 @@
         %td
           #{o.center.name}
         %td
-          #{o.member_name.uniq.join(",")}
+          -if o.member_name.nil?
+            no member
+          -else  
+            #{o.member_name.uniq.join(",")}
         %td 
           - records = o.records_last
-          - if o.for_renewal? || o.on_grace_period?
-            #{records["kok_data"]["effectivity_date"]}
-          - else
-            #{records["kok_data"]["maturity_date"]}
+          - if records.nil?
+
+          -else
+            - if o.for_renewal? || o.on_grace_period?
+              #{records["kok_data"]["effectivity_date"]}
+            - else
+              #{records["kok_data"]["maturity_date"]}
         %td
           - if o.pending?
-            .badge.bg-warning
+            .badge.bg-primary
               Pending
           - if o.checked?
             .badge.bg-info
@@ -58,5 +64,8 @@
           - elsif o.on_grace_period?
             .badge.bg-warning
               On-Grace-Period
+          - elsif o.over_age?
+            .badge.bg-dark
+              Over-Age
 
 = paginate @insurance_loan_bundle_enrollments
