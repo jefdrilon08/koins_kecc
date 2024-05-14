@@ -182,6 +182,13 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           class: "fa fa-check",
           text: "Approve"
         }
+
+        @subheader_side_actions << {
+            id: "btn-declined",
+            link: "#",
+            class: "fa fa-check",
+            text: "Decline"
+        }
       end
     end
 
