@@ -269,7 +269,7 @@ module Loans
                     name: name,
                     amount: amount
                   }
-                  temp_amount -= amount
+                  #temp_amount -= amount
                 end
             end
             
@@ -373,7 +373,11 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-            amount  = s_deduction.business_permit_amount
+            if s_deduction.sms_amount_status.present? and s_deduction.sms_amount_status == true and @loan_data[:sms_fee_available] == false
+              amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_f
+            else 
+              amount  = s_deduction.business_permit_amount
+            end
 
             journal_entries << {
               accounting_code_id: accounting_code.id,
