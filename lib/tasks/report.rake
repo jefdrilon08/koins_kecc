@@ -74,7 +74,75 @@ task :involuntary_resignation => :environment do
     end
     puts @data
   end
+  task :repayment_rates => :environment do
+    s_date = ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = []
+  
+    @data_store = DataStore.where(
+      "meta->>'branch_id' = ? AND
+      CAST(meta->>'as_of' AS date) = ? AND
+      meta->>'data_store_type' = ?",
+      br_id,
+      s_date,
+      "REPAYMENT_RATES"
+    ).last  
+  
+    @data_store_data = @data_store.data.with_indifferent_access
+  
+    @data_store_data[:records].each do |record|
+      member = record["member"]
+      principal = record["principal"]
+      interest = record["interest"]
+      loan_product = record["loan_product"]["name"]
+  
+      if member.present?
+        member_details = Member.find_by(id: member["id"])
+        
+        if member_details.present? && member_details[:member_type] == "GK"
+          data = "#{record['id']}|#{member['last_name']}, #{member['first_name']}, #{member['middle_name']}|#{loan_product}|#{principal}|#{interest}"
+          @data << data
+        end
+      end
+    end
+  
+    puts "MEMBER ID|MEMBER|LOAN PRODUCT|PRINCIPAL|INTEREST"
+    puts @data
+  end
 
+  task:personal_fund => :environment do
+    s_date = ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = []
+
+    @data_store  = DataStore.where(
+                                  "meta->>'branch_id' = ? AND
+                                  CAST(meta->>'as_of' AS date) = ? AND
+                                  meta->>'data_store_type' = ?",
+                                  br_id,
+                                  s_date,
+                                  "PERSONAL_FUNDS",).last
+    @data_store_data = @data_store.data.with_indifferent_access
+
+    @data_store_data[:records].each_with_index do |member, j|
+      a = member[:member]
+      accounts = member[:accounts] 
+      share_cap = accounts.select{|sc| sc[:account_subtype] == "Share Capital"}.last
+      k_impok = accounts.select{|k_impok| k_impok[:account_subtype] == "K-IMPOK"}.last
+      golden_k = accounts.select{|gk| gk[:account_subtype] == "Golden K"}.last
+      savings_if = accounts.select{|sif| sif[:account_subtype] == "Savings Investment Fund"}.last
+      personal_sa = accounts.select{|psa| psa[:account_subtype] == "Personal Savings Account"}.last
+      member_details = Member.find(a[:id])
+      if member_details[:member_type] == "GK"
+        data = "#{a[:last_name]} , #{a[:first_name]} , #{a[:middle_name]}|#{share_cap[:balance]}|#{k_impok[:balance]}|#{golden_k[:balance]}|#{savings_if[:balance]}|#{personal_sa[:balance]}"
+        @data << data
+      end    
+    end
+    puts "MEMBER|SHARE CAPITAL|K-IMPOK|GOLDEN K|SAVINGS INVESTMENT FUND|PERSONAL_SAVINGS_ACCOUNT"
+    puts @data
+  end
 task :member_number => :environment do
   br_name = ENV['SATO']
   br_id = Branch.where(name: br_name).ids
