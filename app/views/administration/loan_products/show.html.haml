@@ -40,16 +40,28 @@
                   No
           %tr
             %th
-              Is Entry Point
+              is entry point
             %td
               - if @loan_product.is_entry_point
                 .badge.bg-success
                   .fa.fa-check
-                  Yes
+                  yes
               - else
                 .badge.bg-danger
                   .fa.fa-times
-                  No
+                  no
+          %tr
+            %th
+              is active
+            %td
+              - if @loan_product.is_active
+                .badge.bg-success
+                  .fa.fa-check
+                  yes
+              - else
+                .badge.bg-danger
+                  .fa.fa-times
+                  no
           %tr
             %th
               Priority
