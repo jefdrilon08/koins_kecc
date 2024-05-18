@@ -215,6 +215,8 @@ module Billings
             @total_cash_payment += rl[:amount].to_f
           elsif rl[:enabled] == true and rl[:record_type] == "WP"
             @total_withdraw_payment += rl[:amount].to_f
+          elsif rl[:enabled] == true and rl[:record_type] == "EQUITY"
+            @total_cash_payment += rl[:amount].to_f
           end
 
         end
