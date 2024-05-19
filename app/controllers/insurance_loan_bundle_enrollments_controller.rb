@@ -132,12 +132,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           }
         }
 
-        @subheader_side_actions << {
-          id: "btn-check",  
-          link: "#",
-          class: "fa fa-check",
-          text: "For-Checking"
-        }
+        if @insurance_loan_bundle_enrollment.records_count > 0
+            @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: "For-Checking"
+          }
+        end
 
         @subheader_side_actions << {
               id: "btn-declined",
@@ -172,13 +174,20 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if @insurance_loan_bundle_enrollment.for_renewal?
+    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75 
       if ["MIS", "BK", "SBK"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
           class: "fa fa-check",
           text: "Approve"
+        }
+
+        @subheader_side_actions << {
+            id: "btn-declined",
+            link: "#",
+            class: "fa fa-check",
+            text: "Decline"
         }
       end
     end

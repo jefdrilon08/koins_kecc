@@ -49,6 +49,7 @@ var $modalEditAmount;
 var $txtAmount;
 var $btnConfirmAmount;
 var _amount;
+var _ltag;
 var $btnConfirmReject;
 
 var $btnRejectChecking;
@@ -69,6 +70,11 @@ var $btnRejectApprove;
 var $modalRejectApprove;
 var $btnConfirmRejectApproveReason;
 var $txtInputReasonApprove;
+
+var $btnLoanTag;
+var $modalEditltag;
+var $btnConfirmLoanTag;
+var $selectLoanTag;
 
 var _cacheDom = function() {
 
@@ -108,6 +114,10 @@ var _cacheDom = function() {
   $modalCheck = new bootstrap.Modal(
     document.getElementById("modal-check")
   )
+  
+  $modalEditltag = new bootstrap.Modal(
+    document.getElementById("modal-loan-tag")
+  )
 
   $btnRejectChecking = $("#btn-reject-checking")
   $txtInputReasonChecking = $("#input-reason-checking")
@@ -137,6 +147,10 @@ var _cacheDom = function() {
   $btnAmount                       = $(".undo");
   $txtAmount                       = $("#bookId");
   $btnConfirmAmount               = $("#btn-confirm-edit-amount");
+
+  $btnLoanTag                     = $(".ltag");
+  $btnConfirmLoanTag              = $("#btn-confirm-loan-tag");
+  $selectLoanTag                  = $("#select-loan-tag");
 
   $btnDownloadForm     = $("#btn-download-form");
 
@@ -298,6 +312,34 @@ var _bindEvents = function() {
     });
 
   });
+  
+  $btnLoanTag.on("click", function() {
+    _id = $(this).data('id');
+    _ltag = $(this).data('ltag');
+
+    //$txtAmount.val(_amount);
+    $modalEditltag.show();
+  });
+
+  $btnConfirmLoanTag.on("click", function(){
+    var loanTagId = $selectLoanTag.val()
+    
+    $.ajax({
+      url: "/api/v1/online_loan_applications/change_loan_tag",
+      method: "POST",
+      data: {
+        id: _id,
+        loan_tag: loanTagId,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.reload();
+      }
+    });
+
+  })
 
 
   $btnAmount.on("click", function() {
@@ -309,7 +351,6 @@ var _bindEvents = function() {
   });
 
   $btnConfirmAmount.on("click", function(){
-
     $.ajax({
       url: "/api/v1/online_loan_applications/change_amount",
       method: "POST",

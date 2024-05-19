@@ -3,10 +3,16 @@
   .col
     .card
       .card-body
-        %h3
+        %h2
           #{@online_application.member.full_name}
+          - if @loan_count.present?
+            %span{style: "color: red; float: right; "}
+              Active Loan : 
+              = link_to member_path(Member.find(@online_application.member_id)), style: "text-decoration: none;" do
+                #{@loan_count}
         %label{style: "color: red; "}
           #{@online_application.status}
+        %br
         %br
         - if @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
           %label{style: "color: green; "}

@@ -74,7 +74,75 @@ task :involuntary_resignation => :environment do
     end
     puts @data
   end
+  task :repayment_rates => :environment do
+    s_date = ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = []
+  
+    @data_store = DataStore.where(
+      "meta->>'branch_id' = ? AND
+      CAST(meta->>'as_of' AS date) = ? AND
+      meta->>'data_store_type' = ?",
+      br_id,
+      s_date,
+      "REPAYMENT_RATES"
+    ).last  
+  
+    @data_store_data = @data_store.data.with_indifferent_access
+  
+    @data_store_data[:records].each do |record|
+      member = record["member"]
+      principal = record["principal"]
+      interest = record["interest"]
+      loan_product = record["loan_product"]["name"]
+  
+      if member.present?
+        member_details = Member.find_by(id: member["id"])
+        
+        if member_details.present? && member_details[:member_type] == "GK"
+          data = "#{record['id']}|#{member['last_name']}, #{member['first_name']}, #{member['middle_name']}|#{loan_product}|#{principal}|#{interest}"
+          @data << data
+        end
+      end
+    end
+  
+    puts "MEMBER ID|MEMBER|LOAN PRODUCT|PRINCIPAL|INTEREST"
+    puts @data
+  end
 
+  task:personal_fund => :environment do
+    s_date = ENV['s_date']
+    br_name = ENV['SATO']
+    br_id = Branch.where(name: br_name).ids
+    @data = []
+
+    @data_store  = DataStore.where(
+                                  "meta->>'branch_id' = ? AND
+                                  CAST(meta->>'as_of' AS date) = ? AND
+                                  meta->>'data_store_type' = ?",
+                                  br_id,
+                                  s_date,
+                                  "PERSONAL_FUNDS",).last
+    @data_store_data = @data_store.data.with_indifferent_access
+
+    @data_store_data[:records].each_with_index do |member, j|
+      a = member[:member]
+      accounts = member[:accounts] 
+      share_cap = accounts.select{|sc| sc[:account_subtype] == "Share Capital"}.last
+      k_impok = accounts.select{|k_impok| k_impok[:account_subtype] == "K-IMPOK"}.last
+      golden_k = accounts.select{|gk| gk[:account_subtype] == "Golden K"}.last
+      savings_if = accounts.select{|sif| sif[:account_subtype] == "Savings Investment Fund"}.last
+      personal_sa = accounts.select{|psa| psa[:account_subtype] == "Personal Savings Account"}.last
+      member_details = Member.find(a[:id])
+      if member_details[:member_type] == "GK"
+        data = "#{a[:last_name]} , #{a[:first_name]} , #{a[:middle_name]}|#{share_cap[:balance]}|#{k_impok[:balance]}|#{golden_k[:balance]}|#{savings_if[:balance]}|#{personal_sa[:balance]}"
+        @data << data
+      end    
+    end
+    puts "MEMBER|SHARE CAPITAL|K-IMPOK|GOLDEN K|SAVINGS INVESTMENT FUND|PERSONAL_SAVINGS_ACCOUNT"
+    puts @data
+  end
 task :member_number => :environment do
   br_name = ENV['SATO']
   br_id = Branch.where(name: br_name).ids
@@ -452,6 +520,11 @@ puts @data
     ).last
 
     @data = []
+    count_age_18_30_j = 0
+    count_age_31_40_j = 0
+    count_age_41_55_j = 0
+    count_age_56_j    = 0
+
     count_age_0_16 = 0
     count_age_0_16_m = 0
     count_age_0_16_f =0
@@ -501,9 +574,15 @@ puts @data
     # Process inactive members
     @data_store_data[:counts][:inactive_members][:members].each do |m|
       mem = Member.find(m[:id])
+      mem_project = mem.data.with_indifferent_access
+      project_types = mem_project["project_type"]
+      if project_types.present? && project_types.is_a?(Array) && project_types[0].present?
+        first_project_type = project_types[0][:details][:project_type]
+      end
+         
       age = calculate_age(mem.date_of_birth)
         sc = MemberAccount.where(member_id: m[:id] , account_type: 'EQUITY' , account_subtype: 'Share Capital').last.balance
-        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"Non-Patronizing Member"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+        j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"Non-Patronizing Member"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{mem.civil_status}|#{age}|#{first_project_type}"
         @data << j
       # if age <= 31
       #   count_age_18_30 += 1
@@ -512,34 +591,44 @@ puts @data
       # elsif age >= 59
       #   count_age_60_above += 1
       # end
-      # 
-      if age <= 16
-        count_age_0_16 += 1
-      elsif age <= 30
-        count_age_17_30 += 1
-      elsif age <= 45
-        count_age_31_45 += 1
-      else
-        count_age_above_45 += 1
+
+      if age <= 30
+        count_age_18_30_j += 1
+      elsif age <= 40 
+        count_age_31_40_j += 1
+      elsif age <= 55 
+        count_age_41_55_j += 1
+      elsif
+        count_age_56_j += 1
       end
 
-      if  mem.gender["Male"] && age <= 16
-        count_age_0_16_m += 1
-      elsif mem.gender["Female"] && age <= 16
-        count_age_0_16_f += 1
-      elsif mem.gender["Male"] && age <= 30
-        count_age_17_30_m += 1
-      elsif mem.gender["Female"] && age <= 30
-        count_age_17_30_f += 1
-      elsif mem.gender["Male"] && age <= 45
-        count_age_31_45_m += 1
-      elsif mem.gender["Female"] && age <= 45
-        count_age_31_45_f += 1
-      elsif mem.gender["Male"] && age >= 46
-        count_age_above_45_m += 1
-      elsif mem.gender["Female"] && age >= 46
-        count_age_above_45_f+= 1
-      end
+      # if age <= 16
+      #   count_age_0_16 += 1
+      # elsif age <= 30
+      #   count_age_17_30 += 1
+      # elsif age <= 45
+      #   count_age_31_45 += 1
+      # else
+      #   count_age_above_45 += 1
+      # end
+
+      # if  mem.gender["Male"] && age <= 16
+      #   count_age_0_16_m += 1
+      # elsif mem.gender["Female"] && age <= 16
+      #   count_age_0_16_f += 1
+      # elsif mem.gender["Male"] && age <= 30
+      #   count_age_17_30_m += 1
+      # elsif mem.gender["Female"] && age <= 30
+      #   count_age_17_30_f += 1
+      # elsif mem.gender["Male"] && age <= 45
+      #   count_age_31_45_m += 1
+      # elsif mem.gender["Female"] && age <= 45
+      #   count_age_31_45_f += 1
+      # elsif mem.gender["Male"] && age >= 46
+      #   count_age_above_45_m += 1
+      # elsif mem.gender["Female"] && age >= 46
+      #   count_age_above_45_f+= 1
+      # end
 
       # if  mem.gender["Male"] && age <= 31
       #   count_age_18_30_m += 1
@@ -589,37 +678,52 @@ puts @data
     # Process pure savers
     @data_store_data[:counts][:pure_savers][:members].each do |m|
       mem = Member.find(m[:id])
+      mem_project = mem.data.with_indifferent_access
+      project_types = mem_project["project_type"]
+      if project_types.present? && project_types.is_a?(Array) && project_types[0].present?
+        first_project_type = project_types[0][:details][:project_type]
+      end
       age = calculate_age(mem.date_of_birth)
 
-      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]}|#{ m[:center][:name]}|#{"pure saver"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{mem.civil_status}|#{age}|#{first_project_type}"
       @data << j
-      if age <= 16
-        count_age_0_16 += 1
-      elsif age <= 30
-        count_age_17_30 += 1
-      elsif age <= 45
-        count_age_31_45 += 1
-      else
-        count_age_above_45 += 1
-      end
+      # if age <= 16
+      #   count_age_0_16 += 1
+      # elsif age <= 30
+      #   count_age_17_30 += 1
+      # elsif age <= 45
+      #   count_age_31_45 += 1
+      # else
+      #   count_age_above_45 += 1
+      # end
       
-      if  mem.gender["Male"] && age <= 16
-        count_age_0_16_m += 1
-      elsif mem.gender["Female"] && age <= 16
-        count_age_0_16_f += 1
-      elsif mem.gender["Male"] && age <= 30
-        count_age_17_30_m += 1
-      elsif mem.gender["Female"] && age <= 30
-        count_age_17_30_f += 1
-      elsif mem.gender["Male"] && age <= 45
-        count_age_31_45_m += 1
-      elsif mem.gender["Female"] && age <= 45
-        count_age_31_45_f += 1
-      elsif mem.gender["Male"] && age >= 46
-        count_age_above_45_m += 1
-      elsif mem.gender["Female"] && age >= 46
-        count_age_above_45_f+= 1
+      if age <= 30
+        count_age_18_30_j += 1
+      elsif age <= 40 
+        count_age_31_40_j += 1
+      elsif age <= 55 
+        count_age_41_55_j += 1
+      elsif
+        count_age_56_j += 1
       end
+
+      # if  mem.gender["Male"] && age <= 16
+      #   count_age_0_16_m += 1
+      # elsif mem.gender["Female"] && age <= 16
+      #   count_age_0_16_f += 1
+      # elsif mem.gender["Male"] && age <= 30
+      #   count_age_17_30_m += 1
+      # elsif mem.gender["Female"] && age <= 30
+      #   count_age_17_30_f += 1
+      # elsif mem.gender["Male"] && age <= 45
+      #   count_age_31_45_m += 1
+      # elsif mem.gender["Female"] && age <= 45
+      #   count_age_31_45_f += 1
+      # elsif mem.gender["Male"] && age >= 46
+      #   count_age_above_45_m += 1
+      # elsif mem.gender["Female"] && age >= 46
+      #   count_age_above_45_f+= 1
+      # end
 
       # if age <= 31
       #   count_age_18_30 += 1
@@ -680,8 +784,14 @@ puts @data
     # Process active borrower
     @data_store_data[:counts][:loaners][:members].each do |m|
       mem = Member.find(m[:id])
+      mem_project = mem.data.with_indifferent_access
+      project_types = mem_project["project_type"]
+      if project_types.present? && project_types.is_a?(Array) && project_types[0].present?
+        first_project_type = project_types[0][:details][:project_type]
+      end
+
       age = calculate_age(mem.date_of_birth)
-      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"Active borrower"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{age}"
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"Active borrower"}|#{mem.date_of_membership}|#{mem.date_of_birth}|#{mem.gender}|#{mem.civil_status}|#{age}|#{first_project_type}"
       @data << j
       # if age <= 31
       #   count_age_18_30 += 1
@@ -694,33 +804,43 @@ puts @data
 
       # end
 
-      if age <= 16
-        count_age_0_16 += 1
-      elsif age <= 30
-        count_age_17_30 += 1
-      elsif age <= 45
-        count_age_31_45 += 1
-      else
-        count_age_above_45 += 1
+      # if age <= 16
+      #   count_age_0_16 += 1
+      # elsif age <= 30
+      #   count_age_17_30 += 1
+      # elsif age <= 45
+      #   count_age_31_45 += 1
+      # else
+      #   count_age_above_45 += 1
+      # end
+
+      if age <= 30
+        count_age_18_30_j += 1
+      elsif age <= 40 
+        count_age_31_40_j += 1
+      elsif age <= 55 
+        count_age_41_55_j += 1
+      elsif
+        count_age_56_j += 1
       end
 
-      if  mem.gender["Male"] && age <= 16
-        count_age_0_16_m += 1
-      elsif mem.gender["Female"] && age <= 16
-        count_age_0_16_f += 1
-      elsif mem.gender["Male"] && age <= 30
-        count_age_17_30_m += 1
-      elsif mem.gender["Female"] && age <= 30
-        count_age_17_30_f += 1
-      elsif mem.gender["Male"] && age <= 45
-        count_age_31_45_m += 1
-      elsif mem.gender["Female"] && age <= 45
-        count_age_31_45_f += 1
-      elsif mem.gender["Male"] && age >= 46
-        count_age_above_45_m += 1
-      elsif mem.gender["Female"] && age >= 46
-        count_age_above_45_f+= 1
-      end
+      # if  mem.gender["Male"] && age <= 16
+      #   count_age_0_16_m += 1
+      # elsif mem.gender["Female"] && age <= 16
+      #   count_age_0_16_f += 1
+      # elsif mem.gender["Male"] && age <= 30
+      #   count_age_17_30_m += 1
+      # elsif mem.gender["Female"] && age <= 30
+      #   count_age_17_30_f += 1
+      # elsif mem.gender["Male"] && age <= 45
+      #   count_age_31_45_m += 1
+      # elsif mem.gender["Female"] && age <= 45
+      #   count_age_31_45_f += 1
+      # elsif mem.gender["Male"] && age >= 46
+      #   count_age_above_45_m += 1
+      # elsif mem.gender["Female"] && age >= 46
+      #   count_age_above_45_f+= 1
+      # end
 
       # if  mem.gender["Male"] && age <= 31
       #   count_age_18_30_m += 1
@@ -771,7 +891,7 @@ puts @data
     @data_store_data[:counts][:active_members][:members].each do |m|
       mem = Member.find(m[:id])
       age = calculate_age(mem.date_of_birth)
-      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"New member"}|#{mem.date_of_birth}|#{mem.date_of_membership}|#{mem.gender}"
+      j = "#{m[:identification_number]}|#{m[:last_name]}, #{m[:first_name]} #{m[:middle_name]}|#{ m[:center][:name]}|#{"New member"}|#{mem.date_of_birth}|#{mem.date_of_membership}|#{mem.gender}|#{mem.civil_status}|#{age}"
       @data << j
       # if age <= 31
       #   count_age_18_30 += 1
@@ -783,33 +903,43 @@ puts @data
       #   count_age_60_above += 1
 
       # end
-      if age <= 16
-        count_age_0_16 += 1
-      elsif age <= 30
-        count_age_17_30 += 1
-      elsif age <= 45
-        count_age_31_45 += 1
-      else
-        count_age_above_45 += 1
-      end
+      # if age <= 16
+      #   count_age_0_16 += 1
+      # elsif age <= 30
+      #   count_age_17_30 += 1
+      # elsif age <= 45
+      #   count_age_31_45 += 1
+      # else
+      #   count_age_above_45 += 1
+      # end
       
-      if  mem.gender["Male"] && age <= 16
-        count_age_0_16_m += 1
-      elsif mem.gender["Female"] && age <= 16
-        count_age_0_16_f += 1
-      elsif mem.gender["Male"] && age <= 30
-        count_age_17_30_m += 1
-      elsif mem.gender["Female"] && age <= 30
-        count_age_17_30_f += 1
-      elsif mem.gender["Male"] && age <= 45
-        count_age_31_45_m += 1
-      elsif mem.gender["Female"] && age <= 45
-        count_age_31_45_f += 1
-      elsif mem.gender["Male"] && age >= 46
-        count_age_above_45_m += 1
-      elsif mem.gender["Female"] && age >= 46
-        count_age_above_45_f+= 1
+      if age <= 30
+        count_age_18_30_j += 1
+      elsif age <= 40 
+        count_age_31_40_j += 1
+      elsif age <= 55 
+        count_age_41_55_j += 1
+      elsif
+        count_age_56_j += 1
       end
+
+      # if  mem.gender["Male"] && age <= 16
+      #   count_age_0_16_m += 1
+      # elsif mem.gender["Female"] && age <= 16
+      #   count_age_0_16_f += 1
+      # elsif mem.gender["Male"] && age <= 30
+      #   count_age_17_30_m += 1
+      # elsif mem.gender["Female"] && age <= 30
+      #   count_age_17_30_f += 1
+      # elsif mem.gender["Male"] && age <= 45
+      #   count_age_31_45_m += 1
+      # elsif mem.gender["Female"] && age <= 45
+      #   count_age_31_45_f += 1
+      # elsif mem.gender["Male"] && age >= 46
+      #   count_age_above_45_m += 1
+      # elsif mem.gender["Female"] && age >= 46
+      #   count_age_above_45_f+= 1
+      # end
       # if  mem.gender["Male"] && age <= 31
       #   count_age_18_30_m += 1
       # elsif mem.gender["Female"] && age <= 31
@@ -854,28 +984,34 @@ puts @data
 
       # end
     end
-
+    puts "ID NUMBER|NAME|CENTER|MEMBER_STATS|DATE OF MEMBERSHIP|DATE OF BIRTH|GENDER|MEMBER STATUS|AGE|BUSINESS"
     puts @data
+  
     # puts "Number of members aged between 18 and 30: |#{count_age_18_30}"
     # puts "Number of members aged between 31 and 59: |#{count_age_31_59}"
     # puts "Number of members aged 60 aboved : |#{count_age_60_above}"
+    puts "Number of members aged 18 - 30  : |#{count_age_18_30_j}"
+    puts "Number of members aged 31 - 40  : |#{count_age_31_40_j}"
+    puts "Number of members aged 41 - 55  : |#{count_age_41_55_j}"
+    puts "Number of members above 56  : |#{count_age_56_j}"
+    puts "Total: |#{count_age_18_30_j + count_age_31_40_j + count_age_41_55_j + count_age_56_j}"
 
-    puts "Number of members aged 0 - 16  : |#{count_age_0_16}"
-    puts "Number of members aged 17 - 30 : |#{count_age_17_30}"
-    puts "Number of members aged 31 - 45 : |#{count_age_31_45}"
-    puts "Number of members aged 45 aboved : |#{count_age_above_45}"
+    # puts "Number of members aged 0 - 16  : |#{count_age_0_16}"
+    # puts "Number of members aged 17 - 30 : |#{count_age_17_30}"
+    # puts "Number of members aged 31 - 45 : |#{count_age_31_45}"
+    # puts "Number of members aged 45 aboved : |#{count_age_above_45}"
 
-    puts "Number of members aged 0 - 16 MALE : |#{count_age_0_16_m}"
-    puts "Number of members aged 0 - 16  FEMALE: |#{count_age_0_16_f}"
+    # puts "Number of members aged 0 - 16 MALE : |#{count_age_0_16_m}"
+    # puts "Number of members aged 0 - 16  FEMALE: |#{count_age_0_16_f}"
 
-    puts "Number of members aged 17 - 30 MALE : |#{count_age_17_30_m}"
-    puts "Number of members aged 17 - 30 FEMALE : |#{count_age_17_30_f}"
+    # puts "Number of members aged 17 - 30 MALE : |#{count_age_17_30_m}"
+    # puts "Number of members aged 17 - 30 FEMALE : |#{count_age_17_30_f}"
 
-    puts "Number of members aged 31 - 45 MALE: |#{count_age_31_45_m}"
-    puts "Number of members aged 31 - 45 FEMALE: |#{count_age_31_45_f}"
+    # puts "Number of members aged 31 - 45 MALE: |#{count_age_31_45_m}"
+    # puts "Number of members aged 31 - 45 FEMALE: |#{count_age_31_45_f}"
 
-    puts "Number of members aged 45 aboved MALE: |#{count_age_above_45_m}"
-    puts "Number of members aged 45 aboved FEMALE: |#{count_age_above_45_f}"
+    # puts "Number of members aged 45 aboved MALE: |#{count_age_above_45_m}"
+    # puts "Number of members aged 45 aboved FEMALE: |#{count_age_above_45_f}"
 
 
 

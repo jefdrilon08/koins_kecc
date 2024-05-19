@@ -8,8 +8,8 @@ class LoanProduct < ApplicationRecord
   has_many :loan_product_types, dependent: :delete_all
   has_many :loan_product_taggings, dependent: :delete_all
 
-  scope :entry_point, -> { where(is_entry_point: true) }
-  scope :non_entry_point, -> { where.not(is_entry_point: true) }
+  scope :entry_point, -> { where(is_entry_point: true, is_active: true) }
+  scope :non_entry_point, -> { where.not(is_entry_point: true, is_active: true) }
 
   def to_h
     {
@@ -20,6 +20,7 @@ class LoanProduct < ApplicationRecord
       denomination: self.denomination.round(2),
       insured: self.insured,
       is_entry_point: self.is_entry_point,
+      is_active: self.is_active,
       monthly_interest_rate: self.monthly_interest_rate,
       priority: self.priority,
       data: self.data

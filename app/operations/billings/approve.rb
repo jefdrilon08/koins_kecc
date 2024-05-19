@@ -215,13 +215,14 @@ module Billings
             @total_cash_payment += rl[:amount].to_f
           elsif rl[:enabled] == true and rl[:record_type] == "WP"
             @total_withdraw_payment += rl[:amount].to_f
+          elsif rl[:enabled] == true and rl[:record_type] == "EQUITY"
+            @total_cash_payment += rl[:amount].to_f
           end
 
         end
         @total_payment = @total_cash_payment+@total_loan_payment
-
         #if @member.data.key?("sms_record") code para kahit wala pang sms record hindi mag error.
-        if @member.data.key?("sms_record")
+        if @member.data["sms_record"].present?
           if @member.data["sms_record"]["sms_rec"] === true
             if @member.data["sms_record"]["loan_maturity"].to_date > Date.today && @total_payment > 0
               content= "Hi #{@member.first_name}! \nAng iyong hulog #{@total_payment} ay natanggap na ng K-COOP RE##{@accounting_entry[:reference_number]} \ndate: #{@accounting_entry[:date_posted].to_fs(:long)} \nMag-log in sa iyong My k-coins account para sa detalye."

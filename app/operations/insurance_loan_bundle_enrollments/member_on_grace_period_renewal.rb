@@ -1,5 +1,5 @@
 module InsuranceLoanBundleEnrollments
-  class MemberRenewal
+  class MemberOnGracePeriodRenewal
     def initialize(config:)
       @config                                  = config
       @insurance_loan_bundle_enrollment        = @config[:insurance_loan_bundle_enrollment]
@@ -155,7 +155,7 @@ module InsuranceLoanBundleEnrollments
       end
 
       @insurance_loan_bundle_enrollment.update!(data: @data)
-      @insurance_loan_bundle_enrollment.update!(status: "for-renewal")
+      @insurance_loan_bundle_enrollment.update!(status: "on-grace-period")
       @insurance_loan_bundle_enrollment
     end
   end

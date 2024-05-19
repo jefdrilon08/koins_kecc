@@ -57,7 +57,7 @@ module InsuranceLoanBundleEnrollments
         
       if @insurance_loan_bundle_enrollment_count == 0
         @effectivity_date                       = @config[:effectivity_date]
-        @maturity_date                          = @config[:effectivity_date].to_date + 1.year
+        @maturity_date                          = @config[:effectivity_date].to_date + 1.year - 1.day
         @enrolled_status                        = "NEW"
         @plan_type                              = @config[:plan_type]  
         @plan_category                          = @config[:plan_category]
