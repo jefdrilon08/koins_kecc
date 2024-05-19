@@ -4,7 +4,8 @@ module DataStores
     def initialize(branch_id:)
   
       @branch_id = branch_id
-      @alist = Member.where(branch_id: @branch_id, status: "active")
+      #@alist = Member.where(branch_id: @branch_id, status: "active")
+      @alist = Member.where(status: "active")
       @p = ProjectTypeCategory.where(is_active: true)
       @data_category = []
       @data = []
