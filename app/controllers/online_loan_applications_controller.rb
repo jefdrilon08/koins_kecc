@@ -103,9 +103,9 @@ class OnlineLoanApplicationsController < ApplicationController
   def show
     @online_application       = LoanApplication.find(params[:id])
     @online_application_data = MemberAccount.where(member_id:  @online_application.member_id, account_type: ["SAVINGS", "EQUITY"], account_subtype: ["K-IMPOK", "Share Capital", "Maintaining Balance Savings"] )
-    # raise @online_application_data.pluck(:account_subtype).inspect
-    @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
 
+    @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
+    @loan_count = Loan.where(member_id: @online_application.member_id, status:'active').count
       @subheader_side_actions = []
 
       if @online_application.pending?
