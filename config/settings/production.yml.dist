@@ -9208,6 +9208,176 @@ loan_products:
         min_num_installments: 26
         max_num_installments: 35
         monthly_interest_rate: 0.08
+  -
+    loan_product_id: "709c3812-da61-4e4d-9000-20e153dab975"                         # K-Transportasyon
+    receivable_accounting_code_id: "f3f491e7-b08c-4b2b-b078-3b82b1504ece"
+    interest_receivable_accounting_code_id: "ca9fbdb1-e6cb-42da-b1ee-daf537c9142c"
+    default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "Maintaining Balance Savings"
+      percentage: 0.2
+      threshold: 7001.00
+    midas:
+      contract_type: 12
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
+    deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.03
+              -
+                num_installments: 35
+                ratio: 0.045
+              -
+                num_installments: 50
+                ratio: 0.06
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
           
 
 loan_product_accounting_codes:
@@ -9379,6 +9549,10 @@ loan_product_accounting_codes:
     loan_product_id: "73dfd935-f2a5-4ff2-b3e0-5fa252c85d74"                         # K-EDUKASYON W4
     receivable_accounting_code_id: "5b44bb66-062f-4455-8a0a-0afce5b9433f"
     interest_receivable_accounting_code_id: "5ca0d969-557b-4567-a740-e82a57b56ba7"
+  -
+    loan_product_id: "709c3812-da61-4e4d-9000-20e153dab975"                         # K-Transportasyon
+    receivable_accounting_code_id: "f3f491e7-b08c-4b2b-b078-3b82b1504ece"
+    interest_receivable_accounting_code_id: "ca9fbdb1-e6cb-42da-b1ee-daf537c9142c"
 
     
 loan_product_accounting_codes_for_writeoff:
@@ -9550,4 +9724,8 @@ loan_product_accounting_codes_for_writeoff:
     loan_product_id: "73dfd935-f2a5-4ff2-b3e0-5fa252c85d74"                         # K-EDUKASYON W4
     receivable_accounting_code_id: "5b44bb66-062f-4455-8a0a-0afce5b9433f"
     allowance_for_impairment_losses_accounting_code_id: "bd0db459-7194-4a7c-b047-c4a8ed8b69df"
+  -
+    loan_product_id: "709c3812-da61-4e4d-9000-20e153dab975"                         # K-Transportasyon
+    receivable_accounting_code_id: "f3f491e7-b08c-4b2b-b078-3b82b1504ece"
+    allowance_for_impairment_losses_accounting_code_id: "313ac84e-5bef-4404-b14d-e21694524ac2"
 ###############################
