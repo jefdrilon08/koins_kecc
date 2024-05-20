@@ -265,6 +265,7 @@ namespace :api do
     post "/online_loan_applications/for_approve", to: "online_loan_applications#for_approve"
     post "/online_loan_applications/approve_loan", to: "online_loan_applications#approve_loan"
     post "/online_loan_applications/change_amount", to: "online_loan_applications#change_amount"
+    post "/online_loan_applications/change_loan_tag", to: "online_loan_applications#change_loan_tag"
     post "/online_loan_applications/reject", to: "online_loan_applications#reject"
     post "/online_loan_applications/update_details", to: "online_loan_applications#update_details"
     post "/online_loan_applications/reject_checking", to: "online_loan_applications#reject_checking"

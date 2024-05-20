@@ -80,6 +80,30 @@
                   Loan Product
                 %td
                   #{@online_application.loan_product.name}
+              
+              %tr
+                %th
+                  Loan Tag
+                %td
+                  - if @online_application.status == "for_approve" || @online_application.status == "approved" || @online_application.status == "reject"
+                    - if @online_application.loan_product_tagging_id != nil
+                      #{LoanProductTagging.find(@online_application.loan_product_tagging_id).name}
+                  - else
+                    - if @online_application.loan_product_tagging_id == nil
+                      %a.ltag{ data: { 
+                                      id: @online_application.id,      
+                                      ltag: @online_application.loan_product_tagging_id
+                                    }, :href => "#" }
+                        nil
+                    - else
+                      %a.ltag{ data: { 
+                                      id: @online_application.id,      
+                                      ltag: @online_application.loan_product_tagging_id
+                                    }, :href => "#" }
+                        #{LoanProductTagging.find(@online_application.loan_product_tagging_id).name}
+
+                        
+                      
               %tr
                 %th
                   Loan Amount
@@ -278,3 +302,4 @@
 = render partial: "online_loan_applications/modals/reject_for_approve"
 = render partial: "online_loan_applications/modals/decline"
 = render partial: "online_loan_applications/modals/check"
+= render partial: "online_loan_applications/modals/edit_loan_tag"
