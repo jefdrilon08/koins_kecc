@@ -9378,6 +9378,80 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+  
+  -
+    loan_product_id: "6ef096d0-cd2c-4e10-b667-abb502ec894e"                         # K-BENEPISYO
+    receivable_accounting_code_id: "0bab5369-466b-464a-a983-f13d679d3900"
+    interest_receivable_accounting_code_id: "2e912b4d-4355-4765-8046-920e19f2d43a"
+    #amount_released_accounting_code_id: "cf90f5e3-439a-43cc-b615-b3333cd0a4b0"
+    default_amount: 5000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "Maintaining Balance Savings"
+      percentage: 0.0
+      threshold: 0.00
+    midas:
+      contract_type: 28
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "NI"
+    deductions: 
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: true
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.00
+              -
+                num_installments: 25
+                ratio: 0.00
+              -
+                num_installments: 35
+                ratio: 0.00
+              -
+                num_installments: 50
+                ratio: 0.00
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.00
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 9
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.00
+              -
+                num_installments: 12
+                ratio: 0.00
+              -
+                num_installments: 18
+                ratio: 0.00
+              -
+                num_installments: 24
+                ratio: 0.00
           
 
 loan_product_accounting_codes:
@@ -9553,6 +9627,10 @@ loan_product_accounting_codes:
     loan_product_id: "709c3812-da61-4e4d-9000-20e153dab975"                         # K-Transportasyon
     receivable_accounting_code_id: "f3f491e7-b08c-4b2b-b078-3b82b1504ece"
     interest_receivable_accounting_code_id: "ca9fbdb1-e6cb-42da-b1ee-daf537c9142c"
+  -
+    loan_product_id: "6ef096d0-cd2c-4e10-b667-abb502ec894e"                         # K-BENEPISYO
+    receivable_accounting_code_id: "0bab5369-466b-464a-a983-f13d679d3900"
+    interest_receivable_accounting_code_id: "2e912b4d-4355-4765-8046-920e19f2d43a"
 
     
 loan_product_accounting_codes_for_writeoff:
@@ -9728,4 +9806,8 @@ loan_product_accounting_codes_for_writeoff:
     loan_product_id: "709c3812-da61-4e4d-9000-20e153dab975"                         # K-Transportasyon
     receivable_accounting_code_id: "f3f491e7-b08c-4b2b-b078-3b82b1504ece"
     allowance_for_impairment_losses_accounting_code_id: "313ac84e-5bef-4404-b14d-e21694524ac2"
+  -
+    loan_product_id: "6ef096d0-cd2c-4e10-b667-abb502ec894e"                         # K-BENEPISYO
+    receivable_accounting_code_id: "0bab5369-466b-464a-a983-f13d679d3900"
+    allowance_for_impairment_losses_accounting_code_id: "04d53f37-fd18-4359-85a4-409ec95f1e6b"
 ###############################
