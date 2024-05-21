@@ -6332,9 +6332,9 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
   -
-    loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # ALALAY SA K
-    receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
-    interest_receivable_accounting_code_id: "8046da37-05dd-4791-8ce6-d285da474d7d"
+    loan_product_id: "2696cbe4-2c8f-478b-89d5-df8eefa46c13"                         # ALALAY SA K W2
+    receivable_accounting_code_id: "2b5e50e3-3af6-47e8-bae1-56aede2eda51"
+    interest_receivable_accounting_code_id: "fb8799fe-f79e-422b-969c-33b3d5f6febf"
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
@@ -8224,9 +8224,9 @@ loan_products:
         max_num_installments: 50
         monthly_interest_rate: 0.05
   -
-    loan_product_id: "2696cbe4-2c8f-478b-89d5-df8eefa46c13"                         # ALALAY SA K W2
-    receivable_accounting_code_id: "2b5e50e3-3af6-47e8-bae1-56aede2eda51"
-    interest_receivable_accounting_code_id: "fb8799fe-f79e-422b-969c-33b3d5f6febf"
+    loan_product_id: "61c7b2c2-7571-4fc9-a214-9f1a6564f111"                         # ALALAY SA K
+    receivable_accounting_code_id: "4ba3a3fe-5391-4068-8803-9826dd551cf6"
+    interest_receivable_accounting_code_id: "8046da37-05dd-4791-8ce6-d285da474d7d"
     default_amount: 5000.00
     maintaining_balance:
      account_type: "SAVINGS"
