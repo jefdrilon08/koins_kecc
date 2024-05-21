@@ -118,7 +118,7 @@ module Api
           user: current_user
         }
        
-        if ["MIS", "AO"].include? current_user.roles.last
+        if ["MIS", "OAS"].include? current_user.roles.last
           errors  = InsuranceLoanBundleEnrollments::ValidateCheck.new(
                       config: config
                     ).execute!
