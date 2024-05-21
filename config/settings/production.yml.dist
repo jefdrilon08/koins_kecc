@@ -9244,16 +9244,16 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
