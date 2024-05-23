@@ -3,6 +3,8 @@
     %tr
       %th
       %th
+        Printed Date
+      %th
         Recognition date
       %th
         Member Name
@@ -20,6 +22,8 @@
             = link_to member_path(o.id) do
               .bi.bi-search
           %td
+            #{o.member_shares_records}
+          %td
             #{o[:data]["recognition_date"]}
           %td
             #{o.full_name}
@@ -35,6 +39,8 @@
           %td.text-center
             = link_to member_path(o.id) do
               .bi.bi-search
+          %td
+            #{o.member_shares_records}
           %td
             #{o[:data]["recognition_date"]}
           %td
