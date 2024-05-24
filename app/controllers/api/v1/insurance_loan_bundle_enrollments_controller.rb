@@ -4,7 +4,7 @@ module Api
       before_action :authenticate_user!
 
       def approve
-    
+
         # online_application  = LoanApplication.find(params[:id])
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
         data = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"].last
@@ -15,9 +15,9 @@ module Api
         member = Member.find(insurance_loan_bundle_enrollment.member_ids)
         # branch_id = member.branch_id
 
-        
+
         # member = Member.find(online_application.member_id)
-        # sco_maker = Member.find(insurance_loan_bundle_enrollment.co_maker_member_id) 
+        # sco_maker = Member.find(insurance_loan_bundle_enrollment.co_maker_member_id)
         loan_data = {
                       id: nil,
                       branch_id: insurance_loan_bundle_enrollment.branch_id,
@@ -32,6 +32,13 @@ module Api
                       # project_type_id: insurance_loan_bundle_enrollment.data['project_type_id'],
                       status: "pending",
                       data: {
+                              clip_beneficiary: {
+                                first_name:  "",
+                                middle_name: "",
+                                last_name: "",
+                                date_of_birth: nil,
+                                relationship: ""
+                              },
                               voucher:{
                                         bank:"",
                                         bank_check_number: "",
@@ -46,7 +53,7 @@ module Api
                                 value: "",
                                 label: "",
                                 id: "",
-                                first_name: "" , 
+                                first_name: "" ,
                                 middle_name: "",
                                 last_name: ""
                               },
@@ -61,13 +68,13 @@ module Api
                             }
                     }
 
-        config  = { 
-                    loan_data: loan_data, 
+        config  = {
+                    loan_data: loan_data,
                     insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
-                    user: current_user, 
-                    co_maker_profile_picture: nil, 
-                    co_maker_three_profile_picture: nil 
-                  } 
+                    user: current_user,
+                    co_maker_profile_picture: nil,
+                    co_maker_three_profile_picture: nil
+                  }
 
         data = ::Loans::Save.new(config: config).execute!
         insurance_loan_bundle_enrollment.update!(status: "approved")
@@ -77,7 +84,7 @@ module Api
           }
         ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
         render json: { message: "ok" }
-      
+
       end
 
 
@@ -117,7 +124,7 @@ module Api
           insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
           user: current_user
         }
-       
+
         if ["MIS", "OAS"].include? current_user.roles.last
           errors  = InsuranceLoanBundleEnrollments::ValidateCheck.new(
                       config: config
@@ -150,7 +157,7 @@ module Api
           errors  = InsuranceLoanBundleEnrollments::ValidateDecline.new(
                       config: config
                     ).execute!
-   
+
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else
@@ -244,7 +251,7 @@ module Api
                     member: member,
                     user: current_user
                   }
-        
+
         errors  = ::InsuranceLoanBundleEnrollments::ValidateAddMember.new(
                     config: config
                   ).execute!
@@ -264,7 +271,7 @@ module Api
         branch            = Branch.where(id: params[:branch_id]).first
         center            = Center.where(id: params[:center_id]).first
         collection_date   = params[:collection_date]
-        
+
         config  = {
           branch: branch,
           center: center,
@@ -285,7 +292,7 @@ module Api
 
           render json: { message: "ok", id: insurance_loan_bundle_enrollment.id }
         end
- 
+
       end
     end
   end
