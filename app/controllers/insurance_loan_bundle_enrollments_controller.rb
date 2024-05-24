@@ -174,8 +174,8 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75 
-      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75
+      if ["MIS", "BK", "SBK", "FM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
