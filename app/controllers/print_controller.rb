@@ -248,6 +248,36 @@ class PrintController < ApplicationController
       @membership_payment_collection = data
 
       render "print/membership_payment_collection", layout: "print"
+
+    elsif type == "membership_payment_collection_thermal"
+      membership_payment_collection = MembershipPaymentCollection.find(params[:id])
+      member_data = membership_payment_collection.data.with_indifferent_access
+      @members = member_data[:records].map do |member|
+        insurance_subtypes = ["Life Insurance Fund", "Retirement Fund", "Hospital Income Insurance Plan", "K-BENTE", "K-KALINGA", "K-MBA"]
+        kcoop_subtypes = ["Share Capital", "Maintaining Balance Savings", "K-KOOP", "ID"]
+      
+        insurance_total = member[:records].select { |record| insurance_subtypes.include?(record[:account_subtype]) }.sum { |record| record[:amount] }
+        kcoop_total = member[:records].select { |record| kcoop_subtypes.include?(record[:account_subtype]) || record[:record_type] == "ID" }.sum { |record| record[:amount] }
+      
+        {
+          full_name: member[:member][:full_name],
+          insurance_total: insurance_total,
+          kcoop_total: kcoop_total
+        }
+      end
+      
+      @grand_insurance_total = @members.sum { |member| member[:insurance_total] }
+      @grand_kcoop_total = @members.sum { |member| member[:kcoop_total] }
+
+      
+      data  = ::Print::BuildMembershipPaymentCollection.new(
+                membership_payment_collection: membership_payment_collection
+              ).execute!
+
+      @membership_payment_collection_thermal = data
+      
+      render "print/membership_payment_collection_thermal", layout: "print"
+
     elsif type == "general_ledger"
       data = DataStore.general_ledgers.find(params[:id]).data.with_indifferent_access
 
