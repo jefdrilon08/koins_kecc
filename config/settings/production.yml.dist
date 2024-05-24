@@ -6144,6 +6144,7 @@ loan_products:
         business_permit_amount: 500
         skip_for_special_loan_fund: "true"
         use_for_special_loan_fund: "true"
+        restructuring_offset: true
         meta:
           member_type: "Regular"
           term_map:
