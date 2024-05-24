@@ -36,7 +36,7 @@ class ClaimsController < ApplicationController
     #   @type_of_insurance_policy = params[:type_of_insurance_policy]
     #   @claims = @claims.where(type_of_insurance_policy: @type_of_insurance_policy)
     # end
-  
+
     #  @claims = @claims.page(params[:page]).per(LIST_PAGE_SIZE)
 
   end
@@ -105,7 +105,7 @@ class ClaimsController < ApplicationController
     ]
 
     @subheader_side_actions = []
-    
+
     @subheader_side_actions << {
         link: claim_path(@claim),
         class: "fa fa-times",
@@ -134,7 +134,7 @@ class ClaimsController < ApplicationController
     ]
 
     @subheader_side_actions = []
-    
+
     @subheader_side_actions << {
         link: claim_path(@claim),
         class: "fa fa-times",
@@ -176,12 +176,12 @@ class ClaimsController < ApplicationController
       elsif @status == "for posting"
         @status = "for-posting"
       elsif @status == "posted"
-        @status = "approved"  
+        @status = "approved"
       end
 
       @claims = @claims.where(status: @status)
     end
-  
+
     @claims = @claims.page(params[:page]).per(25)
 
     if ["Silvida"].include? current_user.first_name
@@ -213,7 +213,7 @@ class ClaimsController < ApplicationController
     ]
 
   end
-  
+
   def destroy
     @claim = Claim.find(params[:id])
     @claim.destroy!
@@ -229,7 +229,7 @@ class ClaimsController < ApplicationController
     if !@data.nil?
       @accounting_entry_data = @claim.data.with_indifferent_access[:accounting_entry]
     end
-  
+
     if !@accounting_entry_data.nil?
       @accounting_entry        = AccountingEntry.where(
                                         reference_number: @claim.data.with_indifferent_access[:accounting_entry][:reference_number],
@@ -240,21 +240,21 @@ class ClaimsController < ApplicationController
     end
 
     @subheader_items = [
-      { 
-        is_link: true, 
-        path: claims_path, 
-        text: "Claims" 
+      {
+        is_link: true,
+        path: claims_path,
+        text: "Claims"
       },
-      { 
-        is_link: true, 
-        path: member_path(@claim.member), 
-        text: "#{@claim.member.full_name}" 
+      {
+        is_link: true,
+        path: member_path(@claim.member),
+        text: "#{@claim.member.full_name}"
       },
-      { 
-        is_link: true, 
+      {
+        is_link: true,
         path: claim_path(@claim),
         class: "btn btn-success",
-        text: "#{@claim.status}" 
+        text: "#{@claim.status}"
       }
     ]
 
@@ -269,10 +269,10 @@ class ClaimsController < ApplicationController
 
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
-        if @claim.prepared_by == "Richard Monteron" || 
+        if @claim.prepared_by == "Richard Monteron" ||
           if ["Evelyn", "Adrian", "Mcquen"].include? current_user.first_name
             @subheader_side_actions << {
-              id: "btn-check",  
+              id: "btn-check",
               link: "#",
               class: "fa fa-check",
               text: "Check"
@@ -281,16 +281,25 @@ class ClaimsController < ApplicationController
         elsif @claim.prepared_by == "Mcquen Abellano"
           if ["Evelyn", "Adrian", "Richard"].include? current_user.first_name
             @subheader_side_actions << {
-              id: "btn-check",  
+              id: "btn-check",
               link: "#",
               class: "fa fa-check",
               text: "Check"
             }
           end
-        elsif @claim.prepared_by == "Ramon Jr Covilla"
+        elsif @claim.prepared_by == "Pamel Joseph Julian"
           if ["Evelyn", "Adrian", "Richard", "Mcquen"].include? current_user.first_name
             @subheader_side_actions << {
-              id: "btn-check",  
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "Check"
+            }
+          end
+        elsif @claim.prepared_by == "Oliver Purisima"
+          if ["Evelyn", "Adrian", "Richard", "Mcquen"].include? current_user.first_name
+            @subheader_side_actions << {
+              id: "btn-check",
               link: "#",
               class: "fa fa-check",
               text: "Check"
@@ -324,7 +333,7 @@ class ClaimsController < ApplicationController
 
     # if @claim.pending? && @claim.proceed_checking?
     #   if ["AO"].include? current_user.roles.last
-    #     if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name 
+    #     if ["Aljon", "Adrian", "Diobert"].include? current_user.first_name
     #       @subheader_side_actions << {
     #         id: "btn-check",
     #         link: "#",
@@ -361,7 +370,7 @@ class ClaimsController < ApplicationController
 
     if @claim.pending?
       if ["AO"].include? current_user.roles.last
-        if @claim.note.nil?  
+        if @claim.note.nil?
           @subheader_side_actions << {
             id: "btn-note",
             link: "#",
@@ -388,7 +397,7 @@ class ClaimsController < ApplicationController
             class: "fa fa-check",
             text: "Post"
           }
-        end  
+        end
       end
     end
 
@@ -569,7 +578,7 @@ class ClaimsController < ApplicationController
             }
           end
         end
-      end      
+      end
     end
 
     if @claim.claim_type == "K-BENTE"
@@ -654,7 +663,7 @@ class ClaimsController < ApplicationController
           end
         end
       end
-    end    
+    end
 
     if @claim.approved?
       if ["MIS"].include? current_user.roles.last
