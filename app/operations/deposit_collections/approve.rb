@@ -52,7 +52,7 @@ module DepositCollections
 
         @total_savings = 0.00
         @total_insurance_payment = 0.00
-        @total_equity = 0.00
+        @total_payment = 0.00
 
         rec[:records].each do |rl|
 
@@ -62,15 +62,21 @@ module DepositCollections
             @total_insurance_payment += rl[:amount].to_f
           end
         end
+        @total_payment = @total_savings+@total_insurance_payment
+        @formatted_total_payment = '%.2f' % @total_payment
 
-        content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. transaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nSavings Payment: #{@total_savings} \nInsurance Payment: #{@total_insurance_payment}"
-        config = {
-          mobile_number: @member.mobile_number,
-          content: content
-        }
-
-        #::SmsBlast::Send.new(config: config).execute!
-        puts config.inspect
+        if @member.data["sms_record"].present?
+          if @member.data["sms_record"]["loan_maturity"].to_date > Date.today && @total_payment > 0
+            content= "Hi! #{@member.first_name}! \nAng iyong hulog na #{@formatted_total_payment} ay natanggap na ng K-COOP REF##{@accounting_entry[:reference_number]} \ndate: #{@accounting_entry[:date_posted].to_fs(:long)} \nMag-log in sa iyong My k-coins account para sa detalye."
+            # content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. transaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nSavings Payment: #{@total_savings} \nInsurance Payment: #{@total_insurance_payment}"
+            config = {
+              mobile_number: @member.mobile_number,
+              content: content
+            }
+            ::SmsBlast::Send.new(config: config).execute!
+            puts config.inspect
+          end
+        end
       end
     end
 
