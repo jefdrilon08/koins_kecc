@@ -59,15 +59,22 @@ module WithdrawalCollections
           elsif rl[:enabled]== true and rl[:record_type] == "EQUITY"
             @total_equity += rl[:amount].to_f
           end
-        end
 
-        content= "Good Day! #{@member.full_name} your payment has been posted to our system with reference number #{@accounting_entry[:reference_number]}. transaction date: #{@accounting_entry[:date_posted].to_fs(:long)} \nSavings Payment: #{@total_savings} \nInsurance Payment: #{@total_insurance_payment} \nWithdraw Equity: #{@total_equity}"
-        config = {
-          mobile_number: @member.mobile_number,
-          content: content
-        }
-        #::SmsBlast::Send.new(config: config).execute!
-        puts config.inspect
+        end
+        @total_withdraw = @total_savings+@total_insurance_payment+@total_equity
+        @formatted_total_payment = '%.2f' % @total_withdraw
+        if @member.mobile_number.present?
+          if @member.data["sms_record"].present?
+            if @member.data["sms_record"]["loan_maturity"].to_date > Date.today && @total_withdraw > 0
+              content="Hi! #{@member.first_name}! \nIkaw ay nag-withdraw sa K-COOP ng #{@formatted_total_payment} na may REF##{@accounting_entry[:reference_number]} \ndate: #{@accounting_entry[:date_posted].to_fs(:long)} \nMag-log in sa iyong My k-coins account para sa detalye."
+              config = {
+                mobile_number: @member.mobile_number,
+                content: content
+              }
+              ::SmsBlast::Send.new(config: config).execute!
+            end
+          end
+        end
       end
     end
 
