@@ -96,18 +96,20 @@ task :involuntary_resignation => :environment do
       principal = record["principal"]
       interest = record["interest"]
       loan_product = record["loan_product"]["name"]
-  
+      principal_balance = record["overall_principal_balance"]
+      interest_balance = record["overall_interest_balance"]
+      balance = record["overall_balance"]
       if member.present?
         member_details = Member.find_by(id: member["id"])
         
         if member_details.present? && member_details[:member_type] == "GK"
-          data = "#{record['id']}|#{member['last_name']}, #{member['first_name']}, #{member['middle_name']}|#{loan_product}|#{principal}|#{interest}"
+          data = "#{record['id']}|#{member['last_name']}, #{member['first_name']}, #{member['middle_name']}|#{loan_product}|#{principal}|#{interest}|#{principal_balance}|#{interest_balance}|#{balance}"
           @data << data
         end
       end
     end
   
-    puts "MEMBER ID|MEMBER|LOAN PRODUCT|PRINCIPAL|INTEREST"
+    puts "MEMBER ID|MEMBER|LOAN PRODUCT|PRINCIPAL|INTEREST|PRINCIPAL BALANCE|INTEREST BALANCE|OVERALL BALANCE"
     puts @data
   end
 
