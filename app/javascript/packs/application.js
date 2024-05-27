@@ -65,7 +65,9 @@ import PsrSchedulesGenerate from "../components/psr_schedules/Generate.js";
 import AdministrationUsersForm from "../components/administration/users/Form.js";
 import AdministrationUsersIndex from "../components/administration/users/Index.js";
 import AdministrationUsersShow from "../components/administration/users/Show.js";
+import AllowanceComputationReportShowComponent from "../components/data_stores/allowance_computation_report/ShowComponents.js";
 import Login from "../components/users/Login.js";
+
 
 // "init" Objects
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
@@ -243,6 +245,8 @@ import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.j
 
 import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
 import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
+import AllowanceComputationIndex from "../models/AllowanceComputationIndex.js";
+
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -304,6 +308,7 @@ const hooks = {
   "accounting/year_end_closings/show":                [YearEndClosingsShow],
   "data_stores/icpr/index":                           [DataStoresIcprIndex],
   "data_stores/icpr/show":                            [DataStoresIcprShow, DataStoresIcprShowComponent],
+ 
   "data_stores/patronage_refund/index":               [PatronageRefundIndex],
   "data_stores/patronage_refund/show":                [PatronageRefundShow,DataStoresPatronageRefundShowComponent],
   
@@ -385,6 +390,7 @@ const hooks = {
   "data_stores/x_weeks_to_pay/index":                 [XWeeksToPayIndex],
   "data_stores/x_weeks_to_pay/show":                  [XWeeksToPayShowComponent],
   "data_stores/branch_resignations/index":            [BranchResignationsIndex],
+  "data_stores/allowance_computation_report/show":    [AllowanceComputationReportShowComponent],
   "data_stores/branch_resignations/show":             [BranchResignationsShowComponent],
   "reports/monthly_remittance":                       [ReportsMonthlyRemittance],
   "reports/insurance_interest":                       [ReportsInsuranceInterest],
@@ -465,7 +471,8 @@ const hooks = {
   "data_stores/share_capital_involuntary/index": 			[ShareCapitalInvoluntaryIndex],
   "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
-  "billing_for_involuntary/show":                     [BillingForInvoluntaryShow]
+  "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
+  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex]	
 }
 
 const renderComponent = (Component, payload) => {

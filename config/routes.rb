@@ -527,6 +527,11 @@ Rails.application.routes.draw do
     get "/member_per_center_counts", to: "member_per_center_counts#index"
     get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
     delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
+
+    get "/allowance_computation_report", to: "allowance_computation_report#index" 
+    get "/allowance_computation_report/:id", to: "allowance_computation_report#show" 
+    resources :allowance_computation_report, only: [:index, :show]
+ 
   end
   
   # daily_branch_metrics
