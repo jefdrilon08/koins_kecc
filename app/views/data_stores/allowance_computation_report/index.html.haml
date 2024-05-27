@@ -1,0 +1,13 @@
+=title
+.row
+  .col
+    .card
+      .card-body
+        - if @records.any?
+          = render partial: "index_list", locals: {records: @records}
+          = paginate @records
+        - else
+          No Records
+
+= render partial: "data_stores/allowance_computation_report/modals/new"
+ 
