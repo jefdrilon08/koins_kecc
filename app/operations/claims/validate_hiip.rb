@@ -18,10 +18,10 @@ module Claims
       @reason_of_confinement                    = @data[:reason_of_confinement]
       @diagnosis                                = @data[:diagnosis]
       @name_of_claimant                         = @data[:name_of_claimant]
-      @balance                                  = @data[:balance] 
+      @balance                                  = @data[:balance]
       @claims_payment                           = @data[:claims_payment]
       @account_name                             = @data[:account_name]
-      @account_number                           = @data[:account_number]        
+      @account_number                           = @data[:account_number]
       @errors = []
 
     end
@@ -77,6 +77,10 @@ module Claims
         @errors << "Name of claimant field is required"
       end
 
+      if @date_prepared.blank?
+        @errors << "Date Prepared field is required"
+      end
+
       # if Date.today.to_date > @expiration_date_of_coverage.to_date
       #   @errors << "Expired HIIP!"
       # end
@@ -116,7 +120,7 @@ module Claims
           if total_amount > 6000.00
             @errors << "Exceed amount!"
           end
-        end 
+        end
       end
     end
   end
