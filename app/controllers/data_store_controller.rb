@@ -142,7 +142,7 @@ class DataStoreController < ApplicationController
       "share_capital_involuntary"     => {order: "as_of DESC",data: %w[] },
       "billing_for_involuntary"       => {order: "created_at DESC",      meta: %w[branch_name], data: %w[]},
       "member_per_center_counts"    => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
-
+      "allowance_computation_report"    => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
     }
   end
 

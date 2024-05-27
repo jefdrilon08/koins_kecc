@@ -204,7 +204,7 @@ namespace :api do
   end
 
   namespace :v1 do
-    #mbs_transfer
+   #mbs_transfer
     post "mbs_transfer/create", to: "mbs_transfer#create"
     post "mbs_transfer/add_member", to: "mbs_transfer#add_member"
     post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
@@ -732,6 +732,9 @@ namespace :api do
       post "/assets_liabilities/create", to: "assets_liabilities#create"
       post "/share_capital_involuntary/queue", to: "share_capital_involuntary#queue"
       post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
+      post "/allowance_computation_report/queue", to: "allowance_computation_report#queue"
+      get  "/allowance_computation_report/fetch", to: "allowance_computation_report#fetch"
+
     end
 
     namespace :epassbook do
