@@ -3433,7 +3433,7 @@ namespace :adjust do
         kok_id                                = k[:id]
         maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
         four_weeks_ago                        = (maturity_date - 28)
-        on_grace_period                       = (maturity_date + 60)
+        on_grace_period                       = (maturity_date + 90)
         status                                = k[:status]
         now                                   = Date.today
 
@@ -3477,4 +3477,89 @@ namespace :adjust do
       end
     end
   end
+
+  task :process_kok_loan_lapsed => :environment do
+    kok = InsuranceLoanBundleEnrollment.lapsed
+    
+    kok.each do |k|
+      status = k.status
+      if status == "lapsed"
+        kok_data = k.data.with_indifferent_access[:records]
+        kok_last_data = kok_data.last
+
+        insurance_loan_bundle_enrollment      = InsuranceLoanBundleEnrollment.where(id: k[:id]).first
+        plan_type                             = kok_last_data[:kok_data][:plan_type]
+        plan_category                         = kok_last_data[:kok_data][:plan_type],
+        partner                               = kok_last_data[:kok_data][:partner],
+        policy_no                             = kok_last_data[:kok_data][:policy_no],
+        effectivity_date                      = kok_last_data[:kok_data][:effectivity_date],
+        maturity_date                         = kok_last_data[:kok_data][:maturity_date],
+        client_type                           = kok_last_data[:kok_data][:client_type],
+        first_name                            = kok_last_data[:kok_data][:client_type],
+        middle_name                           = kok_last_data[:kok_data][:client_type],
+        last_name                             = kok_last_data[:kok_data][:client_type],
+        address                               = kok_last_data[:kok_data][:address],
+        gender                                = kok_last_data[:kok_data][:gender],
+        enrolled_status                       = kok_last_data[:kok_data][:enrolled_status],
+        civil_status                          = kok_last_data[:kok_data][:civil_status],
+        birth_date                            = kok_last_data[:kok_data][:birth_date],
+        age                                   = kok_last_data[:kok_data][:age].to_i,
+        premium_coverage                      = kok_last_data[:kok_data][:premium_coverage],
+        mobile_no                             = kok_last_data[:kok_data][:mobile_no],
+        membership_date                       = kok_last_data[:kok_data][:membership_date],
+        benif_fname                           = kok_last_data[:kok_data][:benif_fname],
+        benif_mname                           = kok_last_data[:kok_data][:benif_mname],
+        benif_lname                           = kok_last_data[:kok_data][:benif_lname],
+        benif_birth_date                      = kok_last_data[:kok_data][:benif_birth_date],
+        benif_gender                          = kok_last_data[:kok_data][:benif_gender],
+        benif_relationship                    = kok_last_data[:kok_data][:benif_relationship],
+        member                                = Member.where(id: kok_last_data[:member][:id]).first
+        kok_id                                = k[:id]
+        maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
+        four_weeks_ago                        = (maturity_date - 28)
+        on_grace_period                       = (maturity_date + 90)
+        status                                = k[:status]
+        now                                   = Date.today
+
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          plan_type: plan_type,
+          plan_category: plan_category,
+          partner: partner,
+          policy_no: policy_no,
+          effectivity_date: effectivity_date,
+          maturity_daste: maturity_date,
+          client_type: client_type,
+          first_name: first_name,
+          middle_name: middle_name,
+          last_name: last_name,
+          address: address,
+          gender: gender,
+          enrolled_status: enrolled_status,
+          civil_status: civil_status,
+          birth_date: birth_date,
+          age: age,
+          premium_coverage: premium_coverage,
+          mobile_no: mobile_no,
+          membership_date: membership_date,
+          benif_fname: benif_fname,
+          benif_mname: benif_mname,
+          benif_lname: benif_lname,
+          benif_birth_date: benif_birth_date,
+          benif_gender: benif_gender,
+          benif_relationship: benif_relationship,
+          member: member,
+          kok_id: kok_id,
+          maturity_date: maturity_date,
+          four_weeks_ago: four_weeks_ago,
+          on_grace_period: on_grace_period,
+          now: now,
+          status: status
+        }
+
+        ProcessKokLoanLapsed.perform_later(config)
+      end
+    end
+  end
+
 end
