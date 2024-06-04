@@ -1,5 +1,5 @@
 class ProcessKokLoanLapsed < ApplicationJob
-  queue_as :default
+  queue_as :operations
 
   def perform(config)
     @config = config
