@@ -25,6 +25,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   scope :for_checking, -> { where(status: "for_checking").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
   scope :declined, -> { where(status: "declined").order("collection_date ASC") }
+  scope :lapsed, -> { where(status: "lapsed").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?
