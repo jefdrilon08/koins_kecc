@@ -166,7 +166,7 @@ module InsuranceLoanBundleEnrollments
         }
       end
 
-      if @enrolled_status == "NEW" && @age > 70
+      if @enrolled_status == "NEW" && @age >= 71
         @errors[:messages] << {
           key: "age",
           message: "Your age is not qualified."
