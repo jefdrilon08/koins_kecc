@@ -639,7 +639,7 @@ insurance_accounting_codes:
     insurance_type: "K-KALINGA"
     deposit_accounting_code_id: "383e87f7-7737-4956-833e-e5061563fde4"
     withdrawal_accounting_code_id: "9e26384f-7a27-4e89-b5d0-1017cfdccf0b"
- -
+  -
     insurance_type: "Hospital Income Insurance Plan"
     deposit_accounting_code_id: "e0125f81-d1b3-4175-bfeb-11b65410f518"  
     withdrawal_accounting_code_id: "4f426778-32e3-482c-b7f3-ba69c9e4adfb"
@@ -683,6 +683,10 @@ branch_accounting_codes:
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
   -
     branch_id: "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"                              #KMBA Associate
+    cash_in_bank_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
+    withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
+  -
+    branch_id: "759d1ed8-c42c-49ac-ab57-07e6ee708a5e"                              #North Olympus
     cash_in_bank_accounting_code_id: "23dc9e6c-682b-46e0-a6cb-9754ef28b5b1"
     withdraw_payment_accounting_code_id: "7c17523d-f11e-4465-bf6e-4ef5ce0c8a9c"
   -
