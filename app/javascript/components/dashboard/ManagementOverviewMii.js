@@ -1608,7 +1608,10 @@ export default class ManagementOverviewMii extends React.Component {
           ACTIVE MEMBERS
         </th>
         <th className="text-center">
-          PERCENTAGE
+          UPLOADED PERCENTAGE
+        </th>
+        <th className="text-center">
+          NOT UPLOADED PERCENTAGE
         </th>
         <th className="text-center">
           As Of (Uploaded Documents Counts)
@@ -1669,24 +1672,27 @@ export default class ManagementOverviewMii extends React.Component {
           <th>
            {areas[i].name}
           </th>
-          <th className="text-center">
+          <td className="text-center">
             {aTotalNumberOfAttachFiles}
-          </th>
-          <th className="text-center">
+          </td>
+          <td className="text-center">
             {aTotalNumberOfActiveMembers}
-          </th>
-          <th className="text-center">
+          </td>
+          <td className="text-center">
             {Math.round((aTotalNumberOfAttachFiles / aTotalNumberOfActiveMembers) * 100)}%
-          </th>
-          <th className="text-center">
+          </td>
+          <td className="text-center">
+            {Math.round((((aTotalNumberOfAttachFiles / aTotalNumberOfActiveMembers) * 100) - 100) * -1)}%
+          </td>
+          <td className="text-center">
             {aUploadDocummentsCountasOf}
-          </th>
+          </td>
         </tr>
       );
     }
 
     rows.push(
-      <tr key={"subtotal-kmba-associate"} style={{backgroundColor: "#696", color: "#fff"}}>
+      <tr key={"subtotal-kmba-associate"}>
         <th>
           KMBA Associate Sub Total 
         </th>
@@ -1700,13 +1706,16 @@ export default class ManagementOverviewMii extends React.Component {
           {Math.round((kmbaAssociateTotalUploadDocuments / kmbaAssociateTotalNumberOfActiveMembers) *100)}%
         </th>
         <th className="text-center">
-          {kmbaAssociateTotalDocummentsCountasOf} 
+          {Math.round((((kmbaAssociateTotalUploadDocuments / kmbaAssociateTotalNumberOfActiveMembers) *100) - 100) * -1)}%
         </th>
+        <td className="text-center">
+          {kmbaAssociateTotalDocummentsCountasOf} 
+        </td>
       </tr>
     );
 
     rows.push(
-      <tr key={"subtotal-kcoop"} style={{backgroundColor: "#696", color: "#fff"}}>
+      <tr key={"subtotal-kcoop"}>
         <th>
           KCOOP Sub Total 
         </th>
@@ -1720,8 +1729,11 @@ export default class ManagementOverviewMii extends React.Component {
            {Math.round((kcoopTotalUploadDocuments / kcoopTotalNumberOfActiveMembers) * 100)}%
         </th>
         <th className="text-center">
-          {kcoopTotalDocummentsCountasOf} 
+           {Math.round((((kcoopTotalUploadDocuments / kcoopTotalNumberOfActiveMembers) * 100) - 100) * -1)}%
         </th>
+        <td className="text-center">
+          {kcoopTotalDocummentsCountasOf} 
+        </td>
       </tr>
     );
 
@@ -1749,8 +1761,11 @@ export default class ManagementOverviewMii extends React.Component {
         </td>
         <td className="text-center">
           <strong>
-            {tUploadDocummentsCountasOf}
+            {Math.round((((tTotalNumberOfAttachFiles / tTotalNumberOfActiveMembers) * 100) - 100) * -1)}%
           </strong>
+        </td>
+        <td className="text-center">
+          {tUploadDocummentsCountasOf}
         </td>
       </tr>
     );
@@ -1803,7 +1818,10 @@ export default class ManagementOverviewMii extends React.Component {
           ACTIVE MEMBERS
         </th>
         <th className="text-center">
-          PERCENTAGE
+          UPLOADED PERCENTAGE
+        </th>
+        <th className="text-center">
+          NOT UPLOADED PERCENTAGE
         </th>
         <th>
           As Of (Uploaded Documents Counts)
@@ -1846,6 +1864,9 @@ export default class ManagementOverviewMii extends React.Component {
                 {branches[k].data.percentage}%
               </td>
               <td className="text-center">
+                {(branches[k].data.percentage - 100) * -1}%
+              </td>
+              <td className="text-center">
                 {branches[k].data.uploaded_documents_counts_as_of}
               </td>
             </tr>
@@ -1874,6 +1895,11 @@ export default class ManagementOverviewMii extends React.Component {
         <td className="text-center">
           <strong>
             {tTotalPercentage = tUploadedFile * 100 / tActiveMember}
+          </strong>
+        </td>
+        <td className="text-center">
+          <strong>
+            {(((tTotalPercentage = tUploadedFile * 100 / tActiveMember) - 100) * -1)}
           </strong>
         </td>
         <td>
