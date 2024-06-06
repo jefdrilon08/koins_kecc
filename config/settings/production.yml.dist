@@ -9453,6 +9453,176 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.00
+  -
+    loan_product_id: "50e2a941-d7c2-470d-8e70-26ffdfd5f0bc"                         # GreensLoan
+    receivable_accounting_code_id: "e391abec-fb39-486e-ad51-9fce0fb71344"
+    interest_receivable_accounting_code_id: "912dbacd-214c-4b91-9a79-97bea70a9cd0"
+    default_amount: 7000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "Maintaining Balance Savings"
+      percentage: 0.0
+      threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
+    deductions:
+      -
+        name: "Service Fee"
+        accounting_code_id: "9f4b1331-cd5a-4edb-9920-a5029759885d"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: false
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.01
+              -
+                num_installments: 25
+                ratio: 0.01
+              -
+                num_installments: 35
+                ratio: 0.01
+              -
+                num_installments: 50
+                ratio: 0.01
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.01
+              -
+                num_installments: 6
+                ratio: 0.01
+              -
+                num_installments: 9
+                ratio: 0.01
+              -
+                num_installments: 12
+                ratio: 0.01
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.01
+              -
+                num_installments: 12
+                ratio: 0.01
+              -
+                num_installments: 18
+                ratio: 0.01
+              -
+                num_installments: 24
+                ratio: 0.01
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
           
 
 loan_product_accounting_codes:
@@ -9632,6 +9802,10 @@ loan_product_accounting_codes:
     loan_product_id: "6ef096d0-cd2c-4e10-b667-abb502ec894e"                         # K-BENEPISYO
     receivable_accounting_code_id: "0bab5369-466b-464a-a983-f13d679d3900"
     interest_receivable_accounting_code_id: "2e912b4d-4355-4765-8046-920e19f2d43a"
+  -
+    loan_product_id: "50e2a941-d7c2-470d-8e70-26ffdfd5f0bc"                         # Greens Loan
+    receivable_accounting_code_id: "e391abec-fb39-486e-ad51-9fce0fb71344"
+    interest_receivable_accounting_code_id: "912dbacd-214c-4b91-9a79-97bea70a9cd0"
 
     
 loan_product_accounting_codes_for_writeoff:
@@ -9811,4 +9985,8 @@ loan_product_accounting_codes_for_writeoff:
     loan_product_id: "6ef096d0-cd2c-4e10-b667-abb502ec894e"                         # K-BENEPISYO
     receivable_accounting_code_id: "0bab5369-466b-464a-a983-f13d679d3900"
     allowance_for_impairment_losses_accounting_code_id: "04d53f37-fd18-4359-85a4-409ec95f1e6b"
+  -
+    loan_product_id: "50e2a941-d7c2-470d-8e70-26ffdfd5f0bc"                         # Greens Loan
+    receivable_accounting_code_id: "e391abec-fb39-486e-ad51-9fce0fb71344"
+    allowance_for_impairment_losses_accounting_code_id: "ef75c407-1e49-4f7d-b60e-8907f30bfdc0"
 ###############################
