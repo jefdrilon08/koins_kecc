@@ -2410,6 +2410,104 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.00
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a"                         # K-BENEPISYO W2
@@ -2484,6 +2582,104 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.00
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K-BENEPISYO W3
@@ -2558,6 +2754,104 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.00
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
       -
         name: "Deposit to hospital income insurance plan"
         accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
@@ -3613,6 +3907,104 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
     midas:
       contract_type: 12
       contract_phase: "AC"
@@ -3690,6 +4082,104 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
 
   -
     loan_product_id: "22f9d132-820f-4c3d-830e-aaee1c0b206c"                         # K-KALUSUGAN W3
@@ -3738,6 +4228,104 @@ loan_products:
               -
                 num_installments: 50
                 ratio: 0.06
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "MBA-CLIP"
+        accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "false"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.0035
+              -
+                num_installments: 6
+                ratio: 0.007
+              -
+                num_installments: 9
+                ratio: 0.0105
+              -
+                num_installments: 12
+                ratio: 0.0140
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.0035
+              -
+                num_installments: 12
+                ratio: 0.007
+              -
+                num_installments: 18
+                ratio: 0.0105
+              -
+                num_installments: 24
+                ratio: 0.0140
+      -
+        name: "Golden Protection Fund"
+        accounting_code_id: "22f6ac03-ab97-4472-ad41-9a894a672e30"
+        amount: 0.00
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_special_loan_fund: "false"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "GK"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.0035
+              -
+                num_installments: 25
+                ratio: 0.007
+              -
+                num_installments: 35
+                ratio: 0.0105
+              -
+                num_installments: 50
+                ratio: 0.0140
             monthly:
               -
                 num_installments: 3
