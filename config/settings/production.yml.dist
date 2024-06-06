@@ -3843,7 +3843,7 @@ loan_products:
     loan_product_id: "edf1be2e-ff70-4ccb-afb3-0bf6ec700204"                         # K-KALUSUGAN W1
     receivable_accounting_code_id: "b6b8f234-f2cf-4a6e-b22a-e0fbce25d6da"
     interest_receivable_accounting_code_id: "cff0a2d5-0b06-474a-bf89-a646e50ca694"
-    amount_released_accounting_code_id: "9189221b-0626-4085-aea3-b76a1faf94a4"
+    amount_released_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
@@ -4185,7 +4185,7 @@ loan_products:
     loan_product_id: "22f9d132-820f-4c3d-830e-aaee1c0b206c"                         # K-KALUSUGAN W3
     receivable_accounting_code_id: "93686bcf-7e20-4968-8d9b-c20032a41280"
     interest_receivable_accounting_code_id: "ab8050bd-e2fe-4e87-bcb3-74eeb1c48a0b"
-    amount_released_accounting_code_id: "725c4a36-5baa-4f3a-ba30-3ecc00233b06"
+    amount_released_accounting_code_id: "186be541-cd56-450a-953e-749e0a64029b"
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
