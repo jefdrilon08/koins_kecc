@@ -10,11 +10,24 @@
       %th
       %th.text-center
         Repor Date
+      %th.text-center
+        Status
   %thead
     - @records.each do |o|
       %tr
         %td.text-center
           = link_to "/data_stores/allowance_computation_report/#{o.id}" do
             .bi.bi-search
-        %td
-          #{(o.meta['as_of']).to_date.strftime("%d-%b-%Y")}
+        %td.text-center
+          #{(o.meta['as_of']).to_date.strftime("%b %d, %Y")}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.bg-success
+              Done
+          - elsif o.error?
+            .badge.bg-danger
+              Error
+ 
