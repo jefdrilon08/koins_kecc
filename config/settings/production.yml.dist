@@ -2513,7 +2513,7 @@ loan_products:
     loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a"                         # K-BENEPISYO W2
     receivable_accounting_code_id: "6e3d53a1-befb-4691-98c1-2a4c203351c4"
     interest_receivable_accounting_code_id: "f27b0547-8407-49f5-9de2-fcc193c8db07"
-    amount_released_accounting_code_id: "c119b339-6918-4fb2-89d3-62c6fcbadbed"
+    amount_released_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
