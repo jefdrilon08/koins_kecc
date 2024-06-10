@@ -1958,42 +1958,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -2360,7 +2360,7 @@ loan_products:
         amount: 0.00
         sms_amount_status: true
         sms_amount: 10.00
-        skip_term_map: true
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -2374,42 +2374,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.00
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.00
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -2532,7 +2532,7 @@ loan_products:
         amount: 0.00
         sms_amount_status: true
         sms_amount: 10.00
-        skip_term_map: true
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -2546,42 +2546,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.00
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.00
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -2685,7 +2685,7 @@ loan_products:
     loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K-BENEPISYO W3
     receivable_accounting_code_id: "7d0ee9af-695d-4e14-bf56-fed585f240a4"
     interest_receivable_accounting_code_id: "1cf33ca9-d7f0-418c-af1e-97984b1c3174"
-    amount_released_accounting_code_id: "4161c731-7ad1-4ae1-842d-f215744d3999"
+    amount_released_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     default_amount: 5000.00
     maintaining_balance:
       account_type: "SAVINGS"
@@ -2704,7 +2704,7 @@ loan_products:
         amount: 0.00
         sms_amount_status: true
         sms_amount: 10.00
-        skip_term_map: true
+        skip_term_map: false
         deduction_type: "member_type_deduction_ratio"
         skip_for_membership_type_status: true
         skip_for_membership_type: ["K-PWD"]
@@ -2718,42 +2718,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.00
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.00
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.00
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -2901,42 +2901,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -3871,42 +3871,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -4046,42 +4046,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -4218,42 +4218,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
@@ -9414,42 +9414,42 @@ loan_products:
             weekly:
               -
                 num_installments: 15
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.01
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.01
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.01
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.01
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
