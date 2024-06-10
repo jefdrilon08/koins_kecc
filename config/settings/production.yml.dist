@@ -2682,7 +2682,7 @@ loan_products:
                 ratio: 0.0140
 
   -
-    loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K-BENEPISYO W3
+    loan_product_id: "9bd1f80b-370c-48f6-8b82-7294fd317a25"                         # K-BENEPISYO W3
     receivable_accounting_code_id: "7d0ee9af-695d-4e14-bf56-fed585f240a4"
     interest_receivable_accounting_code_id: "1cf33ca9-d7f0-418c-af1e-97984b1c3174"
     amount_released_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
@@ -8995,7 +8995,7 @@ loan_products:
           algo: "term_multiplier_for_second_cycle_onwards"
           offset: 1
   -
-    loan_product_id: "9bd1f80b-370c-48f6-8b82-7294fd317a25"                         # K - Benepisyo w4 
+    loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K - Benepisyo w4 
     receivable_accounting_code_id: "f91241b6-a13b-464f-910f-281a493e3be4"
     interest_receivable_accounting_code_id: "82b02486-5228-47ca-bb59-218092a6dbd1"
     default_amount: 500.00
