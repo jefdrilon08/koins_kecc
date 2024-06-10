@@ -1344,39 +1344,39 @@ loan_products:
                 ratio: 0.02
               -
                 num_installments: 25
-                ratio: 0.03
+                ratio: 0.02
               -
                 num_installments: 35
-                ratio: 0.045
+                ratio: 0.02
               -
                 num_installments: 50
-                ratio: 0.06
+                ratio: 0.02
             monthly:
               -
                 num_installments: 3
-                ratio: 0.0035
+                ratio: 0.02
               -
                 num_installments: 6
-                ratio: 0.007
+                ratio: 0.02
               -
                 num_installments: 9
-                ratio: 0.0105
+                ratio: 0.02
               -
                 num_installments: 12
-                ratio: 0.0140
+                ratio: 0.02
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.0035
+                ratio: 0.02
               -
                 num_installments: 12
-                ratio: 0.007
+                ratio: 0.02
               -
                 num_installments: 18
-                ratio: 0.0105
+                ratio: 0.02
               -
                 num_installments: 24
-                ratio: 0.0140
+                ratio: 0.02
       -
         name: "MBA-CLIP"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
