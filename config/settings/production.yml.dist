@@ -1344,13 +1344,13 @@ loan_products:
                 ratio: 0.02
               -
                 num_installments: 25
-                ratio: 0.02
+                ratio: 0.03
               -
                 num_installments: 35
-                ratio: 0.02
+                ratio: 0.04
               -
                 num_installments: 50
-                ratio: 0.02
+                ratio: 0.05
             monthly:
               -
                 num_installments: 3
