@@ -149,7 +149,7 @@ renderSatoData() {
 				const allowParGreaterYear = sato.par_greater_year * 1;
                                 return (
                                     <tr key={sato.sato_id}>
-					<td style={{ paddingLeft: '40px' }}>{sato.sato_name}</td>
+					<td style={{ paddingLeft: '40px' }}><a href={`/data_stores/repayment_rates/${sato.rr_id}`} target='_blank'>{sato.sato_name.toUpperCase()}</a></td> 
 					<td className="text-end" style={tdPortStyle}>{numberWithCommas(portfolioLessParSato)}</td>          
 	                                <td className="text-end" style={tdPortStyle}>{numberWithCommas(sato.par_month)}</td>
 					<td className="text-end" style={tdPortStyle}>{numberWithCommas(sato.par_year)}</td>

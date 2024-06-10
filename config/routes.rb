@@ -530,6 +530,7 @@ Rails.application.routes.draw do
 
     get "/allowance_computation_report", to: "allowance_computation_report#index" 
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show" 
+    delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"
     resources :allowance_computation_report, only: [:index, :show]
  
   end

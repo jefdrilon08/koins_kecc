@@ -18,6 +18,17 @@ module DataStores
     def show
       #super
       @record = DataStore.find(params[:id])
+
+      @subheader_items = [
+        { text: "Data Stores" },
+        { text: "Allowance Computation" }
+      ]
+      @subheader_side_actions = [
+        { text: "Delete", class: "fa fa-times", link: "/data_stores/allowance_computation_report/#{@record.id}", data: { method: :delete, confirm: "Are you sure you want to delete this report?" } }
+      ]
+
+
+
       @payload = {
         id: @record.id
       }
