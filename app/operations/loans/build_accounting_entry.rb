@@ -373,10 +373,42 @@ module Loans
 
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
-            if s_deduction.sms_amount_status.present? and s_deduction.sms_amount_status == true and @loan_data[:sms_fee_available] == false
-              amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_f
-            else 
-              amount  = s_deduction.business_permit_amount
+            #if s_deduction.sms_amount_status.present? and s_deduction.sms_amount_status == true and @loan_data[:sms_fee_available] == false
+            #  amount  = s_deduction.business_permit_amount + s_deduction.sms_amount.to_f
+            #else 
+            #  amount  = s_deduction.business_permit_amount
+            #end
+            if @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
+              amount = s_deduction.sms_amount.to_f
+            else
+
+              if s_deduction.skip_term_map == false
+                if @term == "weekly"
+                  s_deduction.meta.term_map.weekly.each do |s|
+                    
+                    if s.num_installments == @num_installments
+                    
+                      amount  = (0.01 * @amount).round(2) + s_deduction.sms_amount.to_f
+                    end
+                  end
+                elsif @term == "monthly"
+                  s_deduction.meta.term_map.monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (0.01 * @amount).round(2) + s_deduction.sms_amount.to_f
+                    end
+                  end
+                elsif @term == "semi-monthly"
+                  s_deduction.meta.term_map.semi_monthly.each do |s|
+                    if s.num_installments == @num_installments
+                      amount  = (0.01 * @amount).round(2) + s_deduction.sms_amount.to_f
+                    end
+                  end
+                else
+                  raise "Invalid term: #{@term}"
+                end
+              else
+                amount = s_deduction.sms_amount.to_f
+              end
             end
 
             journal_entries << {
