@@ -5,6 +5,12 @@
         - if @insurance_loan_bundle_enrollment.pending?
           = render partial: "show_pending_actions"
           .message
+        - if @insurance_loan_bundle_enrollment.on_grace_period?
+          = render partial: "show_pending_actions"
+          .message
+        - if @insurance_loan_bundle_enrollment.for_renewal?
+          = render partial: "show_pending_actions"
+          .message
         %hr
         - if @records.size == 0
           %p

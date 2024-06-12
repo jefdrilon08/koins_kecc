@@ -37,9 +37,13 @@
   %tbody
     - records.each_with_index do |o, i|
       %tr
-        %td
-          = link_to member_path(o[:member][:id]), target: '_blank' do
-            #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+        - member_id = o[:member][:id]
+        - loan_pending = Loan.find_by(member_id: member_id, loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a", status: "pending")
+        - if loan_pending
+          - loan_id = loan_pending.id
+          %td
+            = link_to loan_path(loan_id), target: '_blank' do
+              #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
         %td
           #{o[:kok_data][:plan_type]}
         %td
@@ -91,3 +95,5 @@
         %th
       - if @insurance_loan_bundle_enrollment.approved?
         %th
+
+
