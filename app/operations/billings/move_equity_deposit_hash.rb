@@ -50,7 +50,39 @@ module Billings
 
       @account_transaction.data = @data
       @account_transaction.save!
+
+      config = {
+        user: @user,
+        member_account_id: @member_account.id,
+        amount: @amount
+      }
+
+      accounting_entry_data = ::Billings::BuildAccountingEntryForAutoTransfer.new(config: config).execute!
+      
+      #post to books
+      
+      config  = {
+        accounting_entry_data: accounting_entry_data,
+        user: @user
+      }
+
+      accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: config
+                          ).execute!
+      
+      config  = {
+        accounting_entry: accounting_entry,
+        user: @user
+      }
+
+
+      @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+                            config: config
+                          ).execute!
+
      
+      @accounting_entry
+      raise @accounting_entry.inspect
     end
   end
 end

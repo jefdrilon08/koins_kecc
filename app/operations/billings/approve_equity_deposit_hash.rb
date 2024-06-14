@@ -7,7 +7,7 @@ module Billings
       @user       = @config[:user]
       @particular = @config[:particular]
       @amount     = @deposit[:amount].try(:to_f).round(2)
-
+      #raise @amount.inspect
       @transaction_type = "deposit"
 
       @member_account = MemberAccount.find(@deposit[:member_account_id])
@@ -47,15 +47,21 @@ module Billings
         balance: new_balance
       )
 
+    
       @account_transaction.data = @data
       @account_transaction.save!
+      @member_new_balance = @member_account.balance.to_f
 
-      #if @member.data.with_indifferent_access[:subscription].present? and @member.data['subscription']['is_subscribed'] == true
-       # if new_balance.to_f >= 1000.to_f
-          #withdraw_cbu!
-          #move_cbu!
-       # end
-      #end
+
+      MemberAccount.joins(:member).where("members.data->'subscription'->>'is_subscribed' = ? AND member_accounts.account_subtype = ? AND member_accounts.balance >= ?", "true", "CBU", 100.00).count
+      if @member.data.with_indifferent_access[:subscription].present? and @member.data['subscription']['is_subscribed'] == true
+        
+        if @member_new_balance.to_f >= 100.to_f
+        
+          withdraw_cbu!
+          move_cbu!
+        end
+      end
 
 
     end
@@ -63,7 +69,11 @@ module Billings
 
     def withdraw_cbu!
       @transaction_type = "withdraw"
-      @withdraw_amount = 1000
+      @divisible_amount = @member_new_balance / 100.to_i
+      #raise @divisible_amount.to_i.inspect
+      if @divisible_amount > 0
+        @withdraw_amount = @divisible_amount.to_i * 100
+      end
       @account_transaction_withdraw  = AccountTransaction.new(
                                 subsidiary_id: @member_account.id,
                                 subsidiary_type: "MemberAccount",
