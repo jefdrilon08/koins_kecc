@@ -48,8 +48,9 @@
             .btn-group{:style => "margin-left: 20px"}
               .btn.btn-delete.btn-danger.btn-sm{:type =>"button", data: {member_id: dt[:member_id], member_name: dt[:member_name]}} 
                 DELETE
-              /.btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}
-              .btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_id: dt[:member_id], member_name: dt[:member_name], member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}  
+          -if @data_store.pending? || @data_store.approved?
+            .btn-group{:style => "margin-left: 20px"}
+              .btn.btn-details.btn-info.btn-sm{:type => "button", data: {member_id: dt[:member_id], member_name: dt[:member_name], member_accounts: dt[:member_accounts], loan_records: dt[:loan_records]}}
                 DETAILS
     %tr
       %th.text-center
