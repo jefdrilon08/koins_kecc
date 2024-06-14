@@ -1,0 +1,37 @@
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "subscription_filter"
+        .table-responsive
+          %table.table.table-sm.table-hover
+            %thead
+              %tr
+                %th #
+                %th Name
+                %th SATO
+                %th Center
+                %th Subscription Date
+                %th CBU Balance
+                %th Share Capital Balance
+        
+            %tbody
+              - if @subscriber.present?
+                - @subscriber.each_with_index do |gin, i| 
+                  %tr
+                    %td
+                      #{ i + 1 }
+                    %td 
+                      #{gin.full_name }
+                    %td
+                      #{gin.branch.name}
+                    %td
+                      #{gin.center.name}
+                    %td
+                      #{gin.data['subscription']['subscribe_updated_at'].to_date}
+                    %td
+                      #{MemberAccount.where(member_id: gin.id, account_subtype: 'CBU').last.balance}
+                    %td
+                      #{MemberAccount.where(member_id: gin.id, account_subtype: 'Share Capital').last.balance}
+
+
