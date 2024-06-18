@@ -82,6 +82,12 @@ class DepositCollectionsController < ApplicationController
         text: "Print"
       }
     ]
+    @subheader_side_actions << {
+      link: "#",
+      class: "fa fa-print-thermal",
+      id: "btn-thermal",
+      text: "Print Thermal"
+    }
 
     if @deposit_collection.pending?
       @subheader_side_actions << {
