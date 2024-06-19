@@ -1,6 +1,6 @@
 module Api
   module V1
-    class InsuranceFundTransferCollectionsController < ApplicationController
+    class InsuranceFundTransferCollectionsController < ApiController
       before_action :authenticate_user!
 
       def fetch
