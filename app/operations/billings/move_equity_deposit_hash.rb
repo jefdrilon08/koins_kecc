@@ -82,7 +82,7 @@ module Billings
 
      
       @accounting_entry
-      raise @accounting_entry.inspect
+    
     end
   end
 end
