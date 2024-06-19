@@ -119,4 +119,3 @@ Make sure that you have the `retest` gem locally installed (`gem install retest`
 ```
 retest 'bundle exec rspec'
 ```
-# Jomari
