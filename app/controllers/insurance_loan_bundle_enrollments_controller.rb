@@ -174,7 +174,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75
+    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] < 76
       if ["MIS", "BK", "SBK", "FM", "CM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
@@ -226,7 +226,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
         @errors_arr << errors
       end
     end
-    
+
     if @errors_arr.any?
       flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
       redirect_to upload_loan_bundle_enrollments_path
