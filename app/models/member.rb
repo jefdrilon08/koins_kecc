@@ -523,7 +523,7 @@ class Member < ApplicationRecord
       now = Time.now
       
       if (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i < 0
-        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement_date][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
         "#{number_of_days} DAYS"
 
       else
@@ -564,7 +564,6 @@ class Member < ApplicationRecord
           end
         end
       end
-    
 
     elsif self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now
