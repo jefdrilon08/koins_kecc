@@ -342,6 +342,37 @@ class PrintController < ApplicationController
       @deposit_collection = data
 
       render "print/deposit_collection", layout: "print"
+    elsif type == "deposit_collection_thermal"
+      deposit_collection  = DepositCollection.find(params[:id])
+      member_data = deposit_collection.data.with_indifferent_access
+      @members = member_data[:records].map do |member|
+        insurance_subtypes = ["Life Insurance Fund", "Retirement Fund", "Hospital Income Insurance Plan", "K-BENTE", "K-KALINGA", "K-MBA"]
+        kcoop_subtypes = ["Share Capital", "Maintaining Balance Savings", "ID", "SAVINGS", "K-IMPOK", "Golden K", "Savings Investment Fund"]
+
+        insurance_total = member[:records].select { |record| insurance_subtypes.include?(record[:account_subtype]) }.sum { |record| record[:amount] }
+        kcoop_total = member[:records].select { |record| kcoop_subtypes.include?(record[:account_subtype]) || record[:record_type] == "ID" }.sum { |record| record[:amount] }
+
+        {
+          full_name: member[:member][:full_name],
+          insurance_total: insurance_total,
+          kcoop_total: kcoop_total
+        }
+      end
+
+      @grand_insurance_total = @members.sum { |member| member[:insurance_total] }
+      @grand_kcoop_total = @members.sum { |member| member[:kcoop_total] }
+      
+      config  = {
+        deposit_collection: deposit_collection
+      }
+
+      data  = ::Print::BuildDepositCollection.new(
+                config: config
+              ).execute!
+
+      @deposit_collection_thermal = data
+
+      render "print/deposit_collection_thermal", layout: "print"
     elsif type == "insurance_fund_transfer_collection"
       insurance_fund_transfer_collection  = InsuranceFundTransferCollection.find(params[:id])
 
