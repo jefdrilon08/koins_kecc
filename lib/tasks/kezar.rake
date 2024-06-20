@@ -21,26 +21,26 @@ namespace :kezar do
     # Rails.logger.info(puts(login))
     # declaring the accessToken to a variable access_token
     access_token = login['accessToken']
-    # setting up the access token to an environment 
+    # setting up the access token to an environment
     ENV["ACCESS_TOKEN"] = access_token
 
     Rake::Task['kezar:member_body_api'].invoke
   end
 
   task :member_body_api => :environment do
-    #--------------Start Declarations--------------# 
+    #--------------Start Declarations--------------#
       # Set the batch size (number of records per batch)
       batch_size              = 500
       # Initialize variables for pagination
       offset                  = 0
-      total_records           = 0 
+      total_records           = 0
       # Define a flag to indicate whether to continue fetching more batches
       fetch_more_batches      = true
       end_point               = ENV['KEZAR_API_SEND_MEMBERDATA'] || "https://account-jdyjiucdcq-uc.a.run.app/account/uploadDocument"
       is_batch                = ENV["BATCH"] || true
-      # retrieve the access token to an environment 
+      # retrieve the access token to an environment
       bearer_token            = ENV["ACCESS_TOKEN"]
-    # --------------End Declarations--------------# 
+    # --------------End Declarations--------------#
 
     while fetch_more_batches
 
@@ -54,7 +54,7 @@ namespace :kezar do
         )
         SELECT
           a.id,
-          CASE 
+          CASE
             WHEN a.identification_number IS NULL then ''
             ELSE a.identification_number
           END as blip_number,
@@ -75,15 +75,15 @@ namespace :kezar do
           ELSE ''
           END AS center_name,
           CONCAT(f.first_name, ' ', f.middle_name, ' ', f.last_name) as recruitedBy,
-          CASE 
+          CASE
             WHEN a.first_name IS NULL then ''
             ELSE a.first_name
           END AS first_name,
-          CASE 
+          CASE
             WHEN a.middle_name IS NULL then ''
             ELSE a.middle_name
           END AS middle_name,
-          CASE 
+          CASE
             WHEN a.last_name IS NULL then ''
             ELSE a.last_name
           END AS last_name,
@@ -99,118 +99,118 @@ namespace :kezar do
             ELSE TO_CHAR(a.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
           END AS birthday,
           CASE
-            WHEN 
+            WHEN
               a.place_of_birth IS NULL THEN ''
               ELSE a.place_of_birth
           END AS place_of_birth,
-          CASE 
+          CASE
             WHEN a.data->'address'->>'province' IS NULL THEN ''
           ELSE a.data->'address'->>'province'
           END AS province,
-          CASE 
+          CASE
             WHEN a.data->'address'->>'city' IS NULL THEN ''
             ELSE a.data->'address'->>'city'
           END AS city,
-          CASE 
+          CASE
             WHEN a.data->'address'->>'street' IS NULL THEN ''
             ELSE a.data->'address'->>'street'
           END AS street,
-          CASE 
-            WHEN a.mobile_number IS NULL THEN '' 
+          CASE
+            WHEN a.mobile_number IS NULL THEN ''
             ELSE a.mobile_number
           END AS contact_number,
-          CASE WHEN a.data->'government_identification_numbers'->>'tin_number' IS NULL THEN '' ELSE a.data->'government_identification_numbers'->>'tin_number' END AS tin_number,  
+          CASE WHEN a.data->'government_identification_numbers'->>'tin_number' IS NULL THEN '' ELSE a.data->'government_identification_numbers'->>'tin_number' END AS tin_number,
           CASE WHEN a.data->'government_identification_numbers'->>'sss_number' IS NULL THEN '' ELSE a.data->'government_identification_numbers'->>'sss_number' END AS sss_number,
           CASE WHEN a.data->'spouse'->>'first_name' IS NULL THEN '' ELSE a.data->'spouse'->>'first_name' END AS spouse_first_name,
           CASE WHEN a.data->'spouse'->>'middle_name' IS NULL THEN '' ELSE a.data->'spouse'->>'middle_name' END AS spouse_middle_name,
           CASE WHEN a.data->'spouse'->>'last_name' IS NULL THEN '' ELSE a.data->'spouse'->>'last_name' END AS spouse_last_name,
           CASE WHEN a.data->'spouse'->>'date_of_birth' IS NULL THEN '' ELSE a.data->'spouse'->>'date_of_birth' END AS spouse_birthday,
-          MAX(CASE 
-            WHEN dependent_rank = 1 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL)  THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name) 
+          MAX(CASE
+            WHEN dependent_rank = 1 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL)  THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
             ELSE ''
           END) AS first_dependent_name,
-          MAX(CASE 
-            WHEN dependent_rank = 1 AND g.relationship IS NOT NULL THEN g.relationship 
+          MAX(CASE
+            WHEN dependent_rank = 1 AND g.relationship IS NOT NULL THEN g.relationship
             ELSE ''
           END) AS first_relationship,
-          MAX(CASE 
-            WHEN dependent_rank = 1 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text 
+          MAX(CASE
+            WHEN dependent_rank = 1 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
             ELSE ''
           END) AS first_date_of_birth,
-          MAX(CASE 
-            WHEN dependent_rank = 2 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name) 
+          MAX(CASE
+            WHEN dependent_rank = 2 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
             ELSE ''
           END) AS second_dependent_name,
-          MAX(CASE 
+          MAX(CASE
             WHEN dependent_rank = 2 AND g.relationship IS NOT NULL THEN g.relationship
             ELSE ''
           END) AS second_relationship,
-          MAX(CASE 
-            WHEN dependent_rank = 2 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text 
+          MAX(CASE
+            WHEN dependent_rank = 2 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
             ELSE ''
           END) AS second_date_of_birth,
-          MAX(CASE 
-            WHEN dependent_rank = 3 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name) 
+          MAX(CASE
+            WHEN dependent_rank = 3 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
             ELSE ''
           END) AS third_dependent_name,
-          MAX(CASE 
+          MAX(CASE
             WHEN dependent_rank = 3 AND g.relationship IS NOT NULL THEN g.relationship
             ELSE ''
           END) AS third_relationship,
-          MAX(CASE 
-            WHEN dependent_rank = 3 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text 
+          MAX(CASE
+            WHEN dependent_rank = 3 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
             ELSE ''
           END) AS third_date_of_birth,
-          MAX(CASE 
-            WHEN dependent_rank = 4 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name) 
+          MAX(CASE
+            WHEN dependent_rank = 4 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
             ELSE ''
           END) AS fourth_dependent_name,
-          MAX(CASE 
+          MAX(CASE
             WHEN dependent_rank = 4 AND g.relationship IS NOT NULL THEN g.relationship
             ELSE ''
           END) AS fourth_relationship,
-          MAX(CASE 
-            WHEN dependent_rank = 4 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text 
+          MAX(CASE
+            WHEN dependent_rank = 4 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
             ELSE ''
           END) AS fourth_date_of_birth,
-          MAX(CASE 
-            WHEN dependent_rank = 5 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name) 
+          MAX(CASE
+            WHEN dependent_rank = 5 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
             ELSE ''
           END) AS fifth_dependent_name,
-          MAX(CASE 
+          MAX(CASE
             WHEN dependent_rank = 5 AND g.relationship IS NOT NULL THEN g.relationship
             ELSE ''
           END) AS fifth_relationship,
-          MAX(CASE 
-            WHEN dependent_rank = 5 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text 
+          MAX(CASE
+            WHEN dependent_rank = 5 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
             ELSE ''
           END) AS fifth_date_of_birth,
-          MAX(CASE 
-            WHEN h.is_primary = 'true' AND h.first_name IS NOT NULL AND h.middle_name IS NOT NULL AND h.last_name IS NOT NULL THEN CONCAT(h.first_name, ' ', h.middle_name, ' ', h.last_name) 
+          MAX(CASE
+            WHEN h.is_primary = 'true' AND h.first_name IS NOT NULL AND h.middle_name IS NOT NULL AND h.last_name IS NOT NULL THEN CONCAT(h.first_name, ' ', h.middle_name, ' ', h.last_name)
             ELSE ''
           END) AS primary_name_beneficiary,
-          MAX(CASE 
-            WHEN h.is_primary = 'true' AND h.relationship IS NOT NULL THEN h.relationship 
+          MAX(CASE
+            WHEN h.is_primary = 'true' AND h.relationship IS NOT NULL THEN h.relationship
             ELSE ''
           END) AS primary_relationship_beneficiary,
-          MAX(CASE 
+          MAX(CASE
             WHEN h.is_primary = 'true' AND h.date_of_birth IS NOT NULL THEN to_char(h.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
             ELSE ''
           END) AS primary_date_of_birth_beneficiary,
-          MAX(CASE 
+          MAX(CASE
             WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND (h.first_name IS NOT NULL OR h.middle_name IS NOT NULL OR h.last_name IS NOT NULL) THEN CONCAT(h.first_name, ' ', h.middle_name, ' ', h.last_name)
             ELSE ''
           END) AS secondary_name_beneficiary,
-          MAX(CASE 
-            WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.relationship IS NOT NULL THEN h.relationship 
+          MAX(CASE
+            WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.relationship IS NOT NULL THEN h.relationship
             ELSE ''
           END) AS secondary_relationship_beneficiary,
-          MAX(CASE 
+          MAX(CASE
             WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.date_of_birth IS NOT NULL THEN to_char(h.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
             ELSE ''
           END) AS secondary_date_of_birth_beneficiary
         FROM members a
-        LEFT JOIN branches b ON b.id = a.branch_id 
+        LEFT JOIN branches b ON b.id = a.branch_id
         LEFT JOIN clusters c ON c.id = b.cluster_id
         LEFT JOIN areas d ON d.id = c.area_id
         LEFT JOIN centers e ON e.id = a.center_id
@@ -219,8 +219,9 @@ namespace :kezar do
         LEFT JOIN beneficiaries h ON h.member_id = a.id
 
         WHERE
-        a.identification_number = 'HOKMBA-A02322'
-        AND a.insurance_status IN ('inforce', 'lapsed') 
+        a.insurance_status IN ('inforce', 'lapsed')
+        AND (a.data->>'recognition_date' >= '2024-06-10' AND a.data->>'recognition_date' <= '2024-06-20')
+        b.cluster_id IN ('ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4')
 
         GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
         ORDER BY branch_name
@@ -258,8 +259,8 @@ namespace :kezar do
         city                                  = o['city']
         street                                = o['street']
         contact_number                        = o['contact_number']
-        tin_number                            = o['tin_number']  
-        sss_number                            = o['sss_number'] 
+        tin_number                            = o['tin_number']
+        sss_number                            = o['sss_number']
         spouse_first_name                     = o['spouse_first_name']
         spouse_middle_name                    = o['spouse_middle_name']
         spouse_last_name                      = o['spouse_last_name']
@@ -271,7 +272,7 @@ namespace :kezar do
         second_relationship                   = o['second_relationship']
         second_date_of_birth                  = o['second_date_of_birth']
         third_dependent_name                  = o['third_dependent_name']
-        third_relationship                    = o['third_relationship'] 
+        third_relationship                    = o['third_relationship']
         third_date_of_birth                   = o['third_date_of_birth']
         fourth_dependent_name                 = o['fourth_dependent_name']
         fourth_relationship                   = o['fourth_relationship']
@@ -305,12 +306,12 @@ namespace :kezar do
               { id: '05lastName', response: last_name },
               { id: '52suffix', response: suffix },
               { id: '53suffixText', response: '' },
-              { id: '06gender', response: gender }, 
+              { id: '06gender', response: gender },
               { id: '07maritalStatus', response: marital_status },
               { id: '08birthday', response: birthday },
               { id: '09placeOfBirth', response: place_of_birth },
-              { id: '10address', 
-                response: [ province, city, street ] 
+              { id: '10address',
+                response: [ province, city, street ]
               },
               { id: '11contactNumber', response: contact_number },
               { id: '12occupation', response: ''},
@@ -322,7 +323,7 @@ namespace :kezar do
               { id: '18spouseLastName', response: spouse_last_name },
               { id: '19spouseBirthday', response: spouse_birthday },
               { id: '20spousePlaceOfBirth', response: '' },
-              { id: '21spousePlaceOfBirthAddress', response: '' },       
+              { id: '21spousePlaceOfBirthAddress', response: '' },
               { id: '22spouseContactNumber', response: '' },
               { id: '23spouseOccupation', response: '' },
               { id: '24spouseWorkAddress', response: '' },
@@ -334,21 +335,21 @@ namespace :kezar do
                 response: [ first_dependent_name, first_relationship, first_date_of_birth ]
               },
               { id: '29secondDependentHeader', response: '' },
-              { id: '30secondDependent', 
-                response: [ second_dependent_name, second_relationship, second_date_of_birth ] 
+              { id: '30secondDependent',
+                response: [ second_dependent_name, second_relationship, second_date_of_birth ]
               },
 
               { id: '31thirdDependentHeader', response: '' },
-              { id: '32thirdDependent', 
-                response: [ third_dependent_name, third_relationship, third_date_of_birth ] 
+              { id: '32thirdDependent',
+                response: [ third_dependent_name, third_relationship, third_date_of_birth ]
               },
               { id: '33fourthDependentHeader', response: '' },
-              { id: '34fourthDependent', 
-                response: [ fourth_dependent_name, fourth_relationship, fourth_date_of_birth ] 
+              { id: '34fourthDependent',
+                response: [ fourth_dependent_name, fourth_relationship, fourth_date_of_birth ]
               },
               { id: '35fifthDependentHeader', response: '' },
-              { id: '36fifthDependent', 
-                response: [ fifth_dependent_name, fifth_relationship, fifth_date_of_birth ] 
+              { id: '36fifthDependent',
+                response: [ fifth_dependent_name, fifth_relationship, fifth_date_of_birth ]
               },
               { id: '38primaryBeneficiaryHeader', response: '' },
               {
@@ -371,20 +372,20 @@ namespace :kezar do
             ]
           }
         }
-        
+
         next if processed_member_ids.include?(blip_number)
         payload = member_records
         Rails.logger.info(puts payload.to_json)
 
         # raise payload.inspect
-        
+
         if is_batch.present?
           Rails.logger.info(puts("Posting to #{end_point}..."))
           result = HTTParty.post(
                      end_point,
                      body: payload.to_json,
-                     :headers => { 
-                        'Content-Type' => 'application/json', 
+                     :headers => {
+                        'Content-Type' => 'application/json',
                         'Authorization' => "Bearer #{bearer_token}"
                      }
                   )
@@ -417,14 +418,14 @@ namespace :kezar do
     # Rails.logger.info(puts(login))
     # declaring the accessToken to a variable access_token
     access_token = login['accessToken']
-    # setting up the access token to an environment 
+    # setting up the access token to an environment
     ENV["ACCESS_TOKEN"] = access_token
 
     Rake::Task['kezar:blip_claims_body_api'].invoke
   end
 
   task :blip_claims_body_api => :environment do
-    #--------------Start Declarations--------------# 
+    #--------------Start Declarations--------------#
       # Set the batch size (number of records per batch)
       batch_size              = 500
       # Initialize variables for pagination
@@ -434,9 +435,9 @@ namespace :kezar do
       fetch_more_batches      = true
       end_point               = ENV['KEZAR_API_SEND_MEMBERDATA'] || "https://account-jdyjiucdcq-uc.a.run.app/account/uploadDocument"
       is_batch                = ENV["BATCH"] || true
-      # retrieve the access token to an environment 
+      # retrieve the access token to an environment
       bearer_token            = ENV["ACCESS_TOKEN"]
-    # --------------End Declarations--------------# 
+    # --------------End Declarations--------------#
 
     while fetch_more_batches
 
@@ -461,12 +462,12 @@ namespace :kezar do
             ELSE d.name
           END as center,
           CASE
-            WHEN a.data->>'category_of_cause_of_death_tpd_accident' = 'Accidental Death' 
-              OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular' 
-              OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular Accident' 
+            WHEN a.data->>'category_of_cause_of_death_tpd_accident' = 'Accidental Death'
+              OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular'
+              OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular Accident'
             THEN 'Abiso ng Pagkamatay dahil sa Aksidente (Notice of Death due to Accident)'
-            
-            WHEN a.data->>'category_of_cause_of_death_tpd_accident' = 'Gastro Intestinal' 
+
+            WHEN a.data->>'category_of_cause_of_death_tpd_accident' = 'Gastro Intestinal'
               OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Hematological'
                     OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Neurogical'
                     OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Cardiovascular'
@@ -474,9 +475,9 @@ namespace :kezar do
                     OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Respiratory'
                     OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Gynecological'
                 THEN 'Abiso ng Natural na Pagkamatay (Notice of Natural Death)'
-            
+
             ELSE ''
-          END as application_type, 
+          END as application_type,
           a.data->>'beneficiary' as claimant_name,
           a.data->>'classification_of_insured' as relation_to_member_of_deceased_disabled,
           a.data->>'name_of_insured' as name_of_deceased_disabled,
@@ -486,20 +487,20 @@ namespace :kezar do
             ELSE a.data->>'cause_of_death_tpd_accident'
           END as cause_of_death_disability,
           a.data->>'date_of_death_tpd_accident' as date_of_death_disability,
-          CASE 
+          CASE
             WHEN a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular' OR a.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular Accident'
             THEN 'YES'
             ELSE 'NO'
           END AS motor_vehicular_accident_hospitalization
 
-        FROM claims a  
+        FROM claims a
         LEFT JOIN members b ON b.id = a.member_id
         LEFT JOIN branches c ON c.id = a.branch_id
         LEFT JOIN centers d ON d.id = a.center_id
 
         WHERE a.claim_type = 'BLIP'
         AND a.branch_id = '3a74c7d5-54a5-4eec-826d-ab81f76ae31a'
-  
+
       SQL
 
       results = ActiveRecord::Base.connection.execute(sql_query)
@@ -530,7 +531,7 @@ namespace :kezar do
         cause_of_death_disability                          = o['cause_of_death_disability']
         date_of_death_disability                           = o['date_of_death_disability']
         motor_vehicular_accident_hospitalization           = o['motor_vehicular_accident_hospitalization']
-        
+
         member_records = {
           userId: '',
           data: {
@@ -579,20 +580,20 @@ namespace :kezar do
             ]
           }
         }
-        
+
         next if processed_member_ids.include?(blip_no)
         payload = member_records
         Rails.logger.info(puts payload.to_json)
 
         raise payload.inspect
-        
+
         if is_batch.present?
           Rails.logger.info(puts("Posting to #{end_point}..."))
           result = HTTParty.post(
                      end_point,
                      body: payload.to_json,
-                     :headers => { 
-                        'Content-Type' => 'application/json', 
+                     :headers => {
+                        'Content-Type' => 'application/json',
                         'Authorization' => "Bearer #{bearer_token}"
                      }
                   )
@@ -625,14 +626,14 @@ namespace :kezar do
     # Rails.logger.info(puts(login))
     # declaring the accessToken to a variable access_token
     access_token = login['accessToken']
-    # setting up the access token to an environment 
+    # setting up the access token to an environment
     ENV["ACCESS_TOKEN"] = access_token
     # raise access_token.inspect
     Rake::Task['kezar:payment_body_api'].invoke
   end
 
   task :payment_body_api => :environment do
-    #--------------Start Declarations--------------# 
+    #--------------Start Declarations--------------#
       total_records           = 0
       end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://payment-jdyjiucdcq-uc.a.run.app/payment/KMBA/upload"
       is_batch                = ENV["BATCH"] || true
@@ -643,12 +644,13 @@ namespace :kezar do
       account_subtype         = 'Life Insurance Fund','Retirement Fund'
       branch                  = 'cf74991b-c211-42c6-bdf7-78dd09862f01', '3820dabe-a47e-43ad-9db9-47158e23b75f'
       member_id               = '0a30de26-163b-48ac-8d90-55db208b240a'
-      # retrieve the access token to an environment 
+      cluster_id              = 'ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4'
+      # retrieve the access token to an environment
       bearer_token            = ENV["ACCESS_TOKEN"]
-    # --------------End Declarations--------------# 
+    # --------------End Declarations--------------#
 
     account_transactions = AccountTransaction.select(
-      " 
+      "
         account_transactions.id,
         account_transactions.amount as amount,
         account_transactions.id AS reference_number,
@@ -664,21 +666,23 @@ namespace :kezar do
     ).joins(
       "
         LEFT JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id
-        LEFT JOIN members ON members.id = member_accounts.member_id 
+        LEFT JOIN members ON members.id = member_accounts.member_id
         LEFT JOIN branches ON branches.id = members.branch_id
         LEFT JOIN centers ON centers.id = members.center_id
+        LEFT JOIN clusters ON clusters.id = branches.cluster_id
       "
     ).where(
         "
           account_transactions.transaction_type = ?
-          AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL) 
-          AND members.insurance_status IN (?) 
+          AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL)
+          AND members.insurance_status IN (?)
           AND member_accounts.account_subtype IN (?)
-          AND branches.id IN (?)
-          AND 
+          AND branches.cluster_id IN (?)
+          AND (account_transactions.transacted_at >= '2024-01-01' AND account_transactions.transacted_at <= '2024-06-10')
+          AND
             CASE
               WHEN members.data->'resignation_records' IS NULL THEN
-                DATE(account_transactions.transacted_at) >= DATE(members.data->>'recognition_date')  
+                DATE(account_transactions.transacted_at) >= DATE(members.data->>'recognition_date')
               WHEN ((members.data->'resignation_records'->2->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
                   DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->2->>'date_resigned')
               WHEN ((members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
@@ -691,7 +695,7 @@ namespace :kezar do
         is_interest,
         insurance_status,
         account_subtype,
-        branch 
+        cluster_id
     ).find_in_batches(:batch_size => 50) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
@@ -725,9 +729,9 @@ namespace :kezar do
         result = HTTParty.post(
                    end_point,
                    body: payload.to_json,
-                   :headers => { 
-                    'Content-Type' => 'application/json', 
-                    'Authorization' => "Bearer #{bearer_token}"  
+                   :headers => {
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer #{bearer_token}"
                   },
                   timeout: 120
                 )
@@ -739,8 +743,8 @@ namespace :kezar do
           result  = HTTParty.post(
                       end_point,
                       body: p.to_json,
-                      :headers => { 
-                        'Content-Type' => 'application/json', 
+                      :headers => {
+                        'Content-Type' => 'application/json',
                         'Authorization' => "Bearer #{bearer_token}"
                       },
                       timeout: 120
@@ -749,7 +753,7 @@ namespace :kezar do
         end
       end
     end
-  end 
+  end
 
   #OLD API PAYMENTS
   task :send_payments => :environment do
@@ -764,16 +768,16 @@ namespace :kezar do
 
     account_transactions = AccountTransaction.select(
       "account_transactions.id,
-       members.identification_number, 
-       account_transactions.transacted_at, 
-       account_transactions.amount, 
-       member_accounts.account_subtype, 
-       account_transactions.id, 
+       members.identification_number,
+       account_transactions.transacted_at,
+       account_transactions.amount,
+       member_accounts.account_subtype,
+       account_transactions.id,
        branches.name AS branch_name"
     ).joins(
       "INNER JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id INNER JOIN members ON members.id = member_accounts.member_id INNER JOIN branches ON branches.id = member_accounts.branch_id"
     ).where(
-     "member_accounts.account_type = ? 
+     "member_accounts.account_type = ?
      AND member_accounts.account_subtype IN (?)
      AND member_accounts.branch_id IN (?)
      AND (account_transactions.data->>'is_interest' = 'false' OR account_transactions.data->>'is_interest' IS NULL)",
@@ -830,11 +834,11 @@ namespace :kezar do
   task send_members: :environment do
     # branch_id           = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
     # branch              = Branch.find(branch_id)
-    is_batch            = ENV["BATCH"] || true 
+    is_batch            = ENV["BATCH"] || true
     end_point           = ENV['KEZAR_API_SEND_MEMBERDATA'] || "https://us-central1-rms-kmba.cloudfunctions.net/api/membership/batch/upload"
     insurance_status    = ["inforce", "dormant", "lapsed"]
     member_include      = ['C1FAI00010','C1BAT00226','C1TS00479','C2BS00788','C2NOV00815','C2LAG03321','C2CAM00589','E1SMR00067','E1MON01654','E1RHS00794','E2MAS00522','E2PAD01012','E2SUM00959','E3CAI00877','E3BIN00378','E3TAY00653','N1SP00497','N1NOR01305','N2BOC00522','N2MEY01341','N3Pul00332','S1LP03557','S1PAR02601','S1SPL02531','S2TM00652']
-    
+
     memberdata = Member.select(
     "
       DISTINCT ON (members.id) members.id,
@@ -846,15 +850,15 @@ namespace :kezar do
 
       CASE
         WHEN members.date_of_birth = NULL then ''
-        ELSE TO_CHAR(members.date_of_birth, 'MM/DD/YYYY') 
+        ELSE TO_CHAR(members.date_of_birth, 'MM/DD/YYYY')
       END as dateofbirth,
 
       CONCAT(date_part('year', age(members.date_of_birth))) as memberage,
 
       CASE
-        WHEN members.mobile_number IS NULL then '09000000000' 
+        WHEN members.mobile_number IS NULL then '09000000000'
         WHEN members.mobile_number = '' then '09000000000'
-        ELSE members.mobile_number    
+        ELSE members.mobile_number
       END AS contactnum,
 
       members.gender AS gender,
@@ -872,8 +876,8 @@ namespace :kezar do
 
       CASE
         WHEN members.place_of_birth = '' then 'N/A'
-        WHEN members.place_of_birth IS NULL then 'N/A' 
-        ELSE members.place_of_birth   
+        WHEN members.place_of_birth IS NULL then 'N/A'
+        ELSE members.place_of_birth
       END AS placeOfBirth,
 
       'N/A' AS sourceofincome,
@@ -881,63 +885,63 @@ namespace :kezar do
       '' AS memberaccountid,
       'approved' as appstatus,
       branches.id AS branchreferenceid,
-      
-      CASE 
+
+      CASE
         WHEN beneficiaries.is_primary = 'true' then CONCAT(beneficiaries.first_name,' ',beneficiaries.middle_name,' ',beneficiaries.last_name)
         ELSE 'N/A'
       END as primarybeneficiaryname,
-      
+
       CASE
         WHEN beneficiaries.is_primary = 'true' AND beneficiaries.date_of_birth IS NULL then '01/01/1900'
         WHEN beneficiaries.date_of_birth IS NULL then '01/01/1900'
         WHEN beneficiaries.is_primary IS NULL AND beneficiaries.date_of_birth IS NOT NULL then '01/01/1900'
         ELSE beneficiaries.date_of_birth
       END as primarydateofbirth,
-        
-      CASE 
-        WHEN beneficiaries.is_primary = 'true' then beneficiaries.relationship 
+
+      CASE
+        WHEN beneficiaries.is_primary = 'true' then beneficiaries.relationship
         ELSE 'N/A'
       END as primaryrelationship,
 
-      CASE 
+      CASE
         WHEN beneficiaries.is_primary IS NULL then CONCAT(beneficiaries.first_name,' ',beneficiaries.middle_name,' ',beneficiaries.last_name)
         ELSE 'N/A'
       END as secondarybeneficiaryname,
-      
+
       CASE
-        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.date_of_birth IS NULL then '01/01/1900' 
+        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.date_of_birth IS NULL then '01/01/1900'
         WHEN beneficiaries.is_primary IS NULL then beneficiaries.date_of_birth
         ELSE '01/01/1900'
       END as secondarydateofbirth,
-            
+
       CASE
-        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.relationship IS NULL then 'N/A'  
-        WHEN beneficiaries.is_primary IS NULL then beneficiaries.relationship 
+        WHEN beneficiaries.is_primary IS NULL AND beneficiaries.relationship IS NULL then 'N/A'
+        WHEN beneficiaries.is_primary IS NULL then beneficiaries.relationship
         ELSE 'N/A'
       END as secondaryrelationship,
-    
+
       CASE
         WHEN members.data->'spouse'->>'last_name' = '' then 'N/A'
         WHEN members.data->'spouse'->>'last_name' IS NULL then 'N/A'
         ELSE members.data->'spouse'->>'last_name'
       END as spouselastname,
-    
+
       CASE
         WHEN members.data->'spouse'->>'first_name' = '' then 'N/A'
         WHEN members.data->'spouse'->>'first_name' IS NULL then 'N/A'
-        ELSE members.data->'spouse'->>'first_name' 
+        ELSE members.data->'spouse'->>'first_name'
       END as spousefirstname,
-    
-      CASE 
+
+      CASE
         WHEN members.data->'spouse'->>'middle_name' = '' then 'N/A'
-        WHEN members.data->'spouse'->>'middle_name' IS NULL then 'N/A' 
+        WHEN members.data->'spouse'->>'middle_name' IS NULL then 'N/A'
         ELSE members.data->'spouse'->>'middle_name'
       END as spousemiddlename,
-    
+
       CASE
         WHEN members.data->'spouse'->>'date_of_birth' = '' then '1900-01-01'
         WHEN members.data->'spouse'->>'date_of_birth' IS NULL then '1900-01-01'
-        ELSE members.data->'spouse'->>'date_of_birth' 
+        ELSE members.data->'spouse'->>'date_of_birth'
       END AS spousedateofbirth,
       'N/A' AS spouseage,
       'N/A' AS ids,
@@ -947,7 +951,7 @@ namespace :kezar do
     "
     ).joins(
     "
-      LEFT JOIN branches ON branches.id = members.branch_id 
+      LEFT JOIN branches ON branches.id = members.branch_id
       LEFT JOIN centers ON centers.id  = members.center_id
       LEFT JOIN beneficiaries ON beneficiaries.member_id = members.id
     "
@@ -960,7 +964,7 @@ namespace :kezar do
       Rails.logger.info(puts("Uploading #{group.size}"))
       member = group.map{ |o|
         {
-          memberNumber: o.membernumber, 
+          memberNumber: o.membernumber,
           applicantLastName: o.applicantlastname,
           applicantFirstName: o.applicantfirstname,
           applicantMiddleName: o.applicantmiddlename,
@@ -1004,9 +1008,9 @@ namespace :kezar do
                 "name" => "",
                 "relationship" => ""
             }
-          ] 
+          ]
         }
-      }  
+      }
 
       Rails.logger.info(puts(member.to_json))
 
@@ -1052,14 +1056,14 @@ namespace :kezar do
 
       CASE
         WHEN members.date_of_birth = NULL then ''
-        ELSE TO_CHAR(members.date_of_birth, 'MM/DD/YYYY') 
+        ELSE TO_CHAR(members.date_of_birth, 'MM/DD/YYYY')
       END as dateofbirth,
 
       CONCAT(date_part('year', age(members.date_of_birth))) as memberage,
 
       CASE
         WHEN members.mobile_number = '' then 'N/A'
-        ELSE members.mobile_number    
+        ELSE members.mobile_number
       END AS contactnum,
 
       members.gender AS gender,
@@ -1077,7 +1081,7 @@ namespace :kezar do
 
       CASE
         WHEN members.place_of_birth = '' then 'N/A'
-        ELSE members.place_of_birth   
+        ELSE members.place_of_birth
       END AS placeOfBirth,
 
       'N/A' AS sourceofincome,
@@ -1103,7 +1107,7 @@ namespace :kezar do
     "
     ).joins(
     "
-      LEFT JOIN branches ON branches.id = members.branch_id 
+      LEFT JOIN branches ON branches.id = members.branch_id
       LEFT JOIN centers ON centers.id  = members.center_id
       LEFT JOIN beneficiaries ON beneficiaries.id = members.id
     "
@@ -1116,7 +1120,7 @@ namespace :kezar do
       Rails.logger.info(puts("Uploading #{group.size}"))
       member = group.map{ |o|
         {
-          memberNumber: o.membernumber, 
+          memberNumber: o.membernumber,
           applicantLastName: o.applicantlastname,
           applicantFirstName: o.applicantfirstname,
           applicantMiddleName: o.applicantmiddlename,
@@ -1160,7 +1164,7 @@ namespace :kezar do
                 "name" => "",
                 "relationship" => ""
             }
-          ] 
+          ]
         }
       }
       Rails.logger.info(puts(member.to_json))
@@ -1194,7 +1198,7 @@ namespace :kezar do
   task send_claims: :environment do
     start_date        = ENV["START_DATE"]  || Date.today - 1.month
     end_date          = ENV["END_DATE"] || Date.today
-    is_batch          = ENV["BATCH"] || true 
+    is_batch          = ENV["BATCH"] || true
     end_point         = ENV['KEZAR_API_SEND_CLAIMDATA'] || "https://us-central1-rms-kmba.cloudfunctions.net/api/claim/batch/upload"
 
     claim_type        =["BLIP", "HIIP"]
@@ -1204,12 +1208,12 @@ namespace :kezar do
         claims.id,
 
         CASE
-          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' = 'Accidental Death' 
-            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular' 
-            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular Accident' 
+          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' = 'Accidental Death'
+            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular'
+            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Motor Vehicular Accident'
           THEN 'Abiso ng Pagkamatay dahil sa Aksidente (Notice of Death due to Accident)'
 
-          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' = 'Gastro Intestinal' 
+          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' = 'Gastro Intestinal'
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Hematological'
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Neurogical'
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Cardiovascular'
@@ -1217,11 +1221,11 @@ namespace :kezar do
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Respiratory'
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Gynecological'
           THEN 'Abiso ng Natural na Pagkamatay (Notice of Natural Death)'
-          
-          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' IS NULL 
-            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Suicide' 
+
+          WHEN claims.data->>'category_of_cause_of_death_tpd_accident' IS NULL
+            OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Suicide'
             OR claims.data->>'category_of_cause_of_death_tpd_accident' = 'Others'
-          THEN 'N/A'  
+          THEN 'N/A'
         END AS claimtype,
 
         TO_CHAR(claims.created_at, 'mm/dd/yyyy hh:MM PM') as datefiled,
@@ -1236,33 +1240,33 @@ namespace :kezar do
         CASE
           WHEN claims.data->>'account_number' IS NULL THEN '(+63) 000-000-0000'
           WHEN claims.data->>'account_number' = '' THEN '(+63) 000-000-0000'
-          ELSE claims.data->>'account_number' 
+          ELSE claims.data->>'account_number'
         END AS claimantcontactno,
 
         'N/A' AS claimantemail,
         claims.data->>'beneficiary' as claimantfullname,
-        
-        CASE 
+
+        CASE
           WHEN claims.data->>'classification_of_insured'= 'Member' THEN 'N/A'
           ELSE claims.data->>'classification_of_insured'
         END as claimantrelationship,
-        
+
         'N/A' as disabled_decease_address,
-        
+
         CASE
           WHEN claims.data->>'cause_of_death_tpd_accident' IS NULL THEN 'N/A'
           WHEN claims.data->>'cause_of_death_tpd_accident' = '' THEN 'N/A'
           ELSE claims.data->>'cause_of_death_tpd_accident'
         END as disabled_decease_cause,
-        
+
         'N/A' as disabled_decease_civilstatus,
         TO_CHAR((claims.data->>'date_of_birth')::DATE, 'mm/dd/yyyy hh:MM PM') as disabled_decease_birthdate,
-        
+
         CASE
           WHEN claims.data->>'date_of_death_tpd_accident' IS NULL THEN 'N/A'
           ELSE TO_CHAR((claims.data->>'date_of_death_tpd_accident')::DATE, 'mm/dd/yyyy hh:MM PM')
         END as disabled_decease_date,
-        
+
         claims.data->>'name_of_insured' as disabled_decease_fullname,
         'N/A' as disabled_decease_relationship,
         members.identification_number as member_no,
@@ -1270,7 +1274,7 @@ namespace :kezar do
         centers.name as center_name,
         TO_CHAR((members.data->>'recognition_date')::DATE, 'mm/dd/yyyy hh:MM PM') as dateofmembership,
         CONCAT(members.first_name,' ',members.middle_name,' ',members.last_name) as memberfullname,
-        claims.data->>'policy_number' as externalref, 
+        claims.data->>'policy_number' as externalref,
         '' as proofaffidavitofloss,
         '' as proofbirth,
         '' as proofclaimantid,
@@ -1283,7 +1287,7 @@ namespace :kezar do
       "
     ).joins(
       "
-        LEFT JOIN members ON members.id = claims.member_id 
+        LEFT JOIN members ON members.id = claims.member_id
         LEFT JOIN branches ON branches.id = claims.branch_id
         LEFT JOIN centers ON centers.id = claims.center_id
       "
@@ -1436,7 +1440,7 @@ namespace :kezar do
           external_ref: o.external_ref
         }
       }
-      
+
       Rails.logger.info(puts(member.to_json))
 
       payload = member
@@ -1462,7 +1466,7 @@ namespace :kezar do
         end
       end
     end
-  end 
+  end
 
 
   # WORKING ON SEND PAYMENTS TO TEST SERVER 172.104.179.39
@@ -1479,7 +1483,7 @@ namespace :kezar do
     # end_recognition           = '2023-08-31'
     is_batch                  = ENV["BATCH"] || true
     # end_point               = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_payments_api"
-    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"    
+    end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://172.104.179.39/api/receive_api/save_payments_api"
     account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
     member_id                 = '2f167148-b4c2-45cc-82ae-2e4924fdf64b'
     is_interest               = 'false'
@@ -1512,7 +1516,7 @@ namespace :kezar do
       payment = group.map{ |o|
         {
           identification_number: o.identification_number,
-          amount: o.amount,          
+          amount: o.amount,
           account_subtype: o.account_subtype,
           transacted_at: o.transacted_at,
           status: o.status
@@ -1531,7 +1535,7 @@ namespace :kezar do
           :headers => { 'Content-Type' => 'application/json' },
           timeout: 120
         )
-   
+
         Rails.logger.info(puts(result))
       else
         payload.each do |p|
@@ -1611,9 +1615,9 @@ namespace :kezar do
   #     }
 
   #     Rails.logger.info(puts(claims.to_json))
-      
+
   #     payload = claims
-      
+
   #     if is_batch.present?
   #      Rails.logger.info(puts "Posting to #{end_point}....")
   #       result = HTTParty.post(
@@ -1649,5 +1653,3 @@ end
 
 # ------------ Batch Upload Live Claims ------------
 # bundle exec rails kezar:send_claims KEZAR_API_SEND_CLAIMDATA='https://us-central1-rms-kmba.cloudfunctions.net/api/claim/batch/upload' RAILS_ENV=development
-
-
