@@ -13,6 +13,8 @@ var $modalApprove;
 var $btnPrint;
 var $modalPrint;
 
+var $btnPrintThermal;
+
 var $selectCashManagementTemplate;
 var $btnConfirmBook;
 
@@ -40,6 +42,8 @@ var _cacheDom = function() {
   $btnConfirmApprove  = $("#btn-confirm-approve");
 
   $btnPrint   = $("#btn-print");
+
+  $btnPrintThermal = $("#btn-thermal");
 
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");
@@ -141,7 +145,12 @@ var _bindEvents = function() {
       }
     });
   });
-
+  $btnPrintThermal.on("click", function() {   
+    var type = "time_deposit_collection_thermal";
+ 
+    window.open("/print?type=" + type + "&id=" + timeDepositCollectionId);
+ 
+   });
   $btnPrint.on("click", function() {
     $modalPrint.show();
 

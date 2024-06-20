@@ -370,6 +370,20 @@ class PrintController < ApplicationController
       @deposit_collection = data
 
       render "print/deposit_collection", layout: "print"
+    elsif type == "time_deposit_collection_thermal"
+      time_deposit_collection = TimeDepositCollection.find(params[:id])
+      member_data = time_deposit_collection.data.with_indifferent_access
+              config  = {
+            time_deposit_collection: time_deposit_collection
+          }
+      data  = ::Print::BuildTimeDepositCollection.new(
+                config: config
+              ).execute!
+
+      @time_deposit_collection_thermal = data
+
+      render "print/time_deposit_collection_thermal", layout: "print"
+      
     elsif type == "withdrawal_collection"
       withdrawal_collection = WithdrawalCollection.find(params[:id])
 
