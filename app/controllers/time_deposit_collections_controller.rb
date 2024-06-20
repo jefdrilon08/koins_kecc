@@ -75,6 +75,15 @@ class TimeDepositCollectionsController < ApplicationController
           link: "#",
           text: "Approve"
         }
+
+      end
+      if @time_deposit_collection.approved?
+        @subheader_side_actions << {
+          id: "btn-thermal",
+          class: "fa fa-check",
+          link: "#",
+          text: "Print Thermal"
+        }
       end
 
       @payload = {
