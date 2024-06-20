@@ -3,119 +3,101 @@ module Api
     class InsuranceLoanBundleEnrollmentsController < ApiController
       before_action :authenticate_user!
 
-      def approve
+      if !Settings.activate_microinsurance      
+        def approve
+          insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
+          data = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"].last
+          data_premium = data.with_indifferent_access["kok_data"]["premium_coverage"]
+          member = Member.find(insurance_loan_bundle_enrollment.member_ids)
+          loan_data = {
+                        id: nil,
+                        branch_id: insurance_loan_bundle_enrollment.branch_id,
+                        center_id: insurance_loan_bundle_enrollment.center_id,
+                        date_prepared: "2024-03-01",
+                        member_id: insurance_loan_bundle_enrollment.member_ids,
+                        principal: data_premium,
+                        loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a",
+                        term: "weekly",
+                        pn_number: "00",
+                        num_installments: 25,
+                        # project_type_id: insurance_loan_bundle_enrollment.data['project_type_id'],
+                        status: "pending",
+                        data: {
+                                clip_beneficiary: {
+                                  first_name:  "",
+                                  middle_name: "",
+                                  last_name: "",
+                                  date_of_birth: nil,
+                                  relationship: ""
+                                },
+                                voucher:{
+                                          bank:"",
+                                          bank_check_number: "",
+                                          check_number: "",
+                                          payee:"",
+                                          date_requested: "",
+                                          date_of_check: "",
+                                          particular: ""
+                                        },
+                                co_maker_two: "",
+                                co_maker_one: {
+                                  value: "",
+                                  label: "",
+                                  id: "",
+                                  first_name: "" ,
+                                  middle_name: "",
+                                  last_name: ""
+                                },
+                                # clip_beneficiary: {
+                                #   first_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['first_name'],
+                                #   middle_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['middle_name'],
+                                #   last_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['last_name'],
+                                #   date_of_birth: "",
+                                #   relationship: ""
 
-        # online_application  = LoanApplication.find(params[:id])
-        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
-        data = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"].last
-        data_premium = data.with_indifferent_access["kok_data"]["premium_coverage"]
-        # raise data_premium.inspect
-        # online_application_data = Member.find(online_application.member_id)
+                                # }
+                              }
+                      }
 
-        member = Member.find(insurance_loan_bundle_enrollment.member_ids)
-        # branch_id = member.branch_id
-
-
-        # member = Member.find(online_application.member_id)
-        # sco_maker = Member.find(insurance_loan_bundle_enrollment.co_maker_member_id)
-        loan_data = {
-                      id: nil,
-                      branch_id: insurance_loan_bundle_enrollment.branch_id,
-                      center_id: insurance_loan_bundle_enrollment.center_id,
-                      date_prepared: "2024-03-01",
-                      member_id: insurance_loan_bundle_enrollment.member_ids,
-                      principal: data_premium,
-                      loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a",
-                      term: "weekly",
-                      pn_number: "00",
-                      num_installments: 25,
-                      # project_type_id: insurance_loan_bundle_enrollment.data['project_type_id'],
-                      status: "pending",
-                      data: {
-                              clip_beneficiary: {
-                                first_name:  "",
-                                middle_name: "",
-                                last_name: "",
-                                date_of_birth: nil,
-                                relationship: ""
-                              },
-                              voucher:{
-                                        bank:"",
-                                        bank_check_number: "",
-                                        check_number: "",
-                                        payee:"",
-                                        date_requested: "",
-                                        date_of_check: "",
-                                        particular: ""
-                                      },
-                              co_maker_two: "",
-                              co_maker_one: {
-                                value: "",
-                                label: "",
-                                id: "",
-                                first_name: "" ,
-                                middle_name: "",
-                                last_name: ""
-                              },
-                              # clip_beneficiary: {
-                              #   first_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['first_name'],
-                              #   middle_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['middle_name'],
-                              #   last_name: insurance_loan_bundle_enrollment.data['clip_beneficiary']['last_name'],
-                              #   date_of_birth: "",
-                              #   relationship: ""
-
-                              # }
-                            }
+          config  = {
+                      loan_data: loan_data,
+                      insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+                      user: current_user,
+                      co_maker_profile_picture: nil,
+                      co_maker_three_profile_picture: nil
                     }
 
-        config  = {
-                    loan_data: loan_data,
-                    insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
-                    user: current_user,
-                    co_maker_profile_picture: nil,
-                    co_maker_three_profile_picture: nil
-                  }
+          data = ::Loans::Save.new(config: config).execute!
+          insurance_loan_bundle_enrollment.update!(status: "approved")
+          args  = {
+              id: insurance_loan_bundle_enrollment.id,
+              user_id: current_user.id
+            }
+          ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
+          render json: { message: "ok" }
 
-        data = ::Loans::Save.new(config: config).execute!
-        insurance_loan_bundle_enrollment.update!(status: "approved")
-        args  = {
-            id: insurance_loan_bundle_enrollment.id,
-            user_id: current_user.id
-          }
-        ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
-        render json: { message: "ok" }
-
+        end
       end
 
+      if Settings.activate_microinsurance
+        def approve
+          insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
+          config  = {
+            insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+            user: current_user
+          }
+            insurance_loan_bundle_enrollment.update!(status: "processing")
 
-      # def approve
-      #   insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
-      #   # @record_id = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"][0]["member"]["id"]
-      #   config  = {
-      #     insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
-      #     user: current_user
-      #   }
+            args  = {
+              id: insurance_loan_bundle_enrollment.id,
+              user_id: current_user.id
+            }
 
-      #   errors  = ::InsuranceLoanBundleEnrollments::ValidateApprove.new(
-      #               config: config
-      #             ).execute!
+            ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
 
-
-      #   if errors[:full_messages].any?
-      #     render json: { errors: errors }, status: 400
-      #   else
-      #     insurance_loan_bundle_enrollment.update!(status: "processing")
-
-      #     args  = {
-      #       id: insurance_loan_bundle_enrollment.id,
-      #       user_id: current_user.id
-      #     }
-
-      #     ProcessApproveInsuranceLoanBundleEnrollment.perform_later(args)
-
-      #     render json: { message: "ok" }
-      #   end
-      # end
+            render json: { message: "ok" }
+        end
+      end
 
       def check
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
