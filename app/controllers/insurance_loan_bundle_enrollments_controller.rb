@@ -226,8 +226,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
         @errors_arr << errors
       end
     end
-
-    raise @errors_arr.inspect
+    
     if @errors_arr.any?
       flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
       redirect_to upload_loan_bundle_enrollments_path
