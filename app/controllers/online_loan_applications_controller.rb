@@ -131,7 +131,7 @@ class OnlineLoanApplicationsController < ApplicationController
             class: "fa fa-pencil-alt",
             link: edit_online_loan_application_path(@online_application.id),
             text: "Edit"
-          }
+          } 
           @subheader_side_actions << {
             id: "btn-for-approve",
             class: "fa fa-pencil-alt",
