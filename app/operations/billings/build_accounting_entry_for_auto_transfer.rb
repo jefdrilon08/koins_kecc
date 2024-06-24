@@ -3,7 +3,7 @@ module Billings
     def initialize(config:)
       @config = config
       @member_account = MemberAccount.find(config[:member_account_id])
-      @branch = Branch.find(@member_account.branch_id)
+      @branch = Branch.find(Member.find(@member_account.member_id).branch_id)
       #@data   = @config[:data]
       @user   = @config[:user]
       @amount = config[:amount]
