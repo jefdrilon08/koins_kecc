@@ -14,6 +14,11 @@
     .col-md-2
       .form-group
         %label
+          Is Active
+        = f.input :is_active, label: false
+    .col-md-2
+      .form-group
+        %label
           Insured
         = f.input :insured, label: false
     .col-md-2

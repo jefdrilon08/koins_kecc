@@ -1,0 +1,89 @@
+:css
+  @page { size: portrait; margin: 0.0rem; margin-bottom: 0.0rem; margin-top: 55px;}
+
+  @media print{
+      /* use your css selector */    
+      body{ 
+          page-break-inside: avoid;
+            
+      }
+  }
+  .page-break{
+     display: block;
+  clear: both;
+  page-break-after: avoid;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .img{
+    padding: 10px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+  .just-font br {
+  content: "";
+  display: block;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 100px; height: 85px; margin-right: 8px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 11.32px"}
+          #{Settings.company_name}
+          #{Settings.company_address}
+        %span
+          VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  %br
+    
+  %br
+  %p
+    %strong
+      Time Deposit  / OR# #{@time_deposit_collection_thermal[:data][:or_number]}
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th.text-center{ width: "1%" }
+          Member 
+        %th.text-center{width: "1%" }
+          TD
+        %th.text-center{width: "1%" }
+          Expected Interest 
+    %tbody
+      - @time_deposit_collection_thermal[:data][:records].each do |member|
+        %tr
+          %td
+            #{member[:member][:full_name]}
+          - member[:records].each do |rr|
+            %td.text-end
+              #{number_to_currency(rr[:amount], unit: '')}
+            %td
+              #{ rr[:lock_in_period][:expected_interest]} -  #{ rr[:lock_in_period][:num_months]}/ Months
+  %br
+  .column
+    .col
+      %br
+        Total :#{@time_deposit_collection_thermal[:data][:total_collected]}
+    .col
+      %br
+        Member Signature
+    .col
+      %br
+        Collected By:
+    .col
+      %br
+        Checked By:
+    .col
+      %br
+        Approved By:
+.page-break

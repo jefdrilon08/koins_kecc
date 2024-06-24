@@ -12,6 +12,7 @@ var $modalApprove;
 
 var $btnPrint;
 var $modalPrint;
+var $btnPrintThermal;
 
 var $message;
 var templateErrorList;
@@ -27,7 +28,7 @@ var _cacheDom = function() {
   $modalPrint = new bootstrap.Modal(
     document.getElementById("modal-print")
   );
-
+  $btnPrintThermal    = $("#btn-thermal");
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
   $btnPrint           = $("#btn-print");
@@ -37,6 +38,14 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+  
+  $btnPrintThermal.on("click", function() {
+    
+    var type = "membership_payment_collection_thermal";
+
+    window.open("/print?type=" + type + "&id=" + membershipPaymentCollectionId);
+  });
+
   $btnPrint.on("click", function() {
     $modalPrint.show();
     

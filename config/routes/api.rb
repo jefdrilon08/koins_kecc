@@ -31,6 +31,7 @@ namespace :api do
 
 
   get "/loan_product_types", to: "loan_product_types#index"
+  get "/loan_product_taggings", to: "loan_product_taggings#index"
   post "/status_check", to: "public#status_check"
   get "/public/branches", to: "public#branches"
   get "/public/centers", to: "public#centers"
@@ -203,7 +204,7 @@ namespace :api do
   end
 
   namespace :v1 do
-    #mbs_transfer
+   #mbs_transfer
     post "mbs_transfer/create", to: "mbs_transfer#create"
     post "mbs_transfer/add_member", to: "mbs_transfer#add_member"
     post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
@@ -264,6 +265,7 @@ namespace :api do
     post "/online_loan_applications/for_approve", to: "online_loan_applications#for_approve"
     post "/online_loan_applications/approve_loan", to: "online_loan_applications#approve_loan"
     post "/online_loan_applications/change_amount", to: "online_loan_applications#change_amount"
+    post "/online_loan_applications/change_loan_tag", to: "online_loan_applications#change_loan_tag"
     post "/online_loan_applications/reject", to: "online_loan_applications#reject"
     post "/online_loan_applications/update_details", to: "online_loan_applications#update_details"
     post "/online_loan_applications/reject_checking", to: "online_loan_applications#reject_checking"
@@ -703,6 +705,7 @@ namespace :api do
       post "/uploaded_documents_counts/queue", to: "uploaded_documents_counts#queue"
       post "/member_quarterly_reports/queue", to: "member_quarterly_reports#queue"
       post "/monthly_new_and_resigned/queue", to: "monthly_new_and_resigned#queue"
+      post "/monthly_new_and_resigned/resolution_update", to: "monthly_new_and_resigned#resolution_update"
       get "/monthly_new_and_resigned/fetch", to: "monthly_new_and_resigned#fetch"
       post "/monthly_incentives/queue", to: "monthly_incentives#queue"
       post "/x_weeks_to_pay/queue", to: "x_weeks_to_pay#queue"
@@ -729,6 +732,9 @@ namespace :api do
       post "/assets_liabilities/create", to: "assets_liabilities#create"
       post "/share_capital_involuntary/queue", to: "share_capital_involuntary#queue"
       post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
+      post "/allowance_computation_report/queue", to: "allowance_computation_report#queue"
+      get  "/allowance_computation_report/fetch", to: "allowance_computation_report#fetch"
+
     end
 
     namespace :epassbook do

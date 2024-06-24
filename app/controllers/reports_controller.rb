@@ -42,6 +42,31 @@ class ReportsController < ApplicationController
       end
 
   end
+  
+  def subscriber
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Government Identification Numbers" }
+    ]
+
+      @branches = Branch.all
+      
+      #@subscriber = Member.where("data->'subscription'->>'is_subscribed' = ? and status = ? and branch_id in (?)", "true", "active", @branches)
+      branch_id = params[:branch_id]
+    
+      if branch_id.present?
+        @subscriber = Member.where("data->'subscription'->>'is_subscribed' = ? AND status = ? AND branch_id = ?", "true", "active", branch_id).order(Arel.sql("to_date(data->'subscription'->>'subscribe_updated_at', 'YYYY-MM-DD') DESC"), :last_name )
+      end
+
+      
+      #raise @subscriber.inspect      
+      #branch_id              = params[:branch_id]
+      #if branch_id.present?
+
+      #  @government_identification_numbers = ::Reports::Subscriber.new(branch_id: branch_id).execute!
+      #end
+
+  end
 
   def monthly_remittance
     @subheader_items = [

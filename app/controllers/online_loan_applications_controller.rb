@@ -48,8 +48,6 @@ class OnlineLoanApplicationsController < ApplicationController
  
     @online_applications_test  = LoanApplication.joins(:member).where("members.branch_id is not null")
     @online_applications  = LoanApplication.joins(:member).where("members.branch_id is null and loan_applications.status = ?","pending")
-                            
-   
     @q      = params[:q]
     @status = params[:status]
     
@@ -105,9 +103,19 @@ class OnlineLoanApplicationsController < ApplicationController
   
   def show
     @online_application       = LoanApplication.find(params[:id])
-    @online_application_data = MemberAccount.where(member_id:  @online_application.member_id)
-    
 
+    @online_application_data = MemberAccount.where(member_id:  @online_application.member_id, account_type: ["SAVINGS", "EQUITY"], account_subtype: ["K-IMPOK", "Share Capital", "Maintaining Balance Savings"] )
+
+    # raise @online_application_data.pluck(:account_subtype).inspect
+    @online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
+    
+    @loan_tag =  LoanProductTagging.where(loan_product_id: @online_application.loan_product_id)
+    @online_application_tag = @online_application.loan_product_tagging_id
+  
+
+
+    #@online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
+    @loan_count = Loan.where(member_id: @online_application.member_id, status:'active').count
       @subheader_side_actions = []
       
       if @online_application.pending?

@@ -620,8 +620,8 @@ module Api
 
       def save
         loan_data = JSON.parse(params[:payload]).with_indifferent_access
-        #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access
         
+        #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access 
         co_maker_profile_picture        = params[:co_maker_profile_picture]
         co_maker_three_profile_picture  = params[:co_maker_three_profile_picture]
         

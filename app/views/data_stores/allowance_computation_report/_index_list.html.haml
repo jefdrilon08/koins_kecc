@@ -1,0 +1,33 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center
+        Allowance Computation Report
+
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Repor Date
+      %th.text-center
+        Status
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "/data_stores/allowance_computation_report/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          #{(o.meta['as_of']).to_date.strftime("%b %d, %Y")}
+        %td.text-center
+          - if o.processing?
+            .badge.bg-info
+              Processing
+          - elsif o.done?
+            .badge.bg-success
+              Done
+          - elsif o.error?
+            .badge.bg-danger
+              Error
+ 

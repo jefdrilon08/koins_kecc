@@ -53,15 +53,17 @@ module Loans
       post_accounting_entry!
 
       perform_deposits!
-      send_sms!
-      @member_data[:sms_record] = {
-        loan: @loan.id,
-        loan_maturity: @loan.maturity_date,
-        timestamp: Time.now,
-        sms_validation: true
-      }
 
-      #puts "jaysoncandelaria" + @member_data.inspect
+      if @loan.data["sms_fee_available"].present? && @loan.data["sms_fee_available"] == false 
+        @member_data[:sms_record] = {
+          loan: @loan.id,
+          loan_maturity: @loan.maturity_date,
+          timestamp: Time.now,
+          sms_validation: true,
+          sms_rec: true
+        }
+      end
+
       if @loan_cycles.blank?
         @loan_cycles  = [
           {
@@ -559,7 +561,6 @@ module Loans
           }
 
           #SmsBlast::Send.new(config: config).execute!
-          puts "asddddddddddddddddddddd" + member.inspect
         end
       end
     end

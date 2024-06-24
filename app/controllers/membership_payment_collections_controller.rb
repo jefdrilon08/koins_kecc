@@ -102,6 +102,12 @@ class MembershipPaymentCollectionsController < ApplicationController
         id: "btn-approve",
         text: "Approve"
       }
+      @subheader_side_actions << {
+        link: "#",
+        class: "fa fa-print-thermal",
+        id: "btn-thermal",
+        text: "Print Thermal"
+      }
       
     end
 

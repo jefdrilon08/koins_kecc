@@ -132,12 +132,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
           }
         }
 
-        @subheader_side_actions << {
-          id: "btn-check",  
-          link: "#",
-          class: "fa fa-check",
-          text: "For-Checking"
-        }
+        if @insurance_loan_bundle_enrollment.records_count > 0
+            @subheader_side_actions << {
+            id: "btn-check",
+            link: "#",
+            class: "fa fa-check",
+            text: "For-Checking"
+          }
+        end
 
         @subheader_side_actions << {
               id: "btn-declined",
@@ -156,7 +158,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     end
 
     if @insurance_loan_bundle_enrollment.checked?
-      if ["MIS", "FM"].include? current_user.roles.last
+      if ["MIS", "FM", "CM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
@@ -172,13 +174,20 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if @insurance_loan_bundle_enrollment.approved?
-      if ["MIS", "BK", "SBK"].include? current_user.roles.last
+    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75
+      if ["MIS", "BK", "SBK", "FM", "CM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
           class: "fa fa-check",
-          text: "Renew"
+          text: "Approve"
+        }
+
+        @subheader_side_actions << {
+            id: "btn-declined",
+            link: "#",
+            class: "fa fa-check",
+            text: "Decline"
         }
       end
     end
@@ -217,7 +226,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
         @errors_arr << errors
       end
     end
-
+    
     if @errors_arr.any?
       flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
       redirect_to upload_loan_bundle_enrollments_path

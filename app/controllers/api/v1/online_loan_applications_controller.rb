@@ -39,6 +39,15 @@ module Api
      
       end
       
+      def change_loan_tag
+      
+        online_application  = LoanApplication.find(params[:id])
+        #raise params[:loan_tag].inspect
+        online_application.update!(loan_product_tagging_id: params[:loan_tag])
+        render json: { message: "ok" }
+     
+      end
+      
       def reject
        
         online_application  = LoanApplication.find(params[:id])

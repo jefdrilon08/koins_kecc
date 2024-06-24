@@ -7,12 +7,15 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "processing",
     "for-renewal",
     "declined",
-    "error"
+    "error",
+    "lapsed",
+    "on-grace-period",
+    "over-age"
   ]
 
   belongs_to :center
   belongs_to :branch
-  
+
   validates :collection_date, presence: true
 
   before_validation :load_defaults
@@ -22,6 +25,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   scope :for_checking, -> { where(status: "for_checking").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
   scope :declined, -> { where(status: "declined").order("collection_date ASC") }
+  scope :lapsed, -> { where(status: "lapsed").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?
@@ -93,6 +97,18 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     self.status == "error"
   end
 
+  def lapsed?
+    self.status == "lapsed"
+  end
+
+  def on_grace_period?
+    self.status == "on-grace-period"
+  end
+
+  def over_age?
+    self.status == "over-age"
+  end
+
   def member_ids
     self.data.with_indifferent_access[:records].map{ |o| o[:member][:id] }
   end
@@ -100,7 +116,7 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   def member_name
     self.data.with_indifferent_access[:records].map{ |o| o[:member][:full_name] }
   end
- 
+
   def member_dependent_name
     self.data.with_indifferent_access[:records].map{ |o| o[:kok_data][:full_name_dependent] }
   end

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import $ from 'jquery';
 import moment from 'moment';
 import Select from 'react-select';
 import Toggle from 'react-toggle';
 import "react-toggle/style.css";
+import Button from 'react-bootstrap/Button';
+
 
 import SkCubeLoading from '../../SkCubeLoading';
 import ErrorDisplay from '../../ErrorDisplay';
 import {numberWithCommas} from '../../utils/helpers';
+import Modal from 'react-bootstrap/Modal';
+import jwtDecode from "jwt-decode";
+import axios from 'axios';
 
 export default class ShowComponent extends React.Component {
   constructor(props) {
@@ -20,10 +25,54 @@ export default class ShowComponent extends React.Component {
       centers: [],
       officers: [],
       currentCenterId: "",
-      currentOfficerId: ""
-    };
+      currentOfficerId: "",
+      isModalResolutionOpen: false,
+      resolutionValue: ''
+      
+    
   }
+  this.handleAddResolution = this.handleAddResolution.bind(this);
+  this.handleConfirmResolution = this.handleConfirmResolution.bind(this);
+  
+}
+handleConfirmResolution(){
+  var context = this;
+  var reso = this.state.resolutionValue;
+  
+  if (!reso.trim()) {
+    alert("Resolution number cannot be empty!");
+    return;
+  }
+  $.ajax({
+    url: "/api/v1/data_stores/monthly_new_and_resigned/resolution_update",
+    data: {
+      id: context.props.id,
+      authenticity_token: context.props.authenticityToken,
+      reso: reso
+    },
+    method: 'POST',
 
+    success: function(response) {
+      if (response) {
+        console.log(response);
+        alert("Resolution number successfully added!");
+        window.location.reload();
+      }
+    },
+    
+    error: function(response) {
+      console.log(response);
+      alert("Something went wrong when fetching data store");
+    }
+    
+  });
+  this.setState({ isModalResolutionOpen: false });
+}
+
+
+  handleAddResolution() {
+    this.setState({ isModalResolutionOpen: true });
+  }
   fetch(options) {
 
     var context       = this;
@@ -148,6 +197,28 @@ export default class ShowComponent extends React.Component {
   
 
     return  (
+      <>
+        <Modal show={this.state.isModalResolutionOpen} onHide={() => this.setState({ isModalResolutionOpen: false })}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Resolution</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              <div className="form-group">
+                <label>Add Resolution:</label>
+                <input type="text" className="form-control" placeholder="Enter resolution here" value={this.state.resolutionValue} onChange={(e) => this.setState({ resolutionValue: e.target.value })}/>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => this.setState({ isModalResolutionOpen: false })}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={this.handleConfirmResolution}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
       <div className="row">
         <div className="col">
           <div className="form-group">
@@ -169,11 +240,17 @@ export default class ShowComponent extends React.Component {
             </select>
           </div>
         </div>
+        <div className="row">
+          <div className="col">
+            <div className="form-group">
+              <button onClick={this.handleAddResolution} className="btn btn-primary">Add Resolution</button>
+            </div>
+          </div>
+        </div>
       </div>
+      </>
     );
   }
-
-  
 
   renderNewMembers() {
     var rows  = [];
@@ -209,7 +286,7 @@ export default class ShowComponent extends React.Component {
       rows.push(
         <tr key={"resigned_members-item-" + x}>
           <td>
-            <a href={"/members/" + resigned_members[x].id} target='_blank'>
+            <a href={"/members/" + resigned_members[x].id+"/display"} target='_blank'>
             {resigned_members[x].last_name + ", " + resigned_members[x].first_name + " " + resigned_members[x].middle_name}</a>
           </td>
           <td>
@@ -288,10 +365,11 @@ renderResingedMemberHeaders() {
     } else {
        var total_new_members = this.state.data.data.num_new;
        var total_resigned_members = this.state.data.data.num_resigned;
+       var reso_number = this.state.data.data.resolution_number;
       return  (
         <div>
           {this.renderFilter()}
-          <h4> New Members <small className="text-muted"> Total {total_new_members} </small> </h4>
+          <h4> New Members <small className="text-muted"> Total {total_new_members} </small> </h4> <h4 className="text-muted"> Resolution number {reso_number} </h4> 
           <table className="table table-sm table-bordered table-hover">
             <thead>
             <tr>

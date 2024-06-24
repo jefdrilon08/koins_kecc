@@ -116,6 +116,19 @@ class Member < ApplicationRecord
   def is_returning?
     self.status == "active"  and (self.previous_date_resigned.present? || (self.data.with_indifferent_access[:resignation_records].present? and self.data.with_indifferent_access[:resignation_records].any?))
   end
+
+  def member_shares_records
+    if self.member_shares.present?
+      return self.member_shares.printed.last.data.with_indifferent_access[:date_printed].to_date
+    else
+      return "Not printed"
+    end
+  end
+
+  def equity_value
+    self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance) / 2
+  end
+
   
   def check_name
     "#{first_name.try(:upcase)} #{last_name.try(:upcase)}"
@@ -510,7 +523,7 @@ class Member < ApplicationRecord
       now = Time.now
       
       if (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i < 0
-        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement_date][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
         "#{number_of_days} DAYS"
 
       else
@@ -551,7 +564,6 @@ class Member < ApplicationRecord
           end
         end
       end
-    
 
     elsif self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now

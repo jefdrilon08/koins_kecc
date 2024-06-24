@@ -25,17 +25,17 @@
         
         %td.text-center
           - if o[:status] == "processing"
-            .badge.badge-info
+            .badge.bg-info
               Processing
           - elsif o[:status] == "done"
-            .badge.badge-success
+            .badge.bg-success
               Done
           - elsif o[:status] == "pending"
-            .badge.badge-danger
+            .badge.bg-danger
               pending
           - elsif o[:status] == "approved"
-            .badge.badge-success
+            .badge.bg-success
               approved
           - elsif o[:status] == "error"
-            .badge.badge-danger
+            .badge.bg-danger
               Error

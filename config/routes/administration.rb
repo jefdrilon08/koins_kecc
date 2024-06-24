@@ -13,6 +13,7 @@ namespace :administration do
   resources :announcements
   resources :loan_products, except: [:destroy] do
     resources :loan_product_types
+    resources :loan_product_taggings
   end
   resources :loan_product_categories
   resources :membership_arrangements

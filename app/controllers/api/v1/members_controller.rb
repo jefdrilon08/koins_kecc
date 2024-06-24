@@ -431,9 +431,10 @@ module Api
         if loans.size == 0 && paid_loans.size == 0
           loan_products = LoanProduct.entry_point.order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
         else
-          loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+          #loan_products = LoanProduct.where.not(id: loans.pluck(:loan_product_id)).order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
+          loan_products = LoanProduct.where(is_active: true).where.not(id: loans.pluck(:loan_product_id)).order("name ASC, is_entry_point ASC").map{ |o| { id: o.id, name: o.name } }
         end
-
+      
         render json: { loan_products: loan_products }
       end
 
