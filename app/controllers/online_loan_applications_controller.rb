@@ -85,7 +85,7 @@ class OnlineLoanApplicationsController < ApplicationController
   @online_applications = @online_applications.joins(member: :center).where(centers: { id: params[:center_id] })
   #raise @online_applications.count.inspect
   end
- 
+  
   if params[:date_applied].present?
     @online_applications = @online_applications.where(date_applied: params[:date_applied])
   end
