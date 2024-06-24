@@ -1,19 +1,26 @@
-= form_tag "", method: 'GET' do
-  .row
-    .col-md-5
-      .form-group
-        %label
-          Center
-        = select_tag :center_id, class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
-    .col-md-4
-      .form-group
-        %label
-          Date Issued
-        = text_field_tag :date_applied,params[:date_applied], class: 'form-control', type: :date
-    .col-md-3.col
-      .form-group
-        %label
-          Actions
+.row
+  .col-md-5
+  .form-group
+    = text_field_tag :status, @status, class: "form-control", hidden: true
+    .form-group
+      %label
+    = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --", hidden: true;
+  .col-md-5
+    .form-group
+      %label Center
+      - if @branch.present?
+        = select_tag :center_id, options_from_collection_for_select(@branch.centers, :id, :name, params[:center_id]), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+      - else
+        = select_tag :center_id, options_for_select([], params[:center_id]), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT -- "
+  .col-md-4
+    .form-group
+      %label
+        Date Issued
+      = text_field_tag :date_applied, params[:date_applied], class: 'form-control', type: :date
+  .col-md-3.col
+    .form-group
+      %label
+        Actions
         .form-group
           .btn-group
             = button_tag type: 'submit', class: 'btn btn-primary btn-block' do

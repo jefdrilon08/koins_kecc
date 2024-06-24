@@ -1,29 +1,29 @@
 class OnlineLoanApplicationsController < ApplicationController
   before_action :authenticate_user!
 
-  def index
-    @branch_details = {}
-    @branch_details[:branch_data] = []
-    @online_application_status = ::LoanApplication::STATUSES
-    @online_applications_list  = LoanApplication.joins(:member).where(
-                                                    "
-                                                     members.branch_id IN (?)",
-                                                    @branches.pluck(:id)
-                                                  )
+  def index 
+  @branch_details = {}
+  @branch_details[:branch_data] = []
+  @online_application_status = ::LoanApplication::STATUSES
+  @online_applications_list  = LoanApplication.joins(:member).where(
+                                  "members.branch_id IN (?)", @branches.pluck(:id)
+                                )
 
-    
-    @branch_account = @online_applications_list.pluck(:branch_id).uniq 
-    @cluster_account = Cluster.find(Branch.find(@branch_account).pluck(:cluster_id).uniq)
+  @branch_account = @online_applications_list.pluck(:branch_id).uniq 
+  @cluster_account = Cluster.find(Branch.find(@branch_account).pluck(:cluster_id).uniq)
+  
+  @center_fetch = Center.find_by_id(params[:center_id])&.name if params[:center_id].present?
+  
 
-    
+  @online_applications = @online_applications.where(branch_id: @branch.id) if @branch.present?
+
     Branch.find(@branch_account).each do |bd|
       tmp = { 
               branch_id: bd["id"],
               cluster_id: bd["cluster_id"],
               test:  []
             }
-
-
+          
       @online_application_status.each do |a|
         status_count  =  LoanApplication.joins(:member).where(
                           "members.branch_id = ? and loan_applications.status = ?",
@@ -42,55 +42,55 @@ class OnlineLoanApplicationsController < ApplicationController
       end
 
 
-
-
-      @branch_details[:branch_data] << tmp
+    @branch_details[:branch_data] << tmp
     end
-    
-    @branch_details
+  
+ 
     @online_applications_test  = LoanApplication.joins(:member).where("members.branch_id is not null")
     @online_applications  = LoanApplication.joins(:member).where("members.branch_id is null and loan_applications.status = ?","pending")
-                               
 
     @q      = params[:q]
     @status = params[:status]
-
-
+    
+   
     @branch = Branch.find_by_id(params[:branch_id])
 
+
+  if @q.present?
+    @online_applications  = @online_applications.where(
+                              "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(middle_name) LIKE :q",
+                              q: "%#{@q.upcase}%"
+                            )
+  end
+
+  if @status.present?
+    @online_applications  = @online_applications_test.where(
+                              status: @status
+                      )
+  end
+
+  if @branch.present?
+    @online_applications  = @online_applications_test.where(
+                              branch_id: @branch.id
+                            )
+  end
+
+
+  if  @branch.present? and @status.present?
+    @online_applications  = @online_applications_test.where(
+                              "members.branch_id = ? and loan_applications.status =?",  @branch.id, @status
+                            )
+  if params[:center_id].present?
+  @online_applications = @online_applications.joins(member: :center).where(centers: { id: params[:center_id] })
+  #raise @online_applications.count.inspect
+  end
   
+  if params[:date_applied].present?
+    @online_applications = @online_applications.where(date_applied: params[:date_applied])
+  end
 
+  end
 
-    if @q.present?
-      @online_applications  = @online_applications.where(
-                                "upper(first_name) LIKE :q OR upper(last_name) LIKE :q OR upper(middle_name) LIKE :q",
-                                q: "%#{@q.upcase}%"
-                              )
-    end
-
-    if @status.present?
-      @online_applications  = @online_applications_test.where(
-                                status: @status
-                              )
-      
-    end
-
-    if @branch.present?
-      @online_applications  = @online_applications_test.where(
-                                branch_id: @branch.id
-                              )
-    end
-
-
-    if  @branch.present? and @status.present?
-      @online_applications  = @online_applications_test.where(
-                                "members.branch_id = ? and loan_applications.status =?",  @branch.id, @status
-                              )
-      
-    end
-
-
-  
     @online_applications  = @online_applications
                               .order("status ASC, last_name ASC")
                               .page(params[:page]).per(LIST_PAGE_SIZE)
@@ -98,10 +98,13 @@ class OnlineLoanApplicationsController < ApplicationController
     @subheader_items  = [
       { text: "Online Applications" }
     ]
+
   end
 
+  
   def show
     @online_application       = LoanApplication.find(params[:id])
+
     @online_application_data = MemberAccount.where(member_id:  @online_application.member_id, account_type: ["SAVINGS", "EQUITY"], account_subtype: ["K-IMPOK", "Share Capital", "Maintaining Balance Savings"] )
 
     # raise @online_application_data.pluck(:account_subtype).inspect
@@ -115,12 +118,12 @@ class OnlineLoanApplicationsController < ApplicationController
     #@online_application_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id).last
     @loan_count = Loan.where(member_id: @online_application.member_id, status:'active').count
       @subheader_side_actions = []
-
+      
       if @online_application.pending?
         if helpers.so_mis_user
           @subheader_side_actions << {
             id: "btn-for-review",
-            class: "fa fa-pencil-alt",
+            class: "fa fa-pencil-alt", 
             link: "#",
             data: { id: @online_application.id },
             text: "For Review"
@@ -137,7 +140,7 @@ class OnlineLoanApplicationsController < ApplicationController
             class: "fa fa-pencil-alt",
             link: edit_online_loan_application_path(@online_application.id),
             text: "Edit"
-          }
+          } 
           @subheader_side_actions << {
             id: "btn-for-approve",
             class: "fa fa-pencil-alt",
@@ -170,12 +173,6 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Approve"
           }
           @subheader_side_actions << {
-            id: "btn-download-form",
-            class: "fa fa-download",
-            link: "#",
-            text: "Download Form", data: {id: @online_application.id}
-          }
-          @subheader_side_actions << {
             id: "btn-reject-approve",
             class: "fa fa-pencil-alt",
             link: "#",
@@ -190,20 +187,10 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Reject"
           }
         end
-       elsif @online_application.status == "approved"
-        if helpers.sbk_mis_bk?
-          @subheader_side_actions << {
-            id: "btn-reject-approve",
-            class: "fa fa-pencil-alt",
-            link: "#",
-            data: { id: @online_application.id },
-            text: "Acco Reject"
-          }
-        end
+       
       end
-
     end
-
+    
     def edit
 
       @online_loan_application       = LoanApplication.find(params[:id])

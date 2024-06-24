@@ -7,9 +7,14 @@ class OnlineApplication < ApplicationRecord
 
   STATUSES = [
     "for_verification",
+    " for_review ",
+    " for_approve ",
+    "pending",
+    "approved",
     "verified",
     "processed",
     "rejected",
+    "reject",
     "processing",
     "error"
   ]
