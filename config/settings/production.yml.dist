@@ -8996,8 +8996,8 @@ loan_products:
           offset: 1
   -
     loan_product_id: "806593d3-4ac4-4f58-bc83-76230aca4039"                         # K - Benepisyo w4 
-    receivable_accounting_code_id: "f91241b6-a13b-464f-910f-281a493e3be4"
-    interest_receivable_accounting_code_id: "82b02486-5228-47ca-bb59-218092a6dbd1"
+    receivable_accounting_code_id: "7d0ee9af-695d-4e14-bf56-fed585f240a4"
+    interest_receivable_accounting_code_id: "1cf33ca9-d7f0-418c-af1e-97984b1c3174"
     default_amount: 500.00
     zero_interest: "true"
     maintaining_balance:
