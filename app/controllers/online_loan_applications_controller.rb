@@ -173,6 +173,12 @@ class OnlineLoanApplicationsController < ApplicationController
             text: "Approve"
           }
           @subheader_side_actions << {
+            id: "btn-download-form",
+            class: "fa fa-download",
+            link: "#",
+            text: "Download Form", data: {id: @online_application.id}
+          }
+          @subheader_side_actions << {
             id: "btn-reject-approve",
             class: "fa fa-pencil-alt",
             link: "#",
@@ -185,6 +191,16 @@ class OnlineLoanApplicationsController < ApplicationController
             link: "#",
             data: { id: @online_application.id },
             text: "Reject"
+          }
+        end
+      elsif @online_application.status == "approved"
+        if helpers.sbk_mis_bk?
+          @subheader_side_actions << {
+            id: "btn-reject-approve",
+            class: "fa fa-pencil-alt",
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Acco Reject"
           }
         end
        
