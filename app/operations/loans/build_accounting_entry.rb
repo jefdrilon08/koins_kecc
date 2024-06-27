@@ -893,7 +893,9 @@ module Loans
             name            = accounting_code.name
             code            = accounting_code.code
             #for_insurance = (amount.to_i/100.to_i) * 100.to_i 
-            if amount >= 500 and amount <= 599
+            if amount >= 300 and amount <= 499
+              total_amount = s_deduction.meta.value * 15 
+            elsif amount >= 500 and amount <= 599
               total_amount = s_deduction.meta.value * 25 
             elsif amount >= 600 and amount <= 699
               total_amount = s_deduction.meta.value * 30
@@ -901,8 +903,10 @@ module Loans
               total_amount = s_deduction.meta.value * 35
             elsif amount >= 800 and amount <= 899
               total_amount = s_deduction.meta.value * 40
-            else
+            elsif amount >= 900 and amount <= 999
               total_amount = s_deduction.meta.value * 50
+            else
+              total_amount = s_deduction.meta.value * 40
             end
               #raise total_amount.inspect
               journal_entries << {
