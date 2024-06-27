@@ -370,7 +370,11 @@ module Loans
           amount              = s_deduction.amount
           name                = accounting_code.name
           code                = accounting_code.code
-
+          
+          #raise s_deduction.special_insurance.inspect
+          #if s_deduction.special_insurance.present? and s_deduction.special_insurance.to_s == "true"
+          #  raise @amount.inspect
+          #end
           # Special: business_permit_available
           if s_deduction.business_permit_available.present? and s_deduction.business_permit_available == true and @loan_data[:business_permit_available].present? and @loan_data[:business_permit_available].to_s == "true"
             #if s_deduction.sms_amount_status.present? and s_deduction.sms_amount_status == true and @loan_data[:sms_fee_available] == false
@@ -378,6 +382,9 @@ module Loans
             #else 
             #  amount  = s_deduction.business_permit_amount
             #end
+
+
+
             if @loan_data[:service_fee_available].present? and  @loan_data[:service_fee_available].to_s == "true" and s_deduction.name == "Service Fee"
               amount = s_deduction.sms_amount.to_f
             else
@@ -781,7 +788,6 @@ module Loans
           end
         elsif deduction_type == "deposit"
           
-    
 
           if s_deduction.meta.algo == "term_multiplier_for_second_cycle_onwards" 
            
@@ -879,12 +885,46 @@ module Loans
              temp_amount = 0.00
 
             end
+            
+          elsif s_deduction.meta.algo == "term_multiplier_for_insurance_amount"
+            
+            amount = @amount
+            accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+            name            = accounting_code.name
+            code            = accounting_code.code
+            #for_insurance = (amount.to_i/100.to_i) * 100.to_i 
+            if amount >= 500 and amount <= 599
+              total_amount = s_deduction.meta.value * 25 
+            elsif amount >= 600 and amount <= 699
+              total_amount = s_deduction.meta.value * 30
+            elsif amount >= 700 and amount <= 799
+              total_amount = s_deduction.meta.value * 35
+            elsif amount >= 800 and amount <= 899
+              total_amount = s_deduction.meta.value * 40
+            else
+              total_amount = s_deduction.meta.value * 50
+            end
+              #raise total_amount.inspect
+              journal_entries << {
+                  accounting_code_id: accounting_code.id,
+                  code: code,
+                  name: name,
+                  amount: total_amount
+                }
+
+    
+             temp_amount -= amount
+          
+          #raise journal_entries.inspect
+           #insurance_amount = s_deduction.meta.value
+            #raise "jef".inspect
           else
             raise "Invalid deduction type algo #{s_deduction.meta.algo}"
           end
         end
       end
 
+      
       # Insurance membership
 #      if @member.insurance_pending?
 #        accounting_code = AccountingCode.find(@settings_insurance_membership.accounting_code_id)
@@ -899,6 +939,8 @@ module Loans
 #
 #        temp_amount -= amount
 #      end
+
+        
       if @bank_data.present?
       
         accounting_code = AccountingCode.find(@bank_data[:accounting_entry_id])
@@ -928,7 +970,18 @@ module Loans
 
       # Update amount
       @amount_released  = temp_amount
+      grouped_data = journal_entries.group_by { |entry| entry[:code] }
 
+      # Sum the amounts and create new combined entries
+      journal_entries = grouped_data.map do |code, entries|
+        {
+            accounting_code_id: entries.first[:accounting_code_id],
+            code: code,
+            name: entries.first[:name],
+            amount: entries.sum { |entry| entry[:amount] }
+        }
+      end
+      #raise journal_entries.map{|a| a}.inspect
       journal_entries
     end
 
