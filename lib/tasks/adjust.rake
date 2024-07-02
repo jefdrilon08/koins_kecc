@@ -3433,7 +3433,7 @@ namespace :adjust do
         kok_id                                = k[:id]
         maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
         four_weeks_ago                        = (maturity_date - 28)
-        on_grace_period                       = (maturity_date + 90)
+        on_grace_period                       = (maturity_date + 30)
         status                                = k[:status]
         now                                   = Date.today
 
@@ -3480,7 +3480,7 @@ namespace :adjust do
 
   task :process_kok_loan_lapsed => :environment do
     kok = InsuranceLoanBundleEnrollment.lapsed
-    
+
     kok.each do |k|
       status = k.status
       if status == "lapsed"
