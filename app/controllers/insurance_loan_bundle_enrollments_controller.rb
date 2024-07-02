@@ -227,8 +227,11 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if @errors_arr.any?
-      flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
+    if @errors_arr.flatten.size > 20
+      flash[:error] = ["Error, please check your csv."]
+      redirect_to upload_loan_bundle_enrollments_path
+    elsif @errors_arr.any?
+      flash[:error] = @errors_arr.flatten
       redirect_to upload_loan_bundle_enrollments_path
     else
       # If no errors, proceed with loading the data
