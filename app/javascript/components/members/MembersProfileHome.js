@@ -5,6 +5,7 @@ import MembersProfileResignationRecords from "./MembersProfileResignationRecords
 import MembersProfileProjectType from "./MembersProfileProjectType";
 import axios from 'axios';
 
+
 export default function MembersProfileHome(props) {
   const [configData, setConfigData] = useState();
 
@@ -23,7 +24,7 @@ export default function MembersProfileHome(props) {
               if(JSON.stringify(configData, null, 2) == 'true') {
                 if(props.member.insurance_status == 'inforce') {
                   return (
-                    <button class="btn-success">
+                    <button className="btn btn-success">
                         <b>
                           INFORCE
                         </b>
@@ -32,7 +33,7 @@ export default function MembersProfileHome(props) {
                   }
                 else if(props.member.insurance_status == 'lapsed') {
                   return (
-                    <button class="btn-warning">
+                    <button className="btn btn-warning">
                       <b>
                         LAPSED    
                       </b>
@@ -41,7 +42,7 @@ export default function MembersProfileHome(props) {
                 }
                 else if(props.member.insurance_status == 'dormant') {
                   return (
-                    <button class="btn-danger">
+                    <button className="btn btn-danger">
                       <b>
                         DORMANT    
                       </b>
@@ -50,7 +51,7 @@ export default function MembersProfileHome(props) {
                 }
                 else if(props.member.insurance_status == 'pending') {
                   return (
-                    <button class="btn-light">
+                    <button className="btn btn-light">
                       <b>
                         PENDING    
                       </b>
