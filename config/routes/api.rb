@@ -97,6 +97,7 @@ namespace :api do
   post "/closing_records", to: "closing_records#create"
   get "/closing_records", to: "closing_records#index"
   get "/closing_records/records", to: "closing_records#records"
+  post "/closing_records/remove", to: "closing_records#remove"
 
   # Branch PSR Records
   post "/branch_psr_records/fetch", to: "branch_psr_records#fetch"
