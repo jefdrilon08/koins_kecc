@@ -14,11 +14,13 @@
           #{@online_application.status}
         %label{style: "color: red; "}
         %br
-          - if @online_application[:status] == "reject"
-            %label{style: "color: red; "}
-              Reason : 
-              %label{style: "color: green; "}
-                = @online_application[:data]["reason_approve_reject"]
+        - if @online_application[:status] == "reject"
+          %label{style: "color: red; "}
+            Reason : 
+            %label{style: "color: green; "}
+              = @online_application[:data]["reason_approve_reject"] || @online_application[:data]["reason_of_reject"]
+
+            
                 
         %br
         - if @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
