@@ -21,8 +21,9 @@ namespace :kezar do
     # Rails.logger.info(puts(login))
     # declaring the accessToken to a variable access_token
     access_token = login['accessToken']
-    # setting up the access token to an environment
-    ENV["ACCESS_TOKEN"] = access_token
+    # setting up the access token, start and end date to an environment
+    ENV["ACCESS_TOKEN"]   = access_token
+    # raise [start_date, end_date].inspect
 
     Rake::Task['kezar:member_body_api'].invoke
   end
@@ -31,7 +32,6 @@ namespace :kezar do
     #--------------Start Declarations--------------#
       # Set the batch size (number of records per batch)
       batch_size              = 500
-      # Initialize variables for pagination
       offset                  = 0
       total_records           = 0
       # Define a flag to indicate whether to continue fetching more batches
@@ -40,6 +40,8 @@ namespace :kezar do
       is_batch                = ENV["BATCH"] || true
       # retrieve the access token to an environment
       bearer_token            = ENV["ACCESS_TOKEN"]
+      start_date              = ENV["START_DATE"]
+      end_date                = ENV["END_DATE"]
     # --------------End Declarations--------------#
 
     while fetch_more_batches
@@ -208,7 +210,9 @@ namespace :kezar do
           MAX(CASE
             WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.date_of_birth IS NOT NULL THEN to_char(h.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
             ELSE ''
-          END) AS secondary_date_of_birth_beneficiary
+          END) AS secondary_date_of_birth_beneficiary,
+          a.external_ref
+
         FROM members a
         LEFT JOIN branches b ON b.id = a.branch_id
         LEFT JOIN clusters c ON c.id = b.cluster_id
@@ -220,16 +224,16 @@ namespace :kezar do
 
         WHERE
         a.insurance_status IN ('inforce', 'lapsed')
-        AND (a.data->>'recognition_date' >= '2024-06-10' AND a.data->>'recognition_date' <= '2024-06-20')
-        b.cluster_id IN ('ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4')
+        AND (a.data->>'recognition_date' >= '#{start_date}' AND a.data->>'recognition_date' <= '#{end_date}')
+        AND b.cluster_id IN ('ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4')
 
         GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
         ORDER BY branch_name
         OFFSET #{offset} ROWS FETCH NEXT #{batch_size} ROWS ONLY
       SQL
 
-      results = ActiveRecord::Base.connection.execute(sql_query)
 
+      results = ActiveRecord::Base.connection.execute(sql_query)
       # Increment offset for the next batch
       offset += batch_size
 
@@ -627,8 +631,8 @@ namespace :kezar do
     # declaring the accessToken to a variable access_token
     access_token = login['accessToken']
     # setting up the access token to an environment
-    ENV["ACCESS_TOKEN"] = access_token
-    # raise access_token.inspect
+    ENV["ACCESS_TOKEN"]         = access_token
+    # raise [start_date, end_date].inspect
     Rake::Task['kezar:payment_body_api'].invoke
   end
 
@@ -647,6 +651,9 @@ namespace :kezar do
       cluster_id              = 'ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4'
       # retrieve the access token to an environment
       bearer_token            = ENV["ACCESS_TOKEN"]
+      start_date              = ENV["START_DATE"] || ""
+      end_date                = ENV["END_DATE"] || ""
+      # raise [start_date, end_date].inspect
     # --------------End Declarations--------------#
 
     account_transactions = AccountTransaction.select(
@@ -678,7 +685,7 @@ namespace :kezar do
           AND members.insurance_status IN (?)
           AND member_accounts.account_subtype IN (?)
           AND branches.cluster_id IN (?)
-          AND (account_transactions.transacted_at >= '2024-01-01' AND account_transactions.transacted_at <= '2024-06-10')
+          AND (account_transactions.transacted_at >= ? AND account_transactions.transacted_at <= ?)
           AND
             CASE
               WHEN members.data->'resignation_records' IS NULL THEN
@@ -695,7 +702,9 @@ namespace :kezar do
         is_interest,
         insurance_status,
         account_subtype,
-        cluster_id
+        cluster_id,
+        start_date,
+        end_date
     ).find_in_batches(:batch_size => 50) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
@@ -723,7 +732,6 @@ namespace :kezar do
       payload = {data: payments}
       Rails.logger.info(puts payload.to_json)
 
-      #raise payload.inspect
       if is_batch.present?
         Rails.logger.info(puts("Posting to #{end_point}..."))
         result = HTTParty.post(
