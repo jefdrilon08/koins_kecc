@@ -43,7 +43,7 @@ module Core
         end
 
         if @password.present? and @password_confirmation.present? and @password == @password_confirmation
-          @user.encrypted_password = User.new(password: @password).encrypted_password
+          # @user.encrypted_password = User.new(password: @password).encrypted_password
         end
 
         if @profile_picture.present?
