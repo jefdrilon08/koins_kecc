@@ -527,7 +527,9 @@ class Member < ApplicationRecord
         "#{number_of_days} DAYS"
 
       else
-        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_time - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_time).abs
+        # seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_time - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_time).abs
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs 
+        
         days_between = seconds_between / 60 / 60 / 24
         number_of_days = days_between.floor
         number_of_months = (days_between / 30.44).floor
