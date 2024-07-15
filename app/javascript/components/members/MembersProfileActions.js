@@ -46,6 +46,7 @@ export default function MembersProfileActions(props) {
   const [currentMobileNumber, setCurrentMobileNumber]                           = useState("9");
   const [success, setSuccess]                                                   = useState(false);
 
+
   useEffect(() => {
     axios.get('/api/yml_values/production_values')
       .then(response => {
@@ -242,36 +243,35 @@ export default function MembersProfileActions(props) {
     })
   }
   const handleReinstateClicked = () => {
+    setErrors([]);
     setIsLoading(true);
 
     const payload = {
       id: props.memberId,
       reinstatement_date: dateReinstated,
       date_stop: dateStopped
-    }
+    };
 
     const headers = {
       'X-KOINS-HQ-TOKEN': props.token
-    }
+    };
 
     const options = {
       headers: headers
-    }
+    };
 
-    axios.post(
-      '/api/members/reinstate',
-      payload,
-      options
-    ).then((res) => {
-      console.log(res);
-      alert("Successfully Reinstated");
-      window.location.href="/members/" + props.memberId + "/display/";
-      setIsLoading(false);
-    }).catch((error) => {
-      console.log(error.response);
-      setErrors(error.response.data.errors);
-      setIsLoading(false);
-    })
+    axios.post('/api/members/reinstate', payload, options)
+      .then((res) => {
+        console.log(res);
+        alert("Successfully Reinstated");
+        window.location.href = `/members/${props.memberId}/display/`;
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setErrors(error.response?.data?.errors || ["An error occurred while reinstating the member."]);
+        setIsLoading(false);
+      });
   }
 
   const handleResignedInsuranceClicked = () => {
@@ -585,67 +585,59 @@ export default function MembersProfileActions(props) {
   return (
     <>
 
-      <Modal
+      <Modal 
         show={isModalReinstateOpen}
       >
         <Modal.Header>
-          <Modal.Title>
-            Reinstate Member
-          </Modal.Title>
+          <Modal.Title>Reinstate Member</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <div className="row">
             <div className="form-group">
-              <label>
-               Reinstatement Date
-              </label>
+              <label>Reinstatement Date</label>
               <input
                 className="form-control"
                 value={dateReinstated}
                 disabled={isLoading}
                 type="date"
-              
-                onChange={(event) => { setDateReinstated(event.target.value) } }
-
+                onChange={(event) => setDateReinstated(event.target.value)}
               />
-              <label>
-               Date Stop
-              </label>
+              <label>Date Stop</label>
               <input
                 className="form-control"
                 value={dateStopped}
                 disabled={isLoading}
                 type="date"
-              
-                onChange={(event) => { setDateStopped(event.target.value) } }
-
+                onChange={(event) => setDateStopped(event.target.value)}
               />
             </div>
           </div>
+          {errors.length > 0 && (
+            <div className="alert alert-danger mt-3">
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Modal.Body>
-
         <Modal.Footer>
           <Button 
             variant="primary"
-            onClick={() => {
-              handleReinstateClicked();
-            }}
+            onClick={handleReinstateClicked}
             disabled={isLoading}
           >
             Confirm
           </Button>
           <Button 
             variant="secondary"
-            onClick={() => { 
-              setModalReinstateOpen(false) 
-            }}
+            onClick={() => setModalReinstateOpen(false)}
             disabled={isLoading}
           >
             Close
           </Button>
         </Modal.Footer>
-
       </Modal>
 
       <Modal

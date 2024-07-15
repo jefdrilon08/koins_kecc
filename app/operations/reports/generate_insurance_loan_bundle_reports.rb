@@ -1,11 +1,15 @@
 module Reports
   class GenerateInsuranceLoanBundleReports
-    def initialize(branch:, start_date:, end_date:, status:)
+    def initialize(branch:, start_date:, end_date:, status:, approval_date_from:, approval_date_to:)
       @branch_id              = branch
       @start_date             = start_date.try(:to_date)
       @start_date_query       = start_date
       @end_date               = end_date.try(:to_date)
       @end_date_query         = end_date
+
+      @approval_date_from     = approval_date_from.try(:to_date)
+      @approval_date_to       = approval_date_to.try(:to_date)
+
       @status                 = status
 
       @all_kok = InsuranceLoanBundleEnrollment.all
@@ -31,6 +35,41 @@ module Reports
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
+        kok = query.map do |row|
+          kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
+          kok_status = row['status']
+          kok_date_approved = row['date_approved']
+          {
+            'record' => kok_records_last,
+            'status' => kok_status,
+            'date_approved' => kok_date_approved
+          }
+        end
+        @query_kok = kok
+      elsif @branch_id.present? && @start_date.present? && @end_date.present? && @status.present? && @approval_date_from.present? && @approval_date_to.present?
+        sql_query = <<-SQL
+          SELECT
+            id,
+            status,
+            date_approved,
+            record
+          FROM
+          insurance_loan_bundle_enrollments,
+          jsonb_array_elements(data->'records') AS record
+          WHERE
+            branch_id = '#{@branch_id.id}'
+            AND status = '#{@status}'
+            AND (record->'kok_data'->>'effectivity_date')::date >= '#{@start_date_query}'
+            AND (record->'kok_data'->>'effectivity_date')::date <= '#{@end_date_query}'
+            AND date_approved >= '#{@approval_date_from}'
+            AND date_approved <= '#{@approval_date_to}'
+          ORDER BY
+            record->'kok_data'->>'effectivity_date'
+          
+        SQL
+
+        query = ActiveRecord::Base.connection.execute(sql_query)
+        raise query.inspect
         kok = query.map do |row|
           kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
           kok_status = row['status']
