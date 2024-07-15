@@ -76,6 +76,11 @@ var $modalEditltag;
 var $btnConfirmLoanTag;
 var $selectLoanTag;
 
+var $btnSyncmb;
+var $ModalMb;
+var $btnConfirmb;
+var $mb;
+
 var _cacheDom = function() {
 
   $modalVerify = new bootstrap.Modal(
@@ -91,7 +96,9 @@ var _cacheDom = function() {
   $modalApprove = new bootstrap.Modal(
     document.getElementById("modal-approve")
   )
-  
+  $ModalMb = new bootstrap.Modal(
+    document.getElementById("modal-maintaining")
+  )
   $modalEditAmount = new bootstrap.Modal(
     document.getElementById("modal-edit-amount")
   )
@@ -157,6 +164,10 @@ var _cacheDom = function() {
   $btnConfirmDecline = $("#confirm-decline");
   $btnCheck = $("#btn-check");
   $btnConfirmCheck = $("#confirm-check");
+  
+  $btnSyncmb = $("#btn-sync-maitaining-balance");
+  $btnConfirmb = $("#btn-confirm-sync-maintaining-balance");
+  $mb = $("#maintaining-balance");
 
 }
 
@@ -168,6 +179,28 @@ var _bindEvents = function() {
   
 
   });
+  $btnSyncmb.on("click", function(){
+    _id = $(this).data('id');
+    $ModalMb.show();
+  });
+  $btnConfirmb.on("click", function(){
+    var mb = $mb.val();
+    
+    $.ajax({
+      url: "/api/v1/online_loan_applications/mb_save",
+      method: "POST",
+      data: {
+        id:_id,
+        maintaining_balance:mb,
+        authenticity_token: _authenticityToken
+
+      },
+      success: function(response) {
+        alert("Success!"); 
+        window.location.reload();
+      }
+    });
+  })
   $btnCheck.on("click", function(){
     //alert("jay");
     
