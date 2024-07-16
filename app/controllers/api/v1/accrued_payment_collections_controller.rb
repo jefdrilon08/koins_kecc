@@ -1,7 +1,7 @@
 module Api
   module V1
     class AccruedPaymentCollectionsController < ActionController::Base
-      before_action :authenticate_user!
+      skip_before_action :verify_authenticity_token
     	def create
     		collection_date = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
