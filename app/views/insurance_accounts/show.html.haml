@@ -153,6 +153,7 @@
                     Equity Value Interest 
             %tbody
             - last_data = nil
+            
             - @account_transactions.each_with_index do |o, i|
               %tr
                 - if current_user.roles.include?("MIS")
@@ -183,35 +184,36 @@
                         .badge.bg-danger
                           .fa.fa-upload
                           Withdraw
-                - if Settings.activate_microinsurance
-                  - is_interest = o.data["is_interest"]
-                  - withdraw  =  o.data["is_withdraw_payment"] 
-                  - member_account = MemberAccount.find(o.subsidiary_id).member_id
-                  - member = Member.find(member_account).recognition_date
-                  - start_number_of_days = ((o.amount / 15) * 7)
-                  - start_coverage_date = (member + start_number_of_days.days)
-                  - transaction_type = o["transaction_type"]
-                  - if i == 0  
-                    %td
-                      %small
-                        = member.strftime("%B %d, %Y")  
-                    %td
-                      %small
-                        - last_data = start_coverage_date  
-                        = last_data.strftime("%B %d, %Y")
-                  - elsif i > 0
-                    - if is_interest == true || withdraw == true 
-                      %td
-                      %td
-                    - else
+
+                  - if Settings.activate_microinsurance
+                    - is_interest = o.data["is_interest"]
+                    - withdraw  =  o.data["is_withdraw_payment"] 
+                    - member_account = MemberAccount.find(o.subsidiary_id).member_id
+                    - member = Member.find(member_account).recognition_date
+                    - start_number_of_days = ((o.amount / 15) * 7)
+                    - start_coverage_date = (member + start_number_of_days.days)
+                    - transaction_type = o["transaction_type"]
+                    - if i == 0  
                       %td
                         %small
-                          = last_data.strftime("%B %d, %Y")  
-                      %td 
+                          = member.strftime("%B %d, %Y")  
+                      %td
                         %small
-                          - end_number_of_days = ((o.amount / 15) * 7)
-                          - last_data = last_data + end_number_of_days.days
-                          = last_data.strftime("%B %d, %Y") 
+                          - last_data = start_coverage_date  
+                          = last_data.strftime("%B %d, %Y")
+                    - elsif i > 0
+                      - if is_interest == true || withdraw == true 
+                        %td
+                        %td
+                      - else
+                        %td
+                          %small
+                            = last_data.strftime("%B %d, %Y")  
+                        %td 
+                          %small
+                            - end_number_of_days = ((o.amount / 15) * 7)
+                            - last_data = last_data + end_number_of_days.days
+                            = last_data.strftime("%B %d, %Y") 
                   %td.text-end.text-muted
                     #{number_to_currency(o.data["beginning_balance"], unit: "")}
                   %td.text-end
@@ -223,6 +225,7 @@
                   - if microinsurance?
                     %td.text-end.text-muted
                       #{number_to_currency(o.interests.first.try(:interest_amount), unit: "")}
+
         - elsif @insurance_account.account_subtype == Settings.pl
           %table.table.table-hover.table-sm.table-bordered
             %thead
