@@ -39,6 +39,14 @@ export default class AccountingEntryPreview extends React.Component {
           <span className="text-muted">
             {this.props.data.ar_number}
           </span>
+          <br/>
+          <strong>
+            SI Number: 
+          </strong>
+          <br/>
+          <span className="text-muted">
+            {this.props.data.si_number}
+          </span>
         </div>
       );
     }
