@@ -1,0 +1,33 @@
+
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{style: "width:2%;"}
+      %th{style: "width:40%;"}
+        Date
+      %th
+        Branch
+      %th
+        Status
+  %tbody
+    - @datastore.each do |o|
+      %tr
+        %td
+          = link_to "written_off_report/#{o.id}" do
+            .bi.bi-search
+        %td
+          - date_generated = o.meta['date_generated']
+          - formatted_date = Date.parse(date_generated).strftime("%B %d, %Y") if date_generated.present?
+          = formatted_date || 'N/A'
+        %td
+          = o.meta['branch_name']
+        %td.text-center
+          - if o.processing?
+            .badge.bg-info
+              Processing
+          - elsif o.done?
+            .badge.bg-success
+              Done
+          - elsif o.error?
+            .badge.bg-danger
+              Error
