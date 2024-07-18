@@ -566,7 +566,14 @@ export default class AccountingEntryFormComponent extends React.Component {
       data: data
     });
   };
+  handleSiNumberChanged(event) {
+    var data            = this.state.data;
+    data.data.si_number = event.target.value;
 
+    this.setState({
+      data: data
+    });
+  };
   handlePayeeChanged(event) {
     var data        = this.state.data;
     data.data.payee = event.target.value.toUpperCase();
@@ -629,6 +636,20 @@ export default class AccountingEntryFormComponent extends React.Component {
                   type="text" 
                   value={accountingEntryData.data.ar_number}
                   onChange={this.handleArNumberChanged.bind(this)} 
+                  className="form-control" 
+                  disabled={this.state.isLoading}
+                />
+              </div>
+            </div>
+            <div className="col">
+              <div className="form-group">
+                <label>
+                  SI Number
+                </label>
+                <input 
+                  type="text" 
+                  value={accountingEntryData.data.si_number}
+                  onChange={this.handleSiNumberChanged.bind(this)} 
                   className="form-control" 
                   disabled={this.state.isLoading}
                 />

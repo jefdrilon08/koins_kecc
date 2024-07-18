@@ -978,13 +978,16 @@ module Loans
 
       # Sum the amounts and create new combined entries
       journal_entries = grouped_data.map do |code, entries|
+        accounting_code_id = entries.first[:accounting_code_id]
+        name = entries.first[:name]
+        amounts = entries.map { |entry| entry[:amount] }.compact
         {
             accounting_code_id: entries.first[:accounting_code_id],
             code: code,
             name: entries.first[:name],
             amount: entries.sum { |entry| entry[:amount] }
-        }
-      end
+        } if accounting_code_id && name && amounts.any?
+      end.compact
       #raise journal_entries.map{|a| a}.inspect
       journal_entries
     end

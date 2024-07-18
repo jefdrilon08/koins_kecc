@@ -47,6 +47,14 @@ module Api
         render json: { message: "ok" }
      
       end
+      def mb_save
+        online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+        online_application_data['mb'] = {}
+
+        online_application_data['mb']['maintaining_balance'] = params[:maintaining_balance]
+        online_application.update(data:online_application_data)
+      end
       
       def reject
        

@@ -51,6 +51,12 @@
                 OR Number: crb
               .text-muted
                 #{accounting_entry.data['or_number']}
+            - if accounting_entry.data['si_number'].present?
+              .col                
+                %strong
+                  SI Number:
+                .text-muted
+                  #{accounting_entry.data['si_number']}
             - if accounting_entry.data["ar_number"].present?
               .col
                 %strong

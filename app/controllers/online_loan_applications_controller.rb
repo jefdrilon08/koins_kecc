@@ -130,7 +130,17 @@ class OnlineLoanApplicationsController < ApplicationController
           }
         end
       end
-
+      if @online_application.pending? || @online_application.status == "for_review"
+        if helpers.so_mis_user
+          @subheader_side_actions << {
+            id: "btn-sync-maitaining-balance",
+            class: "fa fa-pencil-alt", 
+            link: "#",
+            data: { id: @online_application.id },
+            text: "Sync Maintaining Balance"
+          }
+      end
+    end
 
 
       if @online_application.status == "for_review"

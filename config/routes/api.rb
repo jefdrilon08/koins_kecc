@@ -273,6 +273,8 @@ namespace :api do
     post "/online_loan_applications/reject_approve", to: "online_loan_applications#reject_approve"
     post "/online_loan_applications/decline", to: "online_loan_applications#decline"
     post "/online_loan_applications/check", to: "online_loan_applications#check"
+
+    post "online_loan_applications/mb_save", to: "online_loan_applications#mb_save"
     
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
@@ -487,8 +489,10 @@ namespace :api do
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
+    post "/billings/update_si_number", to: "billings#update_si_number"
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
+
 
 
     #billing_for_full_payments
