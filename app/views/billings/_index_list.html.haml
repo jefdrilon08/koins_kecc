@@ -44,17 +44,17 @@
         %td
           %center
             - if o.pending?
-              .badge.bg-danger
+              .badge.bg-warning
                 Pending
             - elsif o.approved?
               .badge.bg-success
                 Approved
             - elsif o.processing?
-              .badge.badge-info
+              .badge.bg-info
                 Processing
             - elsif o.save?
-              .badge.badge-secondary
+              .badge.bg-success
                 Save
             - elsif o.checked?
-              .badge.badge-secondary
+              .badge.bg-success
                 Checked
