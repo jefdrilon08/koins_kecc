@@ -89,7 +89,7 @@ class PrintController < ApplicationController
       @cyc1 = 1
       @prev_loan = 0.0 
      else
-      @cyc =  @online_application_loan.cycle += 1
+      @cyc =  @online_application_loan.cycle += 2
      end
       
       @project_type = ProjectType.find(@online_application.data["project_type_id"])
