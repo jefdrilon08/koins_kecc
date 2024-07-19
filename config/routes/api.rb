@@ -300,6 +300,8 @@ namespace :api do
     post "bank_transfer/create",  to: "bank_transfer#create"
     post "bank_transfer/create_channel", to:"bank_transfer#create_channel"
 
+   
+
     # Adjustments
     namespace :adjustments do
       post "/subsidiary_adjustments/create", to: "subsidiary_adjustments#create"
@@ -739,6 +741,11 @@ namespace :api do
       post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
       post "/allowance_computation_report/queue", to: "allowance_computation_report#queue"
       get  "/allowance_computation_report/fetch", to: "allowance_computation_report#fetch"
+
+       #WrittenOffReport
+      post "written_off_report/generate", to: "written_off_report#generate"
+      get "written_off_report/fetch", to: "written_off_report#fetch"
+
 
     end
 

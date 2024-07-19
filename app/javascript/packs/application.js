@@ -246,6 +246,8 @@ import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.j
 import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
 import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 import AllowanceComputationIndex from "../models/AllowanceComputationIndex.js";
+import WrittenOffReportIndex from '../models/WrittenOffReportIndex.js';
+import WrittenOffReportShow from '../models/WrittenOffReportShow.js';
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -472,7 +474,9 @@ const hooks = {
   "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
   "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
-  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex]	
+  "data_stores/allowance_computation_report/index":		[AllowanceComputationIndex],
+  "data_stores/written_off_report/index":             [WrittenOffReportIndex],
+  "data_stores/written_off_report/show":              [WrittenOffReportShow]
 }
 
 const renderComponent = (Component, payload) => {

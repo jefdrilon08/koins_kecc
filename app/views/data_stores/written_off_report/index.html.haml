@@ -1,0 +1,13 @@
+%link{href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", rel: "stylesheet"}/
+.row
+  .col
+    .card
+      .card-body
+        - if @datastore.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No Written Off Report found.
+
+= render partial: "data_stores/written_off_report/modals/new"
+
