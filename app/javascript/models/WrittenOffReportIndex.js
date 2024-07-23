@@ -27,6 +27,7 @@ var _bindEvents = function() {
         var data = {
             branch_id: branchh,
             authenticity_token: authenticityToken
+            
         };
 
         $.ajax({
