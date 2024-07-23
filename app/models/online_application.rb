@@ -17,8 +17,16 @@ class OnlineApplication < ApplicationRecord
     "reject",
     "processing",
     "error"
+    
   ]
 
+  STATS = [
+    "pending",
+    "for_review",
+    "for_approve",
+    "approved",
+    "reject"
+  ]
   validates :status, presence: true, inclusion: { in: STATUSES }
   validates :reference_number, presence: true, uniqueness: true
   validates :first_name, presence: true
@@ -92,6 +100,7 @@ class OnlineApplication < ApplicationRecord
   def rejected?
     self.status == "rejected"
   end
+  
 
   def for_verification?
     self.status == "for_verification"

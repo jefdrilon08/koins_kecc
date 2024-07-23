@@ -43,6 +43,37 @@ class ReportsController < ApplicationController
 
   end
   
+  def online_loan_application_reports
+    @online_application_status = ::LoanApplication::STATUSES
+    @online_applications_list  = LoanApplication.joins(:member).where(
+                                    "members.branch_id IN (?)", @branches.pluck(:id)
+                                  )
+    @online_applications = @online_applications_list
+    if params[:status].present?
+      @status = params[:status]
+      @online_applications = @online_applications.where(status: @status)
+    end
+    if params[:branch_select].present?
+      @branch = ReadOnlyBranch.find(params[:branch_select])
+      @online_applications = @online_applications.where("members.branch_id": @branch)
+    end
+    
+    if params[:start_date].present?
+      @start_date = params[:start_date]
+      @online_applications = @online_applications.where(date_applied: @start_date)
+    end
+
+    
+    if params[:end_date].present?
+      @end_date = Date.parse(params[:end_date]) 
+      @online_applications = @online_applications.where("loan_applications.data ->> 'date_reject' >= ?", @end_date)           
+    end
+
+    @online_applications = @online_applications.order("first_name ASC").page(params[:page]).per(15)
+    end
+   
+
+
   def subscriber
     @subheader_items = [
       { text: "Other Reports" },

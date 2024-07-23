@@ -1,0 +1,42 @@
+.row
+  .col
+    .card 
+      .card-body
+        .table-responsive
+          = render partial: "online_loan_application_filter"
+          %table.table.table-sm.table-hover
+            %thead
+              %tr
+                %th Name
+                %th Amount
+                %th Sato
+                %th Started Date
+                %th End Date
+                %th Status
+            %tbody
+              - @online_applications.each do |o|
+                - if o.approved?
+                  %tr{:data => {:href => online_loan_application_path(o.id)}}
+                    %td
+                      %strong= link_to Member.find(o.member_id).full_name, online_loan_application_path(o.id)
+                    %td= number_to_currency(o.amount, unit: "")
+                    %td= Member.find(o.member_id).branch.name
+                    %td= o.date_applied
+                    %td
+                    %td
+                      %center
+                        .badge.bg-success Approved
+                - elsif o[:status] == "reject"
+                  %tr{:data => {:href => online_loan_application_path(o.id)}}
+                    %td
+                      %strong= link_to Member.find(o.member_id).full_name, online_loan_application_path(o.id)
+                    %td= number_to_currency(o.amount, unit: "")
+                    %td= Member.find(o.member_id).branch.name
+                    %td= o.date_applied
+                    %td= o.data["date_reject"] || o.data["date_approve_reject"]
+                    %td
+                      %center
+                        .badge.bg-danger Rejected
+          %div.d-flex.justify-content-end
+            = paginate @online_applications
+                  
