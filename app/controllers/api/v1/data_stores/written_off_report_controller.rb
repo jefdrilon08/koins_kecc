@@ -3,32 +3,36 @@ module Api
     module DataStores
       class WrittenOffReportController < ApiController
 
-        def fetch
-          record = DataStore.find(params[:data_store_id])
-          name_to_match = params[:name]
+        # def fetch
+        #   record = DataStore.find(params[:data_store_id])
+        #   name_to_match = params[:name]
         
-          if record.blank?
-            render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
-          else
-            records = record.data.with_indifferent_access[:records]
+        #   if record.blank?
+        #     render json: { errors: { key: "id", message: "not found" }, full_messages: ["not found"] }, status: 400
+        #   else
+        #     records = record.data.with_indifferent_access[:records]
             
-            matching_records = records.select do |re|
-              full_name = re['members']['full_name']
-              name_parts = full_name.split(',').map(&:strip)
+        #     matching_records = records.select do |re|
+        #       full_name = re['members']['full_name']
+        #       name_parts = full_name.split(',').map(&:strip)
         
-              last_name = name_parts[0]
-              first_name = name_parts[1]
-              middle_name = name_parts[2] || '' 
+        #       last_name = name_parts[0]
+        #       first_name = name_parts[1]
+        #       middle_name = name_parts[2] || '' 
         
-              [last_name, first_name, middle_name].include?(name_to_match)
-            end
+        #       [last_name, first_name, middle_name].include?(name_to_match)
+        #     end
         
-            if matching_records.any?
-              puts "hahahashdahwda"+matching_records.inspect
-            else
-              render json: { errors: { key: "name", message: "not found" }, full_messages: ["Name not found"] }, status: 404
-            end
-          end
+        #     if matching_records.any?
+        #       puts "hahahashdahwda"+matching_records.inspect
+        #     else
+        #       render json: { errors: { key: "name", message: "not found" }, full_messages: ["Name not found"] }, status: 404
+        #     end
+        #   end
+        # end
+
+        def delete
+          DataStore.find(params[:data_store_id]).destroy!
         end
         
 

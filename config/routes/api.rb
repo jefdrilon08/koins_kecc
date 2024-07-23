@@ -744,7 +744,7 @@ namespace :api do
 
        #WrittenOffReport
       post "written_off_report/generate", to: "written_off_report#generate"
-
+      post "written_off_report/delete", to: "written_off_report#delete"
 
     end
 
