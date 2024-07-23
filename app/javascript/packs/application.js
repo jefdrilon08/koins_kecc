@@ -1,5 +1,6 @@
 require("@rails/ujs").start();
 
+
 import $ from 'jquery';
 
 import React from 'react';
@@ -246,6 +247,11 @@ import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.j
 import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
 import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 import AllowanceComputationIndex from "../models/AllowanceComputationIndex.js";
+import AdministrationAddressIndex from '../models/AdministrationAddressIndex.js';
+import AdministrationAddressProvinceShow from '../models/AdministrationAddressProvinceShow.js';
+import AdministrationProvinceIndex from '../models/AdministrationProvinceIndex.js';
+import AdministrationMunicipalityIndex from '../models/AdministrationMunicipalityIndex.js';
+import AdministrationBarangayIndex from '../models/AdministrationBarangayIndex.js';
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -472,7 +478,12 @@ const hooks = {
   "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
   "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
-  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex]	
+  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
+  "administration/admin_address/index":             [AdministrationAddressIndex],
+  "administration/admin_address/show":              [AdministrationAddressProvinceShow],
+  "administration/admin_province/index":            [AdministrationProvinceIndex],
+  "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
+  "administration/admin_barangay/index":            [AdministrationBarangayIndex]
 }
 
 const renderComponent = (Component, payload) => {

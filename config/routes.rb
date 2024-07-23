@@ -26,6 +26,10 @@ Rails.application.routes.draw do
   resources :online_loan_applications, only: [:index, :show, :edit]
   resources :loan_application
 
+  #address
+  get 'administration/address', to: 'administration#address'
+  
+
   # Trends
   get "/trends", to: "trends#index", as: :trends
 
