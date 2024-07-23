@@ -1,0 +1,107 @@
+:css
+  @page { size: portrait; margin: 0.0rem; margin-bottom: 0.0rem; margin-top: 55px;}
+
+  @media print{
+      /* use your css selector */    
+      body{ 
+          page-break-inside: avoid;
+
+      }
+  }
+  .page-break{
+     display: block;
+  clear: both;
+  page-break-after: avoid;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+  .img{
+    padding: 10px;
+    display: inline;
+  }
+  .img-text{
+    position: absolute;
+    display: inline-block;
+    line-height: 20px;
+  }
+  .just-font br {
+  content: "";
+  display: block;
+  }
+  .header{
+    margin-bottom: 50px;
+  }
+- total_insurance = 0.00
+- kcoop_fee = 0.00
+- id_fee = 0.00
+%div.header
+  .img
+    = image_tag "logo_titled.png", :class => "float-left", :style => "width: 100px; height: 85px; margin-right: 8px"
+  .img-text
+    %div.just-font
+      %b
+        %span{style: "font-size: 11.32px"}
+          #{Settings.company_name}
+          #{Settings.company_address}
+        %span
+          VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  %br
+    
+  %br
+  %p Deposit
+  %table.table.table-bordered.table-sm
+    %thead
+      %tr
+        %th Member Name
+        %th K-MBA Total
+        %th K-COOP Total
+    %tbody
+      - @members.each do |member|
+        %tr
+          %td
+            %strong{style: "font-size: 11.32px"}
+              = member[:full_name]
+          %td
+            = member[:insurance_total]
+          %td
+            = member[:kcoop_total]
+    %tfoot
+      %tr
+        %td
+          %strong Grand Insurance Total:
+        %td
+          = @grand_insurance_total
+        %td
+      %tr
+        %td
+          %strong Grand K-COOP Total:
+        %td
+        %td
+          = @grand_kcoop_total
+      %tr
+        %td
+          %strong
+            Total Cash
+        %td
+          = @grand_insurance_total + @grand_kcoop_total
+        
+          
+  %p
+  
+  %br
+  .column
+    .col
+      %br
+        Member Signature
+    .col
+      %br
+        Collected By:
+    .col
+      %br
+        Checked By:
+    .col
+      %br
+        Approved By:
+.page-break

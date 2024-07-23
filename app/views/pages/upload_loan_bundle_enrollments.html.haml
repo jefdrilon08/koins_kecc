@@ -30,11 +30,11 @@
           %br
           .row
             .col-md-6
-              - if !flash[:error].nil?
-                - flash[:error].each do |err|
-                  %h4{:style => "color:red;"}
-                    #{err["message"]}
-          %hr  
+              - if flash[:error].is_a?(Array)
+                - flash[:error].each do |error|
+                  %p= error
+              - else
+                %p= flash[:error]
             .row
               .col-md-12
                 = submit_tag "Upload Loan Bundle Enrollment", :class => "btn btn-primary"

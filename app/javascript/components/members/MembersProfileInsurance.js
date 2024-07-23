@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 
 export default function MembersProfileInsurance(props) {
+  const [configData, setConfigData] = useState();
+
+  useEffect(() => {
+    axios.get('/api/yml_values/production_values')
+      .then(response => {
+        setConfigData(response.data);
+        setCustomVariable(response.data); // Assign response.data to your custom variable
+        console.log(response.data); // Log the value to the console
+      })
+      .catch(error => console.error(error));
+  }, []);
+
+
   return (
     <table className="table table-bordered table-hover table-sm">
       <thead>
@@ -8,9 +22,20 @@ export default function MembersProfileInsurance(props) {
           <th>
             Type
           </th>
-          <th className="text-end">
-            Balance
-          </th>
+          {(() => {
+              if(JSON.stringify(configData, null, 2) == 'true') {
+                return (
+                  <th className="text-end">
+                    Total Payment
+                  </th>
+                )
+              }
+              else {
+                <th className="text-end">
+                  Balance
+                </th>
+              }   
+          })()}
         </tr>
       </thead>
       <tbody>

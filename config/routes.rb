@@ -536,7 +536,14 @@ Rails.application.routes.draw do
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show" 
     delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"
     resources :allowance_computation_report, only: [:index, :show]
- 
+
+    get "/written_off_report", to: "written_off_report#index"
+    get "/written_off_report/id", to: "written_off_report#show"
+    resources :written_off_report, only: [:index, :show]
+
+    # get "/written_off_report", to: "written_off_report#index"
+    # get "/written_off_report/:id", to: "written_off_report#show"
+    #
   end
   
   # daily_branch_metrics

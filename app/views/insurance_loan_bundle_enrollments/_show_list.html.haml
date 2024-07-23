@@ -2,92 +2,137 @@
   %thead
     %tr
       %th
+        Loan Status 
+      %th
         Name
       %th
         PlanType
       %th
-        PlanCategory
+        Plan Category
       %th
         Effectivity Date
       %th
-        MaturityDate
+        Maturity Date
       %th
-        ClientType
+        Client Type
       %th
-        FirstName
+        First Name
       %th
-        MiddleName
+        Middle Name
       %th
-        LastName
+        Last Name
       %th
         Address
       %th
-        EnrolledStatus
+        Enrolled Status
       %th
-        BirthDate
+        Birth Date
       %th
         Age
       %th
-        MobileNo
+        Mobile No
       %th.text-right
         PremiumCoverage
       - if @insurance_loan_bundle_enrollment.pending?
         %th.text-center
-          Actions
+          Actions 
   %tbody
     - records.each_with_index do |o, i|
-      %tr
-        %td
-          = link_to member_path(o[:member][:id]), target: '_blank' do
+      %tr 
+        - member_id = o[:member][:id]
+        - loan_pending = Loan.find_by(member_id: member_id, loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a", status: "pending")
+        - loan_active = Loan.find_by(member_id: member_id, loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a", status: "active")
+        - is_last = i == records.length - 1
+
+        - if is_last
+          - if loan_pending
+            - loan_id = loan_pending.id
+            %td
+              = link_to loan_path(loan_pending&.id), class: 'btn btn-secondary', target: '_blank' do
+                View Loan
+            %td
+              = link_to member_path(member_id), target: '_blank' do
+                #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+          - elsif loan_active
+            %td
+              Approved
+            %td
+              #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+          - else
+            %td
+              Approved
+            %td
+              #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+          %td
+            #{o[:kok_data][:plan_type]}
+          %td
+            #{o[:kok_data][:plan_category]}
+          %td
+            #{o[:kok_data][:effectivity_date]}
+          %td
+            #{o[:kok_data][:maturity_date]}
+          %td
+            #{o[:kok_data][:client_type]}
+          %td
+            #{o[:kok_data][:first_name]}
+          %td
+            #{o[:kok_data][:middle_name]}
+          %td
+            #{o[:kok_data][:last_name]}
+          %td
+            #{o[:kok_data][:address]}
+          %td
+            #{o[:kok_data][:enrolled_status]}
+          %td
+            #{o[:kok_data][:birth_date]}
+          %td
+            #{o[:kok_data][:age].to_i}
+          %td
+            #{o[:kok_data][:mobile_no]} 
+          %td.text-right
+            #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
+          - if @insurance_loan_bundle_enrollment.pending?
+            %td.text-center
+              - if @insurance_loan_bundle_enrollment.records_last
+                %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
+                  .fa.fa-times
+        - else
+          %td
+            Approved
+          %td
             #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-        %td
-          #{o[:kok_data][:plan_type]}
-        %td
-          #{o[:kok_data][:plan_category]}
-        %td
-          #{o[:kok_data][:effectivity_date]}
-        %td
-          #{o[:kok_data][:maturity_date]}
-        %td
-          #{o[:kok_data][:client_type]}
-        %td
-          #{o[:kok_data][:first_name]}
-        %td
-          #{o[:kok_data][:middle_name]}
-        %td
-          #{o[:kok_data][:last_name]}
-        %td
-          #{o[:kok_data][:address]}
-        %td
-          #{o[:kok_data][:enrolled_status]}
-        %td
-          #{o[:kok_data][:birth_date]}
-        %td
-          #{o[:kok_data][:age].to_i}
-        %td
-          #{o[:kok_data][:mobile_no]} 
-        %td.text-right
-          #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
-        - if @insurance_loan_bundle_enrollment.pending?
-          %td.text-center
-            - if @insurance_loan_bundle_enrollment.records_last
-              %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
-                .fa.fa-times
-    %tr
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      %th
-      - if @insurance_loan_bundle_enrollment.pending?
-        %th
-      - if @insurance_loan_bundle_enrollment.approved?
-        %th
+          %td
+            #{o[:kok_data][:plan_type]}
+          %td
+            #{o[:kok_data][:plan_category]}
+          %td
+            #{o[:kok_data][:effectivity_date]}
+          %td
+            #{o[:kok_data][:maturity_date]}
+          %td
+            #{o[:kok_data][:client_type]}
+          %td
+            #{o[:kok_data][:first_name]}
+          %td
+            #{o[:kok_data][:middle_name]}
+          %td
+            #{o[:kok_data][:last_name]}
+          %td
+            #{o[:kok_data][:address]}
+          %td
+            #{o[:kok_data][:enrolled_status]}
+          %td
+            #{o[:kok_data][:birth_date]}
+          %td
+            #{o[:kok_data][:age].to_i}
+          %td
+            #{o[:kok_data][:mobile_no]} 
+          %td.text-right
+            #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
+          - if @insurance_loan_bundle_enrollment.pending?
+            %td.text-center
+              - if @insurance_loan_bundle_enrollment.records_last
+                %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
+                  .fa.fa-times
+
+

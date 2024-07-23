@@ -1,30 +1,32 @@
 module Api
   class MembersController < ::Api::FrontController
     before_action :authenticate_member!, except: [
-      :login, 
-      :apply_online, 
-      :index, 
-      :unlock, 
-      :update_password, 
-      :create_survey, 
-      :balik_kasapi, 
-      :reinstate, 
-      :delete, 
-      :form_make_payments, 
+      :login,
+      :apply_online,
+      :index,
+      :unlock,
+      :update_password,
+      :create_survey,
+      :claims_copy_pdf,
+      :balik_kasapi,
+      :reinstate,
+      :delete,
+      :form_make_payments,
       :update_recognition_date,
       :is_member_subscribed,
       :update_member_subscription
     ]
 
     before_action :authenticate_user!, only: [
-      :save, 
-      :index, 
-      :unlock, 
-      :update_password, 
-      :create_survey, 
-      :balik_kasapi, 
-      :reinstate, 
-      :form_make_payments, 
+      :save,
+      :index,
+      :unlock,
+      :update_password,
+      :create_survey,
+      :balik_kasapi,
+      :claims_copy_pdf,
+      :reinstate,
+      :form_make_payments,
       :update_recognition_date,
       :is_member_subscribed,
       :update_member_subscription
@@ -94,25 +96,39 @@ module Api
       member = Member.find(params[:id])
       reinstatement_date = params[:reinstatement_date]
       date_stop = params[:date_stop]
-      errors             = ::Members::ValidateReinstatement.new(
-                            member: member,
-                            reinstatement_date: reinstatement_date,
-                            date_stop: date_stop
-                          ).execute!
 
-      if errors.size == 0
-        ::Members::Reinstate.new(
+      begin
+        # Validate reinstatement and get last transaction date
+        errors = ::Members::ValidateReinstatement.new(
           member: member,
           reinstatement_date: reinstatement_date,
-          date_stop: date_stop,
-          reinstate_by: current_user.full_name
+          date_stop: date_stop
         ).execute!
 
-        render json: { id: member.id }
-      else
-        render json: { errors: errors }, status: 402
+        last_account_transaction_date = ::Members::ValidateLastAccountTransactionDate.new(
+          member: member,
+          reinstatement_date: reinstatement_date,
+          date_stop: date_stop
+        ).execute!
+
+        if errors.empty?
+          # Proceed with reinstatement
+          ::Members::Reinstate.new(
+            member: member,
+            reinstatement_date: reinstatement_date,
+            date_stop: date_stop,
+            reinstate_by: current_user.full_name
+          ).execute!
+
+          render json: { id: member.id }
+        else
+          render json: { errors: errors }, status: :unprocessable_entity
+        end
+      rescue => e
+        render json: { errors: [e.message] }, status: :unprocessable_entity
       end
     end
+
 
     def update_recognition_date
       member            = Member.find(params[:id])
@@ -131,7 +147,7 @@ module Api
         render json: errors, status: 400
       else
         data  = member.data.with_indifferent_access
-          
+
           data[:recognition_date] = recognition_date
           if member.identification_number.present?
             identification_number = member.identification_number
@@ -210,17 +226,17 @@ module Api
     end
 
     def form_make_payments
-    
-    @member = Member.find(params[:id]) 
+
+    @member = Member.find(params[:id])
     config = {
                 member_id: @member.id,
                 make_payment_type: params[:type]
-      
+
               }
     @data = ::Members::BuildMakePayments.new(config: config).execute!
 
     @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(
-                                    make_payment_data: @data, 
+                                    make_payment_data: @data,
                                     current_user: current_user,
                                     make_payment_type: params[:type]
 
@@ -232,19 +248,19 @@ module Api
       { text: "Make Payment Form" }
     ]
 
-  
+
     @subheader_side_actions = [
       {
         id: "btn-save",
         link: "#",
         class: "fa fa-check",
         text: "Save",
-      
+
         data: { member_id: @member.id, make_payment_type: params[:type] }
       },
-      { 
-        is_link: true, 
-        path: member_path(@member), 
+      {
+        is_link: true,
+        path: member_path(@member),
         class: "fa fa-times",
         text: "Cancel" }
     ]
@@ -256,7 +272,7 @@ module Api
 
     def balik_kasapi
       member = Member.find(params[:id])
-      
+
       config = {
         user: @user,
         member: member
@@ -265,18 +281,18 @@ module Api
       errors  = ::Members::ValidateRestore.new(
                   config: config
                 ).execute!
-      
+
       if errors[:messages].any?
 
         render json: errors, status: 400
       else
-        
+
         ::Members::Restore.new(
           config: config
         ).execute!
 
         render json: { id: member.id,  message: "ok"  }
-      end   
+      end
     end
 
       def delete
@@ -316,9 +332,9 @@ module Api
 
     def unlock
 
-        
+
       member = Member.find(params[:id])
-      
+
       config = {
         member: member,
         user:   @user
@@ -508,7 +524,7 @@ module Api
 
       render json: cmd.data
     end
-    
+
     def is_member_subscribed
       member = Member.find(params[:id])
 
@@ -534,7 +550,7 @@ module Api
           member_data["subscription"]["subscribe_created_at"] = Time.now
           member_data["subscription"]["subscribe_updated_at"] = Time.now
           member.update(data: member_data)
-        end   
+        end
 
         render json: { message: "ok", is_subscribed: member_data["subscription"]["is_subscribed"] }
       end

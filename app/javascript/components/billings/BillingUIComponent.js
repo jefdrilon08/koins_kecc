@@ -186,6 +186,33 @@ export default class BillingUIComponent extends React.Component {
       }
     });
   }
+  saveSiNumber() {
+    var context     = this;
+    var data        = context.state.data;
+    var newSiNumber = data.data.accounting_entry.data.si_number;
+
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/billings/update_si_number",
+      method: 'POST',
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        si_number: newSiNumber
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating Si number");
+      }
+    });
+  }
 
   saveOrNumber() {
     var context     = this;
@@ -227,7 +254,18 @@ export default class BillingUIComponent extends React.Component {
       data: data
     });
   }
+  modifySiNumber(event) {
+    var context     = this;
+    var newSiNumber = event.target.value;
+    var data        = context.state.data;
 
+    data.data.si_number                       = newSiNumber;
+    data.data.accounting_entry.data.si_number = newSiNumber;
+
+    context.setState({
+      data: data
+    });
+  }
   modifyParticular(event) {
     var context       = this;
     var newParticular = event.target.value;
@@ -344,7 +382,38 @@ export default class BillingUIComponent extends React.Component {
     
      /*return this.state.data.data.or_number;*/
   }
-
+  renderSiNumber() {
+    var siNumber  = this.state.data.data.si_number;
+   
+    if(this.state.data.status == "save") {
+      return  (
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={siNumber} 
+              onChange={this.modifySiNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveSiNumber.bind(this)}
+            >
+              <span className="bi bi-check"/>
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return this.state.data.data.si_number;
+    }
+    
+     /*return this.state.data.data.si_number;*/
+  }
   renderBook() {
     var book  = this.state.data.data.accounting_entry.book;
 
@@ -486,6 +555,14 @@ export default class BillingUIComponent extends React.Component {
                   {this.renderOrNumber()}
                 </td>
               </tr>
+              <tr>
+                <th>
+                  SI number:
+                </th>
+                <td className="text-end">
+                  {this.renderSiNumber()}
+                </td>
+                </tr>
               <tr>
                 <th>
                   AR Number:

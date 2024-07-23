@@ -32,6 +32,49 @@ export default function ClosingRecordsManager(props) {
   const [records, setRecords]               = useState([]);
   const [closingRecords, setClosingRecords] = useState([]);
   const [dataStoreId, setDataStoreId]       = useState("");
+  const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+  const [recordToRemove, setRecordToRemove] = useState(null);
+
+
+  const handleRemoveRecord = (o) => {
+    setRecordToRemove(o);
+    setRemoveModalIsOpen(true);
+  };
+
+  const confirmRemoveRecord = () => {
+    setIsLoading(true);
+
+    const payload = {
+	data_store_id: recordToRemove.data_store_id,
+      	type: recordToRemove.type
+    }
+
+    const headers = {
+      'X-KOINS-HQ-TOKEN': token
+    }
+
+    const options = {
+      headers: headers
+    }
+
+    axios.post(
+      '/api/closing_records/remove',
+      payload,
+      options
+    ).then((res) => {
+	    //
+      console.log(res);
+      setIsLoading(false);
+      setRemoveModalIsOpen(false);
+      loadRecords(branchId, currentDate, recordType);
+      loadClosingRecords(branchId, currentDate, recordType);
+      setRecordToRemove(null);
+    }).catch((error) => {
+      console.log(error.response.data);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+    });
+  };
 
   const handleCurrentDateChanged = (newCurrentDate) => {
     setIsLoading(true);
@@ -174,7 +217,40 @@ export default function ClosingRecordsManager(props) {
   }, [])
   
   return (
-    <>
+	  <>
+ <Modal
+        show={removeModalIsOpen}
+        onHide={() => { setRemoveModalIsOpen(false) }}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Confirm Removal
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+		  Are you sure you want to remove this record ?<br/>
+		  type: {recordToRemove?.type}?<br/>
+		  ID: {recordToRemove?.data_store_id}    
+	  </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="danger"
+            onClick={confirmRemoveRecord}
+            disabled={props.isLoading}
+          >
+            Remove Record
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => { setRemoveModalIsOpen(false) }}
+            disabled={props.isLoading}
+          >
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Modal
         show={modalNewIsOpen}
         onHide={() => { setModalNewIsOpen(false) }}
@@ -304,6 +380,7 @@ export default function ClosingRecordsManager(props) {
       </h2>
       <ClosingRecordsList 
         closingRecords={closingRecords} 
+	handleRemoveRecord={handleRemoveRecord}
         branches={branches}
         isLoading={isLoading}
         handleBranchChanged={handleBranchChanged}

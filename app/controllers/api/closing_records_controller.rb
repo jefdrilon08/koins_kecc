@@ -1,5 +1,6 @@
 module Api
   class ClosingRecordsController < ::Api::FrontController
+
     def index
       branch        = ReadOnlyBranch.find_by_id(params[:branch_id])
       closing_date  = params[:closing_date]
@@ -85,5 +86,22 @@ module Api
         render json: { message: "ok" }
       end
     end
+ 
+    def remove
+    record_type = params[:type]
+    data_store_id = params[:data_store_id]
+
+    id = AdministrationBranchClosingRecord.where(data_store_id: data_store_id, record_type: record_type).last.id
+    AdministrationBranchClosingRecord.find(id).destroy!
+    
+    #cmd = ::ClosingRecords::RemoveRecord.new(
+    #record_type: record_type,
+    #data_store_id: data_store_id
+    #)
+
+    render json: { message: "Done" }
+  end
+
+
   end
 end

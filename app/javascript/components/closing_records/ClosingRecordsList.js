@@ -15,13 +15,15 @@ export default function ClosingRecordsList(props) {
               </th>
               <th>
                 Status
-              </th>
+	      </th>
+	      <th>
+		Action
+	      </th>
             </tr>
           </thead>
           <tbody>
-            {props.closingRecords.map((o, i) => {
-              console.log(o);
-              return (
+            {props.closingRecords.map((o, i) => {	    
+	       return (
                 <tr key={`cr-${i}`}>
                   <td>
                     <a href={o.path} target="_blank">
@@ -31,11 +33,22 @@ export default function ClosingRecordsList(props) {
                   <td>
                     {o.closing_date}
                   </td>
-                  <td>
+		  <td>
                     {o.status == "done"
                       ? <span className="badge bg-success">Done</span>
                       : <span className="badge bg-secondary">Pending</span>
-                    }
+		     }
+		  </td>
+		  <td>
+		    {o.status === "done" && (
+                      <span
+                        className="badge bg-danger"
+                        onClick={() => props.handleRemoveRecord(o)}
+                      >
+                        Remove
+	      	      </span>
+		    )}
+		    {o.branch_id}  
                   </td>
                 </tr>
               )

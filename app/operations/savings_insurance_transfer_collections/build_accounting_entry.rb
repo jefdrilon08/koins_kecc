@@ -82,6 +82,19 @@ module SavingsInsuranceTransferCollections
                                                     s.insurance_type == @insurance_subtype
                                                   }.first.deposit_accounting_code_id
                                                 )
+        elsif @payment_subtype == "RECEIVABLE" && @insurance_subtype == "Credit Life Insurance Plan"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "RECEIVABLE"
+                                                  }.first.withdrawal_accounting_code_id
+                                                )
+
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
         else
           @payment_subtypes                   = @data[:payment_subtype]
           @savings_withdrawal_accounting_code = AccountingCode.find(

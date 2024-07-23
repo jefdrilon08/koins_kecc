@@ -1,20 +1,23 @@
-= title
-.row
-  .col
-    .card
-      .card-body
-        = render partial: "index_list_summary"
-        = render partial: "index_filter"
-        .h4
-          Application
-          - if @branch.present?
-            = " - #{@branch.name}"
-        .col
-          - if @online_applications.any?
-            = render partial: "index_list", locals: { online_applications: @online_applications }
-            = paginate @online_applications
-          - else
-            %p
-              No online applications found
-#parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }
- 
+= form_tag "", method: 'GET' do
+  = title
+  .row
+    .col
+      .card
+        .card-body
+          = render partial: "index_list_summary"
+          = render partial: "index_filter"
+          .h4
+            Application
+            - if @branch.present?
+              = " - #{@branch.name}"
+            - if @center_fetch.present?  
+              = " - #{@center_fetch}"
+          .col
+            - if @online_applications.any?
+              = render partial: "index_list", locals: { online_applications: @online_applications }
+              = paginate @online_applications
+            - else
+              %p
+                No online applications found
+  #parameters{ data: { controller: "#{params[:controller]}", action: "#{params[:action]}" } }
+  

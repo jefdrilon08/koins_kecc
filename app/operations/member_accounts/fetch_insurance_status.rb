@@ -47,7 +47,7 @@ module MemberAccounts
 			@current_balance   = @member_account.balance
 			
 			if @data_reinstatement_date.present?
-				@num_days = ((@current_date - @data_reinstatement_date).to_i + (@data_date_stop  - @data_old_recognition_date).to_i).to_i 
+				@num_days = ((@current_date - @data_reinstatement_date).to_i ) 
 			else	
 				@num_days = (@current_date - @recognition_date).to_i
 			end
@@ -81,7 +81,7 @@ module MemberAccounts
 
 			if @data_reinstatement_date.present?
 				# puts " reinstatement date: #{@reinstatement_date}"
-				@data[:coverage_date] 		= (@data_old_recognition_date + ((@current_balance / @data[:default_periodic_payment]) * 7).to_i + (@data_reinstatement_date - @data_date_stop).to_i).strftime("%B %d, %Y")
+				@data[:coverage_date] 		= (@data_reinstatement_date + ((@current_balance / @data[:default_periodic_payment]) * 7).to_i).strftime("%B %d, %Y")
 				@data[:insured_amount] 		= @num_weeks  * @data[:default_periodic_payment]
 				@data[:amt_past_due]    	= (@current_balance - @data[:insured_amount]) * -1
 				@data[:num_weeks_past_due]  = (@data[:amt_past_due] / @data[:default_periodic_payment]).to_i

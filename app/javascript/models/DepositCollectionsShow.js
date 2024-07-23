@@ -19,6 +19,8 @@ var $btnPrint;
 var $btnPrintAccountingEntry;
 var $modalPrint;
 
+var $btnPrintThermal;
+
 var $selectCashManagementTemplate;
 var $btnConfirmBook;
 
@@ -75,6 +77,8 @@ var _cacheDom = function() {
   $btnPrint                  = $("#btn-print");
   $btnPrintAccountingEntry   = $("#btn-print-accounting-entry");
 
+  $btnPrintThermal            = $("#btn-thermal");
+
   $selectBook     = $("#select-book");
   $btnConfirmBook = $("#btn-confirm-book");
 
@@ -93,6 +97,17 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
+
+  $btnPrintThermal.on("click", function(){
+    $modalPrint.show();
+
+    var type = "deposit_collection_thermal";
+
+    $modalPrint.hide();
+    window.open("/print?type=" + type + "&id=" + depositCollectionId);
+
+  });
+
   $btnLoadCenter.on("click", function() {
     $modalLoadCenter.show();
   });
@@ -144,7 +159,9 @@ var _bindEvents = function() {
   $btnLoadBranch.on("click", function() {
     $modalLoadBranch.show();
   });
-
+  $btnPrintThermal.on("click", function(){
+    alert("tanginamo")
+  });
   $btnConfirmLoadBranch.on("click", function() {
     $message.html("Loading....");
     $btnConfirmLoadBranch.prop("disabled", true);
