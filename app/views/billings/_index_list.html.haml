@@ -7,6 +7,8 @@
       %th
         OR Number
       %th
+        SI Number
+      %th
         Date Approved
       %th
         Center / Branch
@@ -31,6 +33,10 @@
           %strong
             #{o.or_number}
         %td
+          - if o.si_number.present?
+            #{o.si_number}
+        %td
+      
           - if o.date_approved.present?
             #{o.date_approved.strftime("%b %d, %Y")}
         %td

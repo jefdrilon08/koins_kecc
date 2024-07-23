@@ -594,14 +594,14 @@ class ReportsController < ApplicationController
   end
 
   def insurance_loan_bundle_reports_excel
-    @start_date       = params[:start_date]
-    @end_date         = params[:end_date]
-    @branch_name      = Branch.where(id: @branch).first.name
-    @status           = params[:status]
+    @start_date         = params[:start_date]
+    @end_date           = params[:end_date]
+    @approval_date_from = params[:approval_date_from]
+    @approval_date_to   = params[:approval_date_to]
+    @branch_name        = Branch.where(id: @branch).first.name
+    @status             = params[:status]
 
-    # raise @end_date.inspect
-    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, status: @status).execute!
-    # excel = Reports::GenerateInsuranceLoanBundleReports.new(branch: @branch, start_date: @start_date, status: @status).execute!
+    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, approval_date_from: @approval_date_from, approval_date_to: @approval_date_to , branch: @branch, status: @status).execute!
     filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"

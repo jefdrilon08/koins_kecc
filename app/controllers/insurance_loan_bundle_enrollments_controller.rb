@@ -122,7 +122,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      if ["OAS", "MIS"].include? current_user.roles.last
+      if ["OAS", "MIS", "REMOTE-MIS"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-print",
           class: "fa fa-print",
@@ -158,7 +158,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     end
 
     if @insurance_loan_bundle_enrollment.checked?
-      if ["MIS", "FM", "CM"].include? current_user.roles.last
+      if ["MIS", "FM", "CM", "REMOTE-MIS"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
@@ -174,8 +174,8 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
-    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] <= 75
-      if ["MIS", "BK", "SBK", "FM", "CM"].include? current_user.roles.last
+    if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] < 76
+      if ["MIS", "BK", "SBK", "FM", "CM", "REMOTE-MIS"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-approve",
           link: "#",
@@ -226,9 +226,12 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
         @errors_arr << errors
       end
     end
-    
-    if @errors_arr.any?
-      flash[:error] = @errors_arr.map { |error| error[:messages] }.flatten
+
+    if @errors_arr.flatten.size > 20
+      flash[:error] = ["Error, please check your csv."]
+      redirect_to upload_loan_bundle_enrollments_path
+    elsif @errors_arr.any?
+      flash[:error] = @errors_arr.flatten
       redirect_to upload_loan_bundle_enrollments_path
     else
       # If no errors, proceed with loading the data

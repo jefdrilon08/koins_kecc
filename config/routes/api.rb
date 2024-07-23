@@ -97,6 +97,7 @@ namespace :api do
   post "/closing_records", to: "closing_records#create"
   get "/closing_records", to: "closing_records#index"
   get "/closing_records/records", to: "closing_records#records"
+  post "/closing_records/remove", to: "closing_records#remove"
 
   # Branch PSR Records
   post "/branch_psr_records/fetch", to: "branch_psr_records#fetch"
@@ -272,6 +273,8 @@ namespace :api do
     post "/online_loan_applications/reject_approve", to: "online_loan_applications#reject_approve"
     post "/online_loan_applications/decline", to: "online_loan_applications#decline"
     post "/online_loan_applications/check", to: "online_loan_applications#check"
+
+    post "online_loan_applications/mb_save", to: "online_loan_applications#mb_save"
     
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
@@ -296,6 +299,8 @@ namespace :api do
     #Onlinedisbursement
     post "bank_transfer/create",  to: "bank_transfer#create"
     post "bank_transfer/create_channel", to:"bank_transfer#create_channel"
+
+   
 
     # Adjustments
     namespace :adjustments do
@@ -486,8 +491,10 @@ namespace :api do
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
+    post "/billings/update_si_number", to: "billings#update_si_number"
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
+
 
 
     #billing_for_full_payments
@@ -734,6 +741,10 @@ namespace :api do
       post "/member_per_center_counts/queue", to: "member_per_center_counts#queue"
       post "/allowance_computation_report/queue", to: "allowance_computation_report#queue"
       get  "/allowance_computation_report/fetch", to: "allowance_computation_report#fetch"
+
+       #WrittenOffReport
+      post "written_off_report/generate", to: "written_off_report#generate"
+
 
     end
 

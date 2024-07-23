@@ -106,7 +106,7 @@ module AccruedPaymentCollections
       hders = ab.data['headers']
       hders.each_with_index do |hd , i|
       
-        j = ab.data['member_data'].sum{ |b| b["loan_data"] }
+        j = ab.data['member_data'].flat_map{ |b| b["loan_data"] }
   
 
         u = j.select{ |y| y["name"] == hd["name"] }

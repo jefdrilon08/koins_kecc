@@ -47,6 +47,14 @@ module Api
         render json: { message: "ok" }
      
       end
+      def mb_save
+        online_application  = LoanApplication.find(params[:id])
+        online_application_data = online_application.data
+        online_application_data['mb'] = {}
+
+        online_application_data['mb']['maintaining_balance'] = params[:maintaining_balance]
+        online_application.update(data:online_application_data)
+      end
       
       def reject
        
@@ -226,7 +234,8 @@ module Api
 
         data = ::Loans::Save.new(config: config).execute!
         online_application.update!(status: "approved")
-  
+        # update ng date approved
+        online_application.update(date_approved: Date.today)
         render json: { message: "ok" }
 
       
@@ -236,7 +245,7 @@ module Api
           content: content
         }
         ::SmsBlast::Send.new(config: sms).execute!
-        #puts "jaysoooooooooooooooooooon" + sms.inspect
+
       
       end
 

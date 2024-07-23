@@ -9,7 +9,7 @@ export default function ClosingRecordsControls(props) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [errors, setErrors]           = useState([]);
   const [token]                       = useState(props.token);
-  
+      
   const isComplete = () => {
     numComplete = 0;
 

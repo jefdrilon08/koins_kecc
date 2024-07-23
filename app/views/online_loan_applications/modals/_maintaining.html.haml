@@ -1,0 +1,37 @@
+#modal-maintaining.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h3.modal-title
+          Sync Maintaining Balance
+      .modal-body
+        .modal-body-content
+          .bs-callout.bs-callout-info
+          .message
+          %table
+            %tbody
+              %tr
+                %th
+                  %label Loan Amount:
+                %td        
+                  %label= number_to_currency(@online_application.amount, unit: "")
+                  
+              %tr
+                - if @online_application.amount < 10000
+                  %th
+                    %label Amount:
+                  %td        
+                    %label= text_field_tag :maintaining_balance, 'No maintaining balance', class: 'form-control', id: 'maintaining-balance', readonly: true
+                - else
+                  %th
+                    %label Maintaining Balance:
+                  %td
+                    %label= text_field_tag :maintaining_balance, number_to_currency(@online_application.amount * 0.20, unit: ""), class: 'form-control', id: 'maintaining-balance', readonly: true
+      .modal-footer
+        .controls
+          %button#btn-confirm-sync-maintaining-balance.btn.btn-primary
+            .fa.fa-check
+            Confirm
+          %button.btn{"data-bs-dismiss" => "modal", :type => "button"}
+            .fa.fa-times
+            Cancel

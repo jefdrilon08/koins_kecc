@@ -39,7 +39,7 @@ module InsuranceLoanBundleEnrollments
       if @member_id.nil?
         @errors[:messages] << {
           key: "member",
-          message: "member is empty "
+          message: "member_id is empty "
         }
       elsif member.nil?
         @errors[:messages] << {
@@ -51,7 +51,7 @@ module InsuranceLoanBundleEnrollments
       if @center_id.nil?
         @errors[:messages] << {
           key: "center",
-          message: "center is empty"
+          message: "center_id is empty"
         }
       elsif center.nil?
         @errors[:messages] << {
@@ -63,7 +63,7 @@ module InsuranceLoanBundleEnrollments
       if @branch_id.nil?
         @errors[:messages] << {
           key: "branch",
-          message: "branch is empty"
+          message: "branch_id is empty"
         }
       elsif branch.nil?
         @errors[:messages] << {

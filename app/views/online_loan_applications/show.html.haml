@@ -12,10 +12,44 @@
                 #{@loan_count}
         %label{style: "color: red; "}
           #{@online_application.status}
+        %label{style: "color: red; "}
         %br
+        %label{style: "color: red;"} Maintaining Balance:
+        - if @online_application.data["mb"].present? && @online_application["loan_product_id"] == "4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00"
+          - sc_mb = 0.0
+          - @online_application_data.each do |data|
+            - if data.account_subtype == "Share Capital"
+              - sc_mb += data[:balance].to_f
+          - if sc_mb >= @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: green;"}
+              = number_to_currency(@online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f, unit: "")
+          - elsif sc_mb < @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: greens;"}
+              Please Update Share Capital
+        - elsif @online_application.data["mb"].present?
+          - mbalance = 0.0
+          - @online_application_data.each do |data|
+            - if data.account_subtype == "Maintaining Balance Savings"
+              - mbalance + data[:balance].to_f
+          - if mbalance >= @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: green;"}
+              = number_to_currency(@online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f, unit: "")
+          - elsif mbalance < @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: greens;"}
+              Please Update Maintaining Balance
+                   
+        %br
+        - if @online_application[:status] == "reject"
+          %label{style: "color: red; "}
+            Reason : 
+            %label{style: "color: green; "}
+              = @online_application[:data]["reason_approve_reject"] || @online_application[:data]["reason_of_reject"]
+
+            
+                
         %br
         - if @online_application.data["check_cash_flow"].present? && @online_application.for_approve?
-          %label{style: "color: green; "}
+          %label{style: "color: green;"}
             %a{style: "color: red; "} Cash Flow Approved by:
             #{@online_application.data["check_cash_flow"]["first_name"]} #{@online_application.data["check_cash_flow"]["last_name"]}
         - elsif @online_application.data["check_cash_flow"].present? && @online_application.approved?
@@ -303,3 +337,4 @@
 = render partial: "online_loan_applications/modals/decline"
 = render partial: "online_loan_applications/modals/check"
 = render partial: "online_loan_applications/modals/edit_loan_tag"
+= render partial: "online_loan_applications/modals/maintaining"
