@@ -10,7 +10,6 @@ module DataStores
             
           }
         ]
-  
         @datastore = DataStore.where("meta ->> ? = ?", "data_store_type", "WRITTEN_OFF_REPORT").order(created_at: :desc)
       end
   

@@ -618,6 +618,12 @@ savings_insurance_transfer_accounting_codes:
     withdrawal_accounting_code_id: "3e608010-0274-4d37-a408-fc0121c21a22"
     hiip_withdrawal_accounting_code_id: "39288846-d5ad-405d-a099-29ec02e42e7c"
 
+  -
+    payment_type: "RECEIVABLE"
+    deposit_accounting_code_id: "909311bf-4d6c-4b35-95bc-466ac8a0d09c"
+    withdrawal_accounting_code_id: "909311bf-4d6c-4b35-95bc-466ac8a0d09c"
+    hiip_withdrawal_accounting_code_id: "39288846-d5ad-405d-a099-29ec02e42e7c"
+
 insurance_accounting_codes:
   -
     insurance_type: "Life Insurance Fund"
@@ -643,6 +649,10 @@ insurance_accounting_codes:
     insurance_type: "Hospital Income Insurance Plan"
     deposit_accounting_code_id: "e0125f81-d1b3-4175-bfeb-11b65410f518"  
     withdrawal_accounting_code_id: "4f426778-32e3-482c-b7f3-ba69c9e4adfb"
+  -
+    insurance_type: "Credit Life Insurance Plan"
+    deposit_accounting_code_id: "7dc27e0e-e1d1-4ef9-910e-87ebe19ca139"
+    withdrawal_accounting_code_id: "909311bf-4d6c-4b35-95bc-466ac8a0d09c"
 
 savings_accounting_codes:
   -

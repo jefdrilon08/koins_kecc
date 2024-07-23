@@ -11,11 +11,9 @@ module DataStores
     end
 
     def generate_report
-      branch = @branch_id
-
-      Loan.where(branch: branch, status: 'writeoff').find_each do |loan|
-        center_name = Center.find_by(id: loan.center_id)&.name
-        loan_product_name = LoanProduct.find_by(id: loan.loan_product_id)&.name
+      Loan.where(branch: @branch_id, status: 'writeoff').includes(:center, :loan_product).find_each do |loan|
+        center_name = loan.center&.name
+        loan_product_name = loan.loan_product&.name
         balances = fetch_account_balances(loan.member_id)
 
         @data_record << {
@@ -36,8 +34,6 @@ module DataStores
           **balances
         }
       end
-
-      @data_record
     end
 
     def fetch_account_balances(member_id)
@@ -50,18 +46,14 @@ module DataStores
         sc: 'Share Capital'
       }
 
-      balances = {}
-      account_types.each do |key, subtype|
-        balances[key] = MemberAccount.find_by(member_id: member_id, account_subtype: subtype)&.balance.to_f || 0.0
+      account_types.transform_values do |subtype|
+        MemberAccount.find_by(member_id: member_id, account_subtype: subtype)&.balance.to_f || 0.0
       end
-
-      balances
     end
 
     def execute!
-      records = generate_report
-      data_store = DataStore.find_by!(id: @data_store_id)
-      data_store.update!(data: { records: records })
+      generate_report
+      DataStore.find_by!(id: @data_store_id).update!(data: { records: @data_record })
     end
   end
 end
