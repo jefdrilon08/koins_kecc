@@ -249,7 +249,6 @@ import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 import AllowanceComputationIndex from "../models/AllowanceComputationIndex.js";
 
 import AdministrationAddressIndex from '../models/AdministrationAddressIndex.js';
-import AdministrationAddressProvinceShow from '../models/AdministrationAddressProvinceShow.js';
 import AdministrationProvinceIndex from '../models/AdministrationProvinceIndex.js';
 import AdministrationMunicipalityIndex from '../models/AdministrationMunicipalityIndex.js';
 import AdministrationBarangayIndex from '../models/AdministrationBarangayIndex.js';
@@ -486,10 +485,9 @@ const hooks = {
 
   "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
   "administration/admin_address/index":             [AdministrationAddressIndex],
-  "administration/admin_address/show":              [AdministrationAddressProvinceShow],
   "administration/admin_province/index":            [AdministrationProvinceIndex],
   "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
-  "administration/admin_barangay/index":            [AdministrationBarangayIndex]
+  "administration/admin_barangay/index":            [AdministrationBarangayIndex],
 
   "data_stores/allowance_computation_report/index":		[AllowanceComputationIndex],
   "data_stores/written_off_report/index":             [WrittenOffReportIndex],
