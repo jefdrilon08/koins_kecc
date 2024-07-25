@@ -1,0 +1,19 @@
+#modal-new.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Address
+      .modal-body
+        %form
+          .form-group
+            %label{ for: "Barangay" } Barangay
+            %input#barangay-textbox.form-control{ type: "text", placeholder: "Enter Barangay" }
+            %input#barangay-id.form-control{hidden: "hidden"}
+          .form-group
+            %label{ for: "municipality-dropdown" } Select Municipality
+            = select_tag :municipality_id, options_from_collection_for_select(@municipalities, :id, :municipality_name, @municipalities.try(:id)), class: "form-control select-select2", id: "municipality-select", prompt: "-- SELECT --"
+      .modal-footer
+        %button#btn-confirm.btn.btn-primary Confirm
+        %button.btn.btn-secondary{ "data-bs-dismiss" => "modal" } Cancel
+        
+        
