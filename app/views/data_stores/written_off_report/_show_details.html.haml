@@ -12,6 +12,7 @@
       %th MBS
       %th GK
       %th RF
+      %th Equity Value
       %th CBU
       %th Share Capital
       
@@ -29,5 +30,6 @@
         %td= number_to_currency(record['mbs'], unit: "₱")
         %td= number_to_currency(record['gk'], unit: "₱")
         %td= number_to_currency(record['rf'], unit: "₱")
+        %td= number_to_currency(record['equity_value'], unit: "₱")
         %td= number_to_currency(record['cbu'], unit: "₱")
         %td= number_to_currency(record['sc'], unit: "₱")

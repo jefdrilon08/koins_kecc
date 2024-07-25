@@ -23,6 +23,13 @@ module DataStores
             link: "/data_stores/written_off_report",
             class: "fa fa-arrow-left",
             text: "Written-Off Report"
+          },
+          {
+            id: "btn-delete",
+            link: "#",
+            class: "fa fa-trash",
+            text: "Delete",
+            data: { id: params[:id] }
           }
         ]
       end

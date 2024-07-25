@@ -7,19 +7,51 @@ var $message;
 
 
 var _cacheDom = function() {
-    $search_name = $("#search-name");
-    $btnSearch = $("#search-button");
+    // $search_name = $("#search-name");
+    // $btnSearch = $("#search-button");
+    $btnDelete = $("#btn-delete");
+    $btnConfirmDelete = $("#btn-confirm-delete");
+    $modalDelete = new bootstrap.Modal(document.getElementById("modal-delete"));
 };
 
 var _bindEvents = function() {
-    $btnSearch.on("click", function() {
-        var name = $search_name.val()
-        _id = $(this).data("id")
+    $btnDelete.on("click", function() {
+        _id = $(this).data("id");
+        $modalDelete.show();
+       
+    });
+
+    $btnConfirmDelete.on("click", function(){
+        var id = _id
         var data = {
-            name: name,
-            data_store_id: _id,
+            data_store_id: id,
             authenticity_token: authenticityToken
         }
+
+        console.log(id);
+        $.ajax({
+            url: "/api/v1/data_stores/written_off_report/delete",
+            method: 'POST',
+            data: data,
+            success: function(response) {
+                window.location.href = "/data_stores/written_off_report";
+            },
+            error: function(response) {
+                let errors = [];
+                try {
+                    errors = JSON.parse(response.responseText).full_messages;
+                } catch (err) {
+                    errors.push("Something went wrong");
+                    console.log(response);
+                }
+                $message.html(
+                    Mustache.render(
+                        templateErrorList,
+                        { errors: errors }
+                    )
+                );
+            }
+        });
     });
 };
 
