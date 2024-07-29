@@ -1,95 +1,102 @@
+%br
 .message
 .row
+  = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
   .col
+    %h6
+      Kasagana-ka Mutual Benefit Association, Inc.
     .form-group
       %h3
-        Kuya Jun Scholarship Program Information
+        Kuya Jun Scholarship Program Information 
+
+%hr
+             
 .row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Prepared
         = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control', type: 'date', id: 'date-prepared'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Type of Scholarship
         = select_tag :scholarship_type, options_for_select(["Old", "New"], @claim.data["scholarship_type"]), class: 'form-control', id: 'scholarship-type'
 .row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Name of Beneficiary(Student)
         = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Name of School
         = text_field_tag :name_of_school, @claim.data["name_of_school"], class: 'form-control', id: 'name-of-school'
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Year Level
         = select_tag :year_level, options_for_select(Claim::YEAR_LEVEL, @claim.data["year_level"]), class: 'form-control', id: 'year-level'
-.row
-  .col
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         SY
-        = select_tag :school_year, options_for_select(["2019-2020","2020-2021","2021-2022", "2022-2023", "2023-2024"],@claim.data["school_year"]), class: 'form-control', id: 'school-year'
-  .col
+        = select_tag :school_year, options_for_select(["2019-2020","2020-2021","2021-2022", "2022-2023", "2023-2024", "2024-2025"],@claim.data["school_year"]), class: 'form-control', id: 'school-year'
+  .col{class: "col-md-2"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Final Grade
         = text_field_tag :final_grade, @claim.data["final_grade"], class: 'form-control', id: 'final-grade'
-  .col
-    .form-group.sem-field
+.row
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Payee
+        = text_field_tag :payee, @claim.data["payee"], class: 'form-control', id: 'payee'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Classification
+        = text_field_tag :classification, @claim.data["classification"], class: 'form-control', id: 'classification', value: "CHILD"
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Amount
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
+  .col{class: "col-md-2"}
+    .form-group.sem-field{class: "col-md-12"}
       %label.col.control-label
         Semester
         = select_tag :sem, options_for_select(["1st Sem","2nd Sem"] ,@claim.data["sem"]), class: 'form-control', id: 'sem', prompt: "-- Select --"
-  .col
-    .form-group.course-field
+  .col{class: "col-md-2"}
+    .form-group.course-field{class: "col-md-12"}
       %label.col.control-label
         Course
         = text_field_tag :course, @claim.data["course"], class: 'form-control', id: 'course'
 .row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
-        Payee
-        = text_field_tag :payee, @claim.data["payee"], class: 'form-control', id: 'payee'
-  .col
-    .form-group
-      %label.col.control-label
-        Classification
-        = text_field_tag :classification, @claim.data["classification"], class: 'form-control', id: 'classification', value: "CHILD"
-  .col
-    .form-group
-      %label.col.control-label
-        Amount
-        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
-.row
-  .col
-    .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Prepared by
         = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', value: current_user.print_full_name.titleize, id: 'prepared-by'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-.row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Name
         = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+%br
+
 .row
   .col
     .form-actions
