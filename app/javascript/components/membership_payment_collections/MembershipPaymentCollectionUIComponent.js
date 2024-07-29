@@ -110,7 +110,34 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
       }
     });
   }
+  saveSiNumber() {
+    var context     = this;
+    var data        = context.state.data;
+    var newSiNumber = data.data.accounting_entry.data.si_number;
 
+    context.setState({
+      isSaving: true
+    });
+
+    $.ajax({
+      url: "/api/v1/membership_payment_collections/update_si_number",
+      method: 'POST',
+      si_number: newSiNumber,
+      data: {
+        id: context.state.data.id,
+        authenticity_token: context.props.authenticityToken,
+        si_number: newSiNumber
+      },
+      success: function(response) {
+        context.setState({
+          isSaving: false
+        });
+      },
+      error: function(response) {
+        alert("Error in updating or number");
+      }
+    });
+  }
   modifyOrNumber(event) {
     var context     = this;
     var newOrNumber = event.target.value;
@@ -123,7 +150,18 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
       data: data
     });
   }
+  modifySiNumber(event) {
+    var context     = this;
+    var newSiNumber = event.target.value;
+    var data        = context.state.data;
 
+    data.data.si_number                        = newSiNumber;
+    data.data.accounting_entry.data.si_number   = newSiNumber;
+
+    context.setState({
+      data: data
+    });
+  }
   modifyParticular(event) {
     var context       = this;
     var newParticular = event.target.value;
@@ -238,7 +276,37 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
       return this.state.data.data.or_number;
     }
   }
+  renderSiNumber() {
+    var siNumber  = this.state.data.data.si_number;
 
+    if(this.state.data.status == "pending") {
+      return  (
+        <div className="row">
+          <div className="col-md-10">
+            <input 
+              value={siNumber} 
+              onChange={this.modifySiNumber.bind(this)} 
+              disabled={this.state.isSaving}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-2">
+            <button
+              className="btn btn-info btn-block"
+              disabled={this.state.isSaving}
+              onClick={this.saveSiNumber.bind(this)}
+            >
+              <span className="bi bi-check"/>
+              Save
+            </button>
+          </div>
+        </div>
+      );
+    } else {
+      return this.state.data.data.si_number;
+    }
+    /*return this.state.data.data.si_number;*/
+  }
   renderArNumber() {
     var arNumber  = this.state.data.data.ar_number;
     if(this.state.data.status == "pending") {
@@ -300,6 +368,14 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
                 </th>
                 <td className="text-end">
                   {this.renderOrNumber()}
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  SI Number:
+                </th>
+                <td className="text-end">
+                  {this.renderSiNumber()}
                 </td>
               </tr>
               <tr>

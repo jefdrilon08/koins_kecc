@@ -18,10 +18,10 @@ module MembershipPaymentCollections
         }
       end
 
-      if @data.present? and @data[:or_number].blank?
+      if @data.present? && @data[:or_number].blank? && @data[:si_number].blank?
         @errors[:messages] << {
           key: "or_number",
-          message: "no or number found"
+          message: "no OR/SI number"
         }
       end
 

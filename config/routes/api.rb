@@ -567,6 +567,7 @@ namespace :api do
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"
     post "/membership_payment_collections/approve", to: "membership_payment_collections#approve"
     post "/membership_payment_collections/update_or_number", to: "membership_payment_collections#update_or_number"
+    post "/membership_payment_collections/update_si_number", to: "membership_payment_collections#update_si_number"
     post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
