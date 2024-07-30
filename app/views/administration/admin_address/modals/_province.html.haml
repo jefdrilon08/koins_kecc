@@ -1,0 +1,20 @@
+#modal-province.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title New Province
+      .modal-body
+        %form
+          .form-group
+            %label{ for: "province" } Province
+            %input#province-textbox.form-control{ type: "text", placeholder: "Enter province" }
+            %input#province-id.form-control{ hidden: "hidden"}
+            %input#region-id.form-control{ hidden: "hidden"}
+      .modal-footer
+        %button.btn.btn-secondary{ "data-bs-dismiss" => "modal" } Cancel
+        %button#btn-confirm.btn.btn-primary Confirm
+
+
+
+
+        

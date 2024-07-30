@@ -1,9 +1,17 @@
 = form_tag insurance_loan_bundle_reports_path, html: { novalidate: true }, method: "GET" do
+  .row 
+    .h3
+      KDakila Report
+  %hr
   .row
     .col
       .form-group
         %label Branch
         = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
+    .col
+      .form-group
+        %label Status
+        = select_tag :status, options_for_select(InsuranceLoanBundleEnrollment::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
     .col
       .form-group
         %label Effectivity Date From
@@ -14,17 +22,12 @@
         = text_field_tag :end_date, @end_date, class: "form-control",type: "date", id: "end-date"
     .col
       .form-group
-        %label Status
-        = select_tag :status, options_for_select(InsuranceLoanBundleEnrollment::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
-    .col
-      .form-group
         %label Approval Date From
         = text_field_tag :approval_date_from, @approval_date_from, class: "form-control",type: "date", id: "approval-date-from"
     .col
       .form-group
-        %label Approval Date To
+        %label Approval Date To 
         = text_field_tag :approval_date_to, @approval_date_to, class: "form-control",type: "date", id: "approval-date-to"
-    
     .col
       .form-group
         %label Actions

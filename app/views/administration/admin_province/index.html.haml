@@ -1,0 +1,13 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @admin_index_list.any?
+          = render partial: "index_list"
+        - else
+          %p 
+            No Province available
+
+= render partial: "administration/admin_province/modals/new"
+-# = render partial: "administration/admin_province/modals/update"

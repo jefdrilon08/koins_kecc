@@ -1,0 +1,18 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @admin_index_list.any?
+          = render partial: "index_list"
+        - else
+          %p 
+            No municipality available
+
+
+
+= render partial: "administration/admin_municipality/modals/new"
+-# = render partial: "administration/admin_address/modals/update"
+ 
+
+

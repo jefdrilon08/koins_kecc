@@ -43,7 +43,8 @@ module DataStores
         mbs: 'Maintaining Balance Savings',
         rf: 'Retirement Fund',
         cbu: 'CBU',
-        sc: 'Share Capital'
+        sc: 'Share Capital',
+        equity_value: 'Equity Value'
       }
 
       account_types.transform_values do |subtype|

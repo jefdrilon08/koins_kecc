@@ -1,0 +1,49 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %theads
+    %tr
+      %th{style: 'width:2%'}
+      %th{style: 'width:60%'}
+        Province
+      %th{style: 'width:3%'}
+        Actions
+      
+
+  %tbody
+    - @admin_show_list.each do |aa|
+      %tr
+        %td
+          = link_to "admin_address/#{aa.id}" do 
+            .bi.bi-search
+        %td
+          #{aa.province_name}
+
+          %td.text-center{:style => "display: flex; justify-content: center; align-items: center;"}
+            %a.updateprovince{
+              data: {
+                province_id: aa.id,
+                province_name: aa.province_name,
+              },
+              :href => "#",
+              :class => "btn btn-block btn-info"
+            }
+              update
+            //= button_tag 'Update', type: 'update', class: 'btn btn-primary primary-button', id: 'update-button'
+            %span{style: 'margin: 0 5px;'}
+            = button_tag 'Destroy', method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', style: 'color: white;'
+
+
+
+        
+
+      
+          
+        
+        
+
+      
+          
+              
+
+          
+
+        

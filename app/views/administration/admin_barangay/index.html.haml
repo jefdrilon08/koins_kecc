@@ -1,0 +1,16 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @admin_barangay_list.any?
+          = render partial: "index_list"
+        - else
+          %p 
+            No barangay available
+
+
+
+= render partial: "administration/admin_barangay/modals/new" 
+
+

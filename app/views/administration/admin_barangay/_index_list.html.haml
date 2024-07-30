@@ -1,0 +1,37 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %theads
+    %tr
+      %th{style: 'width:40%'}
+        Region
+      %th{style: 'width:19%'}
+        Province
+      %th{style: 'width:19%'}
+        Municipality
+      %th{style: 'width:19%'}
+        Barangay
+      %th{style: 'width:3%'}
+        Actions
+
+  %tbody
+    - @admin_barangay_list.each do |aa|
+      %tr
+        %td
+          = aa.admin_municipality.admin_province.admin_address.region_name
+        %td
+          = aa.admin_municipality.admin_province.province_name
+        %td
+          = aa.admin_municipality_municipality_name
+        %td
+          #{aa.barangay_name}
+
+          %td.text-center{:style => "display: flex; justify-content: center; align-items: center;"}
+            %a.updatebarangay{
+              data: {
+                barangay_id: aa.id,
+                barangay_name: aa.barangay_name,
+                municipality_id: aa.municipality_id
+              },
+              :href => "#",
+              :class => "btn btn-block btn-info"
+            }
+              update
