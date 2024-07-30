@@ -15,38 +15,7 @@ module Reports
       @all_kok = InsuranceLoanBundleEnrollment.all
       @kok = []
 
-      if @branch_id.present? && @start_date.present? && @end_date.present? && @status.present?
-        sql_query = <<-SQL
-          SELECT
-            id,
-            status,
-            date_approved,
-            record
-          FROM
-          insurance_loan_bundle_enrollments,
-          jsonb_array_elements(data->'records') AS record
-          WHERE
-            branch_id = '#{@branch_id.id}'
-            AND status = '#{@status}'
-            AND (record->'kok_data'->>'effectivity_date')::date >= '#{@start_date_query}'
-            AND (record->'kok_data'->>'effectivity_date')::date <= '#{@end_date_query}'
-          ORDER BY
-            record->'kok_data'->>'effectivity_date'
-        SQL
-
-        query = ActiveRecord::Base.connection.execute(sql_query)
-        kok = query.map do |row|
-          kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
-          kok_status = row['status']
-          kok_date_approved = row['date_approved']
-          {
-            'record' => kok_records_last,
-            'status' => kok_status,
-            'date_approved' => kok_date_approved
-          }
-        end
-        @query_kok = kok
-      elsif @branch_id.present? && @start_date.present? && @end_date.present? && @status.present? && @approval_date_from.present? && @approval_date_to.present?
+      if @branch_id.present? && @status.present? && @start_date.present? && @end_date.present? && @approval_date_from.present? && @approval_date_to.present?
         sql_query = <<-SQL
           SELECT
             id,
@@ -65,11 +34,9 @@ module Reports
             AND date_approved <= '#{@approval_date_to}'
           ORDER BY
             record->'kok_data'->>'effectivity_date'
-          
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
-        raise query.inspect
         kok = query.map do |row|
           kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
           kok_status = row['status']
@@ -81,7 +48,7 @@ module Reports
           }
         end
         @query_kok = kok
-      elsif @branch_id.present? && @status.present?
+      elsif @branch_id.present? && @status.present? && @start_date.present? && @end_date.present?
         sql_query = <<-SQL
           SELECT
             id,
@@ -94,8 +61,90 @@ module Reports
           WHERE
             branch_id = '#{@branch_id.id}'
             AND status = '#{@status}'
+            AND (record->'kok_data'->>'effectivity_date')::date >= '#{@start_date_query}'
+            AND (record->'kok_data'->>'effectivity_date')::date <= '#{@end_date_query}'
           ORDER BY
             record->'kok_data'->>'effectivity_date'
+        SQL
+
+        query = ActiveRecord::Base.connection.execute(sql_query)
+        kok = query.map do |row|
+          kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
+          kok_status = row['status']
+          kok_date_approved = row['date_approved']
+            {
+              'record' => kok_records_last,
+              'status' => kok_status,
+              'date_approved' => kok_date_approved
+            }
+        end
+        @query_kok = kok
+      elsif @branch_id.present? && @status.present? && @approval_date_from.present? && @approval_date_to.present?
+        sql_query = <<-SQL
+          WITH last_data_element AS (
+              SELECT
+                  id,
+                  status,
+                  date_approved,
+                  data,
+                  jsonb_array_length(data::jsonb -> 'records') - 1 AS last_index,
+                  data::jsonb -> 'records' -> (jsonb_array_length(data::jsonb -> 'records') - 1) AS last_data
+              FROM
+                  insurance_loan_bundle_enrollments
+              WHERE
+                branch_id = '#{@branch_id.id}'
+                AND status = '#{@status}'
+                AND date_approved >= '#{@approval_date_from}'
+                AND date_approved <= '#{@approval_date_to}'
+          )
+          SELECT
+              id,
+              status,
+              date_approved,
+              last_data
+          FROM
+              last_data_element
+          ORDER BY
+              last_data->'kok_data'->>'effectivity_date' DESC
+        SQL
+
+        query = ActiveRecord::Base.connection.execute(sql_query)
+        kok = query.map do |row|
+          kok_records_last = InsuranceLoanBundleEnrollment.find(row['id']).records_last
+          kok_status = row['status']
+          kok_date_approved = row['date_approved']
+            {
+              'record' => kok_records_last,
+              'status' => kok_status,
+              'date_approved' => kok_date_approved
+            }
+        end
+        @query_kok = kok
+      elsif @branch_id.present? && @status.present?
+        sql_query = <<-SQL
+          WITH last_data_element AS (
+              SELECT
+                  id,
+                  status,
+                  date_approved,
+                  data,
+                  jsonb_array_length(data::jsonb -> 'records') - 1 AS last_index,
+                  data::jsonb -> 'records' -> (jsonb_array_length(data::jsonb -> 'records') - 1) AS last_data
+              FROM
+                  insurance_loan_bundle_enrollments
+              WHERE
+                  branch_id = '#{@branch_id.id}'
+                  AND status = '#{@status}'
+          )
+          SELECT
+              id,
+              status,
+              date_approved,
+              last_data
+          FROM
+              last_data_element
+          ORDER BY
+              last_data->'kok_data'->>'effectivity_date' DESC
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -112,18 +161,28 @@ module Reports
         @query_kok = kok
       elsif @branch_id.present?
         sql_query = <<-SQL
+          WITH last_data_element AS (
+              SELECT
+                  id,
+                  status,
+                  date_approved,
+                  data,
+                  jsonb_array_length(data::jsonb -> 'records') - 1 AS last_index,
+                  data::jsonb -> 'records' -> (jsonb_array_length(data::jsonb -> 'records') - 1) AS last_data
+              FROM
+                  insurance_loan_bundle_enrollments
+              WHERE
+                  branch_id = '#{@branch_id.id}'
+          )
           SELECT
-            id,
-            status,
-            date_approved,
-            record
+              id,
+              status,
+              date_approved,
+              last_data
           FROM
-          insurance_loan_bundle_enrollments,
-          jsonb_array_elements(data->'records') AS record
-          WHERE
-            branch_id = '#{@branch_id.id}'
+              last_data_element
           ORDER BY
-            record->'kok_data'->>'effectivity_date'
+              last_data->'kok_data'->>'effectivity_date' DESC
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -162,7 +221,16 @@ module Reports
             member_count = 0
 
             sheet.add_row ["KASAGANA-KA KOK DECLARATION"], style: title_cell
-            sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
+
+            if @start_date.present? && @end_date.present? && @approval_date_from.present? && @approval_date_to.present?
+              sheet.add_row ["Effectivity Date From: #{@start_date} to #{@end_date}"], style: title_cell
+              sheet.add_row ["Approval Date From: #{@approval_date_from} to #{@approval_date_to}"], style: title_cell
+            elsif @start_date.present? && @end_date.present?
+              sheet.add_row ["Effectivity Date From: #{@start_date} to #{@end_date}"], style: title_cell
+            elsif @approval_date_from.present? && @approval_date_to.present?
+              sheet.add_row ["Approval Date From: #{@approval_date_from} to #{@approval_date_to}"], style: title_cell
+            end
+
             sheet.add_row []
 
             sheet.add_row [
@@ -195,7 +263,7 @@ module Reports
               "Benif_Relationship"
             ], style: header
 
-
+            # raise @query_kok.inspect
             @query_kok.each do |kok|
               premium_total += kok['record']['kok_data']['premium_coverage'].to_i
               member_count += 1
