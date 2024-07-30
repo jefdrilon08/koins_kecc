@@ -53,7 +53,7 @@ var _cacheDom = function() {
 var _bindEvents = function() {
 
   $btnAddBook.on("click", function() {
-    //alert("jayson");
+    
      var txtBookType = $inputBookType.val()   
      _id = $(this).data("id");    
       $.ajax({      

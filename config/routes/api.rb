@@ -606,6 +606,7 @@ namespace :api do
     post "/time_deposit_collections/modify_book", to: "time_deposit_collections#modify_book"
     post "/time_deposit_collections/add_member", to: "time_deposit_collections#add_member"
     post "/time_deposit_collections/remove_member", to: "time_deposit_collections#remove_member"
+    post "/time_deposit_collections/update_si_number", to: "time_deposit_collections#update_si_number"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"
