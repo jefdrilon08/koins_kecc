@@ -84,6 +84,7 @@ class PrintController < ApplicationController
       @member_comaker = Member.find(@online_application.co_maker_member_id)
       @center = Center.find(@member_data.center_id).name
     
+
       @online_application_count = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id, status: ["active", "paid"]).count
       @last_loan = Loan.where(member_id: @online_application.member_id, loan_product_id: @online_application.loan_product_id, status: ["active", "paid"]).order(created_at: :asc).last
       
@@ -102,7 +103,6 @@ class PrintController < ApplicationController
       else
         @principal_value = nil
       end
-      
       
       @project_type = ProjectType.find(@online_application.data["project_type_id"])
       render "print/print_online_loan_application", layout: "print"
