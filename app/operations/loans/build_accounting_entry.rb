@@ -995,7 +995,7 @@ module Loans
         accounting_code_id = entries.first[:accounting_code_id]
         name = entries.first[:name]
         amounts = entries.map { |entry| entry[:amount] }.compact
-        total_amount = entries.sum { |entry| entry[:amount] }
+        total_amount = amounts.sum
 
         {
           accounting_code_id: accounting_code_id,
