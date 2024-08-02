@@ -4352,7 +4352,28 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-
+      -
+        use_term_interest:
+          -
+            term: "weekly"
+            min_num_installments: 5
+            max_num_installments: 15
+            monthly_interest_rate: 0.1265
+          -
+            term: "weekly"
+            min_num_installments: 16
+            max_num_installments: 25
+            monthly_interest_rate: 0.078
+          -
+            term: "weekly"
+            min_num_installments: 26
+            max_num_installments: 35
+            monthly_interest_rate: 0.056
+          -
+            term: "weekly"
+            min_num_installments: 36
+            max_num_installments: 50
+            monthly_interest_rate: 0.04
   -
     loan_product_id: "8b1b3103-2e3b-4308-bc76-cf5fec772f2e"                         # K-KALUSUGAN W4
     receivable_accounting_code_id: "43a0c6bc-9305-4811-a691-cba2e73a8a65"
@@ -9170,30 +9191,31 @@ loan_products:
 
     
       -
-        name: "Deposit to retirement fund"
-        accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Retirement Fund"
-          value: 5.00
-          algo: "term_multiplier_for_insurance_amount"
-          offset: 1
+         name: "Deposit to life insurance fund"
+         accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
+         amount: 0.00
+         deduction_type: "deposit"
+         special_loan: "true"
+         advance_insurance_value: true
+         meta:
+           account_type: "INSURANCE"
+           account_subtype: "Life Insurance Fund"
+           value: 0.00
+           algo: "term_multiplier_for_insurance_amount"
+           offset: 1
       -
-        name: "Deposit to credit life insurance plan"
-        accounting_code_id: "07e4ccfd-8fdf-4210-a068-1b66f9b6521f"
-        amount: 0.00
-        deduction_type: "deposit"
-        advance_insurance_value: true
-        meta:
-          account_type: "INSURANCE"
-          account_subtype: "Life Insurance Plan"
-          value: 15.00
-          algo: "term_multiplier_for_insurance_amount"
-          offset: 1
-          
+         name: "Deposit to retirement fund"
+         accounting_code_id: "714153eb-0a0b-4127-9e62-2643f10a6d96"
+         amount: 0.00
+         deduction_type: "deposit"
+         special_loan: "true"
+         advance_insurance_value: true
+         meta:
+           account_type: "INSURANCE"
+           account_subtype: "Retirement Fund"
+           value: 0.00
+           algo: "term_multiplier_for_insurance_amount"
+           offset: 1
       -
         name: "Deposit to credit life insurance plan"
         accounting_code_id: "af83062d-628a-4fdd-acfd-bdebe2696513"
