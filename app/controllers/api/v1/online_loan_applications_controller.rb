@@ -234,7 +234,8 @@ module Api
 
         data = ::Loans::Save.new(config: config).execute!
         online_application.update!(status: "approved")
-  
+        # update ng date approved
+        online_application.update(date_approved: Date.today)
         render json: { message: "ok" }
 
       
@@ -244,7 +245,7 @@ module Api
           content: content
         }
         ::SmsBlast::Send.new(config: sms).execute!
-        #puts "jaysoooooooooooooooooooon" + sms.inspect
+
       
       end
 

@@ -39,3 +39,7 @@
             - elsif o.approved?
               .badge.bg-success
                 Approved
+            - elsif o.processing?
+              .badge.bg-info
+                Processing
+
