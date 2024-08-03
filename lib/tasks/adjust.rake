@@ -1,4 +1,64 @@
 namespace :adjust do
+  task :insert_insurance => :environment do
+    #member_id = ENV['MEMBER_ID']
+    member_id = ["5f1a2ebf-336f-4633-b116-860bf310394b","5d85fe8a-251e-4d89-bb70-d3488a181ded"]
+    a = [{name: "Life Insurance Fund", amount: 375}, {name: "Retirement Fund", amount: 125}]
+    a.map{ |a|
+      if a[:name] == 'Life Insurance Fund'
+        m = MemberAccount.where("member_id in (?) and account_subtype = ?", member_id ,a[:name]).last
+        total_balance = m.balance.to_f + a[:amount].to_f
+        data = {  is_withdraw_payment: false,
+                  is_fund_transfer: false,
+                  is_interest: false,
+                  is_adjustment: false,
+                  is_for_exit_age: false,
+                  is_for_loan_payments: false,
+                  accounting_entry_reference_number: nil,
+                  beginning_balance: m.balance,
+                  ending_balance: total_balance,
+                  equity_value: total_balance.to_f / 2.to_f
+                }
+        g = AccountTransaction.create!(
+                                        subsidiary_id: m.id,
+                                        subsidiary_type: "MemberAccount",
+                                        amount: a[:amount],
+                                        transaction_type: "deposit",
+                                        transacted_at: "2024-07-31".to_date,
+                                        status: "approved",
+                                        data: data
+                                      )
+        m.update!(balance: total_balance)
+      
+      elsif a[:name] == 'Retirement Fund'
+        m = MemberAccount.where("member_id in (?) and account_subtype = ?", member_id ,a[:name]).last
+        total_balance = m.balance.to_f + a[:amount].to_f
+        data = {  is_withdraw_payment: false,
+                  is_fund_transfer: false,
+                  is_interest: false,
+                  is_adjustment: false,
+                  is_for_exit_age: false,
+                  is_for_loan_payments: false,
+                  accounting_entry_reference_number: nil,
+                  biginning_balance: m.balance,
+                  ending_balance: total_balance
+                }
+        g = AccountTransaction.create!(
+                                        subsidiary_id: m.id,
+                                        subsidiary_type: "MemberAccount",
+                                        amount: a[:amount],
+                                        transaction_type: "deposit",
+                                        transacted_at: "2024-07-31".to_date,
+                                        status: "approved",
+                                        data: data
+                                      )
+
+        m.update!(balance: total_balance)
+      end
+    }
+
+  end
+
+
   task :input_member_name_in_loan_data => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids
