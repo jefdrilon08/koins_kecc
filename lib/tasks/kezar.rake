@@ -993,10 +993,12 @@ namespace :kezar do
         a.insurance_status IN ('inforce', 'lapsed')
         AND b.id = '#{branch_id}'
 
+
         GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
         ORDER BY branch_name
         OFFSET #{offset} ROWS FETCH NEXT #{batch_size} ROWS ONLY
       SQL
+
 
       # Add this line if you need to capture the date interval from [start date] to [end date].
       # AND (a.data->>'recognition_date' >= '#{start_date}' AND a.data->>'recognition_date' <= '#{end_date}')
