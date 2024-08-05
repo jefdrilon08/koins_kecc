@@ -593,6 +593,8 @@ namespace :api do
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
     post "/deposit_collections/load_center", to: "deposit_collections#load_center"
+    post "/deposit_collections/update_si_number", to: "deposit_collections#update_si_number"
+
 
     # Time Deposit Collection
     post "/time_deposit_collections", to: "time_deposit_collections#create"
