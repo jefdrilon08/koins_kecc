@@ -17,8 +17,10 @@ module SavingsInsuranceTransferCollections
         @clip_number                            = @config[:clip_number]
         @beneficiary                            = @config[:beneficiary]
 
-        if @loan_product_id.present?
-          @loan_product_name = LoanProduct.find(@loan_product_id).to_s
+        if !Settings.activate_microinsurance
+          if @loan_product_id.present?
+            @loan_product_name = LoanProduct.find(@loan_product_id).to_s
+          end
         end
       end
 
