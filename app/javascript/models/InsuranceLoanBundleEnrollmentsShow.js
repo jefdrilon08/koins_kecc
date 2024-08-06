@@ -57,7 +57,8 @@ var _id;
 var _options;
 var _authenticityToken;
 
-var _urlAdd                = "/api/v1/insurance_loan_bundle_enrollments/add_member";
+var _urlAdd                = "/api/v1/insurance_loan_bundle_enrollments/add_member/";
+var _urlUpdateBeneficiary  = "/api/v1/insurance_loan_bundle_enrollments/update_beneficiary"
 var _urlDelete             = "/api/v1/insurance_loan_bundle_enrollments/remove_member";
 var _urlApprove            = "/api/v1/insurance_loan_bundle_enrollments/approve";
 var _urlCheckTransaction   = "/api/v1/insurance_loan_bundle_enrollments/check";
@@ -66,6 +67,7 @@ var _urlDeclineTransaction = "/api/v1/insurance_loan_bundle_enrollments/declined
 var _cacheDom = function() {
 
   $btnAdd               = $("#btn-add");
+  $btnUpdateBeneficiary = $("#btn_update_beneficiary");
   $btnDelete            = $(".btn-delete");
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
@@ -345,7 +347,7 @@ var _bindEvents = function() {
  
   //Add
   $btnAdd.on("click", function() {
-    var memberId  = $selectMember.val();
+    var memberId              = $selectMember.val();
     var PlanType              = $inputPlanType.val();
     var PlanCategory          = $inputPlanCategory.val();
     var Partner               = $inputPartner.val();
@@ -487,6 +489,65 @@ var _bindEvents = function() {
       }
     });
   });
+
+  //Update Beneficiary
+  $btnUpdateBeneficiary.on("click", function() {
+    var memberId              = $selectMember.val();
+    var Benif_Fname           = $inputBenif_Fname.val();
+    var Benif_Mname           = $inputBenif_Mname.val();
+    var Benif_Lname           = $inputBenif_Lname.val();
+    var Benif_BirthDate       = $inputBenif_BirthDate.val();
+    var Benif_Gender          = $inputBenif_Gender.val();
+    var Benif_Relationship    = $inputBenif_Relationship.val();
+  
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken,
+      member_id: memberId,
+      benif_fname: Benif_Fname, 
+      benif_mname: Benif_Mname, 
+      benif_lname: Benif_Lname, 
+      benif_birth_date: Benif_BirthDate, 
+      benif_gender: Benif_Gender, 
+      benif_relationship: Benif_Relationship 
+    };
+
+    $message.html("Loading...");
+    $.ajax({
+      url: _urlUpdateBeneficiary,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $inputBenif_Fname.prop("disabled", false);
+          $inputBenif_Mname.prop("disabled", false);
+          $inputBenif_Lname.prop("disabled", false);
+          $inputBenif_BirthDate.prop("disabled", false);
+          $inputBenif_Gender.prop("disabled", false);
+          $inputBenif_Relationship.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+
   $inputClientType.on('change', function() { 
     var inputClientTypeValue = ($inputClientType.val());
 
