@@ -130,13 +130,14 @@ module SavingsInsuranceTransferCollections
       end
 
       if @savings_insurance_transfer_collection.clip
-        if !@loan_product_id.present?
-          @errors[:messages] << {
-            key: "loan_product",
-            message: "Loan Product is required"
-          }
+        if !Settings.activate_microinsurance
+          if !@loan_product_id.present?
+            @errors[:messages] << {
+              key: "loan_product",
+              message: "Loan Product is required"
+            }
+          end
         end
-
         if !@principal.present?
           @errors[:messages] << {
             key: "principal",
@@ -144,12 +145,12 @@ module SavingsInsuranceTransferCollections
           }
         end
 
-        if !@term.present?
-          @errors[:messages] << {
-            key: "term",
-            message: "Term is required"
-          }
-        end
+        # if !@term.present?
+        #   @errors[:messages] << {
+        #     key: "term",
+        #     message: "Term is required"
+        #   }
+        # end
 
         if !@num_installments.present?
           @errors[:messages] << {

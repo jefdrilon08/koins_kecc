@@ -1,9 +1,15 @@
 - if !is_bk?
   .row
-    .col-md-3
+    .col-md-6
       .form-group
         .h3
-          %label K-DAKILA INFORMATION
+          %label K-DAKILA INFORMATION 
+    .col-md-4
+    .col-md-2
+      %label Status :
+      - if @insurance_loan_bundle_enrollment.pending?
+        %button.btn.btn-sm.btn-primary.btn-block
+          Pending
   - if @insurance_loan_bundle_enrollment.records_count == 0
     .row
       .col-md-3

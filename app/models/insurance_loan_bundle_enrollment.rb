@@ -137,4 +137,8 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     self.data.with_indifferent_access[:records].last
   end
 
+  def date_approved
+    self[:date_approved]&.strftime("%B %d, %Y")
+  end
+
 end
