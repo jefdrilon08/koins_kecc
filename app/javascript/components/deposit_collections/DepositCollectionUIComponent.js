@@ -152,18 +152,6 @@ export default class DepositCollectionUIComponent extends React.Component {
       data: data
     });
   }
-  modifyOrNumber(event) {
-    var context     = this;
-    var newOrNumber = event.target.value;
-    var data        = context.state.data;
-
-    data.data.or_number                       = newOrNumber;
-    data.data.accounting_entry.data.or_number = newOrNumber;
-
-    context.setState({
-      data: data
-    });
-  }
   modifySiNumber(event) {
     var context     = this;
     var newSiNumber = event.target.value;
