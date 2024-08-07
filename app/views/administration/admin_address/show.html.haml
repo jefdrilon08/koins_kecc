@@ -1,0 +1,19 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        - if @admin_show_list.any?
+          = render partial: "show_list"
+        - else
+          %p 
+            No Province available
+            
+
+
+= render partial: "administration/admin_address/modals/province"
+
+
+ 
+
+

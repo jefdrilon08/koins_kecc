@@ -14,7 +14,7 @@ class WithdrawalCollection < ApplicationRecord
 
   scope :pending, -> { where(status: "pending").order("collection_date ASC") }
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
-
+  scope :processing, -> { where(status: "processing").order("collection_date ASC") }
   def not_pending?
     self.status != "pending"
   end
@@ -76,4 +76,8 @@ class WithdrawalCollection < ApplicationRecord
   def approved?
     self.status == "approved"
   end
+  def processing?
+    self.status == "processing"
+  end
+
 end

@@ -2,22 +2,35 @@
   .h4
     FOR CLIP DATA
   .row
-    .col-md-3
-      .form-group
-        %label Loan Product         
-        = select_tag :loan_product_id, options_from_collection_for_select(LoanProduct.order("name ASC"), :id, :name, @loan_product_id), id: 'input-loan-product-id', class: 'form-control js-searchable'
+    - if Settings.activate_microinsurance
+      .col-md-3  
+        .form-group
+          %label Loan Product        
+          = select_tag :loan_product_id, options_for_select(["Project loan", "Utility loan", "Educational loan", "Emergency loan", "Calamity loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
+    - else
+      .col-md-3
+        .form-group
+          %label Loan Product         
+          = select_tag :loan_product_id, options_from_collection_for_select(LoanProduct.order("name ASC"), :id, :name, @loan_product_id), id: 'input-loan-product-id', class: 'form-control js-searchable'
     .col-md-3
       .form-group
         %label Principal      
         = text_field_tag :principal, @principal, id: 'input-principal', class: 'form-control'
-    .col-md-3  
-      .form-group
-        %label Term        
-        = select_tag :term, options_for_select(["weekly", "monthly", "semi-monthly"], @term), id: 'input-term', class: 'form-control'
-    .col-md-3  
-      .form-group
-        %label Num Installments      
-        = text_field_tag :num_installments, @num_installments, id: 'input-num-installments', class: 'form-control'
+    - if !Settings.activate_microinsurance
+      .col-md-3  
+        .form-group
+          %label Term        
+          = select_tag :term, options_for_select(["weekly", "monthly", "semi-monthly"], @term), id: 'input-term', class: 'form-control'
+    - if Settings.activate_microinsurance
+      .col-md-3  
+        .form-group
+          %label Loan Term (in months)     
+          = select_tag :num_installments, options_for_select([ 3, 6, 9, 12], @num_installments), id: 'input-num-installments', class: 'form-control'
+    - if !Settings.activate_microinsurance
+      .col-md-3  
+        .form-group
+          %label Num Installments      
+          = text_field_tag :num_installments, @num_installments, id: 'input-num-installments', class: 'form-control'
   .row
     .col-md-3
       .form-group

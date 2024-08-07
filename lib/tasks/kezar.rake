@@ -1,6 +1,8 @@
 namespace :kezar do
 
   # New API for KEZAR
+
+  # KMBA ASSOCIATE MEMBER API
   task :member_api => :environment do
     email           = "kmba-manual-upload@kezar.co"
     password        = "oQEVaTMGzNls"
@@ -763,6 +765,413 @@ namespace :kezar do
     end
   end
 
+  # KCOOP MEMBER API
+  task :kcoop_member_api => :environment do
+    email           = "kmba-manual-upload@kezar.co"
+    password        = "oQEVaTMGzNls"
+    end_point       = "https://auth-jdyjiucdcq-uc.a.run.app/auth/loginAdmin"
+
+    credentials = {
+      email: email,
+      password: password
+    }
+
+    Rails.logger.info(puts("Logging in #{end_point} . . . "))
+    login = HTTParty.post(
+      end_point,
+      body: credentials.to_json,
+      :headers => { 'Content-Type' => 'application/json'}
+    )
+
+    # Rails.logger.info(puts(login))
+    # declaring the accessToken to a variable access_token
+    access_token = login['accessToken']
+    # setting up the access token, start and end date to an environment
+    ENV["ACCESS_TOKEN"]   = access_token
+    # raise [start_date, end_date].inspect
+
+    Rake::Task['kezar:kcoop_member_body_api'].invoke
+  end
+
+  task :kcoop_member_body_api => :environment do
+    #--------------Start Declarations--------------#
+    # Set the batch size (number of records per batch)
+      batch_size              = 500
+      offset                  = 0
+      total_records           = 0
+      # Define a flag to indicate whether to continue fetching more batches
+      fetch_more_batches      = true
+      end_point               = ENV['KEZAR_API_SEND_MEMBERDATA'] || "https://account-jdyjiucdcq-uc.a.run.app/account/uploadDocument"
+      is_batch                = ENV["BATCH"] || true
+      # retrieve the access token to an environment
+      bearer_token            = ENV["ACCESS_TOKEN"]
+      start_date              = ENV["START_DATE"]
+      end_date                = ENV["END_DATE"]
+      branch_id               = ENV["BRANCH_ID"]
+
+    # --------------End Declarations--------------#
+
+    while fetch_more_batches
+
+      sql_query = <<-SQL
+        WITH RankedLegalDependents AS (
+            SELECT
+                g.*,
+                ROW_NUMBER() OVER (PARTITION BY g.member_id ORDER BY g.id) AS dependent_rank
+            FROM
+                legal_dependents g
+        )
+        SELECT
+          a.id,
+          CASE
+            WHEN a.identification_number IS NULL then ''
+            ELSE a.identification_number
+          END as blip_number,
+          CASE
+            WHEN a.first_name IS NOT NULL OR a.middle_name IS NOT NULL OR a.last_name IS NOT NULL THEN CONCAT(a.first_name, ' ', a.middle_name, ' ', a.last_name)
+            ELSE ''
+          END AS full_name,
+          CASE
+            WHEN a.data->>'recognition_date' IS NULL THEN ''
+            ELSE TO_CHAR((a.data->>'recognition_date')::date, 'YYYY-MM-DD"T"HH24:MI:SS')
+          END as blip_effectivity_date,
+          CASE
+            WHEN b.name IS NOT NULL THEN b.name
+          ELSE ''
+          END AS branch_name,
+          CASE
+            WHEN c.name IS NOT NULL THEN c.name
+          ELSE ''
+          END AS center_name,
+          CONCAT(f.first_name, ' ', f.middle_name, ' ', f.last_name) as recruitedBy,
+          CASE
+            WHEN a.first_name IS NULL then ''
+            ELSE a.first_name
+          END AS first_name,
+          CASE
+            WHEN a.middle_name IS NULL then ''
+            ELSE a.middle_name
+          END AS middle_name,
+          CASE
+            WHEN a.last_name IS NULL then ''
+            ELSE a.last_name
+          END AS last_name,
+          CASE
+            WHEN LENGTH(a.middle_name) <= 2 THEN a.middle_name
+            WHEN LENGTH(a.middle_name) > 2 THEN CONCAT(SUBSTRING(a.middle_name FROM 1 FOR 1), '.')
+            ELSE 'N/A'
+          END AS suffix,
+          a.gender AS gender,
+          a.civil_status AS marital_status,
+          CASE
+            WHEN a.date_of_birth IS NULL THEN ''
+            ELSE TO_CHAR(a.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
+          END AS birthday,
+          CASE
+            WHEN
+              a.place_of_birth IS NULL THEN ''
+              ELSE a.place_of_birth
+          END AS place_of_birth,
+          CASE
+            WHEN a.data->'address'->>'province' IS NULL THEN ''
+          ELSE a.data->'address'->>'province'
+          END AS province,
+          CASE
+            WHEN a.data->'address'->>'city' IS NULL THEN ''
+            ELSE a.data->'address'->>'city'
+          END AS city,
+          CASE
+            WHEN a.data->'address'->>'street' IS NULL THEN ''
+            ELSE a.data->'address'->>'street'
+          END AS street,
+          CASE
+            WHEN a.mobile_number IS NULL THEN ''
+            ELSE a.mobile_number
+          END AS contact_number,
+          CASE WHEN a.data->'government_identification_numbers'->>'tin_number' IS NULL THEN '' ELSE a.data->'government_identification_numbers'->>'tin_number' END AS tin_number,
+          CASE WHEN a.data->'government_identification_numbers'->>'sss_number' IS NULL THEN '' ELSE a.data->'government_identification_numbers'->>'sss_number' END AS sss_number,
+          CASE WHEN a.data->'spouse'->>'first_name' IS NULL THEN '' ELSE a.data->'spouse'->>'first_name' END AS spouse_first_name,
+          CASE WHEN a.data->'spouse'->>'middle_name' IS NULL THEN '' ELSE a.data->'spouse'->>'middle_name' END AS spouse_middle_name,
+          CASE WHEN a.data->'spouse'->>'last_name' IS NULL THEN '' ELSE a.data->'spouse'->>'last_name' END AS spouse_last_name,
+          CASE WHEN a.data->'spouse'->>'date_of_birth' IS NULL THEN '' ELSE a.data->'spouse'->>'date_of_birth' END AS spouse_birthday,
+          MAX(CASE
+            WHEN dependent_rank = 1 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL)  THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
+            ELSE ''
+          END) AS first_dependent_name,
+          MAX(CASE
+            WHEN dependent_rank = 1 AND g.relationship IS NOT NULL THEN g.relationship
+            ELSE ''
+          END) AS first_relationship,
+          MAX(CASE
+            WHEN dependent_rank = 1 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
+            ELSE ''
+          END) AS first_date_of_birth,
+          MAX(CASE
+            WHEN dependent_rank = 2 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
+            ELSE ''
+          END) AS second_dependent_name,
+          MAX(CASE
+            WHEN dependent_rank = 2 AND g.relationship IS NOT NULL THEN g.relationship
+            ELSE ''
+          END) AS second_relationship,
+          MAX(CASE
+            WHEN dependent_rank = 2 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
+            ELSE ''
+          END) AS second_date_of_birth,
+          MAX(CASE
+            WHEN dependent_rank = 3 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
+            ELSE ''
+          END) AS third_dependent_name,
+          MAX(CASE
+            WHEN dependent_rank = 3 AND g.relationship IS NOT NULL THEN g.relationship
+            ELSE ''
+          END) AS third_relationship,
+          MAX(CASE
+            WHEN dependent_rank = 3 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
+            ELSE ''
+          END) AS third_date_of_birth,
+          MAX(CASE
+            WHEN dependent_rank = 4 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
+            ELSE ''
+          END) AS fourth_dependent_name,
+          MAX(CASE
+            WHEN dependent_rank = 4 AND g.relationship IS NOT NULL THEN g.relationship
+            ELSE ''
+          END) AS fourth_relationship,
+          MAX(CASE
+            WHEN dependent_rank = 4 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
+            ELSE ''
+          END) AS fourth_date_of_birth,
+          MAX(CASE
+            WHEN dependent_rank = 5 AND (g.first_name IS NOT NULL OR g.middle_name IS NOT NULL OR g.last_name IS NOT NULL) THEN CONCAT(g.first_name, ' ', g.middle_name, ' ', g.last_name)
+            ELSE ''
+          END) AS fifth_dependent_name,
+          MAX(CASE
+            WHEN dependent_rank = 5 AND g.relationship IS NOT NULL THEN g.relationship
+            ELSE ''
+          END) AS fifth_relationship,
+          MAX(CASE
+            WHEN dependent_rank = 5 AND g.date_of_birth IS NOT NULL THEN g.date_of_birth::text
+            ELSE ''
+          END) AS fifth_date_of_birth,
+          MAX(CASE
+            WHEN h.is_primary = 'true' AND h.first_name IS NOT NULL AND h.middle_name IS NOT NULL AND h.last_name IS NOT NULL THEN CONCAT(h.first_name, ' ', h.middle_name, ' ', h.last_name)
+            ELSE ''
+          END) AS primary_name_beneficiary,
+          MAX(CASE
+            WHEN h.is_primary = 'true' AND h.relationship IS NOT NULL THEN h.relationship
+            ELSE ''
+          END) AS primary_relationship_beneficiary,
+          MAX(CASE
+            WHEN h.is_primary = 'true' AND h.date_of_birth IS NOT NULL THEN to_char(h.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
+            ELSE ''
+          END) AS primary_date_of_birth_beneficiary,
+          MAX(CASE
+            WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND (h.first_name IS NOT NULL OR h.middle_name IS NOT NULL OR h.last_name IS NOT NULL) THEN CONCAT(h.first_name, ' ', h.middle_name, ' ', h.last_name)
+            ELSE ''
+          END) AS secondary_name_beneficiary,
+          MAX(CASE
+            WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.relationship IS NOT NULL THEN h.relationship
+            ELSE ''
+          END) AS secondary_relationship_beneficiary,
+          MAX(CASE
+            WHEN h.is_primary = 'false' OR h.is_primary IS NULL AND h.date_of_birth IS NOT NULL THEN to_char(h.date_of_birth, 'YYYY-MM-DD"T"HH24:MI:SS')
+            ELSE ''
+          END) AS secondary_date_of_birth_beneficiary,
+          a.external_ref
+
+        FROM members a
+        LEFT JOIN branches b ON b.id = a.branch_id
+        LEFT JOIN clusters c ON c.id = b.cluster_id
+        LEFT JOIN areas d ON d.id = c.area_id
+        LEFT JOIN centers e ON e.id = a.center_id
+        LEFT JOIN referrers f ON f.id = a.referrer_id
+        LEFT JOIN RankedLegalDependents g ON g.member_id = a.id
+        LEFT JOIN beneficiaries h ON h.member_id = a.id
+
+        WHERE
+        a.insurance_status IN ('inforce', 'lapsed')
+        AND b.id = '#{branch_id}'
+
+
+        GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
+        ORDER BY branch_name
+        OFFSET #{offset} ROWS FETCH NEXT #{batch_size} ROWS ONLY
+      SQL
+
+
+      # Add this line if you need to capture the date interval from [start date] to [end date].
+      # AND (a.data->>'recognition_date' >= '#{start_date}' AND a.data->>'recognition_date' <= '#{end_date}')
+
+      results = ActiveRecord::Base.connection.execute(sql_query)
+      # Increment offset for the next batch
+      offset += batch_size
+
+      # Check if we should fetch another batch
+      fetch_more_batches = results.count == batch_size
+
+      # Update the total number of records processed so far
+      total_records += results.count
+
+      processed_member_ids = Set.new
+
+      results.each do |o|
+        blip_number                           = o['blip_number']
+        full_name                             = o['full_name']
+        blip_effectivity_date                 = o['blip_effectivity_date']
+        branch_name                           = o['branch_name']
+        center_name                           = o['center_name']
+        first_name                            = o['first_name']
+        middle_name                           = o['middle_name']
+        last_name                             = o['last_name']
+        suffix                                = o['suffix']
+        gender                                = o['gender']
+        marital_status                        = o['marital_status']
+        birthday                              = o['birthday']
+        place_of_birth                        = o['place_of_birth']
+        province                              = o['province']
+        city                                  = o['city']
+        street                                = o['street']
+        contact_number                        = o['contact_number']
+        tin_number                            = o['tin_number']
+        sss_number                            = o['sss_number']
+        spouse_first_name                     = o['spouse_first_name']
+        spouse_middle_name                    = o['spouse_middle_name']
+        spouse_last_name                      = o['spouse_last_name']
+        spouse_birthday                       = o['spouse_birthday']
+        first_dependent_name                  = o['first_dependent_name']
+        first_relationship                    = o['first_relationship']
+        first_date_of_birth                   = o['first_date_of_birth']
+        second_dependent_name                 = o['second_dependent_name']
+        second_relationship                   = o['second_relationship']
+        second_date_of_birth                  = o['second_date_of_birth']
+        third_dependent_name                  = o['third_dependent_name']
+        third_relationship                    = o['third_relationship']
+        third_date_of_birth                   = o['third_date_of_birth']
+        fourth_dependent_name                 = o['fourth_dependent_name']
+        fourth_relationship                   = o['fourth_relationship']
+        fourth_date_of_birth                  = o['fourth_date_of_birth']
+        fifth_dependent_name                  = o['fifth_dependent_name']
+        fifth_relationship                    = o['fifth_relationship']
+        fifth_date_of_birth                   = o['fifth_date_of_birth']
+        primary_name_beneficiary              = o['primary_name_beneficiary']
+        primary_relationship_beneficiary      = o['primary_date_of_birth_beneficiary']
+        primary_date_of_birth_beneficiary     = o['primary_date_of_birth_beneficiary']
+        secondary_name_beneficiary            = o['secondary_name_beneficiary']
+        secondary_relationship_beneficiary    = o['secondary_relationship_beneficiary']
+        secondary_date_of_birth_beneficiary   = o['secondary_date_of_birth_beneficiary']
+
+
+        member_records = {
+          userId: '',
+          data: {
+            accountNumber: blip_number,
+            fullname: full_name,
+            type: 'blipMembership',
+            zForm: [
+              {
+               id: '01branchAndCenter',
+               response: [ 'KMBA', branch_name, center_name ]
+              },
+              { id: 'blipEffectivityDate', response: blip_effectivity_date },
+              { id: '02recruitedBy', response: ''},
+              { id: '03firstName', response: first_name },
+              { id: '04middleName', response: middle_name },
+              { id: '05lastName', response: last_name },
+              { id: '52suffix', response: suffix },
+              { id: '53suffixText', response: '' },
+              { id: '06gender', response: gender },
+              { id: '07maritalStatus', response: marital_status },
+              { id: '08birthday', response: birthday },
+              { id: '09placeOfBirth', response: place_of_birth },
+              { id: '10address',
+                response: [ province, city, street ]
+              },
+              { id: '11contactNumber', response: contact_number },
+              { id: '12occupation', response: ''},
+              { id: '13workAddress', response: '' },
+              { id: '14tinSssGsis', response: [ tin_number, sss_number, '' ] },
+              { id: '15spouseDetailsHeader', response: '' },
+              { id: '16spouseFirstName', response: spouse_first_name },
+              { id: '17spouseMiddleName', response: spouse_middle_name },
+              { id: '18spouseLastName', response: spouse_last_name },
+              { id: '19spouseBirthday', response: spouse_birthday },
+              { id: '20spousePlaceOfBirth', response: '' },
+              { id: '21spousePlaceOfBirthAddress', response: '' },
+              { id: '22spouseContactNumber', response: '' },
+              { id: '23spouseOccupation', response: '' },
+              { id: '24spouseWorkAddress', response: '' },
+              { id: '25spouseTinSssGsis', response: '' },
+              { id: '26legalDependentsHeader', response: '' },
+              { id: '27firstDependentHeader', response: '' },
+              {
+                id: '28firstDependent',
+                response: [ first_dependent_name, first_relationship, first_date_of_birth ]
+              },
+              { id: '29secondDependentHeader', response: '' },
+              { id: '30secondDependent',
+                response: [ second_dependent_name, second_relationship, second_date_of_birth ]
+              },
+
+              { id: '31thirdDependentHeader', response: '' },
+              { id: '32thirdDependent',
+                response: [ third_dependent_name, third_relationship, third_date_of_birth ]
+              },
+              { id: '33fourthDependentHeader', response: '' },
+              { id: '34fourthDependent',
+                response: [ fourth_dependent_name, fourth_relationship, fourth_date_of_birth ]
+              },
+              { id: '35fifthDependentHeader', response: '' },
+              { id: '36fifthDependent',
+                response: [ fifth_dependent_name, fifth_relationship, fifth_date_of_birth ]
+              },
+              { id: '38primaryBeneficiaryHeader', response: '' },
+              {
+                id: '39primaryBeneficiary',
+                response: [ primary_name_beneficiary, primary_relationship_beneficiary, primary_date_of_birth_beneficiary ]
+              },
+              { id: '40secondaryBeneficiaryHeader', response: '' },
+              { id: '41secondaryBeneficiary' ,response: [ secondary_name_beneficiary, secondary_relationship_beneficiary, secondary_date_of_birth_beneficiary ] },
+              { id: '42applicantSelfieHeader', response: '' },
+              { id: '43applicantSelfie', response: '' },
+              { id: '44attachmentsHeader', response: '' },
+              { id: '45GovernmentIssuedId', response: '' },
+              { id: '46singleBirthCertificate', response: '' },
+              { id: '47mayKinakasamaAffidavitOfCohabitation', response: ''},
+              { id: '48ChildBirthCertificate', response: '' },
+              { id: '49kasalMarriageContract', response: '' },
+              { id: '50acknowledgementHeader', response: '' },
+              { id: '51signatureViaApp', response: '' },
+              { id: '52signatureViaUpload', response: '' }
+            ]
+          }
+        }
+
+        next if processed_member_ids.include?(blip_number)
+        payload = member_records
+        Rails.logger.info(puts payload.to_json)
+
+        raise payload.inspect
+
+        # if is_batch.present?
+        #   Rails.logger.info(puts("Posting to #{end_point}..."))
+        #   result = HTTParty.post(
+        #              end_point,
+        #              body: payload.to_json,
+        #              :headers => {
+        #                 'Content-Type' => 'application/json',
+        #                 'Authorization' => "Bearer #{bearer_token}"
+        #              }
+        #           )
+        #   Rails.logger.info(puts(result))
+
+        #   processed_member_ids.add(blip_number)
+        # end
+      end
+    end
+    puts "Total records processed: #{total_records}"
+  end
+
   #OLD API PAYMENTS
   task :send_payments => :environment do
     branch        = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
@@ -838,7 +1247,7 @@ namespace :kezar do
     end
   end
 
-  #OLD API Members
+  #OLD API MEMBERS
   task send_members: :environment do
     # branch_id           = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
     # branch              = Branch.find(branch_id)
@@ -1047,7 +1456,7 @@ namespace :kezar do
     end
   end
 
-  #OLD API BATCH Members
+  #OLD API BATCH MEMBERS
   task send_members: :environment do
     start_date        = ENV["START_DATE"]  || Date.today - 1.month
     end_date          = ENV["END_DATE"] || Date.today
@@ -1202,7 +1611,7 @@ namespace :kezar do
     end
   end
 
-  #OLD API for Claims
+  #OLD API CLAIMS
   task send_claims: :environment do
     start_date        = ENV["START_DATE"]  || Date.today - 1.month
     end_date          = ENV["END_DATE"] || Date.today
@@ -1476,7 +1885,6 @@ namespace :kezar do
     end
   end
 
-
   # WORKING ON SEND PAYMENTS TO TEST SERVER 172.104.179.39
   task send_to_mba_payments: :environment do
     # branch_id         = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"
@@ -1561,103 +1969,108 @@ namespace :kezar do
     end
   end
 
-  # task send_to_mba_claims: :environment do
-  #   # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
-  #   # branch            = Branch.find(branch_id)
+  # WORKING ON SEND CLAIMS TO TEST SERVER 172.104.179.39
+  task send_to_mba_claims: :environment do
+    # branch_id         = ENV["BRANCH_ID"] || "3777729a-78e6-4e40-95f8-ef2e8a8a122e"
+    # branch            = Branch.find(branch_id)
 
-  #   start_date                = ENV["START_DATE"]  || '2023-03-01'
-  #   end_date                  = ENV["END_DATE"] || '2023-03-31'
-  #   is_batch                  = ENV["BATCH"] || true
-  #   end_point                 = ENV['KOINS_RECEIVING_CLAIMS'] || "http://localhost:3000/api/receive_api/save_claims_api"
-  #   claim_type                = ["BLIP", "HIIP"]
-  #   claim_status              = "approved"
+    start_date                = ENV["START_DATE"]  || '2023-03-01'
+    end_date                  = ENV["END_DATE"] || '2023-03-31'
+    is_batch                  = ENV["BATCH"] || true
+    end_point                 = ENV['KOINS_RECEIVING_CLAIMS'] || "http://localhost:3000/api/receive_api/save_claims_api"
+    claim_type                = ["BLIP", "HIIP"]
+    claim_status              = "approved"
 
-  #   claim_data = Claim.select(
-  #     "
-  #       claims.id,
-  #       claims.date_prepared,
-  #       claims.prepared_by,
-  #       claims.created_at,
-  #       claims.updated_at,
-  #       claims.member_id,
-  #       claims.center_id,
-  #       claims.branch_id,
-  #       claims.claim_type,
-  #       claims.data,
-  #       claims.status,
-  #       claims.approved_by,
-  #       claims.checked_by,
-  #       claims.date_checked,
-  #       claims.date_approved,
-  #       claims.posted_by,
-  #       claims.date_posted
-  #     "
-  #   ).where(
-  #     "claims.created_at >= ? AND claims.created_at <= ? AND claims.claim_type IN (?) AND claims.status = ?",
-  #     start_date,
-  #     end_date,
-  #     claim_type,
-  #     claim_status
-  #   ).find_in_batches(:batch_size => 1) do |group|
+    claim_data = Claim.select(
+      "
+        claims.id,
+        claims.date_prepared,
+        claims.prepared_by,
+        claims.created_at,
+        claims.updated_at,
+        claims.member_id,
+        claims.center_id,
+        claims.branch_id,
+        claims.claim_type,
+        claims.data,
+        claims.status,
+        claims.approved_by,
+        claims.checked_by,
+        claims.date_checked,
+        claims.date_approved,
+        claims.posted_by,
+        claims.date_posted
+      "
+    ).where(
+      "claims.created_at >= ? AND claims.created_at <= ? AND claims.claim_type IN (?) AND claims.status = ?",
+      start_date,
+      end_date,
+      claim_type,
+      claim_status
+    ).find_in_batches(:batch_size => 1) do |group|
 
-  #     Rails.logger.info(puts("Uploading #{group.size}"))
-  #     claims = group.map{ |o|
-  #       {
-  #         date_prepared: o.date_prepared,
-  #         prepared_by: o.prepared_by,
-  #         created_at: o.created_at,
-  #         updated_at: o.updated_at,
-  #         member_id: o.member_id,
-  #         center_id: o.center_id,
-  #         branch_id: o.branch_id,
-  #         claim_type: o.claim_type,
-  #         data: o.data,
-  #         status: o.status,
-  #         approved_by: o.approved_by,
-  #         checked_by: o.checked_by,
-  #         date_checked: o.date_checked,
-  #         date_approved: o.date_approved,
-  #         posted_by: o.posted_by,
-  #         date_posted: o.date_posted
-  #       }
-  #     }
+      Rails.logger.info(puts("Uploading #{group.size}"))
+      claims = group.map{ |o|
+        {
+          date_prepared: o.date_prepared,
+          prepared_by: o.prepared_by,
+          created_at: o.created_at,
+          updated_at: o.updated_at,
+          member_id: o.member_id,
+          center_id: o.center_id,
+          branch_id: o.branch_id,
+          claim_type: o.claim_type,
+          data: o.data,
+          status: o.status,
+          approved_by: o.approved_by,
+          checked_by: o.checked_by,
+          date_checked: o.date_checked,
+          date_approved: o.date_approved,
+          posted_by: o.posted_by,
+          date_posted: o.date_posted
+        }
+      }
 
-  #     Rails.logger.info(puts(claims.to_json))
+      Rails.logger.info(puts(claims.to_json))
 
-  #     payload = claims
+      payload = claims
 
-  #     if is_batch.present?
-  #      Rails.logger.info(puts "Posting to #{end_point}....")
-  #       result = HTTParty.post(
-  #         end_point,
-  #         body: payload.to_json,
-  #         :headers => { 'Content-Type' => 'application/json' }
-  #       )
-  #       Rails.logger.info(puts(result))
-  #     else
-  #       payload.each do |p|
-  #         # Posting logic here
-  #         Rails.logger.info(puts "Posting to #{end_point}....")
-  #         result = HTTParty.post(
-  #           end_point,
-  #           body: p.to_json,
-  #           :headers => { 'Content-Type' => 'application/json' }
-  #         )
-  #         Rail.logger.info(puts(result))
-  #       end
-  #     end
-  #   end
-  # end
+      if is_batch.present?
+       Rails.logger.info(puts "Posting to #{end_point}....")
+        result = HTTParty.post(
+          end_point,
+          body: payload.to_json,
+          :headers => { 'Content-Type' => 'application/json' }
+        )
+        Rails.logger.info(puts(result))
+      else
+        payload.each do |p|
+          # Posting logic here
+          Rails.logger.info(puts "Posting to #{end_point}....")
+          result = HTTParty.post(
+            end_point,
+            body: p.to_json,
+            :headers => { 'Content-Type' => 'application/json' }
+          )
+          Rail.logger.info(puts(result))
+        end
+      end
+    end
+  end
 end
 
 
+# NEW API
+# ---Payments---
+# bundle exec rake kezar:payment_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
+# ---Members---
+# bundle exec rake kezar:member_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
 
 
-# ------------ Batch Upload Live Payments------------
+# OLD API BATCH UPLOAD
+# ---Payments---
 # bundle exec rails kezar:send_payments KEZAR_API_SEND_PAYMENTS='https://us-central1-rms-kmba.cloudfunctions.net/api/payment/batch/upload' RAILS_ENV=development
-
-# ------------ Batch Upload Live Membership------------
+# ---Members---
 # bundle exec rails kezar:send_members KEZAR_API_SEND_MEMBERDATA='https://us-central1-rms-kmba.cloudfunctions.net/api/membership/batch/upload' RAILS_ENV=development
-
-# ------------ Batch Upload Live Claims ------------
+# ---Claims---
 # bundle exec rails kezar:send_claims KEZAR_API_SEND_CLAIMDATA='https://us-central1-rms-kmba.cloudfunctions.net/api/claim/batch/upload' RAILS_ENV=development

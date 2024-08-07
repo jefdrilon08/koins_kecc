@@ -1,138 +1,71 @@
-%table.table.table-bordered.table-sm
-  %thead
-    %tr
-      %th
-        Loan Status 
-      %th
-        Name
-      %th
-        PlanType
-      %th
-        Plan Category
-      %th
-        Effectivity Date
-      %th
-        Maturity Date
-      %th
-        Client Type
-      %th
-        First Name
-      %th
-        Middle Name
-      %th
-        Last Name
-      %th
-        Address
-      %th
-        Enrolled Status
-      %th
-        Birth Date
-      %th
-        Age
-      %th
-        Mobile No
-      %th.text-right
-        PremiumCoverage
-      - if @insurance_loan_bundle_enrollment.pending?
-        %th.text-center
-          Actions 
-  %tbody
-    - records.each_with_index do |o, i|
-      %tr 
-        - member_id = o[:member][:id]
-        - loan_pending = Loan.find_by(member_id: member_id, loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a", status: "pending")
-        - loan_active = Loan.find_by(member_id: member_id, loan_product_id: "29a8e8a4-56f5-4aeb-ad49-0b0cd1bcda0a", status: "active")
-        - is_last = i == records.length - 1
 
-        - if is_last
-          - if loan_pending
-            - loan_id = loan_pending.id
-            %td
-              = link_to loan_path(loan_pending&.id), class: 'btn btn-secondary', target: '_blank' do
-                View Loan
-            %td
-              = link_to member_path(member_id), target: '_blank' do
-                #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-          - elsif loan_active
-            %td
-              Approved
-            %td
-              #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-          - else
-            %td
-              Approved
-            %td
-              #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-          %td
-            #{o[:kok_data][:plan_type]}
-          %td
-            #{o[:kok_data][:plan_category]}
-          %td
-            #{o[:kok_data][:effectivity_date]}
-          %td
-            #{o[:kok_data][:maturity_date]}
-          %td
-            #{o[:kok_data][:client_type]}
-          %td
-            #{o[:kok_data][:first_name]}
-          %td
-            #{o[:kok_data][:middle_name]}
-          %td
-            #{o[:kok_data][:last_name]}
-          %td
-            #{o[:kok_data][:address]}
-          %td
-            #{o[:kok_data][:enrolled_status]}
-          %td
-            #{o[:kok_data][:birth_date]}
-          %td
-            #{o[:kok_data][:age].to_i}
-          %td
-            #{o[:kok_data][:mobile_no]} 
-          %td.text-right
-            #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
-          - if @insurance_loan_bundle_enrollment.pending?
-            %td.text-center
-              - if @insurance_loan_bundle_enrollment.records_last
-                %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
-                  .fa.fa-times
-        - else
-          %td
-            Approved
-          %td
+%table.table.table-bordered.table-sm
+  - records.each_with_index do |o, i|
+    %thead
+      %tr
+        %th
+          FullName
+        %th
+          Plan Type
+        %th
+          Member Details
+        %th
+          Beneficiary Details
+        %th
+          Coverage Dates
+        %th
+          Enrolled Status
+        %th.text-right
+          PremiumCoverage
+        - if @insurance_loan_bundle_enrollment.pending?
+          %th.text-center
+            Action
+    %tbody
+      %tr
+        %td
+          = link_to member_path(o[:member][:id]), target: '_blank' do
             #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-          %td
-            #{o[:kok_data][:plan_type]}
-          %td
-            #{o[:kok_data][:plan_category]}
-          %td
-            #{o[:kok_data][:effectivity_date]}
-          %td
-            #{o[:kok_data][:maturity_date]}
-          %td
-            #{o[:kok_data][:client_type]}
-          %td
-            #{o[:kok_data][:first_name]}
-          %td
-            #{o[:kok_data][:middle_name]}
-          %td
-            #{o[:kok_data][:last_name]}
-          %td
-            #{o[:kok_data][:address]}
-          %td
-            #{o[:kok_data][:enrolled_status]}
-          %td
-            #{o[:kok_data][:birth_date]}
-          %td
-            #{o[:kok_data][:age].to_i}
-          %td
-            #{o[:kok_data][:mobile_no]} 
-          %td.text-right
-            #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
-          - if @insurance_loan_bundle_enrollment.pending?
-            %td.text-center
-              - if @insurance_loan_bundle_enrollment.records_last
-                %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
-                  .fa.fa-times
+        %td
+          #{o[:kok_data][:plan_type]}
+        %td
+          Birth Date :
+          #{o[:kok_data][:birth_date]}
+          %br
+          Age :
+          #{o[:kok_data][:age].to_i}
+          %br
+          Mobile Number : 
+          #{o[:kok_data][:mobile_no]} 
+          %br
+          Addrress : 
+          #{o[:kok_data][:address]}
+        %td
+          FullName:
+          #{o[:kok_data][:benif_fname]} #{o[:kok_data][:benif_mname]} #{o[:kok_data][:benif_lname]}
+          %br
+          Birth Date:
+          #{o[:kok_data][:benif_birth_date]}
+          %br
+          Gender:
+          #{o[:kok_data][:benif_gender]}
+          %br 
+          Relationship
+          #{o[:kok_data][:benif_relationship]}
+        %td
+          %strong Effectivity Date : 
+          #{o[:kok_data][:effectivity_date]}
+          %br
+          %strong Maturity Date : 
+          #{o[:kok_data][:maturity_date]}         
+        %td
+          #{o[:kok_data][:enrolled_status]}          
+        %td.text-right
+          #{number_to_currency(o[:kok_data][:premium_coverage], unit: '')}
+        - if @insurance_loan_bundle_enrollment.pending?
+          - if @insurance_loan_bundle_enrollment.records_last
+            %td
+              %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
+                .fa.fa-times
+                  REMOVE
 
 
