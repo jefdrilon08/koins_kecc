@@ -647,6 +647,11 @@ Rails.application.routes.draw do
 
   get "branch_cash_flow",to: "branch_cash_flow#index", as: :branch_cash_flow
 
+  #AC SUMMARY
+  get "/allowance_losses/generate", to: "allowance_losses#generate", as: :allowance_losses_generate
+  # get "/allowance_losses/dates", to: "allowance_losses#dates", as: :allowance_for_impairment_losses_dates
+  # get 'allowance_losses/generate', to: 'allowance_losses#generate
+
   # ACTIVITY LOGS
   #resources :activity_logs, only: [:index]
 
