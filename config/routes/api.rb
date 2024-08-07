@@ -11,9 +11,13 @@ namespace :api do
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules
-  post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
+  post "/psr_schedules/generate", to: "psr_schedules#generate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
+
+  post "/allowance_losses/generate", to: "allowance_losses#generate"
+
+  get "/allowance_losses/fetch", to: "allowance_losses#fetch"
 
   # API for KEZAR
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
