@@ -68,7 +68,7 @@ import AdministrationUsersIndex from "../components/administration/users/Index.j
 import AdministrationUsersShow from "../components/administration/users/Show.js";
 import AllowanceComputationReportShowComponent from "../components/data_stores/allowance_computation_report/ShowComponents.js";
 import Login from "../components/users/Login.js";
-
+import AllowanceLosses from "../components/allowance_losses/Generate.js";
 
 // "init" Objects
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
@@ -491,8 +491,8 @@ const hooks = {
 
   "data_stores/allowance_computation_report/index":		[AllowanceComputationIndex],
   "data_stores/written_off_report/index":             [WrittenOffReportIndex],
-  "data_stores/written_off_report/show":              [WrittenOffReportShow]
-
+  "data_stores/written_off_report/show":              [WrittenOffReportShow],
+  "allowance_losses/generate":                        [AllowanceLosses]
 }
 
 const renderComponent = (Component, payload) => {
