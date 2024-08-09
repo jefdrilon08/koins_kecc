@@ -525,6 +525,7 @@ namespace :api do
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
     post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+    post "/accrued_payment_collections/add_si", to: "accrued_payment_collections#add_si"
 
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"

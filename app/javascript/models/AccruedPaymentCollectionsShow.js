@@ -42,6 +42,8 @@ var $btnAddParticular;
 var $inputParticular;
 var $btnAddOr;
 var $inputOrNumber;
+var $inputSiNumber;
+var $btnAddSi;
 var $btnAddAr;
 var $inputArNumber;
 var $btnAddBook;
@@ -84,6 +86,7 @@ var _urlCenters       = "/api/v1/branches/fetch_centers";
 var _urlLoans         = "/api/v1/loans/fetch_by_member";
 var _urlAddParticular = "/api/v1/accrued_payment_collections/add_particular";
 var _urlAddOr     = "/api/v1/accrued_payment_collections/add_or";
+var _urlAddSi     = "/api/v1/accrued_payment_collections/add_si";
 var _urlAddAr     = "/api/v1/accrued_payment_collections/add_ar";
 var _urlAddBookType     = "/api/v1/accrued_payment_collections/add_book_type";
 
@@ -142,6 +145,8 @@ var _cacheDom = function() {
   $inputParticular          = $("#particular");
   $btnAddOr         = $("#btn-add-or");
   $inputOrNumber     = $("#or_number");
+  $inputSiNumber     = $("#si_number");
+  $btnAddSi         = $("#btn-add-si");
   
   $btnAddAr         = $("#btn-add-ar");
   $inputArNumber          = $("#ar_number");
@@ -369,7 +374,41 @@ var _bindEvents = function() {
     _moratoriumId = $(this).data("id");
     $modalProcess.show();
   });
-  
+  $btnAddSi.on("click", function(){
+    var txtSi = $inputSiNumber.val();
+    _id = $(this).data("id");
+    $.ajax({	    
+      url: _urlAddSi,
+      method: "POST",
+      data: {
+        id: _id,
+        txtSi: txtSi,
+        authenticity_token: _authenticityToken
+      },
+      success: function(response) {
+        $message.html("Success!");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors  = [];
+
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors = ["Something went wrong"];
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnAddOr.prop("disabled", false);
+        }
+      }
+    });
+  });
   $btnAddOr.on("click", function() {
     var txtOr = $inputOrNumber.val()
     _id = $(this).data("id");	  
