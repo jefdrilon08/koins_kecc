@@ -234,6 +234,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     post "/billing_for_writeoff_collection/add_particular", to: "billing_for_writeoff_collection#add_particular"
     post "/billing_for_writeoff_collection/add_book_type", to: "billing_for_writeoff_collection#add_book_type"
+    post "/billing_for_writeoff_collection/add_si_number", to: "billing_for_writeoff_collection#add_si_number"
 
     #billing_for_involuntary
     post "/billing_for_involuntary/create", to: "billing_for_involuntary#create"
