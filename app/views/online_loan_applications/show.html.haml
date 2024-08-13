@@ -142,12 +142,17 @@
                 %th{ width: "25%" }
                   Co-maker sa bahay
                 %td
-                  #{@online_application.co_maker_last_name}, #{@online_application.co_maker_first_name}
+                  - if @online_application.member.member_type != " Kaagapay"
+                    #{@online_application.co_maker_last_name}, #{@online_application.co_maker_first_name}
               %tr
                 %th
                   Co-maker sa sentro
                 %td
-                  #{Member.find( @online_application.co_maker_member_id).full_name}
+                  -# #{@online_application.member.member_type}
+                  - if @online_application.member.member_type != "GK"
+                    = Member.find(@online_application.co_maker_member_id).full_name
+                    -#  #{Member.find( @online_application.co_maker_member_id).full_name}
+                 
         %h4
         
         .table-responsive
