@@ -16,7 +16,11 @@ var $modalUpdate;
 var $modalApproveTransaction;
 var $btnAddParticular;
 var $inputParticular;
+var $inputSinumber;
+var $btnAddSinumber;
+
 var _urlAddParticular   = "/api/v1/billing_for_writeoff_collection/add_particular";
+var _urlAddSiNumber   = "/api/v1/billing_for_writeoff_collection/add_si_number";
 var _urlAddBookType     = "/api/v1/billing_for_writeoff_collection/add_book_type";
 var _loanId;
 var _memberId;
@@ -47,6 +51,8 @@ var _cacheDom = function() {
   $loanType           = $("#loanType");
   $btnAddParticular   = $("#btn-add-particular");
   $inputParticular    = $("#particular");
+  $inputSinumber      = $("#si_number");
+  $btnAddSinumber     = $("#btn-add-si");
   $message            = $(".message");
 };
 
@@ -89,6 +95,7 @@ var _bindEvents = function() {
       });
  
   });
+
 
   $btnAdd.on("click", function() {
     _memberId = $selectMember.val();
@@ -225,7 +232,41 @@ var _bindEvents = function() {
       }
     });
   });
- 
+  $btnAddSinumber.on("click", function(){
+    var si_number = $inputSinumber.val();
+    _id = $(this).data("id");
+       $.ajax({
+        url:_urlAddSiNumber,
+        method: "POST",
+        data: {
+          id: _id,
+          si_number: si_number,
+          authenticity_token: _authenticityToken
+        },
+        success: function(response) {
+          $message.html("Success!");
+          window.location.reload();
+        },
+        error: function(response) {
+          var errors  = [];
+          try {
+            errors  = JSON.parse(response.responseText).full_messages;
+          } catch(err) {
+            errors = ["Something went wrong"];
+          } finally {
+            $message.html(
+              Mustache.render(
+                templateErrorList,
+                { errors: errors }
+              )
+            );
+
+            $btnAddSinumber.prop("disabled", false);
+          }
+        }
+       })
+     });
+
   $btnAddParticular.on("click", function() {
     var txtParticular = $inputParticular.val()
       _id = $(this).data("id");	  

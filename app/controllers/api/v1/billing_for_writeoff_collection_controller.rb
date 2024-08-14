@@ -70,6 +70,16 @@ module Api
         data_store.save!
         render json: { message: "Done" }
       end
+
+      def add_si_number
+        data_store_id     = params[:id]
+        si_number    =  params[:si_number]
+        
+        data_store = DataStore.find(data_store_id)
+        data_store.data['accounting_entry']["data"]["si_number"] = si_number
+        data_store.save!
+        render json: { message: "Done" }
+      end
         
       def approve
         record = DataStore.find(params[:id])
