@@ -3461,10 +3461,11 @@ namespace :adjust do
       status = k.status
       if status == "approved" || status == "for-renewal" || status == "on-grace-period"
         kok_data = k.data.with_indifferent_access[:records]
+        kok_count = k.data.with_indifferent_access[:records].count
         kok_last_data = kok_data.last
 
         insurance_loan_bundle_enrollment      = InsuranceLoanBundleEnrollment.where(id: k[:id]).first
-        plan_type                             = kok_last_data[:kok_data][:plan_type]
+        plan_type                             = kok_last_data[:kok_data][:plan_type],
         plan_category                         = kok_last_data[:kok_data][:plan_type],
         partner                               = kok_last_data[:kok_data][:partner],
         policy_no                             = kok_last_data[:kok_data][:policy_no],
@@ -3492,8 +3493,16 @@ namespace :adjust do
         member                                = Member.where(id: kok_last_data[:member][:id]).first
         kok_id                                = k[:id]
         maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
-        four_weeks_ago                        = (maturity_date - 28)
-        on_grace_period                       = (maturity_date + 30)
+        effectivity_date                      = kok_last_data[:kok_data][:effectivity_date].to_date
+
+        if kok_count == 1
+          four_weeks_ago                        = (maturity_date - 28)
+          on_grace_period                       = (maturity_date + 30)
+        else
+          four_weeks_ago                        = (effectivity_date - 28)
+          on_grace_period                       = (effectivity_date + 30)
+        end
+
         status                                = k[:status]
         now                                   = Date.today
 
