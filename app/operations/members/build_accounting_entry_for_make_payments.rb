@@ -42,7 +42,8 @@ module Members
         status: "display",
         data: {
           or_number: @or_number ,
-          ar_number: 0.0,
+          si_number: 0.0,
+          ar_number: 0.0
         }
       }
       

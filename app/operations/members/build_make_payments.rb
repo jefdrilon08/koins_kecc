@@ -26,6 +26,7 @@ module Members
           meta: {
                   book: "CRB",
                   or_number: "",
+                  si_number: "",
                   ar_number: "",
                   particular: ""
                 },
