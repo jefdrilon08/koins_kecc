@@ -1,78 +1,73 @@
 - if !is_bk?
   .row
-    .col-md-6
-      .form-group
-        .h3
-          %label K-DAKILA INFORMATION 
-    .col-md-4
-    .col-md-2
-      %label Status :
-      - if @insurance_loan_bundle_enrollment.on_grace_period?
-        %button.btn.btn-sm.btn-warning.btn-block
-          On Grace Period
-      - if @insurance_loan_bundle_enrollment.for_renewal?
-        %button.btn.btn-sm.btn-secondary.btn-block
-          For Renewal
-      - if @insurance_loan_bundle_enrollment.approved?
-        %button.btn.btn-sm.btn-success.btn-block
-          Approved
-      - if @insurance_loan_bundle_enrollment.checked?
-        %button.btn.btn-sm.btn-info.btn-block
-          For Approval
-  - if @insurance_loan_bundle_enrollment.on_grace_period? || @insurance_loan_bundle_enrollment.for_renewal?
-    .row
-      .col-md-3
-        .form-group
-          .h3
-            %label BENEFICIARY INFORMATION
-    .row
-      .col-md-3
-        .form-group
-          %label Beneficiary First Name       
-          = text_field_tag :benif_fname, @benif_fname, id: 'input-benif-fname', class: 'form-control'
-      .col-md-3
-        .form-group
-          %label Beneficiary Middle Name       
-          = text_field_tag :benif_mname, @benif_mname, id: 'input-benif-mname', class: 'form-control'
-      .col-md-3
-        .form-group
-          %label Beneficiary Last Name       
-          = text_field_tag :benif_lname, @benif_lname, id: 'input-benif-lname', class: 'form-control'
-      .col-md-3  
-        .form-group
-          %label Beneficiary Birth Date
-          = date_field_tag :benif_birth_date, @benif_birth_date, id: 'input-benif-birth-date', class: 'form-control'
-    .row
-      .col-md-3
-        .form-group
-          %label Beneficiary Gender       
-          = select_tag :benif_gender, options_for_select([['Select Gender', '', {disabled: true, selected: true}]] + ["MALE" , "FEMALE"], @benif_gender), id: 'input-benif-gender', class: 'form-control'
-      .col-md-3
-        .form-group
-          %label Beneficiary Relationship
-          = select_tag :benif_relationship, options_for_select([['Select Relationship', '', {disabled: true, selected: true}]] + ["Aunt","Brother","Brother in law","Cousin","Daughter","Father","Father in law","Friend","Granddaughter","Grandfather","Grandmother","Grandson","Husband","Member","Mother","Mother in law","Neighbor","Nephew","Niece","Sister","Sister in law","Son","Step Brother","Step Daughter","Step Father","Step Mother","Step Sister","Step Son","Uncle","Wife"], @benif_relationship), id: 'input-benif-relationship', class: 'form-control'
-    .row
-      .col-md-2
-        .form-group
-          %button#btn_update_beneficiary.btn.btn-primary.btn-block
-            .fa.fa-plus
-            Update Beneficiary
-  / - else
-  /   .row
-  /     .col-md-2
-  /       .form-group
-  /         %label
-  /           Actions
-  /         %button#btn-add.btn.btn-info.btn-block
-  /           .fa.fa-plus
-  /           RENEW
-
-- if @insurance_loan_bundle_enrollment.approved?
-  .row
-    .col-md-2
-      .form-group
+    .col-md-12
+      .h2
+        %label K-DAKILA INFORMATION
         %label
-          Actions
-        %button#btn-add.btn.btn-info.btn-block
-          .fa.fa-plus
-          RENEW
+        %label
+        - if @insurance_loan_bundle_enrollment.approved?
+          %button.btn.btn-sm.btn-success.btn-block
+            APPROVED
+        - if @insurance_loan_bundle_enrollment.lapsed?
+          %button.btn.btn-sm.btn-danger.btn-block
+            LAPSED
+        - if @insurance_loan_bundle_enrollment.checked?
+          %button.btn.btn-sm.btn-info.btn-block
+            FOR-APPROVAL
+        - if @insurance_loan_bundle_enrollment.for_renewal?
+          %button.btn.btn-sm.btn-secondary.btn-block
+            FOR-RENEWAL
+        - if @insurance_loan_bundle_enrollment.on_grace_period?
+          %button.btn.btn-sm.btn-warning.btn-block
+            ON-GRACE-PERIOD
+        - if @insurance_loan_bundle_enrollment.over_age?
+          %button.btn.btn-sm.btn-dark.btn-block
+            OVER-AGE
+        - if @insurance_loan_bundle_enrollment.declined?
+          %button.btn.btn-sm.btn-danger.btn-block
+            DECLINED
+  - if @insurance_loan_bundle_enrollment.on_grace_period? || @insurance_loan_bundle_enrollment.for_renewal?
+    .card
+      .card-body
+        .row
+          .col-md-6
+            .form-group
+              .h3
+                %label BENEFICIARY INFORMATION
+        .row
+          .col-md-6 
+            .row
+              .col-md-4
+                .form-group
+                  %label First Name       
+                  = text_field_tag :benif_fname, @benif_fname, id: 'input-benif-fname', class: 'form-control'
+              .col-md-4
+                .form-group
+                  %label Middle Name       
+                  = text_field_tag :benif_mname, @benif_mname, id: 'input-benif-mname', class: 'form-control'
+              .col-md-4
+                .form-group
+                  %label Last Name       
+                  = text_field_tag :benif_lname, @benif_lname, id: 'input-benif-lname', class: 'form-control'
+          .col-md-6
+            .row
+              .col-md-3  
+                .form-group
+                  %label Birth Date
+                  = date_field_tag :benif_birth_date, @benif_birth_date, id: 'input-benif-birth-date', class: 'form-control'
+              .col-md-3
+                .form-group
+                  %label Gender       
+                  = select_tag :benif_gender, options_for_select([['Select Gender', '', {disabled: true, selected: true}]] + ["MALE" , "FEMALE"], @benif_gender), id: 'input-benif-gender', class: 'form-control'
+              .col-md-3
+                .form-group
+                  %label Relationship
+                  = select_tag :benif_relationship, options_for_select([['Select Relationship', '', {disabled: true, selected: true}]] + ["Aunt","Brother","Brother in law","Cousin","Daughter","Father","Father in law","Friend","Granddaughter","Grandfather","Grandmother","Grandson","Husband","Member","Mother","Mother in law","Neighbor","Nephew","Niece","Sister","Sister in law","Son","Step Brother","Step Daughter","Step Father","Step Mother","Step Sister","Step Son","Uncle","Wife"], @benif_relationship), id: 'input-benif-relationship', class: 'form-control'
+              .col-md-3
+                .form-group
+                  %label Actions
+                  %button#btn_update_beneficiary.btn.btn-primary.btn-block
+                    .fa.fa-plus
+                    Update Beneficiary
+    
+
