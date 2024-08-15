@@ -49,6 +49,37 @@ module Members
           mobile_number:        []
         }
       end
+      # def show
+      #   begin
+      #     @member = Member.find(params[:id])
+      #     # Your logic here
+      #   rescue ActiveRecord::RecordNotFound
+      #     render json: { error: 'Member not found' }, status: :not_found
+      #   end
+      # end
+      
+      def allowed_member_attributes(member)
+        allowed_fields = [:member_type]
+        attributes = member.attributes.slice(*allowed_fields.map(&:to_s)).with_indifferent_access
+        attributes
+      end
+
+      def member_type
+        # Find the member by ID
+        member = Member.find_by(id: params[:id])
+        
+        # Handle the case where the member is not found
+        if member.nil?
+          render json: { error: 'Member not found' }, status: :not_found
+          return
+        end
+      
+        # Get allowed member attributes
+        member_data = allowed_member_attributes(member)
+        
+        # Render the member data in the response
+        render json: { member: member_data }
+      end
 
       def execute!
         if @amount.blank?
@@ -68,14 +99,25 @@ module Members
         end
 
         # If the member type is GK, its not required to fill the co_maker and clip
-        if @member.member_type != "GK"
-          if @co_maker_first_name.blank?
-            @payload[:co_maker_first_name] << "required"
+        if @member.present?
+          Rails.logger.debug "Member type: #{@member.member_type}" # Debugging line
+          
+          if @member.member_type != " Kaagapay"
+            if @co_maker_first_name.blank?
+              @payload[:co_maker_first_name] << "required"
+            end
+      
+            if @co_maker_last_name.blank?
+              @payload[:co_maker_last_name] << "required"
+            end
           end
-  
-          if @co_maker_last_name.blank?
-            @payload[:co_maker_last_name] << "required"
-          end
+      
+          # if @member.member_type != "GK"
+            if @co_maker_member_id.blank?
+              @payload[:co_maker_member_id] << "required"
+            end
+          # end
+        end
 
           if @data[:clip_beneficiary][:first_name].blank?
             @payload[:clip_beneficiary_first_name] << "required"
@@ -96,11 +138,10 @@ module Members
           if @data[:clip_beneficiary][:relationship].blank?
             @payload[:clip_beneficiary_relationship] << "required"
           end
-        end
 
-        if @co_maker_member_id.blank?
-          @payload[:co_maker_member_id] << "required"
-        end
+        # if @co_maker_member_id.blank?
+        #   @payload[:co_maker_member_id] << "required"
+        # end
 
         if @loan_product.blank?
           @payload[:loan_product_id] << "required"
@@ -114,7 +155,7 @@ module Members
         mobile_number_exist = false
 
         if @data[:mobile_number].blank? 
-          @payload[:mobile_number] << "required" 
+          @payload[:mobile_number] 
 
         elsif mobile_number_count > 0
           if mobile_number_count == 1
