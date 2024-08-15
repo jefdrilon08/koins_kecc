@@ -1,5 +1,5 @@
 %br
-.message
+
 .row
   = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
   .col
@@ -16,7 +16,7 @@
     .form-group
       %label.col.control-label{class: "col-md-12"}
         Date Prepared
-        = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control', type: 'date', id: 'date-prepared'
+        = text_field_tag :date_prepared, (@claim.date_prepared || Date.today.strftime('%Y-%m-%d')), class: 'form-control', type: 'date', id: 'date-prepared'
   .col{class: "col-md-3"}
     .form-group
       %label.col.control-label{class: "col-md-12"}
@@ -96,6 +96,8 @@
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
 %br
+%br
+.message
 
 .row
   .col

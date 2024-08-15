@@ -3495,12 +3495,12 @@ namespace :adjust do
         maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
         effectivity_date                      = kok_last_data[:kok_data][:effectivity_date].to_date
 
-        if kok_count == 1
-          four_weeks_ago                        = (maturity_date - 28)
-          on_grace_period                       = (maturity_date + 30)
+        if status == "on-grace-period"
+          four_weeks_ago                      = (effectivity_date - 28)
+          on_grace_period                     = (effectivity_date + 30)
         else
-          four_weeks_ago                        = (effectivity_date - 28)
-          on_grace_period                       = (effectivity_date + 30)
+          four_weeks_ago                      = (maturity_date - 28)
+          on_grace_period                     = (maturity_date + 30)
         end
 
         status                                = k[:status]
@@ -3627,6 +3627,17 @@ namespace :adjust do
         }
 
         ProcessKokLoanLapsed.perform_later(config)
+      end
+    end
+  end
+
+  task :process_kok_remove_unnecessary_data => :environment do
+    kok = InsuranceLoanBundleEnrollment.all
+
+    kok.each do |kok|
+      status = kok.status
+      if status == "for-renewal"
+        ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
       end
     end
   end

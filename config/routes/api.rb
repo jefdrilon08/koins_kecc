@@ -62,6 +62,7 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
+  post "/members/add_recognition_date", to: "members#add_recognition_date"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
   post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
   post "/members/is_reclassified", to: "members#is_reclassified"
@@ -385,6 +386,7 @@ namespace :api do
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
+    post "/members/add_recognition_date", to: "members#add_recognition_date"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
     post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
     post "/members/is_reclassified", to: "members#is_reclassified"
@@ -808,7 +810,7 @@ namespace :api do
       post "/admin_municipality/create", to: "admin_municipality#create"
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
-      
+
     end
 
     get 'reports/member_reports', to: 'reports#member_reports'
