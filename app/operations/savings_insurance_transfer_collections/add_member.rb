@@ -4,23 +4,35 @@ module SavingsInsuranceTransferCollections
       @config                                 = config
       @savings_insurance_transfer_collection  = @config[:savings_insurance_transfer_collection]
       @member                                 = @config[:member]
-      @amount                                 = @config[:amount]
+      if !@savings_insurance_transfer_collection.clip
+        @amount                                 = @config[:amount]
+      end
       @user                                   = @config[:user]
 
       if @savings_insurance_transfer_collection.clip
         @loan_product_id                        = @config[:loan_product_id]
-        @principal                              = @config[:principal]
+        if Settings.activate_microinsurance
+          @principal                              = @config[:principal].to_i
+        else
+          @principal                              = @config[:principal]
+        end
+        
         @term                                   = @config[:term]
-        @num_installments                       = @config[:num_installments]
         @maturity_date                          = @config[:maturity_date]
         @effective_date                         = @config[:effective_date]
         @clip_number                            = @config[:clip_number]
         @beneficiary                            = @config[:beneficiary]
-
+        @num_installments                       = @config[:num_installments]
         if !Settings.activate_microinsurance
           if @loan_product_id.present?
             @loan_product_name = LoanProduct.find(@loan_product_id).to_s
           end
+        end
+      end
+        
+      if Settings.activate_microinsurance
+        if @savings_insurance_transfer_collection.clip
+          @amount                             = ((@principal * 0.014 * (@num_installments).to_i) / 12) 
         end
       end
 
