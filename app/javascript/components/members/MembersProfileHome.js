@@ -216,7 +216,18 @@ export default function MembersProfileHome(props) {
 }
                 </b>
               </div>
-            </li>  
+            </li>
+            <li className="list-group-item">
+            Sms Status
+            <div className="value text-muted">
+              <b style={{ color: props.member.data?.sms_record?.sms_rec ? "green" : "inherit" }}>
+                {props.member.data?.sms_record?.sms_rec !== undefined &&
+                new Date(props.member.data.sms_record.loan_maturity) > new Date() 
+                  ? props.member.data.sms_record.sms_rec.toString().toUpperCase()
+                  : "N/A"}
+              </b>
+            </div>
+          </li>
           </ul>
         </div>
         <div className="col-md-9">
