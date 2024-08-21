@@ -29,13 +29,16 @@
             #{o.member_name.uniq.join(",")}
         %td 
           - records = o.records_last
-          - if records.nil?
-
-          -else
-            - if o.for_renewal? || o.on_grace_period?
+          - number = o.data['records'].count
+          - if o.for_renewal? || o.on_grace_period?
+            #{records["kok_data"]["effectivity_date"]}
+          - elsif o.lapsed?
+            - if number > 1
               #{records["kok_data"]["effectivity_date"]}
-            - else
+            - else 
               #{records["kok_data"]["maturity_date"]}
+          - else 
+            #{records["kok_data"]["maturity_date"]}
         %td
           - if o.pending?
             .badge.bg-primary
