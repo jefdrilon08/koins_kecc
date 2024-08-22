@@ -28,7 +28,7 @@ namespace :adjust do
                                         data: data
                                       )
         m.update!(balance: total_balance)
-      
+
       elsif a[:name] == 'Retirement Fund'
         m = MemberAccount.where("member_id in (?) and account_subtype = ?", member_id ,a[:name]).last
         total_balance = m.balance.to_f + a[:amount].to_f
@@ -3638,6 +3638,17 @@ namespace :adjust do
       status = kok.status
       if status == "for-renewal"
         ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
+      end
+    end
+  end
+
+  task :process_kok_remove_unnecessary_data_for_approve => :environment do
+    kok = InsuranceLoanBundleEnrollment.all
+
+    kok.each do |kok|
+      status = kok.status
+      if status == "approved"
+        ProcessKokLoanRemoveUnnecessaryDataForApprove.perform_later(kok)
       end
     end
   end

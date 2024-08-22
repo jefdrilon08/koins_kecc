@@ -24,7 +24,7 @@
     - if Settings.activate_microinsurance
       .col-md-3  
         .form-group
-          %label Loan Term (in months)     
+          %label  Term (in Months)
           = select_tag :num_installments, options_for_select([ 3, 6, 9, 12], @num_installments), id: 'input-num-installments', class: 'form-control'
     - if !Settings.activate_microinsurance
       .col-md-3  
@@ -150,7 +150,11 @@
         %label
           Amount
         = number_field_tag :amount, 50.00, id: 'input-amount', class: 'form-control', disabled: true
-  - else
+  - elsif @savings_insurance_transfer_collection.clip && Settings.activate_microinsurance
+    .col-md-4
+      .form-group
+        %label
+  - else 
     .col-md-4
       .form-group
         %label
