@@ -46,8 +46,16 @@ class OnlineLoanApplicationsController < ApplicationController
     end
   
  
-    @online_applications_test  = LoanApplication.joins(:member).where("members.branch_id is not null")
-    @online_applications  = LoanApplication.joins(:member).where("members.branch_id is null and loan_applications.status = ?","pending")
+    # @online_applications_test  = LoanApplication.joins(:member).where("members.branch_id is not null")
+    # @online_applications  = LoanApplication.joins(:member).where("members.branch_id is null and loan_applications.status = ?","pending")
+    @online_applications_test = LoanApplication
+  .joins(:member)
+  .where("members.branch_id IS NOT NULL")
+
+  @online_applications = LoanApplication
+  .joins(:member)
+  .where("members.branch_id IS NULL AND loan_applications.status IN (?)", ["pending", "reject"])
+
 
     @q      = params[:q]
     @status = params[:status]
