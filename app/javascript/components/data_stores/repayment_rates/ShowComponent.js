@@ -4,6 +4,7 @@ import Filter from './Filter';
 import MasterListView from './MasterListView';
 import RepaymentRatesView from './RepaymentRatesView';
 import AgingOfReceivablesView from './AgingOfReceivablesView';
+import AgingOfReceivablesMFIView from './AgingOfReceivablesMFIView';
 
 import { fetchRepaymentRate } from '../../../services/RepaymentRatesService';
 
@@ -186,6 +187,32 @@ export default ShowComponent = (props) => {
         />
       </div>
     );
+
+  } else if (currentView == "AORMFI") {
+    return  (
+      <div>
+        <Filter
+          currentView={currentView} 
+          handleViewToggled={handleViewToggled}
+          centers={centers}
+          officers={officers}
+          loanProducts={loanProducts}
+          currentCenterId={currentCenterId}
+          currentLoanProductId={currentLoanProductId}
+          handleCenterChanged={handleCenterChanged}
+          handleLoanProductChanged={handleLoanProductChanged}
+          handleOfficerChanged={handleOfficerChanged}
+        />
+        <hr/>
+        <AgingOfReceivablesMFIView
+          data={filterData()}
+        />
+      </div>
+    );
+
+
+
+
   } else if (currentView == "ML") {
     return  (
       <div>
