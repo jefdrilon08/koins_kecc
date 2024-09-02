@@ -372,7 +372,7 @@ export default class MembershipPaymentCollectionUIComponent extends React.Compon
               </tr>
               <tr>
                 <th>
-                  SI Number:
+                  Service Invoice:
                 </th>
                 <td className="text-end">
                   {this.renderSiNumber()}

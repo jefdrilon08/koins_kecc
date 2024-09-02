@@ -644,7 +644,7 @@ export default class AccountingEntryFormComponent extends React.Component {
             <div className="col">
               <div className="form-group">
                 <label>
-                  SI Number
+                  Service Invoice
                 </label>
                 <input 
                   type="text" 
