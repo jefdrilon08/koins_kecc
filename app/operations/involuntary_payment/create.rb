@@ -30,7 +30,7 @@ module InvoluntaryPayment
             company_name: Settings.company_name,
             branch: @branch.to_s.upcase,
             prepared_by: @user.to_s,
-            particular: "to record collection for the accounts that previously written off",
+            particular: "to record collection for the accounts that previously involuntary tagged",
             debit_journal_entries: [],
             credit_journal_entries: [],
             journal_entries: [],
