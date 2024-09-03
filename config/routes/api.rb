@@ -305,6 +305,21 @@ namespace :api do
     post "bank_transfer/create",  to: "bank_transfer#create"
     post "bank_transfer/create_channel", to:"bank_transfer#create_channel"
 
+    #involuntary_payment
+    post "involuntary_payment/create", to: "involuntary_payment#create"
+    post "involuntary_payment/add_member", to: "involuntary_payment#add_member"
+    post "involuntary_payment/add_particular", to: "involuntary_payment#add_particular"
+    post "involuntary_payment/add_book_type", to: "involuntary_payment#add_book_type"
+    post "involuntary_payment/update_amount", to: "involuntary_payment#update_amount"
+    post "involuntary_payment/approve", to: "involuntary_payment#approve"
+    post "involuntary_payment/add_si", to: "involuntary_payment#add_si"
+    post "involuntary_payment/add_or", to: "involuntary_payment#add_or"
+
+
+
+
+
+
 
 
     # Adjustments
