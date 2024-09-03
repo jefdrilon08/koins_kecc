@@ -43,7 +43,7 @@ class InvoluntaryPaymentController < ApplicationController
               class: "fa fa-times",           
               data: {
                 method: :delete,
-                confirm: "Are you sure you want to delete this Writeoff Collection?"
+                confirm: "Are you sure you want to delete this Involuntary Collection?"
               },     
               text: "Delete"    
             }
@@ -57,5 +57,15 @@ class InvoluntaryPaymentController < ApplicationController
             }
           end
         end
+  end
+
+  def delete
+  involuntary_collections = DataStore.find(params[:id])
+    if involuntary_collections.pending?
+      involuntary_collections.destroy!
+      redirect_to involuntary_payment_path
+    else
+      redirect_to  involuntary_collections_path(involuntary_collections)
+    end
   end
 end
