@@ -255,6 +255,8 @@ import AdministrationBarangayIndex from '../models/AdministrationBarangayIndex.j
 
 import WrittenOffReportIndex from '../models/WrittenOffReportIndex.js';
 import WrittenOffReportShow from '../models/WrittenOffReportShow.js';
+import InvoluntaryPaymentIndex from '../models/InvoluntaryPaymentIndex.js';
+import InvoluntaryPaymentShow from '../models/InvoluntaryPaymentShow.js';
 
 
 //const renderComponent = (Component, payload) => {
@@ -489,10 +491,12 @@ const hooks = {
   "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
   "administration/admin_barangay/index":            [AdministrationBarangayIndex],
 
-  "data_stores/allowance_computation_report/index":		[AllowanceComputationIndex],
+
   "data_stores/written_off_report/index":             [WrittenOffReportIndex],
   "data_stores/written_off_report/show":              [WrittenOffReportShow],
-  "allowance_losses/generate":                        [AllowanceLosses]
+  "allowance_losses/generate":                        [AllowanceLosses],
+  "involuntary_payment/index":                        [InvoluntaryPaymentIndex],
+  "involuntary_payment/show":                         [InvoluntaryPaymentShow]
 }
 
 const renderComponent = (Component, payload) => {
