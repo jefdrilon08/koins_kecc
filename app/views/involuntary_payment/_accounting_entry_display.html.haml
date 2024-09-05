@@ -46,19 +46,21 @@
         .row
           .col
             %label
+              OR
+            %p
+              #{accounting_entry[:or]}
+        .row
+          .col
+            %label
               Service Invoice
             %p
-              #{accounting_entry[:data][:si_number]}
-    .row
-      .col-md-8
-        %br
+              #{accounting_entry[:si]}
         .row
           .col
             %label
               Particular
             %p
               #{accounting_entry[:particular]}
-
       .col-md-4
         %p.text-right
           %label

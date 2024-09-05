@@ -1,0 +1,60 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th{ width: "30%" }
+        Member
+      - @data[:header].each do |o|
+        - unless o[:name].blank? # Skip rendering if the name is blank
+          %th
+            #{o[:name]}
+      %th
+        Cash Payment
+      %th
+        Total Payment
+  %tbody
+    - @data_view.each_with_index do |o, i|
+      %tr
+        %td
+          = link_to member_path(o[:member_id]), target: "_blank" do
+            %strong
+              #{o[:name]}
+        - @data[:header].each do |header|
+          %td.text-right
+            - loan_data = o[:loan_data].find { |ld| ld[:name] == header[:name] }
+            - if loan_data.present? && loan_data[:enabled]
+              - if @data_store.status == 'pending'
+                %a.undo{ data: {
+                  member_name: o[:name],
+                  loan_id: loan_data[:loan_id],
+                  loan_type: loan_data[:name],
+                  payment_amount: loan_data[:amount],
+                  member_id: o[:member_id]
+                  }, 
+                href: "#" }
+                  #{number_to_currency(loan_data[:amount], unit: '')}
+              - else
+                #{number_to_currency(loan_data[:amount], unit: '')}
+            - else
+              
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:total_cash_payment], unit: '')}
+        %td.text-right
+          %strong
+            #{number_to_currency(o[:total_payment], unit: '')}
+    %tr
+      %td
+        %strong
+          TOTAL :
+      - @data[:header].each do |header|
+        - loan_total = header[:total_amount]
+        - if loan_total.present? # Only render if there's a total amount
+          %td.text-right
+            %strong
+              #{number_to_currency(loan_total, unit: '')}
+      %td.text-right
+        %strong
+          #{number_to_currency(@data[:total_cash_payment], unit: '')}
+      %td.text-right
+        %strong
+          #{number_to_currency(@data[:total_payment], unit: '')}

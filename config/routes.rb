@@ -392,6 +392,13 @@ Rails.application.routes.draw do
   get "/print", to: "print#print"
   get "/download_file", to: "pages#download_file"
 
+  get "/involuntary_payment", to: "involuntary_payment#index"
+  # get "/involuntary_payment.id", to: "involuntary_payment#show"
+  get "/involuntary_payment/:id", to: "involuntary_payment#show"
+  delete "/involuntary_payment/:id", to: "involuntary_payment#delete"
+
+
+
   # Data Stores
   namespace :data_stores do
     get "/share_capital_summary", to: "share_capital_summary#index"
