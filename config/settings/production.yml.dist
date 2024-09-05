@@ -4180,7 +4180,6 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
-
   -
     loan_product_id: "22f9d132-820f-4c3d-830e-aaee1c0b206c"                         # K-KALUSUGAN W3
     receivable_accounting_code_id: "93686bcf-7e20-4968-8d9b-c20032a41280"
@@ -4352,28 +4351,28 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.0140
+    use_term_interest:
       -
-        use_term_interest:
-          -
-            term: "weekly"
-            min_num_installments: 5
-            max_num_installments: 15
-            monthly_interest_rate: 0.1265
-          -
-            term: "weekly"
-            min_num_installments: 16
-            max_num_installments: 25
-            monthly_interest_rate: 0.078
-          -
-            term: "weekly"
-            min_num_installments: 26
-            max_num_installments: 35
-            monthly_interest_rate: 0.056
-          -
-            term: "weekly"
-            min_num_installments: 36
-            max_num_installments: 50
-            monthly_interest_rate: 0.04
+        term: "weekly"
+        min_num_installments: 5
+        max_num_installments: 15
+        monthly_interest_rate: 0.1265
+      -
+        term: "weekly"
+        min_num_installments: 16
+        max_num_installments: 25
+        monthly_interest_rate: 0.078
+      -
+        term: "weekly"
+        min_num_installments: 26
+        max_num_installments: 35
+        monthly_interest_rate: 0.056
+      -
+        term: "weekly"
+        min_num_installments: 36
+        max_num_installments: 50
+        monthly_interest_rate: 0.04
+
   -
     loan_product_id: "8b1b3103-2e3b-4308-bc76-cf5fec772f2e"                         # K-KALUSUGAN W4
     receivable_accounting_code_id: "43a0c6bc-9305-4811-a691-cba2e73a8a65"
