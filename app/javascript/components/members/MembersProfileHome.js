@@ -7,13 +7,79 @@ import axios from 'axios';
 
 
 export default function MembersProfileHome(props) {
-  const [configData, setConfigData] = useState();
+  const [configData,     setConfigData]     = useState();
+  const [regions,        setRegions]        = useState([]);
+  const [provinces,      setProvinces]      = useState([]);
+  const [municipalities, setMunicipalities] = useState([]);
+  const [barangays,      setBarangays]      = useState([]);
 
   useEffect(() => {
-    axios.get('/api/yml_values/production_values')
-      .then(response => setConfigData(response.data))
-      .catch(error => console.error(error));
+    const fetchData = async () => {
+      try {
+        // Fetch configuration data
+        const configResponse = await axios.get('/api/yml_values/production_values');
+        setConfigData(configResponse.data);
+        
+        // Fetch regions data
+        const regionsResponse = await axios.get('/api/v1/administration/admin_address/fetch'); 
+        setRegions(regionsResponse.data);
+
+        // Fetch province data
+        const provincesResponse = await axios.get('/api/v1/administration/admin_province/fetch'); 
+        setProvinces(provincesResponse.data);
+
+        // Fetch municipality data
+        const municipalitiesResponse = await axios.get('/api/v1/administration/admin_municipality/fetch'); 
+        setMunicipalities(municipalitiesResponse.data);
+
+        // Fetch barangay data
+        const barangaysResponse = await axios.get('/api/v1/administration/admin_barangay/fetch'); 
+        setBarangays(barangaysResponse.data);
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    
+    fetchData();
   }, []);
+
+  const getRegionName = (regionId) => {
+    if (!Array.isArray(regions)) {
+      console.error('Regions data is not an array or not defined:', regions);
+      return 'Region not found';
+    }
+    const region = regions.find(r => r.id === regionId);
+    return region ? region.region_name : 'Region not found';
+  };
+
+  const getProvinceName = (provinceId) => {
+    if (!Array.isArray(provinces)) {
+      console.error('Provinces data is not an array or not defined:', provinces);
+      return 'Province not found';
+    }
+    const province = provinces.find(p => p.id === provinceId);
+    return province ? province.province_name : 'Province not found';
+  };
+
+  const getMunicipalityName = (municipalityId) => {
+    if (!Array.isArray(municipalities)) {
+        console.error('Municipalities data is not an array or not defined:', municipalities);
+        return 'Municipality not found';
+    }
+    const municipality = municipalities.find(m => m.id === municipalityId);
+    return municipality ? municipality.municipality_name : 'Municipality not found';
+  };
+
+  const getBarangayName = (barangayId) => {
+    if (!Array.isArray(barangays)) {
+      console.error('Barangays data is not an array or not defined:', barangays);
+      return 'Barangay not found';
+    }
+    const barangay = barangays.find(b => b.id === barangayId);
+    return barangay ? barangay.barangay_name : 'Barangay not found';
+  };
+
 
   return (
     <div id="semi_member_details">
@@ -277,7 +343,11 @@ export default function MembersProfileHome(props) {
                   Address
                 </th>
                 <td>
-                  {props.address}
+                {props.data.address["street"]} &nbsp;
+                {getBarangayName(props.data.address["district"])} &nbsp;
+                {getMunicipalityName(props.data.address["city"])} &nbsp;
+                {getProvinceName(props.data.address["province"])} &nbsp;
+                {getRegionName(props.data.address["region"])} &nbsp;
                 </td>
               </tr>
               <tr>
