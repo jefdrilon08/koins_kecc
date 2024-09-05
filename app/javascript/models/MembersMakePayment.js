@@ -11,6 +11,7 @@ var $selectBook;
 var  $inputPaticular;
 var  $inputOrNumber;
 var  $inputArNumber;
+var  $inputSiNumber;
 
 var  $btnApprove;
 var  $modalApprove;
@@ -40,6 +41,7 @@ var _cacheDom = function() {
   $inputPaticular   = $("#particular");
   $inputOrNumber    = $("#or_number");
   $inputArNumber    = $("#ar_number");
+  $inputSiNumber    = $("#si_number");
 
   $btnApprove         = $("#btn-approve");
   $btnConfirmApprove  = $("#btn-confirm-approve");
@@ -159,6 +161,7 @@ var _bindEvents = function() {
       book: document.getElementById('book_type').value,
       particular: document.getElementById('particular').value,
       or_number: document.getElementById("or_number").value,
+      si_number: document.getElementById("si_number").value,
       ar_number: document.getElementById("ar_number").value,
       make_payment_type: document.getElementById('btn-save').getAttribute("data-make-payment-type"),
       authenticity_token: authenticityToken,

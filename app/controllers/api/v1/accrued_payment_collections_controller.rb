@@ -98,6 +98,14 @@ module Api
           ab.save!
  
         end
+        def add_si
+          data_store_id     = params[:id]
+          txtSi    =  params[:txtSi]
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['data']['si_number'] = txtSi
+          ab.save!
+ 
+        end
 
         def add_ar
           data_store_id = params[:id]

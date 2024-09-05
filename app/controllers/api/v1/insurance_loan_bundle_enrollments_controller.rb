@@ -3,7 +3,7 @@ module Api
     class InsuranceLoanBundleEnrollmentsController < ApiController
       before_action :authenticate_user!
 
-      if !Settings.activate_microinsurance      
+      if !Settings.activate_microinsurance
         def approve
           insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
           data = insurance_loan_bundle_enrollment.data.with_indifferent_access["records"].last
@@ -174,7 +174,7 @@ module Api
         #end
       end
 
-       def add_member
+      def add_member
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
         member                           = Member.where(id: params[:member_id]).first
         plan_type                        = params[:plan_type]
@@ -247,6 +247,31 @@ module Api
 
           render json: { message: "ok" }
         end
+      end
+
+      def update_beneficiary
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first
+        member                           = Member.where(id: params[:member_id]).first
+        benif_fname                      = params[:benif_fname]
+        benif_mname                      = params[:benif_mname]
+        benif_lname                      = params[:benif_lname]
+        benif_birth_date                 = params[:benif_birth_date]
+        benif_gender                     = params[:benif_gender]
+        benif_relationship               = params[:benif_relationship]
+
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          benif_fname: benif_fname,
+          benif_mname: benif_mname,
+          benif_lname: benif_lname,
+          benif_birth_date: benif_birth_date,
+          benif_gender: benif_gender,
+          benif_relationship: benif_relationship
+        }
+
+        ::InsuranceLoanBundleEnrollments::UpdateBeneficiary.new(
+          config: config
+        ).execute!
       end
 
       def save

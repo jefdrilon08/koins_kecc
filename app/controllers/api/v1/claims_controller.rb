@@ -6,8 +6,8 @@ module Api
       def create
         member = Member.find(params[:member_id])
         claim_type = params[:claim_type]
-        branch = member.branch 
-        center = member.center 
+        branch = member.branch
+        center = member.center
 
         claim = Claim.new(
                   member: member,
@@ -18,7 +18,7 @@ module Api
                 )
 
         if claim.save
-          render json: { id: claim.id } 
+          render json: { id: claim.id }
         else
           render errors: claim.errors
         end
@@ -194,7 +194,7 @@ module Api
         prepared_by   = params[:prepared_by]
         control       = params[:control]
         data          = params[:data]
-    
+
         errors = []
         if claim.claim_type == "BLIP"
           errors = ::Claims::ValidateBlip.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by, control: control).execute!
@@ -209,14 +209,14 @@ module Api
         elsif claim.claim_type == "K-BENTE"
           errors = ::Claims::ValidateKbente.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
         elsif claim.claim_type == "KUYA JUN SCHOLARSHIP PROGRAM"
-          errors = ::Claims::ValidateScholarship.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!      
+          errors = ::Claims::ValidateScholarship.new(claim: claim, data: data, date_prepared: date_prepared, prepared_by: prepared_by).execute!
         end
 
-        if errors.size > 0 
+        if errors.size > 0
           render json: { errors: errors }, status: 402
         else
           claim.update!(data: data, date_prepared: date_prepared, prepared_by: prepared_by)
-          render json: {message: "ok"}                            
+          render json: {message: "ok"}
         end
 
         branch = Branch.where(id: Settings.try(:defaults).try(:default_branch).try(:id)).first
@@ -228,7 +228,7 @@ module Api
                                       claim: claim,
                                       user: current_user
                                     }
-                                  ).execute! 
+                                  ).execute!
 
         claim.update!(data: claim_data)
       end
@@ -332,7 +332,7 @@ module Api
           render json: { id: claim.id }
         end
       end
-      
+
       def save_note
         claim  = Claim.where(id: params[:id]).first
         note   = params[:note]
@@ -457,7 +457,7 @@ module Api
           errors =  Claims::ValidateClaimForPosting.new(
                       config: config
                     ).execute!
-          
+
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
           else

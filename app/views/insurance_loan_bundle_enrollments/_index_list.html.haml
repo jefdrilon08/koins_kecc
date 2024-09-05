@@ -29,12 +29,20 @@
             #{o.member_name.uniq.join(",")}
         %td 
           - records = o.records_last
-          - if records.nil?
+          - number = o.data['records'].count
+          - if number.nil?
 
-          -else
+          - elsif records.nil?
+          
+          - else
             - if o.for_renewal? || o.on_grace_period?
               #{records["kok_data"]["effectivity_date"]}
-            - else
+            - elsif o.lapsed?
+              - if number > 1
+                #{records["kok_data"]["effectivity_date"]}
+              - else 
+                #{records["kok_data"]["maturity_date"]}
+            - else 
               #{records["kok_data"]["maturity_date"]}
         %td
           - if o.pending?

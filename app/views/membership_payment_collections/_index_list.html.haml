@@ -5,6 +5,8 @@
       %th
         OR Number
       %th
+        SI Number
+      %th
         Collection Date
       %th
         Date Approved
@@ -24,6 +26,8 @@
               .bi.bi-search
         %td
           #{o.or_number}
+        %td
+          #{o.si_number}
         %td
           %strong
             #{o.collection_date.strftime("%b %d, %Y")}
@@ -45,5 +49,5 @@
               .badge.bg-success
                 Approved
             - elsif o.processing?
-              .badge.badge-info
+              .badge.bg-info
                 Processing
