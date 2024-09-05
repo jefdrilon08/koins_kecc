@@ -28,6 +28,7 @@ namespace :administration do
     get "admin_barangay", to: "admin_barangay#index"
   end
 
+
   
   
 

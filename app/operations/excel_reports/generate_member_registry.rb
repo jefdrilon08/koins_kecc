@@ -6,6 +6,23 @@ module ExcelReports
       @member      = Member.where("branch_id = ? and status NOT IN ('archived' , 'pending')", branch_id)
       @p          = Axlsx::Package.new
     end
+
+    def get_district_name(id)
+      AdminBarangay.find_by(id: id)&.barangay_name || "Unknown"
+    end
+
+    def get_city_name(id)
+      AdminMunicipality.find_by(id: id)&.municipality_name || "Unknown"
+    end
+
+    def get_province_name(id)
+      AdminProvince.find_by(id: id)&.province_name || "Unknown"
+    end
+
+    def get_region_name(id)
+      AdminAddress.find_by(id: id)&.region_name || "Unknown"
+    end
+
     def execute!
       @p.workbook do |wb|
         wb.add_worksheet do |sheet|
@@ -61,7 +78,13 @@ module ExcelReports
             gov = mem_data['government_identification_numbers']
             tin_no    = gov['tin_number']
             get_address   = mem_data['address']
-            address =  "#{get_address['street']} #{get_address['district']} #{get_address['city']} #{get_address['region']} #{get_address['perovince']}"
+            street = get_address['street']
+            # address =  "#{get_address['street']} #{get_address['district']} #{get_address['city']} #{get_address['region']} #{get_address['perovince']}"
+            district_name = get_district_name(get_address['district'])
+            city_name = get_city_name(get_address['city'])
+            province_name = get_province_name(get_address['province'])
+            region_name = get_region_name(get_address['region'])
+            address = "#{street} #{district_name} #{city_name} #{province_name} #{region_name}"
             dependent = mem.legal_dependents.count
             if mem.status = 'resigned'
               res = mem.date_resigned
