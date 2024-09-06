@@ -13,7 +13,7 @@
       %th.text-center
         Status
   %thead
-    - @records.order(created_at: :desc).each do |o|
+    - @records.each do |o|
       %tr
         %td.text-center
           = link_to "/involuntary_payment/#{o.id}" do
@@ -43,6 +43,3 @@
           - elsif o[:status] == "error"
             .badge.bg-danger
               Error
- 
- 
- 
