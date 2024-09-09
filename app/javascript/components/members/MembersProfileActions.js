@@ -16,6 +16,7 @@ export default function MembersProfileActions(props) {
   const [isModalDelete, setIsModalDelete]                                       = useState(false);
   const [isModalReinstateOpen, setModalReinstateOpen]                           = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
+  const [isModalUpdateRecognitonDateOpen, setModalUpdateRecognitonDateOpen]     = useState(false);
   const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
   const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
   const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
@@ -24,6 +25,7 @@ export default function MembersProfileActions(props) {
   const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
   const [reason, setReason]                                                     = useState('');
   const [dateRecognition, setDateRecognition]                                   = useState("");
+  const [dateUpdateRecognition, setUpdateDateRecognition]                       = useState("");
   const [dateOfDeath, setDateOfDeath]                                           = useState("");
   const [reClassified, setreClassified]                                         = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
@@ -160,6 +162,35 @@ export default function MembersProfileActions(props) {
     const payload = {
       id: props.memberId,
       recognition_date: dateRecognition
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+    axios.post(
+      '/api/members/add_recognition_date',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Update Recognition Date");
+      window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+      
+    })
+  }
+
+  const handleUpdateDateRecognitionClicked = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      previous_recognition_date: props.member.data["recognition_date"],
+      update_recognition_date: dateUpdateRecognition
     }
     const headers = {
       'X-KOINS-HQ-TOKEN': props.token
@@ -716,6 +747,15 @@ export default function MembersProfileActions(props) {
               />
             </div>
           </div>
+          {errors.length > 0 && (
+            <div className="alert alert-danger mt-3">
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button 
@@ -731,6 +771,71 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalRecognitonDateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={isModalUpdateRecognitonDateOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Members Recognition Date
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Last Recognition Date
+              </label>
+              <input
+                className="form-control"
+                value={props.member.data["recognition_date"]}
+                disabled={true}
+                type="date"
+              />
+              <br />
+              <label>
+               Updated Recognition Date
+              </label>
+              <input
+                className="form-control"
+                value={dateUpdateRecognition}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setUpdateDateRecognition(event.target.value) } }
+              />
+            </div>
+          </div>
+          {errors.length > 0 && (
+            <div className="alert alert-danger mt-3">
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleUpdateDateRecognitionClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalUpdateRecognitonDateOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -1223,7 +1328,7 @@ export default function MembersProfileActions(props) {
       
 
       <div className="row">
-        <div className="col">
+        <div className="col-md-6">
           <div className="note note-info">
             <strong>
               Modify
@@ -1260,26 +1365,46 @@ export default function MembersProfileActions(props) {
       {(() => {
         if(props.member.modifiable){
           return (
-            <div className="row">
-              <div className="col">
-                <div className="note note-info">
-                  <strong>
-                    Member Recognition Date
-                  </strong>
-                  <p>
-                    Palitan ang impormasyon ukol sa myembrong ito.
-                  </p>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => {
-                      setModalRecognitonDateOpen(true)
-                    }}
-                  >
-                    Edit Recognition Date
-                  </button>
+            <>
+              <br />
+              <div className="row">
+                <div className="col">
+                  <div className="note note-info">
+                    <strong>
+                      Member Recognition Date
+                    </strong>
+                    <p>
+                      Palitan ang impormasyon ukol sa myembrong ito.
+                    </p>
+                    {(() => {
+                      if(props.member.data["recognition_date"] == null ) {
+                        return (
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              setModalRecognitonDateOpen(true)
+                            }}
+                          >
+                            Add Recognition Date
+                          </button>
+                        )
+                      } else {
+                        return (
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              setModalUpdateRecognitonDateOpen(true)
+                            }}
+                          >
+                            Update Recognition Date
+                          </button>
+                        )
+                      }            
+                    })()}
+                  </div>
                 </div>
               </div>
-            </div>
+            </>
           )
         }
       })()}

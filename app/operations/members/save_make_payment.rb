@@ -9,6 +9,7 @@ module Members
       @book       = @config[:book]
       @particular = @config[:particular]
       @or_number  = @config[:or_number]
+      @si_number  = @config[:si_number]
       @ar_number  = @config[:ar_number]
       @user       = @config[:user]
       @branch = Branch.find(Member.find(@member_id).branch_id)
@@ -35,6 +36,7 @@ module Members
         book: @book,
         particular: @particular,
         or_number: @or_number,
+        si_number: @si_number,
         ar_number: @ar_number,
       }
       

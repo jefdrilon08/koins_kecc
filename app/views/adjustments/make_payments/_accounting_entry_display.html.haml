@@ -44,7 +44,13 @@
       .col-md-8
         - if accounting_entry[:book] == "CRB"
           %strong
-            OR Number: 
+            OR Number:
+          = @make_payment_details[:meta]["or_number"]
+      .col-md-8
+        - if accounting_entry[:book] == "CRB"
+          %strong
+            SI Number:
+          = @make_payment_details[:meta]["si_number"]
           .text-muted
         - if accounting_entry[:book] == "CDB"
           .row
