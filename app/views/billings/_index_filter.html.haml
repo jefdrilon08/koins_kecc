@@ -19,7 +19,7 @@
       .form-group
         %label
           Center
-        = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)), :id, :name, @center), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
+        = select_tag :center_id, options_from_collection_for_select(Center.where(branch_id: @branches.pluck(:id)).order(:name), :id, :name, @center), class: "form-control select-select2", id: "center-select", prompt: "-- SELECT --"
     .col-md-1
       .form-group
         %label
