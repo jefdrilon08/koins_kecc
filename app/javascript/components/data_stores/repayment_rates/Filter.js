@@ -114,6 +114,21 @@ export default Filter = (props) => {
             </div>
             <div className="col">
               <ToggleSwitch
+                name={`current-view-aor-mfi`}
+                key={`current-view-aor-mfi`}
+                checked={currentView == "AORMFI"}
+                defaultChecked={currentView == "AORMFI"}
+                onChange={() => {
+                  handleViewToggled("AORMFI")
+                }}
+              />
+              <br/>
+              <label>
+                AoR of MFI
+              </label>
+            </div>
+            <div className="col">
+              <ToggleSwitch
                 name={`current-view-ml`}
                 key={`current-view-ml`}
                 checked={currentView == "ML"}

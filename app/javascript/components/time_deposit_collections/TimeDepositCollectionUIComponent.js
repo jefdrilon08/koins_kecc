@@ -373,7 +373,7 @@ export default class TimeDepositCollectionUIComponent extends React.Component {
               </tr>
               <tr>
                 <th>
-                    SI Number:
+                    Service Invoice:
                 </th>
                   <td className="text-end">
                     {this.renderSiNumber()}
