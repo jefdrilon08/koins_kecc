@@ -6,7 +6,7 @@
           Administration
       .modal-body
         .row
-          - if is_mis_user?
+          - if sbk_mis_bk?
             .col
               = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
                 Chart of Accounts

@@ -168,20 +168,22 @@ module Accounting
           text: "Accounting Code: #{@accounting_code}"
         }
       ]
-
-      @subheader_side_actions = [
-        {
-          link: edit_accounting_accounting_code_path(@accounting_code),
-          class: "fa fa-pencil-alt",
-          text: "Edit"
-        },
-        {
-          link: accounting_accounting_code_path(@accounting_code),
-          data: { method: :delete, confirm: "Are you sure?" },
-          class: "fa fa-times",
-          text: "Delete"
-        }
-      ]
+      
+      if helpers.is_mis_user?
+        @subheader_side_actions = [
+          {
+            link: edit_accounting_accounting_code_path(@accounting_code),
+            class: "fa fa-pencil-alt",
+            text: "Edit"
+          },
+          {
+            link: accounting_accounting_code_path(@accounting_code),
+            data: { method: :delete, confirm: "Are you sure?" },
+            class: "fa fa-times",
+            text: "Delete"
+          }
+        ]
+      end
     end
 
     def destroy

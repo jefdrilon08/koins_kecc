@@ -13,13 +13,13 @@ module Api
 
                     Rails.logger.info "Received config: #{config.inspect}"
 
-                    # puts "@@@@@@@@@@@@@@@@@@@@@@@@@"+config.inspect
-                    # # begin
                     ::Administration::AdministrationAddress::AddMunicipality.new(config: config).execute!
-                    #     render json: result, status: :created
-                    # rescue StandardError => e
-                    #     render json: { error: e.message }, status: :internal_server_error
-                    # end
+                end
+
+                def fetch
+                    admin_municipality = AdminMunicipality.all();
+                    
+                    render json: admin_municipality
                 end
 
                   
