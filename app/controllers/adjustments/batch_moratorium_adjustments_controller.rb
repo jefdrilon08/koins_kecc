@@ -3,7 +3,24 @@ module Adjustments
     before_action :authenticate_user!
 
     def index
+      @branches = Branch.order(:name)  # Load branches sorted alphabetically
+
+      if params[:select_branch].present?
+        @branch = Branch.find(params[:select_branch])
+        @centers = Center.where(branch_id: @branch.id).order(:name)  # Load centers based on selected branch
+      else
+        @centers = []
+      end
+
       @adjustment_records = AdjustmentRecord.batch_moratorium
+
+      if params[:select_branch].present?
+        @adjustment_records = @adjustment_records.where("meta -> 'branch' ->> 'id' = ?", params[:select_branch])
+      end
+
+      if params[:select_center].present?
+        @adjustment_records = @adjustment_records.where("meta -> 'center' ->> 'id' = ?", params[:select_center])
+      end
 
       @adjustment_records = @adjustment_records.page(params[:page]).per(50)
 
