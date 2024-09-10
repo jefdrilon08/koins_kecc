@@ -832,11 +832,10 @@ namespace :api do
 
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
-      center_billing
       get "/admin_barangay/fetch", to: "admin_barangay#fetch"
 
 
-      develop
+
     end
 
     get 'reports/member_reports', to: 'reports#member_reports'
