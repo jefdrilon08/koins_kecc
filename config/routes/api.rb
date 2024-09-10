@@ -816,16 +816,27 @@ namespace :api do
 
       # Membership Arrangement
       post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
+
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
+      get "/admin_address/fetch", to: "admin_address#fetch"
+      
 
       # province
       post "/admin_province/create", to: "admin_province#create"
+      get "/admin_province/fetch", to: "admin_province#fetch"
+
       # Municipality Address
       post "/admin_municipality/create", to: "admin_municipality#create"
+      get "/admin_municipality/fetch", to: "admin_municipality#fetch"
+
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
+      center_billing
+      get "/admin_barangay/fetch", to: "admin_barangay#fetch"
 
+
+      develop
     end
 
     get 'reports/member_reports', to: 'reports#member_reports'
