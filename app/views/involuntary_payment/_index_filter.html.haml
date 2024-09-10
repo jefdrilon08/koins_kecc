@@ -1,10 +1,10 @@
-= form_tag "", method: 'GET' do
+= form_tag involuntary_payment_path, method: 'GET' do
   .row
     .col-md-5
       .form-group
         %label
           Branch
-        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch_id), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
     .col-md-5
       .form-group
         %label
