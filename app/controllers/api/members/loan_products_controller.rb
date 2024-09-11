@@ -29,8 +29,9 @@ module Api
         active_loans.compact!
         
         # get all loan products
-        loan_products = LoanProduct.select("*")
-
+        # loan_products = LoanProduct.select("*")
+        loan_products = LoanProduct.where(is_active: true).all
+        
         # remove the 6 weeks and above the loan products from member
         loan_products = loan_products.where.not(id: active_loans.pluck(:loan_product_id)).order(:name).map{ |o|
           o.to_h
