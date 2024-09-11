@@ -9,6 +9,7 @@ module DepositCollections
 
       @data             = @deposit_collection.try(:data).try(:with_indifferent_access)
       @accounting_entry = @data[:accounting_entry]
+
     end
 
     def execute!
@@ -19,10 +20,10 @@ module DepositCollections
         }
       end
 
-      if @data.present? and @data[:or_number].blank? and @accounting_entry[:book] == "CRB"
+      if @data.present? and @data[:or_number].blank? and @accounting_entry[:book] == "CRB" and @data[:si_number].blank?
         @errors[:messages] << {
           key: "or_number",
-          message: "no or number found"
+          message: "no or/si number found"
         }
       end
 
@@ -60,12 +61,13 @@ module DepositCollections
                 }
               end
 
-              if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).present?
+              if rec[:record_type] == "INSURANCE" and rec[:amount].to_f > 0 and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).present? and MemberAccountValidationRecord.where(status: "approved", member_id: member.id).where("data ->> 'is_void' = ?", "false").present?
                 @errors[:messages] << {
                   key: "validation",
                   message: "#{member.full_name}, is already validated!"
                 }
               end
+              
             end
           end
         end

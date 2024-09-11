@@ -1,7 +1,7 @@
 module Api
   module V1
     class AccruedPaymentCollectionsController < ActionController::Base
-      before_action :authenticate_user!
+      skip_before_action :verify_authenticity_token
     	def create
     		collection_date = params[:collection_date].try(:to_date)
         	branch_id       = params[:branch_id]
@@ -95,6 +95,14 @@ module Api
 
           ab = AccruedBilling.find(data_store_id)
           ab.data['accounting_entry']['data']['or_number'] = txtOr
+          ab.save!
+ 
+        end
+        def add_si
+          data_store_id     = params[:id]
+          txtSi    =  params[:txtSi]
+          ab = AccruedBilling.find(data_store_id)
+          ab.data['accounting_entry']['data']['si_number'] = txtSi
           ab.save!
  
         end

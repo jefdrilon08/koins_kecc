@@ -1,0 +1,12 @@
+%link{href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", rel: "stylesheet"}/
+.row
+  .col
+    .card
+      .card-body
+        %h2
+          Written Off Accounts: #{@branch_name}
+        .row
+          .col
+        %ul
+        = render partial: "show_details" 
+= render partial: "data_stores/written_off_report/modals/delete"

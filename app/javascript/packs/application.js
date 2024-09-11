@@ -1,5 +1,6 @@
 require("@rails/ujs").start();
 
+
 import $ from 'jquery';
 
 import React from 'react';
@@ -67,7 +68,7 @@ import AdministrationUsersIndex from "../components/administration/users/Index.j
 import AdministrationUsersShow from "../components/administration/users/Show.js";
 import AllowanceComputationReportShowComponent from "../components/data_stores/allowance_computation_report/ShowComponents.js";
 import Login from "../components/users/Login.js";
-
+import AllowanceLosses from "../components/allowance_losses/Generate.js";
 
 // "init" Objects
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
@@ -246,6 +247,17 @@ import ShareCapitalInvoluntaryShow from "../models/ShareCapitalInvoluntaryShow.j
 import BillingForInvoluntaryIndex from "../models/BillingForInvoluntaryIndex.js";
 import BillingForInvoluntaryShow from "../models/BillingForInvoluntaryShow.js";
 import AllowanceComputationIndex from "../models/AllowanceComputationIndex.js";
+
+import AdministrationAddressIndex from '../models/AdministrationAddressIndex.js';
+import AdministrationProvinceIndex from '../models/AdministrationProvinceIndex.js';
+import AdministrationMunicipalityIndex from '../models/AdministrationMunicipalityIndex.js';
+import AdministrationBarangayIndex from '../models/AdministrationBarangayIndex.js';
+
+import WrittenOffReportIndex from '../models/WrittenOffReportIndex.js';
+import WrittenOffReportShow from '../models/WrittenOffReportShow.js';
+import InvoluntaryPaymentIndex from '../models/InvoluntaryPaymentIndex.js';
+import InvoluntaryPaymentShow from '../models/InvoluntaryPaymentShow.js';
+
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -472,7 +484,19 @@ const hooks = {
   "data_stores/share_capital_involuntary/show":       [ShareCapitalInvoluntaryShow],
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
   "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
-  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex]	
+
+  //"data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
+  "administration/admin_address/index":             [AdministrationAddressIndex],
+  "administration/admin_province/index":            [AdministrationProvinceIndex],
+  "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
+  "administration/admin_barangay/index":            [AdministrationBarangayIndex],
+
+
+  "data_stores/written_off_report/index":             [WrittenOffReportIndex],
+  "data_stores/written_off_report/show":              [WrittenOffReportShow],
+  "allowance_losses/generate":                        [AllowanceLosses],
+  "involuntary_payment/index":                        [InvoluntaryPaymentIndex],
+  "involuntary_payment/show":                         [InvoluntaryPaymentShow]
 }
 
 const renderComponent = (Component, payload) => {

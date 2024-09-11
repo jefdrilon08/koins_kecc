@@ -11,6 +11,30 @@ namespace :administration do
   resources :branches
   resources :centers
   resources :announcements
+
+  resources :admin_address, only: [:index] do 
+    get "/admin_address", to: "admin_address#index"
+  end
+
+  resources :admin_province, only: [:index] do
+    get "admin_province", to: "admin_province#index"
+  end
+
+  resources :admin_municipality, only: [:index] do
+    get "admin_municipality", to: "admin_municipality#index"
+  end
+
+  resources :admin_barangay, only:  [:index] do
+    get "admin_barangay", to: "admin_barangay#index"
+  end
+
+
+  
+  
+
+  
+
+  
   resources :loan_products, except: [:destroy] do
     resources :loan_product_types
     resources :loan_product_taggings
@@ -33,6 +57,7 @@ namespace :administration do
   resources :project_type_categories
   resources :project_types
 
+  
   resources :surveys, only: [:index, :show, :edit, :update] do
     get "/survey_question_form", to: "surveys#survey_question_form"
   end

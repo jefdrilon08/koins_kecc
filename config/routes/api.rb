@@ -11,9 +11,13 @@ namespace :api do
   get "/branch_cash_flow", to: "branch_cash_flow#index"
   post "/branch_cash_flow/generate",to: "branch_cash_flow#generate"
   # PSR Schedules
-  post "/psr_schedules/generate", to: "psr_schedules#jefgenerate"
+  post "/psr_schedules/generate", to: "psr_schedules#generate"
   # Standard API
   post "/public/save_members", to: "public#save_members"
+
+  post "/allowance_losses/generate", to: "allowance_losses#generate"
+
+  get "/allowance_losses/fetch", to: "allowance_losses#fetch"
 
   # API for KEZAR
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
@@ -58,8 +62,9 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
+  post "/members/add_recognition_date", to: "members#add_recognition_date"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
-  post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"  
+  post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
   post "/members/is_reclassified", to: "members#is_reclassified"
   post "/members/create_survey", to: "members#create_survey"
   post "/members/update_password", to: "members#update_password"
@@ -122,12 +127,12 @@ namespace :api do
     get "/insurance_accounts", to: "insurance_accounts#index"
     get "/insurance_accounts/:id", to: "insurance_accounts#show"
     get "/insurance_accounts/:id/transactions", to: "insurance_accounts#transactions"
-   
+
     # Savings
     get "/savings_accounts", to: "savings_accounts#index"
     get "/savings_accounts/:id", to: "savings_accounts#show"
     get "/savings_accounts/:id/transactions", to: "savings_accounts#transactions"
-   
+
     # Equities
     get "/equity_accounts", to: "equity_accounts#index"
     get "/equity_accounts/:id", to: "equity_accounts#show"
@@ -161,7 +166,7 @@ namespace :api do
     post "/check_status", to: "public#check_status"
     post "/check_mobile_number", to: "public#check_mobile_number"
     get "/branches", to: "public#branches"
-    
+
     # loans
     post "/loans/apply", to: "loans#apply"
     get "/loans/project_type_categories", to: "loans#project_type_categories"
@@ -211,7 +216,7 @@ namespace :api do
     post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
     post "mbs_transfer/add_particular", to: "mbs_transfer#add_particular"
     post "mbs_transfer/approve", to: "mbs_transfer#approve"
-    post "mbs_transfer/delete_member", to: "mbs_transfer#delete_member" 
+    post "mbs_transfer/delete_member", to: "mbs_transfer#delete_member"
 
     #additional_share
     post "additional_share/create", to: "additional_share#create"
@@ -230,6 +235,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     post "/billing_for_writeoff_collection/add_particular", to: "billing_for_writeoff_collection#add_particular"
     post "/billing_for_writeoff_collection/add_book_type", to: "billing_for_writeoff_collection#add_book_type"
+    post "/billing_for_writeoff_collection/add_si_number", to: "billing_for_writeoff_collection#add_si_number"
 
     #billing_for_involuntary
     post "/billing_for_involuntary/create", to: "billing_for_involuntary#create"
@@ -238,7 +244,7 @@ namespace :api do
     post "/billing_for_involuntary/add_particular_to_loan_payments", to: "billing_for_involuntary#add_particular_to_loan_payments"
     post "/billing_for_involuntary/approve", to: "billing_for_involuntary#approve"
     post "/billing_for_involuntary/delete", to: "billing_for_involuntary#delete"
-    
+
     #billing_for_writeoff
     post "/billing_for_writeoff/create", to: "billing_for_writeoff#create"
     post "/billing_for_writeoff/add_member", to: "billing_for_writeoff#add_member"
@@ -273,7 +279,9 @@ namespace :api do
     post "/online_loan_applications/reject_approve", to: "online_loan_applications#reject_approve"
     post "/online_loan_applications/decline", to: "online_loan_applications#decline"
     post "/online_loan_applications/check", to: "online_loan_applications#check"
-    
+
+    post "online_loan_applications/mb_save", to: "online_loan_applications#mb_save"
+
     # Savings Insurance Transfer Collections
     post "/savings_insurance_transfer_collections/save", to: "savings_insurance_transfer_collections#save"
     post "/savings_insurance_transfer_collections/add_member", to: "savings_insurance_transfer_collections#add_member"
@@ -285,6 +293,7 @@ namespace :api do
     # Insurance Loan Bundle Enrollments
     post "/insurance_loan_bundle_enrollments/save", to: "insurance_loan_bundle_enrollments#save"
     post "/insurance_loan_bundle_enrollments/add_member", to: "insurance_loan_bundle_enrollments#add_member"
+    post "insurance_loan_bundle_enrollments/update_beneficiary", to: "insurance_loan_bundle_enrollments#update_beneficiary"
     post "/insurance_loan_bundle_enrollments/remove_member", to: "insurance_loan_bundle_enrollments#remove_member"
     post "/insurance_loan_bundle_enrollments/approve", to: "insurance_loan_bundle_enrollments#approve"
     post "/insurance_loan_bundle_enrollments/pending", to: "insurance_loan_bundle_enrollments#pending"
@@ -297,6 +306,23 @@ namespace :api do
     #Onlinedisbursement
     post "bank_transfer/create",  to: "bank_transfer#create"
     post "bank_transfer/create_channel", to:"bank_transfer#create_channel"
+
+    #involuntary_payment
+    post "involuntary_payment/create", to: "involuntary_payment#create"
+    post "involuntary_payment/add_member", to: "involuntary_payment#add_member"
+    post "involuntary_payment/add_particular", to: "involuntary_payment#add_particular"
+    post "involuntary_payment/add_book_type", to: "involuntary_payment#add_book_type"
+    post "involuntary_payment/update_amount", to: "involuntary_payment#update_amount"
+    post "involuntary_payment/approve", to: "involuntary_payment#approve"
+    post "involuntary_payment/add_si", to: "involuntary_payment#add_si"
+    post "involuntary_payment/add_or", to: "involuntary_payment#add_or"
+
+
+
+
+
+
+
 
     # Adjustments
     namespace :adjustments do
@@ -322,12 +348,12 @@ namespace :api do
       post "/accrued_interests/batch_process", to: "accrued_interests#batch_process"
       post "/accrued_interests/remove", to: "accrued_interests#remove"
       post "/accrued_interests/erase_record", to: "accrued_interests#erase_record"
-      
-      
+
+
       post "/recompute_restructures/create", to: "recompute_restructures#create"
       post "/recompute_restructures/approve", to: "recompute_restructures#approve"
       post "/recompute_restructures/destroy", to: "recompute_restructures#destroy"
-      
+
       post "/make_payments/approve", to: "make_payments#approve"
       post "/make_payments/destroy", to: "make_payments#destroy"
     end
@@ -377,6 +403,7 @@ namespace :api do
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
+    post "/members/add_recognition_date", to: "members#add_recognition_date"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
     post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
     post "/members/is_reclassified", to: "members#is_reclassified"
@@ -404,7 +431,7 @@ namespace :api do
 
     # /api/
     # Member Parameter
-    # 
+    #
     get "/insurance_accounts/fetch_insurance_status", to: "insurance_accounts#fetch_insurance_status"
     get "/insurance_accounts/process_account_transactions_file", to: "insurance_accounts#process_account_transactions_file"
     get "/insurance_accounts/process_member_accounts_file", to: "insurance_accounts#process_member_accounts_file"
@@ -489,8 +516,10 @@ namespace :api do
     post "/billings/update_or_number", to: "billings#update_or_number"
     post "/billings/update_ar_number", to: "billings#update_ar_number"
     post "/billings/update_particular", to: "billings#update_particular"
+    post "/billings/update_si_number", to: "billings#update_si_number"
     post "/billings/update_book", to: "billings#update_book"
     get "/billings/fetch", to: "billings#fetch"
+
 
 
     #billing_for_full_payments
@@ -516,16 +545,17 @@ namespace :api do
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
     post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+    post "/accrued_payment_collections/add_si", to: "accrued_payment_collections#add_si"
 
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"
-    
+
     #transfer_savings
     post "/transfer_savings/create", to: "transfer_savings#create"
     post "/transfer_savings/approved", to: "transfer_savings#approved"
     get "/transfer_savings/fetch", to: "transfer_savings#fetch"
 
-    
+
     #transfer_member_records
     post "/transfer_member_records/create", to: "transfer_member_records#create"
     post "/transfer_member_records/add_member", to: "transfer_member_records#add_member"
@@ -563,6 +593,7 @@ namespace :api do
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"
     post "/membership_payment_collections/approve", to: "membership_payment_collections#approve"
     post "/membership_payment_collections/update_or_number", to: "membership_payment_collections#update_or_number"
+    post "/membership_payment_collections/update_si_number", to: "membership_payment_collections#update_si_number"
     post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
@@ -588,6 +619,8 @@ namespace :api do
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
     post "/deposit_collections/load_center", to: "deposit_collections#load_center"
+    post "/deposit_collections/update_si_number", to: "deposit_collections#update_si_number"
+
 
     # Time Deposit Collection
     post "/time_deposit_collections", to: "time_deposit_collections#create"
@@ -601,6 +634,7 @@ namespace :api do
     post "/time_deposit_collections/modify_book", to: "time_deposit_collections#modify_book"
     post "/time_deposit_collections/add_member", to: "time_deposit_collections#add_member"
     post "/time_deposit_collections/remove_member", to: "time_deposit_collections#remove_member"
+    post "/time_deposit_collections/update_si_number", to: "time_deposit_collections#update_si_number"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"
@@ -738,6 +772,10 @@ namespace :api do
       post "/allowance_computation_report/queue", to: "allowance_computation_report#queue"
       get  "/allowance_computation_report/fetch", to: "allowance_computation_report#fetch"
 
+       #WrittenOffReport
+      post "written_off_report/generate", to: "written_off_report#generate"
+      post "written_off_report/delete", to: "written_off_report#delete"
+
     end
 
     namespace :epassbook do
@@ -780,8 +818,29 @@ namespace :api do
 
       # Membership Arrangement
       post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
+
+      # Region Address
+      post "/admin_address/create", to: "admin_address#create"
+      get "/admin_address/fetch", to: "admin_address#fetch"
+      
+
+      # province
+      post "/admin_province/create", to: "admin_province#create"
+      get "/admin_province/fetch", to: "admin_province#fetch"
+
+      # Municipality Address
+      post "/admin_municipality/create", to: "admin_municipality#create"
+      get "/admin_municipality/fetch", to: "admin_municipality#fetch"
+
+      # Barangay Address
+      post "/admin_barangay/create", to: "admin_barangay#create"
+
+      get "/admin_barangay/fetch", to: "admin_barangay#fetch"
+
+
+
     end
-    
+
     get 'reports/member_reports', to: 'reports#member_reports'
     get 'reports/collections_clip_reports', to: 'reports#collections_clip_reports'
     get 'reports/collections_blip_reports', to: 'reports#collections_blip_reports'
@@ -790,7 +849,7 @@ namespace :api do
     get 'reports/member_quarterly_reports', to: 'reports#member_quarterly_reports'
     get 'reports/member_counts', to: 'reports#member_counts'
     get 'pages/insurance_account_status_reports', to: 'pages#insurance_account_status_reports'
-    get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies' 
+    get 'reports/summary_of_certificates_and_policies', to: 'reports#summary_of_certificates_and_policies'
     get "/reports/personal_document_reports", to: "reports#personal_document_reports"
     get "/reports/collections_hiip_reports", to: "reports#collections_hiip_reports"
     get 'reports/insurance_quarterly_reports', to: 'reports#insurance_quarterly_reports'
@@ -819,6 +878,6 @@ namespace :api do
     post "/claims/save_check_voucher_number", to: "claims#save_check_voucher_number"
     post "/claims/save_note", to: "claims#save_note"
     post "/claims/save_date_paid", to: "claims#save_date_paid"
-    post "/claims/add_transaction_fee", to: "claims#add_transaction_fee"    
+    post "/claims/add_transaction_fee", to: "claims#add_transaction_fee"
   end
 end

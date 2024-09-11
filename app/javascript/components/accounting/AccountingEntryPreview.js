@@ -30,7 +30,14 @@ export default class AccountingEntryPreview extends React.Component {
           <span className="text-muted">
             {this.props.data.or_number}
           </span>
-
+          <br/>
+          <strong>
+            Service Invoice: 
+          </strong>
+          <br/>
+          <span className="text-muted">
+            {this.props.data.si_number}
+          </span>
           <br/>
           <strong>
             AR Number: 

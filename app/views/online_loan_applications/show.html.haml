@@ -14,6 +14,31 @@
           #{@online_application.status}
         %label{style: "color: red; "}
         %br
+        %label{style: "color: red;"} Maintaining Balance:
+        - if @online_application.data["mb"].present? && @online_application["loan_product_id"] == "4e517b79-5ee7-48f3-92ad-b6fb1a3c0a00"
+          - sc_mb = 0.0
+          - @online_application_data.each do |data|
+            - if data.account_subtype == "Share Capital"
+              - sc_mb += data[:balance].to_f
+          - if sc_mb >= @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: green;"}
+              = number_to_currency(@online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f, unit: "")
+          - elsif sc_mb < @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: greens;"}
+              Please Update Share Capital
+        - elsif @online_application.data["mb"].present?
+          - mbalance = 0.0
+          - @online_application_data.each do |data|
+            - if data.account_subtype == "Maintaining Balance Savings"
+              - mbalance + data[:balance].to_f
+          - if mbalance >= @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: green;"}
+              = number_to_currency(@online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f, unit: "")
+          - elsif mbalance < @online_application.data["mb"]["maintaining_balance"].gsub(',', '').to_f
+            %span{style: "color: greens;"}
+              Please Update Maintaining Balance
+                   
+        %br
         - if @online_application[:status] == "reject"
           %label{style: "color: red; "}
             Reason : 
@@ -317,3 +342,4 @@
 = render partial: "online_loan_applications/modals/decline"
 = render partial: "online_loan_applications/modals/check"
 = render partial: "online_loan_applications/modals/edit_loan_tag"
+= render partial: "online_loan_applications/modals/maintaining"

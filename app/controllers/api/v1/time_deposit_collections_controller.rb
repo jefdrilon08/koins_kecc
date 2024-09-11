@@ -174,6 +174,24 @@ module Api
           render json: { message: "error" }, status: 400
         end
       end
+      def update_si_number
+        time_deposit_collection = TimeDepositCollection.find(params[:id])
+        data                    = time_deposit_collection.try(:data).try(:with_indifferent_access)
+        si_number = params[:si_number]
+
+        if time_deposit_collection.pending?
+          data[:si_number]                            = si_number
+          data[:accounting_entry][:data][:si_number]  = si_number
+
+          time_deposit_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
 
       def update_ar_number
         time_deposit_collection = TimeDepositCollection.find(params[:id])

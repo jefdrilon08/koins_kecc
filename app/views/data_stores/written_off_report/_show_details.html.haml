@@ -1,0 +1,34 @@
+%table.table.table-bordered.table-lg.table-hover
+  %thead
+    %tr
+      %th{style: "width: 10%;"} Member
+      %th{style: "width: 10%;"} Center
+      %th{style: "width: 12%;"} Loan Product
+      %th{style: "width: 8%;"} Principal Balance
+      %th{style: "width: 10%;"} Interest Balance
+      %th{style: "width: 10%;"} Total Balance
+      %th{style: "width: 10%;"} Maturity Date
+      %th{style: "width: 5%;"} RSA
+      %th{style: "width: 5%;"} MBS
+      %th{style: "width: 5%;"} GK
+      %th{style: "width: 5%;"} RF
+      %th{style: "width: 5%;"} Equity Value
+      %th{style: "width: 5%;"} CBU
+      %th{style: "width: 5%;"} Share Capital
+  %tbody
+    - @data_record.each do |record|
+      %tr
+        %td= record['members']['full_name']
+        %td= record['center']['center_name']
+        %td= record['loan_product_name']
+        %td= sprintf("%.2f", record['principal_balance'].to_f)
+        %td= sprintf("%.2f", record['interest_balance'].to_f)
+        %td= sprintf("%.2f", record['total_balance'].to_f)
+        %td= record['maturity_date']
+        %td= sprintf("%.2f", record['rsa'].to_f)
+        %td= sprintf("%.2f", record['mbs'].to_f)
+        %td= sprintf("%.2f", record['gk'].to_f)
+        %td= sprintf("%.2f", record['rf'].to_f)
+        %td= sprintf("%.2f", record['equity_value'].to_f)
+        %td= sprintf("%.2f", record['cbu'].to_f)
+        %td= sprintf("%.2f", record['sc'].to_f)

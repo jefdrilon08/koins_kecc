@@ -8,6 +8,18 @@ module ExcelReports
       @p = Axlsx::Package.new
     end
 
+    def get_district_name(id)
+      AdminBarangay.find_by(id: id)&.barangay_name || "Unknown"
+    end
+
+    def get_city_name(id)
+      AdminMunicipality.find_by(id: id)&.municipality_name || "Unknown"
+    end
+
+    def get_province_name(id)
+      AdminProvince.find_by(id: id)&.province_name || "Unknown"
+    end
+
     def execute!
      
           @p.workbook do |wb|
@@ -88,9 +100,12 @@ module ExcelReports
                   @middle_name  = @member.middle_name
                   @address = {
                     street:   @member[:data]["address"]["street"],
-                    barangay: @member[:data]["address"]["district"],
-                    city:     @member[:data]["address"]["city"],
-                    province: @member[:data]["address"]["province"]
+                    # barangay: @member[:data]["address"]["district"],
+                    # city:     @member[:data]["address"]["city"],
+                    # province: @member[:data]["address"]["province"]
+                    barangay: get_district_name(@member_data.dig("address", "district")),
+                    city:     get_city_name(@member_data.dig("address", "city")),
+                    province: get_province_name(@member_data.dig("address", "province"))
                   }
 
                   @street    = @address[:street]

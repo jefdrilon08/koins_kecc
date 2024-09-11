@@ -1,0 +1,33 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %theads
+    %tr
+      %th{style: 'width:38%'}
+        Region
+      %th{style: 'width:30%'}
+        Province
+      %th{style: 'width:30%'}
+        Municipality
+      %th{style: 'width:3%'}
+        Actions
+
+  %tbody
+    - @admin_index_list.each do |aa|
+      %tr
+        %td
+          = aa.admin_province_admin_address_region_name
+        %td
+          = aa.admin_province_province_name
+        %td
+          #{aa.municipality_name}
+
+          %td.text-center{:style => "display: flex; justify-content: center; align-items: center;"}
+            %a.updateregion{
+              data: {
+                municipality_id: aa.id,
+                municipality_name: aa.municipality_name,
+                province_id: aa.province_id
+              },
+              :href => "#",
+              :class => "btn btn-block btn-info"
+            }
+              update

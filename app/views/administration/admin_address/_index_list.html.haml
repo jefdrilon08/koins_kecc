@@ -1,0 +1,40 @@
+%table#data-table.display.table.table-bordered.table-hover.table-sm
+  %theads
+    %tr
+      %th{style: 'width:60%'}
+        Region
+      %th{style: 'width:3%'}
+        Actions
+      
+  %tbody
+    - @admin_address_list.each do |aa|
+      %tr
+        %td
+          #{aa.region_name}
+          %td.text-center{:style => "display: flex; justify-content: center; align-items: center;"}
+            %a.updateregion{
+              data: {
+                region_id: aa.id,
+                region_name: aa.region_name,
+              },
+              :href => "#",
+              :class => "btn btn-block btn-info"
+            }
+              update
+
+
+
+        
+
+      
+          
+        
+        
+
+      
+          
+              
+
+          
+
+        

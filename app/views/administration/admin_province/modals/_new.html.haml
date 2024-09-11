@@ -1,0 +1,18 @@
+#modal-new.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Province
+      .modal-body
+        %form
+          .form-group
+            %label{ for: "province" } Province Name
+            %input#province-textbox.form-control{ type: "text", placeholder: "Enter province" }
+            %input#province-id.form-control{ hidden: true }
+          .form-group
+            %label{ for: "region-dropdown" } Select Region
+            = select_tag :region_id, options_from_collection_for_select(@regions, :id, :region_name, @regions.try(:id)), class: "form-control select-select2", id: "region-select", prompt: "-- SELECT --"
+      .modal-footer
+        %button#btn-confirm.btn.btn-primary Confirm
+        %button.btn.btn-secondary{ "data-bs-dismiss" => "modal" } Cancel
+        

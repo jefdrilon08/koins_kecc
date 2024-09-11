@@ -10,6 +10,18 @@ module ExcelReports
       @p = Axlsx::Package.new
     end
 
+    def get_district_name(id)
+      AdminBarangay.find_by(id: id)&.barangay_name || "Unknown"
+    end
+
+    def get_city_name(id)
+      AdminMunicipality.find_by(id: id)&.municipality_name || "Unknown"
+    end
+
+    def get_province_name(id)
+      AdminProvince.find_by(id: id)&.province_name || "Unknown"
+    end
+
      def execute!
       @p.workbook do |wb|
         wb.add_worksheet do |sheet|
@@ -185,9 +197,12 @@ module ExcelReports
                   member_rec['first_name'],
                   member_rec['middle_name'],
                   address['street'],
-                  address['district'],
-                  address['city'],
-                  address['province'],
+                  # address['district'],
+                  # address['city'],
+                  # address['province'],
+                  get_district_name(address['district']),
+                  get_city_name(address['city']),
+                  get_province_name(address['province']),
                   "",
                   member.date_of_birth,
                   member.place_of_birth,

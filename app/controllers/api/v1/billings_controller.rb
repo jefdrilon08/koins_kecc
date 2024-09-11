@@ -49,7 +49,8 @@ module Api
         billing   = Billing.find(params[:id])
         data      = billing.try(:data).try(:with_indifferent_access)
         or_number = params[:or_number]
-
+        billing[:or_number] = params[:or_number]  
+        
         if billing.save?
           data[:or_number]                            = or_number
           data[:accounting_entry][:data][:or_number]  = or_number
@@ -82,7 +83,25 @@ module Api
           render json: { message: "error" }, status: 400
         end
       end
+      def update_si_number
+        billing   = Billing.find(params[:id])
+        data      = billing.try(:data).try(:with_indifferent_access)
+        si_number = params[:si_number]
+        billing[:si_number] = params[:si_number]
+        
+        if billing.save?
+          data[:si_number]                            = si_number
+          data[:accounting_entry][:data][:si_number]  = si_number
 
+          billing.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
       def toggle_attendance_off
         billing = Billing.find(params[:id])
         data    = billing.data.with_indifferent_access

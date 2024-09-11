@@ -1,0 +1,23 @@
+#modal-new.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Municipality
+      .modal-body
+        %form
+          .form-group
+            %label{ for: "Municipality" } Municipality Name
+            %input#municipality-textbox.form-control{ type: "text", placeholder: "Enter Municipality" }
+            %input#municipality-id.form-control{hidden: "hidden"}
+          .form-group
+            %label{ for: "province-dropdown" } Select Province
+            = select_tag :province_id, options_from_collection_for_select(@provinces, :id, :province_name, @provinces.try(:id)), class: "form-control select-select2", id: "province-select", prompt: "-- SELECT --"
+      .modal-footer
+        %button#btn-confirm.btn.btn-primary Confirm
+        %button.btn.btn-secondary{ "data-bs-dismiss" => "modal" } Cancel
+        
+
+
+
+
+        

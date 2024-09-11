@@ -43,6 +43,37 @@ class ReportsController < ApplicationController
 
   end
   
+  def online_loan_application_reports
+    @online_application_status = ::LoanApplication::STATUSES
+    @online_applications_list  = LoanApplication.joins(:member).where(
+                                    "members.branch_id IN (?)", @branches.pluck(:id)
+                                  )
+    @online_applications = @online_applications_list
+    if params[:status].present?
+      @status = params[:status]
+      @online_applications = @online_applications.where(status: @status)
+    end
+    if params[:branch_select].present?
+      @branch = ReadOnlyBranch.find(params[:branch_select])
+      @online_applications = @online_applications.where("members.branch_id": @branch)
+    end
+    
+    if params[:start_date].present?
+      @start_date = params[:start_date]
+      @online_applications = @online_applications.where(date_applied: @start_date)
+    end
+
+    
+    if params[:end_date].present?
+      @end_date = Date.parse(params[:end_date]) 
+      @online_applications = @online_applications.where("loan_applications.data ->> 'date_reject' >= ?", @end_date)           
+    end
+
+    @online_applications = @online_applications.order("first_name ASC").page(params[:page]).per(15)
+    end
+   
+
+
   def subscriber
     @subheader_items = [
       { text: "Other Reports" },
@@ -563,14 +594,14 @@ class ReportsController < ApplicationController
   end
 
   def insurance_loan_bundle_reports_excel
-    @start_date       = params[:start_date]
-    @end_date         = params[:end_date]
-    @branch_name      = Branch.where(id: @branch).first.name
-    @status           = params[:status]
+    @start_date         = params[:start_date]
+    @end_date           = params[:end_date]
+    @approval_date_from = params[:approval_date_from]
+    @approval_date_to   = params[:approval_date_to]
+    @branch_name        = Branch.where(id: @branch).first.name
+    @status             = params[:status]
 
-    # raise @end_date.inspect
-    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, branch: @branch, status: @status).execute!
-    # excel = Reports::GenerateInsuranceLoanBundleReports.new(branch: @branch, start_date: @start_date, status: @status).execute!
+    excel = Reports::GenerateInsuranceLoanBundleReports.new(start_date: @start_date, end_date: @end_date, approval_date_from: @approval_date_from, approval_date_to: @approval_date_to , branch: @branch, status: @status).execute!
     filename  = "#{@branch_name}Savings Insurance Transfer Report.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"

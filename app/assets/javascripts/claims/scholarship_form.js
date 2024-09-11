@@ -86,6 +86,8 @@ var scholarshipForm = (function() {
             var  errors  = JSON.parse(responseContent.responseText).errors;
             console.log(errors);
             console.log(data);
+            $message.html("Error! " + errors);
+            $submitButton.removeClass('loading');
             $message.html(
                 Mustache.render(
                   $errorsTemplate,

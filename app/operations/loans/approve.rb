@@ -54,7 +54,7 @@ module Loans
 
       perform_deposits!
 
-      if @loan.data["sms_fee_available"].present? && @loan.data["sms_fee_available"] == false 
+      if @loan.data["sms_fee_available"].present? || @loan.data["sms_fee_available"] == false 
         @member_data[:sms_record] = {
           loan: @loan.id,
           loan_maturity: @loan.maturity_date,
