@@ -1,0 +1,20 @@
+.row
+  .col
+    = form_tag "", method: 'GET' do
+      .row
+        .col-md-4
+          .form-group
+            %label
+              SATO
+            = select_tag :branch_select, options_from_collection_for_select(@branches, :id, :name, params[:branch_select]), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+        .col-md-4
+          .form-group
+            %label
+              Date of Subcription
+            = text_field_tag :date_subscription, params[:date_subscription], class: 'form-control', type: :date
+        .col-md-3
+          .form-group
+            %label
+              Actions
+            = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+              .bi.bi-search
