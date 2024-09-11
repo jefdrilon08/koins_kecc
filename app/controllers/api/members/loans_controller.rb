@@ -26,7 +26,7 @@ module Api
         co_maker_first_name = params[:co_maker_first_name]
         co_maker_last_name  = params[:co_maker_last_name]
         co_maker_member_id  = params[:co_maker_member_id]
-        data                = params[:data] || {}
+        data                = params[:data] || [:data_cash_flow].try(:to_f)
         project_type_category = params[:project_type_category]
         project_type_id     = params[:project_type_id]
 
