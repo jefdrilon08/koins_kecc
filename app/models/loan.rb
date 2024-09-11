@@ -165,13 +165,13 @@ class Loan < ApplicationRecord
   def co_maker_two
     temp_data = self.data.with_indifferent_access
 
-    temp_data[:co_maker_two]
+    # temp_data[:co_maker_two]
   end
 
   def co_maker_three
     temp_data = self.data.with_indifferent_access
 
-    temp_data[:co_maker_three]
+    # temp_data[:co_maker_three]
   end
 
   def total_balance

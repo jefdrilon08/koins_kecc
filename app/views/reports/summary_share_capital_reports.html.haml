@@ -1,0 +1,30 @@
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "summary_share_capital_reports_filter"
+        .table-responsive
+          %table.table.table-sm.table-hover
+            %thead
+              %tr
+                %th Name
+                %th SATO
+                %th Subscription Date
+                %th Amount Subcribed
+                %th Paid Up
+                %th Balance
+
+            %tbody
+              - if @shared_capital.present?
+                - @shared_capital.each do |o|
+                  %tr
+                    %td 
+                      #{o.full_name }
+                    %td
+                      #{o.branch.name}
+                    %td
+                      #{o.data['subscription']['subscribe_updated_at'].to_date}
+                    %td
+                    %td
+                     
+        = paginate @shared_capital
