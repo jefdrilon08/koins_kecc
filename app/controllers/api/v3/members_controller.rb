@@ -55,6 +55,7 @@ module Api
         allowed_fields = [:id, :first_name, :last_name, :email, :mobile_number,
          :member_type, :identification_number, :branch_id, :center_id, :data,'address']
         
+        #  getting the member type
         # Get the branch name if branch_id is present
         branch_name = member.branch&.name
         center_name = member.center&.name
