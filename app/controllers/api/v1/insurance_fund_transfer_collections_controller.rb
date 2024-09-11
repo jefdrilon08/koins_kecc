@@ -76,7 +76,7 @@ module Api
       def fetch_members
         insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
 
-        members = Member.active.where(
+        members_active = Member.active.where(
                     branch_id: insurance_fund_transfer_collection.branch_id
                   ).where.not(
                     id: insurance_fund_transfer_collection.member_ids
@@ -91,6 +91,24 @@ module Api
                       }
                     }
                   }
+
+        members_reinstate = Member.reinstate.where(
+                    branch_id: insurance_fund_transfer_collection.branch_id
+                  ).where.not(
+                    id: insurance_fund_transfer_collection.member_ids
+                  ).order("last_name ASC").map{ |o|
+                    {
+                      id: o.id,
+                      name: o.full_name,
+                      identification_number: o.identification_number,
+                      center: {
+                        id: o.center.id,
+                        name: o.center.name
+                      }
+                    }
+                  }
+
+        members = (members_active + members_reinstate).uniq
 
         render json: { members: members }
       end
@@ -152,7 +170,7 @@ module Api
       def revert
         insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
         data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
-        
+
         if insurance_fund_transfer_collection.pending?
           data[:finalize] = false
 
@@ -169,7 +187,7 @@ module Api
       def finalize
         insurance_fund_transfer_collection   = InsuranceFundTransferCollection.find(params[:id])
         data                                 = insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
-        
+
         config  = {
           insurance_fund_transfer_collection: insurance_fund_transfer_collection,
           user: current_user

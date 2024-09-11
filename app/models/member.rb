@@ -21,22 +21,22 @@ class Member < ApplicationRecord
     "cleared",
     "dependent",
     "writeoff",
-    "delinquent"  
+    "delinquent"
   ]
 
   INSURANCE_STATUS = [
-    "inforce", 
-    "lapsed", 
-    "resigned", 
-    "dormant", 
+    "inforce",
+    "lapsed",
+    "resigned",
+    "dormant",
     "pending",
     "inactive"
   ]
 
   MEMBER_TYPES = [
-    "Regular", 
-    "GK", 
-    "Kaagapay", 
+    "Regular",
+    "GK",
+    "Kaagapay",
     "Dependent",
     "Non-Member"
   ]
@@ -97,6 +97,7 @@ class Member < ApplicationRecord
   scope :returning, -> { where("status = ? AND previous_date_resigned IS NOT NULL", "active").order("last_name ASC") }
   scope :insurance_resigned, -> { where(insurance_status: "resigned").order("last_name ASC") }
   scope :insurance_active, -> { where(status: "active", insurance_status: ["inforce", "lapsed", "dormant"]).order("last_name ASC") }
+  scope :reinstate, -> { where(status: "active").where("data->>'reinstatement' IS NOT NULL").order("last_name ASC") }
 
   before_validation :load_defaults
 
@@ -129,7 +130,7 @@ class Member < ApplicationRecord
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Life Insurance Fund").sum(:balance) / 2
   end
 
-  
+
   def check_name
     "#{first_name.try(:upcase)} #{last_name.try(:upcase)}"
   end
@@ -165,7 +166,7 @@ class Member < ApplicationRecord
   def face_amount
     if self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now
-      
+
       value1 = 2000
       value2 = 6000
       value3 = 10000
@@ -174,11 +175,11 @@ class Member < ApplicationRecord
 
 
       number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
-      
-      
+
+
       if number_of_days <= 91
         "₱#{value1}.00"
-      elsif number_of_days >= 92 && number_of_days <= 365 
+      elsif number_of_days >= 92 && number_of_days <= 365
         "₱#{value2}.00"
       elsif number_of_days >= 366 && number_of_days <= 730
         "₱#{value3}.00"
@@ -207,7 +208,7 @@ class Member < ApplicationRecord
   end
 
   def reinstatement_date
-    if self.data.with_indifferent_access[:reinstatement][:reinstatement_date].present?  
+    if self.data.with_indifferent_access[:reinstatement][:reinstatement_date].present?
       return self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date
     else
       return nil
@@ -223,14 +224,14 @@ class Member < ApplicationRecord
   end
 
   def life_number_of_lapsed
-    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first  
-    
+    ma = self.member_accounts.where(account_subtype:"Life Insurance Fund").first
+
     if ma.present?
       recognition_date = self.data.with_indifferent_access[:recognition_date].to_date
       current_date = Date.today.to_date
 
       current_balance   = ma.balance
-      num_days = (current_date - recognition_date).to_i  
+      num_days = (current_date - recognition_date).to_i
       num_weeks  = (num_days / 7).to_i + 1
       insured_amount  = num_weeks  * 15
       amt_past_due    = (current_balance - insured_amount) * -1
@@ -261,7 +262,7 @@ class Member < ApplicationRecord
   end
 
   def full_name_titleize
-    "#{last_name.try(:titleize)}, #{first_name.try(:titleize)} #{middle_name.try(:titleize)}"  
+    "#{last_name.try(:titleize)}, #{first_name.try(:titleize)} #{middle_name.try(:titleize)}"
   end
 
   def resigned?
@@ -271,7 +272,7 @@ class Member < ApplicationRecord
   def active_resigned?
     self.status == "resigned" or self.status == "active"
   end
-  
+
   def pending?
     self.status == "pending"
   end
@@ -344,7 +345,7 @@ class Member < ApplicationRecord
       self.data.with_indifferent_access[:reinstatement][:is_reinstated] == true
     else
       false
-    end 
+    end
   end
 
   def reinstated
@@ -352,7 +353,7 @@ class Member < ApplicationRecord
       self.data.with_indifferent_access[:reinstatement][:is_reinstated] == true
     else
       false
-    end 
+    end
   end
 
 
@@ -388,7 +389,7 @@ class Member < ApplicationRecord
   def fetch_government_id(type)
     data_hash = self.data.with_indifferent_access[:government_identification_numbers]
 
-    if type == "sss_number" 
+    if type == "sss_number"
       data_hash[:sss_number]
     elsif type == "pag_ibig_number"
       data_hash[:pag_ibig_number]
@@ -414,7 +415,7 @@ class Member < ApplicationRecord
     "#{spouse_data[:date_of_birth]}"
   end
 
-  def age 
+  def age
     if self.date_of_birth.nil?
       "Please set date of birth"
     else
@@ -424,8 +425,8 @@ class Member < ApplicationRecord
         #now.year - self.date_of_birth.year - (self.date_of_birth.to_date.change(:year => now.year) > now ? 1 : 0)
       rescue Exception
         "Invalid date of birth: #{self.date_of_birth}"
-      end 
-    end 
+      end
+    end
   end
 
   def load_defaults
@@ -435,7 +436,7 @@ class Member < ApplicationRecord
       end
 
       self.insurance_status = "pending"
-    
+
       if self.data.with_indifferent_access[:recognition_date].present?
         self.status = "active"
         self.insurance_status = "dormant"
@@ -474,7 +475,7 @@ class Member < ApplicationRecord
   def length_of_stay_report
     self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now
-      
+
       if (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i < 0
         number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
         "#{number_of_days} DAYS"
@@ -485,23 +486,23 @@ class Member < ApplicationRecord
         number_of_months = (days_between / 30.44).floor
         years = (days_between / 365.242199).floor
         months = number_of_months - (years * 12)
-        
+
         if years < 1
           if months > 1
             "#{months} MONTHS"
           elsif months == 1
             "#{months} MONTH"
           elsif months < 1
-            if number_of_days == 1 
+            if number_of_days == 1
               "#{number_of_days} DAY"
             elsif number_of_days > 1
               "#{number_of_days} DAYS"
             elsif number_of_days < 1
-              nil          
+              nil
             end
-          end    
+          end
         else
-          if years == 1 && months == 0 
+          if years == 1 && months == 0
             "#{years} YEAR"
           elsif years == 1 && months == 1
             "#{years} YEAR, #{months} MONTH"
@@ -512,7 +513,7 @@ class Member < ApplicationRecord
           elsif years > 1 && months == 1
             "#{years} YEARS, #{months} MONTH"
           elsif years > 1 && months < 1
-            "#{years} YEARS"    
+            "#{years} YEARS"
           end
         end
       end
@@ -521,37 +522,37 @@ class Member < ApplicationRecord
   def length_of_stay
     if self.data.with_indifferent_access[:reinstatement].present?
       now = Time.now
-      
+
       if (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i < 0
-        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i  
+        number_of_days = (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_date - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_date).to_i
         "#{number_of_days} DAYS"
 
       else
         # seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs + (self.data.with_indifferent_access[:reinstatement][:date_stop].to_time - self.data.with_indifferent_access[:reinstatement][:old_recognition_date].to_time).abs
-        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs 
-        
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_time).abs
+
         days_between = seconds_between / 60 / 60 / 24
         number_of_days = days_between.floor
         number_of_months = (days_between / 30.44).floor
         years = (days_between / 365.242199).floor
         months = number_of_months - (years * 12)
-        
+
         if years < 1
           if months > 1
             "#{months} MONTHS"
           elsif months == 1
             "#{months} MONTH"
           elsif months < 1
-            if number_of_days == 1 
+            if number_of_days == 1
               "#{number_of_days} DAY"
             elsif number_of_days > 1
               "#{number_of_days} DAYS"
             elsif number_of_days < 1
-              nil          
+              nil
             end
-          end    
+          end
         else
-          if years == 1 && months == 0 
+          if years == 1 && months == 0
             "#{years} YEAR"
           elsif years == 1 && months == 1
             "#{years} YEAR, #{months} MONTH"
@@ -562,41 +563,41 @@ class Member < ApplicationRecord
           elsif years > 1 && months == 1
             "#{years} YEARS, #{months} MONTH"
           elsif years > 1 && months < 1
-            "#{years} YEARS"    
+            "#{years} YEARS"
           end
         end
       end
 
     elsif self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now
-      
+
       if (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i < 0
         number_of_days = (now.to_date - self.data.with_indifferent_access[:recognition_date].to_date).to_i
         "#{number_of_days} DAYS"
       else
-        seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs 
+        seconds_between = (now.to_time - self.data.with_indifferent_access[:recognition_date].to_time).abs
         days_between = seconds_between / 60 / 60 / 24
         number_of_days = days_between.floor
         number_of_months = (days_between / 30.44).floor
         years = (days_between / 365.242199).floor
         months = number_of_months - (years * 12)
-        
+
         if years < 1
           if months > 1
             "#{months} MONTHS"
           elsif months == 1
             "#{months} MONTH"
           elsif months < 1
-            if number_of_days == 1 
+            if number_of_days == 1
               "#{number_of_days} DAY"
             elsif number_of_days > 1
               "#{number_of_days} DAYS"
             elsif number_of_days < 1
-              nil          
+              nil
             end
-          end    
+          end
         else
-          if years == 1 && months == 0 
+          if years == 1 && months == 0
             "#{years} YEAR"
           elsif years == 1 && months == 1
             "#{years} YEAR, #{months} MONTH"
@@ -607,7 +608,7 @@ class Member < ApplicationRecord
           elsif years > 1 && months == 1
             "#{years} YEARS, #{months} MONTH"
           elsif years > 1 && months < 1
-            "#{years} YEARS"    
+            "#{years} YEARS"
           end
         end
       end
@@ -615,7 +616,7 @@ class Member < ApplicationRecord
   end
 
   def full_name_formatted
-    "#{first_name.try(:titleize)} #{middle_name.try(:titleize)} #{last_name.try(:titleize)}"  
+    "#{first_name.try(:titleize)} #{middle_name.try(:titleize)} #{last_name.try(:titleize)}"
   end
 
  def spouse_age
@@ -744,7 +745,7 @@ class Member < ApplicationRecord
   def to_h
     user_object
   end
-  
+
   def find_in_batches(start: nil, finish: nil, batch_size: 500, error_on_ignore: nil)
     relation = self
     unless block_given?
@@ -753,7 +754,7 @@ class Member < ApplicationRecord
         (total - 1).div(batch_size) + 1
       end
     end
-    
+
     in_batches(of: batch_size, start: start, finish: finish, load: true, error_on_ignore: error_on_ignore) do |batch|
       yield batch.to_a
     end

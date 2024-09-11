@@ -7,9 +7,9 @@ module InsuranceFundTransferCollections
 
       @data                                = @insurance_fund_transfer_collection.try(:data).try(:with_indifferent_access)
       @data_fund_transfers                 = @insurance_fund_transfer_collection.deposits
-      
-      @brach                               = @insurance_fund_transfer_collection.branch
 
+      @branch                              = @insurance_fund_transfer_collection.branch
+      @branch_id                           = @insurance_fund_transfer_collection[:branch_id]
       if Settings.activate_microinsurance
         @date_approved                     = @insurance_fund_transfer_collection.collection_date
       else
@@ -18,12 +18,12 @@ module InsuranceFundTransferCollections
                                                 branch: @branch
                                               }
                                             ).execute!
-      end 
+      end
     end
 
     def execute!
       process_fund_transfers!
-
+      update_insurance_status_per_branch!
       @data[:approved_by] = @user.full_name
 
       @insurance_fund_transfer_collection.update!(
@@ -52,5 +52,15 @@ module InsuranceFundTransferCollections
         ).execute!
       end
     end
+
+    def update_insurance_status_per_branch!
+      begin
+        ProcessUpdateInsuranceStatusPerBranch.perform_later('adjust:update_insurance_status_per_branch', @branch_id)
+      rescue => e
+        # Handle the exception or log it
+        Rails.logger.error("Failed to update insurance status: #{e.message}")
+      end
+    end
+
   end
 end
