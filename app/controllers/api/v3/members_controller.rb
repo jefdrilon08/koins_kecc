@@ -12,6 +12,7 @@ module Api
         :member_change_old_password
       ]
 
+      
       before_action :authorize_mis!, except: [
         :login, 
         :dashboard, 
