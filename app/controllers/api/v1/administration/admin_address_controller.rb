@@ -1,8 +1,8 @@
 module Api 
     module V1
         module Administration
-            class AdminAddressController < ApiController
-                before_action :authenticate_user!
+            class AdminAddressController < ApplicationController
+                # before_action :authenticate_user!
 
                 def create 
                     config = {
@@ -16,7 +16,12 @@ module Api
                         render json: { error: e.message }, status: :internal_server_error
                     end
                 end
-                  
+
+                def fetch
+                    admin_address = AdminAddress.all();
+                    
+                    render json: admin_address
+                end
             end
         end
     end

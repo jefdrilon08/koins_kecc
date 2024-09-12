@@ -23,7 +23,7 @@ class LoanApplication < ApplicationRecord
   scope :pending, -> { where(status: "pending") }
   scope :processing, -> { where(status: "processing") }
   scope :pending_or_processing, -> { where(status: ["pending", "processing"]) }
-
+  scope :reject_or_rejected, -> { where(status: ["reject", "rejected"]) }
   def to_h
     {
       id: self.id,
@@ -46,6 +46,9 @@ class LoanApplication < ApplicationRecord
   end
   def approved?
     self.status == "approved"
+  end
+  def reject?
+    self.status == "reject"
   end
 
   def load_defaults

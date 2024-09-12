@@ -52,13 +52,7 @@ class BillingForFullPaymentsController < ApplicationController
 
       if @billing_data_store.pending? 
         @subheader_side_actions = [
-          {
-            id: "btn-checked",
-            link: "#",
-            class: "fa fa-check",
-            text: "Check",
-            data: { data_store_id: params[:id] }
-          },
+         
           {
             id: "btn-approved",
             link: "#",
@@ -66,6 +60,15 @@ class BillingForFullPaymentsController < ApplicationController
             text: "Approved",
             data: { data_store_id: params[:id] }
           },
+
+          {
+            id: "btn-checked",
+            link: "#",
+            class: "fa fa-check",
+            text: "Check",
+            data: { data_store_id: params[:id] }
+          },
+          
           {
             id: "btn-delete",
             link: "#",

@@ -12,6 +12,7 @@ module Api
         :member_change_old_password
       ]
 
+      
       before_action :authorize_mis!, except: [
         :login, 
         :dashboard, 
@@ -36,51 +37,93 @@ module Api
       ]
 
       def dashboard
+        member_data = allowed_member_attributes(member) 
+        member = @current_member
         cmd = ::Members::GetDashboard.new(
-          member: @current_member
+          member: member
         )
 
         cmd.execute!
 
-        render json: cmd.payload
+        render json: { 
+    dashboard: cmd.payload, 
+    member: member_data 
+  }
+      end
+
+      def allowed_member_attributes(member)
+        # Define which fields you want to include
+        allowed_fields = [:id, :first_name, :last_name, :mobile_number,
+         :member_type, :identification_number, :branch_id, :center_id,]
+        
+        #  getting the member type
+        # Get the branch name if branch_id is present
+        branch_name = member.branch&.name
+        center_name = member.center&.name
+          
+        # Filter the member attributes based on the allowed fields
+        attributes = member.attributes.slice(*allowed_fields.map(&:to_s)).with_indifferent_access
+        
+        # Add the branch name to attributes if branch_id is present
+        attributes[:branch_name] = branch_name if attributes[:branch_id].present?
+        attributes[:center_name] = center_name if attributes[:center_id].present?
+        attributes
+      end
+      
+
+      def member_type
+        # Find the member by ID
+        member = Member.find_by(id: params[:id])
+        
+        # Handle the case where the member is not found
+        if member.nil?
+          render json: { error: 'Member not found' }, status: :not_found
+          return
+        end
+      
+        # Get allowed member attributes
+        member_data = allowed_member_attributes(member)
+        
+        # Render the member data in the response
+        render json: { member: member_data }
       end
 
       def login
         username  = params[:username]
         password  = params[:password]
-
+      
         cmd = ::Members::ValidateLogin.new(
           username: username,
           password: password
         )
-
+      
         cmd.execute!
-
+      
         if cmd.invalid?
           render json: cmd.errors, status: :unprocessable_entity
         else
           member = cmd.member.user_object.with_indifferent_access
-
+      
+          # Clean the mobile number
           mobile_number = cmd.member.mobile_number
-          member["mobile_number"] = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all the special characters
-          # render json: { token: cmd.token, member: cmd.member.user_object }
-          # render json: { token: cmd.token, member: member }
+          member["mobile_number"] = mobile_number.gsub(/[&\/\\#,\-\_()$~%.'":*?<>{}]/, '') # remove all special characters
           
-          if(cmd.token) # if this member has token
-
+          # Add all allowed member attributes
+          member_data = allowed_member_attributes(cmd.member)
+      
+          if cmd.token # if this member has a token
             current_member = Member.find(cmd.member.id)
             current_member_data = current_member.data.with_indifferent_access
-
-            if(!current_member_data.key?(:koinsmobile_first_login_date))
+      
+            if !current_member_data.key?(:koinsmobile_first_login_date)
               current_member_data["koinsmobile_first_login_date"] = Time.now
               current_member.update(data: current_member_data)
             end
-
-            render json: { token: cmd.token, member: member }
+      
+            render json: { token: cmd.token, member: member_data }
           else # if not
-            render json: { member: member, is_otp_verified: cmd.is_otp_verified, is_password_changed: cmd.is_password_changed }
+            render json: { member: member_data, is_otp_verified: cmd.is_otp_verified, is_password_changed: cmd.is_password_changed }
           end
-            
         end
       end
 
