@@ -44,6 +44,10 @@ class MemberAccount < ApplicationRecord
   def kkalinga
     self.account_subtype == "K-KALINGA"
   end
+
+  def life
+    self.account_subtype == "Life Insurance Fund"
+  end
   
   def clip_active_balance
     AccountTransaction.where("subsidiary_id = ? AND data->'data'->>'maturity_date' >= ?", self.id, Date.today).sum(:amount)

@@ -8,10 +8,6 @@ module Members
     end
 
     def execute!
-      if !@reinstatement_date.present?
-        @errors << "Reinstatement date required!"
-      end
-
       @errors
     end
   end
