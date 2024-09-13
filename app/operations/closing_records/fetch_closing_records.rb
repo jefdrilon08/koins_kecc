@@ -23,8 +23,14 @@ module ClosingRecords
       )
 
       results.each do |o|
-        path = "#"
+        ds = DataStore.find(o.data_store_id).meta["data_store_type"]
+        if o.record_type == ds or o.record_type == "TRIAL_BALANCE"
+          stats = "done"
+        else
+          stats = "invalid"
+        end
 
+        path = "#"
         case o.record_type 
         when "TRIAL_BALANCE"
           path = "/accounting/trial_balances/#{o.data_store_id}"
@@ -48,12 +54,14 @@ module ClosingRecords
           path = "/data_stores/personal_funds/#{o.data_store_id}"
         when "MEMBER_COUNTS"
           path = "/data_stores/member_counts/#{o.data_store_id}"
+        when "MONTHLY_NEW_AND_RESIGNED"
+          path = "/data_stores/monthly_new_and_resigned/#{o.data_store_id}"
         end
 
         @records << {
           type:           o.record_type,
           closing_date:   o.closing_date.strftime("%b %d %Y"),
-          status:         "done",
+          status:         stats,
           path:           path,
           data_store_id:  o.data_store_id,
           data:           o.data

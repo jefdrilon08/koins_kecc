@@ -7,7 +7,8 @@ export default function BranchPsrRecordsShow(props) {
   const [token] = useState(props.token);
   const miniSpace = '\u00A0'.repeat(8);
   const tabSpace = '\u00A0'.repeat(14);
- 
+  const sortedLoans = data.data.loans.sort((a, b) => a.loan_product.priority - b.loan_product.priority);
+
   return (
     <>
       <div className="card">
@@ -49,17 +50,20 @@ export default function BranchPsrRecordsShow(props) {
 
               <tr>
 		<td>{tabSpace}Primary</td>
-                <td className="text-center">
+		<td className="text-center">
+		  {data.data.pure_savers_regular}
                 </td>
               </tr>
               <tr>
                 <td>{tabSpace}Kaagapay</td>
-                <td className="text-center">
+		<td className="text-center">
+		  {data.data.pure_savers_kaagapay}
                 </td>
               </tr>
               <tr>
                 <td>{tabSpace}GK</td>
-                <td className="text-center">
+		<td className="text-center">
+		 {data.data.pure_savers_gk}
                 </td>
               </tr>
 
@@ -73,16 +77,19 @@ export default function BranchPsrRecordsShow(props) {
               <tr>
 		<td>{tabSpace}Primary</td>
                 <td className="text-center">
-                </td>
+		  {data.data.active_borrowers_regular}
+		</td>
               </tr>
               <tr>
                 <td>{tabSpace}Kaagapay</td>
-                <td className="text-center">
+		<td className="text-center">
+		  {data.data.active_borrowers_kaagapay}
                 </td>
               </tr>
               <tr>
                 <td>{tabSpace}GK</td>
-                <td className="text-center">
+		<td className="text-center">
+		  {data.data.active_borrowers_gk}
                 </td>
               </tr>
 
@@ -94,7 +101,8 @@ export default function BranchPsrRecordsShow(props) {
 	      </tr>
               <tr>
                 <th>{miniSpace}Inactive Members</th>
-                <td className="text-center">
+		<td className="text-center">
+		  {data.data.non_patronizing}
                 </td>
               </tr>
               <tr>
@@ -133,8 +141,8 @@ export default function BranchPsrRecordsShow(props) {
                 <th className="text-center">
                   {data.data.total_active_loans}
                 </th>
-              </tr>
-              {data.data.loans.map((o) => {
+	      </tr>
+	       {sortedLoans.map((o) => {
                 return (
                   <tr key={`loan-count-${o.loan_product.id}`}>
                     <td>{miniSpace}{o.loan_product.name.toUpperCase()}</td>
@@ -146,7 +154,8 @@ export default function BranchPsrRecordsShow(props) {
 	      })}
 	      <tr>
 	        <th>a3. DROP OUT for the month </th>
-                <th className="text-center">
+		<th className="text-center">
+		  {data.data.resigned_members}
                 </th>
 	      </tr>
               <tr>
@@ -157,7 +166,8 @@ export default function BranchPsrRecordsShow(props) {
 	      <tr>
 	        <th>a4. Total NEW CLIENTS (as of)</th>
                 <th className="text-center">
-                </th>
+		  {data.data.new_members}
+		</th>
 	      </tr>
               <tr>
                 <td>{miniSpace}NEW CLIENTS for the month</td>
@@ -190,7 +200,9 @@ export default function BranchPsrRecordsShow(props) {
                 <th>
                   Average Loan amount (portfolio) for the month
                 </th>
-                <th className="text-end"></th>
+		<th className="text-end">
+		 {numberWithCommas(data.data.average_loan_amount)}
+		</th>
               </tr>
               <tr>
                 <th>b2. PAST DUE AMOUNT:</th>
@@ -198,28 +210,33 @@ export default function BranchPsrRecordsShow(props) {
               </tr>
                <tr>
                 <td>{miniSpace}Past due (1-30 days)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.past_due_month)}
                 </td>
 	      </tr>
               <tr>
                 <td>{miniSpace}Past due (31-365 days)</td>
-                <td className="text-center">
-                </td>
+                <td className="text-end">
+		  {numberWithCommas(data.data.past_due_year)}
+		</td>
 	      </tr>
               <tr>
                 <td>{miniSpace}Past due (365 days above)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.past_due_greater_year)}
                 </td>
 	      </tr>
               <tr>
                 <th>Total PAST DUE</th>
-                <td className="text-center">
-                </td>
+                <th className="text-end">
+		  {numberWithCommas(data.data.total_principal_balance)}
+		</th>
 	      </tr>
               <tr>
                 <th>Past Due Rate</th>
                 <td className="text-center">
-                </td>
+		  {numberAsPercent(data.data.past_due_rate)}
+		</td>
 	      </tr>
               <tr>
                 <th>b3. PAR AMOUNT:</th>
@@ -227,28 +244,33 @@ export default function BranchPsrRecordsShow(props) {
               </tr>
                <tr>
                 <td>{miniSpace}Portfolio at Risk (1-30 days)</td>
-                <td className="text-center">
-                </td>
+                <td className="text-end">
+		 {numberWithCommas(data.data.par_month)}
+		</td>
 	      </tr>
               <tr>
                 <td>{miniSpace}Portfolio at Risk (31-365 days)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.par_year)}
                 </td>
 	      </tr>
               <tr>
                 <td>{miniSpace}Portfolio at Risk (365 days above)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.par_greater_year)}
                 </td>
 	      </tr>
               <tr>
                 <th>Total PAR AMOUNT</th>
-                <td className="text-center">
-                </td>
+		<th className="text-end">
+		  {numberWithCommas(data.data.total_par)}
+                </th>
 	      </tr>
               <tr>
                 <th>PAR Rate (1day)</th>
-                <td className="text-center">
-                </td>
+		<td className="text-center"> 
+                 {numberAsPercent(data.data.par_rate_one_day)}
+		</td>
 	      </tr>
               <tr>
                 <th>b4. Allow. For Impairment losses</th>
@@ -256,23 +278,27 @@ export default function BranchPsrRecordsShow(props) {
               </tr>
                <tr>
                 <td>{miniSpace}Current (1%)</td>
-                <td className="text-center">
-                </td>
+		<td className="text-end">
+		 {numberWithCommas(data.data.afil_current)}
+		</td>
 	      </tr>
               <tr>
                 <td>{miniSpace}1-365 days (35%)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.afil_year)}
                 </td>
 	      </tr>
               <tr>
                 <td>{miniSpace}over 1 yr (100%)</td>
-                <td className="text-center">
+		<td className="text-end">
+		  {numberWithCommas(data.data.afil_greater_year)}
                 </td>
 	      </tr>
               <tr>
                 <th>Total </th>
-                <td className="text-center">
-                </td>
+		<th className="text-end">
+		  {numberWithCommas(data.data.afil)}
+                </th>
 	      </tr>
 
               <tr>
@@ -323,7 +349,49 @@ export default function BranchPsrRecordsShow(props) {
                     </td>
                   </tr>
                 )
+	      })}
+
+              <tr>
+                <th> Average Loan amount (disbursed) for the month</th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.average_disbursed_amount)}
+                </th>
+              </tr>
+ 
+              <tr>
+                <th> d4. Amount collected (as of)</th>
+                <th className="text-end">
+                  {numberWithCommas(data.data.total_principal_paid)}
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-amount-disbursed-${o.loan_product.id}`}>
+                    <td>{miniSpace}{o.loan_product.name}</td>
+                    <td className="text-end">
+                      {numberWithCommas(o.total_principal_paid)}
+                    </td>
+                  </tr>
+                )
               })}
+
+              <tr>
+                <th> Interest income (as of)</th>
+                <th className="text-end">
+                  
+                </th>
+              </tr>
+              {data.data.loans.map((o) => {
+                return (
+                  <tr key={`loan-amount-disbursed-${o.loan_product.id}`}>
+                    <td>{miniSpace}{o.loan_product.name}</td>
+                    <td className="text-end">
+                      {numberWithCommas(o.total_interest_paid)}
+                    </td>
+                  </tr>
+                )
+              })} 
+
               <tr>
                 <th>
                   Gross Income
