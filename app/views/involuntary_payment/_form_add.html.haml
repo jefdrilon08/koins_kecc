@@ -12,7 +12,7 @@
   %tr
     %th 
       OR 
-      = text_field_tag :OR, "#{@data_store.data['accounting_entry']['or']}", class: "form-control", id: "inputOR"
+      = text_field_tag :OR, "#{@data_store.data['accounting_entry']['data']['or_number']}", class: "form-control", id: "inputOR"
     %th
       Action
       %button#btn-add-or.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
@@ -20,7 +20,7 @@
   %tr
     %th 
       Service Invoice
-      = text_field_tag :SI, "#{@data_store.data['accounting_entry']['si']}", class: "form-control", id: "SI"
+      = text_field_tag :SI, "#{@data_store.data['accounting_entry']['data']['si_number']}", class: "form-control", id: "SI"
     %th
       Action
       %button#btn-add-si.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }

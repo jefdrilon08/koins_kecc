@@ -834,7 +834,6 @@ namespace :api do
 
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
-
       get "/admin_barangay/fetch", to: "admin_barangay#fetch"
 
 
