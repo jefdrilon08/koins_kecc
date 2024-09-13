@@ -520,7 +520,7 @@ class Member < ApplicationRecord
   end
 
   def length_of_stay
-    if self.data.with_indifferent_access[:reinstatement].present?
+    if self.data.with_indifferent_access[:reinstatement].present? && self.data.with_indifferent_access[:reinstatement][:date_stop].present?
       now = Time.now
 
       if (now.to_date - self.data.with_indifferent_access[:reinstatement][:reinstatement_date].to_date).to_i < 0
