@@ -167,7 +167,22 @@ module Members
     def destroy
       @member_share       = MemberShare.find(params[:id])
       certificate_number  = @member_share.certificate_number
-      @member_share.update(is_void: true)
+
+      if @member_share.member.active?
+        flash[:error] = "Cannot update member share to void because the associated member's status is active."
+        redirect_to member_path(@member_share.member) and return
+      end
+
+      if @member_share.is_void
+        @member_share.update(certificate_for: "VOID")
+      else
+        @member_share.update(is_void: true, certificate_for: "KCOOP")
+      end
+
+      unless @member_share.save
+        Rails.logger.error "Failed to update member_share #{@member_share.id}: #{@member_share.errors.full_messages.join(', ')}"
+      end
+      
       #@member_share.destroy!
 
       ActivityLog.create!(
