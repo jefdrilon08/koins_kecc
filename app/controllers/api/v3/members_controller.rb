@@ -12,6 +12,7 @@ module Api
         :member_change_old_password
       ]
 
+      
       before_action :authorize_mis!, except: [
         :login, 
         :dashboard, 
@@ -52,8 +53,8 @@ module Api
 
       def allowed_member_attributes(member)
         # Define which fields you want to include
-        allowed_fields = [:id, :first_name, :last_name, :email, :mobile_number,
-         :member_type, :identification_number, :branch_id, :center_id, :data,'address']
+        allowed_fields = [:id, :first_name, :last_name, :mobile_number,
+         :member_type, :identification_number, :branch_id, :center_id,]
         
         #  getting the member type
         # Get the branch name if branch_id is present

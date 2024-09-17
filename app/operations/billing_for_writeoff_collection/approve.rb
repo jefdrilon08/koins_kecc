@@ -18,7 +18,6 @@ module BillingForWriteoffCollection
     end
 
     def execute!
-      #raise "jef".inspect
       insert_payment!
       approved_entry!
       @accounting_entry_data[:reference_number] = @accounting_entry.reference_number
@@ -30,13 +29,13 @@ module BillingForWriteoffCollection
     end
 
     def insert_payment!
-      enabled_member = @records.select{|y| y[:enabled] == true}
+      enabled_member = @records.select { |y| y[:enabled] == true }
       enabled_member.each do |em|
         em[:loan_data].each do |ld|
           if ld[:enabled] == true && ld[:name] != "Withdraw Payment"
             @amort = []
             ld[:loan_amort].each do |amort|
-              if amort[:total_amount] > 0 
+              if amort[:total_amount] > 0
                 @amort << {
                   id: amort[:amort_id],
                   due_date: amort[:due_date],
@@ -47,19 +46,19 @@ module BillingForWriteoffCollection
             end
             account_transaction = AccountTransaction.new(
               amount: ld[:amount],
-	            subsidiary_id: ld[:loan_id],
-	            subsidiary_type: "Loan",
-	            transaction_type: "loan_payment",
-	            transacted_at: @date,
-	            status: "approved",
+              subsidiary_id: ld[:loan_id],
+              subsidiary_type: "Loan",
+              transaction_type: "loan_payment",
+              transacted_at: @date,
+              status: "approved",
               data: {
-	              amort_entries: @amort,
-		            total_interest_paid: ld[:interest_amount].to_f.round(2),
-		            total_principal_paid: ld[:principal_amount].to_f.round(2),
-		            amount_due: ld[:amount],
-		            particular:  @accounting_entry_data[:particular],
-		            approved_by: @user.full_name
-	            }
+                amort_entries: @amort,
+                total_interest_paid: ld[:interest_amount].to_f.round(2),
+                total_principal_paid: ld[:principal_amount].to_f.round(2),
+                amount_due: ld[:amount],
+                particular:  @accounting_entry_data[:particular],
+                approved_by: @user.full_name
+              }
             )
             account_transaction.save!
             ::Loans::FixAmort.new(loan: Loan.find(ld[:loan_id])).execute!
@@ -69,21 +68,23 @@ module BillingForWriteoffCollection
               l.update(status: 'writeoff')
             end
           elsif ld[:enabled] == true && ld[:name] == "Withdraw Payment"
-            account_transaction = AccountTransaction.new(
-              amount: ld[:amount],
-	            subsidiary_id: ld[:savings_account_id],
-	            subsidiary_type: "MemberAccount",
-	            transaction_type: "withdraw",
-	            transacted_at: @date,
-	            status: "approved",
-              data: {
-	              is_withdraw_payment: true,
-                beginning_balance: 0.0,
-                ending_balance: 0.0  
-              }
-            )
-            account_transaction.save!
-            ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(ld[:savings_account_id]), account_transactions: nil).execute!
+            if ld[:amount].to_f > 0
+              account_transaction = AccountTransaction.new(
+                amount: ld[:amount],
+                subsidiary_id: ld[:savings_account_id],
+                subsidiary_type: "MemberAccount",
+                transaction_type: "withdraw",
+                transacted_at: @date,
+                status: "approved",
+                data: {
+                  is_withdraw_payment: true,
+                  beginning_balance: 0.0,
+                  ending_balance: 0.0  
+                }
+              )
+              account_transaction.save!
+              ::MemberAccounts::Rehash.new(member_account: MemberAccount.find(ld[:savings_account_id]), account_transactions: nil).execute!
+            end
           end
         end
       end
@@ -109,4 +110,3 @@ module BillingForWriteoffCollection
     end
   end
 end
- 

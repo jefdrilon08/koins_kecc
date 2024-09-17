@@ -21,6 +21,8 @@ export default function MembersProfileActions(props) {
   const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
   const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
   const [dateReinstated, setDateReinstated]                                     = useState('');
+  const [numWeeksPastDue, setNumWeeksPastDue]                                   = useState('');
+  const [amountToPaid, setAmountToPaid]                                         = useState('');
   const [dateStopped, setDateStopped]                                           = useState('');
   const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
   const [reason, setReason]                                                     = useState('');
@@ -266,7 +268,7 @@ export default function MembersProfileActions(props) {
       options
     ).then((res) => {
       console.log(res);
-      alert("Successfully Uploaded");
+      alert("Successfully Reinstated");
       window.location.href="/members/" + props.memberId + "/display/";
       setIsLoading(false);
     }).catch((error) => {
@@ -275,7 +277,6 @@ export default function MembersProfileActions(props) {
       setIsLoading(false);
     })
   }
-  
  
    const handleReinstateClicked = () => {
    setErrors([]);
@@ -284,7 +285,9 @@ export default function MembersProfileActions(props) {
    const payload = {
      id: props.memberId,
      reinstatement_date: dateReinstated,
-     date_stop: dateStopped
+     date_stop: dateStopped,
+     num_weeks_past_due: numWeeksPastDue,
+     amount_to_paid: amountToPaid
    };
 
    const headers = {
@@ -294,6 +297,7 @@ export default function MembersProfileActions(props) {
    const options = {
      headers: headers
    };
+     
    if(user_MIS_AO_Role){
     axios.post('/api/members/reinstate', payload, options)
       .then((res) => {
@@ -639,14 +643,6 @@ export default function MembersProfileActions(props) {
                 disabled={isLoading}
                 type="date"
                 onChange={(event) => setDateReinstated(event.target.value)}
-              />
-              <label>Date Stop</label>
-              <input
-                className="form-control"
-                value={dateStopped}
-                disabled={isLoading}
-                type="date"
-                onChange={(event) => setDateStopped(event.target.value)}
               />
             </div>
           </div>
