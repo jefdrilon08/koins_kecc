@@ -304,6 +304,23 @@ module Api
 
     def balik_kasapi
       member = Member.find(params[:id])
+      member_share = member.member_shares
+
+      if member_share.present?
+        member_share.each do |member_share| 
+          if member_share.is_void
+            member_share.update(certificate_for: "VOID")
+          else
+            member_share.update(is_void: true, certificate_for: "VOID")
+          end
+
+          unless member_share.save
+            Rails.logger.error "Failed to save updated member_share #{member_share.id}: #{member_share.errors.full_messages.join(', ')}"
+          end
+        end
+      else
+        Rails.logger.error "No member_share found for member #{member.id}"
+      end
 
       config = {
         user: @user,
