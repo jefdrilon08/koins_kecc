@@ -18,6 +18,14 @@
       Action
       %button#btn-add-particular.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
         Save
+  %tr     
+    %th
+      Service Invoice
+      = text_field_tag :si_number, "#{@data_store.data['accounting_entry']['data']['si_number']}", class: "form-control", id: "si_number"
+    %th
+      Action
+      %button#btn-add-si.btn.btn-block.btn-info{ data: { id: "#{@data_store.id}"  } }
+        Save
 
   %tr
     %th

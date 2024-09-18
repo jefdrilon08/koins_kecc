@@ -8,28 +8,23 @@ module MemberAccounts
 			@status 			= @member.status
 	      	@member_type 		= @member.member_type
 	      	@insurance_status	= @member.insurance_status
-
-
-	      	# raise @status.inspect
 			@member_data      					= @member.data.with_indifferent_access
-
-			# raise @member_data.inspect
-		
 			
-			if @member_data[:reinstatement].present?
+			if @member_data[:reinstatement].present? && @member_data[:reinstatement][:date_stop].present?
 				@data_reinstatement_date		= @member_data[:reinstatement][:reinstatement_date].try(:to_date)
 				@data_date_stop  				= @member_data[:reinstatement][:date_stop].try(:to_date)
 				@data_old_recognition_date  	= @member_data[:reinstatement][:old_recognition_date].try(:to_date)
 				@current_date     				= Date.today
 				@recognition_date  				= @member_data[:recognition_date].try(:to_date)
-				@reinstatement_date             = ((@current_date - @data_reinstatement_date) + (@data_date_stop - @data_old_recognition_date)).try(:to_date)
-
-				# raise @reinstatement_date.inspect
+				if @data_date_stop.present?
+					@reinstatement_date             = ((@current_date - @data_reinstatement_date) + (@data_date_stop - @data_old_recognition_date)).try(:to_date)
+				else
+					@recognition_date  				= @member_data[:recognition_date].try(:to_date)
+				end
 			else
 				@current_date     				= Date.today
 				@recognition_date  				= @member_data[:recognition_date].try(:to_date)
 			end
-
 
 			@account_transactions = AccountTransaction.personal_funds.where(
 										"subsidiary_id = ?",
@@ -46,16 +41,12 @@ module MemberAccounts
 			latest_transaction = @account_transactions.last
 			@current_balance   = @member_account.balance
 			
-			if @data_reinstatement_date.present?
+			if @data_reinstatement_date.present?  && @data_date_stop.present?
 				@num_days = ((@current_date - @data_reinstatement_date).to_i ) 
 			else	
 				@num_days = (@current_date - @recognition_date).to_i
 			end
-
 			@num_weeks  = (@num_days / 7).to_i + 1
-
-			# raise @num_weeks.inspect
-
 			@latest_transaction_date = latest_transaction.try(:transacted_at)
 
 			@data = {
@@ -79,8 +70,7 @@ module MemberAccounts
 				@data[:default_periodic_payment] = 50
 			end
 
-			if @data_reinstatement_date.present?
-				# puts " reinstatement date: #{@reinstatement_date}"
+			if @data_reinstatement_date.present? && @data_date_stop.present?
 				@data[:coverage_date] 		= (@data_reinstatement_date + ((@current_balance / @data[:default_periodic_payment]) * 7).to_i).strftime("%B %d, %Y")
 				@data[:insured_amount] 		= @num_weeks  * @data[:default_periodic_payment]
 				@data[:amt_past_due]    	= (@current_balance - @data[:insured_amount]) * -1
@@ -94,7 +84,6 @@ module MemberAccounts
 	        		@days_lapsed  = 999
 	      		end
 			else
-				# puts " recognition_date: #{@recognition_date}"
 				@data[:coverage_date] 		= (@recognition_date + ((@current_balance / @data[:default_periodic_payment]).to_i).weeks).strftime("%B %d, %Y")
 				@data[:insured_amount] 		= @num_weeks  * @data[:default_periodic_payment]
 				@data[:amt_past_due]    	= (@current_balance - @data[:insured_amount]) * -1

@@ -14,7 +14,8 @@ module SavingsInsuranceTransferCollections
         @term                                   = @config[:term]
         @num_installments                       = @config[:num_installments]
         @maturity_date                          = @config[:maturity_date]
-        @effective_date                          = @config[:effective_date]
+        @effective_date                         = @config[:effective_date]
+        @clip_number                            = @config[:clip_number]
       end
 
       if @savings_insurance_transfer_collection.kbente
@@ -63,11 +64,13 @@ module SavingsInsuranceTransferCollections
         }
       end
 
-      if @amount.blank?
-        @errors[:messages] << {
-          key: "amount",
-          message: "Amount required"
-        }
+      if !Settings.activate_microinsurance
+        if @amount.blank?
+          @errors[:messages] << {
+            key: "amount",
+            message: "Amount required"
+          }
+        end
       end
 
       if @amount.present? and @amount <= 0.00
@@ -130,11 +133,22 @@ module SavingsInsuranceTransferCollections
       end
 
       if @savings_insurance_transfer_collection.clip
-        if !@loan_product_id.present?
-          @errors[:messages] << {
-            key: "loan_product",
-            message: "Loan Product is required"
-          }
+        if !Settings.activate_microinsurance
+          if !@loan_product_id.present?
+            @errors[:messages] << {
+              key: "loan_product",
+              message: "Loan Product is required"
+            }
+          end
+        end
+
+        if Settings.activate_microinsurance
+          if !@clip_number.present?
+            @errors[:messages] << {
+              key: "clip_number",
+              message: "CLIP Number is required"
+            }
+          end
         end
 
         if !@principal.present?
@@ -144,18 +158,20 @@ module SavingsInsuranceTransferCollections
           }
         end
 
-        if !@term.present?
-          @errors[:messages] << {
-            key: "term",
-            message: "Term is required"
-          }
-        end
+        # if !@term.present?
+        #   @errors[:messages] << {
+        #     key: "term",
+        #     message: "Term is required"
+        #   }
+        # end
 
-        if !@num_installments.present?
-          @errors[:messages] << {
-            key: "num_installments",
-            message: "Num Installments is required"
-          }
+        if !Settings.activate_microinsurance
+          if !@num_installments.present?
+            @errors[:messages] << {
+              key: "num_installments",
+              message: "Num Installments is required"
+            }
+          end
         end
 
         if !@maturity_date.present?

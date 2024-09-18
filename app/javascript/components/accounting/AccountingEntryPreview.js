@@ -32,7 +32,7 @@ export default class AccountingEntryPreview extends React.Component {
           </span>
           <br/>
           <strong>
-            SI Number: 
+            Service Invoice: 
           </strong>
           <br/>
           <span className="text-muted">

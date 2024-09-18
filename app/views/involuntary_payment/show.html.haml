@@ -1,0 +1,28 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Involuntary Payment for #{@data_store.meta["branch_name"]} /
+          #{@data_store.meta["center_name"]} - 
+          #{@data_store.meta["transaction_date"]}
+
+        - if @data_store["status"] == "pending"
+          = render partial: "form_add"
+
+        - if @data_view.any?
+          = render partial: "members_table"
+        -else
+          %p
+            No records found
+        %hr
+
+        %h4
+          Accounting Entry
+        = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
+
+
+        
+
+= render partial: "involuntary_payment/modals/update_transaction"
+= render partial: "involuntary_payment/modals/approve_transaction"         

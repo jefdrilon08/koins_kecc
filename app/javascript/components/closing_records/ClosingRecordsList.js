@@ -34,13 +34,15 @@ export default function ClosingRecordsList(props) {
                     {o.closing_date}
                   </td>
 		  <td>
-                    {o.status == "done"
-                      ? <span className="badge bg-success">Done</span>
-                      : <span className="badge bg-secondary">Pending</span>
-		     }
+                   {o.status == "done" ? ( 
+		         <span className="badge bg-success">Done</span>
+		    ) : o.status == "invalid" ? (
+		         <span className="badge bg-danger">Invalid</span>
+		    ) : (<span className="badge bg-secondary">Pending</span>
+		    )}
 		  </td>
 		  <td>
-		    {o.status === "done" && (
+		    {(o.status === "done" || o.status === "invalid")&& (
                       <span
                         className="badge bg-danger"
                         onClick={() => props.handleRemoveRecord(o)}

@@ -12,6 +12,13 @@
       = text_field_tag :particular, "#{@accrued_interest_collection.data['accounting_entry']['data']['or_number']}", class: "form-control", id: "or_number"
     %td
       %button#btn-add-or.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
+        Save
+  %tr
+    %th Service Invoice
+    %td
+      = text_field_tag :particular, "#{@accrued_interest_collection.data['accounting_entry']['data']['si_number']}", class: "form-control", id: "si_number"
+    %td
+      %button#btn-add-si.btn.btn-block.btn-info{ data: { id: "#{@accrued_interest_collection.id}"  } }
         Save 
   %tr
     %th AR

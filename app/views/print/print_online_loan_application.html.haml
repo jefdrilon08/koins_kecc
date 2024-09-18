@@ -138,19 +138,16 @@
           #{@online_application[:num_installments]}
       %tr
 
-         
-        
-      - if @online_application_loan.nil?
+      - if @online_application_count == 0.0 || @online_application_count.nil?
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
-        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@prev_loan.to_f, unit:'')}
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@principal_value.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
-        %td{style: "text-align: left; font-size: 9px;"} #{@cyc1}
+        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_count}
       - else
         %td{style: "text-align: left; font-size: 9px;"} Halaga ng Dating Nahiram
-        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@online_application_loan.principal.to_f, unit:'')}
+        %td{style: "text-align: left; font-size: 9px;"} #{number_to_currency(@principal_value.to_f, unit:'')}
         %td{style: "text-align: left; font-size: 9px;"} Loan Cycle
-        %td{style: "text-align: left; font-size: 9px;"} #{@cyc}
-        
+        %td{style: "text-align: left; font-size: 9px;"} #{@online_application_count}
 
       %tr
         %td{style: "text-align: left; font-size: 9px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"} Uri ng Negosyo

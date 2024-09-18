@@ -43,6 +43,91 @@ class ReportsController < ApplicationController
 
   end
   
+  def online_loan_application_reports
+    @online_application_status = ::LoanApplication::STATUSES
+    @online_applications_list  = LoanApplication.joins(:member).where(
+                                    "members.branch_id IN (?)", @branches.pluck(:id)
+                                  )
+    @online_applications = @online_applications_list
+    if params[:status].present?
+      @status = params[:status]
+      @online_applications = @online_applications.where(status: @status)
+    end
+    if params[:branch_select].present?
+      @branch = ReadOnlyBranch.find(params[:branch_select])
+      @online_applications = @online_applications.where("members.branch_id": @branch)
+    end
+    
+    if params[:start_date].present?
+      @start_date = params[:start_date]
+      @online_applications = @online_applications.where(date_applied: @start_date)
+    end
+
+    if params[:end_date].present?
+      @end_date = Date.parse(params[:end_date])
+      
+      @online_applications = @online_applications.where(
+        "loan_applications.data ->> 'date_reject' >= ? OR date_approved<=?", @end_date,@end_date
+      )
+    end
+    @online_applications = @online_applications.order("first_name ASC").page(params[:page]).per(15)
+    end
+
+    def summary_share_capital_reports
+      @subheader_side_actions = []
+      @branches = Branch.all
+      branch_id = params[:branch_select]
+      date_subscribe = params[:date_subscription]
+  
+      if branch_id.present?
+        @shared_capital = Member.where("data->'subscription'->>'is_subscribed' = ? AND status = ? AND branch_id = ?", "true", "active", branch_id)
+      else
+        @shared_capital = Member.where("data->'subscription'->>'is_subscribed' = ? AND status = ?", "true", "active")
+      end
+  
+      if date_subscribe.present?
+        @shared_capital = @shared_capital.where("to_date(data->'subscription'->>'subscribe_updated_at', 'YYYY-MM-DD') = ?", date_subscribe)
+      end
+      @shared_capital = @shared_capital.order(Arel.sql("to_date(data->'subscription'->>'subscribe_updated_at', 'YYYY-MM-DD') DESC"), :last_name).page(params[:page]).per(20)
+      @subheader_side_actions << {
+        link: share_capital_report_excel_path, 
+        class: "fa fa-download",
+        id: "btn-excel",
+        text: "Download Excel"
+      }
+    end
+   
+
+    
+    def share_cap_excel
+      @shared_capital = Member.where("data->'subscription'->>'is_subscribed' = ? AND status = ?", "true", "active")
+      share_capital_data = @shared_capital.map do |o|
+        last_account = Member.where(member_id: o.id, branch_id: 'Share Capital').last
+        
+        {
+          full_name: o.full_name,
+          branch_name: o.branch.name,
+          subscription_date: o.data['subscription']['subscribe_updated_at'].to_date.iso8601,
+            amount_subscribe: MemberAccount.where(member_id: o.id, account_subtype: 'Share Capital' ).last&.balance ,
+            amount_subscribe: MemberAccount.where(member_id: o.id, account_subtype: 'Share Capital').last&.balance,
+          CBU: MemberAccount.where(member_id: o.id, account_subtype: 'CBU').last&.balance
+
+        }
+      end
+
+      Rails.logger.debug("Share Capital Data for Excel: #{share_capital_data.inspect}")
+    
+      share_capital_excel = ::Reports::ShareCapitalReportExcel.new(share_capital_data: share_capital_data)
+      filename = "share_cap_excel.xlsx"
+      file_path = Rails.root.join('tmp', filename).to_s
+      share_capital_excel.execute!(file_path)
+      send_file file_path, filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    end
+
+    def excel
+      render json: { download_url: share_capital_report_excel_path(share_capital_data: params[:id]) }
+    end
+
   def subscriber
     @subheader_items = [
       { text: "Other Reports" },

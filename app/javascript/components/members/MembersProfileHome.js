@@ -221,11 +221,8 @@ export default function MembersProfileHome(props) {
                   </li>
                 )
               }
-            })()}
-            {(() => {
-              if(props.member.data["reinstatement"] == null) {
-                return (
-                  <li className="list-group-item">
+            })()}   
+            <li className="list-group-item">
                     Recognition Date
                     <div className="value text-muted">
                       <b>
@@ -233,19 +230,6 @@ export default function MembersProfileHome(props) {
                       </b>
                     </div>
                   </li>
-                )
-              }
-              return (
-                  <li className="list-group-item">
-                    Reinstatement Date
-                    <div className="value text-muted">
-                      <b>
-                        {props.data.reinstatement.reinstatement_date}
-                      </b>
-                    </div>
-                  </li>
-              )
-            })()}    
             <li className="list-group-item">
               Length of Stay (MBA)
               <div className="value text-muted">
@@ -282,7 +266,18 @@ export default function MembersProfileHome(props) {
 }
                 </b>
               </div>
-            </li>  
+            </li>
+            <li className="list-group-item">
+            Sms Status
+            <div className="value text-muted">
+              <b style={{ color: props.member.data?.sms_record?.sms_rec ? "green" : "inherit" }}>
+                {props.member.data?.sms_record?.sms_rec !== undefined &&
+                new Date(props.member.data.sms_record.loan_maturity) > new Date() 
+                  ? props.member.data.sms_record.sms_rec.toString().toUpperCase()
+                  : "N/A"}
+              </b>
+            </div>
+          </li>
           </ul>
         </div>
         <div className="col-md-9">
@@ -455,6 +450,20 @@ export default function MembersProfileHome(props) {
                       </th>
                       <td>
                         {props.data.reinstatement.reinstatement_date}
+                      </td>
+                    </tr>
+                  )
+                }
+              })()}
+              {(() => {
+                if(props.member.data["reinstatement"] != null) {
+                  return (
+                    <tr>
+                      <th>
+                        Amount to be paid for reinstatement
+                      </th>
+                      <td>
+                        {props.data.reinstatement.amount_to_paid}
                       </td>
                     </tr>
                   )

@@ -68,7 +68,7 @@ import AdministrationUsersIndex from "../components/administration/users/Index.j
 import AdministrationUsersShow from "../components/administration/users/Show.js";
 import AllowanceComputationReportShowComponent from "../components/data_stores/allowance_computation_report/ShowComponents.js";
 import Login from "../components/users/Login.js";
-
+import AllowanceLosses from "../components/allowance_losses/Generate.js";
 
 // "init" Objects
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
@@ -255,6 +255,8 @@ import AdministrationBarangayIndex from '../models/AdministrationBarangayIndex.j
 
 import WrittenOffReportIndex from '../models/WrittenOffReportIndex.js';
 import WrittenOffReportShow from '../models/WrittenOffReportShow.js';
+import InvoluntaryPaymentIndex from '../models/InvoluntaryPaymentIndex.js';
+import InvoluntaryPaymentShow from '../models/InvoluntaryPaymentShow.js';
 
 
 //const renderComponent = (Component, payload) => {
@@ -483,16 +485,18 @@ const hooks = {
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
   "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
 
-  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
+  //"data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
   "administration/admin_address/index":             [AdministrationAddressIndex],
   "administration/admin_province/index":            [AdministrationProvinceIndex],
   "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
   "administration/admin_barangay/index":            [AdministrationBarangayIndex],
 
-  "data_stores/allowance_computation_report/index":		[AllowanceComputationIndex],
-  "data_stores/written_off_report/index":             [WrittenOffReportIndex],
-  "data_stores/written_off_report/show":              [WrittenOffReportShow]
 
+  "data_stores/written_off_report/index":             [WrittenOffReportIndex],
+  "data_stores/written_off_report/show":              [WrittenOffReportShow],
+  "allowance_losses/generate":                        [AllowanceLosses],
+  "involuntary_payment/index":                        [InvoluntaryPaymentIndex],
+  "involuntary_payment/show":                         [InvoluntaryPaymentShow]
 }
 
 const renderComponent = (Component, payload) => {

@@ -73,6 +73,7 @@ module Api
           clip_number = params[:clip_number]
           beneficiary = params[:beneficiary]
 
+
           config  = {
             savings_insurance_transfer_collection: savings_insurance_transfer_collection,
             loan_product_id: loan_product_id,

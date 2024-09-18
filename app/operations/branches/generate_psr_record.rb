@@ -30,6 +30,7 @@ module Branches
       generate_loan_data!
       generate_aging_data!
       generate_fs_data!
+      generate_new_and_resigned!
 
       @record.data = @data
 
@@ -41,6 +42,14 @@ module Branches
     end
 
     private
+
+    def generate_new_and_resigned!
+      closing_record = @closing_records.select{ |o| o[:type] == "MONTHLY_NEW_AND_RESIGNED" }.first
+      data_store  = ReadOnlyDataStore.find(closing_record[:data_store_id])
+      data        = data_store.data.with_indifferent_access
+      @data[:new_members] = data[:num_new]
+      @data[:resigned_members] = data[:num_resigned]
+    end
 
     def generate_fs_data!
       closing_record = @closing_records.select{ |o| o[:type] == "INCOME_STATEMENT" }.first
@@ -62,9 +71,9 @@ module Branches
 
     def generate_loan_data!
       closing_record = @closing_records.select{ |o| o[:type] == "REPAYMENT_RATES" }.first
-
       data_store  = ReadOnlyDataStore.find(closing_record[:data_store_id])
       data        = data_store.data.with_indifferent_access
+      records     = data['records']
 
       @data[:total_active_loans]              = data[:records].size
       @data[:total_principal]                 = data[:records].inject(0){ |sum, o| sum + o[:principal] }
@@ -86,7 +95,34 @@ module Branches
       @data[:total_overall_interest_balance]  = data[:records].inject(0){ |sum, o| sum + o[:overall_interest_balance] }
       @data[:total_overall_balance]           = data[:records].inject(0){ |sum, o| sum + o[:overall_balance] }
 
+      rr_month               = records.select{|r| r['num_days_par'] >=1 and r['num_days_par'] <= 30}
+      rr_year                = records.select{|r| r['num_days_par'] >=31 and r['num_days_par'] <= 365}
+      rr_greater_year        = records.select{|r| r['num_days_par'] >= 366} 
+
+      @data[:past_due_month]        = rr_month.map{|r| r['principal_balance']}.sum
+      @data[:past_due_year]         = rr_year.map{|r| r['principal_balance']}.sum
+      @data[:past_due_greater_year] = rr_greater_year.map{|r| r['principal_balance']}.sum
+      
+      @data[:par_month]             = rr_month.map{|r| r['overall_principal_balance']}.sum
+      @data[:par_year]              = rr_year.map{|r| r['overall_principal_balance']}.sum
+      @data[:par_whole_year]        = @data[:par_month] + @data[:par_year]
+      @data[:par_greater_year]      = rr_greater_year.map{|r| r['overall_principal_balance']}.sum
+      @data[:total_par]             =  @data[:par_whole_year] + @data[:par_greater_year]
+
+      afil_current = @data[:total_overall_principal_balance] - (@data[:par_whole_year] + @data[:par_greater_year])
+      
+      @data[:afil_current]               = afil_current * 0.01
+      @data[:afil_year]                  = @data[:par_whole_year] * 0.35
+      @data[:afil_greater_year]          = @data[:par_greater_year]
+      @data[:afil]                       = @data[:afil_current] + @data[:afil_year] + @data[:afil_greater_year]
+      @data[:par_rate_one_day]           = @data[:total_par] / @data[:total_overall_principal_balance]
+      @data[:past_due_rate]              = @data[:total_principal_balance] / @data[:total_overall_principal_balance]
+
       @data[:loans] = []
+
+      sl = @closing_records.select{ |o| o[:type] == "SOA_LOANS" }.first
+      soa_loan = ReadOnlyDataStore.find(sl[:data_store_id]) 
+      @soa_loan_data = soa_loan.data.with_indifferent_access[:records]
 
       ReadOnlyLoanProduct.all.each do |loan_product|
         loans = data[:records].select{ |o| o[:loan_product][:id] == loan_product.id }
@@ -99,10 +135,13 @@ module Branches
           loan_product: loan_product
         ).execute!
 
+        sl_data = @soa_loan_data.select{ |o| o[:loan_product][:id] == loan_product.id}
+
         @data[:loans] << {
           loan_product: {
             id: loan_product.id,
-            name: loan_product.name
+            name: loan_product.name,
+            priority: loan_product.priority
           },
           loan_product_category: {
             id: loan_product_category.id,
@@ -111,6 +150,8 @@ module Branches
           num_disbursed:              record.total,
           amount_disbursed:           record.amount,
           count:                      loans.size,
+          total_principal_paid:       sl_data.inject(0){ |sum, o| sum + o[:total_principal_paid] },
+          total_interest_paid:        sl_data.inject(0){ |sum, o| sum + o[:total_interest_paid] },
           principal:                  loans.inject(0){ |sum, o| sum + o[:principal] },
           interest:                   loans.inject(0){ |sum, o| sum + o[:interest] },
           total:                      loans.inject(0){ |sum, o| sum + o[:total] },
@@ -130,9 +171,13 @@ module Branches
           overall_interest_balance:   loans.inject(0){ |sum, o| sum + o[:overall_interest_balance] },
           overall_balance:            loans.inject(0){ |sum, o| sum + o[:overall_balance] }
         }
-
+        
+        @data[:total_principal_paid]    = @data[:loans].inject(0){ |sum, o| sum + o[:total_principal_paid] }
         @data[:total_num_disbursed]     = @data[:loans].inject(0){ |sum, o| sum + o[:num_disbursed] }
         @data[:total_amount_disbursed]  = @data[:loans].inject(0){ |sum, o| sum + o[:amount_disbursed] }
+        @data[:average_loan_amount]     = @data[:total_overall_principal_balance]/@data[:active_borrowers]
+        @data[:average_disbursed_amount]= @data[:total_amount_disbursed] / @data[:total_num_disbursed]  
+
       end
     end
 
@@ -155,6 +200,17 @@ module Branches
       @data[:admitted] = data[:counts][:active_members][:total]
 
       @data[:resigned] = data[:counts][:active_members][:resigned]
-    end
+
+      pure_saver = data[:counts][:pure_savers][:members]
+      @data[:pure_savers_regular] = pure_saver.select {|o| o[:member_type] == "Regular"}.count
+      @data[:pure_savers_kaagapay] = pure_saver.select {|o| o[:member_type] == " Kaagapay"}.count
+      @data[:pure_savers_gk] = pure_saver.select {|o| o[:member_type] == "GK"}.count
+
+      active_borrower = data[:counts][:loaners][:members]
+      @data[:active_borrowers_regular] = active_borrower.select {|o| o[:member_type] == "Regular"}.count
+      @data[:active_borrowers_kaagapay] = active_borrower.select {|o| o[:member_type] == " Kaagapay"}.count
+      @data[:active_borrowers_gk] = active_borrower.select {|o| o[:member_type] == "GK"}.count
+      @data[:non_patronizing] = data[:counts][:inactive_members][:members].count
+   end
   end
 end

@@ -675,14 +675,16 @@ end
 
     @payload[:total_insurance] = view_context.number_to_currency(@payload[:total_insurance], unit: '')
 
-    @payload[:attachment_files] = @member.attachment_files.map{ |o|
-      {
-        id:         o.id,
-        file_name:  o.file_name,
-        is_image:   o.file.image?,
-        link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+    if @member.present? && @member.attachment_files.present?
+      @payload[:attachment_files] = @member.attachment_files.map{ |o|
+        {
+          id:         o.id,
+          file_name:  o.file_name,
+          is_image:   o.file.image?,
+          link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+        }
       }
-    }
+    end
 
     @payload[:loan_products_for_restructuring] = helpers.loan_products_for_restructuring.map{ |o|
       {

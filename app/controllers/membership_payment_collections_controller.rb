@@ -3,7 +3,7 @@ class MembershipPaymentCollectionsController < ApplicationController
 
   def index
     @membership_payment_collections = MembershipPaymentCollection
-      .select("id,status,center_id,branch_id,status,date_approved,or_number,ar_number,total_collected,collection_date")
+      .select("id,status,si_number,center_id,branch_id,status,date_approved,or_number,ar_number,total_collected,collection_date")
       .includes(:branch, :center)
       .where(branch_id: @branches.pluck(:id))
 

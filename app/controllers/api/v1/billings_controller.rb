@@ -49,6 +49,7 @@ module Api
         billing   = Billing.find(params[:id])
         data      = billing.try(:data).try(:with_indifferent_access)
         or_number = params[:or_number]
+        billing[:or_number] = params[:or_number]  
         
         if billing.save?
           data[:or_number]                            = or_number

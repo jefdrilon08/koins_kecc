@@ -974,6 +974,20 @@ module Loans
 
       # Update amount
       @amount_released  = temp_amount
+      #grouped_data = journal_entries.group_by { |entry| entry[:code] }
+
+      # Sum the amounts and create new combined entries
+      #journal_entries = grouped_data.map do |code, entries|
+      #  accounting_code_id = entries.first[:accounting_code_id]
+      #  name = entries.first[:name]
+      #  amounts = entries.map { |entry| entry[:amount] }.compact
+      #  {
+      #      accounting_code_id: entries.first[:accounting_code_id],
+      #      code: code,
+      #      name: entries.first[:name],
+      #      amount: entries.sum { |entry| entry[:amount] }
+      #  } if accounting_code_id && name && amounts.any?
+      #end.compact
       grouped_data = journal_entries.group_by { |entry| entry[:code] }
 
       # Sum the amounts and create new combined entries
@@ -981,13 +995,19 @@ module Loans
         accounting_code_id = entries.first[:accounting_code_id]
         name = entries.first[:name]
         amounts = entries.map { |entry| entry[:amount] }.compact
+        total_amount = amounts.sum
+
         {
-            accounting_code_id: entries.first[:accounting_code_id],
-            code: code,
-            name: entries.first[:name],
-            amount: entries.sum { |entry| entry[:amount] }
+          accounting_code_id: accounting_code_id,
+          code: code,
+          name: name,
+          amount: total_amount < 0 ? 0 : total_amount
         } if accounting_code_id && name && amounts.any?
       end.compact
+
+
+
+
       #raise journal_entries.map{|a| a}.inspect
       journal_entries
     end

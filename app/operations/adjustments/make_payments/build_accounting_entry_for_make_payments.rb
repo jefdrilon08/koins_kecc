@@ -17,6 +17,7 @@ module MakePayments
       @particular   = @make_payment_data.meta["particular"]
       @or_number    = @make_payment_data.meta["or_number"]
       @ar_number    = @make_payment_data.meta["ar_number"]
+      @si_number    = @make_payment_data.meta["si_number"]
       @branch = Branch.find(Member.find(@make_payment_data["member_id"]).branch_id) 
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
@@ -41,6 +42,7 @@ module MakePayments
         data: {
           or_number: @or_number ,
           ar_number: @ar_number,
+          si_number: @si_number,
         }
       }
     

@@ -337,6 +337,10 @@ Rails.application.routes.draw do
   get "/billings/billing_excel", to: "billings#billing_excel", as: :billing_download_excel
   resources :billings, only: [:index, :show, :destroy]
   
+  # share_capital
+  get "/reports/excel", to: "reports#excel"
+  get "/reports/share_cap_excel", to: "reports#share_cap_excel", as: :share_capital_report_excel
+
   ################################
   # CASH MANAGEMENT
   ################################
@@ -391,6 +395,13 @@ Rails.application.routes.draw do
   # Printing
   get "/print", to: "print#print"
   get "/download_file", to: "pages#download_file"
+
+  get "/involuntary_payment", to: "involuntary_payment#index"
+  # get "/involuntary_payment.id", to: "involuntary_payment#show"
+  get "/involuntary_payment/:id", to: "involuntary_payment#show"
+  delete "/involuntary_payment/:id", to: "involuntary_payment#delete"
+
+
 
   # Data Stores
   namespace :data_stores do
@@ -624,6 +635,8 @@ Rails.application.routes.draw do
   get "/reports/hiip_report_excel", to: "reports#hiip_report_excel", as: :hiip_report_excel
   get "/reports/government_identification_numbers", to: "reports#government_identification_numbers", as: :government_identification_numbers
   get "/reports/subscriber", to: "reports#subscriber", as: :subscriber
+  get "/reports/online_loan_application_reports", to: "reports#online_loan_application_reports", as: :online_loan_application_reports
+  get "/reports/summary_share_capital_reports", to: "reports#summary_share_capital_reports", as: :summary_share_capital_reports
   get "/reports/insurance_interest", to: "reports#insurance_interest", as: :insurance_interest
   get '/reports/download_excel_insurance_interest', to: 'reports#download_excel_insurance_interest', as: :download_excel_insurance_interest
   get "/reports/address_update", to: "reports#address_update", as: :address_update
@@ -650,6 +663,11 @@ Rails.application.routes.draw do
   get "/psr_schedules/generate", to: "psr_schedules#generate", as: :psr_schedules_generate
 
   get "branch_cash_flow",to: "branch_cash_flow#index", as: :branch_cash_flow
+
+  #AC SUMMARY
+  get "/allowance_losses/generate", to: "allowance_losses#generate", as: :allowance_losses_generate
+  # get "/allowance_losses/dates", to: "allowance_losses#dates", as: :allowance_for_impairment_losses_dates
+  # get 'allowance_losses/generate', to: 'allowance_losses#generate
 
   # ACTIVITY LOGS
   #resources :activity_logs, only: [:index]

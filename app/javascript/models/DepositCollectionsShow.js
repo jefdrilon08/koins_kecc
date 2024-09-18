@@ -160,7 +160,7 @@ var _bindEvents = function() {
     $modalLoadBranch.show();
   });
   $btnPrintThermal.on("click", function(){
-    alert("tanginamo")
+   
   });
   $btnConfirmLoadBranch.on("click", function() {
     $message.html("Loading....");
