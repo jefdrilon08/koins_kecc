@@ -6,10 +6,13 @@
           Administration
       .modal-body
         .row
-          - if is_mis_user?
+          - if is_mis_user? || sbk_mis_bk?
             .col
               = link_to accounting_accounting_codes_path, class: "btn-nav-square-md" do
                 Chart of Accounts
+            .col
+              = link_to export_tools_path, class: "btn-nav-square-md" do
+                Export tools
           .mt-4
           .row
             .col
