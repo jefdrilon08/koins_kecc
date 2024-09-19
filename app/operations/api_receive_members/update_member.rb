@@ -41,7 +41,7 @@ module ApiReceiveMembers
       member_data["address"]["district"] = @address_district
       member_data["address"]["city"]     = @address_city
 
-      member.update!(data: member_data) a
+      member.update!(data: member_data)
 
     end
   end
