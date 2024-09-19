@@ -300,6 +300,10 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
 
+    # Api Receive Members
+    post "/api_receive_members/approve", to: "api_receive_members#approve"
+    post "/api_receive_members/decline", to: "api_receive_members#decline"
+
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
@@ -822,7 +826,7 @@ namespace :api do
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
       get "/admin_address/fetch", to: "admin_address#fetch"
-      
+
 
       # province
       post "/admin_province/create", to: "admin_province#create"

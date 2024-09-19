@@ -1,8 +1,7 @@
 module Api
   class ReceiveApiController < ActionController::API
     # API FOR MEMBERS
-    
-    def save_members_api   
+    def save_members_api
       members = request.body.read
 
       if members.blank?
@@ -10,6 +9,8 @@ module Api
       else
         begin
           members = JSON.parse(members)
+
+          # raise members.inspect
 
           if members.nil?
             render json: { error: 'Invalid JSON format' }, status: 400
@@ -20,15 +21,15 @@ module Api
 
             if errors[:full_messages].any?
               render json: { errors: errors[:full_messages] }, status: 400
-            else 
+            else
               ProcessReceiveMemberApi.perform_later(members)
               render :status => "200", :json => {:Message => "Job Successfully Queued.", :member_count => members.count}
-            end   
+            end
           end
         rescue JSON::ParserError => e
           render json: { error: 'Invalid JSON format', details: e.message }, status: 400
         end
-      end 
+      end
     end
 
     # API FOR PAYMENTS
@@ -107,7 +108,7 @@ module Api
     #           center_id: o[:center_id],
     #           branch_id: o[:branch_id],
     #           claim_type: o[:claim_type],
-    #           data: o[:data], 
+    #           data: o[:data],
     #           status: o[:status],
     #           approved_by: o[:approved_by],
     #           checked_by: o[:checked_by],
@@ -115,11 +116,11 @@ module Api
     #           date_approved: o[:date_approved],
     #           posted_by: o[:posted_by],
     #           date_posted: o[:date_posted]
-    #         } 
+    #         }
     #       }
     #     end
- 
-    #     config.each do |a|  
+
+    #     config.each do |a|
     #       @claims = Claim.where(member_id: a[:member_id])
 
     #       claims_data = {
@@ -152,7 +153,7 @@ module Api
 
     #   if @counter_update > 0
     #     render :status => "200", :json => {:code => "KMBA-003", :Updated => "#{@counter_update}"}.to_json
-    #   end  
+    #   end
     # end
   end
 end
