@@ -70,10 +70,10 @@
                     %th
                       Date Printed
                 %tbody
-                  - @member_shares.each_with_index do |m , i|
+                  - @member_shares.sort_by { |m| [m.data["date_printed"], m.certificate_number.to_i] }.each_with_index do |m, i|
                     %tr
                       %td
-                        #{((@member_shares.current_page - 1) * @member_shares.size) + 1}
+                        #{((@member_shares.current_page - 1) * @member_shares.size) + i + 1}
                       %td
                         = link_to member_member_share_path(m.member.id, m.id), target: '_blank' do
                           #{m.certificate_number}
