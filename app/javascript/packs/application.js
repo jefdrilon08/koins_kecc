@@ -257,7 +257,8 @@ import WrittenOffReportIndex from '../models/WrittenOffReportIndex.js';
 import WrittenOffReportShow from '../models/WrittenOffReportShow.js';
 import InvoluntaryPaymentIndex from '../models/InvoluntaryPaymentIndex.js';
 import InvoluntaryPaymentShow from '../models/InvoluntaryPaymentShow.js';
-
+import ApiReceiveMembersIndex from '../models/ApiReceiveMembersIndex.js';
+import ApiReceiveMembersShow from '../models/ApiReceiveMembersShow.js';
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -496,7 +497,9 @@ const hooks = {
   "data_stores/written_off_report/show":              [WrittenOffReportShow],
   "allowance_losses/generate":                        [AllowanceLosses],
   "involuntary_payment/index":                        [InvoluntaryPaymentIndex],
-  "involuntary_payment/show":                         [InvoluntaryPaymentShow]
+  "involuntary_payment/show":                         [InvoluntaryPaymentShow],
+  "api_receive_members/index":                        [ApiReceiveMembersIndex],
+  "api_receive_members/show":                         [ApiReceiveMembersShow]
 }
 
 const renderComponent = (Component, payload) => {
