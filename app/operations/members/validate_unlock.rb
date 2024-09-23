@@ -6,7 +6,7 @@ module Members
       @config = config
       @member = @config[:member]
       @user   = @config[:user]
-      @valid_roles  = ["MIS", "BK", "SBK", "AO"]
+      @valid_roles  = ["MIS", "BK", "SBK", "AO", "REMOTE-FM", "REMOTE-BK"]
 
       # @valid_roles = ::Users::FetchValidRoles.new(
       #   module_name: "unlock_member_modification"
@@ -26,11 +26,11 @@ module Members
           key: "auth",
           message: "invalid role #{@user.roles}"
         }
-   
+
       end
 
       #not_yet_implemented!
-      
+
       @errors[:messages].each do |o|
         @errors[:full_messages] << o[:message]
       end
