@@ -3,7 +3,7 @@ namespace :api do
     # Members
     get "/members/dashboard", to: "members#dashboard"
     get "/members/savings", to: "members#savings"
-
+    get "/members/fetch", to: "members#fetch"
     # User Management
     post "/users", to: "users#create"
     put "/users/:id", to: "users#update"

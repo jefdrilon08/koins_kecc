@@ -77,7 +77,7 @@ namespace :api do
   get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
   post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
   post "/members/member_change_old_password", to: "v3/members#member_change_old_password"
-
+ get "/members/branch", to: "v3/members#branch"
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
@@ -300,6 +300,10 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
 
+    # Api Receive Members
+    post "/api_receive_members/approve", to: "api_receive_members#approve"
+    post "/api_receive_members/decline", to: "api_receive_members#decline"
+
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
@@ -360,6 +364,8 @@ namespace :api do
 
 		post "/administration/member_shares/print", to: "member_shares#print"
 
+
+
     # Users
     get "/roles", to: "users#roles"
     post "/change_password", to: "users#change_password"
@@ -418,7 +424,7 @@ namespace :api do
     get "/members/member_mobile_number", to: "members#member_mobile_number"
     get "/members/mobile_number_exist", to: "members#mobile_number_exist"
     post "members/update_mobile_number", to: "members#update_mobile_number"
-
+    get  "/members/member_member_type", to: "members#member_member_type"
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
@@ -798,7 +804,7 @@ namespace :api do
 
       get "/user_branches", to: "user_branches#index"
       post "/user_branches/toggle", to: "user_branches#toggle"
-
+      post "/admin_address/save", to: "admin_address#save"
       # Surveys
       post "/surveys/save", to: "surveys#save"
       post "/surveys/delete", to: "surveys#delete"
@@ -816,15 +822,25 @@ namespace :api do
 
       # Membership Arrangement
       post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
+
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
+      get "/admin_address/fetch", to: "admin_address#fetch"
+
 
       # province
       post "/admin_province/create", to: "admin_province#create"
+      get "/admin_province/fetch", to: "admin_province#fetch"
+
       # Municipality Address
       post "/admin_municipality/create", to: "admin_municipality#create"
+      get "/admin_municipality/fetch", to: "admin_municipality#fetch"
+
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
+      get "/admin_barangay/fetch", to: "admin_barangay#fetch"
+
+
 
     end
 

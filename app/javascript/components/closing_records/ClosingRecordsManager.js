@@ -18,7 +18,8 @@ export default function ClosingRecordsManager(props) {
     "SOA_LOANS",
     "MANUAL_AGING",
     "PERSONAL_FUNDS",
-    "MEMBER_COUNTS"
+    "MEMBER_COUNTS",
+    "MONTHLY_NEW_AND_RESIGNED"	  
   ]);
 
   const [modalNewIsOpen, setModalNewIsOpen] = useState(false);

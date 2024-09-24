@@ -12,6 +12,8 @@ const Generate = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const [data, setData] = useState([]);
+  
+
 
   const handleClick = () => {
     setIsLoading(true);
@@ -41,7 +43,7 @@ const Generate = (props) => {
       </h1>
       <hr/>
       <label>
-        Branch
+        SatO
       </label>
       <Select
         value={currentBranches}
@@ -120,13 +122,13 @@ const Generate = (props) => {
       <ErrorList errors={errors}/>
       {(() => {
         if(data.length > 0) {
-          return (
-            <React.Fragment>
+          return (	  
+	     <React.Fragment>
               <table className="table table-bordered table-sm">
                 <tbody>
                   <tr>
                     <th>
-                      Branch
+                      SatO
                     </th>
                     {data.map((obj) => {
                       return (
@@ -136,20 +138,26 @@ const Generate = (props) => {
                       )
                     })}
                   </tr>
-                  <tr>
+		  <tr>
+		   <th>
+		     A. OUTREACH
+		   </th>
+		   <td></td>
+		  </tr>
+		  <tr>
                     <th>
-                      Total Number of Active Members
+                      a1. Total Number of Active Members
                     </th>
                     {data.map((obj) => {
                       return (
-                        <td className="text-center" key={`active-total-${obj.branch_id}`}>
+                        <th className="text-center" key={`active-total-${obj.branch_id}`}>
                           {obj.data.active_total}
-                        </td>
+                        </th>
                       )
                     })}
                   </tr>
                   <tr>
-                    <th>
+                    <th className="ps-4">
                       Female
                     </th>
                     {data.map((obj) => {
@@ -161,7 +169,7 @@ const Generate = (props) => {
                     })}
                   </tr>
                   <tr>
-                    <th>
+                    <th className="ps-4">
                       Male
                     </th>
                     {data.map((obj) => {
@@ -184,7 +192,43 @@ const Generate = (props) => {
                       )
                     })}
                   </tr>
-                  <tr>
+		  <tr>
+                    <th className="ps-4">
+                      Primary
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.pure_savers_regular}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      kaagapay
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.pure_savers_kaagapay}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      GK
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.pure_savers_gk}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
                     <th>
                       Active Borrowers
                     </th>
@@ -196,7 +240,43 @@ const Generate = (props) => {
                       )
                     })}
                   </tr>
-                  <tr>
+		   <tr>
+                    <th className="ps-4">
+                      Primary
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.active_borrowers_regular}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      kaagapay
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.active_borrowers_kaagapay}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      GK
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`active-male-${obj.branch_id}`}>
+                          {obj.data.active_borrowers_gk}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
                     <th>
                       Admitted Members
                     </th>
@@ -207,7 +287,27 @@ const Generate = (props) => {
                         </td>
                       )
                     })}
-                  </tr>
+		  </tr>
+		  <tr>
+                    <th>
+                      Inactive Members
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`admitted-members-${obj.branch_id}`}>
+                          {obj.data.non_patronizing}
+                        </td>
+                      )
+                    })}
+		  </tr>
+
+		  <tr>
+                    <th>
+                      Deliquent Members
+		    </th>
+		    <td></td>
+		  </tr>
+		{/*
                   <tr>
                     <th>
                       Resigned
@@ -243,20 +343,23 @@ const Generate = (props) => {
                         </td>
                       )
                     })}
-                  </tr>
+		  </tr>
+		  */}
                   <tr>
                     <th>
-                      Total Number of Active Loans
+                      a2. Total Number of Active Loans
                     </th>
                     {data.map((obj) => {
                       return (
-                        <td className="text-center" key={`percentage-of-borrowers-${obj.branch_id}`}>
+                        <th className="text-center" key={`percentage-of-borrowers-${obj.branch_id}`}>
                           {obj.data.total_active_loans}
-                        </td>
+                        </th>
                       )
                     })}
                   </tr>
-                  {data[0].data.loans.map((o, i) => {
+		  {data[0].data.loans
+		    .sort((a, b) => a.loan_product.priority - b.loan_product.priority)
+		    .map((o, i) => {
                     return (
                       <tr key={`loan-count-row-${i}`}>
                         <th className="ps-4">
@@ -271,19 +374,65 @@ const Generate = (props) => {
                         })}
                       </tr>
                     )
-                  })}
+		  })}
                   <tr>
                     <th>
-                      Outstanding Loans
-                    </th>
-                    {data.map((obj) => {
+                      a3. DROP OUT for the month
+		    </th>
+		    {data.map((obj) => {
                       return (
-                        <td className="text-end" key={`outstanding-loans-${obj.branch_id}`}>
-                          {numberWithCommas(obj.data.total_overall_principal_balance)}
-                        </td>
+                        <th className="text-center" key={`percentage-of-borrowers-${obj.branch_id}`}>
+                          {obj.data.resigned_members}
+                        </th>
                       )
                     })}
                   </tr>
+                  <tr>
+                    <th className="ps-4">
+                      Drop out rate
+		    </th>
+                        <td></td>
+                  </tr>
+                  <tr>
+                    <th>
+                      a4. Total New Clients (as of)
+		    </th>
+		    <td></td>
+                  </tr>
+                  <tr>
+                    <th className="ps-4">
+                      New clients for the month
+		    </th>
+ 		    {data.map((obj) => {
+                      return (
+                        <th className="text-center" key={`percentage-of-borrowers-${obj.branch_id}`}>
+                          {obj.data.new_members}
+                        </th>
+                      )
+                   })}                       
+                  </tr>
+
+                  <tr>
+                    <th>
+                      B. LOAN PORTFOLIO
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`outstanding-loans-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.total_overall_principal_balance)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+
+                  <tr>
+                    <th>
+                      b1. Outstanding Loans
+                    </th>
+                    <td></td>
+		  </tr>
+                  <tr>
+		  </tr>
                   {data[0].data.loans.map((o, i) => {
                     return (
                       <tr key={`loan-portfolio-row-${i}`}>
@@ -299,19 +448,240 @@ const Generate = (props) => {
                         })}
                       </tr>
                     )
-                  })}
-                  <tr>
+		  })}
+		  <tr>
                     <th>
-                      Loans Disbursed for the Month
+                      Average Loan amount (portfolio) for the month
                     </th>
                     {data.map((obj) => {
                       return (
-                        <td className="text-end" key={`loans-disbursed-for-the-month-${obj.branch_id}`}>
-                          {numberWithCommas(obj.data.total_num_disbursed)}
+                        <th className="text-end" key={`average-loan-amount${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.average_loan_amount)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th>
+                      b2. PAST DUE AMOUNT:
+                    </th>
+		    <td></td>
+		  </tr>
+		  
+		  <tr>
+                    <th className="ps-4">
+                      Past due (1-30 days)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`pastdue-month-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.past_due_month)}
                         </td>
                       )
                     })}
-                  </tr>
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Past due (31-365 days)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`pastdue-year-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.past_due_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Past due (365 days above)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`pastdue-greateryear-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.past_due_greater_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Total PAST DUE
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`principal-balance-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.total_principal_balance)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Past Due Rate
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`pastdue-rate-${obj.branch_id}`}>
+                          {numberAsPercent(obj.data.past_due_rate)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th>
+                      b3. PAR AMOUNT:
+                    </th>
+		    <td></td>
+		  </tr>
+		  
+		  <tr>
+                    <th className="ps-4">
+                      Portfolio at Risk (1-30 days)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`par-month-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.par_month)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Portfolio at Risk (31-365 days)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`par-year-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.par_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Portfolio at Risk (365 days above)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`par-greateryear-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.par_greater_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Total PAR AMOUNT
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`par-balance-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.total_par)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      PAR Rate (1day)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-center" key={`pastdue-rate-${obj.branch_id}`}>
+                          {numberAsPercent(obj.data.par_rate_one_day)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th>
+                      b4. Allow. For Impairment losses
+                    </th>
+		    <td></td>
+		  </tr>
+		  
+		  <tr>
+                    <th className="ps-4">
+                      Current (1%)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`afil-current-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.afil_current)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      1-365 days (35%)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`afil-year-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.afil_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      over 1 yr (100%)
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <td className="text-end" key={`afil-greateryear-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.afil_greater_year)}
+                        </td>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th className="ps-4">
+                      Total 
+                    </th>
+                    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`afil-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.afil)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th>
+                      b4. Allow. For Impairment losses
+                    </th>
+		    <td></td>
+		  </tr>
+
+                  <tr>
+                    <th>
+                      C. DISBURSEMENTS
+		    </th>
+		    <td></td>
+		   </tr>
+		  <tr>
+                    <th>
+                      c1. Total no. of LOAN DISBURSED (As of)
+                    </th>
+		    <td></td>
+		  </tr>
+		  <tr>
+                    <th>
+                      c2. No. of LOAN DISBURSED for the month
+                    </th>
+		    {data.map((obj) => {
+                      return (
+                        <th className="text-center" key={`loans-disbursed-for-the-month-${obj.branch_id}`}>
+                          {obj.data.total_num_disbursed}
+                        </th>
+                      )
+                    })}
+		  </tr>
+
                   {data[0].data.loans.map((o, i) => {
                     return (
                       <tr key={`loans-disbursed-for-the-month-row-${i}`}>
@@ -327,16 +697,23 @@ const Generate = (props) => {
                         })}
                       </tr>
                     )
-                  })}
+		  })}
+		  <tr>
+                    <th>
+                      c3. AMOUNT DISBURSED as of
+                    </th>
+		    <td></td>
+		  </tr>
+
                   <tr>
                     <th>
-                      Amount Disbursed As Of
+                      c4. DISBURSEMENT for the month
                     </th>
                     {data.map((obj) => {
                       return (
-                        <td className="text-end" key={`loans-total-amount-disbursed-${obj.branch_id}`}>
+                        <th className="text-end" key={`loans-total-amount-disbursed-${obj.branch_id}`}>
                           {numberWithCommas(obj.data.total_amount_disbursed)}
-                        </td>
+                        </th>
                       )
                     })}
                   </tr>
@@ -355,7 +732,76 @@ const Generate = (props) => {
                         })}
                       </tr>
                     )
-                  })}
+		  })}
+		  <tr>
+                    <th>
+                      Average Loan amount (disbursed) for the month
+                    </th>
+		    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`loans-disbursed-for-the-month-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.average_disbursed_amount)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+		  <tr>
+                    <th>
+                      d4. Amount collected (as of)
+                    </th>
+		    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`loans-disbursed-for-the-month-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.total_principal_paid)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+                  {data[0].data.loans.map((o, i) => {
+                    return (
+                      <tr key={`loans-amount-collected-row-${i}`}>
+                        <th className="ps-4">
+                          {o.loan_product.name}
+                        </th>
+                        {data.map((obj) => {
+                          return (
+                            <td className="text-end" key={`loans-amount-disbursed-col-${obj.branch_id}`}>
+                              {numberWithCommas(obj.data.loans[i].total_principal_paid)}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+		  })}
+		  <tr>
+                    <th>
+                      Interest income (as of)
+                    </th>
+		    {data.map((obj) => {
+                      return (
+                        <th className="text-end" key={`loans-disbursed-for-the-month-${obj.branch_id}`}>
+                          {numberWithCommas(obj.data.total_interest_paid)}
+                        </th>
+                      )
+                    })}
+		  </tr>
+                  {data[0].data.loans.map((o, i) => {
+                    return (
+                      <tr key={`loans-amount-collected-row-${i}`}>
+                        <th className="ps-4">
+                          {o.loan_product.name}
+                        </th>
+                        {data.map((obj) => {
+                          return (
+                            <td className="text-end" key={`loans-amount-disbursed-col-${obj.branch_id}`}>
+                              {numberWithCommas(obj.data.loans[i].total_interest_paid)}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+		  })}
+
                   <tr>
                     <th>
                       Gross Income

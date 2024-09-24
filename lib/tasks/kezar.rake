@@ -1172,6 +1172,161 @@ namespace :kezar do
     puts "Total records processed: #{total_records}"
   end
 
+  # KCOOP PAYMENT API
+  task :kcoop_payment_api => :environment do
+    email           = "kmba-manual-upload@kezar.co"
+    password        = "oQEVaTMGzNls"
+    end_point       = "https://auth-jdyjiucdcq-uc.a.run.app/auth/loginAdmin"
+
+    credentials = {
+      email: email,
+      password: password
+    }
+
+    Rails.logger.info(puts("Logging in #{end_point} . . . "))
+    login = HTTParty.post(
+      end_point,
+      body: credentials.to_json,
+      :headers => { 'Content-Type' => 'application/json'}
+    )
+
+    # Rails.logger.info(puts(login))
+    # declaring the accessToken to a variable access_token
+    access_token = login['accessToken']
+    # setting up the access token to an environment
+    ENV["ACCESS_TOKEN"]         = access_token
+    # raise [start_date, end_date].inspect
+    Rake::Task['kezar:kcoop_payment_body_api'].invoke
+  end
+
+  task :kcoop_payment_body_api => :environment do
+    #--------------Start Declarations--------------#
+      total_records           = 0
+      total_records           = 0
+      end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || ""
+      is_batch                = ENV["BATCH"] || true
+      transaction_type        = 'deposit'
+      is_interest             = 'false'
+      insurance_status        = 'inforce','lapsed'
+      # status                  = 'active'
+      account_subtype         = 'Life Insurance Fund','Retirement Fund'
+      branch                  = 'cf74991b-c211-42c6-bdf7-78dd09862f01', '3820dabe-a47e-43ad-9db9-47158e23b75f'
+      member_id               = '2f167148-b4c2-45cc-82ae-2e4924fdf64b'
+      cluster_id              = 'ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4'
+      # retrieve the access token to an environment
+      bearer_token            = ENV["ACCESS_TOKEN"]
+      branch_id               = ENV["BRANCH_ID"]
+      start_date              = ENV["START_DATE"] || ""
+      end_date                = ENV["END_DATE"] || ""
+      # raise [start_date, end_date].inspect
+    # --------------End Declarations--------------#
+
+    account_transactions = AccountTransaction.select(
+      "
+        account_transactions.id,
+        account_transactions.amount as amount,
+        account_transactions.id AS reference_number,
+        'Bank Transfer' AS source,
+        member_accounts.account_subtype as type,
+        account_transactions.transacted_at as payment_date,
+        members.identification_number as account_number,
+        CONCAT(members.first_name,' ',members.middle_name,' ',members.last_name) as full_name,
+        'KMBA' as tier1,
+        branches.name as tier2,
+        centers.name as tier3
+      "
+    ).joins(
+      "
+        LEFT JOIN member_accounts ON member_accounts.id = account_transactions.subsidiary_id
+        LEFT JOIN members ON members.id = member_accounts.member_id
+        LEFT JOIN branches ON branches.id = members.branch_id
+        LEFT JOIN centers ON centers.id = members.center_id
+        LEFT JOIN clusters ON clusters.id = branches.cluster_id
+      "
+    ).where(
+        "
+          account_transactions.transaction_type = ?
+          AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL)
+          AND members.insurance_status IN (?)
+          AND member_accounts.account_subtype IN (?)
+          AND (account_transactions.transacted_at >= ? AND account_transactions.transacted_at <= ?)
+          AND
+            CASE
+              WHEN members.data->'resignation_records' IS NULL THEN
+                DATE(account_transactions.transacted_at) >= DATE(members.data->>'recognition_date')
+              WHEN ((members.data->'resignation_records'->2->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
+                  DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->2->>'date_resigned')
+              WHEN ((members.data->'resignation_records'->1->>'date_resigned' IS NOT NULL) AND (members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL)) THEN
+                  DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->1->>'date_resigned')
+              WHEN members.data->'resignation_records'->0->>'date_resigned' IS NOT NULL THEN
+                DATE(account_transactions.transacted_at) >= DATE(members.data->'resignation_records'->0->>'date_resigned')
+            END
+        ",
+        transaction_type,
+        is_interest,
+        insurance_status,
+        account_subtype,
+        member_id,
+        start_date,
+        end_date
+    ).find_in_batches(:batch_size => 50) do |group|
+
+      Rails.logger.info(puts "Uploading #{group.size} transactions...")
+
+      payments = group.map{ |o|
+        {
+          details: {
+            amount: o.amount,
+            referenceNumber: o.reference_number,
+            source: o.source,
+            type: o.type,
+            paymentDate: o.payment_date
+          },
+          payor: {
+            accountNumber: o.account_number,
+            fullName: o.full_name,
+            tier1: o.tier1,
+            tier2: o.tier2,
+            tier3: o.tier3
+          }
+        }
+      }
+
+      total = payments.count
+      payload = {data: payments}
+      Rails.logger.info(puts payload.to_json)
+
+      if is_batch.present?
+        Rails.logger.info(puts("Posting to #{end_point}..."))
+        result = HTTParty.post(
+                   end_point,
+                   body: payload.to_json,
+                   :headers => {
+                    'Content-Type' => 'application/json',
+                    'Authorization' => "Bearer #{bearer_token}"
+                  },
+                  timeout: 120
+                )
+        Rails.logger.info(puts(result))
+        Rails.logger.info(puts(total))
+      else
+        payload.each do |p|
+          Rails.logger.info(puts("Posting to #{end_point}..."))
+          result  = HTTParty.post(
+                      end_point,
+                      body: p.to_json,
+                      :headers => {
+                        'Content-Type' => 'application/json',
+                        'Authorization' => "Bearer #{bearer_token}"
+                      },
+                      timeout: 120
+                    )
+          Rails.logger.info(puts(result))
+        end
+      end
+    end
+  end
+
   #OLD API PAYMENTS
   task :send_payments => :environment do
     branch        = ENV["BRANCH_ID"] || "3a74c7d5-54a5-4eec-826d-ab81f76ae31a"

@@ -7,6 +7,60 @@ import AddressService from '../utils/AddressService';
 export default class FormPersonalInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      regions: [],
+      provinces: [],
+      municipalities: [],
+      barangays: [],
+    }
+  }
+
+  // async componentDidMount() {
+  //   const dataFetchers = [
+  //     { key: 'regions', method: AddressService.getRegions },
+  //     { key: 'provinces', method: AddressService.getProvince },
+  //     { key: 'municipalities', method: AddressService.getMunicipality },
+  //     { key: 'barangay', method: AddressService.getDistricts }
+  //   ];
+
+  //   for (const { key, method } of dataFetchers) {
+  //     try {
+  //       const data = await method();
+  //       this.setState({ [key]: data });
+  //     } catch (error) {
+  //       console.error(`Error fetching ${key}: `, error);
+  //     }
+  //   }
+  // }
+
+  async componentDidMount() {
+    try {
+      const regions = await AddressService.getRegions();
+      const provinces = await AddressService.getProvince();
+      const municipalities = await AddressService.getMunicipality();
+      const barangays = await AddressService.getDistricts();
+      this.setState({ regions, provinces, municipalities, barangays });
+
+      const selectedRegion = this.props.data.data.address.region;
+      if (selectedRegion) {
+        const provinces = await AddressService.getProvince(selectedRegion);
+        this.setState({ provinces });
+
+      const selectedProvince = this.props.data.data.address.province;
+        if (selectedProvince) {
+          const municipalities = await AddressService.getMunicipality(selectedProvince);
+          this.setState({ municipalities });
+
+          const selectedCity = this.props.data.data.address.city;
+          if (selectedCity) {
+            const barangays = await AddressService.getDistricts(selectedCity);
+            this.setState({ barangays });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
   }
 
   handleFirstNameChanged(event) {
@@ -50,37 +104,93 @@ export default class FormPersonalInfo extends React.Component {
   }
 
   handleAddressRegionChanged(event) {
-    var data                    = this.props.data;
-    data.data.address.region    = event.target.value ? event.target.value : "";
-    data.data.address.province  = "";
-    data.data.address.city      = "";
-    data.data.address.district  = "";
+    // var data                    = this.props.data;
+    // data.data.address.region    = event.target.value ? event.target.value : "";
+    // data.data.address.province  = "";
+    // data.data.address.city      = "";
+    // data.data.address.district  = "";
 
-    this.props.updateData(data);
+    // this.props.updateData(data);
+    const region = event.target.value;
+    this.props.updateData({
+      ...this.props.data,
+      data: {
+        ...this.props.data.data,
+        address: {
+          ...this.props.data.data.address,
+          region,
+          province: "",
+          city: "",
+          district: ""
+        }
+      }
+    });
+    // Fetch provinces based on selected region
+    AddressService.getProvince(region).then(provinces => this.setState({ provinces }));
   }
 
   handleAddressProvinceChanged(event) {
-    var data                    = this.props.data;
-    data.data.address.province  = event.target.value ? event.target.value : "";
-    data.data.address.city      = "";
-    data.data.address.district  = "";
+    // var data                    = this.props.data;
+    // data.data.address.province  = event.target.value ? event.target.value : "";
+    // data.data.address.city      = "";
+    // data.data.address.district  = "";
 
-    this.props.updateData(data);
+    // this.props.updateData(data);
+    const province = event.target.value;
+    this.props.updateData({
+      ...this.props.data,
+      data: {
+        ...this.props.data.data,
+        address: {
+          ...this.props.data.data.address,
+          province,
+          city: "",
+          district: ""
+        }
+      }
+    });
+    // Fetch municipalities based on selected province
+    AddressService.getMunicipality(province).then(municipalities => this.setState({ municipalities }));
   }
 
   handleAddressCityChanged(event) {
-    var data                    = this.props.data;
-    data.data.address.city      = event.target.value ? event.target.value.toUpperCase() : "";
-    data.data.address.district  = "";
+    // var data                    = this.props.data;
+    // data.data.address.city      = event.target.value ? event.target.value.toUpperCase() : "";
+    // data.data.address.district  = "";
 
-    this.props.updateData(data);
+    // this.props.updateData(data);
+    const city = event.target.value;
+    this.props.updateData({
+      ...this.props.data,
+      data: {
+        ...this.props.data.data,
+        address: {
+          ...this.props.data.data.address,
+          city,
+          district: ""
+        }
+      }
+    });
+    // Fetch barangays based on selected city
+    AddressService.getDistricts(city).then(barangays => this.setState({ barangays }));
   }
 
   handleAddressDistrictChanged(event) {
-    var data                    = this.props.data;
-    data.data.address.district  = event.target.value ? event.target.value.toUpperCase() : "";
+    // var data                    = this.props.data;
+    // data.data.address.district  = event.target.value ? event.target.value.toUpperCase() : "";
 
-    this.props.updateData(data);
+    // this.props.updateData(data);
+    const district = event.target.value;
+    this.props.updateData({
+      ...this.props.data,
+      data: {
+        ...this.props.data.data,
+        address: {
+          ...this.props.data.data.address,
+          district
+        }
+      }
+    });
   }
 
   handleAddressStreetChanged(event) {
@@ -130,7 +240,7 @@ export default class FormPersonalInfo extends React.Component {
   
   handleNewAddressProvinceChanged(event) {
     var data                = this.props.data;
-    data.data.new_address.proprovince  = event.target.value ? event.target.value.toUpperCase() : "";
+    data.data.new_address.province  = event.target.value ? event.target.value.toUpperCase() : "";
 
     this.props.updateData(data);
   }
@@ -213,81 +323,137 @@ export default class FormPersonalInfo extends React.Component {
       <option value="" key="region-x">
         -- SELECT --
       </option>
-    ]
+    ];
 
-    AddressService.getRegions().forEach(function(o, i) {
+    this.state.regions.forEach((o, i) => {
       elements.push(
-        <option value={o} key={"region-" + i}>
-          {o}
+        <option value={o.id} key={"region-" + i}>
+          {o.name}
         </option>
-      )
+      );
     });
 
     return elements;
+    
   }
+
+
+  // =================== OLD PROVINCE ADDRESS
+  // renderProvinces() {
+  //   var elements = [
+  //     <option value="" key="province-x">
+  //       -- SELECT --
+  //     </option>
+  //   ]
+
+  //   var region = this.props.data.data.address.region;
+
+  //   AddressService.getProvincesByRegion(region).forEach(function(o, i) {
+  //     elements.push(
+  //       <option value={o} key={"province-" + i}>
+  //         {o}
+  //       </option>
+  //     )
+  //   });
+
+  //   return elements;
+  // }
 
   renderProvinces() {
+    var selectedProvince = this.props.data.data.address.province;
     var elements = [
       <option value="" key="province-x">
-        -- SELECT --
+      -- SELECT --
       </option>
-    ]
+    ];
 
-    var region = this.props.data.data.address.region;
-
-    AddressService.getProvincesByRegion(region).forEach(function(o, i) {
+    this.state.provinces.forEach((o, i) => {
       elements.push(
-        <option value={o} key={"province-" + i}>
-          {o}
+        <option value={o.id} key={"province-" + i} selected={selectedProvince === o.id}>
+          {o.name}
         </option>
-      )
+      );
     });
-
     return elements;
-  }
+  };
+
+  // renderCities() {
+  //   var elements = [
+  //     <option value="" key="city-x">
+  //       -- SELECT --
+  //     </option>
+  //   ]
+
+  //   var region    = this.props.data.data.address.region;
+  //   var province  = this.props.data.data.address.province;
+
+  //   AddressService.getCitiesByRegionAndProvince(region, province).forEach(function(o, i) {
+  //     elements.push(
+  //       <option value={o} key={"city-" + i}>
+  //         {o}
+  //       </option>
+  //     )
+  //   });
+
+  //   return elements;
+  // }
 
   renderCities() {
     var elements = [
-      <option value="" key="city-x">
-        -- SELECT --
+      <option value="" key="municipality-x">
+      -- SELECT --
       </option>
-    ]
+    ];
 
-    var region    = this.props.data.data.address.region;
-    var province  = this.props.data.data.address.province;
-
-    AddressService.getCitiesByRegionAndProvince(region, province).forEach(function(o, i) {
+    this.state.municipalities.forEach((o, i) => {
       elements.push(
-        <option value={o} key={"city-" + i}>
-          {o}
+        <option value={o.id} key={"municipality-" + i}>
+          {o.name}
         </option>
-      )
+      );
     });
-
     return elements;
-  }
+  };
 
-  renderDistricts() {
+  // renderDistricts() {
+  //   var elements = [
+  //     <option value="" key="district-x">
+  //       -- SELECT --
+  //     </option>
+  //   ]
+
+  //   var region    = this.props.data.data.address.region;
+  //   var province  = this.props.data.data.address.province;
+  //   var city      = this.props.data.data.address.city;
+
+  //   AddressService.getDistrictsByRegionAndProvinceAndCity(region, province, city).forEach(function(o, i) {
+  //     elements.push(
+  //       <option value={o} key={"district-" + i}>
+  //         {o}
+  //       </option>
+  //     )
+  //   });
+
+  //   return elements;
+  // }
+
+  renderBarangay() {
+    var selectedBarangay = this.props.data.data.address.district;
     var elements = [
       <option value="" key="district-x">
-        -- SELECT --
+      -- SELECT --
       </option>
-    ]
+    ];
 
-    var region    = this.props.data.data.address.region;
-    var province  = this.props.data.data.address.province;
-    var city      = this.props.data.data.address.city;
-
-    AddressService.getDistrictsByRegionAndProvinceAndCity(region, province, city).forEach(function(o, i) {
+    this.state.barangays.forEach((o, i) => {
       elements.push(
-        <option value={o} key={"district-" + i}>
-          {o}
+        <option value={o.id} key={"district-" + i} selected={selectedBarangay === o.id}>
+          {o.name}
         </option>
-      )
+      );
     });
-
     return elements;
-  }
+  };
 
   render() {
     var housingType       = this.props.data.data.housing.type;
@@ -389,24 +555,24 @@ export default class FormPersonalInfo extends React.Component {
           </div>
           <div className="col-md-4">
             <div className="form-group">
-              <label>* Barangay (OLD)</label>
+            {/*  <label>* Barangay (OLD)</label>
               <input
                 value={this.props.data.data.address.old_district}
                 className="form-control"
                 onChange={this.handleAddressOldDistrictChanged.bind(this)}
                 disabled={this.props.formDisabled}
-              />
+            /> */}
             </div>
           </div>
           <div className="col-md-4">
             <div className="form-group">
-              <label>* Syudad / City (OLD)</label>
+              {/* <label>* Syudad / City (OLD)</label>
               <input
                 value={this.props.data.data.address.old_city}
                 className="form-control"
                 onChange={this.handleAddressOldCityChanged.bind(this)}
                 disabled={this.props.formDisabled}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -468,7 +634,7 @@ export default class FormPersonalInfo extends React.Component {
                 value={this.props.data.data.address.district}
                 onChange={this.handleAddressDistrictChanged.bind(this)}
               >
-                {this.renderDistricts()}
+                {this.renderBarangay()}
               </select>
             </div>
           </div>

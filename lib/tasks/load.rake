@@ -1,4 +1,32 @@
 namespace :load do
+  task :load_member_city => :environment do
+    cluster = ENV['CLUSTER']
+    city_name = ENV['CITY']
+    new_city_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'city' = ?",cluster, city_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:city] = new_city_id
+      a.update!(data: a_data)
+    end
+  
+  end
+  
+  task :load_brgy => :environment do
+    existing_brgy = ENV['BRGYD']
+    new_id = ENV['NEWID']
+    new_cluster = ENV['CLUSTERD']
+
+    puts Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'district' = ?",new_cluster,existing_brgy).count
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'district' = ?",new_cluster,existing_brgy ).each do |a|
+      m = Member.find(a.id)
+      m_data = m.data.with_indifferent_access
+      m_data[:address][:district] = new_id
+      m.update!(data: m_data)
+    end
+    puts "done"
+  end
 
   task :load_member_project_type => :environment do
       branch = ENV['BRANCH']

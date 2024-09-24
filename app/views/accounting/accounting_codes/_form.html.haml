@@ -2,23 +2,28 @@
   .row
     .col
       .form-group
-        = f.input :code, input_html: { class: 'form-control' }
+        = f.input :code, input_html: { class: 'form-control', disabled: !is_mis_user? }
     .col
       .form-group
-        = f.input :name, input_html: { class: 'form-control' }
+        = f.input :name, input_html: { class: 'form-control', disabled: !is_mis_user? }
     .col
       .form-group
-        = f.input :category, as: :select, collection: AccountingCode::CATEGORIES, input_html: { class: 'form-control' }
+        = f.input :category, as: :select, collection: AccountingCode::CATEGORIES, input_html: { class: 'form-control', disabled: !is_mis_user? }
   %hr
   .btn-group
-    %button{ type: "submit", class: "btn btn-primary" }
-      .fa.fa-check
-      Save
-    - if @accounting_code.new_record?
+    - if is_mis_user?
+      %button{ type: "submit", class: "btn btn-primary" }
+        .fa.fa-check
+        Save
+    - if @accounting_code.present? && @accounting_code.persisted?
+      = link_to accounting_accounting_code_path(@accounting_code), class: 'btn btn-danger' do
+        .fa.fa-times
+        Cancel  
+    - else
       = link_to accounting_accounting_codes_path, class: 'btn btn-danger' do
         .fa.fa-times
         Cancel
-    - else
-      = link_to accounting_accounting_code_path(@accounting_code), class: 'btn btn-danger' do
-        .fa.fa-times
-        Cancel
+    -# = link_to(is_mis_user? ? accounting_accounting_code_path(@accounting_code) : accounting_accounting_codes_path, class: 'btn btn-danger') do
+    -#   .fa.fa-times
+    -#   Cancel
+

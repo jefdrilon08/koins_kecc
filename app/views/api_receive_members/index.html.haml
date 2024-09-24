@@ -1,0 +1,23 @@
+.row
+  .col
+    .card 
+      .card-body.d-flex.align-items-center
+        %h2
+          %i.bi.bi-database-down.me-2
+          %label.mb-0 API RECEIVE MEMBERS
+      .card
+      -# %button#btn-click.btn.btn-primary button to check 
+      .card-body
+        = render partial: "index_filter"
+        - if @api_receive_members.any?
+          = render partial: "index_list", locals: { api_receive_member: @api_receive_member }
+          = paginate @api_receive_members
+        - else
+          %p
+            No members found
+
+
+= render partial: "templates/error_list"
+= render partial: "templates/loader"
+
+

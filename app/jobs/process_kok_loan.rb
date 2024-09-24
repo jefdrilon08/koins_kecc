@@ -31,13 +31,25 @@ class ProcessKokLoan < ApplicationJob
             config: config
           ).execute!
         end
-      elsif status == "for-renewal"
+      elsif status == "for-renewal" && age < 66
         if now >= effectivity_date && now <= on_grace_period
           cmd = ::InsuranceLoanBundleEnrollments::UpdateGracePeriodStatus.new(
             config: config
           ).execute!
         end
-      elsif status == "on-grace-period"
+      elsif status == "for-renewal" && age >= 66 
+        if now > on_grace_period
+          cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
+            config: config
+          ).execute!
+        end
+      elsif status == "on-grace-period" && age >= 66 
+        if now > on_grace_period
+          cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
+            config: config
+          ).execute!
+        end
+      elsif status == "on-grace-period" && age < 66
         if now > on_grace_period
           cmd = ::InsuranceLoanBundleEnrollments::UpdateInsuranceLoanBundleStatus.new(
             config: config

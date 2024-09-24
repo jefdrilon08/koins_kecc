@@ -3495,9 +3495,15 @@ namespace :adjust do
         maturity_date                         = kok_last_data[:kok_data][:maturity_date].to_date
         effectivity_date                      = kok_last_data[:kok_data][:effectivity_date].to_date
 
-        if status == "on-grace-period"
+        if status == "for-renewal" && age >= 66
+          four_weeks_ago                      = (effectivity_date - 28)
+          on_grace_period                     = effectivity_date
+        elsif status == "on-grace-period" && age < 66
           four_weeks_ago                      = (effectivity_date - 28)
           on_grace_period                     = (effectivity_date + 30)
+        elsif status == "on-grace-period" && age >= 66
+          four_weeks_ago                      = (effectivity_date - 28)
+          on_grace_period                     = effectivity_date
         else
           four_weeks_ago                      = (maturity_date - 28)
           on_grace_period                     = (maturity_date + 30)
