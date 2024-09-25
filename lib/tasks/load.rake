@@ -7,7 +7,7 @@ namespace :load do
     Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'region' = ?",cluster, region_name).each do |m|
       a = Member.find(m.id)
       a_data = a.data.with_indifferent_access
-      a_data[:address][:city] = new_region_id
+      a_data[:address][:region] = new_region_id
       a.update!(data: a_data)
     end
   
