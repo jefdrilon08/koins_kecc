@@ -548,6 +548,10 @@ Rails.application.routes.draw do
     get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
     delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
 
+    get "/kbente_summary", to: "kbente_summary#index"
+    get "/kbente_summary/:id", to: "kbente_summary#show"
+    delete "/kbente_summary/:id", to: "kbente_summary#destroy"
+
     get "/allowance_computation_report", to: "allowance_computation_report#index"
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show"
     delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"
