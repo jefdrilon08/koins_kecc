@@ -1,4 +1,18 @@
 namespace :load do
+  task :load_member_region => :environment do
+    cluster = ENV['CLUSTER']
+    region_name = ENV['REGION']
+    new_region_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'region' = ?",cluster, region_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:city] = new_region_id
+      a.update!(data: a_data)
+    end
+  
+  end
+
   task :load_member_city => :environment do
     cluster = ENV['CLUSTER']
     city_name = ENV['CITY']
