@@ -17,6 +17,9 @@ export default ShowComponent = (props) => {
   const [currentCenterId, setCurrentCenterId]           = useState("");
   const [currentLoanProductId, setCurrentLoanProductId] = useState("");
   const [currentView, setCurrentView]                   = useState("RR");
+  const [currentStatus, setCurrentStatus]               = useState("");
+
+  const statusOptions = ["ACTIVE", "RESIGNED", "PENDING", "DELINQUENT"];
 
   let {
     id
@@ -40,6 +43,12 @@ export default ShowComponent = (props) => {
     if (currentLoanProductId) {
       fData.records = fData.records.filter((o) => {
         return o.loan_product.id == currentLoanProductId;
+      });
+    }
+
+    if (currentStatus) {
+      fData.records = fData.records.filter((o) => {
+        return o.member.status == currentStatus.toLowerCase();
       });
     }
 
@@ -140,6 +149,12 @@ export default ShowComponent = (props) => {
     setCurrentView(viewName);
   }
 
+  const handleStatusChanged = (e) => {
+    const selectedStatus = e.target.value;
+    setCurrentStatus(selectedStatus);
+    console.log("Selected Status:", selectedStatus);
+  };
+
   if (isLoading) {
     return  (
       <SkCubeLoading/>
@@ -152,12 +167,15 @@ export default ShowComponent = (props) => {
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
         <hr/>
         <RepaymentRatesView
@@ -173,12 +191,15 @@ export default ShowComponent = (props) => {
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
         <hr/>
         <AgingOfReceivablesView
@@ -194,12 +215,15 @@ export default ShowComponent = (props) => {
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
         <hr/>
         <MasterListView

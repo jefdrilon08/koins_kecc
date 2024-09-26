@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "react-toggle/style.css";
 import ToggleSwitch from '../../utils/ToggleSwitch';
 
@@ -7,15 +7,38 @@ export default Filter = (props) => {
     loanProducts,
     centers,
     officers,
+    status,
     currentView,
     currentCenterId,
     currentOfficerId,
     currentLoanProductId,
+    currentStatus,
     handleViewToggled,
     handleCenterChanged,
     handleOfficerChanged,
-    handleLoanProductChanged
+    handleLoanProductChanged,
+    handleStatusChanged
   } = props;
+
+  const renderStatusOptions = () => {
+    let options = [];
+
+    options.push(
+      <option key="" value="">
+        -- SELECT --
+      </option>
+    );
+    
+    status.forEach((item) => {
+      options.push(
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
+
+    return options;
+  };
 
   const renderLoanProductOptions = () => {
     let options = [];
@@ -172,6 +195,20 @@ export default Filter = (props) => {
           </select>
         </div>
       </div>
+      <div className="col-md-3 col-xs-12">
+      <div className="form-group">
+        <label>
+          Member Status
+        </label>
+        <select
+          className="form-control"
+          value={currentStatus}
+          onChange={handleStatusChanged}
+        >
+          {renderStatusOptions()}
+        </select>
+      </div>
+    </div>
     </div>
   );
 }
