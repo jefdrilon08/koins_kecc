@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
   get "/upload_loan_bundle_enrollments", to: "pages#upload_loan_bundle_enrollments"
+  get "/upload_admin_address", to: "pages#upload_admin_address"
 
   get "/upload_clip", to: "pages#upload_clip"
 
@@ -353,6 +354,10 @@ Rails.application.routes.draw do
     collection { post :upload }
   end
 
+  # Admin Address
+  resources :admin_address, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
   # Api Receive Member
   resources :api_receive_members, only: [:index, :show, :destroy] do
     collection { post :upload}
@@ -547,6 +552,10 @@ Rails.application.routes.draw do
     get "/member_per_center_counts", to: "member_per_center_counts#index"
     get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
     delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
+
+    get "/kbente_summary", to: "kbente_summary#index"
+    get "/kbente_summary/:id", to: "kbente_summary#show"
+    delete "/kbente_summary/:id", to: "kbente_summary#destroy"
 
     get "/allowance_computation_report", to: "allowance_computation_report#index"
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show"
