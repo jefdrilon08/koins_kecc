@@ -1,0 +1,25 @@
+.row
+  .col
+    .card
+      .card-body
+        = form_tag upload_admin_address_index_path, multipart: true do
+          .h4
+            Upload Admin Address
+          %br
+          .row
+            .col-md-3
+              .form-group
+                %label
+                  File
+                = file_field_tag :file, class: "form-control"
+          %br
+          .row
+            .col-md-6
+              - if flash[:error].is_a?(Array)
+                - flash[:error].each do |error|
+                  %p= error
+              - else
+                %p= flash[:error]
+            .row
+              .col-md-12
+                = submit_tag "Upload Admin Address", :class => "btn btn-primary"
