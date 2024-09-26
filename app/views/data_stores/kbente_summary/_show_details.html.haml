@@ -1,0 +1,36 @@
+%h3
+  KBENTE Summary
+%h5
+  Generated as of : #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+%br
+%table.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th.text-center Branch
+      %th.text-center Insured Name
+      %th.text-center Age
+      %th.text-center Gender
+      %th.text-center Address
+      %th.text-center Date of Birth
+      %th.text-center Date Approved
+      %th.text-center Amount
+      %th.text-center Beneficiary
+      %th.text-center Relationship
+      %th.text-center Effectivity Date
+      %th.text-center Date Prepared
+  
+  %tbody
+    - @record[:data]['records'].each do |record|
+      %tr
+        %td.text-center= record['branch']
+        %td.text-center= record['name_of_insured']
+        %td.text-center= record['age']
+        %td.text-center= record['gender']
+        %td.text-center= record['address']
+        %td.text-center= record['date_of_birth']
+        %td.text-center= record['date_approved']
+        %td.text-center= record['amount']
+        %td.text-center= record['beneficiary']
+        %td.text-center= record['relationship']
+        %td.text-center= record['effectivity_date']
+        %td.text-center= record['date_prepared']

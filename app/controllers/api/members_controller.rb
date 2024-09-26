@@ -12,6 +12,7 @@ module Api
       :reinstate,
       :delete,
       :form_make_payments,
+      :add_recognition_date,
       :update_recognition_date,
       :is_member_subscribed,
       :update_member_subscription
@@ -27,6 +28,7 @@ module Api
       :claims_copy_pdf,
       :reinstate,
       :form_make_payments,
+      :add_recognition_date,
       :update_recognition_date,
       :is_member_subscribed,
       :update_member_subscription
@@ -130,21 +132,24 @@ module Api
     end
 
 
-    def update_recognition_date
+    def add_recognition_date
       member            = Member.find(params[:id])
       recognition_date  = params[:recognition_date]
       status            = 'active'
       config  = {
         member: member,
-        user: current_user,
+        user: current_user.full_name,
         recognition_date: recognition_date
+
       }
+
       errors = ::Members::ValidateRecognitionDate.new(
         member: member,
         recognition_date: recognition_date
       ).execute!
+
       if errors.any?
-        render json: errors, status: 400
+        render json: { errors: [errors] }, status: :unprocessable_entity
       else
         data  = member.data.with_indifferent_access
 
@@ -167,6 +172,33 @@ module Api
           member: member,
           recognition_date: recognition_date,
           status: status
+        ).execute!
+        render json: { id: member.id }
+      end
+    end
+
+    def update_recognition_date
+      member                       = Member.find(params[:id])
+      previous_recognition_date    = params[:previous_recognition_date]
+      update_recognition_date      = params[:update_recognition_date]
+      user                         = current_user
+
+      errors = ::Members::ValidateUpdateRecognitionDate.new(
+        member: member,
+        previous_recognition_date: previous_recognition_date,
+        update_recognition_date: update_recognition_date,
+        user: user
+      ).execute!
+
+      if errors.any?
+        render json: { errors: [errors] }, status: :unprocessable_entity
+      else
+        member.update!(modifiable: nil)
+        ::Members::UpdateNewRecognitionDate.new(
+          member: member,
+          previous_recognition_date: previous_recognition_date,
+          update_recognition_date: update_recognition_date,
+          user: user,
         ).execute!
         render json: { id: member.id }
       end
@@ -272,6 +304,23 @@ module Api
 
     def balik_kasapi
       member = Member.find(params[:id])
+      member_share = member.member_shares
+
+      if member_share.present?
+        member_share.each do |member_share| 
+          if member_share.is_void
+            member_share.update(certificate_for: "VOID")
+          else
+            member_share.update(is_void: true, certificate_for: "VOID")
+          end
+
+          unless member_share.save
+            Rails.logger.error "Failed to save updated member_share #{member_share.id}: #{member_share.errors.full_messages.join(', ')}"
+          end
+        end
+      else
+        Rails.logger.error "No member_share found for member #{member.id}"
+      end
 
       config = {
         user: @user,

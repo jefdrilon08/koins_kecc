@@ -10,7 +10,8 @@ class AdministrationBranchClosingRecord < ApplicationRecord
     "SOA_LOANS",
     "MANUAL_AGING",
     "PERSONAL_FUNDS",
-    "MEMBER_COUNTS"
+    "MEMBER_COUNTS",
+    "MONTHLY_NEW_AND_RESIGNED"
   ]
 
   belongs_to :data_store, optional: true

@@ -1,0 +1,42 @@
+.table-responsive
+  %table.table.table-sm.table-hover.table-bordered
+    %thead
+      %tr
+        %th.text-center
+          ID
+        %th.text-center
+          Date Received
+        %th.text-center
+          From
+        %th.text-center
+          Date Approved
+        %th.text-center
+          Branch
+        %th.text-center
+          Status
+    %tbody
+      - @api_receive_members.each do |o|
+        %tr
+          %td.text-center
+            = link_to api_receive_member_path(o) do
+              %strong
+                #{o.id}
+          %td.text-center
+            #{o.receive_date.strftime("%b %d, %Y")}
+          %td.text-center
+            #{o.api_from}
+          %td.text-center
+            - if o.date_approve.nil?
+            - else 
+              #{o.date_approve.strftime("%b %d, %Y")}
+          %td.text-center
+            #{o.branch}
+          %td
+            %center
+              - if o.pending?
+                .badge.bg-secondary
+                  pending
+              - if o.approved?
+                .badge.bg-success
+                  approved
+            

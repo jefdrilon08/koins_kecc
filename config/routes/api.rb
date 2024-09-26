@@ -23,6 +23,11 @@ namespace :api do
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
+
+  # API for KCOOP
+  post "/receive_api/send_kbente_summary", to: "receive_api#send_kbente_summary"
+
+
   get "/public/api_centers/:branch_id", to: "public#centers"
   get "/yml_values/production_values", to: "yml_values#production_values"
 
@@ -62,6 +67,7 @@ namespace :api do
   post "/members/balik_kasapi", to: "members#balik_kasapi"
   post "/members/resign", to: "members#resign"
   post "/members/reinstate", to: "members#reinstate"
+  post "/members/add_recognition_date", to: "members#add_recognition_date"
   post "/members/update_recognition_date", to: "members#update_recognition_date"
   post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
   post "/members/is_reclassified", to: "members#is_reclassified"
@@ -76,7 +82,7 @@ namespace :api do
   get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
   post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
   post "/members/member_change_old_password", to: "v3/members#member_change_old_password"
-
+ get "/members/branch", to: "v3/members#branch"
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
@@ -234,6 +240,7 @@ namespace :api do
     post "/billing_for_writeoff_collection/approve", to: "billing_for_writeoff_collection#approve"
     post "/billing_for_writeoff_collection/add_particular", to: "billing_for_writeoff_collection#add_particular"
     post "/billing_for_writeoff_collection/add_book_type", to: "billing_for_writeoff_collection#add_book_type"
+    post "/billing_for_writeoff_collection/add_si_number", to: "billing_for_writeoff_collection#add_si_number"
 
     #billing_for_involuntary
     post "/billing_for_involuntary/create", to: "billing_for_involuntary#create"
@@ -298,6 +305,10 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
 
+    # Api Receive Members
+    post "/api_receive_members/approve", to: "api_receive_members#approve"
+    post "/api_receive_members/decline", to: "api_receive_members#decline"
+
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
 
@@ -358,6 +369,8 @@ namespace :api do
 
 		post "/administration/member_shares/print", to: "member_shares#print"
 
+
+
     # Users
     get "/roles", to: "users#roles"
     post "/change_password", to: "users#change_password"
@@ -399,6 +412,7 @@ namespace :api do
     post "/members/change_recognition_date", to: "members#change_recognition_date"
     post "/members/resign", to: "members#resign"
     post "/members/reinstate", to: "members#reinstate"
+    post "/members/add_recognition_date", to: "members#add_recognition_date"
     post "/members/update_recognition_date", to: "members#update_recognition_date"
     post "/members/claims_copy_pdf", to: "members#claims_copy_pdf"
     post "/members/is_reclassified", to: "members#is_reclassified"
@@ -415,7 +429,7 @@ namespace :api do
     get "/members/member_mobile_number", to: "members#member_mobile_number"
     get "/members/mobile_number_exist", to: "members#mobile_number_exist"
     post "members/update_mobile_number", to: "members#update_mobile_number"
-
+    get  "/members/member_member_type", to: "members#member_member_type"
     #post "/members_make_payment/save_make_payment", to: "members_make_payment#save_make_payment"
     # Member accounts
     get "/savings_accounts", to: "savings_accounts#index"
@@ -540,6 +554,7 @@ namespace :api do
     post "/accrued_payment_collections/add_or", to: "accrued_payment_collections#add_or"
     post "/accrued_payment_collections/add_ar", to: "accrued_payment_collections#add_ar"
     post "/accrued_payment_collections/add_book_type", to: "accrued_payment_collections#add_book_type"
+    post "/accrued_payment_collections/add_si", to: "accrued_payment_collections#add_si"
 
     #midas
     get "/excel_reports/generate", to: "excel_reports#generate"
@@ -587,6 +602,7 @@ namespace :api do
     post "/membership_payment_collections/modify_transaction_record", to: "membership_payment_collections#modify_transaction_record"
     post "/membership_payment_collections/approve", to: "membership_payment_collections#approve"
     post "/membership_payment_collections/update_or_number", to: "membership_payment_collections#update_or_number"
+    post "/membership_payment_collections/update_si_number", to: "membership_payment_collections#update_si_number"
     post "/membership_payment_collections/update_ar_number", to: "membership_payment_collections#update_ar_number"
     post "/membership_payment_collections/update_particular", to: "membership_payment_collections#update_particular"
     get "/membership_payment_collections/fetch", to: "membership_payment_collections#fetch"
@@ -612,6 +628,8 @@ namespace :api do
     post "/deposit_collections/modify_book", to: "deposit_collections#modify_book"
     post "/deposit_collections/load_branch", to: "deposit_collections#load_branch"
     post "/deposit_collections/load_center", to: "deposit_collections#load_center"
+    post "/deposit_collections/update_si_number", to: "deposit_collections#update_si_number"
+
 
     # Time Deposit Collection
     post "/time_deposit_collections", to: "time_deposit_collections#create"
@@ -625,6 +643,7 @@ namespace :api do
     post "/time_deposit_collections/modify_book", to: "time_deposit_collections#modify_book"
     post "/time_deposit_collections/add_member", to: "time_deposit_collections#add_member"
     post "/time_deposit_collections/remove_member", to: "time_deposit_collections#remove_member"
+    post "/time_deposit_collections/update_si_number", to: "time_deposit_collections#update_si_number"
 
     # Withdrawal Collection
     post "/withdrawal_collections", to: "withdrawal_collections#create"
@@ -790,7 +809,7 @@ namespace :api do
 
       get "/user_branches", to: "user_branches#index"
       post "/user_branches/toggle", to: "user_branches#toggle"
-
+      post "/admin_address/save", to: "admin_address#save"
       # Surveys
       post "/surveys/save", to: "surveys#save"
       post "/surveys/delete", to: "surveys#delete"
@@ -808,16 +827,26 @@ namespace :api do
 
       # Membership Arrangement
       post "/membership_arrangements/update_data", to: "membership_arrangements#update_data"
+
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
+      get "/admin_address/fetch", to: "admin_address#fetch"
+
 
       # province
       post "/admin_province/create", to: "admin_province#create"
+      get "/admin_province/fetch", to: "admin_province#fetch"
+
       # Municipality Address
       post "/admin_municipality/create", to: "admin_municipality#create"
+      get "/admin_municipality/fetch", to: "admin_municipality#fetch"
+
       # Barangay Address
       post "/admin_barangay/create", to: "admin_barangay#create"
-      
+      get "/admin_barangay/fetch", to: "admin_barangay#fetch"
+
+
+
     end
 
     get 'reports/member_reports', to: 'reports#member_reports'

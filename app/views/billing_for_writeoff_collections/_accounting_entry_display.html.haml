@@ -46,9 +46,19 @@
         .row
           .col
             %label
+              Service Invoice
+            %p
+              #{accounting_entry[:data][:si_number]}
+    .row
+      .col-md-8
+        %br
+        .row
+          .col
+            %label
               Particular
             %p
               #{accounting_entry[:particular]}
+
       .col-md-4
         %p.text-right
           %label

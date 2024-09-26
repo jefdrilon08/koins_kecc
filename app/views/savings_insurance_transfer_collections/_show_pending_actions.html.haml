@@ -6,7 +6,7 @@
       .col-md-3  
         .form-group
           %label Loan Product        
-          = select_tag :loan_product_id, options_for_select(["Project loan", "Utility loan", "Educational loan", "Emergency loan", "Calamity loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
+          = select_tag :loan_product_id, options_for_select(["Calamity loan","Educational loan","Emergency loan","Housing Loan","Multi Purpose Loan","Project loan","Regular Loan","Utility loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
     - else
       .col-md-3
         .form-group
@@ -24,7 +24,7 @@
     - if Settings.activate_microinsurance
       .col-md-3  
         .form-group
-          %label Loan Term (in months)     
+          %label  Term (in Months)
           = select_tag :num_installments, options_for_select([ 3, 6, 9, 12], @num_installments), id: 'input-num-installments', class: 'form-control'
     - if !Settings.activate_microinsurance
       .col-md-3  
@@ -150,7 +150,11 @@
         %label
           Amount
         = number_field_tag :amount, 50.00, id: 'input-amount', class: 'form-control', disabled: true
-  - else
+  - elsif @savings_insurance_transfer_collection.clip && Settings.activate_microinsurance
+    .col-md-4
+      .form-group
+        %label
+  - else 
     .col-md-4
       .form-group
         %label

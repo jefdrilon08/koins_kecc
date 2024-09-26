@@ -6,6 +6,13 @@
       - if @savings_insurance_transfer_collection.clip
         %th
           Loan Product
+        - if Settings.activate_microinsurance
+          %th
+            CLIP Number
+          %th 
+            Effectivity Date
+          %th 
+            Maturity Date
         %th
           Principal
       - if @savings_insurance_transfer_collection.kbente
@@ -50,9 +57,18 @@
         %td
           = link_to member_path(o[:member][:id]), target: '_blank' do
             #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
-        - if @savings_insurance_transfer_collection.clip
+        - if @savings_insurance_transfer_collection.clip && !Settings.activate_microinsurance
           %td
             #{o[:clip_data][:loan_product_name]}
+        - if @savings_insurance_transfer_collection.clip && Settings.activate_microinsurance
+          %td
+            #{o[:clip_data][:loan_product_id]}
+          %td 
+            #{o[:clip_data][:clip_number]}
+          %td 
+            #{o[:clip_data][:effective_date]}
+          %td 
+            #{o[:clip_data][:maturity_date]}
           %td
             #{number_to_currency(o[:clip_data][:principal], unit: '')}
         - if @savings_insurance_transfer_collection.kbente
@@ -100,7 +116,12 @@
         Total
       - if @savings_insurance_transfer_collection.clip
         %th
+        - if Settings.activate_microinsurance
+          %th
+          %th
+          %th
         %th
+
       - if @savings_insurance_transfer_collection.kbente
         %th
         %th

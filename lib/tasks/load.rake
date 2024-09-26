@@ -1,5 +1,78 @@
 namespace :load do
 
+  task :load_member_brgy => :environment do
+    cluster = ENV['CLUSTER']
+    district_name = ENV['DISTRICT']
+    new_district_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'district' = ?",cluster, district_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:district_name] = new_district_name_id
+      a.update!(data: a_data)
+    end
+  
+  end
+
+
+
+  task :load_member_region => :environment do
+    cluster = ENV['CLUSTER']
+    region_name = ENV['REGION']
+    new_region_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'region' = ?",cluster, region_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:region] = new_region_id
+      a.update!(data: a_data)
+    end
+  
+  end
+
+  task :load_member_city => :environment do
+    cluster = ENV['CLUSTER']
+    city_name = ENV['CITY']
+    new_city_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'city' = ?",cluster, city_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:city] = new_city_id
+      a.update!(data: a_data)
+    end
+  
+  end
+  
+  task :load_member_province => :environment do
+    cluster = ENV['CLUSTER']
+    province_name = ENV['CITY']
+    new_province_id = ENV['REPLACEID']
+
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'province' = ?",cluster, province_name).each do |m|
+      a = Member.find(m.id)
+      a_data = a.data.with_indifferent_access
+      a_data[:address][:province] = new_province_id
+      a.update!(data: a_data)
+    end
+  
+  end
+  
+  task :load_brgy => :environment do
+    existing_brgy = ENV['BRGYD']
+    new_id = ENV['NEWID']
+    new_cluster = ENV['CLUSTERD']
+
+    puts Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'district' = ?",new_cluster,existing_brgy).count
+    Member.joins(:branch).where("branches.cluster_id = ? and data->'address'->>'district' = ?",new_cluster,existing_brgy ).each do |a|
+      m = Member.find(a.id)
+      m_data = m.data.with_indifferent_access
+      m_data[:address][:district] = new_id
+      m.update!(data: m_data)
+    end
+    puts "done"
+  end
+
   task :load_member_project_type => :environment do
       branch = ENV['BRANCH']
       data = ::Reports::GenerateMemberProjectType.new(branch: branch).execute!

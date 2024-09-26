@@ -28,7 +28,7 @@
                     %th
                       RECIEVED BY: 
                 %tbody
-                  - @member_shares.sort_by { |item| item.member.center.to_s }.each_with_index do |m , i|
+                  - @member_shares.sort_by { |m| [m.member.center.to_s, m.data["date_printed"], m.certificate_number.to_i] }.each_with_index do |m, i|
                     %tr
                       %td
                         #{i + 1}

@@ -18,7 +18,16 @@
         - if @insurance_loan_bundle_enrollment.checked?
           = render partial: "show_beneficiary"
           .message
-        %hr
+        - if @insurance_loan_bundle_enrollment.lapsed?
+          = render partial: "show_beneficiary"
+          .message
+        - if @insurance_loan_bundle_enrollment.over_age?
+          = render partial: "show_beneficiary"
+          .message
+        - if @insurance_loan_bundle_enrollment.declined?
+          = render partial: "show_beneficiary"
+          .message
+        %br
         - if @records.size == 0
           %p
             No records found

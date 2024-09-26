@@ -40,6 +40,7 @@ module BillingForWriteoffCollection
             data: {
               or_number: "",
               ar_number: "",
+              si_number:"",
               check_number: "",
               check_voucher_number: "",
               date_of_check: "",

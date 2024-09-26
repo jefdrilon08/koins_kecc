@@ -96,10 +96,29 @@ module Api
         membership_payment_collection   = MembershipPaymentCollection.find(params[:id])
         data      = membership_payment_collection.try(:data).try(:with_indifferent_access)
         or_number = params[:or_number]
-
+        membership_payment_collection[:or_number] = params[:or_number]
         if membership_payment_collection.pending?
           data[:or_number]                            = or_number
           data[:accounting_entry][:data][:or_number]  = or_number
+
+          membership_payment_collection.update!(
+            data: data
+          )
+
+          render json: { message: "ok" }
+        else
+          render json: { message: "error" }, status: 400
+        end
+      end
+      def update_si_number
+        membership_payment_collection   = MembershipPaymentCollection.find(params[:id])
+        data      = membership_payment_collection.try(:data).try(:with_indifferent_access)
+        si_number = params[:si_number]
+        membership_payment_collection[:si_number] = params[:si_number]
+
+        if membership_payment_collection.pending?
+          data[:si_number]                            = si_number
+          data[:accounting_entry][:data][:si_number]  = si_number
 
           membership_payment_collection.update!(
             data: data

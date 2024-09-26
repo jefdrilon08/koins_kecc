@@ -183,11 +183,9 @@
             - elsif @claim.prepared_by == "Jake Villanueva"
               %u
                 Adrian San Andres
-            - elsif @claim.prepared_by == "Ramon Jr Covilla"
+            - else
               %u
                 Adrian San Andres
-            - else
-              ""
           - else
             %u
               #{@claim.checked_by}

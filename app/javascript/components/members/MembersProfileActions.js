@@ -16,14 +16,18 @@ export default function MembersProfileActions(props) {
   const [isModalDelete, setIsModalDelete]                                       = useState(false);
   const [isModalReinstateOpen, setModalReinstateOpen]                           = useState(false);
   const [isModalRecognitonDateOpen, setModalRecognitonDateOpen]                 = useState(false);
+  const [isModalUpdateRecognitonDateOpen, setModalUpdateRecognitonDateOpen]     = useState(false);
   const [isModalReclassifiedOpen ,setModalReclassifiedOpen]                     = useState(false);
   const [isModalClaimsCopyPDFOpen ,setModalClaimsCopyPDFOpen]                   = useState(false);
   const [isModalResignFromInsuranceOpen, setModalResignFromInsuranceOpen]       = useState(false);
   const [dateReinstated, setDateReinstated]                                     = useState('');
+  const [numWeeksPastDue, setNumWeeksPastDue]                                   = useState('');
+  const [amountToPaid, setAmountToPaid]                                         = useState('');
   const [dateStopped, setDateStopped]                                           = useState('');
   const [dateResignedInsurance, setDateResignedInsurance]                       = useState('');
   const [reason, setReason]                                                     = useState('');
   const [dateRecognition, setDateRecognition]                                   = useState("");
+  const [dateUpdateRecognition, setUpdateDateRecognition]                       = useState("");
   const [dateOfDeath, setDateOfDeath]                                           = useState("");
   const [reClassified, setreClassified]                                         = useState('');
   const [isModalMakePaymentOpen, setModalMakePaymentOpen]                       = useState(false);
@@ -45,6 +49,8 @@ export default function MembersProfileActions(props) {
   const [isMobileNumberValid, setIsMobileNumberValid]                           = useState(false);
   const [currentMobileNumber, setCurrentMobileNumber]                           = useState("9");
   const [success, setSuccess]                                                   = useState(false);
+
+  const user_MIS_AO_Role                                                        = jwtDecode(props.token).roles.includes("MIS") || jwtDecode(props.token).roles.includes("AO");
 
 
   useEffect(() => {
@@ -168,6 +174,35 @@ export default function MembersProfileActions(props) {
       headers: headers
     }
     axios.post(
+      '/api/members/add_recognition_date',
+      payload,
+      options
+    ).then((res) => {
+      console.log(res);
+      alert("Successfully Update Recognition Date");
+      window.location.href="/members/" + props.memberId + "/display/";
+    }).catch((error) => {
+      console.log(error.response);
+      setErrors(error.response.data.errors);
+      setIsLoading(false);
+      
+    })
+  }
+
+  const handleUpdateDateRecognitionClicked = () => {
+    setIsLoading(true);
+    const payload = {
+      id: props.memberId,
+      previous_recognition_date: props.member.data["recognition_date"],
+      update_recognition_date: dateUpdateRecognition
+    }
+    const headers = {
+      'X-KOINS-HQ-TOKEN': props.token
+    }
+    const options = {
+      headers: headers
+    }
+    axios.post(
       '/api/members/update_recognition_date',
       payload,
       options
@@ -233,7 +268,7 @@ export default function MembersProfileActions(props) {
       options
     ).then((res) => {
       console.log(res);
-      alert("Successfully Uploaded");
+      alert("Successfully Reinstated");
       window.location.href="/members/" + props.memberId + "/display/";
       setIsLoading(false);
     }).catch((error) => {
@@ -242,24 +277,28 @@ export default function MembersProfileActions(props) {
       setIsLoading(false);
     })
   }
-  const handleReinstateClicked = () => {
-    setErrors([]);
-    setIsLoading(true);
+ 
+   const handleReinstateClicked = () => {
+   setErrors([]);
+   setIsLoading(true);
 
-    const payload = {
-      id: props.memberId,
-      reinstatement_date: dateReinstated,
-      date_stop: dateStopped
-    };
+   const payload = {
+     id: props.memberId,
+     reinstatement_date: dateReinstated,
+     date_stop: dateStopped,
+     num_weeks_past_due: numWeeksPastDue,
+     amount_to_paid: amountToPaid
+   };
 
-    const headers = {
-      'X-KOINS-HQ-TOKEN': props.token
-    };
+   const headers = {
+     'X-KOINS-HQ-TOKEN': props.token
+   };
 
-    const options = {
-      headers: headers
-    };
-
+   const options = {
+     headers: headers
+   };
+     
+   if(user_MIS_AO_Role){
     axios.post('/api/members/reinstate', payload, options)
       .then((res) => {
         console.log(res);
@@ -272,7 +311,10 @@ export default function MembersProfileActions(props) {
         setErrors(error.response?.data?.errors || ["An error occurred while reinstating the member."]);
         setIsLoading(false);
       });
+   }
+
   }
+  
 
   const handleResignedInsuranceClicked = () => {
     setIsLoading(true);
@@ -602,14 +644,6 @@ export default function MembersProfileActions(props) {
                 type="date"
                 onChange={(event) => setDateReinstated(event.target.value)}
               />
-              <label>Date Stop</label>
-              <input
-                className="form-control"
-                value={dateStopped}
-                disabled={isLoading}
-                type="date"
-                onChange={(event) => setDateStopped(event.target.value)}
-              />
             </div>
           </div>
           {errors.length > 0 && (
@@ -716,6 +750,15 @@ export default function MembersProfileActions(props) {
               />
             </div>
           </div>
+          {errors.length > 0 && (
+            <div className="alert alert-danger mt-3">
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button 
@@ -731,6 +774,71 @@ export default function MembersProfileActions(props) {
             variant="secondary"
             onClick={() => { 
               setModalRecognitonDateOpen(false) 
+            }}
+            disabled={isLoading}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={isModalUpdateRecognitonDateOpen}
+      >
+        <Modal.Header>
+          <Modal.Title>
+            Members Recognition Date
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="row">
+            <div className="form-group">
+              <label>
+               Last Recognition Date
+              </label>
+              <input
+                className="form-control"
+                value={props.member.data["recognition_date"]}
+                disabled={true}
+                type="date"
+              />
+              <br />
+              <label>
+               Updated Recognition Date
+              </label>
+              <input
+                className="form-control"
+                value={dateUpdateRecognition}
+                disabled={isLoading}
+                type="date"
+                onChange={(event) => { setUpdateDateRecognition(event.target.value) } }
+              />
+            </div>
+          </div>
+          {errors.length > 0 && (
+            <div className="alert alert-danger mt-3">
+              <ul>
+                {errors.map((error, index) => (
+                  <li key={index}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button 
+            variant="primary"
+            onClick={() => {
+              handleUpdateDateRecognitionClicked();
+            }}
+            disabled={isLoading}
+          >
+            Confirm
+          </Button>
+          <Button 
+            variant="secondary"
+            onClick={() => { 
+              setModalUpdateRecognitonDateOpen(false) 
             }}
             disabled={isLoading}
           >
@@ -1223,7 +1331,7 @@ export default function MembersProfileActions(props) {
       
 
       <div className="row">
-        <div className="col">
+        <div className="col-md-6">
           <div className="note note-info">
             <strong>
               Modify
@@ -1260,26 +1368,50 @@ export default function MembersProfileActions(props) {
       {(() => {
         if(props.member.modifiable){
           return (
-            <div className="row">
-              <div className="col">
-                <div className="note note-info">
-                  <strong>
-                    Member Recognition Date
-                  </strong>
-                  <p>
-                    Palitan ang impormasyon ukol sa myembrong ito.
-                  </p>
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => {
-                      setModalRecognitonDateOpen(true)
-                    }}
-                  >
-                    Edit Recognition Date
-                  </button>
+            <>
+              {user_MIS_AO_Role && (
+                <>
+                <br />
+                <div className="row">
+                  <div className="col">
+                    <div className="note note-info">
+                      <strong>
+                        Member Recognition Date
+                      </strong>
+                      <p>
+                        Palitan ang impormasyon ukol sa myembrong ito.
+                      </p>
+                      {(() => {
+                        if(props.member.data["recognition_date"] == null ) {
+                          return (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setModalRecognitonDateOpen(true)
+                              }}
+                            >
+                              Add Recognition Date
+                            </button>
+                          )
+                        } else {
+                          return (
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setModalUpdateRecognitonDateOpen(true)
+                              }}
+                            >
+                              Update Recognition Date
+                            </button>
+                          )
+                        }            
+                      })()}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+               </>
+              )}
+            </>
           )
         }
       })()}
@@ -1342,42 +1474,46 @@ export default function MembersProfileActions(props) {
       </div>
       <hr/>
 
-      <div className="row">
-        <div className="col">
-          <div className="note note-info">
-            <strong>
-              Reinstatement
-            </strong>
-            <p>
-              Reinstate member
-            </p>
-            {(() => {
-              if(props.member.data["reinstatement"] == null ) {
-                return (
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => {
-                      setModalReinstateOpen(true)
-                    }}
-                  >
-                    Reinstate
-                  </button>
-                )
-              } else if(props.member.data["reinstatement"]["is_reinstated"] == true || props.member.status == "pending"){
-                return (
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => { setModalReinstateOpen(false) }}
-                  >
-                    <span className="bi bi-padlock"/>
-                    Already Reinstated OR Pending Status
-                  </button>
-                )
-              }            
-            })()}
+      {user_MIS_AO_Role && (
+        <>
+        <div className="row">
+          <div className="col">
+            <div className="note note-info">
+              <strong>
+                Reinstatement
+              </strong>
+              <p>
+                Reinstate member
+              </p>
+              {(() => {
+                if(props.member.data["reinstatement"] == null ) {
+                  return (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        setModalReinstateOpen(true)
+                      }}
+                    >
+                      Reinstate
+                    </button>
+                  )
+                } else if(props.member.data["reinstatement"]["is_reinstated"] == true || props.member.status == "pending"){
+                  return (
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => { setModalReinstateOpen(false) }}
+                    >
+                      <span className="bi bi-padlock"/>
+                      Already Reinstated OR Pending Status
+                    </button>
+                  )
+                }            
+              })()}
+            </div>
           </div>
         </div>
-      </div>
+        </>
+      )}
  
 
       {(() => {

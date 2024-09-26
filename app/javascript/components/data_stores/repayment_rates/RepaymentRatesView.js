@@ -187,6 +187,7 @@ export default RepaymentRatesView = (props) => {
 
     return rows;
   }
+  
   var numRecords  = 0;
   var numPastDue  = 0;
   var numAdvanced = 0;
@@ -291,3 +292,54 @@ export default RepaymentRatesView = (props) => {
     </div>
   )
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var printButton = document.getElementById('btn-print-rp');
+  
+  if (printButton) {
+    printButton.addEventListener('click', function() {
+      var printWindow = window.open('', '', 'height=600,width=800');
+      var tableHtml = document.querySelector('table').outerHTML; 
+      tableHtml = tableHtml.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+
+     
+      var repaymentTitle = document.getElementById('hidden-title').innerHTML;
+      
+      var headerHtml = `
+    <style>
+        .arial-font {
+            font-family: Arial, sans-serif;
+            color: black; /* itim na kulay para sa teksto */
+            margin: 10px 5px; /* spacing sa itaas at ibaba */
+            font-family:'Courier
+        }
+        h3 {
+            font-size: 25px; 
+            font-weight: bold; 
+            font-family:Courier;
+        }
+        h4 {
+            font-size: 15px; /* laki ng font para sa h4 */
+            font-weight: normal; /* normal na timbang */
+            font-family: Courier;
+            font-weight: bold;
+        }
+    </style>
+    
+      <h3 class="arial-font">KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE</h3>
+      <h4 class="arial-font">4th Floor KMBA Members' Center Building #5 Matimpiin St. Brgy. Pinyahan Quezon City 1100</h4>
+      <h4 class="arial-font">${repaymentTitle}</h4>
+      `;
+
+      printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #000; padding: 5px; text-align: left;} th{background-color: #f2f2f2;} </style>'); 
+      printWindow.document.write('</head><body>');
+      
+      printWindow.document.write(headerHtml);
+      printWindow.document.write(tableHtml);
+      printWindow.document.write('</body></html>');
+
+      printWindow.document.close();
+      printWindow.print();
+    });
+  }
+});

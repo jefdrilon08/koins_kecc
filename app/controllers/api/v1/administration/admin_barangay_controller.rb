@@ -10,17 +10,14 @@ module Api
                         barangayid: params[:barangayid],
                         municipality_id: params[:municipality_id]
                     }
-                    
-                    Rails.logger.info "Received config: #{config.inspect}" # Log the received params
-
-                    puts "@@@@@@@@@@@@@@@@@@@@@@@@@#{config.inspect}"
-                    
-                    # begin
+                    Rails.logger.info "Received config: #{config.inspect}" 
                     ::Administration::AdministrationAddress::AddBarangay.new(config: config).execute!
-                    # render json: result, status: :created
-                    # rescue StandardError => e
-                    # render json: { error: e.message }, status: :internal_server_error
-                    # end
+                end
+
+                def fetch
+                    admin_barangay = AdminBarangay.all();
+                    
+                    render json: admin_barangay
                 end
 
             end

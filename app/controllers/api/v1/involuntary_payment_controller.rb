@@ -76,7 +76,7 @@ module Api
         txtOR    =  params[:txtOR]
         
         data_store = DataStore.find(data_store_id)
-        data_store.data['accounting_entry']['or'] = txtOR
+        data_store.data['accounting_entry']['data']['or_number'] = txtOR
         data_store.save!
         render json: { message: "Done" }
       end
@@ -86,7 +86,7 @@ module Api
         txtSI    =  params[:txtSI]
         
         data_store = DataStore.find(data_store_id)
-        data_store.data['accounting_entry']['si'] = txtSI
+        data_store.data['accounting_entry']['data']['si_number'] = txtSI
         data_store.save!
         render json: { message: "Done" }
       end

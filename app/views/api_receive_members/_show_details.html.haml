@@ -1,0 +1,86 @@
+.card
+  .card-body
+    .row
+      .col-md-4.text-center
+        %h4
+          PENDING 
+          %span.bg-secondary.text-white.px-2.py-1.rounded= @api_receive_members.pending_count
+      .col-md-4.text-center
+        %h4
+          INFORCE
+          %span.bg-success.text-white.px-2.py-1.rounded= @api_receive_members.inforce_count
+      .col-md-4.text-center
+        %h4
+          LAPSED
+          %span.bg-danger.text-white.px-2.py-1.rounded= @api_receive_members.lapsed_count
+    %br
+    .card
+      .card-body    
+        .table-responsive
+          %table.table.table-sm.table-hover.table-bordered
+            %tbody
+              - pending_section_shown = false
+              - inforce_section_shown = false
+              - lapsed_section_shown = false
+
+              - @api_receive_members.data.each do |o|
+                - if o["insurance_status"] == "pending" && !pending_section_shown
+                  %tr
+                    %td{ colspan: 9, class: 'text-center'} Pending Members
+                  %tr
+                    %th.text-center First Name
+                    %th.text-center Middle Name
+                    %th.text-center Last Name
+                    %th.text-center Gender
+                    %th.text-center Date of Birth
+                    %th.text-center Civil Status
+                    %th.text-center Mobile Number
+                    %th.text-center Address
+                    %th.text-center External Ref
+                  - pending_section_shown = true
+
+                - if o["insurance_status"] == "inforce" && !inforce_section_shown
+                  %tr
+                    %td{ colspan: 9, class: 'text-center'} Inforce Members
+                  %tr
+                    %th.text-center First Name
+                    %th.text-center Middle Name
+                    %th.text-center Last Name
+                    %th.text-center Gender
+                    %th.text-center Date of Birth
+                    %th.text-center Civil Status
+                    %th.text-center Mobile Number
+                    %th.text-center Address
+                    %th.text-center External Ref
+                  - inforce_section_shown = true
+
+                - if o["insurance_status"] == "lapsed" && !lapsed_section_shown
+                  %tr
+                    %td{ colspan: 9, class: 'text-center'} Lapsed Members
+                  %tr
+                    %th.text-center First Name
+                    %th.text-center Middle Name
+                    %th.text-center Last Name
+                    %th.text-center Gender
+                    %th.text-center Date of Birth
+                    %th.text-center Civil Status
+                    %th.text-center Mobile Number
+                    %th.text-center Address
+                    %th.text-center External Ref
+                  - inforce_section_shown = true
+
+                %tr
+                  - if o["member_id"].present?
+                    %td.text-center
+                      = link_to member_path(o["member_id"]), target: '_blank' do
+                        = o["first_name"]
+                  - else
+                  %td.text-center= o["first_name"]
+                  %td.text-center= o["middle_name"]
+                  %td.text-center= o["last_name"]
+                  %td.text-center= o["gender"]
+                  %td.text-center= o["date_of_birth"]
+                  %td.text-center= o["civil_insurance"]
+                  %td.text-center= o["mobile_number"]
+                  %td.text-center= "#{o["address_street"]}, #{o["address_district"]}, #{o["address_city"]}"
+                  %td.text-center= o["external_ref"]

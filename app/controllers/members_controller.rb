@@ -16,13 +16,13 @@ class MembersController < ApplicationController
                       .includes(:center, :branch, :profile_picture_attachment)
                       .where(branch_id: @branches.pluck(:id))
 
-    @q        = params[:q]
-    @status   = params[:status]
-    @restored = params[:restored].present?
-    @center   = Center.where(id: params[:center_id]).try(:first)
-    @branch   = Branch.where(id: params[:branch_id]).try(:first)
-
-    @centers  = @branches.first.try(:centers) || []
+    @q                  = params[:q]
+    @insurance_status   = params[:insurance_status]
+    @status             = params[:status]
+    @restored           = params[:restored].present?
+    @center             = Center.where(id: params[:center_id]).try(:first)
+    @branch             = Branch.where(id: params[:branch_id]).try(:first)
+    @centers            = @branches.first.try(:centers) || []
 
     if @q.present?
       @members = @members.where(
@@ -41,6 +41,10 @@ class MembersController < ApplicationController
 
     if @status.present?
       @members  = @members.where(status: @status)
+    end
+
+    if @insurance_status.present?
+      @members  = @members.where(insurance_status: @insurance_status)
     end
 
     if @restored.present?
@@ -675,14 +679,16 @@ end
 
     @payload[:total_insurance] = view_context.number_to_currency(@payload[:total_insurance], unit: '')
 
-    @payload[:attachment_files] = @member.attachment_files.map{ |o|
-      {
-        id:         o.id,
-        file_name:  o.file_name,
-        is_image:   o.file.image?,
-        link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+    if @member.present? && @member.attachment_files.present?
+      @payload[:attachment_files] = @member.attachment_files.map{ |o|
+        {
+          id:         o.id,
+          file_name:  o.file_name,
+          is_image:   o.file.image?,
+          link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+        }
       }
-    }
+    end
 
     @payload[:loan_products_for_restructuring] = helpers.loan_products_for_restructuring.map{ |o|
       {

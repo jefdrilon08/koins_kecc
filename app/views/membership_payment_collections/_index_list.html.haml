@@ -5,6 +5,8 @@
       %th
         OR Number
       %th
+        Service Invoice
+      %th
         Collection Date
       %th
         Date Approved
@@ -24,6 +26,8 @@
               .bi.bi-search
         %td
           #{o.or_number}
+        %td
+          #{o.si_number}
         %td
           %strong
             #{o.collection_date.strftime("%b %d, %Y")}
