@@ -25,7 +25,10 @@
       .form-group
         %label
           Status
-        = select_tag :status, options_for_select(["active", "pending", "resigned" ,"delinquent"], @status), class: "form-select select-select2", id: "status-select", prompt: "-- SELECT --"
+        - if Settings.activate_microinsurance
+          = select_tag :insurance_status, options_for_select(["inforce", "lapsed", "resigned" ,"dormant", "pending"], @insurance_status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+        - else 
+          = select_tag :status, options_for_select(["active", "pending", "resigned" ,"delinquent"], @status), class: "form-select select-select2", id: "status-select", prompt: "-- SELECT --"
     .col-md-1
       .form-group
         %label

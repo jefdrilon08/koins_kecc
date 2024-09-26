@@ -301,6 +301,26 @@ class Member < ApplicationRecord
     self.status != "active"
   end
 
+  def inforce_insurance_status?
+    self.insurance_status == "inforce"
+  end
+
+  def lapsed_insurance_status?
+    self.insurance_status == "lapsed"
+  end
+
+  def dormant_insurance_status?
+    self.insurance_status == "dormant"
+  end
+
+  def resigned_insurance_status?
+    self.insurance_status == "resigned"
+  end
+
+  def pending_insurance_status?
+    self.insurance_status == "pending"
+  end
+
   def entry_point_loan_cycle_count
     self.data.with_indifferent_access[:entry_point_loan_cycle] || 0
   end
