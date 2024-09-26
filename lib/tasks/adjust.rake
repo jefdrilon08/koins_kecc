@@ -3659,4 +3659,46 @@ namespace :adjust do
     end
   end
 
+  task :process_kbente_summary => :environment do
+    @data_store_type = "KBENTE_SUMMARY"
+    @as_of = Date.today
+
+    @start_date = Date.today.beginning_of_year
+    @end_date = @as_of.end_of_month
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    branch = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+    puts "Processing #{branch.name}"
+
+    @record = DataStore.kbente_summary.where(
+      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+      branch.id,
+      @as_of
+    ).first
+
+    if @record.blank?
+      @record = DataStore.create!(
+        meta: {
+          branch_id: branch.id,
+          branch_name: branch.name,
+          as_of: @as_of,
+          data_store_type: @data_store_type
+        },
+        data: {
+          status: "processing"
+        }
+      )
+
+      args = {
+        record: @record,
+        data_store_type: @data_store_type
+      }
+      ProcessKbenteSummary.perform_later(args)
+    end
+    puts "Done!"
+  end
+
 end
