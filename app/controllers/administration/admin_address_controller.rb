@@ -48,8 +48,17 @@ module Administration
           @admin_address.require(:admin_address).permit!
         end
 
+        def process_admin_address_file
+            actual_url  = params[:actual_url]
+
+            ProcessAdminAddressFile.perform_later({
+                actual_url: actual_url
+            })
+            render json: { message: "ok" }
+        end
+
         def admin_address_params
-          params.require(:admin_address, :upload).permit!
+          params.require(:admin_address, :upload, :process_admin_address_file).permit!
         end
 
     end
