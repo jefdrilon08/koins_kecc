@@ -23,6 +23,11 @@ namespace :api do
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
+
+  # API for KCOOP
+  post "/receive_api/send_kbente_summary", to: "receive_api#send_kbente_summary"
+
+
   get "/public/api_centers/:branch_id", to: "public#centers"
   get "/yml_values/production_values", to: "yml_values#production_values"
 

@@ -41,19 +41,19 @@ module Members
       end
 
       # Validate address
-      if @member_data[:data][:address][:street].blank?
-        @errors[:messages] << {
-          key: "address_street",
-          message: "Address street required"
-        }
-      end
+      # if @member_data[:data][:address][:street].blank?
+      #   @errors[:messages] << {
+      #     key: "address_street",
+      #     message: "Address street required"
+      #   }
+      # end
 
-      if @member_data[:data][:address][:district].blank?
-        @errors[:messages] << {
-          key: "address_district",
-          message: "Address district required"
-        }
-      end
+      # if @member_data[:data][:address][:district].blank?
+      #   @errors[:messages] << {
+      #     key: "address_district",
+      #     message: "Address district required"
+      #   }
+      # end
       
       # Validate 2nd address
 #      if @member_data[:data][:new_address][:street].blank?
@@ -125,12 +125,12 @@ module Members
         }
       end
 
-      if @member_data[:data][:address][:city].blank?
-        @errors[:messages] << {
-          key: "address_city",
-          message: "Address city required"
-        }
-      end
+      # if @member_data[:data][:address][:city].blank?
+      #   @errors[:messages] << {
+      #     key: "address_city",
+      #     message: "Address city required"
+      #   }
+      # end
 
       if @branch.blank?
         @errors[:messages] << {

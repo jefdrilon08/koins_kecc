@@ -71,6 +71,7 @@ class DataStore < ApplicationRecord
   scope :billing_for_involuntary, -> {where("meta->>'data_store_type' = ? ","BILLING_FOR_INVOLUNTARY")}
   scope :member_per_center_counts, -> { where("meta->>'data_store_type' = ?", "MEMBER PER CENTER COUNTS") }
   scope :allowance_computation_report, -> { where("meta->>'data_store_type' = ?", "ALLOWANCE_COMPUTATION") }
+  scope :kbente_summary, -> { where("meta->>'data_store_type' = ?", "KBENTE_SUMMARY") }
  
   # For attaching json dumps
   has_one_attached :data_json_dump
