@@ -63,7 +63,7 @@ class DataStoreController < ApplicationController
     if @status.present?
       @records  = @records.where(
                     status: @status
-                  )  
+                  )
     end
   end
 
@@ -79,7 +79,7 @@ class DataStoreController < ApplicationController
 
   def destroy
     @record = DataStore.find(params[:id])
-    
+
     if !@record.processing? || !@record_summary.processing?
       @record.destroy!
       flash[:danger] = "#{data_store_scope.humanize} ##{@record.id} deleted."
@@ -144,6 +144,8 @@ class DataStoreController < ApplicationController
       "member_per_center_counts"                => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "allowance_computation_report"            => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "kbente_summary"                          => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
+      "kkalinga_summary"                        => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
+      "kok_summary"                        => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] }
     }
   end
 

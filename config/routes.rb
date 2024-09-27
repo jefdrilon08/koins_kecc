@@ -557,6 +557,14 @@ Rails.application.routes.draw do
     get "/kbente_summary/:id", to: "kbente_summary#show"
     delete "/kbente_summary/:id", to: "kbente_summary#destroy"
 
+    get "/kkalinga_summary", to: "kkalinga_summary#index"
+    get "/kkalinga_summary/:id", to: "kkalinga_summary#show"
+    delete "/kkalinga_summary/:id", to: "kkalinga_summary#destroy"
+
+    get "/kok_summary", to: "kok_summary#index"
+    get "/kok_summary/:id", to: "kok_summary#show"
+    delete "/kok_summary/:id", to: "kok_summary#destroy"
+
     get "/allowance_computation_report", to: "allowance_computation_report#index"
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show"
     delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"

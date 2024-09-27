@@ -1,0 +1,20 @@
+= title
+
+.row
+  .col
+    .card
+      .card-header
+        .h3
+          KKalinga SUMMARY
+      .card-body
+        = render partial: "index_filter"
+        %br
+        - if @records.any?
+          = render partial: "index_list"
+          = paginate @records
+        - else
+          %p
+            No records
+
+= render partial: "data_stores/claims_counts/modals/new"
+= render partial: "templates/error_list"
