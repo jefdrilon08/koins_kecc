@@ -23,6 +23,11 @@ namespace :api do
   post "/receive_api/save_members_api", to: "receive_api#save_members_api"
   post "/receive_api/save_payments_api", to: "receive_api#save_payments_api"
   post "/receive_api/save_claims_api", to: "receive_api#save_claims_api"
+
+  # API for KCOOP
+  post "/receive_api/send_kbente_summary", to: "receive_api#send_kbente_summary"
+
+
   get "/public/api_centers/:branch_id", to: "public#centers"
   get "/yml_values/production_values", to: "yml_values#production_values"
 
@@ -299,6 +304,10 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/pending", to: "insurance_loan_bundle_enrollments#pending"
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
+
+    # Api Receive Members
+    post "/api_receive_members/approve", to: "api_receive_members#approve"
+    post "/api_receive_members/decline", to: "api_receive_members#decline"
 
     # Accounting Codes
     get "/accounting_codes", to: "accounting_codes#index"
@@ -822,7 +831,7 @@ namespace :api do
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
       get "/admin_address/fetch", to: "admin_address#fetch"
-      
+
 
       # province
       post "/admin_province/create", to: "admin_province#create"

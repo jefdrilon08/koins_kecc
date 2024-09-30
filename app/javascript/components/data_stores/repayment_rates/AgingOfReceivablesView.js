@@ -171,6 +171,9 @@ export default AgingOfReceivablesView = (props) => {
 
   return  (
     <div>
+       <h5>
+        Aging Of Receivables
+      </h5>
       <table className="table table-sm table-hover table-bordered" style={{fontSize: "0.8em"}}>
         <thead>
           <tr>

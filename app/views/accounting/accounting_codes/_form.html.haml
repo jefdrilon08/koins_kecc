@@ -15,6 +15,15 @@
       %button{ type: "submit", class: "btn btn-primary" }
         .fa.fa-check
         Save
-    = link_to(is_mis_user? ? accounting_accounting_code_path(@accounting_code) : accounting_accounting_codes_path, class: 'btn btn-danger') do
-      .fa.fa-times
-      Cancel
+    - if @accounting_code.present? && @accounting_code.persisted?
+      = link_to accounting_accounting_code_path(@accounting_code), class: 'btn btn-danger' do
+        .fa.fa-times
+        Cancel  
+    - else
+      = link_to accounting_accounting_codes_path, class: 'btn btn-danger' do
+        .fa.fa-times
+        Cancel
+    -# = link_to(is_mis_user? ? accounting_accounting_code_path(@accounting_code) : accounting_accounting_codes_path, class: 'btn btn-danger') do
+    -#   .fa.fa-times
+    -#   Cancel
+

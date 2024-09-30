@@ -234,7 +234,28 @@ namespace :generate do
     end
   end
 
+  task :admin_adrress_file => :environment do
+    start_date  = ENV["START_DATE"] || Date.yesterday
+    end_date    = ENV["END_DATE"] || Date.tomorrow
 
+    cmd = ::Exports::SaveAdminAddressCsv.new(
+          start_date: start_date,
+          end_date: end_date
+        )
+    cmd.execute!
 
+    file_repository = cmd.file_repository
+    actual_url      = file_repository.actual_url
+    api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/administration/admin_address/process_admin_address_file"
+    response = HTTParty.get(api_url, { query: { actual_url: actual_url } })
+
+    if response.code.to_s == "200"
+      puts "Successfully called ADMIN ADDRESS API"
+    else
+      puts "ERROR in calling ADMIN ADDRESS API"
+      puts "api_url: #{api_url}"
+      puts "actual_url: #{actual_url}"
+    end 
+  end
 
 end

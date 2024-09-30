@@ -1,0 +1,45 @@
+.row
+  .col-12
+    .card
+      .card-body
+        .row
+          .col-md-8
+            .form-group
+              .h2
+                %label RECEIVE MEMBERS 
+                %label
+                %label
+                  - if @api_receive_members.status == "pending"
+                    %button.btn.btn-sm.btn-secondary.btn-block
+                      PENDING
+                  - elsif @api_receive_members.status == "approve"
+                    %button.btn.btn-sm.btn-success.btn-block
+                      APPROVED
+                  - elsif @api_receive_members.status == "decline"
+                    %button.btn.btn-sm.btn-danger.btn-block
+                      DECLINE
+          .col-md-4
+            .col-md-12
+              %span.small-text Date Receive : 
+              %strong= @api_receive_members.receive_date.try(:strftime, '%B %d, %Y')
+            .col-md-12
+              %span.small-text Date Approve :
+              - if @api_receive_members.date_approve.nil?
+              - else
+                %strong= @api_receive_members.date_approve.try(:strftime, '%B %d, %Y')
+        .row
+          .col-1
+            %span.small-text From : 
+            %strong= @api_receive_members.api_from
+          .col-2
+            %span.small-text Branch :  
+            %strong= @api_receive_members.branch.name
+
+
+        %br
+        = render partial: "api_receive_members/show_details"
+          
+.message
+  = render partial: "shared/modals/print"
+  = render partial: "api_receive_members/modals/approve"
+  = render partial: "api_receive_members/modals/decline"

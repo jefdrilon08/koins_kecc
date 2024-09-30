@@ -1,8 +1,8 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
-  root to: "pages#index"
 
+  root to: "pages#index"
   devise_for :users, skip: [:sessions]
 
   # For heartbeat
@@ -21,14 +21,14 @@ Rails.application.routes.draw do
 
   # online applications
   resources :online_applications, only: [:index, :show]
-  
+
   # online loan applications
   resources :online_loan_applications, only: [:index, :show, :edit]
   resources :loan_application
 
   #address
   get 'administration/address', to: 'administration#address'
-  
+
 
   # Trends
   get "/trends", to: "trends#index", as: :trends
@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   get "/upload_insurance_withdrawal", to: "pages#upload_insurance_withdrawal"
   get "/upload_fund_transfer", to: "pages#upload_fund_transfer"
   get "/upload_loan_bundle_enrollments", to: "pages#upload_loan_bundle_enrollments"
+  get "/upload_admin_address", to: "pages#upload_admin_address"
 
   get "/upload_clip", to: "pages#upload_clip"
 
@@ -73,7 +74,7 @@ Rails.application.routes.draw do
 
   # Visualize
   get "/visualize/monthly_psr", to: "visualize#monthly_psr", as: :visualize_monthly_psr
-  
+
   # Adjustments
   namespace :adjustments do
     get "/subsidiary_adjustments", to: "subsidiary_adjustments#index", as: :subsidiary_adjustments
@@ -83,21 +84,21 @@ Rails.application.routes.draw do
     get "/batch_moratorium_adjustments/:id", to: "batch_moratorium_adjustments#show", as: :batch_moratorium_adjustment
 
     get "/moratoriums", to: "moratoriums#index", as: :moratoriums
-    
+
     get "/accrued_interests", to: "accrued_interests#index", as: :accrued_interests
     get "/accrued_interests/:id", to: "accrued_interests#show", as: :accrued_interest
-  
-    
+
+
 
     get "/recompute_restructures", to: "recompute_restructures#index", as: :recompute_restructures
     get "/recompute_restructures/:id", to: "recompute_restructures#show", as: :recompute_restructure
-    
+
     get "/make_payments", to: "make_payments#index", as: :make_payments
     get "/make_payments/:id", to: "make_payments#show", as: :make_payment
 
 
   end
-  
+
   # EXPORTS
   get "/exports/members", to: "exports#members", as: :export_members
   get "/exports/beneficiaries", to: "exports#beneficiaries", as: :export_beneficiaries
@@ -105,7 +106,7 @@ Rails.application.routes.draw do
   get "/exports/member_accounts", to: "exports#member_accounts", as: :export_member_accounts
   get "/exports/account_transactions", to: "exports#account_transactions", as: :export_account_transactions
   get "/exports/billing_per_center", to: "exports#billing_per_center", as: :export_billing_per_center
-  
+
   #Microinsurance
   get "/insurance_exit_age_members", to: "pages#insurance_exit_age_members", as: :insurance_exit_age_members
   get "/members_for_reinsurance", to: "pages#members_for_reinsurance", as: :members_for_reinsurance
@@ -116,7 +117,7 @@ Rails.application.routes.draw do
   get "/pages/seriatim_report", to: "pages#seriatim_report", as: :pages_seriatim_report
   get "/daily_report_insurance_account_status", to: "pages#daily_report_insurance_account_status", as: :daily_report_insurance_account_status
   get "/pages/daily_report_insurance_account_status_excel", to: "pages#daily_report_insurance_account_status_excel", as: :daily_report_insurance_account_status_excel
-  
+
   # Monitoring
 #  get "/monitoring/accounting_entry_subsidiary_balancing", to: "monitoring#accounting_entry_subsidiary_balancing", as: :monitoring_accounting_entry_subsidiary_balancing
 #  get "/monitoring/accounting_entry_precision", to: "monitoring#accounting_entry_precision", as: :monitoring_accounting_entry_precision
@@ -144,7 +145,7 @@ Rails.application.routes.draw do
   post "/new_kbente_claim_application", to: "kbente_claims#new_kbente_claim_application", as: :new_kbente_claim_application
   post "/new_kjsp_claim_application", to: "kjsp_claims#new_kjsp_claim_application", as: :new_kjsp_claim_application
   post "/new_calamity_claim_application", to: "calamity_claims#new_calamity_claim_application", as: :new_calamity_claim_application
-          
+
   resources :claims do
     get "/blip_validation_pdf", to: "claims#blip_validation_pdf"
     get "/blip_loa_pdf", to: "claims#blip_loa_pdf"
@@ -168,19 +169,19 @@ Rails.application.routes.draw do
    get "/claims/new/:id", to: "claims#new"
 
   resources :clip_claims do
-    
+
   end
-  
+
   resources :hiip_claims do
-    
+
   end
 
   resources :kalinga_claims do
-     
+
   end
 
   resources :kbente_claims do
-    
+
   end
 
   resources :kjsp_claims do
@@ -191,7 +192,7 @@ Rails.application.routes.draw do
   end
 
   resources :calamity_claims do
-     
+
   end
 
   resources :members, only: [] do
@@ -212,7 +213,7 @@ Rails.application.routes.draw do
     resources :calamity_claims, controller: 'members/calamity_claims'
     resources :form_make_payments, controller: 'members/form_make_payments'
   end
-  
+
   # Insurance Accounts
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
@@ -222,7 +223,7 @@ Rails.application.routes.draw do
   end
 
   # Loans
-  resources :loans, only: [:index, :show] do  
+  resources :loans, only: [:index, :show] do
     get "/adjustment/:adjustment_record_id", to: "loans#adjustment", as: :adjustment
   end
 
@@ -237,12 +238,12 @@ Rails.application.routes.draw do
   end
 
   get "/loans/form/display", to: "loans#form", as: :loan_application_form
-  
+
   get "/loans/:id/reverse_form",        to: "loans#reverse_form",       as: :reverse_form
   #get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
 
   get '/loans/:id/amortization_pdf', to: 'loans#amortization_pdf', as: :amortization_pdf
-  
+
   # Accrued
   get "/accrued_payment_collections", to: "accrued_payment_collections#index"
   get "/accrued_payment_collections/:id", to: "accrued_payment_collections#show"
@@ -258,8 +259,8 @@ Rails.application.routes.draw do
   #billing_for_full_paments
   get "/billing_for_full_payments", to: "billing_for_full_payments#index"
   get "/billing_for_full_payments/:id", to: "billing_for_full_payments#show", as: :billing_for_full_payment
-  resources :billing_for_full_payments 
-  
+  resources :billing_for_full_payments
+
   #mbs_transfer
   get "/mbs_transfer", to: "mbs_transfer#index"
   get "/mbs_transfer/:id", to: "mbs_transfer#show"
@@ -287,12 +288,12 @@ Rails.application.routes.draw do
 
   #involuntary_resignation
   get "involuntary_resignation", to: "involuntary_resignation#index"
-  
+
   #Transfer_member
   get "/transfer_member_records", to: "transfer_member_records#index"
   get "/transfer_member_records/:id", to: "transfer_member_records#show"
   delete "/transfer_member_records/:id", to: "transfer_member_records#destroy"
-  
+
   # Accounts
   get "/savings_accounts", to: "savings_accounts#index"
   get "/savings_accounts/:id", to: "savings_accounts#show", as: :savings_account
@@ -319,24 +320,24 @@ Rails.application.routes.draw do
   get "/accounting/general_ledger", to: "accounting#general_ledger"
   get "/accounting/general_ledger_excel_url", to: "accounting#general_ledger_excel_url"
   get "/accounting/general_ledger_excel", to: "accounting#general_ledger_excel", as: :general_ledger_excel_url
-  
+
   #books
   get "/books/excel", to: "books#excel"
   get "/books/books_download_excel", to: "books#books_download_excel", as: :books_download_excel
-  
+
   namespace :accounting do
     resources :year_end_closings, only: [:index, :show, :destroy]
     resources :balance_sheets, only: [:index, :show, :destroy]
     resources :income_statements, only: [:index, :show, :destroy]
   end
-  
 
-  
+
+
   # Billing
   get "/billings/excel", to: "billings#excel"
   get "/billings/billing_excel", to: "billings#billing_excel", as: :billing_download_excel
   resources :billings, only: [:index, :show, :destroy]
-  
+
   # share_capital
   get "/reports/excel", to: "reports#excel"
   get "/reports/share_cap_excel", to: "reports#share_cap_excel", as: :share_capital_report_excel
@@ -351,6 +352,15 @@ Rails.application.routes.draw do
   # Insurance Loan Bundle Enrollments
   resources :insurance_loan_bundle_enrollments, only: [:index, :show, :destroy] do
     collection { post :upload }
+  end
+
+  # Admin Address
+  resources :admin_address, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
+  # Api Receive Member
+  resources :api_receive_members, only: [:index, :show, :destroy] do
+    collection { post :upload}
   end
 
   # Deposits
@@ -406,12 +416,12 @@ Rails.application.routes.draw do
   # Data Stores
   namespace :data_stores do
     get "/share_capital_summary", to: "share_capital_summary#index"
-    
+
     get "/members_project_types", to: "members_project_types#index"
-    
+
     get "/members_project_types/:id", to: "members_project_types#show"
     delete "/members_project_types/:id", to: "members_project_types#destroy"
-    
+
     get "/project_types_summary", to: "project_types_summary#index"
     get "/project_types_summary/:id", to: "project_types_summary#show"
     get "/project_types_summary/:id/details_data/:categ/cetag_details/:cated_details", to: "project_types_summary#details_data"
@@ -518,7 +528,7 @@ Rails.application.routes.draw do
     get "/branch_resignations", to: "branch_resignations#index"
     get "/branch_resignations/:id", to: "branch_resignations#show"
     delete "/branch_resignations/:id", to: "branch_resignations#destroy"
-    
+
     get "/member_id_generators", to: "member_id_generators#index"
     get "/member_id_generators/:id", to: "member_id_generators#show"
     delete "/member_id_generators/:id", to: "member_id_generators#destroy"
@@ -543,8 +553,12 @@ Rails.application.routes.draw do
     get "/member_per_center_counts/:id", to: "member_per_center_counts#show"
     delete "/member_per_center_counts/:id", to: "member_per_center_counts#destroy"
 
-    get "/allowance_computation_report", to: "allowance_computation_report#index" 
-    get "/allowance_computation_report/:id", to: "allowance_computation_report#show" 
+    get "/kbente_summary", to: "kbente_summary#index"
+    get "/kbente_summary/:id", to: "kbente_summary#show"
+    delete "/kbente_summary/:id", to: "kbente_summary#destroy"
+
+    get "/allowance_computation_report", to: "allowance_computation_report#index"
+    get "/allowance_computation_report/:id", to: "allowance_computation_report#show"
     delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"
     resources :allowance_computation_report, only: [:index, :show]
 
@@ -556,7 +570,7 @@ Rails.application.routes.draw do
     # get "/written_off_report/:id", to: "written_off_report#show"
     #
   end
-  
+
   # daily_branch_metrics
   resources :daily_branch_metrics, only: [:index, :show, :destroy]
 
@@ -565,7 +579,7 @@ Rails.application.routes.draw do
     get "/accounting_entries/:id", to: "accounting_entries#show", as: :accounting_entry
     delete "/accounting_entries/:id", to: "accounting_entries#destroy", as: :delete_accounting_entry
     get "/accounting_entry/form", to: "accounting_entries#form", as: :accounting_entry_form
-    
+
     get "/trial_balances", to: "trial_balances#index"
     get "/trial_balances/:id", to: "trial_balances#show"
     delete "/trial_balances/:id", to: "trial_balances#destroy"
@@ -652,9 +666,9 @@ Rails.application.routes.draw do
   get "/reports/reclassified_report_excel", to: "reports#reclassified_report_excel", as: :reclassified_report_excel
   #transfer_savings
   get "/transfer_savings", to: "transfer_savings#index"
-  get "/transfer_savings/:id", to: "transfer_savings#show" 
+  get "/transfer_savings/:id", to: "transfer_savings#show"
 
-  
+
   resources :insurance_accounts do
     get "/claims_copy_pdf", to: "insurance_accounts#claims_copy_pdf"
   end
