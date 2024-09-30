@@ -1,0 +1,38 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th
+        Date
+      %th.text-center
+        Status
+      %th.text-center
+        Started
+      %th.text-center
+        Last Updated
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          %strong
+            = link_to "/data_stores/kkalinga_summary/#{o.id}" do
+              .bi.bi-search
+        %td
+          %strong
+            #{o.as_of.try(:to_date).try(:strftime, "%b %d, %Y")}
+        %td.text-center
+          - if o.processing?
+            .badge.badge-info
+              Processing
+          - elsif o.done?
+            .badge.bg-success
+              Done
+          - elsif o.error?
+            .badge.bg-danger
+              Error
+        %td.text-center
+          %small
+            #{o.created_at.localtime}
+        %td.text-center
+          %small
+            #{o.updated_at.localtime}

@@ -1,0 +1,20 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-3
+      .form-group
+        %label
+          Start Date 
+        = text_field_tag :start_date, params[:start_date], class: 'form-control', type: :date
+    .col-md-3
+      .form-group
+        %label
+          End Date 
+        = text_field_tag :end_date, params[:end_date], class: 'form-control', type: :date
+    .col-md-2
+      .form-group
+        %label
+        .form-group
+          .btn-group
+            = button_tag type: 'submit', class: 'btn btn-primary btn-block d-flex align-items-center justify-content-center' do
+              %span{ style: 'margin-right: 5px;' }
+              %i.bi.bi-search
