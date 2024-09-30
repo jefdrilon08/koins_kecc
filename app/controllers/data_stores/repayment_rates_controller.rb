@@ -37,9 +37,20 @@ module DataStores
   id: "btn-print-rp",
   link: '#',
   class: "fa fa-print",
-  text: "Print",
+  text: "Print PDF",
   data: {
     action: "print"
+  }
+}
+
+@subheader_side_actions << {
+  id: "btn-print-excel",
+  link: '#',
+  class: "fa fa-print",
+  text: "Download Excel",
+  data: {
+    action: "print-excel"
+    
   }
 }
 
