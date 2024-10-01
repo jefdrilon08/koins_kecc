@@ -3670,7 +3670,7 @@ namespace :adjust do
       @as_of = ENV['CURRENT_DATE'].to_date
     end
 
-    branch = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+    branch = Branch.find("945dc9dd-8f69-4ff6-a0b0-b51fae94c482")
     puts "Processing #{branch.name}"
 
     @record = DataStore.kbente_summary.where(
@@ -3712,7 +3712,7 @@ namespace :adjust do
       @as_of = ENV['CURRENT_DATE'].to_date
     end
 
-    branch = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+    branch = Branch.find("945dc9dd-8f69-4ff6-a0b0-b51fae94c482")
     puts "Processing #{branch.name}"
 
     @record = DataStore.kkalinga_summary.where(
@@ -3754,7 +3754,7 @@ namespace :adjust do
       @as_of = ENV['CURRENT_DATE'].to_date
     end
 
-    branch = Branch.find("3a74c7d5-54a5-4eec-826d-ab81f76ae31a")
+    branch = Branch.find("945dc9dd-8f69-4ff6-a0b0-b51fae94c482")
     puts "Processing #{branch.name}"
 
     @record = DataStore.kok_summary.where(
