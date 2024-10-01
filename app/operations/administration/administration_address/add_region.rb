@@ -36,11 +36,6 @@ module Administration
                 raise "AdminAddress with regionid #{@regionid} not found"
             end
 
-            # def delete_region(region_id)
-            #     admin_address = AdminAddress.find(region_id)
-            #     admin_address.destroy!
-            # end
-
         end
     end
 end

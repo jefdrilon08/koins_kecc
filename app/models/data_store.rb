@@ -2,11 +2,11 @@ class DataStore < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   STATUSES = [
-    "processing", 
-    "done", 
-    "error", 
-    "closed", 
-    "approved", 
+    "processing",
+    "done",
+    "error",
+    "closed",
+    "approved",
     "pending",
     "for_printing",
     "checked"
@@ -72,7 +72,9 @@ class DataStore < ApplicationRecord
   scope :member_per_center_counts, -> { where("meta->>'data_store_type' = ?", "MEMBER PER CENTER COUNTS") }
   scope :allowance_computation_report, -> { where("meta->>'data_store_type' = ?", "ALLOWANCE_COMPUTATION") }
   scope :kbente_summary, -> { where("meta->>'data_store_type' = ?", "KBENTE_SUMMARY") }
- 
+  scope :kkalinga_summary, -> { where("meta->>'data_store_type' = ?", "KKALINGA_SUMMARY") }
+  scope :kok_summary, -> { where("meta->>'data_store_type' = ?", "KOK_SUMMARY") }
+
   # For attaching json dumps
   has_one_attached :data_json_dump
 

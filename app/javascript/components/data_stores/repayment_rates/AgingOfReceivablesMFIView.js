@@ -219,6 +219,9 @@ export default AgingOfReceivablesMFIView = (props) => {
 
   return  (
     <div>
+       <h5>
+        Aging Of Receivables MFI
+      </h5>
       <table className="table table-sm table-hover table-bordered" style={{fontSize: "0.8em"}}>
         <thead>
           <tr>

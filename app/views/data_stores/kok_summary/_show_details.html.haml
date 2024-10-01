@@ -1,0 +1,68 @@
+%h3
+  KOK Summary
+%h5
+  Generated as of : #{@record.meta.with_indifferent_access[:as_of].to_date.strftime("%B %d, %Y")}
+%br
+%table.table.table-bordered.table-hover.table-sm
+  %thead
+    %tr
+      %th.text-center Date Approved
+      %th.text-center Status
+      %th.text-center PlanType
+      %th.text-center PlanCategory
+      %th.text-center Partner
+      %th.text-center PolicyNo
+      %th.text-center EffectivityDate
+      %th.text-center MaturityDate
+      %th.text-center ClientType
+      %th.text-center FirstName
+      %th.text-center MiddleName
+      %th.text-center LastName
+      %th.text-center Address
+      %th.text-center Gender
+      %th.text-center EnrolledStatus
+      %th.text-center CivilStatus
+      %th.text-center BirthDate
+      %th.text-center Age
+      %th.text-center PremiumCoverage
+      %th.text-center MobileNo
+      %th.text-center MembershipDate
+      %th.text-center Benif_Fname
+      %th.text-center Benif_Mname
+      %th.text-center Benif_Lname
+      %th.text-center Benif_BirthDate
+      %th.text-center Benif_Gender
+      %th.text-center Benificiary Relationship
+  
+  %tbody
+    - @record[:data]['records'].each do |record|
+      %tr
+        %td.text-center= record['date_approved']
+        %td.text-center= record['status']
+        %td.text-center= record['plan_type']
+        %td.text-center= record['plan_category']
+        %td.text-center= record['partner']
+        %td.text-center= record['effectivity_date']
+        %td.text-center= record['maturity_date']
+        %td.text-center= record['client_type']
+        %td.text-center= record['effectivity_date']
+        %td.text-center= record['first_name']
+        %td.text-center= record['middle_name']
+        %td.text-center= record['last_name']
+        %td.text-center= record['address']
+        %td.text-center= record['gender']
+        %td.text-center= record['enrolled_status']
+        %td.text-center= record['civil_status']
+        %td.text-center= record['birth_date']
+        %td.text-center= record['age']
+        %td.text-center= record['premium_coverage']
+        %td.text-center= record['mobile_no']
+        %td.text-center= record['membership_date']
+        %td.text-center= record['benif_fname']
+        %td.text-center= record['benif_mname']
+        %td.text-center= record['benif_lname']
+        %td.text-center= record['benif_birth_date']
+        %td.text-center= record['benif_gender']
+        %td.text-center= record['benif_relationship']
+
+
