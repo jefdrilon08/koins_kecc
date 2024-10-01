@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import "react-toggle/style.css";
 import ToggleSwitch from '../../utils/ToggleSwitch';
+import $ from 'jquery';
+
 
 export default Filter = (props) => {
   let {
@@ -17,8 +19,31 @@ export default Filter = (props) => {
     handleCenterChanged,
     handleOfficerChanged,
     handleLoanProductChanged,
-    handleStatusChanged
+    handleStatusChanged,
+    handleLoanProductTaggingChanged,
   } = props;
+
+  const [loanProductTagging, setLoanProductTagging] = useState([]);
+  const [currentLoanProductTaggingId, setCurrentLoanProductTaggingId] = useState("");
+
+  useEffect(() => {
+    if (currentLoanProductId) {
+      $.ajax({
+        url: "/api/loan_product_taggings",
+        data: {
+          loan_product_id: currentLoanProductId,
+        },
+        method: "GET",
+        success: function (response) {
+          setLoanProductTagging(response.loan_product_tagging);
+          setCurrentLoanProductTaggingId(response.loan_product_tagging[0]?.id || "");
+        },
+        error: function (response) {
+          console.log(response);
+        },
+      });
+    }
+  }, [currentLoanProductId]);
 
   const renderStatusOptions = () => {
     let options = [];
@@ -42,23 +67,24 @@ export default Filter = (props) => {
 
   const renderLoanProductOptions = () => {
     let options = [];
-
+  
     options.push(
       <option value="" key={"loan-product-select"}>
         -- SELECT --
       </option>
     );
-
-    loanProducts.forEach((o) => {
+  
+    loanProducts.forEach((o, index) => {
       options.push(
-        <option key={`loan-product-${o.id}`} value={o.id}>
+        <option key={`loan-product-${o.id}-${index}`} value={o.id}>
           {o.name}
         </option>
       );
-    })
-
+    });
+  
     return options;
-  }
+  };
+  
 
   const renderCenterOptions = () => {
     let options = [];
@@ -99,6 +125,26 @@ export default Filter = (props) => {
 
     return options;
   }
+
+  const renderLoanProductTaggingOptions = () => {
+    let options = [];
+  
+    options.push(
+      <option value="" key={"loan-product-tagging-select"}>
+        -- SELECT --
+      </option>
+    );
+  
+    loanProductTagging.forEach((tag) => {
+      options.push(
+        <option value={tag.id} key={`loan-product-tagging-${tag.id}`}>
+          {tag.name}
+        </option>
+      );
+    });
+  
+    return options;
+  };
 
   return  (
     <div className="row">
@@ -182,17 +228,41 @@ export default Filter = (props) => {
           </select>
         </div>
       </div>
+      {/* Loan Product Selection */}
       <div className="col-md-3 col-xs-12">
         <div className="form-group">
-          <label>
-            Loan Products
-          </label>
+          <label>Loan Products</label>
           <select
             className="form-control"
             value={currentLoanProductId}
-            onChange={handleLoanProductChanged}
+            onChange={(e) => {
+              handleLoanProductChanged(e);
+              setCurrentLoanProductTaggingId("");
+            }}
           >
             {renderLoanProductOptions()}
+          </select>
+        </div>
+      </div>
+
+      {/* Loan Product Tagging */}
+      <div className="col-md-3 col-xs-12">
+        <div className="form-group">
+          <label>Loan Product Tag</label>
+          <select
+          className="form-control"
+          value={currentLoanProductTaggingId}
+          onChange={(e) => {
+            const selectedTagId = e.target.value;
+            setCurrentLoanProductTaggingId(selectedTagId);
+            handleLoanProductTaggingChanged(e);
+            
+
+            // Add console.log to see selected value
+            console.log("Selected Loan Product Tag ID:", selectedTagId);
+          }}
+        >
+            {renderLoanProductTaggingOptions()}
           </select>
         </div>
       </div>
