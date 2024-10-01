@@ -1,0 +1,8 @@
+.row
+  .col
+    .card
+      .card-body
+        - if @record.error?
+          = render partial: "data_stores/error_page"
+        - else
+          = render partial: "show_details"
