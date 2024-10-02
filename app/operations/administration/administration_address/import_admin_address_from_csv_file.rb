@@ -44,9 +44,6 @@ module Administration
           end
         end
       end
-
-     end  
-
     end
   end
 end
