@@ -50,13 +50,17 @@ export default RepaymentRatesView = (props) => {
                 {member.last_name}, {member.first_name} {member.middle_name}
                 <br/>
                 <small className="text-muted">
-                  | {center.name}
+                  | {center.name} | {member.status}
                 </small>
               </strong>
             </a>
           </td>
           <td>
             {loanProduct.name}
+            <br/>
+            <small className="text-muted">
+              {loanProduct.loan_product_tagging_name}
+            </small>
           </td>
           <td className="text-end">
             {numberWithCommas(loans[i].principal)}
@@ -349,8 +353,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", "Repayment Rate Report.xls");
-      document.body.appendChild(link);  
+      link.setAttribute("download", "Repayment Rate Report.xlsx");
+      document.body.appendChild(link);    
       link.click();
       document.body.removeChild(link);
     });
