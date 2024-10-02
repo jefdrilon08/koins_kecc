@@ -5,8 +5,8 @@ module Branches
       @branch   = @config[:branch]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
 
-      @start_date = Date.today.months_since(-1)
-      @end_date = @start_date.end_of_month
+      @start_date = @as_of.beginning_of_month - 1.month
+      @end_date = @as_of.end_of_month - 1.month
 
       @data = {
         records: []
@@ -59,7 +59,7 @@ module Branches
     def queryAllBranch
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
         SELECT
-          r.record->'kbente_data'->>'beneficiary_age' AS age,
+		      (r.record->'kbente_data'->>'beneficiary_age')::FLOAT::INTEGER AS age,
           r.record->'kbente_data'->>'kbente_beneficiary_name' AS name_of_insured,
           r.record->'kbente_data'->>'date_of_birth' AS date_of_birth,
           r.record->'kbente_data'->>'gender' AS gender,
@@ -82,6 +82,9 @@ module Branches
         WHERE
           a.data->>'insurance_subtype' = 'K-BENTE'
           AND (a.date_approved >= '#{@start_date}' AND a.date_approved <= '#{@end_date}')
+        ORDER BY
+          b.name,
+          a.date_approved
       EOS
     end
   end
