@@ -5,8 +5,8 @@ module Branches
       @branch   = @config[:branch]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
 
-      @start_date = Date.today.months_since(-1)
-      @end_date = @start_date.end_of_month
+      @start_date = @as_of.beginning_of_month - 1.month
+      @end_date = @as_of.end_of_month - 1.month
 
       @data = {
         records: []
@@ -113,10 +113,14 @@ module Branches
           r.record->'kok_data'->>'benif_birth_date' as benif_birth_date,
           r.record->'kok_data'->>'benif_gender' as benif_gender,
           r.record->'kok_data'->>'benif_relationship' as benif_relationship
-        FROM insurance_loan_bundle_enrollments a,
+        FROM insurance_loan_bundle_enrollments a
+        LEFT JOIN branches b ON b.id = a.branch_id,
         jsonb_array_elements(a.data->'records') AS r(record)
         WHERE
           (a.date_approved >= '#{@start_date}' AND a.date_approved <= '#{@end_date}')
+        ORDER BY
+          b.name,
+          a.date_approved
       EOS
     end
   end
