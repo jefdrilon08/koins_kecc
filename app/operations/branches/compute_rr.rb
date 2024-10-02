@@ -58,6 +58,8 @@ module Branches
                             o[:officer]
                           }.uniq
 
+
+                          
       # Compute totals
       @data[:records].each do |r|
         @data[:total_principal] += r[:principal].to_f
@@ -226,6 +228,16 @@ module Branches
           end
         end
 
+        loan = Loan.find(r.fetch("id"))
+        loan_product_tag = loan.loan_product_tagging_id
+
+        # Check if loan_product_tag exists
+        loan_product_tagging_name = if loan_product_tag.present?
+          LoanProductTagging.find(loan_product_tag).name
+        else
+          nil
+        end
+
         temp_r  = {
           id: r.fetch("id"),
           pn_number: r.fetch("pn_number"),
@@ -233,14 +245,17 @@ module Branches
           maturity_date: r.fetch("maturity_date"),
           loan_product: {
             id: r.fetch("loan_product_id"),
-            name: r.fetch("loan_product_name")
+            name: r.fetch("loan_product_name"),
+            loan_product_tagging_id: loan_product_tag,
+            loan_product_tagging_name: loan_product_tagging_name
           },
           member: {
             id: r.fetch("member_id"),
             first_name: r.fetch("member_first_name"),
             last_name: r.fetch("member_last_name"),
             middle_name: r.fetch("member_middle_name"),
-            identification_number: r.fetch("member_identification_number")
+            identification_number: r.fetch("member_identification_number"),
+            status: Member.find_by(id: r.fetch("member_id"))&.status
           },
           branch: {
             id: r.fetch("branch_id"),

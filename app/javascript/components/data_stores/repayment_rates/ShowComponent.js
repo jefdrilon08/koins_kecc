@@ -5,7 +5,6 @@ import MasterListView from './MasterListView';
 import RepaymentRatesView from './RepaymentRatesView';
 import AgingOfReceivablesView from './AgingOfReceivablesView';
 import AgingOfReceivablesMFIView from './AgingOfReceivablesMFIView';
-
 import { fetchRepaymentRate } from '../../../services/RepaymentRatesService';
 
 export default ShowComponent = (props) => {
@@ -17,230 +16,174 @@ export default ShowComponent = (props) => {
   const [currentOfficerId, setCurrentOfficerId]         = useState("");
   const [currentCenterId, setCurrentCenterId]           = useState("");
   const [currentLoanProductId, setCurrentLoanProductId] = useState("");
+  const [currentLoanProductTaggingId, setCurrentLoanProductTaggingId] = useState("");
   const [currentView, setCurrentView]                   = useState("RR");
+  const [currentStatus, setCurrentStatus]               = useState("");
 
-  let {
-    id
-  } = props;
+  const statusOptions = ["ACTIVE", "RESIGNED", "PENDING", "DELINQUENT"];
 
+  let { id } = props;
+
+  // Filter logic, now including loan product tagging
   const filterData = () => {
     let fData = {...data};
 
     if (currentCenterId) {
-      fData.records = fData.records.filter((o) => {
-        return o.center.id == currentCenterId;
-      });
+      fData.records = fData.records.filter((o) => o.center.id == currentCenterId);
     }
 
     if (currentOfficerId) {
-      fData.records = fData.records.filter((o) => {
-        return o.officer.id == currentOfficerId;
-      });
+      fData.records = fData.records.filter((o) => o.officer.id == currentOfficerId);
     }
 
     if (currentLoanProductId) {
-      fData.records = fData.records.filter((o) => {
-        return o.loan_product.id == currentLoanProductId;
-      });
+      fData.records = fData.records.filter((o) => o.loan_product.id == currentLoanProductId);
+    }
+
+    if (currentStatus) {
+      fData.records = fData.records.filter((o) => o.member.status.toLowerCase() == currentStatus.toLowerCase());
+    }
+
+    // Loan Product Tagging filter
+    if (currentLoanProductTaggingId) {
+      fData.records = fData.records.filter((o) => o.loan_product.loan_product_tagging_id == currentLoanProductTaggingId);
     }
 
     return fData;
-  }
+  };
 
-  const fetch = (options) => {
-    var data  = {
+  // Fetch data logic
+  const fetch = () => {
+    const fetchData = {
       center_id: currentCenterId,
       loan_product_id: currentLoanProductId,
-      officer_id: currentOfficerId
-    }
+      officer_id: currentOfficerId,
+    };
 
-    console.log("fetch (data):");
-    console.log(data);
-
-    fetchRepaymentRate(id, {...data})
+    fetchRepaymentRate(id, fetchData)
       .then((payload) => {
-        console.log(payload);
-        let _data = payload.data.data;
+        const _data = payload.data.data;
         setIsLoading(false);
         setData(_data);
         setCenters(_data.centers);
         setLoanProducts(_data.loan_products);
         setOfficers(_data.officers);
-      }).catch((payload) => {
+      })
+      .catch((payload) => {
         console.log(payload);
         alert("Something went wrong when fetching data store");
-      })
-  }
+      });
+  };
 
   useEffect(() => {
     fetch();
   }, []);
 
-  const handleCenterChanged = (event) => {
-    setCurrentCenterId(event.target.value);
-    $.ajax({
-      url: "/api/v1/data_stores/repayment_rates/fetch",
-      data: {
-        id: context.props.id
-      },
-      headers: {
-        'X-KOINS-APP-AUTH-SECRET': context.state.xKoinsAppAuthSecret,
-        'Access-Control-Allow-Methods': '*',
-        'Access-Control-Allow-Headers': '*',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': 'true'
-      },
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
+  // Handlers for updating filter state
+  const handleCenterChanged = (event) => setCurrentCenterId(event.target.value);
+  const handleOfficerChanged = (event) => setCurrentOfficerId(event.target.value);
+  const handleLoanProductChanged = (event) => setCurrentLoanProductId(event.target.value);
+  const handleLoanProductTaggingChanged = (event) => setCurrentLoanProductTaggingId(event.target.value); // Handle loan product tagging change
+  const handleViewToggled = (viewName) => setCurrentView(viewName);
+  const handleStatusChanged = (e) => setCurrentStatus(e.target.value);
 
-        var centers       = response.data.centers;
-
-        context.setState({
-          isLoading: false,
-          data: response,
-          centers: centers
-        });
-      },
-      error: function(response) {
-        console.log(response);
-        alert("Something went wrong when fetching data store");
-      }
-    });
-    
-    $("#btn-print-rp").on("click", function() {
-      var url = "/print";
-      var params = "?type=repayment_rates&id=" + context.state.data.id;
-      if (context.state.currentCenterId.length > 0){
-        params = params + "&center_id=" + context.state.currentCenterId;
-      }
-      if (context.state.currentLoanProductId.length > 0){
-        params = params + "&loan_product_id=" + context.state.currentLoanProductId;
-      }
-      if (context.state.currentOfficerId.length > 0){
-        params = params + "&officer_id=" + context.state.currentOfficerId;
-      }
-      url = url + params;
-      window.open(url, '_blank', 'noopener');
-    });
-
-    $("#btn-print-rp").on('contextmenu', function(event) {
-      event.preventDefault();
-    });
-  }
-
-  const handleOfficerChanged = (event) => {
-    setCurrentOfficerId(event.target.value);
-  }
-
-  const handleLoanProductChanged = (event) => {
-    setCurrentLoanProductId(event.target.value);
-  }
-
-  const handleViewToggled = (viewName) => {
-    setCurrentView(viewName);
-  }
-
+  // Conditional rendering based on view
   if (isLoading) {
-    return  (
-      <SkCubeLoading/>
-    );
+    return <SkCubeLoading />;
   } else if (currentView == "RR") {
-    return  (
+    return (
       <div>
         <Filter
-          currentView={currentView} 
+          currentView={currentView}
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentLoanProductTaggingId={currentLoanProductTaggingId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
+          handleLoanProductTaggingChanged={handleLoanProductTaggingChanged} // Pass handler to Filter
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
-        <hr/>
-        <RepaymentRatesView
-          data={filterData()}
-        />
+        <hr />
+        <RepaymentRatesView data={filterData()} />
       </div>
     );
   } else if (currentView == "AOR") {
-    return  (
+    return (
       <div>
         <Filter
-          currentView={currentView} 
+          currentView={currentView}
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentLoanProductTaggingId={currentLoanProductTaggingId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
+          handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
-        <hr/>
-        <AgingOfReceivablesView
-          data={filterData()}
-        />
+        <hr />
+        <AgingOfReceivablesView data={filterData()} />
       </div>
     );
-
   } else if (currentView == "AORMFI") {
-    return  (
+    return (
       <div>
         <Filter
-          currentView={currentView} 
+          currentView={currentView}
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentLoanProductTaggingId={currentLoanProductTaggingId}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
+          handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
         />
-        <hr/>
-        <AgingOfReceivablesMFIView
-          data={filterData()}
-        />
+        <hr />
+        <AgingOfReceivablesMFIView data={filterData()} />
       </div>
     );
-
-
-
-
   } else if (currentView == "ML") {
-    return  (
+    return (
       <div>
         <Filter
-          currentView={currentView} 
+          currentView={currentView}
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
+          currentLoanProductTaggingId={currentLoanProductTaggingId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
+          handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
-        <hr/>
-        <MasterListView
-          data={filterData()}
-        />
+        <hr />
+        <MasterListView data={filterData()} />
       </div>
     );
   } else {
-    return  (
-      <div>
-        <p>
-          Invalid view name: {currentView}
-        </p>
-      </div>
-    );
+    return <div><p>Invalid view name: {currentView}</p></div>;
   }
-}
+};

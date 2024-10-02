@@ -50,13 +50,17 @@ export default RepaymentRatesView = (props) => {
                 {member.last_name}, {member.first_name} {member.middle_name}
                 <br/>
                 <small className="text-muted">
-                  | {center.name}
+                  | {center.name} | {member.status}
                 </small>
               </strong>
             </a>
           </td>
           <td>
             {loanProduct.name}
+            <br/>
+            <small className="text-muted">
+              {loanProduct.loan_product_tagging_name}
+            </small>
           </td>
           <td className="text-end">
             {numberWithCommas(loans[i].principal)}
