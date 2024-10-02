@@ -246,7 +246,7 @@ namespace :generate do
 
     file_repository = cmd.file_repository
     actual_url      = file_repository.actual_url
-    api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/administration/admin_address/process_admin_address_file"
+    api_url = "#{ENV['INSURANCE_KOINS_URL']}/api/v1/admin_addresses/process_admin_address_file"
     response = HTTParty.get(api_url, { query: { actual_url: actual_url } })
 
     if response.code.to_s == "200"

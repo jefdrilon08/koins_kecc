@@ -265,9 +265,7 @@ default_member_accounts:
   -
     account_type: "INSURANCE"
     account_subtype: "Policy Loan"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "K-Kalinga"
+
   -
     account_type: "INSURANCE"
     account_subtype: "Equity Value"
@@ -633,10 +631,7 @@ insurance_accounting_codes:
     insurance_type: "Retirement Fund"
     deposit_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
     withdrawal_accounting_code_id: "01d46c5f-12a1-428d-ad4f-5ad7bc798b6b"
-  -
-    insurance_type: "K-Kalinga"
-    deposit_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
-    withdrawal_accounting_code_id: "868d7669-85a7-4034-a2c6-b68dc423c952"
+
   -
     insurance_type: "K-BENTE"
     deposit_accounting_code_id: "65991126-c9ec-4204-b455-e1aaf66cc962"

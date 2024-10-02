@@ -3,6 +3,7 @@ module Api
         module Administration
             class AdminAddressController < ApplicationController
                 # before_action :authenticate_user!
+                before_action :authenticate_user!, except: [:process_admin_address_file]
                 def create 
                     config = {
                         region_name: params[:region],
