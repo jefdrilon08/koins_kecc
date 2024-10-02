@@ -15,7 +15,7 @@ module Administration
 
       def load_csv_file!
         CSV.foreach(@file.path, headers: true) do |row|
-        uuid = row['id']
+        id = row['id']
 
         if !id.nil?
           admin_address_record = AdminAddress.where(id: id).first
@@ -23,7 +23,7 @@ module Administration
           if admin_address_record.nil?
             admin_address = AdminAddress.new
 
-            if uuid.present?
+            if id.present?
               admin_address.id = uuid
             end
 
@@ -43,6 +43,9 @@ module Administration
           end
         end
       end
+
+     end  
+
     end
   end
 end
