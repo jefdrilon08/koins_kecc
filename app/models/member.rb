@@ -97,6 +97,7 @@ class Member < ApplicationRecord
   scope :returning, -> { where("status = ? AND previous_date_resigned IS NOT NULL", "active").order("last_name ASC") }
   scope :insurance_resigned, -> { where(insurance_status: "resigned").order("last_name ASC") }
   scope :insurance_active, -> { where(status: "active", insurance_status: ["inforce", "lapsed", "dormant"]).order("last_name ASC") }
+  scope :inforce, -> { where(status: "active", insurance_status: "inforce").order("last_name ASC") }
   scope :reinstate, -> { where(status: "active").where("data->>'reinstatement' IS NOT NULL").order("last_name ASC") }
 
   before_validation :load_defaults
