@@ -146,14 +146,17 @@ export default ShowComponent = (props) => {
           handleViewToggled={handleViewToggled}
           centers={centers}
           officers={officers}
+          status={statusOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
           currentLoanProductTaggingId={currentLoanProductTaggingId}
+          currentStatus={currentStatus}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
+          handleStatusChanged={handleStatusChanged}
         />
         <hr />
         <AgingOfReceivablesMFIView data={filterData()} />
