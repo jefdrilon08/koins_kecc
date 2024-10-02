@@ -831,7 +831,7 @@ namespace :api do
       # Region Address
       post "/admin_address/create", to: "admin_address#create"
       get "/admin_address/fetch", to: "admin_address#fetch"
-
+      get "/admin_addresses/process_admin_address_file", to: "admin_addresses#process_admin_address_file"
 
       # province
       post "/admin_province/create", to: "admin_province#create"
