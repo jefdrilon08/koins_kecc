@@ -334,24 +334,25 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (downloadButton) {
-  downloadButton.addEventListener('click', function() {
-    const table = document.querySelector('table');
-    const rows = Array.from(table.querySelectorAll('tr'));
-    const data = rows.map(row => 
-      Array.from(row.querySelectorAll('td, th'))
-        .map(cell => cell.innerText.trim().replace(/"/g, '""'))
-        .join('\t')
-    ).join('\n');
+    downloadButton.addEventListener('click', function() {
+      const table = document.querySelector('table');
+      const rows = Array.from(table.querySelectorAll('tr'));
+      const data = rows.map(row => 
+          Array.from(row.querySelectorAll('td, th'))
+              .map(cell => `"${cell.innerText.trim().replace(/"/g, '""')}"`) 
+      );
 
-    const blob = new Blob(["\ufeff", data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const url = URL.createObjectURL(blob);
+     
+      const csvContent = data.map(e => e.join(",")).join("\n");
+      const blob = new Blob([csvContent], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "Repayment_Rate_Report.xlsx"); 
-    document.body.appendChild(link);    
-    link.click();
-    document.body.removeChild(link);
-  });
-}
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "Repayment Rate Report.xlsx");
+      document.body.appendChild(link);    
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
 });
