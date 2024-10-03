@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", "Repayment Rate Report.xlsx");
+      link.setAttribute("download", "Repayment Rate Report.xls");
       document.body.appendChild(link);    
       link.click();
       document.body.removeChild(link);
