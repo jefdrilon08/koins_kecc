@@ -293,6 +293,7 @@ export default RepaymentRatesView = (props) => {
     </div>
   )
 }
+
 document.addEventListener('DOMContentLoaded', function() {
   var printButton = document.getElementById('btn-print-rp');
   var downloadButton = document.getElementById('btn-print-excel');
@@ -341,19 +342,19 @@ document.addEventListener('DOMContentLoaded', function() {
     downloadButton.addEventListener('click', function() {
       const table = document.querySelector('table');
       const rows = Array.from(table.querySelectorAll('tr'));
+      
       const data = rows.map(row => 
-          Array.from(row.querySelectorAll('td, th'))
-              .map(cell => `"${cell.innerText.trim().replace(/"/g, '""')}"`) 
-      );
-
-     
-      const csvContent = data.map(e => e.join(",")).join("\n");
-      const blob = new Blob([csvContent], { type: 'application/vnd.ms-excel' });
+        Array.from(row.querySelectorAll('td, th'))
+          .map(cell => `"${cell.innerText.trim().replace(/"/g, '""')}"`)
+          .join(",")
+      ).join("\n");
+    
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = URL.createObjectURL(blob);
-
+    
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", "Repayment Rate Report.xlsx");
+      link.setAttribute("download", "Repayment_Rate_Report.xlsx");
       document.body.appendChild(link);    
       link.click();
       document.body.removeChild(link);
