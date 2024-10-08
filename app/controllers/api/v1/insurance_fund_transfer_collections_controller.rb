@@ -76,7 +76,7 @@ module Api
       def fetch_members
         insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
 
-        members_active = Member.inforce.where(
+        members_active = Member.inforce_pending.where(
                     branch_id: insurance_fund_transfer_collection.branch_id
                   ).where.not(
                     id: insurance_fund_transfer_collection.member_ids
