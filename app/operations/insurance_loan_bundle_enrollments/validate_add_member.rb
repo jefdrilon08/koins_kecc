@@ -70,7 +70,7 @@ module InsuranceLoanBundleEnrollments
         @mobile_no                              = @member.mobile_number
         @civil_status                           = @member.civil_status
         @membership_date                        = @member.date_of_membership
-        @age                = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
+        @age                = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365.25)).floor(4)
         
       else
         @maturity_date                          = @last_effectivity_date.to_date + 2.year
@@ -92,7 +92,7 @@ module InsuranceLoanBundleEnrollments
         @birth_date                             = @previous_birth_date
         @mobile_no                              = @previous_mobile_no
         @civil_status                           = @previous_civil_status
-        @age                = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365)).floor(4)
+        @age                = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365.25)).floor(4)
       end
       
       
