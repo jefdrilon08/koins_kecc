@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
           .join(",")
       ).join("\n");
     
-      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
       const url = URL.createObjectURL(blob);
     
       const link = document.createElement("a");
