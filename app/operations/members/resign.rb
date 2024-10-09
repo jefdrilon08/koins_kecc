@@ -10,6 +10,8 @@ module Members
 
     def execute!
       @member_data[:resignation][:reason] = @reason
+      @member_data[:hide_status] = "involuntary"
+
       @member.update!(data: @member_data)
       @member.update!(
         status: 'resigned', 
