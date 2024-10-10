@@ -38,6 +38,7 @@ module Members
       @member.member_type     = @member_data[:member_type]
       @member.religion        = @member_data[:religion]
       @member.data            = @member_data[:data]
+      @member.data[:hide_status]  = "pending"
 
       # Legal Dependents
       ld_remaining_uuids = []
