@@ -262,6 +262,7 @@ export default class BillingUITable extends React.Component {
           </strong>
           <br />
           <small className="badge bg-info">
+            {this.props.data.data.records[i].member.member_type} | 
             {this.props.data.data.records[i].member.data.hide_status}
           </small>
           {
