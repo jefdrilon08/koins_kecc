@@ -170,6 +170,11 @@ module Billings
       
       else
       
+      member_account  = MemberAccount.equities.where(
+                          member_id: @member.id, 
+                          account_subtype: equity_subtype
+                        ).first
+      
       data  = {
         record_type: "EQUITY",
         account_subtype: equity_subtype,
@@ -177,7 +182,10 @@ module Billings
         enabled: false,
         member_account_id: false
       }
-      
+      if member_account.present?
+        #data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+      end
       end
 
       data
@@ -246,12 +254,24 @@ module Billings
         enabled: false,
         member_account_id: false
       }
-
+      
+      member_account  = MemberAccount.insurance.where(
+                          member_id: @member.id, 
+                          account_subtype: insurance_subtype
+                        ).first
+      
+      if member_account.present?
+        #data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+      
+      end
+      
       end
       data
     end
 
     def build_savings_deposit(savings_subtype)
+      member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
       if @member.status == "active"
       data  = {
         record_type: "SAVINGS",
@@ -261,7 +281,7 @@ module Billings
         member_account_id: false
       }
 
-      member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
+      #member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
 
       if member_account.present?
         data[:enabled]            = true
@@ -287,7 +307,7 @@ module Billings
         account_subtype: savings_subtype,
         amount: 0.00,
         enabled: false,
-        member_account_id: false
+        member_account_id: member_account.id
       }
 
       
