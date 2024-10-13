@@ -681,13 +681,23 @@ end
 
     if @member.present? && @member.attachment_files.present?
       @payload[:attachment_files] = @member.attachment_files.map{ |o|
-        {
-          id:         o.id,
-          file_name:  o.file_name,
-          is_image:   o.file.image?,
-          link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+        if o.file.present? # Check if file is not nil
+          {
+            id:         o.id,
+            file_name:  o.file_name,
+            is_image:   o.file.image?,
+            link:       view_context.rails_blob_path(o.file, disposition: "attachment", only_path: true)
+          }
+        else
+          {
+            id:         o.id,
+            file_name:  o.file_name,
+            is_image:   false, # Assuming it's not an image if the file is nil
+            link:       nil    # No link if there's no file
+          }
+        end
+
         }
-      }
     end
 
     @payload[:loan_products_for_restructuring] = helpers.loan_products_for_restructuring.map{ |o|
