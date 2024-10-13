@@ -99,7 +99,7 @@ class Member < ApplicationRecord
   scope :insurance_active, -> { where(status: "active", insurance_status: ["inforce", "lapsed", "dormant"]).order("last_name ASC") }
   scope :inforce, -> { where(status: "active", insurance_status: "inforce").order("last_name ASC") }
   scope :reinstate, -> { where(status: "active").where("data->>'reinstatement' IS NOT NULL").order("last_name ASC") }
-
+  scope :inforce_pending, -> { where(status: "active", insurance_status: ["inforce", "pending"]).order("last_name ASC") }
   before_validation :load_defaults
 
   def user_object
