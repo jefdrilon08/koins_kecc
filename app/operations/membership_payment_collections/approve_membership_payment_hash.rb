@@ -54,7 +54,7 @@ module MembershipPaymentCollections
                                     ).execute!
           end
         end
-        member_data = @member.data.with_indiffrent_access
+        member_data = @member.data.with_indifferent_access
         member_data[:hide_status] = "active"
         @member.update!(
           status: "active",
