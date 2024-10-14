@@ -95,6 +95,32 @@ module SavingsInsuranceTransferCollections
                                                     s.insurance_type == @insurance_subtype
                                                   }.first.deposit_accounting_code_id
                                                 )
+        elsif @payment_subtype == "RECEIVABLE" && @insurance_subtype == "K-BENTE"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "RECEIVABLE"
+                                                  }.first.kbente_withdrawal_accounting_code_id
+                                                )
+
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
+        elsif @payment_subtype == "RECEIVABLE" && @insurance_subtype == "K-KALINGA"
+          @savings_withdrawal_accounting_code = AccountingCode.find(
+                                                  Settings.savings_insurance_transfer_accounting_codes.select{ |s|
+                                                    s.payment_type == "RECEIVABLE"
+                                                  }.first.kkalinga_withdrawal_accounting_code_id
+                                                )
+
+          @insurance_subtype                  = @data[:insurance_subtype]
+          @insurance_deposit_accounting_code  = AccountingCode.find(
+                                                  Settings.insurance_accounting_codes.select{ |s|
+                                                    s.insurance_type == @insurance_subtype
+                                                  }.first.deposit_accounting_code_id
+                                                )
         else
           @payment_subtypes                   = @data[:payment_subtype]
           @savings_withdrawal_accounting_code = AccountingCode.find(
@@ -281,6 +307,60 @@ module SavingsInsuranceTransferCollections
           }
         
         elsif @payment_subtype == "OTHER-BANK" && @insurance_subtype == "K-BENTE"          
+          @accounting_entry_data  = {
+            book: @book,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        elsif @payment_subtype == "RECEIVABLE" && @insurance_subtype == "K-BENTE"          
+          @accounting_entry_data  = {
+            book: @book,
+            accounting_fund_id: @accounting_fund_gen_fund,
+            date_prepared: @current_date.strftime("%B %d, %Y"),
+            company_name: Settings.company_name,
+            company_address: Settings.company_address,
+            branch: @branch.to_s.upcase,
+            prepared_by: @prepared_by,
+            particular: @particular,
+            debit_journal_entries: [],
+            credit_journal_entries: [],
+            journal_entries: [],
+            branch_id: @branch.id,
+            branch_name: @branch.name,
+            status: "display",
+            data: {
+              or_number: @or_number,
+              ar_number: @ar_number,
+              check_number: "",
+              check_voucher_number: "",
+              date_of_check: "",
+              sub_reference_number: "",
+              payee: ""
+            }
+          }
+
+        elsif @payment_subtype == "RECEIVABLE" && @insurance_subtype == "K-KALINGA"          
           @accounting_entry_data  = {
             book: @book,
             accounting_fund_id: @accounting_fund_gen_fund,

@@ -1172,7 +1172,7 @@ namespace :kezar do
     puts "Total records processed: #{total_records}"
   end
 
-  # KCOOP PAYMENT API
+  # KCOOP MEMBER API
   task :kcoop_payment_api => :environment do
     email           = "kmba-manual-upload@kezar.co"
     password        = "oQEVaTMGzNls"
@@ -1203,19 +1203,15 @@ namespace :kezar do
     #--------------Start Declarations--------------#
       total_records           = 0
       total_records           = 0
-      end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || ""
+      end_point               = ENV['KEZAR_API_SEND_PAYMENTS'] || "https://payment-jdyjiucdcq-uc.a.run.app/payment/KMBA/upload"
       is_batch                = ENV["BATCH"] || true
       transaction_type        = 'deposit'
       is_interest             = 'false'
       insurance_status        = 'inforce','lapsed'
-      # status                  = 'active'
       account_subtype         = 'Life Insurance Fund','Retirement Fund'
-      branch                  = 'cf74991b-c211-42c6-bdf7-78dd09862f01', '3820dabe-a47e-43ad-9db9-47158e23b75f'
-      member_id               = '2f167148-b4c2-45cc-82ae-2e4924fdf64b'
-      cluster_id              = 'ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4'
-      # retrieve the access token to an environment
-      bearer_token            = ENV["ACCESS_TOKEN"]
       branch_id               = ENV["BRANCH_ID"]
+
+      bearer_token            = ENV["ACCESS_TOKEN"]
       start_date              = ENV["START_DATE"] || ""
       end_date                = ENV["END_DATE"] || ""
       # raise [start_date, end_date].inspect
@@ -1249,6 +1245,7 @@ namespace :kezar do
           AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL)
           AND members.insurance_status IN (?)
           AND member_accounts.account_subtype IN (?)
+          AND members.branch_id = ?
           AND (account_transactions.transacted_at >= ? AND account_transactions.transacted_at <= ?)
           AND
             CASE
@@ -1266,10 +1263,10 @@ namespace :kezar do
         is_interest,
         insurance_status,
         account_subtype,
-        member_id,
+        branch_id,
         start_date,
         end_date
-    ).find_in_batches(:batch_size => 50) do |group|
+    ).find_in_batches(:batch_size => 1) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
 
@@ -2215,11 +2212,17 @@ namespace :kezar do
 end
 
 
-# NEW API
+# NEW ASSOCIATE API
 # ---Payments---
 # bundle exec rake kezar:payment_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
 # ---Members---
 # bundle exec rake kezar:member_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
+
+# NEW KCOOP API
+# ---Payments---
+# bundle exec rake kezar:kcoop_payment_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
+# ---Members---
+# bundle exec rake kezar:kcoop_member_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
 
 
 # OLD API BATCH UPLOAD
