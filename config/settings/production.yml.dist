@@ -1155,8 +1155,8 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "dddd9a1d-7782-46f2-a303-7da0ebd1c10f"
     due_from_accounting_code_id: "186033f0-72f9-4fbb-9939-ff28d3c5dd9c"
-    
-    branch_id: "6eb3cd23-1fda-4dae-a90b-20cac6383735"                              #baliuag
+  -
+    branch_id: "6eb3cd23-1fda-4dae-a90b-20cac6383735"                              #baras
     cash_in_bank_accounting_code_id: "dcc43b23-dbcb-4cd2-8394-516a91c6552c"
     #cash_in_bank_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
