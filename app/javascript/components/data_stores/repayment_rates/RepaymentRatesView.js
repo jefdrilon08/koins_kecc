@@ -338,6 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  
   if (downloadButton) {
     downloadButton.addEventListener('click', function() {
       const table = document.querySelector('table');
