@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
       const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-    
+
       const link = document.createElement("a");
       link.setAttribute("href", url);
       link.setAttribute("download", "Repayment_Rate_Report.csv"); 
@@ -361,3 +361,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 }
 });
+
