@@ -338,7 +338,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  
+
+
   if (downloadButton) {
     downloadButton.addEventListener('click', function() {
       const table = document.querySelector('table');
@@ -355,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", "Repayment_Rate_Report.csv"); 
+      link.setAttribute("download", "Repayment_Rate_Reports.csv"); 
       document.body.appendChild(link);    
       link.click();
       document.body.removeChild(link);
