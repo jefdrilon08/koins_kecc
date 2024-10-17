@@ -338,6 +338,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+
+
   if (downloadButton) {
     downloadButton.addEventListener('click', function() {
       const table = document.querySelector('table');
@@ -349,15 +351,18 @@ document.addEventListener('DOMContentLoaded', function() {
           .join(",")
       ).join("\n");
     
-      const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+
       const url = URL.createObjectURL(blob);
-    
+
       const link = document.createElement("a");
       link.setAttribute("href", url);
-      link.setAttribute("download", "Repayment_Rate_Report.xlsx");
+      link.setAttribute("download", "Repayment_Rate_Reports.csv"); 
       document.body.appendChild(link);    
       link.click();
       document.body.removeChild(link);
     });
-  }
+}
 });
+
