@@ -1525,6 +1525,9 @@ namespace :adjust do
     dir_location  = ENV['DIR_LOCATION']
     puts "Searching in directory #{dir_location}"
 
+    success_count = 0
+    error_count = 0
+
     Dir["#{dir_location}/*"].each do |f|
       if File.directory? f
         sub_dir_name  = f.split('/').last
@@ -1548,23 +1551,26 @@ namespace :adjust do
                                         member: member
                                      )
 
-                    attachment_file.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                    attachment_file.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
 
                     if attachment_file.save
                       puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                      success_count += 1
                     else
                       puts "Error in attaching file #{ff}"
                       puts attachment_file.errors.full_messages
+                      error_count += 1
                     end
                   end
                 else
                   attachment.file.purge
-                  attachment.file.attach(io: File.open(ff), filename: '#{filename}.jpg', content_type: 'file/jpg')
+                  attachment.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
                   attachment.update(
                     file_name: filename,
                     member: member,
                     )
                   puts "Successfully updated file #{ff} for #{member.identification_number}"
+                  success_count += 1
                 end
               end
             end
@@ -1574,7 +1580,12 @@ namespace :adjust do
         end
       end
     end
+
+    puts "Upload process completed."
+    puts "Total successful uploads: #{success_count}"
+    puts "Total errors: #{error_count}"
   end
+
 
   task :destroy_thumbs_attachment_file => :environment do
     puts "Destroying thumbs file ..."
@@ -3781,6 +3792,48 @@ namespace :adjust do
         data_store_type: @data_store_type
       }
       ProcessKokSummary.perform_later(args)
+    end
+    puts "Done!"
+  end
+
+  task :process_clip_summary => :environment do
+    @data_store_type = "CLIP_SUMMARY"
+    @as_of = Date.today
+
+    @start_date = Date.today.beginning_of_year
+    @end_date = @as_of.end_of_month
+
+    if ENV['CURRENT_DATE'].present?
+      @as_of = ENV['CURRENT_DATE'].to_date
+    end
+
+    branch = Branch.find("945dc9dd-8f69-4ff6-a0b0-b51fae94c482")
+    puts "Processing #{branch.name}"
+
+    @record = DataStore.clip_summary.where(
+      "meta->>'branch_id' = ? AND CAST(meta->>'as_of' AS date) = ?",
+      branch.id,
+      @as_of
+    ).first
+
+    if @record.blank?
+      @record = DataStore.create!(
+        meta: {
+          branch_id: branch.id,
+          branch_name: branch.name,
+          as_of: @as_of,
+          data_store_type: @data_store_type
+        },
+        data: {
+          status: "processing"
+        }
+      )
+
+      args = {
+        record: @record,
+        data_store_type: @data_store_type
+      }
+      ProcessClipSummary.perform_later(args)
     end
     puts "Done!"
   end

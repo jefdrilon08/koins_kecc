@@ -24,7 +24,7 @@
       .form-group
         %label
           Status
-        = select_tag :status, options_for_select(MembershipPaymentCollection::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+        = select_tag :status, options_for_select(SavingsInsuranceTransferCollection::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
     .col-md-2
       .form-group
         %label

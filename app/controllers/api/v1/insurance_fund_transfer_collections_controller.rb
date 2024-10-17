@@ -75,8 +75,8 @@ module Api
 
       def fetch_members
         insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(params[:id])
-
-        members_active = Member.inforce.where(
+        
+        members = Member.inforce_pending.where(
                     branch_id: insurance_fund_transfer_collection.branch_id
                   ).where.not(
                     id: insurance_fund_transfer_collection.member_ids
@@ -91,24 +91,6 @@ module Api
                       }
                     }
                   }
-
-        members_reinstate = Member.reinstate.where(
-                    branch_id: insurance_fund_transfer_collection.branch_id
-                  ).where.not(
-                    id: insurance_fund_transfer_collection.member_ids
-                  ).order("last_name ASC").map{ |o|
-                    {
-                      id: o.id,
-                      name: o.full_name,
-                      identification_number: o.identification_number,
-                      center: {
-                        id: o.center.id,
-                        name: o.center.name
-                      }
-                    }
-                  }
-
-        members = (members_active + members_reinstate).uniq
 
         render json: { members: members }
       end
