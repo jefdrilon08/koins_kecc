@@ -31,7 +31,7 @@ module InsuranceLoanBundleEnrollments
       @previous_birth_date          = @last_kok_data_records[:kok_data][:birth_date]
       @previous_civil_status        = @last_kok_data_records[:kok_data][:civil_status]
       @previous_full_name           = @last_kok_data_records[:kok_data][:full_name]
-      @previous_age                 = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365)).floor(4)
+      @previous_age                 = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365.25)).floor(4)
 
 
       @maturity_date                          = @last_effectivity_date.to_date + 2.year - 2.days
@@ -53,7 +53,7 @@ module InsuranceLoanBundleEnrollments
       @birth_date                             = @previous_birth_date
       @mobile_no                              = @previous_mobile_no
       @civil_status                           = @previous_civil_status
-      @age                                    = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365)).floor(4)
+      @age                                    = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365.25)).floor(4)
 
       if @age >= 18 && @age < 66
         @premium_coverage                     = 550
