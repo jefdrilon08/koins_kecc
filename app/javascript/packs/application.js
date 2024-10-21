@@ -486,7 +486,7 @@ const hooks = {
   "billing_for_involuntary/index":                    [BillingForInvoluntaryIndex],
   "billing_for_involuntary/show":                     [BillingForInvoluntaryShow],
 
-  //"data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
+  "data_stores/allowance_computation_report/index":		      [AllowanceComputationIndex],
   "administration/admin_address/index":             [AdministrationAddressIndex],
   "administration/admin_province/index":            [AdministrationProvinceIndex],
   "administration/admin_municipality/index":        [AdministrationMunicipalityIndex],
