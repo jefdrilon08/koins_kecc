@@ -14,19 +14,17 @@ module Api
           }
         
           errors = ::Dormants::ValidateCreate.new(config: config).execute!
+          
           if errors[:messages].any?
             render json: errors, status: 400
           else
-            dormants_fee = ::Dormants::Create.new(config: config).execute!
-
-            data_store_id = dormants_fee[:id]
-            config[:data_store_id] = data_store_id        
-
-            build_accounting_entry_dormants = ::Dormants::BuildAccountingEntry.new(config: config).execute!
-           
-            render json: dormants_fee, status: 200
+            # Enqueue the background job and pass the config
+            ProcessGenerateDormant.perform_later(config)
+        
+            render json: { message: 'Dormant creation process started', status: 200 }
           end
         end
+        
         
         def add_book_type
           data_store_id = params[:id]
@@ -74,7 +72,20 @@ module Api
         end
 
 
-      
+        def approve
+          record = DataStore.find(params[:id])
+          config = {
+          data_store: record.id,
+          user: current_user.id
+          } 
+          args = {
+            data_store: record.id,
+            user: current_user.id
+          }
+          record.update(status: "processing")
+          ProcessApproveDormants.perform_later(args)
+          render json: { message: "ok" }
+        end
 
 
      
