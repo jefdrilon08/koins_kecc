@@ -1246,7 +1246,6 @@ namespace :kezar do
           AND members.insurance_status IN (?)
           AND member_accounts.account_subtype IN (?)
           AND members.branch_id = ?
-          AND (account_transactions.transacted_at >= ? AND account_transactions.transacted_at <= ?)
           AND
             CASE
               WHEN members.data->'resignation_records' IS NULL THEN
@@ -1263,10 +1262,8 @@ namespace :kezar do
         is_interest,
         insurance_status,
         account_subtype,
-        branch_id,
-        start_date,
-        end_date
-    ).find_in_batches(:batch_size => 1) do |group|
+        branch_id
+    ).find_in_batches(:batch_size => 50) do |group|
 
       Rails.logger.info(puts "Uploading #{group.size} transactions...")
 
@@ -2223,7 +2220,8 @@ end
 # bundle exec rake kezar:kcoop_payment_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
 # ---Members---
 # bundle exec rake kezar:kcoop_member_api START_DATE="2024-07-01" END_DATE="2024-07-31" NODE_ENV=production RAILS_ENV=production
-
+# ---Payments NO DATE---
+# bundle exec rake kezar:kcoop_payment_api BRANCH_ID="" NODE_ENV=production RAILS_ENV=production
 
 # OLD API BATCH UPLOAD
 # ---Payments---
