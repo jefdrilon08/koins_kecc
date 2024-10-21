@@ -7,7 +7,7 @@ module Dormants
       @accounting_entry_data  = @data_store.data.with_indifferent_access[:accounting_entry]
       @records                = @data[:record]	
       @header                 = @data[:header]
-      # @user                   = @config[:user]
+      @user                   = @config[:user]
       @total_payment          = @data[:total_payment]
       @date                   = ::Utils::GetCurrentDate.new(
                                   config: {
@@ -26,7 +26,6 @@ module Dormants
 
       @data_store.update!(status: "approved",data: {accounting_entry: @accounting_entry_data, record: @records , header: @header, total_payment: @total_payment})
       @data_store
-      # member_data
     end
 
     def insert_payment!
@@ -76,7 +75,7 @@ module Dormants
     def approved_entry!
       config  = {
         accounting_entry_data: @accounting_entry_data.with_indifferent_access,
-        # user: @user
+        user: @user
       }
       accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                           config: config
@@ -84,7 +83,7 @@ module Dormants
       # Post to books
       config  = {
         accounting_entry: accounting_entry,
-        # user: @user
+        user: @user
       }
       @accounting_entry = ::Accounting::AccountingEntries::Approve.new(
                           config: config
