@@ -565,6 +565,10 @@ Rails.application.routes.draw do
     get "/kok_summary/:id", to: "kok_summary#show"
     delete "/kok_summary/:id", to: "kok_summary#destroy"
 
+    get "/clip_summary", to: "clip_summary#index"
+    get "/clip_summary/:id", to: "clip_summary#show"
+    delete "/clip_summary/:id", to: "clip_summary#destroy"
+
     get "/allowance_computation_report", to: "allowance_computation_report#index"
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show"
     delete "/allowance_computation_report/:id", to: "allowance_computation_report#destroy"

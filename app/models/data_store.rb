@@ -74,6 +74,7 @@ class DataStore < ApplicationRecord
   scope :kbente_summary, -> { where("meta->>'data_store_type' = ?", "KBENTE_SUMMARY") }
   scope :kkalinga_summary, -> { where("meta->>'data_store_type' = ?", "KKALINGA_SUMMARY") }
   scope :kok_summary, -> { where("meta->>'data_store_type' = ?", "KOK_SUMMARY") }
+  scope :clip_summary, -> { where("meta->>'data_store_type' = ?", "CLIP_SUMMARY") }
 
   # For attaching json dumps
   has_one_attached :data_json_dump

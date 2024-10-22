@@ -281,7 +281,7 @@ export default AgingOfReceivablesMFIView = (props) => {
             <br/>
             {numberWithCommas(totalCategoryFParAmount)}
             <br/>
-            {categoryECounter}
+            {categoryFCounter}
           </strong>
         </td>
         <td className="text-end">
@@ -290,7 +290,7 @@ export default AgingOfReceivablesMFIView = (props) => {
             <br/>
             {numberWithCommas(totalCategoryGParAmount)}
             <br/>
-            {categoryECounter}
+            {categoryGCounter}
           </strong>
         </td>
         <td className="text-end">

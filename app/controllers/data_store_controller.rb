@@ -145,7 +145,8 @@ class DataStoreController < ApplicationController
       "allowance_computation_report"            => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "kbente_summary"                          => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
       "kkalinga_summary"                        => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
-      "kok_summary"                        => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] }
+      "kok_summary"                             => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] },
+      "clip_summary"                                    => { order: "as_of DESC",      meta: %w[branch_name as_of], data: %w[] }
     }
   end
 
