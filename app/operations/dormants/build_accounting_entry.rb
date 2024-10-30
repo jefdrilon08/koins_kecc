@@ -44,7 +44,7 @@ module Dormants
     
     def build_credit_journal_entries!
       journal_entries           = []
-      accounting_code        = AccountingCode.find("b7c23e58-e44e-46ae-a3ec-b5081d6eed32")
+      accounting_code        = AccountingCode.find("22e9409a-b0e5-4aca-bdc9-2f22dd8e9889")
       total_payment             = @header[0]['total_payment'].to_f
 
         journal_entries << {

@@ -3,6 +3,7 @@ class ProcessApproveDormants < ApplicationJob
 
   def perform(args)
     record = DataStore.find(args[:data_store])
+    user = User.find(args[:user])
     
     if record.nil?
       Rails.logger.error("DataStore record not found with ID: #{args[:data_store]}")
@@ -11,7 +12,8 @@ class ProcessApproveDormants < ApplicationJob
 
     begin
       config = {
-        record: record
+        record: record,
+        user: user
       }
        # Approve the Dormant
        record = ::Dormants::Approve.new(config: config).execute!

@@ -47,8 +47,10 @@ module Dormants
           status: "approved",
           data: {
             is_withdraw_payment: true,
+            is_dormant_fee: true,
             beginning_balance: beginning_balance,
-            ending_balance: ending_balance
+            ending_balance: ending_balance,
+
           }
         )
     
@@ -75,7 +77,7 @@ module Dormants
     def approved_entry!
       config  = {
         accounting_entry_data: @accounting_entry_data.with_indifferent_access,
-        user: @user
+        user: @user 
       }
       accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                           config: config
