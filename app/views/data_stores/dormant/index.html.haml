@@ -1,0 +1,23 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+
+        - if @records.any?
+          = render partial: "index_list"
+        - elsif @no_records_message
+          .alert.alert-warning
+            %p= @no_records_message
+        - else
+          %p
+            No records found
+
+
+= render partial: "data_stores/dormant/modals/new"
+
+
+      
+
+    

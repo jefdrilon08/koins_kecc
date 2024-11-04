@@ -787,10 +787,11 @@ namespace :api do
 
       #dormant
       post "dormants/create", to: "dormants#create"
+      post "dormants/approve", to: "dormants#approve"
       post "dormants/add_book_type", to: "dormants#add_book_type"
       post "dormants/add_or", to: "dormants#add_or"
       post "dormants/add_si", to: "dormants#add_si"
-      post "dormants/add_si", to: "dormants#add_particular"
+      post "dormants/add_particular", to: "dormants#add_particular"
       
     end
 

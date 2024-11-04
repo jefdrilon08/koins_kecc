@@ -10,7 +10,7 @@ module Api
           config = {
             branch: branch,
             as_of: as_of,
-            current_user: current_user
+            current_user: current_user.id
           }
         
           errors = ::Dormants::ValidateCreate.new(config: config).execute!
