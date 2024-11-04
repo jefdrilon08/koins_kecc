@@ -28,7 +28,7 @@ module Billings
 
       @active_loans = ReadOnlyLoan.active.where(member_id: @member.id)
 
-      @members  = ReadOnlyMember.active.where(center_id: @member.center.id)
+      @members  = ReadOnlyMember.active_and_involutary.where(center_id: @member.center.id)
       valid_loan_product_ids  = ReadOnlyLoan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
 
       @entry_point_loan_products      = ReadOnlyLoanProduct.entry_point.where(id: valid_loan_product_ids)
@@ -134,6 +134,7 @@ module Billings
     end
     
     def build_equity_deposit(equity_subtype)
+      if @member.status == "active"
       data  = {
         record_type: "EQUITY",
         account_subtype: equity_subtype,
@@ -166,11 +167,32 @@ module Billings
 
 
       end
+      
+      else
+      
+      member_account  = MemberAccount.equities.where(
+                          member_id: @member.id, 
+                          account_subtype: equity_subtype
+                        ).first
+      
+      data  = {
+        record_type: "EQUITY",
+        account_subtype: equity_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: false
+      }
+      if member_account.present?
+        #data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+      end
+      end
 
       data
     end
 
     def build_insurance_deposit(insurance_subtype)
+      if @member.status == "active"
       data  = {
         record_type: "INSURANCE",
         account_subtype: insurance_subtype,
@@ -222,11 +244,35 @@ module Billings
           end
         end
       end
-
+      
+      else
+      
+      data  = {
+        record_type: "INSURANCE",
+        account_subtype: insurance_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: false
+      }
+      
+      member_account  = MemberAccount.insurance.where(
+                          member_id: @member.id, 
+                          account_subtype: insurance_subtype
+                        ).first
+      
+      if member_account.present?
+        #data[:enabled]            = true
+        data[:member_account_id]  = member_account.id
+      
+      end
+      
+      end
       data
     end
 
     def build_savings_deposit(savings_subtype)
+      member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
+      if @member.status == "active"
       data  = {
         record_type: "SAVINGS",
         account_subtype: savings_subtype,
@@ -235,7 +281,7 @@ module Billings
         member_account_id: false
       }
 
-      member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
+      #member_account  = MemberAccount.savings.where(member_id: @member.id, account_subtype: savings_subtype).first
 
       if member_account.present?
         data[:enabled]            = true
@@ -252,6 +298,19 @@ module Billings
             end
           end
         end
+      end
+      
+      else
+     
+      data  = {
+        record_type: "SAVINGS",
+        account_subtype: savings_subtype,
+        amount: 0.00,
+        enabled: false,
+        member_account_id: member_account.id
+      }
+
+      
       end
 
       data

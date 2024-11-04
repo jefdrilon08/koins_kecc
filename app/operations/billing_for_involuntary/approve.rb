@@ -263,6 +263,7 @@ module BillingForInvoluntary
              
                    @member_data[:resignation]          = resignation_data
                    @member_data[:resignation_records]  = resignation_records
+                   @member_data[:hide_status]  = "involuntary"
              
                    @member.update!(
                      status: "resigned",

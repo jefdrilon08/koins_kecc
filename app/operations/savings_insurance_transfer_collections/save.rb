@@ -51,14 +51,16 @@ module SavingsInsuranceTransferCollections
                                                       records: []
                                                     }
                                                   )
-
-        @savings_insurance_transfer_collection.data[:accounting_entry]  = ::SavingsInsuranceTransferCollections::BuildAccountingEntry.new(
-                                                                            config: {
-                                                                              branch: @branch,
-                                                                              data: @savings_insurance_transfer_collection.data.with_indifferent_access,
-                                                                              user: @user
-                                                                            }
-                                                                          ).execute!
+        if @branch != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @center != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
+          @savings_insurance_transfer_collection.data[:accounting_entry]  = ::SavingsInsuranceTransferCollections::BuildAccountingEntry.new(
+                                                                              config: {
+                                                                                branch: @branch,
+                                                                                data: @savings_insurance_transfer_collection.data.with_indifferent_access,
+                                                                                user: @user
+                                                                              }
+                                                                            ).execute!
+        end
+        
       end
     end
 

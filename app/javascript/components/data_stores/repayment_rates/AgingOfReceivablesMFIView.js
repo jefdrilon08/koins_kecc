@@ -23,10 +23,22 @@ export default AgingOfReceivablesMFIView = (props) => {
     var totalCategoryDPastDueAmount = 0.00;
     var totalCategoryDParAmount     = 0.00;
     
+    var totalCategoryEPastDueAmount = 0.00; //91-120
+    var totalCategoryEParAmount     = 0.00;
+    
+    var totalCategoryFPastDueAmount = 0.00; //121-150
+    var totalCategoryFParAmount     = 0.00;
+    
+    var totalCategoryGPastDueAmount = 0.00; //151-180
+    var totalCategoryGParAmount     = 0.00;
+    
     var categoryACounter  = 0;
     var categoryBCounter  = 0;
     var categoryCCounter  = 0;
     var categoryDCounter  = 0;
+    var categoryECounter  = 0;
+    var categoryFCounter  = 0;
+    var categoryGCounter  = 0;
 
     for(var i = 0; i < loans.length; i++) {
       var member      = loans[i].member;
@@ -49,6 +61,15 @@ export default AgingOfReceivablesMFIView = (props) => {
       
       var categoryDPastDueAmount  = 0.00;
       var categoryDParAmount      = 0.00;
+      
+      var categoryEPastDueAmount  = 0.00;
+      var categoryEParAmount      = 0.00;
+      
+      var categoryFPastDueAmount  = 0.00;
+      var categoryFParAmount      = 0.00;
+      
+      var categoryGPastDueAmount  = 0.00;
+      var categoryGParAmount      = 0.00;
 
       var numDaysPar  = parseInt(loans[i].num_days_par);
       var par         = loans[i].par;
@@ -84,6 +105,33 @@ export default AgingOfReceivablesMFIView = (props) => {
           totalCategoryCParAmount     += categoryCParAmount;
 
           categoryCCounter++;
+        
+        } else if(numDaysPar >= 91 && numDaysPar <= 120) {
+          categoryEPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryEParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryEPastDueAmount += categoryEPastDueAmount;
+          totalCategoryEParAmount     += categoryEParAmount;
+
+          categoryECounter++;
+        
+        } else if(numDaysPar >= 121 && numDaysPar <= 150) {
+          categoryFPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryFParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryFPastDueAmount += categoryFPastDueAmount;
+          totalCategoryFParAmount     += categoryFParAmount;
+
+          categoryFCounter++;
+        
+        } else if(numDaysPar >= 121 && numDaysPar <= 150) {
+          categoryGPastDueAmount  = parseFloat(loans[i].principal_balance);
+          categoryGParAmount      = parseFloat(loans[i].overall_principal_balance);
+
+          totalCategoryGPastDueAmount += categoryGPastDueAmount;
+          totalCategoryGParAmount     += categoryGParAmount;
+
+          categoryGCounter++;
 
 
         }  else {
@@ -145,6 +193,21 @@ export default AgingOfReceivablesMFIView = (props) => {
               {numberWithCommas(categoryCParAmount)}
             </td>
             <td className="text-end">
+              {numberWithCommas(categoryEPastDueAmount)}
+              <br/>
+              {numberWithCommas(categoryEParAmount)}
+            </td>
+            <td className="text-end">
+              {numberWithCommas(categoryFPastDueAmount)}
+              <br/>
+              {numberWithCommas(categoryFParAmount)}
+            </td>
+            <td className="text-end">
+              {numberWithCommas(categoryGPastDueAmount)}
+              <br/>
+              {numberWithCommas(categoryGParAmount)}
+            </td>
+            <td className="text-end">
               {numberWithCommas(categoryDPastDueAmount)}
               <br/>
               {numberWithCommas(categoryDParAmount)}
@@ -155,8 +218,8 @@ export default AgingOfReceivablesMFIView = (props) => {
     }
 
     // TOTAL
-    var totalPastDueAmount  = totalCategoryAPastDueAmount + totalCategoryBPastDueAmount + totalCategoryCPastDueAmount + totalCategoryDPastDueAmount;
-    var totalParAmount      = totalCategoryAParAmount + totalCategoryBParAmount + totalCategoryCParAmount + totalCategoryDParAmount;
+    var totalPastDueAmount  = totalCategoryAPastDueAmount + totalCategoryBPastDueAmount + totalCategoryCPastDueAmount + totalCategoryDPastDueAmount + totalCategoryEPastDueAmount + totalCategoryFPastDueAmount +  totalCategoryGPastDueAmount;
+    var totalParAmount      = totalCategoryAParAmount + totalCategoryBParAmount + totalCategoryCParAmount + totalCategoryDParAmount + totalCategoryEParAmount + totalCategoryFParAmount + totalCategoryGParAmount;
 
     rows.push(
       <tr key={"aor-total"}>
@@ -205,6 +268,33 @@ export default AgingOfReceivablesMFIView = (props) => {
         </td>
         <td className="text-end">
           <strong>
+            {numberWithCommas(totalCategoryEPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryEParAmount)}
+            <br/>
+            {categoryECounter}
+          </strong>
+        </td>
+        <td className="text-end">
+          <strong>
+            {numberWithCommas(totalCategoryFPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryFParAmount)}
+            <br/>
+            {categoryFCounter}
+          </strong>
+        </td>
+        <td className="text-end">
+          <strong>
+            {numberWithCommas(totalCategoryGPastDueAmount)}
+            <br/>
+            {numberWithCommas(totalCategoryGParAmount)}
+            <br/>
+            {categoryGCounter}
+          </strong>
+        </td>
+        <td className="text-end">
+          <strong>
             {numberWithCommas(totalCategoryDPastDueAmount)}
             <br/>
             {numberWithCommas(totalCategoryDParAmount)}
@@ -246,7 +336,16 @@ export default AgingOfReceivablesMFIView = (props) => {
               61-90
             </th>
             <th className="text-end">
-              91 onwards
+              91-120
+            </th>
+            <th className="text-end">
+              121-150
+            </th>
+            <th className="text-end">
+              151-180
+            </th>
+            <th className="text-end">
+              181 onwards
             </th>
           </tr>
         </thead>

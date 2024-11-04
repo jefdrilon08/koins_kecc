@@ -1,50 +1,54 @@
 :css
   table {
     font-size: 0.9em;
-    border-collapse: collapse;
-  }
-  table.table tr{
-    font-size: 0.9em;
-    border: 1px solid black;
-    padding: 5px 5px 5px 5px;
-    border-collapse: collapse;
+    width: 100%; /* Ensure the table takes full width */
+    border-collapse: collapse;            
+    margin-right: 60px;
 
   }
-  table.table.table-bordered td{
+  table.table tr {
     font-size: 0.9em;
     border: 1px solid black;
-    border-collapse: collapse;
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
   }
-  table th{
-    font-size: 0.9em;
+  table.table.table-bordered td {
     border: 1px solid black;
-    border-collapse: collapse;
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
   }
-  font-size 
-  {
-
-
+  table th {
+    border: 1px solid black;
+    padding: 5px;
   }
   #book, header {
     margin-left: 60px;
   }
-
   header {
     position: running(header);
   }
-
   @media screen {
     header {
       display: none;
     }
   }
-
   @media print {
     header#header {
       position: fixed;
       top: 0;
+    }
+    body {
+      margin: 0; /* Remove margins */
+      padding: 0; /* Remove padding */
+      
+    }
+    
+    table {
+      page-break-inside: auto;
+    }
+    tr {
+      page-break-inside: avoid; 
+    }
+    td {
+      page-break-inside: avoid; 
     }
   }
 
@@ -57,7 +61,7 @@
             %strong
               #{Settings.company_name}
               %br
-                #{Settings.company_address}
+              #{Settings.company_address}
               %br
               VAT Registration Tin Number: #{Settings.company_tin_number}
               %br
@@ -65,41 +69,29 @@
               %br
               Period: #{@book[:start_date]} - #{@book[:end_date]}
     %tbody
-      %tr
-        %td
-          - @book[:accounting_entries].each do |o|
-            %table.table.table-bordered.table-sm
-              %tbody
-                %tr
-                  %th{ width: "10%" }
-                    DATE
-                  %th{ width: "50%" }
-                    ACCOUNTING TITLE
-                  %th{ width: "20%" }
-                    DEBIT (PHP)
-                  %th{ width: "20%" }
-                    CREDIT (PHP)
-                - o[:debit_entries].each_with_index do |j,i|
-                  %tr
-                    %td
-                      - if i == 0
-                        #{o[:date_posted]}
-                    %td
-                      #{j[:accounting_code][:name]}
-                    %td.text-end
-                      #{j[:debit_amount]}
-                    %td.text-end
-                - o[:credit_entries].each_with_index do |j,i|
-                  %tr
-                    %td
-                    %td
-                      #{j[:accounting_code][:name]}
-                    %td.text-end
-                    %td.text-end
-                      #{j[:credit_amount]}
-                %tr
-                  %td{ colspan: 4 }
-                    #{o[:particular]}
+      - @book[:accounting_entries].each do |o|
+        %table.table.table-bordered.table-sm
+          %thead
+            %tr
+              %th{ width: "25%" } DATE
+              %th{ width: "25%" } ACCOUNTING TITLE
+              %th{ width: "25%" } DEBIT (PHP)
+              %th{ width: "25%" } CREDIT (PHP)
+          %tbody
+            - o[:debit_entries].each_with_index do |j, i|
+              %tr
+                %td{ colspan: i == 0 ? 1 : 0 } #{i == 0 ? o[:date_posted] : ''}
+                %td #{j[:accounting_code][:name]}
+                %td.text-end #{j[:debit_amount]}
+                %td.text-end
+            - o[:credit_entries].each do |j|
+              %tr
+                %td
+                %td #{j[:accounting_code][:name]}
+                %td.text-end
+                %td.text-end #{j[:credit_amount]}
+            %tr
+              %td{ colspan: 4 } #{o[:particular]}
 
 :javascript
   window.print();

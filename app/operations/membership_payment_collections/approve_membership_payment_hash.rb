@@ -54,10 +54,12 @@ module MembershipPaymentCollections
                                     ).execute!
           end
         end
-
+        member_data = @member.data.with_indifferent_access
+        member_data[:hide_status] = "active"
         @member.update!(
           status: "active",
-          identification_number: identification_number
+          identification_number: identification_number,
+          data: member_data
         )
 
         # Update branch counter
