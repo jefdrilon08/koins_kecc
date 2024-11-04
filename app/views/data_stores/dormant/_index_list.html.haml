@@ -1,0 +1,42 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        As of Date
+      %th.text-center
+        Date Approved
+      %th.text-center
+        Branch
+      %th.text-center
+        Status
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "dormant/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          %strong
+          #{o.meta.with_indifferent_access[:as_of]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:date_approved]}
+          
+        %td.text-center
+          #{o.meta.with_indifferent_access[:branch_name]} 
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.bg-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.bg-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.bg-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.bg-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.bg-danger
+              Error

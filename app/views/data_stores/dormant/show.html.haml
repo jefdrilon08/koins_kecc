@@ -1,0 +1,27 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Dormant for #{@data_store.meta["branch_name"]} / #{@data_store.meta["as_of"]}
+
+          
+        - if @data_store["status"] == "pending"
+          = render partial: "form_add"
+        - else
+          %p
+            No records found
+
+        %h5
+        = render partial: "member_details", locals: { dormant_records: @dormant_records }
+        
+        %div{ style: "margin-bottom: 25px;" }
+
+        %h5
+          Accounting Entry
+        - if @accounting_entry.present?
+          = render partial: "accounting_entry_display", locals: { accounting_entry: @accounting_entry }
+        - else
+          %p No accounting entry data available.
+
+= render partial: "data_stores/dormant/modals/approve_dormant"         

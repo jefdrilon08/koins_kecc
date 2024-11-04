@@ -1,0 +1,20 @@
+= form_tag data_stores_dormant_path, method: 'GET' do
+  .row
+    .col-md-5
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, params[:branch_id]), { prompt: "-- SELECT --", class: "form-control" }
+    .col-md-5
+      .form-group
+        %label
+          As of Date
+        = text_field_tag :date, params[:date], class: "form-control", id: "date-picker", placeholder: "Select a date", type: "date"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        .form-group
+          .btn-group
+            = button_tag type: 'submit', class: 'btn btn-primary btn-block' do
+              .bi.bi-search
