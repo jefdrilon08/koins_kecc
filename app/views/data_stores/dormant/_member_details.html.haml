@@ -9,14 +9,14 @@
           %th{ style: "min-width: 100px;" } Status
           %th{ style: "min-width: 100px;" } K-IMPOK
           %th{ style: "min-width: 100px;" } Dormant Fee
-          %th{ style: "min-width: 40px;" } TOTAL
+          -# %th{ style: "min-width: 40px;" } TOTAL
       %tbody
         - if @dormant_records.present?
           - @dormant_records.each do |record|
             %tr
               %td
-                - if record[:member_id].present?
-                  = link_to member_path(record[:member_id]), target: "_blank" do
+                - if record[:id].present?
+                  = link_to(member_path(record[:id]), target: "_blank") do
                     %strong= record[:full_name]
                 - else
                   %strong= record[:full_name]
@@ -28,8 +28,8 @@
                 = number_to_currency(record[:balance], unit: "", precision: 2)
               %td.text-right
                 = number_to_currency(record[:dormant_fee], unit: "", precision: 2)
-              %td.text-right
-                = number_to_currency(record[:balance] + record[:dormant_fee], unit: "", precision: 2)
+              -# %td.text-right
+              -#   = number_to_currency(record[:balance] + record[:dormant_fee], unit: "", precision: 2)
         - else
           %tr
             %td{ colspan: 6 } No dormant records found.
@@ -42,5 +42,5 @@
             %strong= number_to_currency(@total_balance, unit: "", precision: 2)
           %td.text-right
             %strong= number_to_currency(@total_dormant_fee, unit: "", precision: 2)
-          %td.text-right
-            %strong= number_to_currency(@total_balance + @total_dormant_fee, unit: "", precision: 2)
+          -# %td.text-right
+          -#   %strong= number_to_currency(@total_balance + @total_dormant_fee, unit: "", precision: 2)
