@@ -108,6 +108,11 @@ module ExcelReports
                     province: get_province_name(@member_data.dig("address", "province"))
                   }
 
+                  # Check for gender and set PreviousLastName accordingly
+                  if @member.gender == 'Female' && @member.middle_name.present?
+                    previous_last_name = @member.middle_name
+                  end
+
                   @street    = @address[:street]
                   @barangay  = @address[:barangay]
                   @city      = @address[:city]
@@ -149,7 +154,9 @@ module ExcelReports
                   }
 
                   @pn_number = l[:pn_number]
-                  @settings = Settings.loan_products.select{ |o| o.loan_product_id == l['loan_product_id']}.first.midas
+                  # @settings = Settings.loan_products.select{ |o| o.loan_product_id == l['loan_product_id']}.first.midas
+                  @settings = Settings.loan_products.find { |o| o.loan_product_id == l['loan_product_id'] }&.midas
+
 
                   if @settings.nil?
                     @contractType     = ""
@@ -178,6 +185,7 @@ module ExcelReports
                   @last_name,
                   @first_name,
                   @middle_name,
+                  previous_last_name,
                   "",
                   @street,
                   @barangay,
