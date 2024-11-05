@@ -46,14 +46,20 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
 
   def show
     @savings_insurance_transfer_collection  = SavingsInsuranceTransferCollection.find(params[:id])
+    @savings_insurance_transfer_collection_data = @savings_insurance_transfer_collection.data.with_indifferent_access
+    @insurance_subtype = @savings_insurance_transfer_collection_data[:insurance_subtype]
+
+    # raise @insurance_subtype.inspect
 
     if @savings_insurance_transfer_collection.processing?
       redirect_to savings_insurance_transfer_collections_path
     end
 
-    @accounting_entry_hash                  = @savings_insurance_transfer_collection.data.with_indifferent_access[:accounting_entry]
-    @particular                             = @accounting_entry_hash[:particular]
-
+    if @savings_insurance_transfer_collection.branch_id != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @savings_insurance_transfer_collection.center_id != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
+      @accounting_entry_hash                  = @savings_insurance_transfer_collection.data.with_indifferent_access[:accounting_entry]
+      @particular                             = @accounting_entry_hash[:particular]
+    end
+    
     @members  = Member.active.where(
                   center_id: @savings_insurance_transfer_collection.center.id
                 ).where.not(
