@@ -53,6 +53,15 @@ module DataStores
                 []
             end
 
+            # Sort the dormant records by center_name
+            @dormant_records.sort_by! do |record|
+                center_name = record[:center_name]
+                center_name.scan(/\d+|\D+/).map do |part|
+                    part.match?(/\d+/) ? part.to_i : part.downcase
+                end
+            end
+
+
             @total_balance = @dormant_records.sum { |record| record[:balance].to_f }
             @total_dormant_fee = @dormant_records.sum { |record| record[:dormant_fee].to_f }
                              
