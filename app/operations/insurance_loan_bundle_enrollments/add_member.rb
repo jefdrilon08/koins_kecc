@@ -23,6 +23,8 @@ module InsuranceLoanBundleEnrollments
         @address                                 = @region_name + ", " + @province_name + ", " + @municipality_name + ", " + @barangay_name
       end
 
+
+
       if @insurance_loan_bundle_enrollment_count == 0
         @last_effectivity_date      = @config[:effectivity_date]
         @previous_plan_type         = @config[:plan_type]
