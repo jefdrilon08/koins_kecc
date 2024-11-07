@@ -107,7 +107,8 @@ namespace :report do
     end
 
     # Save the Excel file
-    p.serialize('loan_data.xlsx')
+    p.serialize(File.expand_path('~/Downloads/loan_data.xlsx'))
+
 
     puts "Data has been successfully exported to loan_data.xlsx"
 
