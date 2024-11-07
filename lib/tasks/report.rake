@@ -12,7 +12,7 @@ namespace :report do
 
     data_store = DataStore.where(
       "meta ->> 'data_store_type' = ? AND meta ->> 'as_of' = ? AND meta ->> 'branch_id' = ?",
-      'REPAYMENT_RATES', as_of, br_name
+      'REPAYMENT_RATES', as_of, br_id
     ).last
 
     # Create a new Excel package
@@ -106,11 +106,9 @@ namespace :report do
       ws.add_row ['No data found for the specified criteria.']
     end
 
-    # Save the Excel file
-    p.serialize(File.expand_path('~/Downloads/loan_data.xlsx'))
+    p.serialize(File.expand_path("~/Downloads/#{br_name}.xlsx"))
 
-
-    puts "Data has been successfully exported to loan_data.xlsx"
+    puts "Data has been successfully exported to #{br_name}.xlsx"
 
 
   end
