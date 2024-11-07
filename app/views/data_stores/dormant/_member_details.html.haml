@@ -15,8 +15,8 @@
           - @dormant_records.each do |record|
             %tr
               %td
-                - if record[:member_id].present?
-                  = link_to member_path(record[:member_id]), target: "_blank" do
+                - if record[:id].present?
+                  = link_to(member_path(record[:id]), target: "_blank") do
                     %strong= record[:full_name]
                 - else
                   %strong= record[:full_name]

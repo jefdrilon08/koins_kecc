@@ -30,7 +30,7 @@ module DataStores
             end
             
           
-              if @status.present?
+              if params[:status].present?
                 @records = @records.where(status: @status)
               end
 
@@ -57,6 +57,7 @@ module DataStores
             @dormant_records.sort_by! do |record|
                 center_name = record[:center_name]
                 center_name.scan(/\d+|\D+/).map do |part|
+                    part.match?(/\d+/) ? part.to_i : part.downcase 
                     part.match?(/\d+/) ? part.to_i : part.downcase
                 end
             end
