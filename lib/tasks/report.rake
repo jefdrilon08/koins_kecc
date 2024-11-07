@@ -88,6 +88,7 @@ namespace :report do
   
     puts "Data has been successfully exported to #{br_name}.csv"
   end
+
   
   task :mba_report => :environment do
     br_name = ENV['SATO']
