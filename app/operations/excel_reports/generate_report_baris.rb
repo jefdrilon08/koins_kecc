@@ -50,6 +50,7 @@ module ExcelReports
           "LastName",
           "FirstName",
           "MiddleName",
+          "PreviousLastName",
           "Street",
           "BarangayDistrict",
           "CityMunicipality",
@@ -102,8 +103,18 @@ module ExcelReports
                 mem        = member.data
                 gov_id     = mem['government_identification_numbers']
                 loan       = Loan.find(l['id'])
-                sett       = Settings.loan_products.select{ |o| o.loan_product_id == l['loan_product']['id']}.first.midas
+
+                # sett       = Settings.loan_products.select{ |o| o.loan_product_id == l['loan_product']['id']}.first.midas
+                sett = Settings.loan_products.find { |o| o.loan_product_id == l['loan_product']['id'] }&.midas
+
                 int_rate   = (loan.monthly_interest_rate*12)*100
+
+                #PreviousLastName
+                # Check for gender and set PreviousLastName accordingly
+                if member.gender == 'Female' && member_rec['middle_name'].present?
+                  previous_last_name = member_rec['middle_name']
+                end
+
                 #civil_status
                 case member.civil_status
                 when 'May Kinakasama' , 'Single' , 'single'
@@ -192,6 +203,7 @@ module ExcelReports
                   member_rec['last_name'],
                   member_rec['first_name'],
                   member_rec['middle_name'],
+                  previous_last_name,
                   address['street'],
                   # address['district'],
                   # address['city'],
