@@ -412,7 +412,6 @@ Rails.application.routes.draw do
   delete "/involuntary_payment/:id", to: "involuntary_payment#delete"
 
 
-
   # Data Stores
   namespace :data_stores do
     get "/share_capital_summary", to: "share_capital_summary#index"
@@ -477,6 +476,11 @@ Rails.application.routes.draw do
     get "/monthly_incentives", to: "monthly_incentives#index"
     get "/monthly_incentives/:id", to: "monthly_incentives#show"
     delete "/monthly_incentives/:id", to: "monthly_incentives#destroy"
+
+    get "/dormant", to: "dormant#index"
+    get "/dormant/:id", to: "dormant#show"
+    resources :dormant, only: [:index, :show, :destroy]
+
 
     get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
     get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"
@@ -564,10 +568,6 @@ Rails.application.routes.draw do
     get "/kok_summary", to: "kok_summary#index"
     get "/kok_summary/:id", to: "kok_summary#show"
     delete "/kok_summary/:id", to: "kok_summary#destroy"
-
-    get "/clip_summary", to: "clip_summary#index"
-    get "/clip_summary/:id", to: "clip_summary#show"
-    delete "/clip_summary/:id", to: "clip_summary#destroy"
 
     get "/allowance_computation_report", to: "allowance_computation_report#index"
     get "/allowance_computation_report/:id", to: "allowance_computation_report#show"

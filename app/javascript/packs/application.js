@@ -260,6 +260,9 @@ import InvoluntaryPaymentShow from '../models/InvoluntaryPaymentShow.js';
 import ApiReceiveMembersIndex from '../models/ApiReceiveMembersIndex.js';
 import ApiReceiveMembersShow from '../models/ApiReceiveMembersShow.js';
 
+import DormantIndex from '../models/DormantIndex.js';
+import DormantShow from '../models/DormantShow.js';
+
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -499,7 +502,10 @@ const hooks = {
   "involuntary_payment/index":                        [InvoluntaryPaymentIndex],
   "involuntary_payment/show":                         [InvoluntaryPaymentShow],
   "api_receive_members/index":                        [ApiReceiveMembersIndex],
-  "api_receive_members/show":                         [ApiReceiveMembersShow]
+  "api_receive_members/show":                         [ApiReceiveMembersShow],
+  
+  "data_stores/dormant/index":                        [DormantIndex],
+  "data_stores/dormant/show":                         [DormantShow]
 }
 
 const renderComponent = (Component, payload) => {

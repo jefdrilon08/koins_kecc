@@ -1,0 +1,70 @@
+%div{ id: "accounting-entry", class: "card border-success" }
+  %div{ class: "card-header bordered-success" }
+    .row
+      .col-md-6
+        %strong
+          - if accounting_entry[:status] == "approved"
+            #{accounting_entry[:book]}
+            #{accounting_entry[:reference_number]} - 
+            #{accounting_entry[:approved_by]}
+          - else
+            Pending
+      .col-md-6
+        .text-right
+          .text-muted
+            .fa.fa-store
+            #{accounting_entry[:branch].to_s} - #{accounting_entry[:book].to_s}
+  .card-body
+    %table.table.table-sm
+      %tr
+        %th{ width: "50%" }
+          Accounting Code
+        %th.text-right{ width: "25%" }
+          Debit
+        %th.text-right{ width: "25%" }
+          Credit
+      - accounting_entry[:journal_entries].each do |o|
+        - if o[:post_type] == "DR"
+          %tr
+            %td
+              #{o[:accounting_code_name]}
+            %td.text-right
+              #{number_to_currency(o[:amount], unit: "")}
+            %td
+      - accounting_entry[:journal_entries].each do |o|
+        - if o[:post_type] == "CR"
+          %tr
+            %td
+              #{o[:accounting_code_name]}
+            %td
+            %td.text-right
+              #{number_to_currency(o[:amount], unit: "")}
+    %hr
+    .row
+      .col-md-8
+        %br
+        .row
+          .col
+            %label
+              OR Number:
+            %p
+              #{accounting_entry[:data][:or_number]}
+        .row
+          .col
+            %label
+              SI Number:
+            %p
+              #{accounting_entry[:data][:si_number]}
+        .row
+          .col
+            %label
+              Particular
+            %p
+              #{accounting_entry[:particular]}
+      .col-md-4
+        %p.text-right
+          %label
+            %strong
+              Approved By:
+          %br
+          #{accounting_entry[:approved_by]}

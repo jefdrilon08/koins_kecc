@@ -4,6 +4,7 @@ module Dormants
       @config = config
       @branch = @config[:branch]
       @as_of = @config[:as_of]
+      @user = @config[:current_user]
       @transaction_date = Date.today
       @data_store_type = "DORMANT"
       @current_date = ::Utils::GetCurrentDate.new(config: { branch: @branch }).execute!
@@ -19,6 +20,7 @@ module Dormants
           as_of: @as_of,
           transaction_date: @current_date,
           date_approved: ""
+          
         },
         data: {
           accounting_entry: {
