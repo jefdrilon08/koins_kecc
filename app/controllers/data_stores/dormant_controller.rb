@@ -58,6 +58,7 @@ module DataStores
                 center_name = record[:center_name]
                 center_name.scan(/\d+|\D+/).map do |part|
                     part.match?(/\d+/) ? part.to_i : part.downcase 
+                    part.match?(/\d+/) ? part.to_i : part.downcase
                 end
             end
 
