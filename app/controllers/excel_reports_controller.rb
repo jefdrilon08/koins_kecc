@@ -71,4 +71,31 @@ class ExcelReportsController < ApplicationController
 
   end
 
+ def loan_report
+  branch_id = params[:branch]
+  as_of = params[:as_of]
+  loan_id = params[:loan]
+
+
+  if branch_id.present? && as_of.present? && loan_id.present?
+    @loan = LoanProduct.find(loan_id).name
+    @branch = Branch.find(branch_id)
+    @filename = "#{@branch.name}_Loan_Report_#{@loan}.xlsx"
+
+    config = {
+      branch_id: branch_id,
+      as_of: as_of,
+      loan_id: loan_id
+    }
+
+    excel = ::ExcelReports::GenerateReportLoan.new(config: config).execute!
+
+    excel.serialize "#{Rails.root}/tmp/#{@filename}"
+     send_file "#{Rails.root}/tmp/#{@filename}", filename: "#{@filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  end
+end
+
+  
+
 end	
