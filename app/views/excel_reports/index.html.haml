@@ -70,3 +70,37 @@
                   %br
                     %button#c-btn-gen-midas.btn.btn-success.btn-info{ data: { id: ""  } }
                       GENERATE EXCEL FILE
+.row
+  .col
+    .card
+      .card-body
+        %h5
+          Report Loan
+        %table.table.table-sm.table-hover
+          %thead
+            %tr
+              %th
+                SATO
+              %th
+                As of 
+              %th
+                Loan Product
+              %th
+                Action
+            %tr
+              %td
+                .form-group
+                  = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "select-branch-loan", prompt: "-- SELECT --"
+              %td
+                .form-group
+                  = date_field_tag :report_date, "now", class: "form-control", id: "as-of-date"
+              %td
+                .form-group
+                  = select_tag :loan_product_id, options_from_collection_for_select(LoanProduct.order("name ASC"), :id, :name, @loan_product_id), class: "form-control select-select2", id: "loan-product-select", prompt: "-- SELECT --"
+              %td
+                .form-group
+                  %br
+                    %button#btn-gen-loan.btn.btn-success.btn-info{ data: { id: ""  } }
+                      GENERATE EXCEL FILE
+          %tr
+        %tr

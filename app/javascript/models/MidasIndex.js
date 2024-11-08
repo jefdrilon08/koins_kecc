@@ -28,6 +28,11 @@ var _xKoinsAppAuthSecret;
 var _urlGenerate        = "/api/v1/midas/generate";
 
 
+var $selectBranch3;
+var $inputAsOf2;
+var $selectLoanProduct;
+
+
 var _cacheDom = function() {
   $modalNew      = $("#modal-new");
   $btnNew        = $("#btn-new");
@@ -44,6 +49,13 @@ var _cacheDom = function() {
   $reportDate	  = $("#report-date");	
   $inputAsOf    = $("#input-as-of");
   $midasType	  = $("#midas-type");
+
+
+
+  $btnGenloan   = $("#btn-gen-loan");
+  $selectBranch3 = $("#select-branch-loan");
+  $inputAsOf2    = $("#as-of-date");
+  $selectLoanProduct   = $("#loan-product-select");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -77,6 +89,24 @@ var _bindEvents = function() {
 
 
   });
+
+
+  $btnGenloan.on("click", function() {
+    var branch = $selectBranch3.val();
+    var as_of = $inputAsOf2.val();
+    var loan_product = $selectLoanProduct.val();
+  
+    var data = {
+      branch: branch,
+      as_of: as_of,
+      loan: loan_product
+    };
+  
+    console.log(data);
+  
+    window.location = "/excel_reports/loan_report?" + encodeQueryData(data);
+  });
+  
 
 
 
