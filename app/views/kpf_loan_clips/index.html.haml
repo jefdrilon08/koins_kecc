@@ -1,0 +1,14 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+        - if @kpf_loan_clips.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No records found
+
+= render partial: "kpf_loan_clips/modals/new_transaction"
+= render partial: "shared/errors_template"
