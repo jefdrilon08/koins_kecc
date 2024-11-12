@@ -5,8 +5,8 @@ module Branches
       @branch   = @config[:branch]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
 
-      @start_date = @as_of.beginning_of_month - 1.month
-      @end_date = @as_of.end_of_month - 1.month
+      @start_date = (@as_of - 1.month).beginning_of_month
+      @end_date = (@as_of - 1.month).end_of_month
 
       @data = {
         records: []
@@ -24,6 +24,7 @@ module Branches
 
       @data[:records] = @result.map{ |r|
                         date_approved         = r.fetch("date_approved")
+                        branch                = r.fetch("branch")
                         status                = r.fetch("status")
                         plan_type             = r.fetch('plan_type')
                         plan_category         = r.fetch('plan_category')
@@ -53,6 +54,7 @@ module Branches
 
                         {
                           date_approved: date_approved,
+                          branch: branch,
                           status: status,
                           plan_type: plan_type,
                           plan_category: plan_category,
@@ -88,7 +90,8 @@ module Branches
         SELECT
             a.date_approved,
             a.status,
-          a.id,
+            a.id,
+            b.name AS branch,
             last_record->'kok_data'->>'plan_type' AS plan_type,
             last_record->'kok_data'->>'plan_category' AS plan_category,
             last_record->'kok_data'->>'partner' AS partner,
