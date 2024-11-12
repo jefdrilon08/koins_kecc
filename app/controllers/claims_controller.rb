@@ -346,7 +346,7 @@ class ClaimsController < ApplicationController
 
     if @claim.for_approval?
       if ["MIS"].include? current_user.roles.last
-        if ["Silvida"].include? current_user.first_name
+        if ["Silvida", "NELLY"].include? current_user.first_name
           @subheader_side_actions << {
             id: "btn-approve",
             link: "#",
