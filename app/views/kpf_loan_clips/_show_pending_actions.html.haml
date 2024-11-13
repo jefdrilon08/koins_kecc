@@ -40,10 +40,6 @@
                     .form-group
                       %label  Term (in Months)
                       = select_tag :num_installments, options_for_select([ 3, 6, 9, 12], @num_installments), id: 'input-num-installments', class: 'form-control'
-                  / .col-md-3
-                  /   .form-group
-                  /     %label Num Installments      
-                  /     = text_field_tag :num_installments, @num_installments, id: 'input-num-installments', class: 'form-control'
                   .col-md-3
                     .form-group
                       %label Effective Date
@@ -60,25 +56,6 @@
                     .form-group
                       %label CLIP Beneficiary
                       = text_field_tag :beneficiary, @beneficiary, id: 'input-beneficiary', class: 'form-control'
-                .row
-                  .col-md-3
-                    .form-group
-                      %label
-                        Or Number
-                      = text_area_tag :or_number, @or_number, id: 'input-or-number', class: 'form-control'
-                  .col-md-3
-                    .form-group
-                      %label
-                        Ar Number
-                      = text_area_tag :ar_number, @ar_number, id: 'input-ar-number', class: 'form-control'
-                  .col-md-2
-                    .form-group
-                      %br
-                        %label
-                          Actions
-                        %button#btn-update-or-ar-number.btn.btn-info.btn-block
-                          .fa.fa-plus
-                          Save Or/Ar Number
                        
             %br
             .row

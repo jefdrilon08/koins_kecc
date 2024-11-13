@@ -9,6 +9,8 @@
       %th
         Member
       %th
+        Loan Product
+      %th
         Status
   %tbody
     - @kpf_loan_clips.each do |o|
@@ -33,7 +35,7 @@
           - elsif records.nil?
           
           - else
-
+            #{records["clip_data"]["loan_product_id"]}
         %td
           - if o.pending?
             .badge.bg-primary

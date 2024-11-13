@@ -17,10 +17,6 @@ var $selectMember;
 var $message;
 var templateErrorList;
 
-var $btnUpdateOrArnumber;
-var $inputOrNumber;          
-var $inputArNumber; 
-
 var $inputLoanProductId;
 var $inputPrincipal;
 var $inputTerm;
@@ -42,17 +38,13 @@ var _urlCheckTransaction   = "/api/v1/kpf_loan_clips/check";
 var _cacheDom = function() {
 
   $btnAdd               = $("#btn-add");
-  $btnUpdateParticular  = $("#btn-update-particular");
-  $btnUpdateOrArnumber  = $("#btn-update-or-ar-number");
   $btnDelete            = $(".btn-delete");
   $btnApprove           = $("#btn-approve");
   $btnConfirmApprove    = $("#btn-confirm-approve");
   $btnCheck             = $("#btn-check");
-    
   $btnConfirmCheck      = $("#btn-confirm-check");
   $btnPending           = $("#btn-pending");
   $btnConfirmPending    = $("#btn-confirm-pending");
-
 
   $modalApprove = new bootstrap.Modal(
     document.getElementById("modal-approve")
@@ -65,9 +57,6 @@ var _cacheDom = function() {
   
   $selectMember         = $("#select-member");
   $inputAmount          = $("#input-amount");
-  $inputParticular      = $("#input-particular");
-  $inputOrNumber        = $("#input-or-number");
-  $inputArNumber        = $("#input-ar-number");
   $message              = $(".message");
   templateErrorList     = $("#template-error-list").html();
   $inputLoanProductId   = $("#input-loan-product-id");

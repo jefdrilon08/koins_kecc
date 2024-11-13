@@ -17,13 +17,6 @@ module KpfLoanClips
         }
       end
 
-      # if @kpf_loan_clip.approved?
-      #   @errors[:messages] << {
-      #     key: "kpf_loan_clip",
-      #     message: "KDAKILA is already approved!"
-      #   }
-      # end
-
       @errors
     end
   end
