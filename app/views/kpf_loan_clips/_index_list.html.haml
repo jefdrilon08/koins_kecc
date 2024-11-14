@@ -1,0 +1,57 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+      %th
+        Branch
+      %th
+        Center
+      %th
+        Member
+      %th
+        Status
+  %tbody
+    - @kpf_loan_clips.each do |o|
+      %tr
+        %td.text-center
+          = link_to kpf_loan_clip_path(o) do
+            .bi.bi-search
+        %td
+          #{o.branch}  
+        %td
+          #{o.center.name}
+        %td
+          -if o.member_name.nil?
+            no member
+          -else  
+            #{o.member_name.uniq.join(",")}
+        %td 
+          - records = o.records_last
+          - number = o.data['records'].count
+          - if number.nil?
+
+          - elsif records.nil?
+          
+          - else
+
+        %td
+          - if o.pending?
+            .badge.bg-primary
+              Pending
+          - if o.checked?
+            .badge.bg-info
+              For Approval
+          - elsif o.approved?
+            .badge.bg-success
+              Approved
+          - elsif o.declined?
+            .badge.bg-danger
+              Declined
+          - elsif o.error?
+            .badge.bg-danger
+              ERROR
+          - elsif o.processing?
+            .badge.badge-info
+              Processing
+         
+= paginate @kpf_loan_clips

@@ -94,6 +94,9 @@ import SavingsInsuranceTransferCollectionsShow from "../models/SavingsInsuranceT
 import InsuranceLoanBundleEnrollmentsIndex from "../models/InsuranceLoanBundleEnrollmentsIndex.js";
 import InsuranceLoanBundleEnrollmentsShow from "../models/InsuranceLoanBundleEnrollmentsShow.js";
 
+import KpfLoanClipsIndex from "../models/KpfLoanClipsIndex.js";
+import KpfLoanClipsShow from "../models/KpfLoanClipsShow.js";
+
 import InsuranceFundTransferCollectionsIndex from "../models/InsuranceFundTransferCollectionsIndex.js";
 import InsuranceFundTransferCollectionsShow from "../models/InsuranceFundTransferCollectionsShow.js";
 import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCollectionsIndex.js";
@@ -306,6 +309,8 @@ const hooks = {
   "savings_insurance_transfer_collections/show":      [SavingsInsuranceTransferCollectionsShow],
   "insurance_loan_bundle_enrollments/index":     	  [InsuranceLoanBundleEnrollmentsIndex],
   "insurance_loan_bundle_enrollments/show":      	  [InsuranceLoanBundleEnrollmentsShow],
+  "kpf_loan_clips/index":     	  					  [KpfLoanClipsIndex],
+  "kpf_loan_clips/show":      	  					  [KpfLoanClipsShow],
   "insurance_fund_transfer_collections/index":        [InsuranceFundTransferCollectionsIndex],
   "insurance_fund_transfer_collections/show":         [InsuranceFundTransferCollectionsShow, InsuranceFundTransferCollectionUIComponent],
   "insurance_withdrawal_collections/index":           [InsuranceWithdrawalCollectionsIndex],
