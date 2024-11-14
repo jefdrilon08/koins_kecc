@@ -41,15 +41,3 @@
           %td.text-center
             %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
               .fa.fa-times
-    %tr
-      %th
-        Total
-      %th
-      %th
-      %th
-      %th
-      %th      
-      %th.text-right
-        #{number_to_currency(@kpf_loan_clip.total_amount, unit: '')}
-      - if @kpf_loan_clip.pending?
-        %th
