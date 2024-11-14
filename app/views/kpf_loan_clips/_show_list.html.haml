@@ -36,7 +36,7 @@
           #{number_to_currency(o[:clip_data][:principal], unit: '')}
           
         %td.text-right
-          #{number_to_currency(o[:amount], unit: '')}
+          #{number_to_currency(o[:clip_data][:amount], unit: '')}
         - if @kpf_loan_clip.pending?
           %td.text-center
             %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
@@ -48,9 +48,7 @@
       %th
       %th
       %th
-      %th
-
-      
+      %th      
       %th.text-right
         #{number_to_currency(@kpf_loan_clip.total_amount, unit: '')}
       - if @kpf_loan_clip.pending?

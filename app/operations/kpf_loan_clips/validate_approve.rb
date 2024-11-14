@@ -3,7 +3,7 @@ module KpfLoanClips
     def initialize(config:)
       super()
 
-      @config                            = config
+      @config         = config
       @kpf_loan_clip  = @config[:kpf_loan_clip]
     end
 
@@ -22,7 +22,6 @@ module KpfLoanClips
         }
       end
 
-     
       @errors[:messages].each do |m|
         @errors[:full_messages] << m[:message]
       end

@@ -68,37 +68,32 @@ module Api
       end
 
       def add_member
-        kpf_loan_clip                    = KpfLoanClip.where(id: params[:id]).first
-        member                           = Member.where(id: params[:member_id]).first
-        amount                           = params[:amount].try(:to_f).try(:round, 2)
+        kpf_loan_clip    = KpfLoanClip.where(id: params[:id]).first
+        member           = Member.where(id: params[:member_id]).first
+        amount           = params[:amount].try(:to_f).try(:round, 2)
+        loan_product_id  = params[:loan_product_id]
+        principal        = params[:principal]
+        term             = params[:term]
+        num_installments = params[:num_installments]
+        maturity_date    = params[:maturity_date]
+        effective_date   = params[:effective_date]
+        clip_number      = params[:clip_number]
+        beneficiary      = params[:beneficiary]
 
-
-          loan_product_id = params[:loan_product_id]
-          principal = params[:principal]
-          term = params[:term]
-          num_installments = params[:num_installments]
-          maturity_date = params[:maturity_date]
-          effective_date = params[:effective_date]
-          clip_number = params[:clip_number]
-          beneficiary = params[:beneficiary]
-
-          # raise effective_date.inspect
-
-          config  = {
-            kpf_loan_clip: kpf_loan_clip,
-            loan_product_id: loan_product_id,
-            principal: principal,
-            term: term,
-            num_installments: num_installments,
-            maturity_date: maturity_date,
-            effective_date: effective_date,
-            clip_number: clip_number,
-            beneficiary: beneficiary,
-            member: member,
-            amount: amount,
-            user: current_user
-          }
-
+        config = {
+          kpf_loan_clip: kpf_loan_clip,
+          loan_product_id: loan_product_id,
+          principal: principal,
+          term: term,
+          num_installments: num_installments,
+          maturity_date: maturity_date,
+          effective_date: effective_date,
+          clip_number: clip_number,
+          beneficiary: beneficiary,
+          member: member,
+          amount: amount,
+          user: current_user
+        }
 
         errors  = ::KpfLoanClips::ValidateAddMember.new(
                     config: config
@@ -114,7 +109,6 @@ module Api
           render json: { message: "ok" }
         end
       end
-
 
       def save
         branch            = Branch.where(id: params[:branch_id]).first

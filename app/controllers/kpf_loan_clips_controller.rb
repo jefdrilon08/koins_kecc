@@ -3,7 +3,6 @@ class KpfLoanClipsController < ApplicationController
 
   def index
     @kpf_loan_clips = KpfLoanClip.select("*").where(branch_id: @branches.pluck(:id))
-
     @center   = Center.where(id: params[:center_id]).first
     @q        = params[:q]
     @branch   = Branch.where(id: params[:branch_id]).first
@@ -72,34 +71,16 @@ class KpfLoanClipsController < ApplicationController
                   id: @kpf_loan_clip.member_ids
                 ).order("last_name ASC")
 
-    @kok_data = @kpf_loan_clip.data.with_indifferent_access[:kok_data]
+    @clip_data = @kpf_loan_clip.data.with_indifferent_access[:clip_data]
 
-    if @kok_data.present?
-      @plan_type = @kok_data[:plan_type]
-      @plan_category = @kok_data[:plan_category]
-      @partner = @kok_data[:partner]
-      @policy_no = @kok_data[:policy_no]
-      @effectivity_date = @kok_data[:effectivity_date]
-      @maturity_date = @effectivity_date.to_date == Date.today + 1.year
-      @client_type = @kok_data[:client_type]
-      @first_name = @kok_data[:first_name]
-      @middle_name = @kok_data[:middle_name]
-      @last_name = @kok_data[:last_name]
-      @address = @kok_data[:address]
-      @gender = @kok_data[:gender]
-      @enrolled_status = @kok_data[:enrolled_status]
-      @civil_status = @kok_data[:civil_status]
-      @birth_date = @kok_data[:birth_date]
-      @age[:age] = @age[:birth_date].present? ? Date.today.year - @kok_data[:birth_date].to_date.year : ""
-      @premium_coverage = @kok_data[:premium_coverage]
-      @mobile_no = @kok_data[:mobile_no]
-      @membership_date = @kok_data[:membership_date]
-      @benif_fname = @kok_data[:benif_fname]
-      @benif_mname = @kok_data[:benif_mname]
-      @benif_lname = @kok_data[:benif_lname]
-      @benif_birth_date = @kok_data[:benif_birth_date]
-      @benif_gender = @kok_data[:benif_gender]
-      @benif_relationship = @kok_data[:benif_relationship]
+    if @clip_data.present?
+      @effectivity_date   = @clip_data[:effectivity_date]
+      @maturity_date      = @clip_data[:maturity_date]
+      @amount             = @clip_data[:amount]
+      @clip_number        = @clip_data[:clip_number]
+      @beneficiary        = @clip_data[:beneficiary]
+      @loan_product_id    = @clip_data[:loan_product_id]
+      @num_installments   = @clip_data[:benif_lname]
     end
 
     @members  = Member.active.where(center_id: @kpf_loan_clip.center.id)
