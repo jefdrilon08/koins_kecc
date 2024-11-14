@@ -155,7 +155,6 @@ class KpfLoanClipsController < ApplicationController
       end
     end
 
-
     @payload = {
       id: @kpf_loan_clip.id
     }
