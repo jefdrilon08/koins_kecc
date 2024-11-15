@@ -26,19 +26,19 @@
                 .col-md-3  
                   .form-group
                     %label Loan Product        
-                    = select_tag :loan_product_id, options_for_select(["Calamity loan","Educational loan","Emergency loan","Housing Loan","Multi Purpose Loan","Project loan","Regular Loan","Utility loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
+                    = select_tag :loan_product_id, options_for_select(["Calamity loan","Educational loan","Emergency loan","Housing Loan","Micro-Housing Loan","Multi Purpose Loan","Project loan","Regular Loan","Utility loan","Vehicle Loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
                 .col-md-3
                   .form-group
                     %label Principal      
                     = text_field_tag :principal, @principal, id: 'input-principal', class: 'form-control'
-                .col-md-3
-                  .form-group
-                    %label Term        
-                    = select_tag :term, options_for_select(["weekly", "monthly", "semi-monthly"], @term), id: 'input-term', class: 'form-control'
+                / .col-md-3
+                /   .form-group
+                /     %label Term        
+                /     = select_tag :term, options_for_select(["weekly", "monthly", "semi-monthly"], @term), id: 'input-term', class: 'form-control'
                 .col-md-3
                   .form-group
                     %label  Term (in Months)
-                    = select_tag :num_installments, options_for_select([ 3, 6, 9, 12], @num_installments), id: 'input-num-installments', class: 'form-control'
+                    = select_tag :num_installments, options_for_select([ 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25], @num_installments), id: 'input-num-installments', class: 'form-control'
                 .col-md-3
                   .form-group
                     %label Effective Date
