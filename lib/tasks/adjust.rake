@@ -1525,8 +1525,16 @@ namespace :adjust do
     dir_location  = ENV['DIR_LOCATION']
     puts "Searching in directory #{dir_location}"
 
-    success_count = 0
-    error_count = 0
+    update_count                  = 0
+
+    member_count                  = 0
+    attachment_count              = 0
+
+    not_active_in_kcoop_count     = 0
+    inactive_member_ids           = []
+
+    error_count                   = 0
+    error_ids                     = []
 
     Dir["#{dir_location}/*"].each do |f|
       if File.directory? f
@@ -1536,6 +1544,7 @@ namespace :adjust do
 
         if member
           if member.insurance_active?
+            member_count += 1
             puts "Found directory for member #{member.full_name}"
             Dir["#{f}/*"].each do |ff|
               if !File.directory? ff
@@ -1555,11 +1564,11 @@ namespace :adjust do
 
                     if attachment_file.save
                       puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
-                      success_count += 1
+                      attachment_count += 1
                     else
-                      puts "Error in attaching file #{ff}"
-                      puts attachment_file.errors.full_messages
-                      error_count += 1
+                      puts "Member #{member.identification_number} is not active in Kcoop"
+                      not_active_in_kcoop_count += 1
+                      inactive_member_ids << member.identification_number # Store inactive member ID
                     end
                   end
                 else
@@ -1570,16 +1579,31 @@ namespace :adjust do
                     member: member,
                     )
                   puts "Successfully updated file #{ff} for #{member.identification_number}"
-                  success_count += 1
+                  update_count += 1
                 end
               end
             end
+          else
+            puts "Member #{member.identification_number} is not active in Kcoop"
+            not_active_in_kcoop_count += 1
+            inactive_member_ids << member.identification_number # Store inactive member ID
           end
         else
           puts "Member #{sub_dir_name} not found"
+          error_count += 1
+          error_ids << sub_dir_name
         end
       end
     end
+
+    puts "Upload process completed."
+    puts "Total members processed: #{member_count}"
+    puts "Total attachments uploaded: #{attachment_count}"
+    puts "Total errors: #{error_count}"
+    puts "Error members IDs: #{error_ids}"
+    puts "Total inactive members in Kcoop: #{not_active_in_kcoop_count}"
+    puts "Inactive member IDs: #{inactive_member_ids.join(', ')}" # Display inactive
+  end
 
     puts "Upload process completed."
     puts "Total successful uploads: #{success_count}"
