@@ -1605,12 +1605,6 @@ namespace :adjust do
     puts "Inactive member IDs: #{inactive_member_ids.join(', ')}" # Display inactive
   end
 
-    puts "Upload process completed."
-    puts "Total successful uploads: #{success_count}"
-    puts "Total errors: #{error_count}"
-  end
-
-
   task :destroy_thumbs_attachment_file => :environment do
     puts "Destroying thumbs file ..."
     AttachmentFile.where("file_name IN (?)", ["Thumbs", "thumbs"]).each do |af|
@@ -3861,5 +3855,4 @@ namespace :adjust do
     end
     puts "Done!"
   end
-
 end
