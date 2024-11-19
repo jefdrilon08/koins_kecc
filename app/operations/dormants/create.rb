@@ -113,7 +113,9 @@ module Dormants
             center_name: Center.find(member_savings.center_id).name,
             member_status: member.status,
             balance: balance.to_f,  
-            dormant_fee: dormant_fee.to_f
+            dormant_fee: dormant_fee.to_f,
+            last_transaction: account_transaction.transacted_at,
+            last_transaction_type: account_transaction.data['is_withdraw'] == true ? 'Withdraw' : 'Deposit'
             # withdraw_data: [withdraw_data]  
           }
         end
