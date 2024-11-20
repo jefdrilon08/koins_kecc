@@ -275,7 +275,12 @@
           %i DATE: #{@claim.date_approved.try(:strftime, "%b %d, %Y") || ""}
           %br
           %br
-          %u
-            Silvida R. Antiquera
-          %br
-          General Manager
+          - if @claim.approved_by == "Nelly Vengano"
+            %u 
+              #{@claim.approved_by}
+            %br
+              KMBA President
+          - else            
+            %u Silvida R. Antiquera
+            %br
+              General Manager

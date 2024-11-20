@@ -1,0 +1,23 @@
+= form_tag "", method: 'GET' do
+  .row
+    .col-md-2
+      .form-group
+        %label
+          Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), class: "form-control select-select2", id: "branch-select", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Query
+        = text_field_tag :q, @q, class: 'form-control', placeholder: 'Name / ID Number'
+    .col-md-2
+      .form-group
+        %label
+          Status
+        = select_tag :status, options_for_select(KpfLoanClip::STATUSES, @status), class: "form-control select-select2", id: "status-select", prompt: "-- SELECT --"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        = button_tag type: 'submit', class: 'btn btn-info btn-block' do
+          .bi.bi-search

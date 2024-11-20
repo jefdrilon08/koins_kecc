@@ -7,7 +7,22 @@ module InsuranceLoanBundleEnrollments
       @insurance_loan_bundle_enrollment_count  = @insurance_loan_bundle_enrollment_data[:records].count
       @user                                    = @config[:user]
       @member                                  = @config[:member]
-      
+      @member_data                             = @member.data.with_indifferent_access
+
+      if Settings.activate_microinsurance
+        @address = @member.full_address
+      else
+        @region                                  = @member_data['address']['region']
+        @province                                = @member_data['address']['province']
+        @municipality                            = @member_data['address']['city']
+        @barangay                                = @member_data['address']['district']
+        @region_name                             = AdminAddress.find_by(id: @region)&.region_name || ""
+        @province_name                           = AdminProvince.find_by(id: @province)&.province_name || ""
+        @municipality_name                       = AdminMunicipality.find_by(id: @municipality)&.municipality_name || ""
+        @barangay_name                           = AdminBarangay.find_by(id: @barangay)&.barangay_name || ""
+        @address                                 = @region_name + ", " + @province_name + ", " + @municipality_name + ", " + @barangay_name
+      end
+
       if @insurance_loan_bundle_enrollment_count == 0
         @last_effectivity_date      = @config[:effectivity_date]
         @previous_plan_type         = @config[:plan_type]
@@ -19,14 +34,14 @@ module InsuranceLoanBundleEnrollments
         @previous_first_name        = @member.first_name
         @previous_middle_name       = @member.middle_name
         @previous_last_name         = @member.last_name
-        @previous_address           = @member.full_address
+        @previous_address           = @address
         @previous_full_name         = @member.full_name_formatted
         @previous_gender            = @member.gender
         @previous_birth_date        = @member.date_of_birth
         @previous_mobile_no         = @member.mobile_number
         @previous_civil_status      = @member.civil_status
         @last_membership_date       = @member.date_of_membership
-        
+
       else
         @last_kok_data_records        = @insurance_loan_bundle_enrollment_data[:records].last
         @last_effectivity_date        = @last_kok_data_records[:kok_data][:effectivity_date]
@@ -54,12 +69,12 @@ module InsuranceLoanBundleEnrollments
         @previous_age               = ((@last_effectivity_date.to_time - @previous_birth_date.to_time)/(60*60*24*365.25)).floor(4)
 
       end
-        
+
       if @insurance_loan_bundle_enrollment_count == 0
         @effectivity_date                       = @config[:effectivity_date]
         @maturity_date                          = @config[:effectivity_date].to_date + 1.year - 1.day
         @enrolled_status                        = "NEW"
-        @plan_type                              = @config[:plan_type]  
+        @plan_type                              = @config[:plan_type]
         @plan_category                          = @config[:plan_category]
         @client_type                            = @config[:client_type]
         @partner                                = @config[:partner]
@@ -68,7 +83,7 @@ module InsuranceLoanBundleEnrollments
         @first_name                             = @member.first_name
         @middle_name                            = @member.middle_name
         @last_name                              = @member.last_name
-        @address                                = @member.full_address
+        @address                                = @address
         @full_name                              = @member.full_name_formatted
         @gender                                 = @member.gender
         @birth_date                             = @member.date_of_birth
@@ -100,13 +115,13 @@ module InsuranceLoanBundleEnrollments
       end
 
       @age                                    = ((@effectivity_date.to_time - @birth_date.to_time)/(60*60*24*365.25)).floor(4)
-      
+
       if @age >= 18 && @age < 66
         @premium_coverage                     = 550
-      else 
-        @premium_coverage                     = 1475   
+      else
+        @premium_coverage                     = 1475
       end
-      
+
       @benif_fname                            = @config[:benif_fname]
       @benif_mname                            = @config[:benif_mname]
       @benif_lname                            = @config[:benif_lname]
@@ -199,7 +214,7 @@ module InsuranceLoanBundleEnrollments
         },
       }
       end
-        
+
       @insurance_loan_bundle_enrollment.update!(data: @data)
       @insurance_loan_bundle_enrollment
     end

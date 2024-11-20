@@ -356,6 +356,11 @@ Rails.application.routes.draw do
     collection { post :upload }
   end
 
+  # Kpf Loan Clips
+  resources :kpf_loan_clips, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
+
   # Admin Address
   resources :admin_address, only: [:index, :show, :destroy] do
     collection { post :upload }

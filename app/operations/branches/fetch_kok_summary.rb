@@ -5,8 +5,8 @@ module Branches
       @branch   = @config[:branch]
       @as_of    = @config[:as_of].try(:to_date) || Date.today
 
-      @start_date = @as_of.beginning_of_month - 1.month
-      @end_date = @as_of.end_of_month - 1.month
+      @start_date = (@as_of - 1.month).beginning_of_month
+      @end_date = (@as_of - 1.month).end_of_month
 
       @data = {
         records: []
@@ -24,6 +24,7 @@ module Branches
 
       @data[:records] = @result.map{ |r|
                         date_approved         = r.fetch("date_approved")
+                        branch                = r.fetch("branch")
                         status                = r.fetch("status")
                         plan_type             = r.fetch('plan_type')
                         plan_category         = r.fetch('plan_category')
@@ -53,6 +54,7 @@ module Branches
 
                         {
                           date_approved: date_approved,
+                          branch: branch,
                           status: status,
                           plan_type: plan_type,
                           plan_category: plan_category,
@@ -86,41 +88,50 @@ module Branches
     def queryAllBranch
       @result = ActiveRecord::Base.connection.execute(<<-EOS).to_a
         SELECT
-          a.date_approved,
-          a.status,
-          r.record->'kok_data'->>'plan_type' as plan_type,
-          r.record->'kok_data'->>'plan_category' as plan_category,
-          r.record->'kok_data'->>'partner' as partner,
-          r.record->'kok_data'->>'policy_no' as policy_no,
-          r.record->'kok_data'->>'effectivity_date' as effectivity_date,
-          r.record->'kok_data'->>'maturity_date' as maturity_date,
-          r.record->'kok_data'->>'client_type' as client_type,
-          r.record->'kok_data'->>'first_name' as first_name,
-          r.record->'kok_data'->>'middle_name' as middle_name,
-          r.record->'kok_data'->>'last_name' as last_name,
-          r.record->'kok_data'->>'address' as address,
-          r.record->'kok_data'->>'gender' as gender,
-          r.record->'kok_data'->>'enrolled_status' as enrolled_status,
-          r.record->'kok_data'->>'civil_status' as civil_status,
-          r.record->'kok_data'->>'birth_date' as birth_date,
-          r.record->'kok_data'->>'age' as age,
-          r.record->'kok_data'->>'premium_coverage' as premium_coverage,
-          r.record->'kok_data'->>'mobile_no' as mobile_no,
-          r.record->'kok_data'->>'membership_date' as membership_date,
-          r.record->'kok_data'->>'benif_fname' as benif_fname,
-          r.record->'kok_data'->>'benif_mname' as benif_mname,
-          r.record->'kok_data'->>'benif_lname' as benif_lname,
-          r.record->'kok_data'->>'benif_birth_date' as benif_birth_date,
-          r.record->'kok_data'->>'benif_gender' as benif_gender,
-          r.record->'kok_data'->>'benif_relationship' as benif_relationship
-        FROM insurance_loan_bundle_enrollments a
-        LEFT JOIN branches b ON b.id = a.branch_id,
-        jsonb_array_elements(a.data->'records') AS r(record)
+            a.date_approved,
+            a.status,
+            a.id,
+            b.name AS branch,
+            last_record->'kok_data'->>'plan_type' AS plan_type,
+            last_record->'kok_data'->>'plan_category' AS plan_category,
+            last_record->'kok_data'->>'partner' AS partner,
+            last_record->'kok_data'->>'policy_no' AS policy_no,
+            last_record->'kok_data'->>'effectivity_date' AS effectivity_date,
+            last_record->'kok_data'->>'maturity_date' AS maturity_date,
+            last_record->'kok_data'->>'client_type' AS client_type,
+            last_record->'kok_data'->>'first_name' AS first_name,
+            last_record->'kok_data'->>'middle_name' AS middle_name,
+            last_record->'kok_data'->>'last_name' AS last_name,
+            last_record->'kok_data'->>'address' AS address,
+            last_record->'kok_data'->>'gender' AS gender,
+            last_record->'kok_data'->>'enrolled_status' AS enrolled_status,
+            last_record->'kok_data'->>'civil_status' AS civil_status,
+            last_record->'kok_data'->>'birth_date' AS birth_date,
+            last_record->'kok_data'->>'age' AS age,
+            last_record->'kok_data'->>'premium_coverage' AS premium_coverage,
+            last_record->'kok_data'->>'mobile_no' AS mobile_no,
+            last_record->'kok_data'->>'membership_date' AS membership_date,
+            last_record->'kok_data'->>'benif_fname' AS benif_fname,
+            last_record->'kok_data'->>'benif_mname' AS benif_mname,
+            last_record->'kok_data'->>'benif_lname' AS benif_lname,
+            last_record->'kok_data'->>'benif_birth_date' AS benif_birth_date,
+            last_record->'kok_data'->>'benif_gender' AS benif_gender,
+            last_record->'kok_data'->>'benif_relationship' AS benif_relationship
+        FROM
+            insurance_loan_bundle_enrollments a
+        LEFT JOIN
+            branches b ON b.id = a.branch_id,
+            LATERAL (
+                SELECT r.value AS last_record
+                FROM jsonb_array_elements(a.data->'records') WITH ORDINALITY r(value, ordinality)
+                ORDER BY ordinality DESC
+                LIMIT 1
+            ) AS last_record
         WHERE
-          (a.date_approved >= '#{@start_date}' AND a.date_approved <= '#{@end_date}')
+            (a.date_approved >= '#{@start_date}' AND a.date_approved <= '#{@end_date}')
         ORDER BY
-          b.name,
-          a.date_approved
+            b.name,
+            a.date_approved
       EOS
     end
   end
