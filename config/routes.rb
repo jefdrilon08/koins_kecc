@@ -252,6 +252,8 @@ Rails.application.routes.draw do
   get "/excel_reports", to: "excel_reports#index"
   get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
   get "/excel_reports/midas_closing_report", to: "excel_reports#midas_closing_report", as: :midas_closing_report
+  get "/excel_reports/loan_report", to: "excel_reports#loan_report", as: :loan_report
+
 
   #excel_for_banks
   get "/excel_for_bank", to: "excel_for_bank#index"
