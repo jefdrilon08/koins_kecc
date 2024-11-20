@@ -22,7 +22,7 @@ class ApiReceiveMembersController < ApplicationController
       @api_receive_members = @api_receive_members.where(status: @status)
     end
 
-    @api_receive_members = @api_receive_members.order("status DESC, receive_date DESC").page(params[:page]).per(100)
+    @api_receive_members = @api_receive_members.order("status DESC, created_at DESC").page(params[:page]).per(100)
   end
 
   def show
