@@ -675,6 +675,10 @@ Rails.application.routes.draw do
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
   get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports", as: :insurance_loan_bundle_reports
   get "/reports/insurance_loan_bundle_reports_excel", to: "reports#insurance_loan_bundle_reports_excel", as: :insurance_loan_bundle_reports_excel
+
+  get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports", as: :kpf_loan_clip_reports
+  get "/reports/kpf_loan_clip_reports_excel", to: "reports#kpf_loan_clip_reports_excel", as: :kpf_loan_clip_reports_excel
+
   get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report", as: :claims_processing_time_report
   get "/reports/claims_processing_time_report_excel", to: "reports#claims_processing_time_report_excel", as: :claims_processing_time_report_excel
   get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary", as: :claims_processing_time_report_summary

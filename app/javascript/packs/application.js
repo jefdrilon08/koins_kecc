@@ -179,6 +179,7 @@ import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfC
 import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
 
 import ReportsInsuranceLoanBundleReports from "../models/ReportsInsuranceLoanBundleReports.js";
+import ReportsKpfLoanClipReports from "../models/ReportsKpfLoanClipReports.js";
 
 import ReportsClaimsProcessingTimeReport from "../models/ReportsClaimsProcessingTimeReport.js";
 import ReportsClaimsProcessingTimeReportSummary from "../models/ReportsClaimsProcessingTimeReportSummary.js";
@@ -429,6 +430,7 @@ const hooks = {
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
   "reports/insurance_loan_bundle_reports": 	  		  [ReportsInsuranceLoanBundleReports],
+  "reports/kpf_loan_clip_reports": 	  		  		  [ReportsKpfLoanClipReports],
   "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
   "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
   "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],

@@ -19,6 +19,7 @@ module KpfLoanClips
       @branch               = @kpf_loan_clip.branch
       @amount               = ((@principal * 0.014 * (@num_installments).to_i) / 12) 
       @full_name            = @member.full_name_formatted
+      @identification_number = @member.identification_number
       
     end
 
@@ -29,7 +30,8 @@ module KpfLoanClips
           first_name: @member.first_name,
           middle_name: @member.middle_name,
           last_name: @member.last_name,
-          full_name: @full_name
+          full_name: @full_name,
+          identification_number: @identification_number
         },
         clip_data: {
           loan_product_id: @loan_product_id,
