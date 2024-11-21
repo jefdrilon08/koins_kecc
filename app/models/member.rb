@@ -101,6 +101,8 @@ class Member < ApplicationRecord
   scope :inforce, -> { where(status: "active", insurance_status: "inforce").order("last_name ASC") }
   scope :reinstate, -> { where(status: "active").where("data->>'reinstatement' IS NOT NULL").order("last_name ASC") }
   scope :inforce_pending, -> { where(status: "active", insurance_status: ["inforce", "pending"]).order("last_name ASC") }
+  scope :active_not_gk, -> { where("EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth)) < 65").order("last_name ASC") }
+
   before_validation :load_defaults
 
   def user_object
@@ -274,7 +276,7 @@ class Member < ApplicationRecord
   def active_resigned?
     self.status == "resigned" or self.status == "active"
   end
-  
+
   def active_involuntary?
     self.status == "resigned" or self.is_involuntary == true
   end
@@ -497,6 +499,40 @@ class Member < ApplicationRecord
   def rf_amount
     self.member_accounts.where(account_type: "INSURANCE", account_subtype: "Retirement Fund").sum(:balance)
   end
+
+  def length_of_stay_reports
+    recognition_date = self.data.with_indifferent_access[:recognition_date]&.to_date
+    return nil unless recognition_date
+
+    now = Time.now.to_date
+
+    if recognition_date > now
+      number_of_days = (recognition_date - now).to_i
+      return "#{number_of_days} DAYS"
+    end
+
+    years = now.year - recognition_date.year
+    months = now.month - recognition_date.month
+    days = now.day - recognition_date.day
+
+    if days < 0
+      previous_month = (now << 1)
+      days += previous_month.end_of_month.day
+      months -= 1
+    end
+
+    if months < 0
+      years -= 1
+      months += 12
+    end
+
+    result = []
+    result << "#{years} YEAR#{'S' if years > 1}" if years > 0
+    result << "#{months} MONTH#{'S' if months > 1}" if months > 0
+    result << "#{days} DAY#{'S' if days > 1}" if days > 0
+    result.join(', ')
+  end
+
 
   def length_of_stay_report
     self.data.with_indifferent_access[:recognition_date].present?

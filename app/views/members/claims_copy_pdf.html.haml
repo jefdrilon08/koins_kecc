@@ -168,7 +168,7 @@
             DAYS LAPSED
         %td{:width => "15%", :align => "center", :colspan => "2"}
           %b
-            DAY OF STAY
+            LENGTH OF STAY UNTIL DEATH
         %td{:width => "15%", :align => "center", :colspan => "2"}
           %b
             FINAL
@@ -180,7 +180,7 @@
         %td{:width => "15%", :align => "center"}
           #{@payment_meta[:life_num_weeks_past_due] * 7}
         %td{:width => "15%", :align => "center", :colspan => "2"}
-          #{@member.length_of_stay}
+          #{@member.length_of_stay_reports}
         %td{:width => "15%", :align => "center", :colspan => "2"}
           #{@member.length_of_stay}
   %br
