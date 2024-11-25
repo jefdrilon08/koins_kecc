@@ -532,15 +532,20 @@ end
       "from_mobile_app":              @member.from_mobile_app  
     }
     
+
     @payload[:active_loans] = @active_loans.map{ |o|
+    amount_due = AmortizationScheduleEntry.where(loan_id: o.id).pluck(:amount_due).first || 0
+
       {
         id:             o.id,
         pn_number:      o.pn_number,
         loan_product:   o.loan_product.name,
         cycle:          o.cycle,
-        total_dues:     view_context.number_to_currency(o.total_dues, unit: ''),
-        total_paid:     view_context.number_to_currency(o.total_paid, unit: ''),
-        total_balance:  view_context.number_to_currency(o.total_balance, unit: '')
+        principal:      o.principal,
+        amount_due:     amount_due,
+        total_dues:     o.total_dues,
+        total_paid:     o.total_paid,
+        total_balance:  o.total_balance
       }
     }
 
