@@ -10,6 +10,7 @@ class ProcessReceivePaymentApi < ApplicationJob
       @user                     = payment["user"]
       @prepared_by              = User.find(@user)
       @data                     = payment["data"]
+      @api_from                 = payment["api_from"]
 
       @default_deposit_accounts = Settings.default_deposit_accounts
 
@@ -17,22 +18,23 @@ class ProcessReceivePaymentApi < ApplicationJob
         config: {
           collection_date: @collection_date,
           user: @prepared_by,
-          branch_id: @branch_id
+          branch_id: @branch_id,
+          api_from: @api_from
         }
       ).execute!
 
       @a_data = @insurance_fund_transfer_collection.data.with_indifferent_access
-    
+
       create_record
       @insurance_fund_transfer_collection
     end
   end
 
   private
-  
+
   def recompute_totals!
     @insurance_fund_transfer_collection = InsuranceFundTransferCollection.find(@insurance_fund_transfer_collection.id)
-   
+
     r_config = {
       current_member: {
         id: @member.id
@@ -40,12 +42,12 @@ class ProcessReceivePaymentApi < ApplicationJob
       data: @insurance_fund_transfer_collection.data.with_indifferent_access,
       user: @user,
       insurance_fund_transfer_collection: @insurance_fund_transfer_collection
-    } 
+    }
 
     data  = ::InsuranceFundTransferCollections::RecomputeTotals.new(
       config: r_config
     ).execute!
-    
+
     @insurance_fund_transfer_collection.update!(data: data)
 
     @insurance_fund_transfer_collection
@@ -84,9 +86,9 @@ class ProcessReceivePaymentApi < ApplicationJob
         else
           amount = 0.00
         end
-          
+
         record_type = o.account_type
-      
+
         @records << {
           amount: amount,
           enabled: enabled,
@@ -109,7 +111,7 @@ class ProcessReceivePaymentApi < ApplicationJob
       @insurance_fund_transfer_collection.update!(
         data: @a_data
       )
-      recompute_totals!  
+      recompute_totals!
     end
     @insurance_fund_transfer_collection.save!
   end

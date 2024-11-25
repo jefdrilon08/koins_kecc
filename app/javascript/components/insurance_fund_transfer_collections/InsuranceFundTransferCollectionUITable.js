@@ -260,13 +260,37 @@ export default class InsuranceFundTransferCollectionUITable extends React.Compon
               </td>
             );
           }
-        } else {
-          components.push(
-            <td key={"na-" + member.id + "-" + j} className="text-end">
-              {numberWithCommas(paymentRecord.amount)}
-            </td>,
-            <td><center>{(paymentRecord.reference_num)}</center></td>
-          )
+        }else if(this.props.data.status == "approved") {
+          if(paymentRecord.account_subtype == "Life Insurance Fund") {
+            components.push(
+              <td>
+                <center>{paymentRecord.reference_num}</center>
+              </td>,
+              <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          } else {
+            components.push(
+              <td key={"insurance-fund-transfer-payment-" + j} className="text-end">
+                <strong>
+                  <a 
+                    href="#"
+                    onClick={this.handleTransactionClicked.bind(this, paymentRecord, member)}
+                  >
+                    {numberWithCommas(paymentRecord.amount)}
+                  </a>
+                </strong>
+              </td>
+            );
+          }
         }
       }
 
