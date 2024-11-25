@@ -9,6 +9,8 @@
           %th{ style: "min-width: 100px;" } Status
           %th{ style: "min-width: 100px;" } K-IMPOK
           %th{ style: "min-width: 100px;" } Dormant Fee
+          %th{ style: "min-width: 100px;" } Last Transaction
+          %th{ style: "min-width: 100px;" } Transaction Type
           -# %th{ style: "min-width: 40px;" } TOTAL
       %tbody
         - if @dormant_records.present?
@@ -28,11 +30,15 @@
                 = number_to_currency(record[:balance], unit: "", precision: 2)
               %td.text-right
                 = number_to_currency(record[:dormant_fee], unit: "", precision: 2)
+              %td
+                = record[:last_transaction].to_date.strftime("%Y-%m-%d") if record[:last_transaction].present?
+              %td
+                = record[:last_transaction_type]
               -# %td.text-right
               -#   = number_to_currency(record[:balance] + record[:dormant_fee], unit: "", precision: 2)
         - else
           %tr
-            %td{ colspan: 6 } No dormant records found.
+            %td{ colspan: 7 } No dormant records found.
 
       %tfoot
         %tr
