@@ -793,7 +793,17 @@ namespace :api do
       post "dormants/add_si", to: "dormants#add_si"
       post "dormants/add_particular", to: "dormants#add_particular"
       
+
+      #Holiday
+      post "holidays/create", to: "holidays#create"
+      post "holidays/update", to: "holidays#update"
+      get "holidays/index", to: "holidays#index"
+
+      resources :holidays
+
+    
     end
+    
 
     namespace :epassbook do
       get "/members/status", to: "members#status"
