@@ -96,7 +96,7 @@ var _bindEvents = function() {
       if(centers[i].id == centerId) {
         for(var j = 0; j < centers[i].members.length; j++) { 
           $selectMember.append(
-            "<option value='" + centers[i].members[j].id + "'>" + centers[i].members[j].name + "</option>"
+            "<option value='" + centers[i].members[j].id + "'>" + centers[i].members[j].name + ", " + centers[i].members[j].age + "years old" + "</option>"
           );
         }
       }
