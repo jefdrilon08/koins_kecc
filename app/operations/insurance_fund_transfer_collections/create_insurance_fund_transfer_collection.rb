@@ -11,7 +11,11 @@ module InsuranceFundTransferCollections
                                                   collection_date: @collection_date,
                                                   branch: @branch
                                                   )
-
+      if @config[:api_from]
+        @api_from = @config[:api_from]
+      else
+        @api_from = ""
+      end
       if Settings.activate_microinsurance
         particular = "TO RECORD DEPOSIT COLLECTION OF #{@branch.name.upcase}"
       else
@@ -31,6 +35,7 @@ module InsuranceFundTransferCollections
         particular: particular,
         is_remote_deposit: User::REMOTE_ROLES.include?(@user.roles.last),
         reference_number: "",
+        api_from: @api_from,
       }
     end
 
