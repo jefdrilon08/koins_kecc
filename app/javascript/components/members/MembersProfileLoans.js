@@ -448,8 +448,7 @@ export default function MembersProfileLoans(props) {
 
 
 
-      <h6>
-  Active Loans &nbsp;
+      <h6>Active Loans 
   <small className="text-muted">
     Entry Point Loan Cycle Count: {props.entryPointLoanCycleCount}
   </small>
@@ -479,8 +478,9 @@ export default function MembersProfileLoans(props) {
           </thead>
           <tbody>
             {props.activeLoans.map((o) => {
-              const principal = parseFloat(o.principal) || 0;
-              const amount_due = parseFloat(o.amount_due) || 0;
+              // Ensure that the fields exist and parse them correctly
+              const principal = parseFloat(o.principal) || 0;  // Loan amount
+              const amount_due = parseFloat(o.amount_due) || 0;  // Loan payment
               const total_dues = parseFloat(o.total_dues) || 0;
               const total_paid = parseFloat(o.total_paid) || 0;
               const total_balance = parseFloat(o.total_balance) || 0;
@@ -497,38 +497,52 @@ export default function MembersProfileLoans(props) {
                     <a href={`/loans/${o.id}`}>
                       <strong>{o.pn_number}</strong>
                     </a>
-                  </td>
-                  <td className="text-muted">{o.loan_product}</td>
-                  <td className="text-center">{o.cycle}</td>
-                  <td className="text-center">{principal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                  <td className="text-center">{amount_due.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                  <td className="text-end"><strong>{total_dues.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-                  <td className="text-end"><strong>{total_paid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-                  <td className="text-end"><strong>{total_balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
+                    </td>
+        <td className="text-muted">{o.loan_product}</td>
+        <td className="text-center">{o.cycle}</td>
+        <td className="text-center">{principal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+        <td className="text-center">{amount_due.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+        <td className="text-end">
+          <strong>{total_dues.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
+        <td className="text-end">
+          <strong>{total_paid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
+        <td className="text-end">
+          <strong>{total_balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
                 </tr>
               );
             })}
           </tbody>
           <tfoot>
-            <tr>
-              <td colSpan={3} className="text-end"><strong>Total:</strong></td>
-              <td className="text-center"><strong>{totalLoanAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-              <td className="text-center"><strong>{totalLoanPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-              <td className="text-end"><strong>{totalDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-              <td className="text-end"><strong>{totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-              <td className="text-end"><strong>{totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong></td>
-            </tr>
-          </tfoot>
+  <tr>
+    <td colSpan={3} className="text-end"><strong>Total:</strong></td>
+    <td className="text-center">
+      <strong>{totalLoanAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-center">
+      <strong>{totalLoanPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+  </tr>
+</tfoot>
         </table>
       </>
-          )
-        } else {
-          return (
-            <p>
-              No loans found.
-            </p>
-          )
-        }
+    );
+  } else {
+    return (
+      <p>No loans found.</p>
+    );
+  }
       })()}
       <button
         className="btn btn-primary"

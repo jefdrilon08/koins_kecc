@@ -663,6 +663,30 @@ class ReportsController < ApplicationController
 
   end
 
+  def kpf_loan_clip_reports
+    @subheader_items = [
+      { text: "Other Reports" },
+      { text: "Clip Module Reports" }
+    ]
+  end
+
+  def kpf_loan_clip_reports_excel
+    @start_date         = params[:start_date]
+    @end_date           = params[:end_date]
+    @approval_date_from = params[:approval_date_from]
+    @approval_date_to   = params[:approval_date_to]
+    @branch_name        = Branch.where(id: @branch).first.name
+    @status             = params[:status]
+
+    excel = Reports::GenerateKpfLoanClipReports.new(start_date: @start_date, end_date: @end_date, approval_date_from: @approval_date_from, approval_date_to: @approval_date_to , branch: @branch, status: @status).execute!
+    filename  = "#{@branch_name}Clip Report.xlsx"
+
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+  end
+
+
 
   def claim_generate_report
     claim_type = params[:claim_type]

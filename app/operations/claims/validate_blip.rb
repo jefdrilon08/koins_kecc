@@ -13,7 +13,7 @@ module Claims
         @type_of_insurance_policy                 = @data[:type_of_insurance_policy]
         @name_of_insured                          = @data[:name_of_insured]
         @beneficiary                              = @data[:beneficiary]
-        @classification_of_insured                = @data[:classification_of_insured]  
+        @classification_of_insured                = @data[:classification_of_insured]
         @date_of_birth                            = @data[:date_of_birth]
         @date_of_policy_issue                     = @data[:date_of_policy_issue]
         @face_amount                              = @data[:face_amount]
@@ -33,7 +33,7 @@ module Claims
         @account_name                             = @data[:account_name]
         @account_number                           = @data[:account_number]
         @control                                  = control
-      
+
         @errors = []
     end
 
@@ -127,6 +127,11 @@ module Claims
         @errors << "Date Reported field is required"
       end
 
+
+      if @classification_of_insured == "Legal Dependent (Parent)" && @age.to_i < 60
+        @errors << "Age for Legal Dependent (Parent) classification should be 60 or above. Current age: #{@age}"
+      end
+
       # if @date_paid.blank?
       #   @errors << "Date Paid field is required"
       # end
@@ -160,16 +165,16 @@ module Claims
                           AND data->>'date_of_death_tpd_accident' = ?
                           AND data->>'policy_number' = ?
                           AND data->>'date_of_birth' = ?
-                          AND data->>'gender' = ?",  
-                          @date_of_policy_issue, 
+                          AND data->>'gender' = ?",
+                          @date_of_policy_issue,
                           @type_of_insurance_policy,
-                          @classification_of_insured, 
-                          @date_of_death_tpd_accident, 
-                          @policy_number, 
-                          @date_of_birth, 
+                          @classification_of_insured,
+                          @date_of_death_tpd_accident,
+                          @policy_number,
+                          @date_of_birth,
                           @gender).count
       end
-      
+
       if @count > 0
         @errors << "Duplicate BLIP!"
       end
