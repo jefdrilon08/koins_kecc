@@ -16,9 +16,9 @@ export default function ClosingRecordsList(props) {
               <th>
                 Status
 	      </th>
-	      <th>
+	      {/* <th>
 		Action
-	      </th>
+	      </th> */}
             </tr>
           </thead>
           <tbody>
@@ -41,7 +41,7 @@ export default function ClosingRecordsList(props) {
 		    ) : (<span className="badge bg-secondary">Pending</span>
 		    )}
 		  </td>
-		  <td>
+		  {/* <td>
 		    {(o.status === "done" || o.status === "invalid")&& (
                       <span
                         className="badge bg-danger"
@@ -51,7 +51,7 @@ export default function ClosingRecordsList(props) {
 	      	      </span>
 		    )}
 		    {o.branch_id}  
-                  </td>
+                  </td> */}
                 </tr>
               )
             })}
