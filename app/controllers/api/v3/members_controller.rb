@@ -2,7 +2,8 @@ module Api
   module V3
     class MembersController < ::Api::V3::ApplicationController
       before_action :authenticate_user!, except: [
-        :login, 
+        :login,
+        :passing_otp_code,
         :dashboard, 
         :savings,
         :verify_code,
@@ -14,12 +15,14 @@ module Api
 
       
       before_action :authorize_mis!, except: [
-        :login, 
+        :login,
+        :passing_otp_code,
         :dashboard, 
         :savings,
         :verify_code,
         :member_change_password,
         :project_types,
+
         :confirmation_changepass,
         :member_change_old_password
       ]
@@ -36,6 +39,8 @@ module Api
         :member_change_old_password
       ]
 
+    
+
       def dashboard
         member_data = allowed_member_attributes(member) 
         member = @current_member
@@ -50,11 +55,18 @@ module Api
     member: member_data 
   }
       end
-
+      def authenticate_member!
+        @current_member = Member.find_by(id: session[:member_id]) # or from token, etc.
+      
+        unless @current_member
+          render json: { error: 'Unauthorized' }, status: :unauthorized
+        end
+      end
+      
       def allowed_member_attributes(member)
         # Define which fields you want to include
         allowed_fields = [:id, :first_name, :last_name, :mobile_number,
-         :member_type, :identification_number, :branch_id, :center_id,]
+         :member_type, :identification_number, :branch_id, :center_id]
         
         #  getting the member type
         # Get the branch name if branch_id is present
@@ -64,13 +76,16 @@ module Api
         # Filter the member attributes based on the allowed fields
         attributes = member.attributes.slice(*allowed_fields.map(&:to_s)).with_indifferent_access
         
-        # Add the branch name to attributes if branch_id is present
+        # Add the branch and center names if their IDs are present
         attributes[:branch_name] = branch_name if attributes[:branch_id].present?
         attributes[:center_name] = center_name if attributes[:center_id].present?
-        attributes
-      end
       
-
+        # Add the is_otp_code field from data if it exists
+        attributes[:is_otp_code] = member.data['is_otp_code'] if member.data&.key?('is_otp_code')
+        
+        attributes
+      end  
+      
       def member_type
         # Find the member by ID
         member = Member.find_by(id: params[:id])
@@ -88,6 +103,26 @@ module Api
         render json: { member: member_data }
       end
 
+
+      def passing_otp_code
+        # Find the member by ID
+        member = Member.find_by(id: params[:id])
+
+        if member.nil?
+          render json: { error: 'Member not found' }, status: :not_found
+          return
+        end
+      
+        # Get allowed member attributes
+        member_data = allowed_member_attributes(member)
+        
+        # Render the member data in the response
+        render json: { member: member_data }
+      end
+
+
+
+      
       def login
         username  = params[:username]
         password  = params[:password]
@@ -110,7 +145,7 @@ module Api
           
           # Add all allowed member attributes
           member_data = allowed_member_attributes(cmd.member)
-      
+          # member_data = passing_otp_code(cmd.member)
           if cmd.token # if this member has a token
             current_member = Member.find(cmd.member.id)
             current_member_data = current_member.data.with_indifferent_access
@@ -127,6 +162,10 @@ module Api
         end
       end
 
+      
+
+      
+      
       def import_members
         validator = ::Core::Members::ValidateImportMembers.new(
           data: params[:data]

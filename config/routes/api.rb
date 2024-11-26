@@ -82,7 +82,8 @@ namespace :api do
   get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
   post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
   post "/members/member_change_old_password", to: "v3/members#member_change_old_password"
- get "/members/branch", to: "v3/members#branch"
+  get "/members/branch", to: "v3/members#branch"
+  get "/members/passing_otp_code", to: "members#passing_otp_code"
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"

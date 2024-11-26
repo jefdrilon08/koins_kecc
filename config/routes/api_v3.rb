@@ -4,6 +4,12 @@ namespace :api do
     get "/members/dashboard", to: "members#dashboard"
     get "/members/savings", to: "members#savings"
     get "/members/fetch", to: "members#fetch"
+    get "/members/passing_otp_code", to: "members#passing_otp_code" 
+
+    post "/resend_otp", to: "resend_otp#resend"
+    # get "/resend_otp", to: "resend_otp#resend"
+
+
     # User Management
     post "/users", to: "users#create"
     put "/users/:id", to: "users#update"
