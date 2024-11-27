@@ -176,6 +176,14 @@ class BillingsController < ApplicationController
             text: "Print PDF"
           }
           end
+
+          # "Print Thermal Printer" for approved billings
+        @subheader_side_actions << {
+          link: "#",
+          class: "fa fa-download",
+          id: "btn-termal",
+          text: "Print Thermal Printer"
+        }
       end
 
       @subheader_side_actions << {
