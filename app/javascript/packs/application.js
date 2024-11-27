@@ -94,6 +94,9 @@ import SavingsInsuranceTransferCollectionsShow from "../models/SavingsInsuranceT
 import InsuranceLoanBundleEnrollmentsIndex from "../models/InsuranceLoanBundleEnrollmentsIndex.js";
 import InsuranceLoanBundleEnrollmentsShow from "../models/InsuranceLoanBundleEnrollmentsShow.js";
 
+import KpfLoanClipsIndex from "../models/KpfLoanClipsIndex.js";
+import KpfLoanClipsShow from "../models/KpfLoanClipsShow.js";
+
 import InsuranceFundTransferCollectionsIndex from "../models/InsuranceFundTransferCollectionsIndex.js";
 import InsuranceFundTransferCollectionsShow from "../models/InsuranceFundTransferCollectionsShow.js";
 import InsuranceWithdrawalCollectionsIndex from "../models/InsuranceWithdrawalCollectionsIndex.js";
@@ -176,6 +179,7 @@ import ReportsSummaryOfCertificatesAndPolicies from "../models/ReportsSummaryOfC
 import ReportsSavingsInsuranceTransferReports from "../models/ReportsSavingsInsuranceTransferReports.js";
 
 import ReportsInsuranceLoanBundleReports from "../models/ReportsInsuranceLoanBundleReports.js";
+import ReportsKpfLoanClipReports from "../models/ReportsKpfLoanClipReports.js";
 
 import ReportsClaimsProcessingTimeReport from "../models/ReportsClaimsProcessingTimeReport.js";
 import ReportsClaimsProcessingTimeReportSummary from "../models/ReportsClaimsProcessingTimeReportSummary.js";
@@ -306,6 +310,8 @@ const hooks = {
   "savings_insurance_transfer_collections/show":      [SavingsInsuranceTransferCollectionsShow],
   "insurance_loan_bundle_enrollments/index":     	  [InsuranceLoanBundleEnrollmentsIndex],
   "insurance_loan_bundle_enrollments/show":      	  [InsuranceLoanBundleEnrollmentsShow],
+  "kpf_loan_clips/index":     	  					  [KpfLoanClipsIndex],
+  "kpf_loan_clips/show":      	  					  [KpfLoanClipsShow],
   "insurance_fund_transfer_collections/index":        [InsuranceFundTransferCollectionsIndex],
   "insurance_fund_transfer_collections/show":         [InsuranceFundTransferCollectionsShow, InsuranceFundTransferCollectionUIComponent],
   "insurance_withdrawal_collections/index":           [InsuranceWithdrawalCollectionsIndex],
@@ -424,6 +430,7 @@ const hooks = {
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
   "reports/insurance_loan_bundle_reports": 	  		  [ReportsInsuranceLoanBundleReports],
+  "reports/kpf_loan_clip_reports": 	  		  		  [ReportsKpfLoanClipReports],
   "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
   "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],
   "reports/reclassified_report": 	 		  		  [ReportsReclassifiedReport],

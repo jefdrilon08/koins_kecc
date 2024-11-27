@@ -1,0 +1,19 @@
+.row
+  .col
+    .card
+      .card-body
+        - if @kpf_loan_clip.pending?
+          = render partial: "show_pending_actions"
+          .message
+        %br
+        - if @records.size == 0
+          %p
+            No records found
+        - else
+          = render partial: "show_list", locals: { records: @records }
+       
+= render partial: "kpf_loan_clips/modals/approve"
+= render partial: "kpf_loan_clips/modals/check"
+= render partial: "kpf_loan_clips/modals/declined"
+= render partial: "kpf_loan_clips/modals/pending"
+= render partial: "shared/errors_template"

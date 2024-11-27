@@ -8,9 +8,6 @@
           
         - if @data_store["status"] == "pending"
           = render partial: "form_add"
-        - else
-          %p
-            No records found
 
         %h5
         = render partial: "member_details", locals: { dormant_records: @dormant_records }

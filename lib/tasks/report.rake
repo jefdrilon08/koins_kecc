@@ -1,4 +1,95 @@
 namespace :report do
+  task :loan_report => :environment do
+    require 'csv'
+  
+    br_name = ENV['SATO']
+    br_id   = Branch.where(name: br_name).ids
+    as_of = ENV['as_of']
+    loan_product_id = ENV['loan_id']
+  
+    data_store = DataStore.where(
+      "meta ->> 'data_store_type' = ? AND meta ->> 'as_of' = ? AND meta ->> 'branch_id' = ?",
+      'REPAYMENT_RATES', as_of, br_id
+    ).last
+  
+    CSV.open("#{Rails.root}/tmp/#{br_name}.csv", "w", write_headers: true, headers: [
+      'Member Name', 'Center', 'Loan Product', 'Amount', 'Date Released', 'Maturity Date', 'Loan Term', 'Monthly Interest Rate',
+      'Principal Balance', 'Interest Balance', 'PAR Amount 1-30', 'PAR Amount 31-365', 'PAR Amount 365 Onwards', 
+      'Num Days Par', 'RR (Raw)', 'RR Percentage', 'Amount Paid'
+    ]) do |csv|
+      if data_store.present?
+        totalCategoryAPastDueAmount = 0.0
+        totalCategoryAParAmount = 0.0
+        categoryACounter = 0
+  
+        totalCategoryBPastDueAmount = 0.0
+        totalCategoryBParAmount = 0.0
+        categoryBCounter = 0
+  
+        totalCategoryCPastDueAmount = 0.0
+        totalCategoryCParAmount = 0.0
+        categoryCCounter = 0
+  
+        data_store.data['records'].each do |rec|
+          if rec['loan_product']['id'] == loan_product_id
+            loan_id = rec['id']
+            member_name = "#{rec['member']['last_name']}, #{rec['member']['first_name']} #{rec['member']['middle_name']}"
+            loan_name = rec['loan_product']['name']
+            center = rec['center']['name']
+            amount = rec['principal']
+            date_released = rec['date_released']
+            maturity_date = rec['maturity_date']
+            num_installments = Loan.find(loan_id).num_installments
+            monthly_interest_rate = Loan.find(loan_id).monthly_interest_rate
+            principal_balance = rec['principal_balance']
+            interest_balance = rec['interest_balance']
+            total_paid = rec['total_paid']
+            principal_due = rec['principal_due']
+            totalRR = [rec['principal_paid_due'] / principal_due, 1].min
+            rr_percentage = (totalRR / 1) * 100
+            num_days_par = rec['num_days_par']
+            par = rec['par']
+  
+            # Categorize based on num_days_par
+            if par > 0
+              case num_days_par
+              when 1..30
+                categoryAPastDueAmount = rec['principal_balance']
+                categoryAParAmount = rec['overall_principal_balance']
+                totalCategoryAPastDueAmount += categoryAPastDueAmount
+                totalCategoryAParAmount += categoryAParAmount
+                categoryACounter += 1
+              when 31..365
+                categoryBPastDueAmount = rec['principal_balance']
+                categoryBParAmount = rec['overall_principal_balance']
+                totalCategoryBPastDueAmount += categoryBPastDueAmount
+                totalCategoryBParAmount += categoryBParAmount
+                categoryBCounter += 1
+              else
+                categoryCPastDueAmount = rec['principal_balance']
+                categoryCParAmount = rec['overall_principal_balance']
+                totalCategoryCPastDueAmount += categoryCPastDueAmount
+                totalCategoryCParAmount += categoryCParAmount
+                categoryCCounter += 1
+              end
+            end
+  
+            csv << [
+              member_name, center, loan_name, amount, date_released, maturity_date, num_installments, monthly_interest_rate,
+              principal_balance, interest_balance, categoryAParAmount, categoryBParAmount, categoryCParAmount,
+              num_days_par, totalRR, rr_percentage, total_paid
+            ]
+          end
+        end
+      else
+        csv << ['No data found for the specified criteria.']
+      end
+    end
+  
+    puts "Data has been successfully exported to #{br_name}.csv"
+  end
+
+  
   task :mba_report => :environment do
     br_name = ENV['SATO']
     br_id   = Branch.where(name: br_name).ids

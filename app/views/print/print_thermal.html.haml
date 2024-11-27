@@ -86,6 +86,8 @@
           Name
         //- @billing[:data][:totals].each do |t|
         %th.text-center{width: "2%" }
+          PDUE
+        %th.text-center{width: "2%" }
           LP
         %th.text-center{width: "1%" }
           S
@@ -114,7 +116,7 @@
             - grand_total_liferf       = 0.00
             - total_savings = 0.0
             - total_insurance = 0.0
-            - total_wp = 0.0 
+            - total_wp = 0.0
 
             - r[:records].each do |rr|
               - if rr[:record_type] == "SAVINGS"
@@ -144,7 +146,7 @@
 
                 - r[:records].each do |tt|
                   - if tt[:record_type] == "WP"
-                    - total_cash_collection_c =+ grand_total_cp
+                    - total_cash_collection_c += grand_total_cp
                     - total_cash_collection_x =+ grand_total_wp
                     - total_cash_collection =+ total_cash_collection_c -= total_cash_collection_x 
 
@@ -222,6 +224,7 @@
       -else @billing[:data][:special_report] == nil
         %h3
           %strong COLLECTION REPORT
+          - grand_total_past_due = 0.00
           - @billing[:data][:records].each do |r|
             
             - tota_equity = 0.00
@@ -234,6 +237,8 @@
             - savings             = 0.00
             - liferf              = 0.00
             - grand_total_liferf       = 0.00
+            - total_past_due = 0.00
+            
 
             %tr
               %td{style: "font-size: 12px"}
@@ -241,7 +246,13 @@
                 - if r["total_loan_payment"].to_f < r["total_fix_payment"].to_f
                   *
                   %table(style="background-color: #f1f1f1;")
+                
                 #{r[:member][:last_name]}, #{r[:member][:first_name]}
+
+                - principal = 0.00
+                - interest = 0.00
+                - actual_payment = 0.00
+
               - r[:records].each do |rr|
                 - if rr[:record_type] == "WP"
                   - member_grand_total += rr[:amount].to_f
@@ -252,6 +263,15 @@
                   - member_total_cp += rr[:amount].to_f
                   - member_grand_total += rr[:amount].to_f
                   - total_payment += rr[:amount].to_f
+
+                  - principal += rr[:amount].to_f
+                  - interest += rr[:amount].to_f
+              
+              - # Calculate past due amount
+              - total_due = principal + interest
+              - total_past_due = total_due - total_payment
+
+              - grand_total_past_due += total_past_due if total_past_due > 0  
 
               - r[:records].each do |tt|
                 - if tt[:record_type] == "WP"
@@ -268,29 +288,37 @@
                 - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
                   - liferf += ss[:amount].to_f
                   - grand_total_liferf += liferf
-                  - total_life_rf += ss[:amount].to_f
 
               - r[:records].each do |cc|
                 - if cc[:record_type] == "LOAN_PAYMENT"
                   - total_loan_payment += cc[:amount].to_f
                   - grand_total_loan_payment += cc[:amount].to_f
-
+                  
               - r[:records].each do |ee|
                 - if ee[:record_type] == "EQUITY"
                   - tota_equity  += ee[:amount].to_f
                   - grand_total_equity += ee[:amount].to_f
+
+              %td.text-end{style: "font-size: 14px"}
+                - if total_past_due.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(total_past_due.to_f.round(2),unit:'')}
+                  
               %td.text-end{style: "font-size: 14px"}
                 - if total_loan_payment.to_f == 0
                   - x = " - "
                   #{x}
                 - else
                   #{number_to_currency(total_loan_payment.to_f.round(2),unit:'')}
+                  
               %td.text-end{style: "font-size: 14px"}
                 - if savings.to_f == 0
                   - x = " - "
                   #{x}
                 - else
-                  #{number_to_currency(savings.to_f.round(2),unit: '')}
+                #{number_to_currency(savings.to_f.round(2),unit:'')}
               %td.text-end{style: "font-size: 14px"}
                 - if liferf.to_f == 0
                   - x = " - "
@@ -318,6 +346,8 @@
         %tr
           %th
             TOTAL
+          %th.text-end
+            #{number_to_currency(grand_total_past_due.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
           %th.text-end

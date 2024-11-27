@@ -201,25 +201,66 @@
   %br
   %center
     %table.signatories{"border:" => "", :none => ""}
-      %tr
-        -if Settings.activate_microinsurance == true
-          %th{width: 400}
-            MARIA VICTORIA MAPOLA
-        -else
-          %th{width: 350} #{@accounting_entry_data[:prepared_by]}
-        -if Settings.activate_microinsurance == true
-          %th{width: 400} EVELYN LAGMAY
-          / %th{width: 350} #{@accounting_entry_data[:approved_by]}
-        -else
-          %th{width: 255}
-        -if Settings.activate_microinsurance == true
-          %th{width: 350} #{@accounting_entry_data[:approved_by]}
-        -else
-          %th{width: 350} #{@accounting_entry_data[:approved_by]}
-      %tr
-        %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
-        %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
+      - if @accounting_entry_data[:book] == "CRB"
+        %tr
+          -if Settings.activate_microinsurance == true
+            %th{width: 400}
+              MARIA VICTORIA MAPOLA
+          -else
+            %th{width: 350} #{@accounting_entry_data[:prepared_by]}
+          -if Settings.activate_microinsurance == true
+            %th{width: 400} EVELYN LAGMAY
+            / %th{width: 350} #{@accounting_entry_data[:approved_by]}
+          -else
+            %th{width: 255}
+          -if Settings.activate_microinsurance == true
+            %th{width: 350} #{@accounting_entry_data[:approved_by]}
+          -else
+            %th{width: 350} #{@accounting_entry_data[:approved_by]}
+        %tr
+          %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
+      - if @accounting_entry_data[:book] == "JVB"
+        %tr
+          -if Settings.activate_microinsurance == true
+            %th{width: 400}
+              MARIA VICTORIA MAPOLA
+          -else
+            %th{width: 350} #{@accounting_entry_data[:prepared_by]}
+          -if Settings.activate_microinsurance == true
+            %th{width: 400} EVELYN LAGMAY
+            / %th{width: 350} #{@accounting_entry_data[:approved_by]}
+          -else
+            %th{width: 255}
+          -if Settings.activate_microinsurance == true
+            %th{width: 350} #{@accounting_entry_data[:approved_by]}
+          -else
+            %th{width: 350} #{@accounting_entry_data[:approved_by]}
+        %tr
+          %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Posted by:&emsp;&emsp;
+      - elsif @accounting_entry_data[:book] == "CDB"
+        %tr
+          -if Settings.activate_microinsurance == true
+            %th{width: 400}
+              MARIA VICTORIA MAPOLA
+          -else
+            %th{width: 350} #{@current_user[:first_name]}
+          -if Settings.activate_microinsurance == true
+            %th{width: 400} EVELYN LAGMAY
+            / %th{width: 350} #{@accounting_entry_data[:approved_by]}
+          -else
+            %th{width: 255}
+          -if Settings.activate_microinsurance == true
+            %th{width: 400} Nelly Vengano
+          -else
+            %th{width: 350} #{@accounting_entry_data[:approved_by]}
+        %tr
+          %td.overline &emsp;&emsp;Prepared by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Reviewed by:&emsp;&emsp;
+          %td.overline &emsp;&emsp;Approved by:&emsp;&emsp;
   %br
 :javascript
   window.print();

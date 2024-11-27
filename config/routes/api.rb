@@ -82,7 +82,8 @@ namespace :api do
   get "/members/project_types", to: "v3/members#project_types" # getting the project type and categories
   post "/members/confirmation_changepass", to: "v3/members#confirmation_changepass"
   post "/members/member_change_old_password", to: "v3/members#member_change_old_password"
- get "/members/branch", to: "v3/members#branch"
+  get "/members/branch", to: "v3/members#branch"
+  get "/members/passing_otp_code", to: "members#passing_otp_code"
   # Messages
   post "/messages", to: "messages#create"
   get "/messages", to: "messages#index"
@@ -305,6 +306,14 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
 
+    # KPF Loan Clips
+    post "/kpf_loan_clips/save", to: "kpf_loan_clips#save"
+    post "/kpf_loan_clips/add_member", to: "kpf_loan_clips#add_member"
+    post "/kpf_loan_clips/remove_member", to: "kpf_loan_clips#remove_member"
+    post "/kpf_loan_clips/approve", to: "kpf_loan_clips#approve"
+    post "/kpf_loan_clips/pending", to: "kpf_loan_clips#pending"
+    post "/kpf_loan_clips/check", to: "kpf_loan_clips#check"
+    
     # Api Receive Members
     post "/api_receive_members/approve", to: "api_receive_members#approve"
     post "/api_receive_members/decline", to: "api_receive_members#decline"
@@ -872,6 +881,7 @@ namespace :api do
     get "/reports/savings_insurance_transfer_reports", to: "reports#savings_insurance_transfer_reports"
 
     get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports"
+    get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports"
 
     get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
     get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary"

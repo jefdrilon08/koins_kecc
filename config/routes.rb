@@ -252,6 +252,8 @@ Rails.application.routes.draw do
   get "/excel_reports", to: "excel_reports#index"
   get "/excel_reports/excel_report", to: "excel_reports#excel_report", as: :excel_report
   get "/excel_reports/midas_closing_report", to: "excel_reports#midas_closing_report", as: :midas_closing_report
+  get "/excel_reports/loan_report", to: "excel_reports#loan_report", as: :loan_report
+
 
   #excel_for_banks
   get "/excel_for_bank", to: "excel_for_bank#index"
@@ -349,6 +351,11 @@ Rails.application.routes.draw do
 
   # Insurance Loan Bundle Enrollments
   resources :insurance_loan_bundle_enrollments, only: [:index, :show, :destroy] do
+    collection { post :upload }
+  end
+
+  # Kpf Loan Clips
+  resources :kpf_loan_clips, only: [:index, :show, :destroy] do
     collection { post :upload }
   end
 
@@ -675,6 +682,10 @@ Rails.application.routes.draw do
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
   get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports", as: :insurance_loan_bundle_reports
   get "/reports/insurance_loan_bundle_reports_excel", to: "reports#insurance_loan_bundle_reports_excel", as: :insurance_loan_bundle_reports_excel
+
+  get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports", as: :kpf_loan_clip_reports
+  get "/reports/kpf_loan_clip_reports_excel", to: "reports#kpf_loan_clip_reports_excel", as: :kpf_loan_clip_reports_excel
+
   get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report", as: :claims_processing_time_report
   get "/reports/claims_processing_time_report_excel", to: "reports#claims_processing_time_report_excel", as: :claims_processing_time_report_excel
   get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary", as: :claims_processing_time_report_summary

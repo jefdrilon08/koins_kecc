@@ -4,8 +4,7 @@ module Claims
 
     def initialize(user:, claim:)
       @claim = claim
-      @user = user
-      @email_address = @user.email
+      @users = user
 
       if @claim.pending?
         @status = "For Checking"
@@ -39,20 +38,25 @@ module Claims
     def execute!
       ActiveRecord::Base.transaction do
         from    = Email.new(email: "kmbakoins2020@gmail.com")
-        to      = Email.new(email: @email_address)
-        subject = "KMBA / Claims / #{@claim_type} / #{@status} / #{@member.try(:titleize)} / #{@claim.branch.name.try(:titleize)}"
-        content = Content.new(
-                    type: "text/html",
-                    value: "
-                            Claims #{@status.downcase}. I-click lamang ang link sa ibaba.
-                            <br />
-                            Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@member} - #{@status}</a>
-                            "
-                  )
 
-        mail      = Mail.new(from, subject, to, content)
-        sg        = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
-        response  = sg.client.mail._('send').post(request_body: mail.to_json)
+        @users.each do |user|
+          email_address = user.email
+
+          to      = Email.new(email: email_address)
+          subject = "KMBA / Claims / #{@claim_type} / #{@status} / #{@member.try(:titleize)} / #{@claim.branch.name.try(:titleize)}"
+          content = Content.new(
+                      type: "text/html",
+                      value: "
+                              Claims #{@status.downcase}. I-click lamang ang link sa ibaba.
+                              <br />
+                              Link: <a href='http://139.162.47.128:8081/claims/#{@claim.id}' target='_blank'>#{@member} - #{@status}</a>
+                              "
+                    )
+
+          mail      = Mail.new(from, subject, to, content)
+          sg        = SendGrid::API.new(api_key: ENV['SENDGRID_API_KEY'])
+          response  = sg.client.mail._('send').post(request_body: mail.to_json)
+        end
       end
     end
   end

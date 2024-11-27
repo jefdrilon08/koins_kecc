@@ -17,7 +17,7 @@ module Members
       #raise @active_loans.length.inspect
       #if @active_loans == []
       
-      @member_accounts.where(account_subtype: "K-IMPOK").last.update(maintaining_balance: 100.0)
+      #@member_accounts.where(account_subtype: "K-IMPOK").last.update(maintaining_balance: 100.0)
         
       #end
       

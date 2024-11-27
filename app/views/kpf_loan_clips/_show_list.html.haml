@@ -1,0 +1,42 @@
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th
+        Name
+      %th
+        Loan Product
+      %th
+        CLIP Number
+      %th 
+        Effectivity Date
+      %th 
+        Maturity Date
+      %th
+        Principal
+      %th.text-right
+        Amount
+      / - if @kpf_loan_clip.records_last?
+      %th.text-center
+        Actions
+  %tbody
+    - records.each_with_index do |o, i|
+      %tr
+        %td
+          = link_to member_path(o[:member][:id]), target: '_blank' do
+            #{o[:member][:last_name]}, #{o[:member][:first_name]} #{o[:member][:middle_name]}
+        %td
+          #{o[:clip_data][:loan_product_id]}
+        %td 
+          #{o[:clip_data][:clip_number]}
+        %td 
+          #{o[:clip_data][:effective_date]}
+        %td 
+          #{o[:clip_data][:maturity_date]}
+        %td
+          #{number_to_currency(o[:clip_data][:principal], unit: '')}
+        %td.text-right
+          #{number_to_currency(o[:clip_data][:amount], unit: '')}
+        - if ["MIS", "FM"].include? current_user.roles.last
+          %td.text-center
+            %button.btn.btn-danger.btn-sm.btn-delete{ data: { member_id: "#{i}" } }
+              .fa.fa-times

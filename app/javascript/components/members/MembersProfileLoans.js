@@ -4,6 +4,8 @@ import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 import Select from 'react-select';
 import ErrorList from '../ErrorList';
+import { data } from "jquery";
+import DataTable from "datatables.net-dt";
 
 export default function MembersProfileLoans(props) {
   console.log(props.accruedInterest);
@@ -14,6 +16,7 @@ export default function MembersProfileLoans(props) {
   const [loanProductId, setLoanProductId]                   = useState("");
   const [rActiveLoans, setRActiveLoans]                     = useState([]);
   const [activeLoans]                                       = useState(props.activeLoans || []);
+  const [loanProduct]                                       = useState(props.loanProduct);
   const [coMaker, setCoMaker]                               = useState("");
   const [coMakerMemberId, setCoMakerMemberId]               = useState("");
   const [pnNumber, setPnNumber]                             = useState("");
@@ -443,83 +446,103 @@ export default function MembersProfileLoans(props) {
         </Modal.Footer>
       </Modal>
 
-      <h6>
-        Active Loans &nbsp;
-        <small className="text-muted">
-          Entry Point Loan Cycle Count: {props.entryPointLoanCycleCount}
-        </small>
-      </h6>
-      {(() => {
-        if(props.activeLoans.length > 0) {
-          return (
-            <table className="table table-bordered table-hover table-sm">
-              <thead>
-                <tr>
-                  <th>
-                    PN Number
-                  </th>
-                  <th>
-                    Loan Product
-                  </th>
-                  <th className="text-center">
-                    Cycle
-                  </th>
-                  <th className="text-end">
-                    Total Due
-                  </th>
-                  <th className="text-end">
-                    Total Paid
-                  </th>
-                  <th className="text-end">
-                    Total Balance
-                  </th>
+
+
+      <h6>Active Loans 
+  <small className="text-muted">
+    Entry Point Loan Cycle Count: {props.entryPointLoanCycleCount}
+  </small>
+</h6>
+{(() => {
+  if (props.activeLoans.length > 0) {
+    let totalLoanAmount = 0;
+    let totalLoanPayment = 0;
+    let totalDue = 0;
+    let totalPaid = 0;
+    let totalBalance = 0;
+
+    return (
+      <>
+        <table className="table table-bordered table-hover table-sm">
+          <thead>
+            <tr>
+              <th>PN Number</th>
+              <th>Loan Product</th>
+              <th className="text-center">Cycle</th>
+              <th className="text-center">Loan Amount</th>
+              <th className="text-center">Loan Payment</th>
+              <th className="text-end">Total Due</th>
+              <th className="text-end">Total Paid</th>
+              <th className="text-end">Total Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.activeLoans.map((o) => {
+              // Ensure that the fields exist and parse them correctly
+              const principal = parseFloat(o.principal) || 0;  // Loan amount
+              const amount_due = parseFloat(o.amount_due) || 0;  // Loan payment
+              const total_dues = parseFloat(o.total_dues) || 0;
+              const total_paid = parseFloat(o.total_paid) || 0;
+              const total_balance = parseFloat(o.total_balance) || 0;
+
+              totalLoanAmount += principal;
+              totalLoanPayment += amount_due;
+              totalDue += total_dues;
+              totalPaid += total_paid;
+              totalBalance += total_balance;
+
+              return (
+                <tr key={"active-loan-" + o.id}>
+                  <td>
+                    <a href={`/loans/${o.id}`}>
+                      <strong>{o.pn_number}</strong>
+                    </a>
+                    </td>
+        <td className="text-muted">{o.loan_product}</td>
+        <td className="text-center">{o.cycle}</td>
+        <td className="text-center">{principal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+        <td className="text-center">{amount_due.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+        <td className="text-end">
+          <strong>{total_dues.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
+        <td className="text-end">
+          <strong>{total_paid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
+        <td className="text-end">
+          <strong>{total_balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+        </td>
                 </tr>
-              </thead>
-              <tbody>
-                {props.activeLoans.map((o) => {
-                  return (
-                    <tr key={"active-loan-" + o.id}>
-                      <td>
-                        <a href={`/loans/${o.id}`}>
-                          <strong>
-                            {o.pn_number}
-                          </strong>
-                        </a>
-                      </td>
-                      <td className="text-muted">
-                        {o.loan_product}
-                      </td>
-                      <td className="text-center">
-                        {o.cycle}
-                      </td>
-                      <td className="text-end">
-                        <strong>
-                          {o.total_dues}
-                        </strong>
-                      </td>
-                      <td className="text-end">
-                        <strong>
-                          {o.total_paid}
-                        </strong>
-                      </td>
-                      <td className="text-end">
-                        <strong>
-                          {o.total_balance}
-                        </strong>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          )
-        } else {
-          return (
-            <p>
-              No loans found.
-            </p>
-          )
-        }
+              );
+            })}
+          </tbody>
+          <tfoot>
+  <tr>
+    <td colSpan={3} className="text-end"><strong>Total:</strong></td>
+    <td className="text-center">
+      <strong>{totalLoanAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-center">
+      <strong>{totalLoanPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalPaid.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+    <td className="text-end">
+      <strong>{totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</strong>
+    </td>
+  </tr>
+</tfoot>
+        </table>
+      </>
+    );
+  } else {
+    return (
+      <p>No loans found.</p>
+    );
+  }
       })()}
       <button
         className="btn btn-primary"

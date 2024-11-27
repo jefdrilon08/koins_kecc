@@ -70,7 +70,10 @@ module Api
                       config: config
                     ).execute!
 
-          @approving_user = User.where(first_name: "Silvida", last_name: "Antiquera").first
+          @approving_user1 = User.where(first_name: "Silvida", last_name: "Antiquera").first # for GENERAL MANAGER
+          @approving_user2 = User.where(first_name: "Nelly", last_name: "Vengano").first  # for KMBA PRESIDENT
+
+          @approving_users = [@approving_user1, @approving_user2, @approving_user3]
 
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
@@ -79,7 +82,7 @@ module Api
                                         config: config
                                       ).execute!
 
-            ::Claims::NotifyUser.new(claim: claim, user: @approving_user).execute!
+            ::Claims::NotifyUser.new(claim: claim, user: @approving_users).execute!
 
             render json: { message: "Successfully proceed claim" }
           end

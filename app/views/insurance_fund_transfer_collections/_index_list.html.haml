@@ -12,6 +12,8 @@
         Collection Date
       %th
         Branch
+      %th
+        From
       %th.text-end
         Amount Collected
       %th
@@ -47,13 +49,15 @@
               #{o.collection_date.strftime("%b %d, %Y")}
         %td
           #{o.branch}
+        %td
+          #{o.data.with_indifferent_access["api_from"]}
         %td.text-end
           %strong
             #{number_to_currency(o.total_collected, unit: "")}
         %td
           %center
             - if o.pending?
-              .badge.bg-danger
+              .badge.bg-secondary
                 Pending
             - elsif o.approved?
               .badge.bg-success
@@ -62,7 +66,7 @@
           %td
             %center
               - if o.pending? && o.finalized?
-                .badge.badge-primary
+                .badge.bg-primary
                   For Approval
               - elsif o.pending? && !o.finalized?
                 .badge.bg-warning

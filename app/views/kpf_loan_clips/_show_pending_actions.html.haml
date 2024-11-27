@@ -1,0 +1,75 @@
+- if !is_bk?
+  .row
+    .col-md-12
+      .form-group
+        .h2
+          %label CLIP INFORMATION 
+          %label
+          %label  
+            %button.btn.btn-sm.btn-primary.btn-block
+              Pending
+  .card
+    .card-body
+      .row
+        .col-md-12
+          .form-group
+            .h3 
+              %label Loan Information
+          %hr
+          .row
+            .col-md-12
+              .row
+                .col-md-3
+                  .form-group
+                    %label Member
+                    = select_tag :member, options_from_collection_for_select(@members, :id, :full_name), id: 'select-member', class: 'form-control'
+                .col-md-3  
+                  .form-group
+                    %label Loan Product        
+                    = select_tag :loan_product_id, options_for_select(["Calamity loan","Educational loan","Emergency loan","Housing Loan","Micro-Housing Loan","Multi Purpose Loan","Project loan","Regular Loan","Utility loan","Vehicle Loan"], @loan_product_id), id: 'input-loan-product-id', class: 'form-control'
+                .col-md-3
+                  .form-group
+                    %label Principal      
+                    = text_field_tag :principal, @principal, id: 'input-principal', class: 'form-control'
+                / .col-md-3
+                /   .form-group
+                /     %label Term        
+                /     = select_tag :term, options_for_select(["weekly", "monthly", "semi-monthly"], @term), id: 'input-term', class: 'form-control'
+                .col-md-3
+                  .form-group
+                    %label  Term (in Months)
+                    = select_tag :num_installments, options_for_select([ 3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25], @num_installments), id: 'input-num-installments', class: 'form-control'
+                .col-md-3
+                  .form-group
+                    %label Effective Date
+                    = date_field_tag :effective_date, @effective_date, id: 'input-effective-date', class: 'form-control' 
+                .col-md-3
+                  .form-group
+                    %label Maturity Date
+                    = date_field_tag :maturity_date, @maturity_date, id: 'input-maturity-date', class: 'form-control'  
+                .col-md-3
+                  .form-group
+                    %label CLIP Number
+                    = text_field_tag :clip_number, @clip_number, id: 'input-clip-number', class: 'form-control'
+                .col-md-3
+                  .form-group
+                    %label CLIP Beneficiary
+                    = text_field_tag :beneficiary, @beneficiary, id: 'input-beneficiary', class: 'form-control'
+                     
+          %br
+          .row
+            .col-md-6
+              .form-group
+                %button#btn-add.btn.btn-primary.btn-block
+                  .fa.fa-plus
+                  Add Clip                      
+        
+- if @kpf_loan_clip.approved?
+  .row
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        %button#btn-add.btn.btn-info.btn-block
+          .fa.fa-plus
+          RENEW

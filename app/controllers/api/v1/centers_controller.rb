@@ -15,7 +15,7 @@ module Api
 
         errors  = ::Centers::ValidateAssignOfficer.new(
                     config: config
-                  ).execute! 
+                  ).execute!
 
         if errors[:messages].any?
           render json: errors, status: 400
@@ -74,8 +74,8 @@ module Api
 
         centers.order("name ASC").find_each(batch_size: 1000) do |o|
           members = []
-          
-          records = o.members
+
+          records = o.members.active_not_gk
 
           if params[:is_unregistered].present?
             records = o.members.active.where("access_token IS NULL")
@@ -84,7 +84,8 @@ module Api
           records.order("last_name ASC").each do |m|
             members << {
               id: m.id,
-              name: m.full_name
+              name: m.full_name,
+              age: m.age
             }
           end
 

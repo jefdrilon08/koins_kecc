@@ -43,16 +43,20 @@ module Members
           @errors[:username] << 'invalid status'
         else        
           user_data = user.data.with_indifferent_access # get the data first
+          user_data["is_otp_code"] ||= "" # Set `is_otp` to an empty string if it’s missing
+
           # Check if the member is new or old
           if (user.date_of_membership.present? and Date.parse(user.date_of_membership).strftime("%Y-%m-%d") >= @newMemberDate) # this is new member
-            
+            # This is a new member, OTP verification may be required
+            user_data["is_otp_code"] = "" # or set as needed by OTP logic
+
             if(user_data.key?(:is_otp_verified)) 
               if(user_data["is_otp_verified"]) # this member done in otp 
                 if(user_data.key?(:is_password_changed)) 
                   if(user_data["is_password_changed"]) # this member can now login direct to dashboard
                     @token  = user.generate_jwt # create the token
                   end
-                  
+
                 else # this member need to change password
                   user_data["is_password_changed"] = false
                 end
@@ -63,9 +67,9 @@ module Members
               user_data["is_otp_verified"] = false
             end
 
-            # # send sms temporary only (for testing only)
-            # gen_six_digit = rand(100_000..999_999) # generate 6 digit code
-            # user_data["sms_code"] = gen_six_digit.to_s # add the sms_code with the generated code
+            # send sms temporary only (for testing only)
+            gen_otp_code = rand(100_000..999_999) # generate 6 digit code
+            user_data["is_otp_code"] = gen_otp_code.to_s # add the sms_code with the generated code
             
             user.update(data: user_data) # update member's data
 
