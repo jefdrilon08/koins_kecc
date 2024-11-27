@@ -1,0 +1,68 @@
+:css
+  @page { size: portrait; margin: 25px; }
+
+  table {
+    font-size: 0.9em;
+  }
+
+%strong
+  #{Settings.company_name}
+  %br
+  #{Settings.company_address}
+  %br
+  VAT Registration Tin Number: #{Settings.company_tin_number}
+  %br
+  Dormant
+  %br
+  as of #{@drmt[:as_of]}
+  %br
+  Branch: #{@drmt[:branch_name]}
+  %br
+  %br
+
+%table.table.table-bordered.table-sm
+  %thead
+    %tr
+      %th{ width: "10%" }
+      %th{ width: "25%" } Member
+      %th.text-center Center
+      %th.text-center Status
+      %th.text-center K-Impok
+      %th.text-center Dormant Fee
+  %tbody
+    - @drmt[:records].each_with_index do |rec, inx|
+      %tr
+        %td= inx + 1
+        %td= rec[:full_name]
+        %td.text-center= rec[:center_name]
+        %td.text-center= rec[:member_status]
+        %td.text-center= rec[:balance]
+        %td.text-center= rec[:dormant_fee]
+%strong
+  %table.table.table-bordered.table-sm
+    %tbody
+      - @drmt[:header].each do |header|
+        %tr
+          %td= "TOTAL:"
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td
+          %td.text-center= header[:total_amount]
+          %td.text-center= header[:total_payment]
