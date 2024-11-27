@@ -17,6 +17,42 @@ class PrintController < ApplicationController
 
       @monthly_incentive = data
       render "print/monthly_incentive",layout: "print"
+    
+    elsif type == "print_dormant"
+      drmt = DataStore.find(params[:id])
+
+      data = ::Print::BuildPrintDormant.new(
+                drmt: drmt
+              ).execute!
+      @drmt = data
+      render "print/dormant", layout: "print"
+      # Rails.logger.debug "drmt data: #{drmt.inspect}"
+    elsif type == "membership_payment_collection"
+      membership_payment_collection = MembershipPaymentCollection.find(params[:id])
+
+      data  = ::Print::BuildMembershipPaymentCollection.new(
+                membership_payment_collection: membership_payment_collection
+              ).execute!
+
+      @membership_payment_collection = data
+
+      render "print/membership_payment_collection", layout: "print"
+
+    elsif type == "withdrawal_collection"
+      withdrawal_collection = WithdrawalCollection.find(params[:id])
+
+      config  = {
+        withdrawal_collection: withdrawal_collection
+      }
+
+      data  = ::Print::BuildWithdrawalCollection.new(
+                config: config
+              ).execute!
+
+      @withdrawal_collection = data
+
+      render "print/withdrawal_collection", layout: "print"
+
     elsif type == "print_second_involuntary_letter"
       data_str = params[:data]
       data = ::Print::BuildInvoluntarySecondLetter.new(config: JSON.parse(data_str)).execute!
@@ -51,6 +87,7 @@ class PrintController < ApplicationController
 
     elsif type == "print_migs"
       migs = DataStore.find(params[:id])
+
       data = ::Print::BuildPrintMigs.new(
               migs: migs
               ).execute!
@@ -250,16 +287,7 @@ class PrintController < ApplicationController
       @billing  = data
 
       render "print/wp", layout: "print"
-    elsif type == "membership_payment_collection"
-      membership_payment_collection = MembershipPaymentCollection.find(params[:id])
-
-      data  = ::Print::BuildMembershipPaymentCollection.new(
-                membership_payment_collection: membership_payment_collection
-              ).execute!
-
-      @membership_payment_collection = data
-
-      render "print/membership_payment_collection", layout: "print"
+    
 
     elsif type == "membership_payment_collection_thermal"
       membership_payment_collection = MembershipPaymentCollection.find(params[:id])
@@ -427,20 +455,7 @@ class PrintController < ApplicationController
 
       render "print/time_deposit_collection_thermal", layout: "print"
       
-    elsif type == "withdrawal_collection"
-      withdrawal_collection = WithdrawalCollection.find(params[:id])
-
-      config  = {
-        withdrawal_collection: withdrawal_collection
-      }
-
-      data  = ::Print::BuildWithdrawalCollection.new(
-                config: config
-              ).execute!
-
-      @withdrawal_collection = data
-
-      render "print/withdrawal_collection", layout: "print"
+    
     elsif type == "withdrawal_request"
       data_store = DataStore.find(params[:id])
 
