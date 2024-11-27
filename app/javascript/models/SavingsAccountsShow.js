@@ -84,7 +84,6 @@ var _cacheDom = function() {
 };
 
 var _bindEvents = function() {
-  console.log("TANGINA");
   $btnPrintLedger.on("click", function() {
     $modalPrint.show();
     

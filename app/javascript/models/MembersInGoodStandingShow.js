@@ -39,15 +39,14 @@ var _bindEvents = function() {
  $btnPrintPdf.on("click", function() {
     var print_icpr = $btnPrintPdf.data('id');
 
-    //$modalPrint.show();
-    //$printMessage.html(
+    $modalPrint.show();
+    // $printMessage.html(
     //  Mustache.render(
     //    loader,
     //    {}
     //  )
-    //);
-
-    //$modalPrint.hide();
+    // );
+    $modalPrint.hide();
     window.open("/print?id=" + print_icpr + "&type=print_migs");
   });
 

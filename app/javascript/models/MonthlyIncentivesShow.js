@@ -18,8 +18,8 @@ var $message;
 var _cacheDom = function() {
 
   $btnPrint         = $("#btn-print");
-  $printMessage       = $(".print-message");
-  $btnPrintPdf      =  $("#btn-print-pdf");
+  $printMessage     = $(".print-message");
+  $btnPrintPdf      = $("#btn-print-pdf");
 
   $modalPrint         = $("#modal-print");
 
@@ -46,7 +46,6 @@ var _bindEvents = function() {
     $modalPrint.hide();
     window.open("/print?id=" + print_mi + "&type=print_monthly_incentives");
   });
-
 
 };
 

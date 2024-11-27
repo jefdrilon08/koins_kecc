@@ -1,9 +1,9 @@
 module Dormants
   class DormantDownloadExcel
     def initialize(record:)
-    @p = Axlsx::Package.new
+      @p = Axlsx::Package.new
 
-    @records = DataStore.find(record)
+      @records = DataStore.find(record)
      @data = {}
     end
     
@@ -19,6 +19,8 @@ module Dormants
         @row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER, format_code: "#,##0.00")
         @data_row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER)
         @bottom_row = wb.styles.add_style(alignment: {horizontal: :right}, b: true, border: Axlsx::STYLE_THIN_BORDER)
+        @total_label_style = wb.styles.add_style(alignment: { horizontal: :left }, b: true, border: Axlsx::STYLE_THIN_BORDER)
+        
         sheet.add_row ["DORMANT"] , style: @header_cells
         sheet.add_row ["#{Settings.company_name}"], style: @header_cells
         sheet.add_row ["#{Settings.company_address}"], style: @header_cells
@@ -33,16 +35,18 @@ module Dormants
           balance   = value[:balance].to_f.round(2)
           dormant_fee = value[:dormant_fee].to_f.round(2)
           sheet.add_row ["#{member_name}","#{member_center}","#{member_status}","#{balance}","#{dormant_fee}"], style: @data_row
-        
         end
+
         records[:header].each_with_index do |value, index|
           total_balance   = value[:total_amount].to_f.round(2)
           total_dormant_fee   = value[:total_payment].to_f.round(2)
-          sheet.add_row ["TOTAL", "", "", "#{total_balance}", "#{total_dormant_fee}"], style: @bottom_row
+          sheet.add_row ["TOTAL: ", "", "", "#{total_balance}", "#{total_dormant_fee}"], 
+              style: [@total_label_style, @bottom_row, @bottom_row, @bottom_row, @bottom_row]
         end
       end
+
     end
     @p
+  end 
   end
-end
 end

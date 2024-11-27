@@ -95,7 +95,7 @@ module Accounting
 
         @subheader_items << { text: "Prepared by: #{@prepared_by}" }
 
-
+          
         @subheader_side_actions = [
           {
             id: "btn-printpdf",

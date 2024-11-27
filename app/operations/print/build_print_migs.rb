@@ -1,10 +1,13 @@
 module Print
 	class BuildPrintMigs
 		def initialize(migs)
+
 			@migs = migs 	
 			@migs_data= @migs[:migs]
 			@branch_name = @migs_data[:data]["branch"]["name"]
 			@migs_as_of  = @migs_data[:data]["migs_as_of"]
+			Rails.logger.debug "migs_data: #{@branch_name.inspect}"
+      		Rails.logger.debug "migs_data: #{@migs_as_of.inspect}"
 		end 
 
 		def execute!
@@ -23,6 +26,7 @@ module Print
 				}
 				temp
 			} 
+	
 			@data[:records]= @data[:records].sort_by { |hash|hash[:center_name]}
 
 			@data
