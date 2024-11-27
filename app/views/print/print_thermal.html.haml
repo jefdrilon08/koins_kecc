@@ -305,7 +305,7 @@
                   - x = " - "
                   #{x}
                 - else
-                  #{number_to_currency(total_past_due.to_f.round(2),unit:'')}
+                 
                   
               %td.text-end{style: "font-size: 14px"}
                 - if total_loan_payment.to_f == 0
@@ -348,7 +348,6 @@
           %th
             TOTAL
           %th.text-end
-            #{number_to_currency(grand_total_past_due.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
           %th.text-end
