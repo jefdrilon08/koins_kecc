@@ -804,8 +804,8 @@ namespace :api do
       
 
       #Holiday
-      post "holidays/create", to: "holidays#create"
-      post "holidays/update", to: "holidays#update"
+      post "holiday_records/create", to: "holiday_records#create"
+      post "holiday_records/update", to: "holiday_records#update"
       get "holidays/index", to: "holidays#index"
 
       resources :holidays
