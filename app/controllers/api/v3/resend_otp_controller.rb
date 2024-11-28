@@ -20,7 +20,7 @@ module Api
             new_otp_code = rand(100_000..999_999).to_s  # Generate a new OTP code
             
             user_data["is_otp_code"] = new_otp_code  # Set the new OTP
-            # user_data["is_otp_verified"] = false  # Reset OTP verification flag
+            user_data["is_otp_verified"] = true  # Reset OTP verification flag
   
             if user.update(data: user_data)
               # Send OTP via SMS (Optional: use an SMS service)

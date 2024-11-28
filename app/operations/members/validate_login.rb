@@ -68,8 +68,8 @@ module Members
             end
 
             # send sms temporary only (for testing only)
-            gen_otp_code = rand(100_000..999_999) # generate 6 digit code
-            user_data["is_otp_code"] = gen_otp_code.to_s # add the sms_code with the generated code
+            # gen_otp_code = rand(100_000..999_999) # generate 6 digit code
+            # user_data["is_otp_code"] = gen_otp_code.to_s # add the sms_code with the generated code
             
             user.update(data: user_data) # update member's data
 
