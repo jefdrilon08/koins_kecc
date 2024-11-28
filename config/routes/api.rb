@@ -26,6 +26,7 @@ namespace :api do
 
   # API for KCOOP
   post "/receive_api/send_kbente_summary", to: "receive_api#send_kbente_summary"
+  post "/receive_api/save_account_transaction_from_kcoop", to: "receive_api#save_account_transaction_from_kcoop"
 
 
   get "/public/api_centers/:branch_id", to: "public#centers"
@@ -312,7 +313,7 @@ namespace :api do
     post "/kpf_loan_clips/approve", to: "kpf_loan_clips#approve"
     post "/kpf_loan_clips/pending", to: "kpf_loan_clips#pending"
     post "/kpf_loan_clips/check", to: "kpf_loan_clips#check"
-    
+
     # Api Receive Members
     post "/api_receive_members/approve", to: "api_receive_members#approve"
     post "/api_receive_members/decline", to: "api_receive_members#decline"
@@ -800,7 +801,7 @@ namespace :api do
       post "dormants/add_or", to: "dormants#add_or"
       post "dormants/add_si", to: "dormants#add_si"
       post "dormants/add_particular", to: "dormants#add_particular"
-      
+
     end
 
     namespace :epassbook do

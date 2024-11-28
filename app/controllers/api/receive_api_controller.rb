@@ -62,6 +62,35 @@ module Api
       end
     end
 
+    def save_account_transaction_from_kcoop
+      payments = request.body.read
+
+      if payments.blank?
+        render json: { error: 'Request body is empty' }, status: 400
+      else
+        begin
+          payments = JSON.parse(payments)
+
+          if payments.nil?
+            render json: { error: 'Invalid JSON format' }, status: 400
+          else
+            errors = ::Kmba::ValidateSavePaymentFromKcoop.new(
+              payments: payments
+            ).execute!
+
+            if errors[:full_messages].any?
+              render json: { errors: errors[:full_messages] }, status: 400
+            else
+              ProcessReceiveAccountTransactionFromKcoopApi.perform_later(payments)
+              render json: {message: 'Job Successfully Queued.'}
+            end
+          end
+        rescue JSON::ParserError => e
+          render json: { error: 'Invalid JSON format', details: e.message }, status: 400
+        end
+      end
+    end
+
     # # API FOR CLAIMS
     # def save_claims_api
     #   @claims = []

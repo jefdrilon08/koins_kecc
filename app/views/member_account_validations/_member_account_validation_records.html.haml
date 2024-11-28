@@ -1,15 +1,15 @@
 %table.ui.small.table
   %thead
     %tr
-      %th{width: "2%"}
+      %th{width: "1%"}
       %th{width: "15%"} Member
-      %th Member Type
-      %th Classification
-      %th Recognition Date (MII)
-      %th Center
+      %th{width: "7%"} Member Type
+      %th{width:"5%"} Classification
+      %th{width:"12%"} Recognition Date (MII)
+      %th{width:"12%"} Center
       - if member_account_validation.approved?
         %th Trans #
-      %th Resignation Date
+      %th{width:"5%"} Resignation Date
       %th.curr RF
       %th.curr 50% LIFE
       %th.curr Equity Interest
@@ -63,11 +63,11 @@
           #{number_to_currency(member_account_validation_record.total, unit: "")}
         - if Settings.activate_microinsurance  
           %td
-            = link_to member_account_validation_files_path(member_account_validation,member_account_validation_record), target: "_blank", class: "btn", id: "btn-files" do
-              .fa.fa-image
+            = link_to member_account_validation_files_path(member_account_validation,member_account_validation_record), target: "_blank", class: "btn btn", id: "btn-files" do
+              .bi.bi-file-text
         %td
           = link_to member_account_validation_withdrawal_pdf_path(member_account_validation,member_account_validation_record), target: "_blank", class: "btn", id: "btn-print-pdf" do
-            .fa.fa-print
+            .bi.bi-printer-fill
   %thead
     %tr
       %th
