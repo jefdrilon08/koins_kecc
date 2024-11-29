@@ -883,6 +883,7 @@ namespace :api do
 
     get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports"
     get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports"
+    get "/reports/billing_lapsed_member_reports", to: "reports#billing_lapsed_member_reports"
 
     get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
     get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary"

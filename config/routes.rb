@@ -678,6 +678,9 @@ Rails.application.routes.draw do
   get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports", as: :insurance_loan_bundle_reports
   get "/reports/insurance_loan_bundle_reports_excel", to: "reports#insurance_loan_bundle_reports_excel", as: :insurance_loan_bundle_reports_excel
 
+  get "/reports/billing_lapsed_member_reports", to: "reports#billing_lapsed_member_reports", as: :billing_lapsed_member_reports
+  get "/reports/billing_lapsed_member_reports_excel", to: "reports#billing_lapsed_member_reports_excel", as: :billing_lapsed_member_reports_excel
+
   get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports", as: :kpf_loan_clip_reports
   get "/reports/kpf_loan_clip_reports_excel", to: "reports#kpf_loan_clip_reports_excel", as: :kpf_loan_clip_reports_excel
 
