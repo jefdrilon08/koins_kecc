@@ -1,15 +1,15 @@
-class ProcessReceivePaymentApi < ApplicationJob
+class ProcessReceiveAccountTransactionFromKcoopApi < ApplicationJob
   queue_as :default
 
   def perform(payments)
 
-    payments.each do |payment|
-      @branch_id                = payment["branch_id"]
-      @collection_date          = payment["collection_date"].to_date
-      @user                     = payment["user"]
+      @branch_id                = payments["branch_id"]
+      @collection_date          = payments["collection_date"].to_date
+      @user                     = payments["user"]
       @prepared_by              = User.find(@user)
-      @data                     = payment["data"]
-      @api_from                 = payment["api_from"]
+      @data                     = payments["data"]
+      @api_from                 = payments["api_from"]
+
 
       @default_deposit_accounts = Settings.default_deposit_accounts
 
@@ -26,7 +26,7 @@ class ProcessReceivePaymentApi < ApplicationJob
 
       create_record
       @insurance_fund_transfer_collection
-    end
+
   end
 
   private
@@ -54,7 +54,7 @@ class ProcessReceivePaymentApi < ApplicationJob
 
   def create_record
     @data.each do |data|
-      @member = Member.find_by(identification_number: data['identification_number'])
+      @member = Member.find(data['member_id'])
 
       @member_object = {
         id: @member.id,
@@ -75,15 +75,16 @@ class ProcessReceivePaymentApi < ApplicationJob
           enabled = true
         end
 
-        # raise member_account.inspect
-        if o[:account_subtype] == 'Life Insurance Fund'
-          amount = data['lif_amount']
-          reference_num = data['reference_num']
-        elsif o[:account_subtype] == 'Retirement Fund'
-          amount = data['rf_amount']
-          reference_num = data['reference_num']
-        else
-          amount = 0.00
+        if data['member_id'] == @member.id
+          if o[:account_subtype] == 'Life Insurance Fund'
+            amount = data['lif_amount'].to_i
+            reference_num = data["reference_num"]
+          elsif o[:account_subtype] == 'Retirement Fund'
+            amount = data['rf_amount'].to_i
+            reference_num = data["reference_num"]
+          else
+            amount = 0.00
+          end
         end
 
         record_type = o.account_type
