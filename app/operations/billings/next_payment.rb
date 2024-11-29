@@ -48,6 +48,7 @@ module Billings
           middle_name: @member.middle_name,
           last_name: @member.last_name,
           identification_number: @member.identification_number,
+          insurance_status: @member.insurance_status,
           member_type: @member.member_type,
           data: @member.data
         },
