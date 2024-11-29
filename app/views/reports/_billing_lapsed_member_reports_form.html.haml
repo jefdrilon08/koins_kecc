@@ -1,0 +1,28 @@
+= form_tag billing_lapsed_member_reports_path, html: { novalidate: true }, method: "GET" do
+  .row 
+    .h3
+      Billing of Lapsed Member Report
+  %hr
+  .row
+    .col
+      .form-group
+        %label Branch
+        = select_tag :branch_id, options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), prompt: "-- SELECT --",class: "form-control select-select2", id: "branch-select"
+    .col
+      .form-group
+        %label Status
+        = select_tag :status, options_for_select(Billing::STATUSES, @status), class: "form-control select-select2", prompt: "-- SELECT --", id: "status"
+    .col
+      .form-group
+        %label Collection Date From
+        = text_field_tag :collection_date_from, @collection_date_from, class: "form-control",type: "date", id: "collection-date-from"
+    .col
+      .form-group
+        %label Collection Date To 
+        = text_field_tag :collection_date_to, @collection_date_to, class: "form-control",type: "date", id: "collection-date-to"
+    .col
+      .form-group
+        %label Actions
+        = link_to "#", id: 'btn-excel', class: 'btn btn-success btn-block' do
+          .fa.fa-download
+          Excel 
