@@ -111,6 +111,7 @@ module DataStores
       else
         redirect_to data_stores_dormant_path
       end
+
     end
 
     def excel
@@ -136,6 +137,11 @@ module DataStores
       download_excel.serialize "#{Rails.root}/tmp/#{filename}"
       send_file "#{Rails.root}/tmp/#{filename}", filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end
+    end
+  end
+end
+end
+
 
     
   end
