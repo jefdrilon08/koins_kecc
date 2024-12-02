@@ -1474,6 +1474,26 @@ export default function MembersProfileActions(props) {
       </div>
       <hr/>
 
+      <div className="row">
+        <div className="col">
+          <div className="note note-info">
+            <strong>
+              Generate Certificate Form
+            </strong>
+            <p>
+            Generate Certificate Form PDF
+            </p>
+            <button
+              className="btn btn-primary"
+              onClick={() => { window.location.href=`/members/${props.memberId}/certificate_form_pdf` }}
+            >
+              Generate Certificate Form
+            </button>     
+          </div>
+        </div>
+      </div>
+      <hr/>
+
       {user_MIS_AO_Role && (
         <>
         <div className="row">
