@@ -55,10 +55,10 @@ class SavingsInsuranceTransferCollectionsController < ApplicationController
       redirect_to savings_insurance_transfer_collections_path
     end
 
-    if @savings_insurance_transfer_collection.branch_id != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @savings_insurance_transfer_collection.center_id != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
+    # if @savings_insurance_transfer_collection.branch_id != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @savings_insurance_transfer_collection.center_id != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
       @accounting_entry_hash                  = @savings_insurance_transfer_collection.data.with_indifferent_access[:accounting_entry]
       @particular                             = @accounting_entry_hash[:particular]
-    end
+    # end
     
     @members  = Member.active.where(
                   center_id: @savings_insurance_transfer_collection.center.id
