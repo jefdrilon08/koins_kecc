@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
+ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
@@ -43,6 +43,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.datetime "updated_at", precision: nil, null: false
     t.string "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
+    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
+    t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
     t.index ["subsidiary_id", "transaction_type", "transacted_at"], name: "idx_account_transactions_soa_personal_funds", where: "(amount > (0)::numeric)"
     t.index ["transacted_at", "subsidiary_id"], name: "index_account_transactions_loan_payments", where: "(((transaction_type)::text = 'loan_payment'::text) AND ((subsidiary_type)::text = 'Loan'::text) AND (amount > (0)::numeric))"
     t.index ["transacted_at"], name: "index_account_transactions_on_transacted_at"
@@ -96,6 +98,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.datetime "updated_at", precision: nil, null: false
     t.uuid "accounting_fund_id"
     t.index ["accounting_fund_id"], name: "index_accounting_entries_on_accounting_fund_id"
+    t.index ["book", "reference_number", "particular"], name: "manual_idx_9"
     t.index ["branch_id", "date_posted"], name: "manual_idx_17", where: "((status)::text = 'approved'::text)"
     t.index ["branch_id"], name: "index_accounting_entries_on_branch_id"
     t.index ["date_prepared"], name: "manual_idx_16"
@@ -170,8 +173,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.index "((data ->> 'billing_id'::text)), created_at DESC", name: "manual_idx_13"
+    t.index "((data ->> 'loan_id'::text)), created_at DESC", name: "manual_idx_8"
     t.index "((data ->> 'member_id'::text)), created_at DESC", name: "manual_idx_15"
     t.index ["created_at"], name: "manual_idx_4", order: :desc
+  end
+
+  create_table "addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "region_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "adjustment_records", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -183,6 +195,46 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.string "adjustment_type"
     t.date "date_approved"
     t.string "approved_by"
+  end
+
+  create_table "admin_addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "region_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "is_active"
+    t.string "province_name"
+  end
+
+  create_table "admin_barangays", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "barangay_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "municipality_id"
+  end
+
+  create_table "admin_municipalities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "municipality_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "province_id"
+  end
+
+  create_table "admin_provinces", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "province_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.uuid "region_id"
+  end
+
+  create_table "administration_addresses", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "region_name"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "administration_branch_closing_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -228,6 +280,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.date "announced_at"
     t.date "published_at"
     t.index ["branch_id"], name: "index_announcements_on_branch_id"
+  end
+
+  create_table "api_receive_members", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.date "receive_date"
+    t.string "api_from"
+    t.uuid "branch_id"
+    t.json "data"
+    t.string "status"
+    t.date "date_approve"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "inforce_count"
+    t.integer "lapsed_count"
+    t.integer "pending_count"
   end
 
   create_table "areas", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
@@ -284,6 +350,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.string "ar_number"
     t.decimal "total_collected"
     t.decimal "total_expected_collections"
+    t.string "si_number"
     t.index ["branch_id"], name: "index_billings_on_branch_id"
     t.index ["center_id"], name: "index_billings_on_center_id"
     t.index ["status", "collection_date"], name: "idx_billings_status_collection_date"
@@ -774,6 +841,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.index ["member_id"], name: "index_hiip_claims_on_member_id"
   end
 
+  create_table "holidays", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "holiday_name"
+    t.string "holiday_date"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "insurance_fund_transfer_collections", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.date "collection_date"
     t.uuid "center_id"
@@ -854,7 +929,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.string "status"
     t.date "date_prepared"
     t.date "ae_date_posted"
+    t.index ["accounting_code_id", "accounting_entry_id"], name: "manual_idx_10"
     t.index ["accounting_code_id"], name: "index_journal_entries_on_accounting_code_id"
+    t.index ["accounting_entry_id", "post_type", "accounting_code_id"], name: "manual_idx_18"
     t.index ["accounting_entry_id"], name: "index_journal_entries_on_accounting_entry_id"
     t.index ["accounting_fund_id"], name: "index_journal_entries_on_accounting_fund_id"
     t.index ["branch_id"], name: "index_journal_entries_on_branch_id"
@@ -945,6 +1022,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.index ["member_id"], name: "index_kjsp_claims_on_member_id"
   end
 
+  create_table "kpf_loan_clips", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "status"
+    t.uuid "center_id"
+    t.uuid "branch_id"
+    t.date "collection_date"
+    t.date "date_approved"
+    t.jsonb "data"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.decimal "total_amount", precision: 8, scale: 2, default: "0.0"
+    t.string "approved_by"
+    t.index ["branch_id"], name: "index_kpf_loan_clips_on_branch_id"
+    t.index ["center_id"], name: "index_kpf_loan_clips_on_center_id"
+  end
+
   create_table "legal_dependents", id: :uuid, default: -> { "public.gen_random_uuid()" }, force: :cascade do |t|
     t.string "first_name"
     t.string "middle_name"
@@ -974,7 +1066,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.uuid "co_maker_member_id"
     t.string "co_maker_first_name", null: false
     t.string "co_maker_last_name", null: false
+    t.uuid "loan_product_tagging_id"
+    t.date "date_approved"
     t.index ["loan_product_id"], name: "index_loan_applications_on_loan_product_id"
+    t.index ["loan_product_tagging_id"], name: "index_loan_applications_on_loan_product_tagging_id"
     t.index ["member_id"], name: "index_loan_applications_on_member_id"
   end
 
@@ -1014,6 +1109,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.json "data"
     t.integer "priority"
     t.uuid "loan_product_category_id"
+    t.boolean "is_active"
     t.index ["loan_product_category_id"], name: "index_loan_products_on_loan_product_category_id"
     t.index ["priority"], name: "manual_idx_6"
   end
@@ -1308,6 +1404,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
     t.string "or_number"
     t.string "ar_number"
     t.decimal "total_collected"
+    t.string "si_number"
     t.index ["branch_id"], name: "index_membership_payment_collections_on_branch_id"
     t.index ["center_id"], name: "index_membership_payment_collections_on_center_id"
   end
@@ -1725,6 +1822,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_01_074433) do
   add_foreign_key "kjsp_claims", "centers"
   add_foreign_key "kjsp_claims", "members"
   add_foreign_key "legal_dependents", "members"
+  add_foreign_key "loan_applications", "loan_product_taggings"
   add_foreign_key "loan_applications", "loan_products"
   add_foreign_key "loan_applications", "members"
   add_foreign_key "loan_applications", "members", column: "co_maker_member_id"

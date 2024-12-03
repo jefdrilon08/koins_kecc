@@ -20,11 +20,9 @@ module Api
           else
             # Enqueue the background job and pass the config
             ProcessGenerateDormant.perform_later(config)
-        
             render json: { message: 'Dormant creation process started', status: 200 }
           end
         end
-        
         
         def add_book_type
           data_store_id = params[:id]
@@ -71,7 +69,6 @@ module Api
           render json: { message: "Done" }
         end
 
-
         def approve
           record = DataStore.find(params[:id])
           config = {
@@ -86,17 +83,6 @@ module Api
           ProcessApproveDormants.perform_later(args)
           render json: { message: "ok" }
         end
-
-
-     
-        
-      
-        
-        
-        
-        
-        
-        
 
       end
     end
