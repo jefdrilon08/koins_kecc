@@ -1,0 +1,305 @@
+:css
+
+  @page {
+    size: 8.5in 13in; 
+    margin: 0.4in;
+  }
+
+  .print-text {
+    font-size: 18px;
+    font-family: calibri;
+  }
+
+  .title-kmba {
+    font-size: 23px;
+  }
+
+  .p-kmba {
+    font-family: calibri;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  table, th, td {
+    -# border: 1px solid black;
+    text-align: center;
+  }
+
+  #kmba{
+    width: 100px;
+    height: 80px;
+  }
+
+  #micr{
+    width: 100px;
+    height: 50px;
+  }
+
+  .p-text {
+    font-family: calibri;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .p-text-register {
+    font-family: calibri;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 22px;
+  }
+
+  .p-text-register-bold {
+    font-family: calibri;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 22px;
+  }
+
+  .p-certificate {
+    font-family: system-ui;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 42px;
+  }
+
+  .u-certificate {
+    font-size: 20px;
+  }
+
+  .p-name {
+    font-size: 25px;
+    margin-bottom: 0;
+  }
+
+  .p-format {
+    margin-bottom: 0;
+  }
+
+  .td-format {
+    padding-left: 0;
+    padding-rigth: 0;
+  }
+  
+  .space-left{
+    padding-left: 18px;
+  }
+
+  .space-right{
+    padding-left: 18px;
+  }
+
+  .no_space{
+    padding-left: 18px;
+    text-align: left;
+  }
+
+  .member {
+    font-style: italic;
+    font-size: 40px;
+    margin-bottom: 0;
+    font: San-serif;
+  }
+
+  .foot-content {
+    text-align: justify;
+  }
+  
+  .membership {
+    text-align: center;
+    word-spacing: 2px;
+  }
+
+  .foot_names {
+    width:50%
+  }
+
+  .foot_reminder {
+    font-size: 11px;
+  }
+  
+  .brand_and_center {
+    font-size: 12px;
+  }
+
+
+%table{style: "width:100%"}
+  %tr
+    %th MBA For No. 02
+    %th 
+    %th{style: "text-align: right;"} 2013 
+  %tr
+    %td 
+      = image_tag("kmba.ico", :alt => "kmba img", id: "kmba")
+    %td
+      %p.p-kmba
+        %span.title-kmba
+          KASAGANA-KA Mutual Benefit Association, Inc.
+        %p.p-kmba 5 Matimpiin St., Brgy. Pinyahan, Quezon City
+        %p.p-kmba Tel. No. 990-7915/Fax No. 931-4335 
+        %p.p-kmba E-mail: kasaganaka.mba@gmail.com TIN 246-220-351-000
+    %td
+      = image_tag("micr.png", :alt => "micro img", id: "micr")
+  %tr
+    %td
+    %td
+      %p.p-text REGISTERED WITH INSURANCE COMMISSION
+      %strong
+        %p.p-text LICENSE NO. :2019-22-R 
+    %td
+%br
+%br
+%br
+%table{style: "width:100%"}
+  %tr
+    %td
+    %td
+      %strong
+        %p.p-certificate CERTIFICATE OF MEMBERSHIP 
+    %td
+  %tr
+    %td
+    %td
+      %p 
+        CERTIFICATE NO. 
+        %strong
+          %u.u-certificate
+            = @member.identification_number
+    %td
+%br
+%br
+%br
+%table{style: "width:100%"}
+  %tr
+    %td
+    %td
+      %strong
+        %p 
+          This is to certify that
+    %td
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td
+    %td
+      %strong
+        %p.p-name
+          = @member.full_name_formatted
+    %td
+  %tr{ style: "height: 10px;" }
+    %td
+    %td
+      %div{ style: "width: 50%; border-bottom: 1px solid #000; margin: 0 auto;" }
+    %td
+  %tr
+    %td
+    %td
+      %p
+        MEMBER'S NAME
+    %td
+
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.space-left
+    %td.td-format
+      %p.p-format
+        of
+    %td
+      %strong
+        %p.p-format
+          = @member.center
+    %td.td-format
+      %p.p-format
+        of
+    %td
+      %strong
+        %p.p-format
+          = @member.branch
+    %td.space-right
+  %tr{ style: "height: 10px;" }
+    %td
+    %td
+    %td
+      %div{ style: "width: 100%; border-bottom: 1px solid #000; margin: 0 auto;" }
+    %td
+    %td
+      %div{ style: "width: 100%; border-bottom: 1px solid #000; margin: 0 auto;" }
+    %td
+  %tr{ style: "height: 10px;" }
+    %td
+    %td
+    %td.brand_and_center
+      (CENTER NAME)
+    %td
+    %td.brand_and_center
+      (BRANCH NAME)
+    %td
+%br
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.space-left
+    %td
+      %strong
+        is a
+    %td.space-right
+%br
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.space-left
+    %td
+      %strong
+        %p.member
+          MEMBER
+    %td.space-right
+%br
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.space-left
+    %td.foot-content
+      %p
+        %strong of Kasagana-Ka Mutual Benefit Association, Inc. (KMBA) 
+        and is therefore entitled to all rights and privileges accruing thereto, provided his/her membership to KMBA is continuous and provided further that he/she abides faithfully by the Rules and Regulations of the KMBA and all provisions appurtenant thereto.
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.no_space
+    %td.membership
+      This membership takes effect on the 
+      %strong
+        = @member.recognition_date_day
+      day of
+      %strong 
+        = @member.recognition_date_month
+      %strong
+        = @member.recognition_date_year
+  %tr.space-right
+    %tr{ style: "height: 10px;" }
+    %td
+    %td
+    %td
+      %div{ style: "width: 100%; border-bottom: 1px solid #000; margin: 0 auto;" }
+    %td
+    %td
+      %div{ style: "width: 100%; border-bottom: 1px solid #000; margin: 0 auto;" }
+    %td
+%br
+%br
+%br
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.foot_names
+      %u
+        Nelly Vengano
+    %td.foot_names
+      %u
+        Silvida Reyes Antiquera
+  %tr{ style: "height: 0px;" }
+    %td.foot_names
+      PRESIDENT
+    %td
+      GENERAL MANAGER
+%br
+%br
+%table{ style: "width:100%;" }
+  %tr{ style: "height: 0px;" }
+    %td.foot_reminder
+      (INSURANCE BENEFITS FOR A RECOGNIZED MEMBER AT THE BACK)
+
+

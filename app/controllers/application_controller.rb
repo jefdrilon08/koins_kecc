@@ -54,6 +54,7 @@ class ApplicationController < ActionController::Base
     "claims_copy_pdf",
     "insurance_account_pdf",
     "blip_form_pdf",
+    "certificate_form_pdf",
     "hiip_validation_pdf",
     "hiip_loa_pdf",
     "kalinga_validation_pdf",

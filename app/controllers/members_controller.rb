@@ -119,16 +119,28 @@ class MembersController < ApplicationController
       end
   end
 
+  def certificate_form_pdf
+    @member = Member.find(params[:id])
+
+    @user_roles = UserBranch.joins(:user).where("branch_id = ? AND active = true", @member.branch_id).pluck(:user_id).uniq
+    @user_roles.each do |y|
+      user = User.find(y)
+        if user.current_roles.shift == "FM"
+          @som = user[:first_name].upcase + " "+ user[:last_name].upcase
+        end
+      end
+  end
+
   def claims_copy_pdf
     @member = Member.find(params[:id])
-    @member_id = @member[:id]  
+    @member_id = @member[:id]
     @insurance_account = MemberAccount.where(member_id: @member_id)
     @lif = "Life Insurance Fund"
     @lif_insurance_account = MemberAccount.where(account_subtype: @lif, member_id: @member_id).first
     @rf = "Retirement Fund"
     @rf_insurance_account = MemberAccount.where(account_subtype: @rf, member_id: @member_id).first
     @date_of_death = session[:date_of_death].to_date
-    
+
     config = {
       member: @member,
       lif_insurance_account: @lif_insurance_account,
@@ -140,7 +152,7 @@ class MembersController < ApplicationController
       config: config
     ).execute!
   end
-  
+
   def member_registry_excel
 
     excel = ::Members::GenerateRegistryOfMembers.new(branch: @branches).execute!
@@ -151,17 +163,17 @@ class MembersController < ApplicationController
   end
 
   def form_make_payments
-    
-    @member = Member.find(params[:id]) 
+
+    @member = Member.find(params[:id])
     config = {
                 member_id: @member.id,
                 make_payment_type: params[:type]
-      
+
               }
     @data = ::Members::BuildMakePayments.new(config: config).execute!
 
     @accounting_entry = ::Members::BuildAccountingEntryForMakePayments.new(
-                                    make_payment_data: @data, 
+                                    make_payment_data: @data,
                                     current_user: current_user,
                                     make_payment_type: params[:type]
 
@@ -173,20 +185,20 @@ class MembersController < ApplicationController
       { text: "Make Payment Form" }
     ]
 
-  
+
     @subheader_side_actions = [
       {
         id: "btn-save",
         link: "#",
         class: "fa fa-check",
         text: "Save",
-      
+
         data: { member_id: @member.id, make_payment_type: params[:type] }
       },
-      { 
-        is_link: true, 
+      {
+        is_link: true,
         link: "/members/" + @member.id + "/display",
-        # path: member_path(@member), 
+        # path: member_path(@member),
         class: "fa fa-times",
         text: "Cancel" }
     ]
@@ -352,7 +364,7 @@ class MembersController < ApplicationController
     ).order(
       "loan_products.name ASC"
     )
-  
+
 
     @paid_loans = ReadOnlyLoan.paid.includes(:loan_product).where(
       member_id: params[:id]
@@ -432,13 +444,13 @@ if @accrued_interest.present?
       total_accrued_interest = o[:data]["accrued_interest"]["total_accrued_interest"]
       total_accrued_interest_balance = o[:data]["accrued_interest"]["total_accrued_interest_balance"]
       status = o[:data]["accrued_interest"]["status"]
-      
+
       if status.blank?
         status = o[:data]["accrued_interest"]["status"] = "active"
       else
-  
+
       end
-      
+
       {
         id:                               o.id,
         pn_number:                        o.pn_number,
@@ -510,7 +522,7 @@ end
       "membership_arrangement":       @member.membership_arrangement,
       "recognition_date":             @member.recognition_date.try(:strftime, "%b %d, %Y"),
       "length_of_stay":               @member.length_of_stay,
-      "face_amount":                  @member.face_amount, 
+      "face_amount":                  @member.face_amount,
       "legal_dependents":             @legal_dependents,
       "beneficiaries":                @beneficiaries,
       "resignation_records":          @resignation_records,
@@ -529,9 +541,9 @@ end
       "reinstated":                   @member.reinstated.try(:strftime, "%b %d, %Y"),
       "project_type":                 @project_type,
       "accrued_interest_data":        @accrued_interest_data,
-      "from_mobile_app":              @member.from_mobile_app  
+      "from_mobile_app":              @member.from_mobile_app
     }
-    
+
 
     @payload[:active_loans] = @active_loans.map{ |o|
     amount_due = AmortizationScheduleEntry.where(loan_id: o.id).pluck(:amount_due).first || 0
@@ -633,7 +645,7 @@ end
       }
     }
 
-   
+
 
     @payload[:savings_accounts] = @savings_accounts.map{ |o|
       {
@@ -751,7 +763,7 @@ end
     file_name = orig_file_name_no_ext.delete! "members"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).to_date
@@ -760,13 +772,13 @@ end
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
 
     CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
-      config = {  
+      config = {
         member: row.to_hash
       }
 
@@ -776,7 +788,7 @@ end
     if !@errors.nil?
       if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -786,7 +798,7 @@ end
             end_date: end_date
           }
         )
-        
+
         redirect_to import_members_path, :flash => { :error => "#{@errors[:messages].last[:message]}!" }
       else
         Members::ImportMembersFromCsvFile.new(
@@ -794,7 +806,7 @@ end
                             user: current_user
                       ).execute!
         flash[:success] = "Successfully Imported Members Record."
-        
+
         if !start_date.nil? && !end_date.nil?
           content = "#{current_user.full_name} successfully imported members. #{start_date.strftime("%b %d, %Y")} - #{end_date.strftime("%b %d, %Y")}"
         else
@@ -827,7 +839,7 @@ end
         )
 
       redirect_to members_path
-    end    
+    end
   end
 
   def import_legal_dependents
@@ -837,7 +849,7 @@ end
     file_name = orig_file_name_no_ext.delete! "legal dependents"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
@@ -846,13 +858,13 @@ end
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
 
     CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
-      config = {  
+      config = {
         legal_dependent: row.to_hash
       }
 
@@ -862,7 +874,7 @@ end
     if !@errors.nil?
       if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -922,7 +934,7 @@ end
     file_name = orig_file_name_no_ext.delete! "beneficiaries"
     start_date_string = file_name.split("_").first
     end_date_string = file_name.split("_").last
-    
+
     if !start_date_string.nil? && !end_date_string.nil?
       # if start_date_string.include? "201"
         end_date = DateTime.parse(end_date_string).try(:to_date)
@@ -931,13 +943,13 @@ end
       #   end_date = nil
       #   start_date = nil
       # end
-    else  
+    else
       end_date = nil
       start_date = nil
     end
 
     CSV.foreach(file.path, headers: true, encoding: 'windows-1251:utf-8') do |row|
-      config = {  
+      config = {
         beneficiary: row.to_hash
       }
 
@@ -947,7 +959,7 @@ end
     if !@errors.nil?
       if @errors[:messages].any?
         content = "ERROR: #{@errors[:messages]}!"
-        
+
         ActivityLog.create!(
           content: content,
           activity_type: "upload",
@@ -997,6 +1009,6 @@ end
         )
 
       redirect_to members_path
-    end  
+    end
   end
 end

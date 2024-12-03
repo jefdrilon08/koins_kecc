@@ -128,6 +128,7 @@ Rails.application.routes.draw do
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
+  get "/members/:id/certificate_form_pdf", to: "members#certificate_form_pdf", as: :member_certificate_form_pdf
   get "/members/:id/claims_copy_pdf", to: "members#claims_copy_pdf", as: :member_claims_copy_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
