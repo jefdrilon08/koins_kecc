@@ -1317,7 +1317,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.02
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 22
@@ -2699,7 +2699,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 28
@@ -3671,7 +3671,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 28
@@ -5259,7 +5259,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 12
@@ -6552,7 +6552,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 12
@@ -7833,7 +7833,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.02
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 28
@@ -10010,7 +10010,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.0
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 28
@@ -10082,7 +10082,7 @@ loan_products:
     maintaining_balance:
       account_type: "SAVINGS"
       account_subtype: "K-IMPOK"
-      percentage: 0.02
+      percentage: 0.2
       threshold: 0.00
     midas:
       contract_type: 22
