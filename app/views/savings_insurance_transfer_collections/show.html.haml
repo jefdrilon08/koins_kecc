@@ -12,8 +12,8 @@
         - else
           = render partial: "show_list", locals: { records: @records }
         
-        -  if @savings_insurance_transfer_collection.branch_id != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @savings_insurance_transfer_collection.center_id != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
-          = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_hash }
+        / -  if @savings_insurance_transfer_collection.branch_id != "3a74c7d5-54a5-4eec-826d-ab81f76ae31a" && @savings_insurance_transfer_collection.center_id != "5feb513d-6963-4b30-acdc-7630da3aef13" && @insurance_subtype != "Credit Life Insurance Plan"
+        = render partial: "shared/accounting_entry_hash", locals: { accounting_entry: @accounting_entry_hash }
 
 = render partial: "savings_insurance_transfer_collections/modals/approve"
 = render partial: "shared/errors_template"

@@ -167,6 +167,30 @@ class Member < ApplicationRecord
     end
   end
 
+  def recognition_date_month
+    if self.data.with_indifferent_access[:recognition_date].present?
+      return self.data.with_indifferent_access[:recognition_date].to_date.strftime("%B")
+    else
+      return nil
+    end
+  end
+
+  def recognition_date_day
+    if self.data.with_indifferent_access[:recognition_date].present?
+      return self.data.with_indifferent_access[:recognition_date].to_date.strftime("%-d")
+    else
+      return nil
+    end
+  end
+
+  def recognition_date_year
+    if self.data.with_indifferent_access[:recognition_date].present?
+      return self.data.with_indifferent_access[:recognition_date].to_date.strftime("%Y")
+    else
+      return nil
+    end
+  end
+
   def face_amount
     if self.data.with_indifferent_access[:recognition_date].present?
       now = Time.now

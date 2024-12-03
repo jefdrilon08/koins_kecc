@@ -26,6 +26,7 @@ namespace :api do
 
   # API for KCOOP
   post "/receive_api/send_kbente_summary", to: "receive_api#send_kbente_summary"
+  post "/receive_api/save_account_transaction_from_kcoop", to: "receive_api#save_account_transaction_from_kcoop"
 
 
   get "/public/api_centers/:branch_id", to: "public#centers"
@@ -313,7 +314,7 @@ namespace :api do
     post "/kpf_loan_clips/approve", to: "kpf_loan_clips#approve"
     post "/kpf_loan_clips/pending", to: "kpf_loan_clips#pending"
     post "/kpf_loan_clips/check", to: "kpf_loan_clips#check"
-    
+
     # Api Receive Members
     post "/api_receive_members/approve", to: "api_receive_members#approve"
     post "/api_receive_members/decline", to: "api_receive_members#decline"
@@ -810,7 +811,6 @@ namespace :api do
 
       resources :holidays
 
-    
     end
     
 
@@ -892,6 +892,7 @@ namespace :api do
 
     get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports"
     get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports"
+    get "/reports/billing_lapsed_member_reports", to: "reports#billing_lapsed_member_reports"
 
     get "/reports/claims_processing_time_report", to: "reports#claims_processing_time_report"
     get "/reports/claims_processing_time_report_summary", to: "reports#claims_processing_time_report_summary"

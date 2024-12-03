@@ -128,6 +128,7 @@ Rails.application.routes.draw do
   get "/members/:id/display", to: "members#show", as: :member
   get "/members/:id/form_resignation", to: "members#form_resignation", as: :member_form_resignation
   get "/members/:id/blip_form_pdf", to: "members#blip_form_pdf", as: :member_blip_form_pdf
+  get "/members/:id/certificate_form_pdf", to: "members#certificate_form_pdf", as: :member_certificate_form_pdf
   get "/members/:id/claims_copy_pdf", to: "members#claims_copy_pdf", as: :member_claims_copy_pdf
   get "/members/member_registry_excel", to: "members#member_registry_excel", as: :member_registry_excel
   get "/members/search", to: "members#search", as: :members_search
@@ -682,6 +683,9 @@ Rails.application.routes.draw do
   get "/reports/savings_insurance_transfer_reports_excel", to: "reports#savings_insurance_transfer_reports_excel", as: :savings_insurance_transfer_reports_excel
   get "/reports/insurance_loan_bundle_reports", to: "reports#insurance_loan_bundle_reports", as: :insurance_loan_bundle_reports
   get "/reports/insurance_loan_bundle_reports_excel", to: "reports#insurance_loan_bundle_reports_excel", as: :insurance_loan_bundle_reports_excel
+
+  get "/reports/billing_lapsed_member_reports", to: "reports#billing_lapsed_member_reports", as: :billing_lapsed_member_reports
+  get "/reports/billing_lapsed_member_reports_excel", to: "reports#billing_lapsed_member_reports_excel", as: :billing_lapsed_member_reports_excel
 
   get "/reports/kpf_loan_clip_reports", to: "reports#kpf_loan_clip_reports", as: :kpf_loan_clip_reports
   get "/reports/kpf_loan_clip_reports_excel", to: "reports#kpf_loan_clip_reports_excel", as: :kpf_loan_clip_reports_excel

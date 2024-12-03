@@ -267,6 +267,8 @@ import ApiReceiveMembersShow from '../models/ApiReceiveMembersShow.js';
 import DormantIndex from '../models/DormantIndex.js';
 import DormantShow from '../models/DormantShow.js';
 
+import ReportsBillingLapsedMemberReports from '../models/ReportsBillingLapsedMemberReports.js';
+
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
 //    <Component {...payload} />,
@@ -430,6 +432,7 @@ const hooks = {
   "reports/summary_of_certificates_and_policies":     [ReportsSummaryOfCertificatesAndPolicies],
   "reports/savings_insurance_transfer_reports": 	  [ReportsSavingsInsuranceTransferReports],
   "reports/insurance_loan_bundle_reports": 	  		  [ReportsInsuranceLoanBundleReports],
+  "reports/billing_lapsed_member_reports": 	  		  [ReportsBillingLapsedMemberReports],
   "reports/kpf_loan_clip_reports": 	  		  		  [ReportsKpfLoanClipReports],
   "reports/claims_processing_time_report": 	 		  [ReportsClaimsProcessingTimeReport],
   "reports/claims_processing_time_report_summary": 	  [ReportsClaimsProcessingTimeReportSummary],

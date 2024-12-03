@@ -60,6 +60,8 @@
         - if @savings_insurance_transfer_collection.clip && !Settings.activate_microinsurance
           %td
             #{o[:clip_data][:loan_product_name]}
+          %td 
+            #{o[:clip_data][:principal]}
         - if @savings_insurance_transfer_collection.clip && Settings.activate_microinsurance
           %td
             #{o[:clip_data][:loan_product_id]}
