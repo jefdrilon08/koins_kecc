@@ -41,7 +41,8 @@ module Members
               
                 if s.maintaining_balance.threshold.present? and loan.principal >= s.maintaining_balance.threshold.to_f.round(2)
                   
-                  maintaining_balance += (loan.principal_balance * s.maintaining_balance.percentage)
+                  #maintaining_balance += (loan.principal_balance * s.maintaining_balance.percentage)
+                  maintaining_balance += (loan.principal * s.maintaining_balance.percentage)
                 end
               end
               
