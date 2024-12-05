@@ -438,6 +438,12 @@ Rails.application.routes.draw do
     get "/dormant/:id/excel", to: "dormant#excel"
     get "/dormant/:id/dormant_excel", to: "dormant#dormant_excel", as: :dormant_download_excel
 
+    #Holiday routes
+    get "/holiday", to: "holiday#index"
+    delete "/holiday/:id", to: "holiday#destroy"
+
+
+
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"

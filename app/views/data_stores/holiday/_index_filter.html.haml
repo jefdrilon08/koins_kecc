@@ -1,0 +1,21 @@
+= form_tag data_stores_holiday_path, method: 'GET' do
+  .row
+    .col-md-5
+      .form-group
+        %label
+          Holiday
+        = text_field_tag :holiday_name, params[:holiday_name], class: "form-control", id: "holiday_name", placeholder: "Input holiday name"
+    .col-md-5
+      .form-group
+        %label
+          Date
+        = text_field_tag :date, params[:date], class: "form-control", id: "date-picker", placeholder: "Select a date", type: "date"
+    .col-md-2
+      .form-group
+        %label
+          Actions
+        .form-group
+          .btn-group
+            = button_tag type: 'submit', class: 'btn btn-primary btn-block' do
+              %i.bi.bi-search
+              Search

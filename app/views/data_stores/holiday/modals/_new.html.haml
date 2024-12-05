@@ -1,0 +1,21 @@
+#modal-new.modal.fade{ tabindex: "-1" }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Holiday
+      .modal-body
+        %form
+          .form-group
+            %label{ for: "holiday" } Holiday Name
+            %input#holiday-textbox.form-control{ type: "text", placeholder: "Enter holiday" }
+            %input#holiday-id.form-control{ hidden: true }
+          .form-group
+            %label
+              Holiday Date
+            = text_field_tag :as_of, Date.today, type: :date, id: "input-as-of", class: 'form-control'
+          .message
+      .modal-footer
+        %button#btn-confirm.btn.btn-primary Confirm
+        %button.btn.btn-secondary{ "data-bs-dismiss" => "modal" } Cancel
+        
+ 

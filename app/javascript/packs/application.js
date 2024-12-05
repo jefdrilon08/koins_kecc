@@ -266,6 +266,7 @@ import ApiReceiveMembersShow from '../models/ApiReceiveMembersShow.js';
 
 import DormantIndex from '../models/DormantIndex.js';
 import DormantShow from '../models/DormantShow.js';
+import HolidayIndex from '../models/HolidayIndex.js';
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -512,7 +513,8 @@ const hooks = {
   "api_receive_members/show":                         [ApiReceiveMembersShow],
   
   "data_stores/dormant/index":                        [DormantIndex],
-  "data_stores/dormant/show":                         [DormantShow]
+  "data_stores/dormant/show":                         [DormantShow],
+  "data_stores/holiday/index":                        [HolidayIndex]
 }
 
 const renderComponent = (Component, payload) => {
