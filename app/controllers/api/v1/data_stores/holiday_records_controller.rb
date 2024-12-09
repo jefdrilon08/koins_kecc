@@ -4,15 +4,6 @@ module Api
       class HolidayRecordsController < ApiController
         # before_action :set_holiday, only: [:show, :update, :destroy]
 
-        # def index
-        #   holidays = Holiday.all
-        #   render json: holidays
-        # end
-        
-        # def show
-        #   render json: @holiday
-        # end
-
         def create
           config = {
             holiday_name: params[:holiday_name],
@@ -35,23 +26,17 @@ module Api
           render json: {message: result}
         end
 
-      #   def destroy
-      #     @holiday.destroy
-      #     head :no_content
-      #   end
+        def delete
+          config = { holiday_id: params[:holiday_id] }
 
-      #   private
+          begin
+            result = ::HolidayRecords::Delete.new(config: config).execute!
+            render json: { message: result[:message] }
+          rescue => e
+            render json: { error: e.message }, status: :not_found
+          end
+        end
 
-      #   def set_holiday
-      #     @holiday = Holiday.find_by(id: params[:id])
-      #     unless @holiday
-      #       render json: { error: 'Holiday not found' }, status: :not_found
-      #     end
-      #   end
-
-      #   def holiday_params
-      #     params.require(:holiday).permit(:holiday_name, :holiday_date, :status)
-      #   end
        end
     end
   end
