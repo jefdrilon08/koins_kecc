@@ -34,6 +34,28 @@ module DataStores
         { text: "Delete", class: "fa fa-times", link: "/data_stores/soa_loans/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
 
+      @subheader_side_actions << {
+  id: "print_soal",
+  link: '#',
+  class: "fa fa-print",
+  text: "Print PDF",
+  data: {
+    action: "print"
+  }
+}
+
+@subheader_side_actions << {
+  id: "excel_soal",
+  link: '#',
+  class: "fa fa-print",
+  text: "Download Excel",
+  data: {
+    action: "print-excel"
+    
+  }
+}
+
+
       @payload = {
         id: @record.id
       }

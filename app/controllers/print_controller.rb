@@ -594,8 +594,20 @@ class PrintController < ApplicationController
 
       render "print/print_member_shares", layout: "print"
 
-    else
-      raise "Invalid type: #{type}"
+      elsif type == "print_loan_stats"
+        rr_data = ReadOnlyDataStore.find(params[:id])[:data].with_indifferent_access
+        # puts rr
+        puts"jhghmjgbujhikunyh"
+        @data = ::DataStores::BuildBranchLoanStatsFromRr.new(rr_data:rr_data).execute!
+        @data2 = ::DataStores::BuildBranchLoanStatsPerOfficerFromRr.new(rr_data:rr_data).execute!
+        
+        puts @data
+        # puts rr_data
+            
+        render "print/branch_loans_stats", layout: "print"
+
+        else
+        raise "Invalid type: #{type}"
+      end
     end
   end
-end

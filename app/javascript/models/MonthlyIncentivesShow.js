@@ -4,6 +4,7 @@ import $ from "jquery";
 var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
+var $btnDownloadExcel;
 
 
 var $btnPrint;
@@ -13,6 +14,8 @@ var id;
 var templateErrorList;
 var authenticityToken;
 
+var _urlDownload= "/data_stores/monthly_incentives_excel/";
+
 var $message;
 
 var _cacheDom = function() {
@@ -20,6 +23,7 @@ var _cacheDom = function() {
   $btnPrint         = $("#btn-print");
   $printMessage       = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
+  $btnDownloadExcel =  $("#btn-dl-excel")
 
   $modalPrint         = $("#modal-print");
 
@@ -47,6 +51,28 @@ var _bindEvents = function() {
     window.open("/print?id=" + print_mi + "&type=print_monthly_incentives");
   });
 
+  $btnDownloadExcel.on("click", function() {
+    console.log("hello");
+    // $.ajax({
+    //   url: _urlDownload+$btnDownloadExcel.data('id'),
+    //   method: 'GET',
+    //   success: function(response) {
+    //     console.log(response);
+    //     console.log("kkkk");
+
+    //     var filename = response.filename;
+
+    //     window.location.href = "/download_file?filename=" + filename;
+    //   },
+    //   error: function(response) {
+    //     console.log(response);
+    //     alert("Something went wrong when fetching data store");
+    //   }
+    // });
+    window.open(_urlDownload+$btnDownloadExcel.data('id'));
+  });
+
+  
 
 };
 
