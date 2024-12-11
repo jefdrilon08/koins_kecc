@@ -278,9 +278,10 @@
 
               - grand_total_past_due += total_past_due if total_past_due > 0  
 
-              - loans = Loan.where(member_id: r[:member][:id])
-              - total_principal_balance = loans.sum(:principal_balance)
-              - total_interest_balance = loans.sum(:interest_balance)
+              - loans = Loan.where(member_id: r[:member][:id], status: 'active')
+              - amort_pastdue = AmortizationScheduleEntry.where("loan_id in (?) and is_paid is NULL and due_date < ?", loans.ids, "#{@billing[:collection_date].to_date}")
+              - total_principal_balance = amort_pastdue.sum(:principal_balance)
+              - total_interest_balance = amort_pastdue.sum(:interest_balance)
               - grand_total = total_principal_balance + total_interest_balance
               
 
@@ -315,11 +316,11 @@
                   - grand_total_equity += ee[:amount].to_f
 
               %td.text-end{style: "font-size: 14px"}
-                - if pdue.to_f == 0
+                - if grand_total.to_f == 0
                   - x = " - "
                   #{x}
                 - else
-                  #{number_to_currency(pdue.to_f.round(2), unit: '')}
+                  #{number_to_currency(grand_total.to_f.round(2), unit: '')}
                  
                   
               %td.text-end{style: "font-size: 14px"}
@@ -359,6 +360,12 @@
                   #{x}
                 - else
                   #{number_to_currency(total_payment.to_f.round(2),unit: '')}
+              %td.text-end{style: "font-size: 14px"}
+                - if grand_total.to_f == 0
+                  - x = " - "
+                  #{x}
+                - else
+                  #{number_to_currency(grand_total.to_f.round(2),unit: '')}
               
 
 
