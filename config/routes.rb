@@ -485,6 +485,11 @@ Rails.application.routes.draw do
     get "/monthly_incentives/:id", to: "monthly_incentives#show"
     delete "/monthly_incentives/:id", to: "monthly_incentives#destroy"
 
+    get "/monthly_incentives_excel/:id", to: "monthly_incentives#excel"
+    get "/monthly_incentives/monthly_incentives_excel", to: "monthly_incentives#monthly_incentives_excel", as: :monthly_incentives_excel
+    resources :monthly_incentives,only: [:index,:show,:destroy]
+
+
     get "/dormant", to: "dormant#index"
     get "/dormant/:id", to: "dormant#show"
     resources :dormant, only: [:index, :show, :destroy]
@@ -691,6 +696,7 @@ Rails.application.routes.draw do
   get "/reports/claims_processing_time_report_summary_excel", to: "reports#claims_processing_time_report_summary_excel", as: :claims_processing_time_report_summary_excel
   get "/reports/reclassified_report", to: "reports#reclassified_report", as: :reclassified_report
   get "/reports/reclassified_report_excel", to: "reports#reclassified_report_excel", as: :reclassified_report_excel
+  get "/reports/loan_stats_excel/", to: "reports#loan_stats_excel", as: :loan_stats_excel
   #transfer_savings
   get "/transfer_savings", to: "transfer_savings#index"
   get "/transfer_savings/:id", to: "transfer_savings#show"

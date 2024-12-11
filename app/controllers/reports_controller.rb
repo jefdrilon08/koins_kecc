@@ -758,6 +758,14 @@ class ReportsController < ApplicationController
     end
   end
 
+  def loan_stats_excel
+    puts "test"
+    rr_data = ReadOnlyDataStore.find(params[:id])[:data].with_indifferent_access
+    excel = DataStores::GenerateLoanStatsExcel.new(data:rr_data).execute!
+    filename="LOANSTATS_#{rr_data[:branch][:name].upcase}_#{rr_data[:as_of].upcase}.xlsx"
+    excel.serialize "#{Rails.root}/tmp/#{filename}"
+    send_file "#{Rails.root}/tmp/#{filename}", filename: "#{filename}", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  end
 
   def insurance_interest
     @subheader_items = [

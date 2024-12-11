@@ -45,13 +45,38 @@ module DataStores
         link: "/data_stores/monthly_incentives/#{@record.id}", 
         data: { method: :delete, confirm: "Are you sure?" }
         }
-      
-
-       
+        
+        @subheader_side_actions << {
+          link: "#",  
+          # link:"#{data_stores_monthly_incentives_download_excel_path(record: params[:id])}",
+          # method:monthly_incentives_excel,
+          class: "fa fa-download",
+          id: "btn-dl-excel",
+          text: "Download Excel",
+          data:
+          {
+            id:"#{@record.id}",
+          }
+          
+        }
 
       @payload = {
         id: @record.id
       }
     end
+
+    def excel
+      
+      puts "hahahahahahahahahaah"
+      # download_excel = ::DataStores::GenerateMonthlyIncentivesExcel.new(meta: @meta,data: @data).execute!
+      @download_excel =::DataStores::GenerateMonthlyIncentivesExcel.new(config: params[:id]).execute!
+      a=ReadOnlyDataStore.find(params[:id])
+      @branch=a[:meta]["branch_name"]
+      @endDate=a[:meta]["as_of"]
+      # render json: @download_excel
+      @filename = "Monthly_Incentives - #{@branch} #{@endDate}.xlsx"
+      send_data @download_excel,filename:@filename
+    end
+
   end
 end
