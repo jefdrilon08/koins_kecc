@@ -285,6 +285,9 @@
               - grand_total = total_principal_balance + total_interest_balance
               
 
+
+              
+
               - r[:records].each do |tt|
                 - if tt[:record_type] == "WP"
                   - total_cash_collection_c =+ grand_total_cp
@@ -316,11 +319,11 @@
                   - grand_total_equity += ee[:amount].to_f
 
               %td.text-end{style: "font-size: 14px"}
-                - if grand_total.to_f == 0
+                - if pdue.to_f <= 0
                   - x = " - "
                   #{x}
                 - else
-                  #{number_to_currency(grand_total.to_f.round(2), unit: '')}
+                  #{number_to_currency(pdue.to_f.round(2),unit: '')}
                  
                   
               %td.text-end{style: "font-size: 14px"}
@@ -360,14 +363,10 @@
                   #{x}
                 - else
                   #{number_to_currency(total_payment.to_f.round(2),unit: '')}
-              %td.text-end{style: "font-size: 14px"}
-                - if grand_total.to_f == 0
-                  - x = " - "
-                  #{x}
-                - else
-                  #{number_to_currency(grand_total.to_f.round(2),unit: '')}
-              
 
+            
+              
+              
 
         %tr
           %th
