@@ -66,7 +66,7 @@ module Api
       def allowed_member_attributes(member)
         # Define which fields you want to include
         allowed_fields = [:id, :first_name, :last_name, :mobile_number,
-         :member_type, :identification_number, :branch_id, :center_id]
+         :member_type, :identification_number, :branch_id, :center_id, :encrypted_password]
         
         #  getting the member type
         # Get the branch name if branch_id is present
@@ -280,33 +280,34 @@ module Api
       end
 
       def member_change_old_password
-        old_password = params[:old_password]
-        new_password = params[:new_password]
-        confirm_new_password = params[:confirm_new_password]
+        # old_password = params[:old_password]
+        # new_password = params[:new_password]
+        # confirm_new_password = params[:confirm_new_password]
   
-        config = {
-          member: @current_member,
-          old_password: old_password,
-          new_password: new_password,
-          confirm_new_password: confirm_new_password
-        }
+          # config = {
+          #   member: @current_member,
+          #   old_password: old_password,
+          #   new_password: new_password,
+          #   confirm_new_password: confirm_new_password
+          # }
+    
+        # cmd = ::Members::ValidateMemberChangePassword.new(
+        #   config: config
+        # )
   
-        cmd = ::Members::ValidateMemberChangePassword.new(
-          config: config
-        )
+        # cmd.execute!
   
-        cmd.execute!
+        # if cmd.messages.any?
+        #   render json: { errors: cmd.messages }, status: :unprocessable_entity
+        # else
+        #   @current_member.update!(
+        #     password: new_password,
+        #     password_confirmation: confirm_new_password
+        #   )
   
-        if cmd.messages.any?
-          render json: { errors: cmd.messages }, status: :unprocessable_entity
-        else
-          @current_member.update!(
-            password: new_password,
-            password_confirmation: confirm_new_password
-          )
-  
-          render json: { message: "ok" }
-        end
+        #   render json: { message: "ok" }
+        # end
+        
 
       end
 

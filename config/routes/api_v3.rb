@@ -8,6 +8,8 @@ namespace :api do
 
     post "/resend_otp", to: "resend_otp#resend"
     # get "/resend_otp", to: "resend_otp#resend"
+    post "/members/member_change_old_password", to: "members#member_change_old_password"
+    post "/members_old_password_change", to: "members_old_password_change#change_old_password"
 
 
     # User Management
