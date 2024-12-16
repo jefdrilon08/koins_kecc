@@ -8,7 +8,7 @@ module HolidayRecords
         end
 
         def execute!
-            @holiday_record = HolidayRecord.new(
+            @holiday_record = HolidayRecordDetail.new(
                 holiday_name: @holiday_name,
                 holiday_date: @holiday_date,
                 status: @status

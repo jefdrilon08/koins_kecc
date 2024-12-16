@@ -5,7 +5,7 @@ module HolidayRecords
       end
   
       def execute!
-        @holiday_record = HolidayRecord.find_by(id: @holiday_id)
+        @holiday_record = HolidayRecordDetail.find_by(id: @holiday_id)
   
         if @holiday_record
           @holiday_record.destroy!
