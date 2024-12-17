@@ -991,7 +991,8 @@ namespace :kezar do
 
         WHERE
         a.insurance_status IN ('inforce', 'lapsed')
-        AND b.id = '#{branch_id}'
+        AND b.cluster_id NOT IN ('ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4')
+        AND (a.data->>'recognition_date' >= '#{start_date}' AND a.data->>'recognition_date' <= '#{end_date}')
 
 
         GROUP BY a.id, a.identification_number, a.first_name, a.middle_name, a.last_name, d.name, b.name, e.name, f.first_name, f.middle_name, f.last_name, c.name, b.name
@@ -1006,7 +1007,7 @@ namespace :kezar do
       results = ActiveRecord::Base.connection.execute(sql_query)
       # Increment offset for the next batch
       offset += batch_size
-
+      raise results.to_json.inspect
       # Check if we should fetch another batch
       fetch_more_batches = results.count == batch_size
 
@@ -2077,6 +2078,23 @@ namespace :kezar do
       member_id,
       is_interest
     ).find_in_batches(:batch_size => 500) do |group|
+
+      account_transaction = {
+        branch_id: b.id,
+        collection_date: date_today,
+        user: user_id,
+        api_from: "KCOOP",
+        data: group.each do |o|
+          {
+            member_id: o.identification_number,
+            reference_num: o.id,
+            lif_amount: o.lif_amount,
+            rf_amount: o.rf_amount
+          }
+        end
+      }
+
+
       Rails.logger.info(puts("Uploading #{group.size}"))
       payment = group.map{ |o|
         {
@@ -2091,6 +2109,8 @@ namespace :kezar do
       Rails.logger.info(puts(payment.to_json))
 
       payload = payment
+
+      raise payload.inspect
 
       if is_batch.present?
        Rails.logger.info(puts "Posting to #{end_point}....")

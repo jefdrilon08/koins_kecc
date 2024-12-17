@@ -13,6 +13,8 @@ class ProcessReceivePaymentApi < ApplicationJob
 
       @default_deposit_accounts = Settings.default_deposit_accounts
 
+      raise @default_deposit_accounts.inspect
+
       @insurance_fund_transfer_collection = ::InsuranceFundTransferCollections::CreateInsuranceFundTransferCollection.new(
         config: {
           collection_date: @collection_date,
@@ -75,7 +77,7 @@ class ProcessReceivePaymentApi < ApplicationJob
           enabled = true
         end
 
-        # raise member_account.inspect
+        raise member_account.inspect
         if o[:account_subtype] == 'Life Insurance Fund'
           amount = data['lif_amount']
           reference_num = data['reference_num']
