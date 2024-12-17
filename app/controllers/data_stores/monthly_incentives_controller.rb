@@ -30,16 +30,17 @@ module DataStores
         }
       end
       @subheader_side_actions = []
-      @subheader_side_actions << {
-          id: "btn-print-pdf",
-          link: "#",
-          class: "fa fa-print",
-          text: "Print",
-          data: {
-           id: "#{@record.id}"
-          },
 
-        }
+      @subheader_side_actions << {
+        id: "btn-print-pdf",
+        link: "#",
+        class: "fa fa-print",
+        text: "Print",
+        data: {
+          id: "#{@record.id}"
+        },
+      }
+
       @subheader_side_actions <<  { 
         text: "Delete", class: "fa fa-times", 
         link: "/data_stores/monthly_incentives/#{@record.id}", 

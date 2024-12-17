@@ -24,6 +24,7 @@ var _bindEvents = function () {
 $btnPrint.on("click", function() {
   var data_store = $btnPrint.data('id');
   alert("sample");
+  // console.log("ASDASD")
   
     
   }); 

@@ -4,6 +4,7 @@ module Reports
        @p = Axlsx::Package.new
 
        @records = DataStore.find(record)
+        Rails.logger.debug "batman: #{@records.inspect}"
        @data = {}
     end
     def execute!

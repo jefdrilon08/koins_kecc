@@ -672,11 +672,12 @@ class ReportsController < ApplicationController
 
   def billing_lapsed_member_reports_excel
     @collection_date_from = params[:collection_date_from]
-    @collection_date_to   = params[:approval_date_to]
-    @branch_name        = Branch.where(id: @branch).first.name
-    @status             = params[:status]
+    @collection_date_to   = params[:collection_date_to]
+    @branch_name          = Branch.where(id: @branch).first.name
+    @status               = params[:status]
 
-    excel = Reports::GenerateInsuranceLoanBundleReports.new(collection_date_from: @collection_date_from, collection_date_to: @collection_date_to , branch: @branch, status: @status).execute!
+    # raise params[:collection_date_from].inspect
+    excel = Reports::GenerateBillingLapsedMemberReports.new(collection_date_from: @collection_date_from, collection_date_to: @collection_date_to , branch: @branch, status: @status).execute!
     filename  = "#{@branch_name}Billing Lapsed Member Reports.xlsx"
 
     excel.serialize "#{Rails.root}/tmp/#{filename}"

@@ -802,8 +802,17 @@ namespace :api do
       post "dormants/add_or", to: "dormants#add_or"
       post "dormants/add_si", to: "dormants#add_si"
       post "dormants/add_particular", to: "dormants#add_particular"
+      
+
+      #Holiday
+      post "holiday_records/create", to: "holiday_records#create"
+      post "holiday_records/update", to: "holiday_records#update"
+      get "holidays/index", to: "holidays#index"
+
+      resources :holidays
 
     end
+    
 
     namespace :epassbook do
       get "/members/status", to: "members#status"

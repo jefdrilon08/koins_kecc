@@ -5,29 +5,23 @@ var $modalPrint;
 var $printMessage;
 var $btnPrintPdf;
 var $btnDownloadExcel;
-
-
 var $btnPrint;
 var loader;
-
 var id;
 var templateErrorList;
 var authenticityToken;
-
 var _urlDownload= "/data_stores/monthly_incentives_excel/";
-
 var $message;
 
 var _cacheDom = function() {
 
   $btnPrint         = $("#btn-print");
+  $printMessage     = $(".print-message");
+  $btnPrintPdf      = $("#btn-print-pdf");
   $printMessage       = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
   $btnDownloadExcel =  $("#btn-dl-excel")
-
   $modalPrint         = $("#modal-print");
-
-
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
   loader            = $("#template-loader").html();
@@ -71,8 +65,6 @@ var _bindEvents = function() {
     // });
     window.open(_urlDownload+$btnDownloadExcel.data('id'));
   });
-
-  
 
 };
 

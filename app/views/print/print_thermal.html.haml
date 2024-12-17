@@ -288,6 +288,7 @@
                 - if ss[:record_type] == "INSURANCE" and ss[:account_subtype] = "Retirement Fund" || "Life Insurance Fund"
                   - liferf += ss[:amount].to_f
                   - grand_total_liferf += liferf
+                  - total_life_rf += ss[:amount].to_f
 
               - r[:records].each do |cc|
                 - if cc[:record_type] == "LOAN_PAYMENT"
@@ -304,7 +305,7 @@
                   - x = " - "
                   #{x}
                 - else
-                  #{number_to_currency(total_past_due.to_f.round(2),unit:'')}
+                 
                   
               %td.text-end{style: "font-size: 14px"}
                 - if total_loan_payment.to_f == 0
@@ -347,7 +348,6 @@
           %th
             TOTAL
           %th.text-end
-            #{number_to_currency(grand_total_past_due.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
           %th.text-end

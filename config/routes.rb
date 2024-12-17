@@ -334,8 +334,6 @@ Rails.application.routes.draw do
     resources :income_statements, only: [:index, :show, :destroy]
   end
 
-
-
   # Billing
   get "/billings/excel", to: "billings#excel"
   get "/billings/billing_excel", to: "billings#billing_excel", as: :billing_download_excel
@@ -433,6 +431,14 @@ Rails.application.routes.draw do
     get "/project_types_summary/:id", to: "project_types_summary#show"
     get "/project_types_summary/:id/details_data/:categ/cetag_details/:cated_details", to: "project_types_summary#details_data"
 
+    #Dormant routes
+    get "/dormant", to: "dormant#index"
+    get "/dormant/:id", to: "dormant#show"
+    delete "/dormant/:id", to: "dormant#destroy"
+    get "/dormant/:id/print", to: "dormant#print"
+    get "/dormant/:id/excel", to: "dormant#excel"
+    get "/dormant/:id/dormant_excel", to: "dormant#dormant_excel", as: :dormant_download_excel
+
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"
@@ -485,16 +491,16 @@ Rails.application.routes.draw do
     get "/monthly_incentives/:id", to: "monthly_incentives#show"
     delete "/monthly_incentives/:id", to: "monthly_incentives#destroy"
 
+    get 'errors/not_found', to: 'errors#not_found', as: 'errors_not_found'
+    get 'errors/generic_error', to: 'errors#generic_error', as: 'errors_generic_error'
+    get 'errors/missing_id', to: 'errors#missing_id', as: 'errors_missing_id'
     get "/monthly_incentives_excel/:id", to: "monthly_incentives#excel"
     get "/monthly_incentives/monthly_incentives_excel", to: "monthly_incentives#monthly_incentives_excel", as: :monthly_incentives_excel
     resources :monthly_incentives,only: [:index,:show,:destroy]
 
-
     get "/dormant", to: "dormant#index"
     get "/dormant/:id", to: "dormant#show"
     resources :dormant, only: [:index, :show, :destroy]
-
-
     get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
     get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"
     delete "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#destroy"
