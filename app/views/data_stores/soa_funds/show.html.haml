@@ -1,6 +1,7 @@
 = title @record.id
 .h5
-  Soa Funds #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["start_date"]).strftime("%b %d, %Y")} to #{DateTime.parse(@record.data["end_date"]).strftime("%b %d, %Y")}
+  - soa_funds = "Soa Funds #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["start_date"]).strftime("%b %d, %Y")} to #{DateTime.parse(@record.data["end_date"]).strftime("%b %d, %Y")}"
+  = soa_funds
   %br
     %br
       .row
@@ -11,3 +12,4 @@
                 = render partial: "data_stores/error_page"
               - else
                 #react-root
+                #hidden-title{style: "display:none;"}= soa_funds

@@ -10,5 +10,5 @@ ReactDOM.render(
   <BranchLoanProductStatsUI
     authenticityToken={authenticityToken}
   />,
-  document.getElementById('branch-loan-product-stats-content')
+  document.getElementById('loanstats')
 );
