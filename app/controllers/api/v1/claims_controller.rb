@@ -166,7 +166,8 @@ module Api
           user: current_user
         }
 
-        @posting_user = User.where(first_name: "Evelyn", last_name: "Lagmay").first
+        @posting_user1 = User.where(first_name: "Evelyn", last_name: "Lagmay").first
+        @posting_users = [@posting_user1]
 
         if ["MIS"].include? current_user.roles.last
           errors  = Claims::ValidateClaimForApproval.new(
@@ -180,7 +181,7 @@ module Api
                                         config: config
                                       ).execute!
 
-            ::Claims::NotifyUser.new(claim: claim, user: @posting_user).execute!
+            ::Claims::NotifyUser.new(claim: claim, user: @posting_users).execute!
 
             render json: { message: "Successfully approved claim" }
           end

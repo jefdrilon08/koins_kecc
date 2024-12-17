@@ -494,7 +494,13 @@ Rails.application.routes.draw do
     get 'errors/not_found', to: 'errors#not_found', as: 'errors_not_found'
     get 'errors/generic_error', to: 'errors#generic_error', as: 'errors_generic_error'
     get 'errors/missing_id', to: 'errors#missing_id', as: 'errors_missing_id'
+    get "/monthly_incentives_excel/:id", to: "monthly_incentives#excel"
+    get "/monthly_incentives/monthly_incentives_excel", to: "monthly_incentives#monthly_incentives_excel", as: :monthly_incentives_excel
+    resources :monthly_incentives,only: [:index,:show,:destroy]
 
+    get "/dormant", to: "dormant#index"
+    get "/dormant/:id", to: "dormant#show"
+    resources :dormant, only: [:index, :show, :destroy]
     get "/x_weeks_to_pay", to: "x_weeks_to_pay#index"
     get "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#show"
     delete "/x_weeks_to_pay/:id", to: "x_weeks_to_pay#destroy"
@@ -696,6 +702,7 @@ Rails.application.routes.draw do
   get "/reports/claims_processing_time_report_summary_excel", to: "reports#claims_processing_time_report_summary_excel", as: :claims_processing_time_report_summary_excel
   get "/reports/reclassified_report", to: "reports#reclassified_report", as: :reclassified_report
   get "/reports/reclassified_report_excel", to: "reports#reclassified_report_excel", as: :reclassified_report_excel
+  get "/reports/loan_stats_excel/", to: "reports#loan_stats_excel", as: :loan_stats_excel
   #transfer_savings
   get "/transfer_savings", to: "transfer_savings#index"
   get "/transfer_savings/:id", to: "transfer_savings#show"
