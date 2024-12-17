@@ -26,14 +26,24 @@ module DataStores
           text: "#{@record.data["branch"]["name"]} - #{@record.data["as_of"].to_date.strftime("%B %d, %Y")}"
         }
       end
+      
+      @subheader_side_actions = []
 
+      if is_mis_user?
       @subheader_side_actions = [
         { text: "Delete", class: "fa fa-times", link: "/data_stores/manual_aging/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
+      end
 
       @payload = {
         id: @record.id
       }
+    end
+
+    private
+
+    def is_mis_user?
+      current_user&.roles&.include?('MIS')
     end
   end
 end

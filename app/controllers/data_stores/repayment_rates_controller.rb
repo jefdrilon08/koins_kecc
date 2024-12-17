@@ -30,9 +30,14 @@ module DataStores
           text: "#{@record.meta["branch_name"]} - #{@record.meta["as_of"].to_date.strftime("%B %d, %Y")}"
         }
       end
+
+      @subheader_side_actions = []
+      
+      if is_mis_user?
       @subheader_side_actions = [
         { text: "Delete", class: "fa fa-times", link: "/data_stores/repayment_rates/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
+      end
       @subheader_side_actions << {
   id: "btn-print-rp",
   link: '#',
@@ -59,6 +64,12 @@ module DataStores
         userId: current_user.id,
         xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
       }
+    end
+
+    private
+
+    def is_mis_user?
+      current_user&.roles&.include?('MIS')
     end
   end
 end
