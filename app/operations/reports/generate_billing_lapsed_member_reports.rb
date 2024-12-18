@@ -7,6 +7,10 @@ module Reports
       @status                 = status
 
       @clip = Billing.where("collection_date >= ? AND collection_date <= ? AND branch_id = ? AND status = ?", @collection_date_from, @collection_date_to, @branch_id, @status).order("collection_date DESC")
+      @last_clip = @clip.last
+      @clip_data = @last_clip.data.with_indifferent_access
+      @clip_records = @clip_data[:records][0][:member][:insurance_status]
+
       @p        = Axlsx::Package.new
       end
 
@@ -41,20 +45,73 @@ module Reports
             "Branch",
             "Center",
             "MemberName",
-            "InsuranceStatus"
+            "InsuranceStatus",
+            "AccountType",
+            "Amount",
+            "AccountType",
+            "Amount",
+            "AccountType",
+            "Amount",
+            "AccountType",
+            "Amount"
           ], style: header
           @clip.each do |clip|
-          # @clip_data = clip.data.with_indifferent_access
-          # raise clip[:data][:records][0].inspect
             clip[:data]["records"].each_with_index do |o, index|
             
               sheet.add_row [
                 clip.branch.name,
                 clip.center.name,
                 o["member"]["full_name"],
-                o["member"]["insurance_status"]
-                
-              ], style: [left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell]
+                o["member"]["insurance_status"],
+                if o["records"][12].present?
+                  o["records"][12]["account_subtype"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][12].present?
+                  o["records"][12]["amount"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][13].present?
+                  o["records"][13]["account_subtype"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][13].present?
+                  o["records"][13]["amount"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][14].present?
+                  o["records"][14]["account_subtype"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][14].present?
+                  o["records"][14]["amount"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][15].present?
+                  o["records"][15]["account_subtype"]
+                else
+                  "No Data"
+                end,
+
+                if o["records"][15].present?
+                  o["records"][15]["amount"]
+                else
+                  "No Data"
+                end
+          
+              ], style: [left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell]
             end
           end
 

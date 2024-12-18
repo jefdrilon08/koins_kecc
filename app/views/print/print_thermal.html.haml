@@ -225,6 +225,9 @@
         %h3
           %strong COLLECTION REPORT
           - grand_total_past_due = 0.00
+          - grand_total_principal_balance = 0.00
+          - grand_total_interest_balance = 0.00
+          - total_pdue = 0.00
           - @billing[:data][:records].each do |r|
             
             - tota_equity = 0.00
@@ -238,6 +241,8 @@
             - liferf              = 0.00
             - grand_total_liferf       = 0.00
             - total_past_due = 0.00
+            
+            
             
 
             %tr
@@ -273,6 +278,16 @@
 
               - grand_total_past_due += total_past_due if total_past_due > 0  
 
+              - loans = Loan.where(member_id: r[:member][:id], status: 'active')
+              - amort_pastdue = AmortizationScheduleEntry.where("loan_id in (?) and is_paid is NULL and due_date < ?", loans.ids, "#{@billing[:collection_date].to_date}")
+              - total_principal_balance = amort_pastdue.sum(:principal_balance)
+              - total_interest_balance = amort_pastdue.sum(:interest_balance)
+              - grand_total = total_principal_balance + total_interest_balance
+              
+
+
+              
+
               - r[:records].each do |tt|
                 - if tt[:record_type] == "WP"
                   - total_cash_collection_c =+ grand_total_cp
@@ -294,17 +309,21 @@
                 - if cc[:record_type] == "LOAN_PAYMENT"
                   - total_loan_payment += cc[:amount].to_f
                   - grand_total_loan_payment += cc[:amount].to_f
-                  
+
+              - pdue = grand_total - total_loan_payment
+              - total_pdue += pdue if pdue > 0
+ 
               - r[:records].each do |ee|
                 - if ee[:record_type] == "EQUITY"
                   - tota_equity  += ee[:amount].to_f
                   - grand_total_equity += ee[:amount].to_f
 
               %td.text-end{style: "font-size: 14px"}
-                - if total_past_due.to_f == 0
+                - if pdue.to_f <= 0
                   - x = " - "
                   #{x}
                 - else
+                  #{number_to_currency(pdue.to_f.round(2),unit: '')}
                  
                   
               %td.text-end{style: "font-size: 14px"}
@@ -344,10 +363,16 @@
                   #{x}
                 - else
                   #{number_to_currency(total_payment.to_f.round(2),unit: '')}
+
+            
+              
+              
+
         %tr
           %th
             TOTAL
           %th.text-end
+            #{number_to_currency(total_pdue.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_loan_payment.to_f.round(2),unit: '')}
           %th.text-end
@@ -360,6 +385,8 @@
             #{number_to_currency(grand_total_wp.to_f.round(2),unit: '')}
           %th.text-end
             #{number_to_currency(grand_total_cp.to_f.round(2),unit: '')}
+
+          
 .row
 .col
   Grand Total:

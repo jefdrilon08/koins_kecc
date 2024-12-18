@@ -20,13 +20,7 @@ var _cacheDom = function() {
   $btnPrint         = $("#btn-print");
   $printMessage     = $(".print-message");
   $btnPrintPdf      =  $("#btn-print-pdf");
-
-  
-  //$modalPrint      = new bootstrap.Modal(
-  //  document.getElementById("modal-print")
-
-  //);
-
+  $btnExcel         = $("#btn-excel");
 
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
@@ -50,7 +44,34 @@ var _bindEvents = function() {
     window.open("/print?id=" + print_icpr + "&type=print_migs");
   });
 
+  $btnExcel.on("click", function () {
 
+    id = $(this).data("id");	
+    if (!id) {
+      console.error("Missing ID for Excel download");
+      $message.html("Error: Missing ID.");
+      return;
+    }else{
+      console.log(id);
+    }
+    
+    $.ajax({
+      url: "/data_stores/members_in_good_standing/" + id + "/excel",
+      method: "GET",
+      data: {
+        id: id,
+        authenticity_token: authenticityToken,
+      },
+      dataType: "json",
+      success: function (response) {
+        console.log(response);
+        window.open(response.download_url, "_blank");
+      },
+      error: function (response) {
+        $message.html("Error downloading Excel.");
+      },
+    });
+  });
 };
 
 var init  = function(options) {

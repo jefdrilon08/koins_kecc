@@ -1,0 +1,43 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th.text-center 
+        Holiday Name
+      %th.text-center 
+        Holiday Date
+      %th.text-center 
+        Status
+      %th.text-center{style: 'width:10%'}
+        Actions
+  %tbody
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = o.holiday_name.upcase
+        %td.text-center
+          = o.holiday_date
+        %td.text-center
+          - if o.status == "active"
+            .badge.bg-success Active
+          - elsif o.status == "inactive"
+            .badge.bg-secondary Inactive
+          - else
+            .badge.bg-warning Unknown
+        %td.text-center
+          %button.btn.btn-info.btn-sm.update-button{
+            data: {
+              holiday_id: o.id,
+              holiday_name: o.holiday_name,
+              holiday_date: o.holiday_date,
+              holiday_status: o.status
+            }
+          }
+            Update
+          %button.btn.btn-sm.btn-danger.delete-button{
+            data: { holiday_id: o.id }
+          }
+            .fa.fa-times
+            Delete
+
+
+        

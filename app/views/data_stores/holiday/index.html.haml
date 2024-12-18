@@ -1,0 +1,17 @@
+= title
+.row
+  .col
+    .card
+      .card-body
+        = render partial: "index_filter"
+
+        - if @records.any?
+          = render partial: "index_list"
+        - else
+          %p
+            No records found
+  
+= render partial: "data_stores/holiday/modals/new" 
+      
+
+     

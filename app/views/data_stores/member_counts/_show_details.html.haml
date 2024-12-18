@@ -120,200 +120,122 @@
   %tr
     %th{ width: "50%" }
     - if microinsurance?
-      %th.text-center
-        Inforce
-      %th.text-center
-        Lapsed
-      %th.text-center
-        Pending
-    %th.text-center
-      Regular/Primary
-    %th.text-center
-      GK
-    %th.text-center
-      Kaagapay
-    %th.text-center
-      MCLF
-    %th.text-center
-      MCLF-GK
-    %th.text-center
-      MCLF-KAAGAPAY
-    %th.text-center
-      Total
+      %th.text-center Inforce
+      %th.text-center Lapsed
+      %th.text-center Pending
+    %th.text-center Regular/Primary
+    %th.text-center GK
+    %th.text-center Kaagapay
+    %th.text-center MCLF
+    %th.text-center MCLF-GK
+    %th.text-center MCLF-KAAGAPAY
+    %th.text-center Total
+
   - if microloans?
     %tr
-      %th
-        Pure Savers 
-        -$regular   = 0
-        -$kaagapay  = 0
-        -$gk        = 0
-        -$mcpl      = 0
-        -$mclf_gk      = 0
-        -$mclf_kaagapay      = 0
-        - @data[:counts][:pure_savers][:members].each do |member_type| 
-          - if member_type[:member_type] == "Regular"
-            - $regular += 1 
-          - elsif member_type[:member_type] == "GK"
-            - $gk  +=1
-          - elsif member_type[:member_type] == "MCLF"
-            - $mcpl  +=1
-          - elsif member_type[:member_type] == "MCLF-GK"
-            - $mclf_gk   +=1
-          - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
-            - $mclf_kaagapay  +=1
-          - else 
-            - $kaagapay +=1
-        %td.text-center
-          #{$regular}
-        %td.text-center
-          #{$gk}
-        %td.text-center
-          #{$kaagapay}
-        %td.text-center
-          #{$mcpl}
-        %td.text-center
-          #{$mclf_gk}
-        %td.text-center
-          #{$mclf_kaagapay}
+      %th Pure Savers
+      - member_counts = Hash.new(0)
+      - @data[:counts][:pure_savers][:members].each do |member_type| 
+        - case member_type[:member_type]
+          - when "Regular" then member_counts[:regular] += 1
+          - when "GK" then member_counts[:gk] += 1
+          - when " Kaagapay" then member_counts[:kaagapay] += 1
+          - when "MCLF" then member_counts[:mclf] += 1
+          - when "MCLF-GK" then member_counts[:mclf_gk] += 1
+          - when "MCLF-KAAGAPAY" then member_counts[:mclf_kaagapay] += 1
+      %td.text-center= member_counts[:regular]
+      %td.text-center= member_counts[:gk]
+      %td.text-center= member_counts[:kaagapay]
+      %td.text-center= member_counts[:mclf]
+      %td.text-center= member_counts[:mclf_gk]
+      %td.text-center= member_counts[:mclf_kaagapay]
+      %td.text-center= member_counts.values.sum
 
-        %td.text-center
-          #{@data[:counts][:pure_savers][:total]}
     %tr
-      %th
-        Active Borrowers
-        -$regular   = 0
-        -$kaagapay  = 0
-        -$mcpl      = 0
-        -$mclf_gk      = 0
-        -$mclf_kaagapay      = 0
-        -$gk        = 0
-        - @data[:counts][:loaners][:members].each do |member_type|
-          - if member_type[:member_type] == "Regular"
-            - $regular += 1 
-          - elsif member_type[:member_type] == "GK"
-            - $gk  +=1
-          - elsif member_type[:member_type] == "MCLF"
-            - $mcpl  +=1
-          - elsif member_type[:member_type] == "MCLF-GK"
-            - $mclf_gk   +=1
-          - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
-            - $mclf_kaagapay  +=1
-          - else 
-            - $kaagapay +=1
-        %td.text-center
-          #{$regular}
-        %td.text-center
-          #{$gk}
-        %td.text-center
-          #{$kaagapay}
-        %td.text-center
-          #{$mcpl}
-        %td.text-center
-          #{$mclf_gk}
-        %td.text-center
-          #{$mclf_kaagapay}
-        %td.text-center
-          #{@data[:counts][:loaners][:total]}
+      %th Active Borrowers
+      - member_counts = Hash.new(0)
+      - @data[:counts][:loaners][:members].each do |member_type| 
+        - case member_type[:member_type]
+          - when "Regular" then member_counts[:regular] += 1
+          - when "GK" then member_counts[:gk] += 1
+          - when " Kaagapay" then member_counts[:kaagapay] += 1
+          - when "MCLF" then member_counts[:mclf] += 1
+          - when "MCLF-GK" then member_counts[:mclf_gk] += 1
+          - when "MCLF-KAAGAPAY" then member_counts[:mclf_kaagapay] += 1
+      %td.text-center= member_counts[:regular]
+      %td.text-center= member_counts[:gk]
+      %td.text-center= member_counts[:kaagapay]
+      %td.text-center= member_counts[:mclf]
+      %td.text-center= member_counts[:mclf_gk]
+      %td.text-center= member_counts[:mclf_kaagapay]
+      %td.text-center= member_counts.values.sum
+
   %tr
-    %th
-      New Members
-    - if microinsurance? 
-      %td.text-center
-        #{@data[:counts][:active_members][:inforce]}
-      %td.text-center
-        #{@data[:counts][:active_members][:lapsed]}
-      %td.text-center
-        #{@data[:counts][:active_members][:pending]}   
-    -$regular   = 0
-    -$kaagapay  = 0
-    -$mcpl      = 0
-    -$mclf_gk      = 0
-    -$mclf_kaagapay      = 0
-    -$gk        = 0
-    - @data[:counts][:active_members][:members].each do |member_type|
-      - if member_type[:member_type] == "Regular"
-        - $regular += 1 
-      - elsif member_type[:member_type] == "GK"
-        - $gk  +=1
-      - elsif member_type[:member_type] == "MCLF"
-        - $mcpl  +=1
-      - elsif member_type[:member_type] == "MCLF-GK"
-        - $mclf_gk   +=1
-      - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
-        - $mclf_kaagapay  +=1
-      - else 
-        - $kaagapay +=1 
-    %td.text-center
-      #{$regular}
-    %td.text-center
-      #{$gk}
-    %td.text-center
-      #{$kaagapay}
-    %td.text-center
-      #{$mcpl}
-    %td.text-center
-      #{$mclf_gk}
-    %td.text-center
-      #{$mclf_kaagapay}
-    %td.text-center
-      #{@data[:counts][:active_members][:total]}
-  
+    %th New Members
+    - if microinsurance?
+      %td.text-center= @data[:counts][:active_members][:inforce]
+      %td.text-center= @data[:counts][:active_members][:lapsed]
+      %td.text-center= @data[:counts][:active_members][:pending]
+    - member_counts = Hash.new(0)
+    - @data[:counts][:active_members][:members].each do |member_type| 
+      - case member_type[:member_type]
+        - when "Regular" then member_counts[:regular] += 1
+        - when "GK" then member_counts[:gk] += 1
+        - when " Kaagapay" then member_counts[:kaagapay] += 1
+        - when "MCLF" then member_counts[:mclf] += 1
+        - when "MCLF-GK" then member_counts[:mclf_gk] += 1
+        - when "MCLF-KAAGAPAY" then member_counts[:mclf_kaagapay] += 1
+    %td.text-center= member_counts[:regular]
+    %td.text-center= member_counts[:gk]
+    %td.text-center= member_counts[:kaagapay]
+    %td.text-center= member_counts[:mclf]
+    %td.text-center= member_counts[:mclf_gk]
+    %td.text-center= member_counts[:mclf_kaagapay]
+    %td.text-center= member_counts.values.sum
+
   - if @data[:counts][:inactive_members].present?
     %tr
-      %th
-        Non-patronizing Members
-      - if microinsurance? 
-        %td.text-center
-          #{@data[:counts][:inactive_members][:inforce]}
-        %td.text-center
-          #{@data[:counts][:inactive_members][:lapsed]}
-        %td.text-center
-          #{@data[:counts][:inactive_members][:pending]}   
-      -$regular   = 0
-      -$kaagapay  = 0
-      -$gk        = 0
-      -$mclf_gk      = 0
-      -$mclf_kaagapay      = 0
-      - @data[:counts][:inactive_members][:members].each do |member_type|
-        - if member_type[:member_type] == "Regular"
-          - $regular += 1 
-        - elsif member_type[:member_type] == "GK"
-          - $gk  +=1
-        - elsif member_type[:member_type] == "MCLF"
-          - $mcpl  +=1
-        - elsif member_type[:member_type] == "MCLF-GK"
-          - $mclf_gk   +=1
-        - elsif member_type[:member_type] == "MCLF-KAAGAPAY"
-          - $mclf_kaagapay  +=1
-        - else 
-          - $kaagapay +=1 
-      %td.text-center
-        #{$regular}
-      %td.text-center
-        #{$gk}
-      %td.text-center
-        #{$kaagapay}
-      %td.text-center
-        #{$mcpl}
-      %td.text-center
-        #{$mclf_gk}
-      %td.text-center
-        #{$mclf_kaagapay}
-
-      %td.text-center
-        #{@data[:counts][:inactive_members][:total]}
-
+      %th Non-patronizing Members
+      - if microinsurance?
+        %td.text-center= @data[:counts][:inactive_members][:inforce]
+        %td.text-center= @data[:counts][:inactive_members][:lapsed]
+        %td.text-center= @data[:counts][:inactive_members][:pending]
+      - member_counts = Hash.new(0)
+      - @data[:counts][:inactive_members][:members].each do |member_type| 
+        - case member_type[:member_type]
+          - when "Regular" then member_counts[:regular] += 1
+          - when "GK" then member_counts[:gk] += 1
+          - when " Kaagapay" then member_counts[:kaagapay] += 1
+          - when "MCLF" then member_counts[:mclf] += 1
+          - when "MCLF-GK" then member_counts[:mclf_gk] += 1
+          - when "MCLF-KAAGAPAY" then member_counts[:mclf_kaagapay] += 1
+      %td.text-center= member_counts[:regular]
+      %td.text-center= member_counts[:gk]
+      %td.text-center= member_counts[:kaagapay]
+      %td.text-center= member_counts[:mclf]
+      %td.text-center= member_counts[:mclf_gk]
+      %td.text-center= member_counts[:mclf_kaagapay]
+      %td.text-center= member_counts.values.sum
 
   - if @data[:counts][:inactive_members].present?
     %tr
       %th
         TOTAL COUNTS PER MEMBER TYPE
         - if @data[:member_type_counts].present?
-          - @data[:member_type_counts].each do |o|
-            %th.text-center
-              #{o[:count]}
+          - total_regular = @data[:counts][:active_members][:members].count { |m| m[:member_type] == "Regular" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == "Regular" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == "Regular" } + @data[:counts][:inactive_members][:members].count { |m| m[:member_type] == "Regular" }
+          - total_gk = @data[:counts][:active_members][:members].count { |m| m[:member_type] == "GK" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == "GK" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == "GK" }
+          - total_kaagapay = @data[:counts][:active_members][:members].count { |m| m[:member_type] == " Kaagapay" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == " Kaagapay" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == " Kaagapay" }
+          - total_mcpl = @data[:counts][:active_members][:members].count { |m| m[:member_type] == "MCLF" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == "MCLF" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == "MCLF" }
+          - total_mclf_gk = @data[:counts][:active_members][:members].count { |m| m[:member_type] == "MCLF-GK" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == "MCLF-GK" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == "MCLF-GK" }
+          - total_mclf_kaagapay = @data[:counts][:active_members][:members].count { |m| m[:member_type] == "MCLF-KAAGAPAY" } + @data[:counts][:pure_savers][:members].count { |m| m[:member_type] == "MCLF-KAAGAPAY" } + @data[:counts][:loaners][:members].count { |m| m[:member_type] == "MCLF-KAAGAPAY" }
+          %th.text-center= total_regular
+          %th.text-center= total_gk
+          %th.text-center= total_kaagapay
+          %th.text-center= total_mcpl
+          %th.text-center= total_mclf_gk
+          %th.text-center= total_mclf_kaagapay
       %th.text-center
-        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i + @data[:counts][:inactive_members][:total].to_i }
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i + @data[:counts][:inactive_members][:total].to_i}
   - else
     %tr
       %th
@@ -323,7 +245,7 @@
             %th.text-center
               #{o[:count]}
       %th.text-center
-        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i}
+        #{@data[:counts][:active_members][:total].to_i + @data[:counts][:pure_savers][:total].to_i + @data[:counts][:loaners][:total].to_i + @data[:counts][:inactive_members][:total].to_i}
 
 %ul.nav.nav-tabs{:role => "tablist"}
   %li.nav-item

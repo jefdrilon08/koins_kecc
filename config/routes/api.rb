@@ -806,7 +806,9 @@ namespace :api do
 
       #Holiday
       post "holiday_records/create", to: "holiday_records#create"
-      post "holiday_records/update", to: "holiday_records#update"
+      put  "holiday_records/update", to: "holiday_records#update"
+      post "holiday_records/delete", to: "holiday_records#delete"
+
       get "holidays/index", to: "holidays#index"
 
       resources :holidays

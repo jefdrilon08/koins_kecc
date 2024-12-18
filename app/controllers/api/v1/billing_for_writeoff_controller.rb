@@ -85,6 +85,13 @@ module Api
         
       end
 
+      def authenticate_user!
+        unless current_user
+          Rails.logger.debug "Authentication failed: User not logged in."
+          render json: { error: "Unauthorized" }, status: :unauthorized
+        end
+      end
+
       def create
       branch  = Branch.where(id: params[:branch_id]).first
       year = params[:year]
