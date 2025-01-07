@@ -15,7 +15,7 @@ class BillingForInvoluntaryController < DataStoreController
   def show
     @data_store              = DataStore.find(params[:id])
     @branch_id               = @data_store.meta['branch_id']
-    @member_list             = Member.active.where(branch_id: @branch_id).order("last_name ASC")
+    @member_list             = Member.where(branch_id: @branch_id).where(status: ['active', 'writeoff']).order("last_name ASC")
     @data                   = @data_store.data.with_indifferent_access
     @data_view              = @data[:records]
     @accounting_entry_transfer_savings  = @data[:accounting_entry_transfer_savings]

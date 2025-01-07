@@ -10,7 +10,7 @@ module DataStores
               text: "New"
             }
         ]
-        @records = HolidayRecord.all.order(:holiday_name)
+        @records = HolidayRecordDetail.all.order(:holiday_name)
 
         holiday_id = params[:holiday_id]
         holiday_name = params[:holiday_name]

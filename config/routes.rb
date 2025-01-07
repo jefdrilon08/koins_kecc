@@ -416,8 +416,15 @@ Rails.application.routes.draw do
   # get "/involuntary_payment.id", to: "involuntary_payment#show"
   get "/involuntary_payment/:id", to: "involuntary_payment#show"
   delete "/involuntary_payment/:id", to: "involuntary_payment#delete"
-
-
+  
+  namespace :data_stores do
+    get "/members_in_good_standing", to: "members_in_good_standing#index"
+    get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
+    delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
+    get "/members_in_good_standing/:id/excel", to: "members_in_good_standing#excel"
+    get "/members_in_good_standing/:id/members_in_good_standing_excel", to: "members_in_good_standing#members_in_good_standing_excel", as: :generate_migs
+  end
+  
   # Data Stores
   namespace :data_stores do
     get "/share_capital_summary", to: "share_capital_summary#index"
@@ -443,8 +450,6 @@ Rails.application.routes.draw do
     get "/holiday", to: "holiday#index"
     delete "/holiday/:id", to: "holiday#destroy"
 
-
-
     get "/icpr", to: "icpr#index"
     get "/icpr/:id", to: "icpr#show"
     delete "/icpr/:id", to: "icpr#destroy"
@@ -452,7 +457,9 @@ Rails.application.routes.draw do
     get "/members_in_good_standing", to: "members_in_good_standing#index"
     get "/members_in_good_standing/:id", to: "members_in_good_standing#show"
     delete "/members_in_good_standing/:id", to: "members_in_good_standing#destroy"
-
+    get "/members_in_good_standing/:id/excel", to: "members_in_good_standing#excel"
+    get "/members_in_good_standing/:id/members_in_good_standing_excel", to: "members_in_good_standing#members_in_good_standing_excel", as: :migs_download_excel
+    
     get "/for_writeoff/excel", to: "for_writeoff#excel"
     get "/for_writeoff/for_writeoff_excel", to: "for_writeoff#for_writeoff_excel", as: :for_writeoff_download_excel
     resources :for_writeoff,only: [:index,:show,:destroy]
