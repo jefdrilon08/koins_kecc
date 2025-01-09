@@ -1,10 +1,15 @@
 = title @record.id
 .h5
-  SOA Expense #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["start_date"]).strftime("%b %d, %Y")} to #{DateTime.parse(@record.data["end_date"]).strftime("%b %d, %Y")}
+  - soax_title = "SOA Expense #{@record.data["branch"]["name"]} - #{DateTime.parse(@record.data["start_date"]).strftime("%b %d, %Y")} to #{DateTime.parse(@record.data["end_date"]).strftime("%b %d, %Y")}"
+  = soax_title
   %br
     %br
       .row
         .col
           .card
             .card-body
-              #react-root
+              - if @record.error?
+                = render partial: "data_stores/error_page"
+              - else
+                #react-root
+              #hidden-title{style: "display:none;"}= soax_title

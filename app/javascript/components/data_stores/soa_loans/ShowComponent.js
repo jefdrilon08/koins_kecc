@@ -393,3 +393,76 @@ export default class ShowComponent extends React.Component {
     }
   }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  var printButton = document.getElementById('print_soal');
+  var downloadButton = document.getElementById('excel_soal');
+
+  if (printButton) {
+    printButton.addEventListener('click', function() {
+      var printWindow = window.open('', '', 'height=600,width=800');
+      var tableHtml = document.querySelector('table').outerHTML; 
+      tableHtml = tableHtml.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+      var Title = document.getElementById('hidden-title').innerHTML;
+
+      var headerHtml = `
+        <style>
+          .arial-font {
+            font-family: Arial, sans-serif;
+            color: black; 
+            margin: 10px 5px;
+          }
+          h3 {
+            font-size: 25px; 
+            font-weight: bold; 
+          }
+          h4 {
+            font-size: 15px; 
+            font-weight: normal;
+            font-weight: bold;
+          }
+        </style>
+        <h3 class="arial-font">KASAGANA-KA CREDIT AND SAVINGS COOPERATIVE</h3>
+        <h4 class="arial-font">4th Floor KMBA Members' Center Building #5 Matimpiin St. Brgy. Pinyahan Quezon City 1100</h4>
+        <h4 class="arial-font">${Title}</h4>
+      `;
+
+      printWindow.document.write('<style>body{font-family: Arial, sans-serif;} table{width: 100%; border-collapse: collapse;} th, td{border: 1px solid #000; padding: 5px; text-align: left;} th{background-color: #f2f2f2;} </style>'); 
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(headerHtml);
+      printWindow.document.write(tableHtml);
+      printWindow.document.write('</body></html>');
+
+      printWindow.document.close();
+      printWindow.print();
+    });
+  }
+
+
+
+  if (downloadButton) {
+    downloadButton.addEventListener('click', function() {
+      const table = document.querySelector('table');
+      const rows = Array.from(table.querySelectorAll('tr'));
+      
+      const data = rows.map(row => 
+        Array.from(row.querySelectorAll('td, th'))
+          .map(cell => `"${cell.innerText.trim().replace(/"/g, '""')}"`)
+          .join(",")
+      ).join("\n");
+    
+
+      const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "SOA_Loans"); 
+      document.body.appendChild(link);    
+      link.click();
+      document.body.removeChild(link);
+    });
+}
+});
+

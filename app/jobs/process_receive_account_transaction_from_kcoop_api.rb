@@ -77,11 +77,32 @@ class ProcessReceiveAccountTransactionFromKcoopApi < ApplicationJob
 
         if data['member_id'] == @member.id
           if o[:account_subtype] == 'Life Insurance Fund'
-            amount = data['lif_amount'].to_i
-            reference_num = data["reference_num"]
+            amount = data['lif_amount'].to_f.round(2)
+            if data["reference_num"].present?
+              reference_num = data["reference_num"]
+            else
+              reference_num = nil
+            end
+
+            if data["is_interest"].present?
+              is_interest = data["is_interest"]
+            else
+              is_interest = nil
+            end
+
           elsif o[:account_subtype] == 'Retirement Fund'
-            amount = data['rf_amount'].to_i
-            reference_num = data["reference_num"]
+            amount = data['rf_amount'].to_f.round(2)
+            if data["reference_num"].present?
+              reference_num = data["reference_num"]
+            else
+              reference_num = nil
+            end
+
+            if data["is_interest"].present?
+              is_interest = data["is_interest"]
+            else
+              is_interest = nil
+            end
           else
             amount = 0.00
           end
@@ -96,7 +117,8 @@ class ProcessReceiveAccountTransactionFromKcoopApi < ApplicationJob
           record_type: o.account_type,
           account_subtype: o.account_subtype,
           member_account_id: member_account.try(:id),
-          reference_num: reference_num
+          reference_num: reference_num,
+          is_interest: is_interest
         }
 
         @total_collected += amount.to_f

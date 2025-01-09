@@ -30,6 +30,26 @@ module DataStores
         { text: "Delete", class: "fa fa-times", link: "/data_stores/branch_loans_stats/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
 
+      @subheader_side_actions << {
+  id: "print_loanstats",
+  # link: '#',
+  class: "fa fa-print",
+  text: "Print PDF",
+  data: {
+    id: @record.id
+  }
+}
+
+@subheader_side_actions << {
+  id: "excel_loanstats",
+  link: '#',
+  class: "fa fa-print",
+  text: "Download Excel",
+  data: {
+    id: @record.id
+  }
+}
+
       @payload = {
         id: @record.id
       }
@@ -42,3 +62,4 @@ module DataStores
     end
   end
 end
+
