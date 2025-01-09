@@ -1924,6 +1924,10 @@ namespace :adjust do
                         new_status = "resigned"
                       end
 
+                      if current_balance > 0 && insurance_status == "pending"
+                        new_status = "inforce"
+                      end
+
                       if current_balance == 0.0 && insurance_status == "resigned"
                         new_status = "resigned"
                       end
@@ -3670,9 +3674,17 @@ namespace :adjust do
     kok = InsuranceLoanBundleEnrollment.all
 
     kok.each do |kok|
+      ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
+    end
+  end
+
+  task :process_kok_remove_unnecessary_data_for_renewal => :environment do
+    kok = InsuranceLoanBundleEnrollment.all
+
+    kok.each do |kok|
       status = kok.status
       if status == "for-renewal"
-        ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
+        ProcessKokLoanRemoveUnnecessaryDataForRenewal.perform_later(kok)
       end
     end
   end
