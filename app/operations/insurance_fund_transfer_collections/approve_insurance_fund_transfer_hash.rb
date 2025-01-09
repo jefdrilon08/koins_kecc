@@ -2,7 +2,8 @@ module InsuranceFundTransferCollections
   class ApproveInsuranceFundTransferHash
     def initialize(config:)
       @config                     = config
-      @reference_number           =  @config[:insurance_fund_transfer][:reference_num]
+      @reference_number           = @config[:insurance_fund_transfer][:reference_num]
+      @is_interest                = @config[:insurance_fund_transfer][:is_interest]
       @date_paid                  = @config[:date_paid]
       @insurance_fund_transfer    = @config[:insurance_fund_transfer]
       @user                       = @config[:user]
@@ -10,7 +11,8 @@ module InsuranceFundTransferCollections
       @amount                     = @insurance_fund_transfer[:amount].try(:to_f).round(2)
       @transaction_type           = "deposit"
       @member_account             = MemberAccount.find(@insurance_fund_transfer[:member_account_id])
-       
+      @account_subtype            = @config[:insurance_fund_transfer][:account_subtype]
+
       if @reference_number.present?
         @account_transaction_api = AccountTransaction.new(
           subsidiary_id: @member_account.id,
@@ -33,7 +35,27 @@ module InsuranceFundTransferCollections
           ending_balance: 0.00,
           payment_tpye: "gcash",
 
-        }  
+        }
+      elsif @is_interest.present?
+        @account_transaction_api = AccountTransaction.new(
+          subsidiary_id: @member_account.id,
+          subsidiary_type: "MemberAccount",
+          amount: @amount,
+          transaction_type: @transaction_type,
+          transacted_at: @date_paid,
+          status: "approved"
+        )
+
+        @data_api = {
+          is_withdraw_payment: false,
+          is_fund_transfer: false,
+          is_interest: true,
+          is_adjustment: false,
+          is_for_exit_age: false,
+          is_for_loan_payments: false,
+          beginning_balance: 0.00,
+          ending_balance: 0.00
+        }
       else
         @account_transaction  = AccountTransaction.new(
                                   subsidiary_id: @member_account.id,
@@ -52,7 +74,7 @@ module InsuranceFundTransferCollections
           is_for_loan_payments: false,
           beginning_balance: 0.00,
           ending_balance: 0.00        }
-      end     
+      end
     end
 
     def execute!
@@ -78,7 +100,7 @@ module InsuranceFundTransferCollections
           # For Equity Value deposit transaction
           member     = @member_account.member
           ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
-          
+
           if ev_account.present?
             ev_balance = ev_account.balance
 
@@ -121,6 +143,75 @@ module InsuranceFundTransferCollections
         @account_transaction_api.data = @data_api
 
         @account_transaction_api.save!
+      elsif @is_interest.present?
+
+        if @account_subtype == "Life Insurance Fund"
+          # For Equity Value deposit transaction
+          member     = @member_account.member
+          ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
+
+          if ev_account.present?
+            ev_balance = ev_account.balance
+
+            account_transaction  = AccountTransaction.new(
+                                      subsidiary_id: ev_account.id,
+                                      subsidiary_type: "MemberAccount",
+                                      amount: @amount,
+                                      transaction_type: "deposit",
+                                      transacted_at: @date_paid,
+                                      status: "approved",
+                                      data: {
+                                        is_withdraw_payment: false,
+                                        is_fund_transfer: false,
+                                        is_interest: true,
+                                        is_adjustment: false,
+                                        is_for_exit_age: false,
+                                        is_for_loan_payments: false,
+                                        accounting_entry_reference_number: nil,
+                                        beginning_balance: 0.00,
+                                        ending_balance: 0.00                                      }
+                                    )
+
+            account_transaction.save!
+
+            ev_id  = account_transaction.subsidiary_id
+            # raise ev_id.inspect
+            MemberAccounts::Rehash.new(member_account:MemberAccount.find(ev_id)).execute!
+          end
+        else
+          member     = @member_account.member
+          rf_account = member.member_accounts.where(account_subtype:"Retirement Fund").first
+
+          if rf_account.present?
+            ev_balance = rf_account.balance
+
+            account_transaction  = AccountTransaction.new(
+                                      subsidiary_id: rf_account.id,
+                                      subsidiary_type: "MemberAccount",
+                                      amount: @amount,
+                                      transaction_type: "deposit",
+                                      transacted_at: @date_paid,
+                                      status: "approved",
+                                      data: {
+                                        is_withdraw_payment: false,
+                                        is_fund_transfer: false,
+                                        is_interest: true,
+                                        is_adjustment: false,
+                                        is_for_exit_age: false,
+                                        is_for_loan_payments: false,
+                                        accounting_entry_reference_number: nil,
+                                        beginning_balance: 0.00,
+                                        ending_balance: 0.00                                      }
+                                    )
+
+            account_transaction.save!
+
+            rf_id  = account_transaction.subsidiary_id
+            # raise rf_id.inspect
+            MemberAccounts::Rehash.new(member_account:MemberAccount.find(rf_id)).execute!
+          end
+
+        end
       else
         # Compute beginning and ending balance
         @data[:beginning_balance] = @member_account.balance.round(2)
@@ -144,7 +235,7 @@ module InsuranceFundTransferCollections
           # For Equity Value deposit transaction
           member     = @member_account.member
           ev_account = member.member_accounts.where(account_subtype:"Equity Value").first
-          
+
           if ev_account.present?
             ev_balance = ev_account.balance
 

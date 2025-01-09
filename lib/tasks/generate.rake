@@ -259,18 +259,22 @@ namespace :generate do
   end
 
   task :account_transaction_file_kcoop_to_mba => :environment do
-    start_date                = '2024-10-02'
-    end_date                  = '2024-10-02'
+    start_date                = (ENV["START_DATE"] || Date.yesterday).strftime('%Y-%m-%d')
+    end_date                  = (ENV["END_DATE"] || Date.tomorrow).strftime('%Y-%m-%d')
+    # start_date              = '2024-11-01'
+    # end_date                = '2024-11-30'
     is_batch                  = ENV["BATCH"] || true
     end_point                 = ENV['KOINS_RECEIVING_PAYMENTS'] || "http://localhost:3000/api/receive_api/save_account_transaction_from_kcoop"
     account_subtypes          = ["Life Insurance Fund", "Retirement Fund"]
     is_interest               = 'false'
     is_withdraw_payment       = 'false'
-    # branches                  = Branch.where(id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0")
+    # branches                  = Branch.where(id: "ff757405-81b9-4fba-a3f6-9a7903789295")
     branches                  = Branch.where("cluster_id NOT IN ('ad6de437-60bb-4c0c-bfdb-afb806a35088','4350b839-9774-4b0a-a79b-f71409ad6d2b','168eb8bf-59b4-4401-9498-79c87b3c01d4')")
     date_today                = Date.today.strftime('%Y-%m-%d')
     user_id                   = "2bbf67fc-7982-43bc-a8a6-32d288051fd4"
 
+
+    # raise [start_date, end_date].inspect
     branches.each do |b|
       account_transactions = AccountTransaction.select(
         "
@@ -292,15 +296,11 @@ namespace :generate do
         "
           (account_transactions.transacted_at >= ? AND account_transactions.transacted_at <= ?)
           AND member_accounts.account_subtype IN (?)
-          AND account_transactions.data->>'is_interest' = ?
-          AND account_transactions.data->>'is_withdraw_payment' = ?
           AND members.branch_id = ?
         ",
         start_date,
         end_date,
         account_subtypes,
-        is_interest,
-        is_withdraw_payment,
         b.id
       ).group(
         "members.id, branches.name"
