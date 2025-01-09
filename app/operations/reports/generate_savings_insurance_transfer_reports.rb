@@ -1,12 +1,12 @@
 module Reports
-  class GenerateSavingsInsuranceTransferReports 
-     if Settings.activate_microinsurance 
+  class GenerateSavingsInsuranceTransferReports
+     if Settings.activate_microinsurance
       def initialize(branch:, start_date:, end_date:, insurance_subtype:, payment_subtype:, status:)
-        @start_date = start_date.try(:to_date) 
-        @end_date = end_date.try(:to_date) 
+        @start_date = start_date.try(:to_date)
+        @end_date = end_date.try(:to_date)
         @branch_id = branch
         @insurance_subtype = insurance_subtype
-        @payment_subtype = payment_subtype 
+        @payment_subtype = payment_subtype
         @status = status
 
         if @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
@@ -14,9 +14,9 @@ module Reports
         elsif @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
           @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
-          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC") 
-        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? 
-          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC") 
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC")
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
           @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
@@ -24,29 +24,29 @@ module Reports
         elsif @insurance_subtype == "Credit Life Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @payment_subtype.present?
           @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'payment_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @payment_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "Credit Life Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
-          @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")  
+          @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ?", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         else
           puts "not valid"
         end
       @p        = Axlsx::Package.new
       end
-      
+
     else
       def initialize(branch:, start_date:, end_date:, insurance_subtype:, savings_subtype:, status:)
-        @start_date = start_date.try(:to_date) 
-        @end_date = end_date.try(:to_date) 
+        @start_date = start_date.try(:to_date)
+        @end_date = end_date.try(:to_date)
         @branch_id = branch
         @insurance_subtype = insurance_subtype
         @savings_subtype = savings_subtype
         @status = status
-        
+
         if @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
           @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "K-BENTE" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
           @kbente = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
           @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
-        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? 
+        elsif @insurance_subtype == "K-KALINGA" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
           @kkalinga = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "Hospital Income Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
           @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
@@ -54,8 +54,8 @@ module Reports
           @hiip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         elsif @insurance_subtype == "Credit Life Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? and @savings_subtype.present?
           @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND  data ->> 'savings_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @savings_subtype, @branch_id, @status).order("collection_date DESC")
-        elsif @insurance_subtype == "Credit Life Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present? 
-          @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")     
+        elsif @insurance_subtype == "Credit Life Insurance Plan" and @start_date.present? and @end_date.present? and @branch_id.present? and @insurance_subtype.present?
+          @clip = SavingsInsuranceTransferCollection.where("collection_date >= ? AND collection_date <= ? AND  data ->> 'insurance_subtype' = ? AND branch_id = ? AND status = ? ", @start_date, @end_date,  @insurance_subtype, @branch_id, @status).order("collection_date DESC")
         else
           puts "not valid"
         end
@@ -82,8 +82,8 @@ module Reports
             sheet.add_row ["KASAGANA-KA K-BENTE DECLARATION"], style: title_cell
             sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
-            
-            sheet.add_row [ 
+
+            sheet.add_row [
               "AGE",
               "NAME OF INSURED",
               "BIRTHDATE",
@@ -97,10 +97,18 @@ module Reports
               "RELATIONSHIP",
               "DATE PREPARED",
               "DATE APPROVED",
-              
+
             ], style: header
             @kbente.each do |kbente|
               kbente[:data]["records"].each_with_index do |o, index|
+                middle_name = o["member"]["middle_name"]
+
+                member_fullname = if middle_name.present?
+                  "#{o["member"]["first_name"] + " " + o["member"]["middle_name"] + ", " + o["member"]["last_name"]}"
+                else
+                  "#{o["member"]["first_name"] + " " + " " + o["member"]["last_name"]}"
+                end
+
                 sheet.add_row [
                   o["kbente_data"]["beneficiary_age"].to_i,
                   o["kbente_data"]["kbente_beneficiary_name"],
@@ -111,18 +119,18 @@ module Reports
                   kbente[:data]["accounting_entry"]["branch"],
                   kbente.date_approved.try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["amount"],
-                  o["member"]["first_name"] + " " + o["member"]["middle_name"] + " , " + o["member"]["last_name"],
+                  member_fullname,
                   o["kbente_data"]["relationship"],
                   o["kbente_data"]["effectivity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   kbente.date_approved.try(:to_date).try(:strftime, "%b %d, %Y"),
-                  
+
                 ], style: [ left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, currency_cell_right, left_aligned_cell, left_aligned_cell, date_format_cell, date_format_cell]
               end
             end
           end
         end
         @p
-      
+
       elsif @insurance_subtype == "K-KALINGA"
         @p.workbook do |wb|
           wb.add_worksheet do |sheet|
@@ -141,8 +149,8 @@ module Reports
             sheet.add_row ["KASAGANA-KA KALINGA DECLARATION"], style: title_cell
             sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
-            
-            sheet.add_row [ 
+
+            sheet.add_row [
               "Agent",
               "OR DATE",
               "OR#",
@@ -184,14 +192,14 @@ module Reports
                   o["kkalinga_data"]["kkalinga_relationship"],
                   o["kkalinga_data"]["kkalinga_effectivity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   kkalinga.date_approved.try(:to_date).try(:strftime, "%b %d, %Y"),
-                  
+
                 ], style: [ left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, left_aligned_cell, date_format_cell, left_aligned_cell, currency_cell_right, left_aligned_cell, left_aligned_cell, date_format_cell, date_format_cell]
               end
             end
           end
         end
         @p
-      
+
     elsif @insurance_subtype == "Credit Life Insurance Plan"
         @p.workbook do |wb|
           wb.add_worksheet do |sheet|
@@ -210,8 +218,8 @@ module Reports
             sheet.add_row ["KASAGANA-KA CLIP DECLARATION"], style: title_cell
             sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
             sheet.add_row []
-            
-            sheet.add_row [ 
+
+            sheet.add_row [
               "Branch",
               "Center",
               "Member ID Number",
@@ -240,7 +248,7 @@ module Reports
                   o["clip_data"]["num_installments"],
                   o["clip_data"]["maturity_date"].try(:to_date).try(:strftime, "%b %d, %Y"),
                   o["amount"]
-                  
+
                 ], style: [ left_aligned_cell, left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell,left_aligned_cell,date_format_cell,left_aligned_cell,left_aligned_cell,date_format_cell,left_aligned_cell]
               end
             end
@@ -266,8 +274,8 @@ module Reports
           sheet.add_row ["HIIP Report"], style: title_cell
           sheet.add_row ["For the period of: #{@start_date} - #{@end_date}"], style: title_cell
           sheet.add_row []
-          
-          sheet.add_row [ 
+
+          sheet.add_row [
            "BRANCH NAME",
            "NAME OF ASSURED",
            "POLICY NUMBER",
