@@ -1924,10 +1924,6 @@ namespace :adjust do
                         new_status = "resigned"
                       end
 
-                      if current_balance > 0 && insurance_status == "pending"
-                        new_status = "inforce"
-                      end
-
                       if current_balance == 0.0 && insurance_status == "resigned"
                         new_status = "resigned"
                       end
