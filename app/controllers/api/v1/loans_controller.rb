@@ -622,11 +622,17 @@ module Api
         loan_data = JSON.parse(params[:payload]).with_indifferent_access
         
         #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access 
+        payment_type = "USSC"
+        sub_type = "E-WALLET"
+
         co_maker_profile_picture        = params[:co_maker_profile_picture]
         co_maker_three_profile_picture  = params[:co_maker_three_profile_picture]
         
         config  = {
           loan_data:                      loan_data,
+          payment_type:                payment_type,
+          sub_type:                       sub_type,
+          
           user:                           current_user,
           co_maker_profile_picture:       co_maker_profile_picture,
           co_maker_three_profile_picture: co_maker_three_profile_picture
@@ -665,7 +671,6 @@ module Api
           mobile_number = params[:mobile_number]
           member_id = loan_data[:member_id]
           Member.find(member_id).update(mobile_number: mobile_number)
-
           render json: { id: loan.id }
         end
       end
