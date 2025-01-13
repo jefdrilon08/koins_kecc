@@ -1,5 +1,5 @@
 namespace :adjust do
-  task :update_hidden_status
+  task :update_hidden_status do
     a = Member.where("status = :status AND data->> :key = :hide_status", status: "active", key: 'hide_status', hide_status: "pending")
     a.each do |g|
       m = Member.find(g.id)
@@ -7,6 +7,7 @@ namespace :adjust do
       m_data[:hide_status] = "active"
       m.update(data: m_data)
     end
+
   end
 
   task :insert_insurance => :environment do
