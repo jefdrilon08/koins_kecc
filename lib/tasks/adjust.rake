@@ -3670,9 +3670,17 @@ namespace :adjust do
     kok = InsuranceLoanBundleEnrollment.all
 
     kok.each do |kok|
+      ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
+    end
+  end
+
+  task :process_kok_remove_unnecessary_data_for_renewal => :environment do
+    kok = InsuranceLoanBundleEnrollment.all
+
+    kok.each do |kok|
       status = kok.status
       if status == "for-renewal"
-        ProcessKokLoanRemoveUnnecessaryData.perform_later(kok)
+        ProcessKokLoanRemoveUnnecessaryDataForRenewal.perform_later(kok)
       end
     end
   end
