@@ -5,6 +5,7 @@ module Loans
     
       @loan_data    = @config[:loan_data]
       @user         = @config[:user]
+
       @loan_product = LoanProduct.where(id: @loan_data[:loan_product_id]).first
     
   
@@ -23,6 +24,8 @@ module Loans
 
       @co_maker_profile_picture       = @config[:co_maker_profile_picture]
       @co_maker_three_profile_picture = @config[:co_maker_three_profile_picture]
+      @payment_type = @config[:payment_type]
+      @sub_type = @config[:sub_type]
 
       @persist  = persist
 
@@ -52,7 +55,7 @@ module Loans
         raise "No settings foud for loan_product #{@loan_product.id}"
       end
     end
-
+    
     def execute!
       @loan.pn_number         = @loan_data[:pn_number]
       @loan.date_prepared     = @loan_data[:date_prepared]
@@ -61,19 +64,22 @@ module Loans
       @loan.num_installments  = @loan_data[:num_installments]
       @loan.project_type_id   = @loan_data[:project_type_id]
       @loan.term              = @loan_data[:term]
-      @loan.data              = @loan_data[:data]
-      
+      @loan.data              = @loan_data[:data] || {}
     
-    if @bank_transfer.present?
-      @bank_data  = { bank_transfer_id: @bank_transfer.id, 
-                    bank_transfer_name: @bank_transfer.name, 
-                    bank_transfer_amount: @bank_transfer.amount.to_f,
-                    accounting_entry_id: @bank_transfer.accounting_entry_id,
-                    transfer_option_id: @bank_transfer.transfer_option_id
-
-                  }
-      @loan.data[:bank_transfer]= @bank_data
-    end
+      # Save modepayment_type_of and sub_type into loan data
+      @loan.data[:payment_type]    = @payment_type
+      @loan.data[:sub_type]   = @sub_type
+    
+      if @bank_transfer.present?
+        @bank_data = {
+          bank_transfer_id: @bank_transfer.id, 
+          bank_transfer_name: @bank_transfer.name, 
+          bank_transfer_amount: @bank_transfer.amount.to_f,
+          accounting_entry_id: @bank_transfer.accounting_entry_id,
+          transfer_option_id: @bank_transfer.transfer_option_id
+        }
+        @loan.data[:bank_transfer] = @bank_data
+      end
 
       # Setup loan cycle
       @loan_cycles            = @member_data[:loan_cycles]
@@ -214,24 +220,40 @@ module Loans
 
       # Build accounting entry data
       particular  = "Release of Loan - #{@member.first_name} #{@member.middle_name} #{@member.last_name} cv# #{@loan.voucher_check_voucher_number} ck# #{@loan.voucher_bank_check_number} clip# #{@loan.clip_number}"
+      particular_for_remittance  = "Release of Loan via Remittance - #{@member.first_name} #{@member.middle_name} #{@member.last_name} cv# #{@loan.voucher_check_voucher_number} ck# #{@loan.voucher_bank_check_number} clip# #{@loan.clip_number}"
 
       if @loan.data.present? and @loan.data.with_indifferent_access[:accounting_entry].present?
         @book = @loan.data.with_indifferent_access[:accounting_entry][:book]
       end
-      accounting_entry_data = ::Loans::BuildAccountingEntry.new(
-                                config: {
-                                  member: @member,
-                                  loan_product: @loan_product,
-                                  amount: @loan.principal,
-                                  term: @loan.term,
-                                  num_installments: @loan.num_installments,
-                                  particular: particular,
-                                  book: @book,
-                                  bank_data: @bank_data,
-                                  loan: @loan
-                                }
-                              ).execute!
-
+        if @payment_type == 'USSC' && @sub_type == 'E-WALLET'
+          accounting_entry_data = ::Loans::BuildAccountingEntryForRemittance.new(
+                                    config: {
+                                      member: @member,
+                                      loan_product: @loan_product,
+                                      amount: @loan.principal,
+                                      term: @loan.term,
+                                      num_installments: @loan.num_installments,
+                                      particular: particular_for_remittance,
+                                      book: @book,
+                                      bank_data: @bank_data,
+                                      loan: @loan
+                                    }
+                                  ).execute!
+          else
+            accounting_entry_data = ::Loans::BuildAccountingEntry.new(
+              config: {
+                member: @member,
+                loan_product: @loan_product,
+                amount: @loan.principal,
+                term: @loan.term,
+                num_installments: @loan.num_installments,
+                particular: particular,
+                book: @book,
+                bank_data: @bank_data,
+                loan: @loan
+              }
+            ).execute!
+        end
       @loan.data[:accounting_entry] = accounting_entry_data
 
       if @persist
