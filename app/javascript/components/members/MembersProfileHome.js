@@ -4,6 +4,7 @@ import MembersProfileBeneficiaries from "./MembersProfileBeneficiaries";
 import MembersProfileResignationRecords from "./MembersProfileResignationRecords";
 import MembersProfileProjectType from "./MembersProfileProjectType";
 import axios from 'axios';
+import AddressService from "../utils/AddressService";
 
 
 export default function MembersProfileHome(props) {
@@ -339,10 +340,18 @@ export default function MembersProfileHome(props) {
                 </th>
                 <td>
                 {props.data.address["street"]} &nbsp;
-                {getBarangayName(props.data.address["district"])} &nbsp;
-                {getMunicipalityName(props.data.address["city"])} &nbsp;
-                {getProvinceName(props.data.address["province"])} &nbsp;
-                {getRegionName(props.data.address["region"])} &nbsp;
+                {AddressService.activateMicroinsurance()
+                  ? (props.data.address["district"] || 'District not found')
+                  : getBarangayName(props.data.address["district"])} &nbsp;
+                {AddressService.activateMicroinsurance()
+                  ? (props.data.address["city"] || 'City not found') 
+                  : getMunicipalityName(props.data.address["city"])} &nbsp;
+                {AddressService.activateMicroinsurance()
+                  ? (props.data.address["province"] || 'Province not found') 
+                  : getProvinceName(props.data.address["province"])} &nbsp;
+                {AddressService.activateMicroinsurance()
+                  ? (props.data.address["region"] || 'Region not found')
+                  : getRegionName(props.data.address["region"])} &nbsp;
                 </td>
               </tr>
               <tr>
