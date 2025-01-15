@@ -622,8 +622,8 @@ module Api
         loan_data = JSON.parse(params[:payload]).with_indifferent_access
         
         #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access 
-        payment_type = "USSC"
-        sub_type = "E-WALLET"
+        payment_type = ""
+        sub_type = ""
 
         co_maker_profile_picture        = params[:co_maker_profile_picture]
         co_maker_three_profile_picture  = params[:co_maker_three_profile_picture]
