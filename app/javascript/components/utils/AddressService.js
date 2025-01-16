@@ -1,9 +1,24 @@
 import data from './brgy.json';
 import $ from "jquery";
 
+const settings = { 
+  activate_microinsurance: false,
+  activate_microloans: true
+}; 
+
+
 export default class AddressService {
   constructor() {
   }
+
+  static activateMicroinsurance() {
+    return settings.activate_microinsurance;
+  }
+
+  static activateMicroloans() {
+   return settings.activate_microloans;
+  }
+
   
   // ===================== OLD
   // static getRegions() {
@@ -17,7 +32,15 @@ export default class AddressService {
   // }
 
   static getRegions() {
-    return new Promise((resolve, reject) => {
+    if (this.activateMicroinsurance()) {
+      console.log(`Microinsurance is ${settings.activate_microinsurance}. Using local data (brgy.json) for KMBA Address`, );
+      var regions = data.regions.map(function(o) {
+        return o.name;
+      });
+      return Promise.resolve(regions);
+    } else if (this.activateMicroloans()) {
+      console.log(`Microloans is ${settings.activate_microloans} Using Falling back to API for KCOOP Address`);
+      return new Promise((resolve, reject) => {
       $.ajax({
         url:"/api/v1/administration/admin_address/fetch",
         method:'GET',
@@ -30,11 +53,16 @@ export default class AddressService {
             resolve(regions);
           },
           error: function(err) {
+            console.error("Error fetching regions from API:", err);
             reject(err);
           }
       });
     });
+  } else {
+    console.warn("Neither microinsurance nor microloans is active.");
+      return Promise.reject("No active configuration for fetching regions.");
   }
+}
 
   // static getProvincesByRegion(region) {
   //   var provinces = [];
@@ -49,25 +77,33 @@ export default class AddressService {
   // }
 
   static getProvince(regionId) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: "/api/v1/administration/admin_province/fetch",
-        method: 'GET',
-        success: function(response) {
-          var provinces = response
-            .filter(o => o.region_id === regionId)
-            .map(o => ({
-              id: o.id,
-              name: o.province_name
-          }));
-          resolve(provinces);
-        },
-        error: function(err) {
-          reject(err);
-        }
+    if (this.activateMicroinsurance()) {
+      const region = data.regions.find(r => r.name === regionId);
+      const provinces = region ? region.provinces.map(p => p.name) : [];
+      return Promise.resolve(provinces);
+    } else if (this.activateMicroloans()){
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/v1/administration/admin_province/fetch",
+          method: 'GET',
+          success: function(response) {
+            var provinces = response
+              .filter(o => o.region_id === regionId)
+              .map(o => ({
+                id: o.id,
+                name: o.province_name
+            }));
+            resolve(provinces);
+          },
+          error: function(err) {
+            reject(err);
+          }
+        });
       });
-    });
+    }
   }
+
+    
 
   // static getCitiesByRegionAndProvince(region, province) {
   //   var cities  = [];
@@ -86,24 +122,41 @@ export default class AddressService {
   // }
 
   static getMunicipality(provinceId) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: "/api/v1/administration/admin_municipality/fetch",
-        method: 'GET',
-        success: function(response) {
-          var municipalities = response
-            .filter(o => o.province_id === provinceId)
-            .map(o => ({
-              id: o.id,
-              name: o.municipality_name
-          }))
-          resolve(municipalities);
-        },
-        error: function(err) {
-          reject(err);
-        }
+    if (this.activateMicroinsurance()) {
+
+      let cities = [];
+      data.regions.forEach(region => {
+        region.provinces.forEach(province => {
+          if (province.name === provinceId) {
+            if (Array.isArray(province.cities)) {
+              cities = province.cities.map(m => m.name);
+            } else {
+              console.warn(`No municipalities found for province: ${provinceId}`);
+            }
+          }
+        });
       });
-    });
+      return Promise.resolve(cities);
+    } else if (this.activateMicroloans()) {
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/v1/administration/admin_municipality/fetch",
+          method: 'GET',
+          success: function(response) {
+            var municipalities = response
+              .filter(o => o.province_id === provinceId)
+              .map(o => ({
+                id: o.id,
+                name: o.municipality_name
+            }))
+            resolve(municipalities);
+          },
+          error: function(err) {
+            reject(err);
+          }
+        });
+      });
+    }
   }
 
   // static getDistrictsByRegionAndProvinceAndCity(region, province, city) {
@@ -127,24 +180,44 @@ export default class AddressService {
   // }
 
   static getDistricts(municipalityId) {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: "/api/v1/administration/admin_barangay/fetch",
-        method: 'GET',
-        success: function(response) {
-          var barangay = response
-            .filter(o => o.municipality_id === municipalityId)
-            .map(o => ({
-              id: o.id,
-              name: o.barangay_name
-          }))
-          resolve(barangay);
-        },
-        error: function(err) {
-          reject(err);
-        }
+    if (this.activateMicroinsurance()) {
+      let districts = [];
+    data.regions.forEach(region => {
+      region.provinces.forEach(province => {
+        province.cities.forEach(city => {
+          if (city.name === municipalityId) {
+            if (Array.isArray(city.districts)) {
+              districts = city.districts.map(district => ({
+                name: district
+              }));
+            } else {
+              console.warn(`No districts found for city: ${city.name}`);
+            }
+          }
+        });
       });
     });
+    return Promise.resolve(districts);
+    } else if (this.activateMicroloans()){
+      return new Promise((resolve, reject) => {
+        $.ajax({
+          url: "/api/v1/administration/admin_barangay/fetch",
+          method: 'GET',
+          success: function(response) {
+            var barangay = response
+              .filter(o => o.municipality_id === municipalityId)
+              .map(o => ({
+                id: o.id,
+                name: o.barangay_name
+            }))
+            resolve(barangay);
+          },
+          error: function(err) {
+            reject(err);
+          }
+        });
+      });
+    }
   }
 
 }
