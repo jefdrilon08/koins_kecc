@@ -1538,11 +1538,13 @@ namespace :adjust do
 
     update_count                  = 0
 
-    member_count                  = 0
+    member_inforce_count          = 0
+    member_lapsed_count           = 0
+    member_pending_count          = 0
     attachment_count              = 0
 
-    not_active_in_kcoop_count     = 0
-    inactive_member_ids           = []
+    not_uploaded                  = 0
+    not_uploaded_id           = []
 
     error_count                   = 0
     error_ids                     = []
@@ -1554,50 +1556,128 @@ namespace :adjust do
         member  = Member.where(identification_number: sub_dir_name).first
 
         if member
-          if member.insurance_active?
-            member_count += 1
-            puts "Found directory for member #{member.full_name}"
-            Dir["#{f}/*"].each do |ff|
-              if !File.directory? ff
-                filename  = ff.split('/').last.split('.').first
+          if member.active? || member.resigned? || member.pending?
+            if member.inforce_insurance_status?
+              puts "Found directory for member #{member.full_name}"
+              Dir["#{f}/*"].each do |ff|
+                if !File.directory? ff
+                  filename  = ff.split('/').last.split('.').first
 
-                attachments = member.attachment_files
-                attachment = attachments.where(file_name: filename).first
+                  attachments = member.attachment_files
+                  attachment = attachments.where(file_name: filename).first
 
-                if attachment.nil?
-                  if filename != "Thumbs"
-                    attachment_file  = AttachmentFile.new(
-                                        file_name: filename,
-                                        member: member
-                                     )
+                  if attachment.nil?
+                    if filename != "Thumbs"
+                      attachment_file  = AttachmentFile.new(
+                                          file_name: filename,
+                                          member: member
+                                       )
 
-                    attachment_file.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+                      attachment_file.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
 
-                    if attachment_file.save
-                      puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
-                      attachment_count += 1
-                    else
-                      puts "Member #{member.identification_number} is not active in Kcoop"
-                      not_active_in_kcoop_count += 1
-                      inactive_member_ids << member.identification_number # Store inactive member ID
+                      if attachment_file.save
+                        puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                        member_inforce_count += 1
+                        attachment_count += 1
+                      else
+                        puts "File not uploaded for #{member.identification_number}"
+                        not_uploaded += 1
+                        not_uploaded_id << member.identification_number # Store inactive member ID
+                      end
                     end
+                  else
+                    attachment.file.purge
+                    attachment.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+                    attachment.update(
+                      file_name: filename,
+                      member: member,
+                      )
+                    puts "Successfully updated file #{ff} for #{member.identification_number}"
+                    update_count += 1
                   end
-                else
-                  attachment.file.purge
-                  attachment.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
-                  attachment.update(
-                    file_name: filename,
-                    member: member,
-                    )
-                  puts "Successfully updated file #{ff} for #{member.identification_number}"
-                  update_count += 1
+                end
+              end
+            elsif member.lapsed_insurance_status?
+              puts "Found directory for member #{member.full_name}"
+              Dir["#{f}/*"].each do |ff|
+                if !File.directory? ff
+                  filename  = ff.split('/').last.split('.').first
+
+                  attachments = member.attachment_files
+                  attachment = attachments.where(file_name: filename).first
+
+                  if attachment.nil?
+                    if filename != "Thumbs"
+                      attachment_file  = AttachmentFile.new(
+                                          file_name: filename,
+                                          member: member
+                                       )
+
+                      attachment_file.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+
+                      if attachment_file.save
+                        puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                        member_lapsed_count += 1
+                        attachment_count += 1
+                      else
+                        puts "File not uploaded for #{member.identification_number}"
+                        not_uploaded += 1
+                        not_uploaded_id << member.identification_number # Store inactive member ID
+                      end
+                    end
+                  else
+                    attachment.file.purge
+                    attachment.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+                    attachment.update(
+                      file_name: filename,
+                      member: member,
+                      )
+                    puts "Successfully updated file #{ff} for #{member.identification_number}"
+                    update_count += 1
+                  end
+                end
+              end
+            elsif member.pending_insurance_status?
+              puts "Found directory for member #{member.full_name}"
+              Dir["#{f}/*"].each do |ff|
+                if !File.directory? ff
+                  filename  = ff.split('/').last.split('.').first
+
+                  attachments = member.attachment_files
+                  attachment = attachments.where(file_name: filename).first
+
+                  if attachment.nil?
+                    if filename != "Thumbs"
+                      attachment_file  = AttachmentFile.new(
+                                          file_name: filename,
+                                          member: member
+                                       )
+
+                      attachment_file.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+
+                      if attachment_file.save
+                        puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
+                        member_pending_count += 1
+                        attachment_count += 1
+                      else
+                        puts "File not uploaded for #{member.identification_number}"
+                        not_uploaded += 1
+                        not_uploaded_id << member.identification_number # Store inactive member ID
+                      end
+                    end
+                  else
+                    attachment.file.purge
+                    attachment.file.attach(io: File.open(ff), filename: "#{filename}.jpg", content_type: 'file/jpg')
+                    attachment.update(
+                      file_name: filename,
+                      member: member,
+                      )
+                    puts "Successfully updated file #{ff} for #{member.identification_number}"
+                    update_count += 1
+                  end
                 end
               end
             end
-          else
-            puts "Member #{member.identification_number} is not active in Kcoop"
-            not_active_in_kcoop_count += 1
-            inactive_member_ids << member.identification_number # Store inactive member ID
           end
         else
           puts "Member #{sub_dir_name} not found"
@@ -1607,13 +1687,20 @@ namespace :adjust do
       end
     end
 
-    puts "Upload process completed."
-    puts "Total members processed: #{member_count}"
-    puts "Total attachments uploaded: #{attachment_count}"
-    puts "Total errors: #{error_count}"
+    puts "-------------------------------------------------------"
+    puts "Upload Process Completed."
+    puts "-------------------------------------------------------"
+    puts "Total Attachments Uploaded: #{attachment_count}"
+    puts "Total Inforce Uploaded: #{member_inforce_count}"
+    puts "Total Lapsed Uploaded: #{member_lapsed_count}"
+    puts "Total Pending Uploaded: #{member_pending_count}"
+    puts "-------------------------------------------------------"
+    puts "Total Errors: #{error_count}"
     puts "Error members IDs: #{error_ids}"
-    puts "Total inactive members in Kcoop: #{not_active_in_kcoop_count}"
-    puts "Inactive member IDs: #{inactive_member_ids.join(', ')}" # Display inactive
+    puts "Total Not Uploaded Attachments: #{not_uploaded}"
+    puts "Not Uploaded Member IDs: #{not_uploaded_id.join(', ')}"
+    puts "-------------------------------------------------------"
+
   end
 
   task :destroy_thumbs_attachment_file => :environment do
