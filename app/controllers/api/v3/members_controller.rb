@@ -66,23 +66,23 @@ module Api
       def allowed_member_attributes(member)
         # Define which fields you want to include
         allowed_fields = [:id, :first_name, :last_name, :mobile_number,
-         :member_type, :identification_number, :branch_id, :center_id, :encrypted_password]
+         :member_type, :identification_number, :branch_id, :center_id, :membership_arrangement_id]
         
         #  getting the member type
         # Get the branch name if branch_id is present
         branch_name = member.branch&.name
         center_name = member.center&.name
-          
+        membership_arrangement_name = member.membership_arrangement&.name
         # Filter the member attributes based on the allowed fields
         attributes = member.attributes.slice(*allowed_fields.map(&:to_s)).with_indifferent_access
         
         # Add the branch and center names if their IDs are present
         attributes[:branch_name] = branch_name if attributes[:branch_id].present?
         attributes[:center_name] = center_name if attributes[:center_id].present?
-      
+        attributes[:membership_arrangement_name] = membership_arrangement_name if attributes[:membership_arrangement_id].present?
         # Add the is_otp_code field from data if it exists
         attributes[:is_otp_code] = member.data['is_otp_code'] if member.data&.key?('is_otp_code')
-        
+        attributes.except!(:membership_arrangement_id)
         attributes
       end  
       

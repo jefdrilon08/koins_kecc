@@ -39,7 +39,6 @@ module DataStores
       @data_store = DataStore.find(params[:id])
       @data = @data_store.data.with_indifferent_access
       Rails.logger.debug "Params ID: #{params[:id]}"
-      # Rails.logger.debug "DataStore Found: #{@data_store.present?}"
       @accounting_entry = @data[:accounting_entry]
 
       @dormant_records = if @data[:record].present?
@@ -50,9 +49,10 @@ module DataStores
 
       # Sort the dormant records by center_name
       @dormant_records.sort_by! do |record|
-        center_name = record[:center_name]
+        center_name = record[:center_name].to_s
+
         center_name.scan(/\d+|\D+/).map do |part|
-          part.match?(/\d+/) ? part.to_i : part.downcase
+          part.match?(/\d+/) ? format('%010d', part.to_i) : part.downcase
         end
       end
 

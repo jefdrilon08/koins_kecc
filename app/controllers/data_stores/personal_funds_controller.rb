@@ -33,15 +33,25 @@ module DataStores
         }
       end
 
+      @subheader_side_actions = []
+
+      if is_mis_user?
       @subheader_side_actions = [
         { text: "Delete", class: "fa fa-times", link: "/data_stores/personal_funds/#{@record.id}", data: { method: :delete, confirm: "Are you sure?" } }
       ]
+      end
 
       @payload = {
         id: @record.id,
         userId: current_user.id,
         xKoinsAppAuthSecret: ENV['KOINS_APP_AUTH_SECRET']
       }
+    end
+
+    private
+
+    def is_mis_user?
+      current_user&.roles&.include?('MIS')
     end
   end
 end
