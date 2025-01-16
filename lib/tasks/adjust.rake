@@ -1,4 +1,15 @@
 namespace :adjust do
+  task :update_hidden_status do
+    a = Member.where("status = :status AND data->> :key = :hide_status", status: "active", key: 'hide_status', hide_status: "pending")
+    a.each do |g|
+      m = Member.find(g.id)
+      m_data = m.data.with_indifferent_access
+      m_data[:hide_status] = "active"
+      m.update(data: m_data)
+    end
+
+  end
+
   task :insert_insurance => :environment do
     #member_id = ENV['MEMBER_ID']
     member_id = ["5f1a2ebf-336f-4633-b116-860bf310394b","5d85fe8a-251e-4d89-bb70-d3488a181ded"]

@@ -36,6 +36,9 @@
           - elsif o.approved?
             .badge.bg-success
               Approved
+          - elsif o.status == "processing"
+            .badge.bg-info
+              Processing
         %td.text-center
           = link_to adjustments_batch_moratorium_adjustment_path(o.id), class: 'btn btn-primary' do
             .bi.bi-search
