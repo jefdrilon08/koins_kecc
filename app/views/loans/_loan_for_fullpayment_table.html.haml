@@ -1,0 +1,31 @@
+- if @loan.active? && @loan.data["for_full_payment"].present?
+  - full_payment_data = @loan.data["for_full_payment"]
+  - if full_payment_data.is_a?(Array)
+    - first_item = full_payment_data[0]
+    %table.table.table-hover.table-sm
+      %tbody
+        %tr
+          %th PN Number:
+          %td.text-end= first_item["pn_number_for_full_payment"] if first_item.is_a?(Hash)
+        %tr
+          %th Principal Paid:
+          %td.text-end= first_item["principal_paid"] if first_item.is_a?(Hash)
+        %tr
+          %th Interest Balance:
+          %td.text-end= first_item["interest_balance"] if first_item.is_a?(Hash)
+  - elsif full_payment_data.is_a?(Hash)
+    %table.table.table-hover.table-sm
+      %tbody
+        %tr
+          %th PN Number:
+          %td.text-end= full_payment_data["pn_number_for_full_payment"]
+        %tr
+          %th Principal Paid:
+          %td.text-end= full_payment_data["principal_paid"]
+        %tr
+          %th Interest Balance:
+          %td.text-end= full_payment_data["interest_balance"]
+  - else
+    %p Invalid data for full payment.
+- else
+  %p No data available for full payment.

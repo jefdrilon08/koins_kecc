@@ -62,7 +62,13 @@ class LoansController < ApplicationController
   
     @loans  = @loans.order(Arel.sql("data->>'member_full_name' ASC"),"loans.status ASC, loans.maturity_date ASC" ).page(params[:page]).per(LIST_PAGE_SIZE)
     
-
+    def for_full_payment
+      data = self.data
+      data = JSON.parse(data) if data.is_a?(String)
+      return {} unless data.is_a?(Hash)
+      data["for_full_payment"] || {}
+    end
+    
 
 
     @subheader_items = [
