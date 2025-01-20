@@ -49,11 +49,19 @@ module Loans
       end
     end
 
+
+
     def execute!
-      post_accounting_entry!
+  
+        post_accounting_entry!
+        perform_deposits!
+        perform_active_loansproduct!
+        
 
-      perform_deposits!
-
+        # Check if the member has the same loan product
+    
+     
+    
       if @loan.data["sms_fee_available"].present? || @loan.data["sms_fee_available"] == false 
         @member_data[:sms_record] = {
           loan: @loan.id,
@@ -140,6 +148,93 @@ module Loans
     end
 
     private
+
+     def perform_active_loansproduct!
+        active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
+        full_payment = []
+        full_payment << {
+          present_loan_id: active_loan.id, 
+          pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
+          principal_paid: active_loan.principal_balance.to_f,
+          interest_balance: active_loan.interest_balance
+        }
+
+        loan_inf = Loan.find(@loan.id)
+        loan_inf_data = loan_inf.data.with_indifferent_access
+        loan_inf_data[:for_full_payment] = full_payment
+        loan_inf.update(data: loan_inf_data)
+        
+        full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user).execute!
+        
+        accounting_entry  = ::Accounting::AccountingEntries::Save.new(
+                            config: {
+                              id: nil,
+                              accounting_entry_data: full_payment_entry,
+                              user: @user
+                            }
+                          ).execute!
+
+        accounting_entry  = ::Accounting::AccountingEntries::Approve.new(
+                            config: {
+                              accounting_entry: accounting_entry,
+                              user: @user
+                            }
+                          ).execute!
+    #   # Check if there is an active loan with the same product
+        if active_loan.present?
+          amort_forpaid = AmortizationScheduleEntry.where(loan_id: active_loan.id, is_paid: nil) #kukunin lahat ng hindi pa bayad sa amortization
+
+    
+          if amort_forpaid.exists?
+            amort_forpaid.each do |amort_details|
+              amort = []
+              amort << {
+                id: amort_details[:id],
+                due_date: amort_details[:due_date],
+                principal_paid: amort_details[:principal_balance],
+                interest_paid: amort_details[:interest_balance]
+              }
+              
+              data = {
+                amort_entries: amort,
+                total_interest_paid: amort_details[:interest_balance].to_f,
+                total_principal_paid: amort_details[:principal_balance].to_f,
+                amount_due: amort_details[:amount_due],
+                particular: "",
+                approved_by: "#{@user.first_name} #{@user.last_name}".upcase
+
+
+              }
+
+              payment_transaction = AccountTransaction.create!(
+                subsidiary_id: amort_details[:loan_id],
+                subsidiary_type: "Loan",
+                amount: amort_details[:amount_due],
+                transaction_type: "loan_payment",
+                transacted_at: Time.now,
+                status: "approved",
+                data: data
+
+              )
+
+              payment_transaction.save!
+              
+              
+
+            end          
+            # Get the first unpaid amortization entry or calculate total payment
+  
+            # Execute loan amortization fix
+            ::Loans::FixAmort.new(loan: Loan.find(active_loan.id) ).execute!
+            Loan.find(active_loan.id).update(status: "paid")
+        
+          end
+        
+        end
+      
+    end
+
+    
 
     def perform_deposits!
       @settings.deductions.each do |s_deduction|
@@ -523,6 +618,9 @@ module Loans
       end
     end
 
+    
+
+
     def post_accounting_entry!
       accounting_entry_data = @loan.data.with_indifferent_access[:accounting_entry]
 
@@ -549,6 +647,7 @@ module Loans
         data: data
       )
     end
+
     def send_sms!
       member = Member.find(@loan.member_id)
       content = "Good Day! #{member.full_name.upcase}, Your Loan has been approved with Loan Reference Number: #{@loan.pn_number} amounting to #{number_to_currency(@loan.principal,unit: "")} and the first date of payment is #{@loan.first_date_of_payment.to_fs(:long)}  THIS IS A TEST MESSAGE ONLY"
