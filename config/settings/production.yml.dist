@@ -1009,6 +1009,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "dc28c45f-0516-4ad2-9b21-7d38ae78e3c5"
     due_from_accounting_code_id: "1065428d-03af-4beb-bd63-aff1af6a2110"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
   -
     branch_id: "3726405b-777c-4b61-b6a5-7a4b48db62b6"                              #guiguinto
@@ -1019,6 +1020,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "638f3a3f-a5f4-4c9b-aab7-2b43b8c8bf98"
     due_from_accounting_code_id: "ebad990a-42f5-4c11-bb74-4a969e2cd12a"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
   -
     branch_id: "7a16abd9-ee95-4873-91fc-5cf1afb3e69b"                              #pulilan
@@ -1029,6 +1031,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "646883be-38ba-4391-b012-569372ec085c"
     due_from_accounting_code_id: "007f980e-5619-470c-b212-e0d82e129499"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #north 2
 
@@ -1041,6 +1044,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "f4443ad1-fc63-4ee2-803f-c0102570dae0"
     due_from_accounting_code_id: "4f800942-ad69-4383-96f4-2bae2c433314"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
   -
     branch_id: "6a773bfb-db5c-4713-af70-d0ea183e68d6"                              #marilao
@@ -1051,6 +1055,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "61db9275-728b-4950-aa00-2448fabec27e"
     due_from_accounting_code_id: "6a205e22-be89-4722-9952-50435e7d9f41"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
   -
     branch_id: "26df15a2-80de-4830-aae4-2f0645c059a3"                              #bocaue
@@ -1060,6 +1065,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "f384ac82-cb7c-4228-83a6-1ec3435877d4"
     due_from_accounting_code_id: "a26f6875-6d90-4c1f-9fa7-cfe02c088c02"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #north 1
   -
@@ -1070,6 +1076,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "ae804644-1a71-4d61-b752-de0ba624b7f1"
     due_from_accounting_code_id: "0f603a28-6abc-435a-8841-9f58281b1634"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "a5a866ac-6733-4995-94bf-95430fea2b02"                              #sapangpalay
     cash_in_bank_accounting_code_id: "ff204df5-818d-4502-8700-23a6c27eb7c2"
@@ -1078,6 +1085,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "59bc8d1b-1506-4d58-8440-ca937d88bd4b"
     due_from_accounting_code_id: "ec8e0697-d841-48cb-8ae8-48de2e855e3c"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "70dc66d9-728e-4370-a444-16092ac816c4"                              #tungko
     cash_in_bank_accounting_code_id: "7c9cb9f1-d871-4003-ae46-f65ce0ab369f"
@@ -1086,6 +1094,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "15cae8c3-5d3a-4960-a7aa-4db11e175336"
     due_from_accounting_code_id: "d7a32064-7b46-43fb-bc5d-c5dff74d9aef"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "339144e0-9544-4a7a-b2d4-b500cc329034"                              #Muzon
     cash_in_bank_accounting_code_id: "7c9cb9f1-d871-4003-ae46-f65ce0ab369f"
@@ -1094,6 +1103,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "4223bc22-4186-44c9-8981-41249baac956"
     due_from_accounting_code_id: "21bfa305-b4cd-4ee0-88fa-447533a9882c"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #east 1
   
@@ -1105,6 +1115,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "cda85edb-4a00-4037-b7b5-0382295028cf"
     due_from_accounting_code_id: "5b66e1ca-574c-4ac1-8953-278839bcb2ff"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
   -
     branch_id: "1c549142-8796-4110-b409-af7612a915d0"                              #marikina
@@ -1114,6 +1125,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "c9c8f942-7ad5-48a4-8fc2-32c0c5d6e163"
     due_from_accounting_code_id: "a56ec775-96c1-477f-a9cd-5eb1ef11ff6e"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "5cd4dd97-ba81-4cb8-916d-294e32397ece"                              #montalban
     cash_in_bank_accounting_code_id: "351b98bb-ef88-4b04-b2ab-55abdeb8ee78"
@@ -1122,6 +1134,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "a1a9ffcf-ada1-4b20-b5f0-8d8a3463cc70"
     due_from_accounting_code_id: "eb902d1f-7ae2-4c31-8795-bb0f8f185516"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 #east 2
   -
     branch_id: "dd43c792-f160-4d8f-861b-ca3eb478ffe0"                              #masinag
@@ -1131,6 +1144,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "62e411b8-ec70-49c4-a7fe-04a6a6d1038c"
     due_from_accounting_code_id: "5e074919-a1f9-42b7-ba2a-d6cbc920a9d7"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "945dc9dd-8f69-4ff6-a0b0-b51fae94c482"                              #sumulong
     cash_in_bank_accounting_code_id: "2f6c6af6-b5be-42e5-9a89-805e62377904"
@@ -1139,6 +1153,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "286d81c1-5f1e-495a-bb26-02ea344f2d05"
     due_from_accounting_code_id: "ba51792a-0e9a-4a4f-88b1-917c6879e588"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "505008be-d28c-4ebd-9dfb-bc076bccb638"                              #padilla
     cash_in_bank_accounting_code_id: "dcc43b23-dbcb-4cd2-8394-516a91c6552c"
@@ -1147,6 +1162,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "f53f6b60-62bb-4d76-b8f4-2180d401d422"
     due_from_accounting_code_id: "bb35f119-bdaf-443a-b680-195613484496"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "08d69d87-566c-444c-9042-bc1c495a7e3d"                              #teresa
     cash_in_bank_accounting_code_id: "722bdf86-c0ad-49a3-a17e-deaf59603505"
@@ -1155,6 +1171,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "dddd9a1d-7782-46f2-a303-7da0ebd1c10f"
     due_from_accounting_code_id: "186033f0-72f9-4fbb-9939-ff28d3c5dd9c"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "6eb3cd23-1fda-4dae-a90b-20cac6383735"                              #baras
     cash_in_bank_accounting_code_id: "dcc43b23-dbcb-4cd2-8394-516a91c6552c"
@@ -1164,6 +1181,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "c649576b-6808-4174-8d16-e01f0530ebdc"
     due_from_accounting_code_id: "1dd9b3e9-f4b3-4dd5-8682-1c0c22650cb9"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 
 #central 1
@@ -1175,6 +1193,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "5a40c701-c4a5-4c78-9c2c-1edf0b65ef02"
     due_from_accounting_code_id: "c581551f-d213-4f45-ab72-d6e4d48005d3"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "125681b8-9826-4b01-9dd3-11a6f2beebbd"                              #fairview
     cash_in_bank_accounting_code_id: "c7f37dda-7920-4107-a4de-e835ea3fe460"
@@ -1183,6 +1202,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "f3dfdb01-19b1-4e7b-8cf9-b49ae2a95601"
     due_from_accounting_code_id: "eddb72ba-f53c-41a4-8623-a0cb608339ee"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "3503b976-d48c-4f88-b007-1534f228d194"                              #tandangsora
     cash_in_bank_accounting_code_id: "25ebc50f-b3b6-45ca-a179-ac6491a8c705"
@@ -1191,6 +1211,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "c1504522-2322-4d49-8e1a-5db0e1b49332"
     due_from_accounting_code_id: "c9c09408-13ef-4400-aa27-92d944466a11"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 #central2
   -
     branch_id: "797759bf-97f5-4daa-b036-19db59c24e04"                              #camarin
@@ -1200,6 +1221,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "faf78f05-c8c1-4dbc-ac5f-855ce2083a75"
     due_from_accounting_code_id: "ab70dd59-3b24-421f-b52a-cc79d8d839a6"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "8cfbf39c-0125-4d82-8f09-ee55c72b5a0a"                              #novaliches
     cash_in_bank_accounting_code_id: "81c5a55f-a813-4260-90bf-12f35700b7e4"
@@ -1208,6 +1230,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "4474b5a9-689e-4734-a6e6-cbab0a7a97d9"
     due_from_accounting_code_id: "29106ce7-70a6-4999-bd07-9d57baec4bf3"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "3777729a-78e6-4e40-95f8-ef2e8a8a122e"                              #bagongsilang
     cash_in_bank_accounting_code_id: "cd48f570-a2b2-406e-9177-d0f8dd8e76ab"
@@ -1216,6 +1239,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "00390a97-f110-4330-bfa1-74f816fdd870"
     due_from_accounting_code_id: "7130bb3a-4a2c-4b16-8556-1d07228efc78"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "e1562b4e-52e7-45a0-bdb5-d45675dcfc12"                              #lagro
     cash_in_bank_accounting_code_id: "38edc06c-5499-4305-85e1-ac10cbc68354"
@@ -1224,6 +1248,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "5a27ed0b-71b2-4397-9e78-0cc8e6d509fb"
     due_from_accounting_code_id: "7dc131d7-5cc9-4701-89fa-ecf59947dd83"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #east3
   -
@@ -1234,6 +1259,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "8b630359-97f7-4642-9168-43b6ecd004d8"
     due_from_accounting_code_id: "84b62e2c-de34-431b-87f9-398fd67f63e4"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "a181c1d0-6d41-4167-859b-30b2642bc891"                              #binangonan
     cash_in_bank_accounting_code_id: "1473b8a8-4b67-4341-af54-b725e47abf77"
@@ -1242,6 +1268,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "39c71145-ea7e-4705-b219-749f0b8c54f9"
     due_from_accounting_code_id: "385840f4-2fa1-4789-ae81-0936996aa1d1"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "63748cf0-1215-4078-afa5-b42525ad235d"                              #cainta
     cash_in_bank_accounting_code_id: "100b2c49-a81c-4382-9506-de036a45fbca"
@@ -1250,6 +1277,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "c0ea3863-5e9d-4081-ab4a-952588d166cf"
     due_from_accounting_code_id: "8673558f-4266-4034-a844-05dce2d590d5"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #south1
   -
@@ -1260,6 +1288,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "14de14b5-3924-4829-bf85-29e408f842a3"
     due_from_accounting_code_id: "76310d3f-967f-48a7-9405-3c311b99fbb6"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "acaf0cc8-cbdb-453b-9f5e-a432fa7e0cbd"                              #paranaque
     cash_in_bank_accounting_code_id: "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1"
@@ -1268,6 +1297,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "b8d60795-27bd-4424-b506-5b88badad238"
     due_from_accounting_code_id: "09d62da8-9fbd-4824-a4f9-a742051c826c"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "48b949af-e682-43b2-a5d2-278cff5f4972"                              #sanpedro
     cash_in_bank_accounting_code_id: "b4d5d005-e02f-4946-b748-da5b119b1937"
@@ -1276,6 +1306,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "2c5d2c90-e1cd-4703-b843-1aa4276c9836"
     due_from_accounting_code_id: "290a81ac-96b3-4eb0-9450-6e42f19de507"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
 
 #south2
   -
@@ -1286,6 +1317,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "3ef6bae0-8177-4b62-8921-f0c7c9d30fb3"
     due_from_accounting_code_id: "a324518a-8aa1-4233-adb6-6650c4cebba7"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "a0161335-a253-4237-9119-e912291c7d92"                              #dasma
     cash_in_bank_accounting_code_id: "687a50b4-075b-4dfd-aeb0-8b098b42a5b3"
@@ -1294,6 +1326,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "a927f5d0-2c39-4685-96e6-8e43f67112d3"
     due_from_accounting_code_id: "7d01aea2-8e4d-45a1-add4-91b918e7169c"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
   -
     branch_id: "6a8b4597-af32-4daa-8484-508ae8790f26"                              #trecemartires
     cash_in_bank_accounting_code_id: "32dbabd2-b165-4fc4-91d5-4b140654ccde"
@@ -1302,6 +1335,7 @@ branch_accounting_codes:
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "0bb90ced-05ad-4174-8e82-97082996aae1"
     due_from_accounting_code_id: "cdde74ac-131d-459f-8c41-91c61ae0e701"
+    remittance_accounting_code_id: "a025c124-1a4f-4f48-ac4d-0e317d001d3b"
     
 #
 ###############################
