@@ -39,6 +39,8 @@ export default class ApplicationFormComponent extends React.Component {
       isMobileNumberValid: false,
       mobileNumberMaxLength: false,
       isMobileNumberExist: false,
+      paymentType: "",
+      subType: "",
       errors: false
     };
   }
@@ -291,7 +293,9 @@ export default class ApplicationFormComponent extends React.Component {
 
   updateData(data) {
     this.setState({
-      data: data
+      data: data,
+      paymentType: data.paymentType || this.state.paymentType,
+      subType: data.subType || this.state.subType,
     });
   }
 
@@ -404,6 +408,9 @@ export default class ApplicationFormComponent extends React.Component {
     if(state.coMakerThreeProfilePicture) {
       formData.append('co_maker_three_profile_picture', state.coMakerThreeProfilePicture);
     }
+
+    formData.append("payment_type", state.paymentType);
+    formData.append("sub_type", state.subType);
 
     // FOR MOBILE NUMBER
     formData.append('mobile_number', state.memberMobileNumber);

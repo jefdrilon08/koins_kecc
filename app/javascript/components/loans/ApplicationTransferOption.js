@@ -5,9 +5,24 @@ export default class ApplicationTransferOption extends React.Component{
 		super(props);
 
 		this.state = {
-
+			paymentType: this.props.data.paymentType || "",
+      		subType: this.props.data.subType|| "",
 		}
 	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		if (
+		  nextProps.data.paymentType !== prevState.paymentType ||
+		  nextProps.data.subType !== prevState.subType
+		) {
+		  return {
+			paymentType: nextProps.data.paymentType || "",
+			subType: nextProps.data.subType || "",
+		  };
+		}
+		return null;
+	  }
+	
 	handleBankTransferOptionChanged(event) {
 		var data = this.props.data;
 
@@ -16,8 +31,34 @@ export default class ApplicationTransferOption extends React.Component{
 		this.props.updateData(data);
 	}
 
+	 // Handle Payment Type change
+	 handlePaymentTypeChanged(event) {
+		const selectedPaymentType = event.target.value;
+		console.log("Payment Type selected:", selectedPaymentType);
+		
+		this.setState({ paymentType: selectedPaymentType });
+		this.props.updateData({
+			...this.props.data,
+			paymentType: selectedPaymentType, 
+		});
+	}
+	
+	  // Handle Sub Type change
+	  handleSubTypeChanged(event) {
+		const selectedSubType = event.target.value;
+		console.log("Sub Type selected:", selectedSubType);
+		
+		this.setState({ subType: selectedSubType });
+		this.props.updateData({
+			...this.props.data,
+			subType: selectedSubType,
+		});
+	  }
+
 	render() {
 		var bankTransferOptions = [];
+		var { paymentType, subType } = this.state;
+
 
 		bankTransferOptions.push(
 			<option key={"transfer-select"}>
@@ -31,6 +72,20 @@ export default class ApplicationTransferOption extends React.Component{
 				-- SELECT --
 			</option>
 		);
+
+		var PaymentType = [
+			<option key={"payment-select"}>-- SELECT --</option>,
+			<option key={"USSC"} value="USSC">
+			  USSC
+			</option>,
+		];
+	  
+		var SubType = [
+			<option key={"sub-select"}>-- SELECT --</option>,
+			<option key={"E-WALLET"} value="E-WALLET">
+			  E-Wallet
+			</option>,
+		];
 
 		for(var i = 0; i < this.props.optionTransfer.length; i++) {
 			if(this.props.optionTransfer[i].id == this.props.currentBankTransferId) {
@@ -85,6 +140,34 @@ export default class ApplicationTransferOption extends React.Component{
 						</div>
 					</div>
 				</div>	
+				<div className="row">
+					<div className="col">
+						<div className="form-group">
+							<label>Payment Type</label>
+							<select
+								className="form-control"
+								value={paymentType}
+								onChange={this.handlePaymentTypeChanged.bind(this)} 
+								disabled={this.props.disabled}
+							>
+								{PaymentType}
+							</select>
+						</div>
+					</div>
+					<div className="col">
+						<div className="form-group">
+							<label>Sub Type</label>
+							<select
+								className="form-control"
+								value={subType}
+								onChange={this.handleSubTypeChanged.bind(this)} 
+								disabled={this.props.disabled}
+							>
+								{SubType}
+							</select>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
