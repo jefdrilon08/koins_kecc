@@ -73,7 +73,7 @@ module Api
           @approving_user1 = User.where(first_name: "Silvida", last_name: "Antiquera").first # for GENERAL MANAGER
           @approving_user2 = User.where(first_name: "Nelly", last_name: "Vengano").first  # for KMBA PRESIDENT
 
-          @approving_users = [@approving_user1, @approving_user2, @approving_user3]
+          @approving_users = [@approving_user1, @approving_user2]
 
           if errors[:messages].any?
             render json: { errors: errors }, status: 400
