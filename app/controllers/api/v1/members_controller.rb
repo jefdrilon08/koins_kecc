@@ -429,7 +429,7 @@ module Api
         paid_loans  = Loan.paid.where(member_id: member.id)
 
         loans_above_limit = Loan.joins(:amortization_schedule_entries)
-                  .where(member_id: "e5dc7b0f-87e8-42d1-91fd-85d5e22a5611", status: "active")
+                  .where(member_id: member.id, status: "active")
                   .where("amortization_schedule_entries.is_paid IS NULL")
                   .group("loans.id")
                   .having("COUNT(amortization_schedule_entries.id) <= ?", 5)
