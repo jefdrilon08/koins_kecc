@@ -66,12 +66,19 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       redirect_to insurance_loan_bundle_enrollments_path
     end
 
-    @members  = Member.active.where(
-                  center_id: @insurance_loan_bundle_enrollment.center.id
-                ).where.not(
-                  id: @insurance_loan_bundle_enrollment.member_ids
-                ).order("last_name ASC")
-
+    if !Settings.activate_microinsurance
+      @members  = Member.active.where(
+                    center_id: @insurance_loan_bundle_enrollment.center.id
+                  ).where.not(
+                    id: @insurance_loan_bundle_enrollment.member_ids
+                  ).order("last_name ASC")
+    else
+      @members  = Member.active_and_resigned.where(
+                    center_id: @insurance_loan_bundle_enrollment.center.id
+                  ).where.not(
+                    id: @insurance_loan_bundle_enrollment.member_ids
+                  ).order("last_name ASC")
+    end
     @kok_data = @insurance_loan_bundle_enrollment.data.with_indifferent_access[:kok_data]
 
     if @kok_data.present?
@@ -102,7 +109,12 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       @benif_relationship = @kok_data[:benif_relationship]
     end
 
-    @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    if !Settings.activate_microinsurance
+      @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    else
+      @members  = Member.active_and_resigned.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    end
+    
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
     @subheader_items = [
