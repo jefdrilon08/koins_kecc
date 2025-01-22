@@ -31,6 +31,10 @@ module Loans
       @transaction_type = "deposit"
       @date_paid        = @current_date
 
+
+      
+      @active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
+      
       Settings.loan_products.each do |s|
         if s.loan_product_id == @loan_product.id
           @settings = s
@@ -55,8 +59,10 @@ module Loans
   
         post_accounting_entry!
         perform_deposits!
-        perform_active_loansproduct!
         
+        if @active_loan.size > 0        
+          perform_active_loansproduct!
+        end
 
         # Check if the member has the same loan product
     
