@@ -60,7 +60,7 @@ module Loans
         post_accounting_entry!
         perform_deposits!
         
-        if @active_loan.size > 0        
+        if @active_loan != nil        
           perform_active_loansproduct!
         end
 
@@ -157,18 +157,18 @@ module Loans
 
      def perform_active_loansproduct!
         active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
-        full_payment = []
-        full_payment << {
-          present_loan_id: active_loan.id, 
-          pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
-          principal_paid: active_loan.principal_balance.to_f,
-          interest_balance: active_loan.interest_balance
-        }
+        # full_payment = []
+        # full_payment << {
+        #   present_loan_id: active_loan.id, 
+        #   pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
+        #   principal_paid: active_loan.principal_balance.to_f,
+        #   interest_balance: active_loan.interest_balance
+        # }
 
-        loan_inf = Loan.find(@loan.id)
-        loan_inf_data = loan_inf.data.with_indifferent_access
-        loan_inf_data[:for_full_payment] = full_payment
-        loan_inf.update(data: loan_inf_data)
+        # loan_inf = Loan.find(@loan.id)
+        # loan_inf_data = loan_inf.data.with_indifferent_access
+        # loan_inf_data[:for_full_payment] = full_payment
+        # loan_inf.update(data: loan_inf_data)
         
         full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user).execute!
         
