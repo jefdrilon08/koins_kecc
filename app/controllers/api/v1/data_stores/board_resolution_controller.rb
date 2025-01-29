@@ -7,14 +7,23 @@ module Api
           def create
               config = {
                 branch: Branch.find(params[:branch_id]),
-                date_from: params[:date_from],
-                date_to: params[:date_to],
+                month: params[:month],
+                year: params[:year],
                 current_user: current_user,
                 status: params[:status],
                 board_resolution_number: params[:board_resolution_number]
               }
-              result = ProcessCreateBoardResolutionNumber.perform_later(config)
-              render json: { success: true, message: "success"}
+
+              errors = ::BoardResolution::ValidateCreate.new(config: config).execute!
+
+              if errors[:messages].any?
+                render json: errors, status: 400
+              else
+                result = ProcessCreateBoardResolutionNumber.perform_later(config)
+                render json: { message: 'Board Resolution Created', status: 200 }
+              end
+
+            
 
           end
 
