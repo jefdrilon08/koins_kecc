@@ -50,7 +50,7 @@ export default RepaymentRatesView = (props) => {
                 {member.last_name}, {member.first_name} {member.middle_name}
                 <br/>
                 <small className="text-muted">
-                  | {center.name} | {member.status}
+                  | {center.name} | {member.status} | {member.gender}
                 </small>
               </strong>
             </a>

@@ -19,8 +19,10 @@ export default ShowComponent = (props) => {
   const [currentLoanProductTaggingId, setCurrentLoanProductTaggingId] = useState("");
   const [currentView, setCurrentView]                   = useState("RR");
   const [currentStatus, setCurrentStatus]               = useState("");
+  const [currentGender, setCurrentGender]               = useState("");
 
   const statusOptions = ["ACTIVE", "RESIGNED", "PENDING", "DELINQUENT"];
+  const genderOptions = ["MALE", "FEMALE", "OTHERS"];
 
   let { id } = props;
 
@@ -42,6 +44,10 @@ export default ShowComponent = (props) => {
 
     if (currentStatus) {
       fData.records = fData.records.filter((o) => o.member.status.toLowerCase() == currentStatus.toLowerCase());
+    }
+
+    if (currentGender) {
+      fData.records = fData.records.filter((o) => o.member.gender.toLowerCase() == currentGender.toLowerCase());
     }
 
     // Loan Product Tagging filter
@@ -86,6 +92,7 @@ export default ShowComponent = (props) => {
   const handleLoanProductTaggingChanged = (event) => setCurrentLoanProductTaggingId(event.target.value); // Handle loan product tagging change
   const handleViewToggled = (viewName) => setCurrentView(viewName);
   const handleStatusChanged = (e) => setCurrentStatus(e.target.value);
+  const handleGenderChanged = (e) => setCurrentGender(e.target.value);
 
   // Conditional rendering based on view
   if (isLoading) {
@@ -99,16 +106,19 @@ export default ShowComponent = (props) => {
           centers={centers}
           officers={officers}
           status={statusOptions}
+          gender={genderOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
           currentLoanProductTaggingId={currentLoanProductTaggingId}
           currentStatus={currentStatus}
+          currentGender={currentGender}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleLoanProductTaggingChanged={handleLoanProductTaggingChanged} // Pass handler to Filter
           handleOfficerChanged={handleOfficerChanged}
           handleStatusChanged={handleStatusChanged}
+          handleGenderChanged={handleGenderChanged}
         />
         <hr />
         <RepaymentRatesView data={filterData()} />
@@ -123,16 +133,19 @@ export default ShowComponent = (props) => {
           centers={centers}
           officers={officers}
           status={statusOptions}
+          gender={genderOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
           currentLoanProductTaggingId={currentLoanProductTaggingId}
           currentStatus={currentStatus}
+          currentGender={currentGender}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
           handleStatusChanged={handleStatusChanged}
+          handleGenderChanged={handleGenderChanged}
         />
         <hr />
         <AgingOfReceivablesView data={filterData()} />
@@ -147,16 +160,19 @@ export default ShowComponent = (props) => {
           centers={centers}
           officers={officers}
           status={statusOptions}
+          gender={genderOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
           currentLoanProductTaggingId={currentLoanProductTaggingId}
           currentStatus={currentStatus}
+          currentGender={currentGender}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
           handleStatusChanged={handleStatusChanged}
+          handleGenderChanged={handleGenderChanged}
         />
         <hr />
         <AgingOfReceivablesMFIView data={filterData()} />
@@ -171,16 +187,19 @@ export default ShowComponent = (props) => {
           centers={centers}
           officers={officers}
           status={statusOptions}
+          gender={genderOptions}
           loanProducts={loanProducts}
           currentCenterId={currentCenterId}
           currentLoanProductId={currentLoanProductId}
           currentLoanProductTaggingId={currentLoanProductTaggingId}
           currentStatus={currentStatus}
+          currentGender={currentGender}
           handleCenterChanged={handleCenterChanged}
           handleLoanProductChanged={handleLoanProductChanged}
           handleLoanProductTaggingChanged={handleLoanProductTaggingChanged}
           handleOfficerChanged={handleOfficerChanged}
           handleStatusChanged={handleStatusChanged}
+          handleGenderChanged={handleGenderChanged}
         />
         <hr />
         <MasterListView data={filterData()} />
