@@ -73,7 +73,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
                     id: @insurance_loan_bundle_enrollment.member_ids
                   ).order("last_name ASC")
     else
-      @members  = Member.active_and_resigned.where(
+      @members  = Member.inforce_lapsed_resigned.where(
                     center_id: @insurance_loan_bundle_enrollment.center.id
                   ).where.not(
                     id: @insurance_loan_bundle_enrollment.member_ids
@@ -112,9 +112,9 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     if !Settings.activate_microinsurance
       @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
     else
-      @members  = Member.active_and_resigned.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+      @members  = Member.inforce_lapsed_resigned.where(center_id: @insurance_loan_bundle_enrollment.center.id)
     end
-    
+
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
     @subheader_items = [
