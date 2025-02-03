@@ -102,6 +102,7 @@ class Member < ApplicationRecord
   scope :reinstate, -> { where(status: "active").where("data->>'reinstatement' IS NOT NULL").order("last_name ASC") }
   scope :inforce_pending, -> { where(status: "active", insurance_status: ["inforce", "pending"]).order("last_name ASC") }
   scope :active_not_gk, -> { where("EXTRACT(YEAR FROM AGE(CURRENT_DATE, date_of_birth)) < 65").order("last_name ASC") }
+  scope :inforce_lapsed_resigned, -> { where(status: ["active", "resigned"]).where(insurance_status: ["inforce", "lapsed", "resigned", "dormant"]).order("last_name ASC") }
 
   before_validation :load_defaults
 

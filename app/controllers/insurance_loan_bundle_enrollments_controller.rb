@@ -114,7 +114,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     else
       @members  = Member.active_and_resigned.where(center_id: @insurance_loan_bundle_enrollment.center.id)
     end
-    
+
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
     @subheader_items = [
