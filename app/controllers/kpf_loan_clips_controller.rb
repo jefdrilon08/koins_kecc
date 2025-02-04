@@ -118,7 +118,7 @@ class KpfLoanClipsController < ApplicationController
             id: "btn-check",
             link: "#",
             class: "fa fa-check",
-            text: "For-Checking"
+            text: "Check"
           }
         end
 

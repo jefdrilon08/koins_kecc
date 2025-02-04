@@ -278,8 +278,26 @@ module Loans
         end
 
 
-        @loan.save!
+        @loan.save! 
       end
+       # After saving, update the full payment details
+       active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
+
+       if active_loan.present?
+         full_payment = []
+         full_payment << {
+           present_loan_id: active_loan.id, 
+           pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
+           principal_paid: active_loan.principal_balance.to_f,
+           interest_balance: active_loan.interest_balance
+         }
+ 
+         # Update the current loan with full payment info
+         loan_inf = Loan.find(@loan.id)
+         loan_inf_data = loan_inf.data.with_indifferent_access
+         loan_inf_data[:for_full_payment] = full_payment
+         loan_inf.update(data: loan_inf_data)
+       end
 
       @loan
     end

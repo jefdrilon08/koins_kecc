@@ -813,6 +813,12 @@ namespace :api do
 
       resources :holidays
 
+      #board_resolution
+      post "board_resolution/create", to: "board_resolution#create"
+      post "board_resolution/approve", to: "board_resolution#approve"
+
+
+      
     end
     
 
