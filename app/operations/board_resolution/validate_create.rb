@@ -7,6 +7,7 @@ module BoardResolution
       @month = @config[:month].upcase
       @year = @config[:year].to_s
       @status = @config[:status]
+      @board_resolution_number = @config[:board_resolution_number]
     end
 
     def execute!
@@ -17,6 +18,13 @@ module BoardResolution
         @errors[:messages] << {
           key: "board_resolution",
           message: "Board resolution already exists for #{@branch.name}, #{@month} #{@year}, and status #{@status}."
+        }
+      end
+
+      if DataStore.where("meta ->> 'board_resolution_number' = ?", @board_resolution_number).exists?
+        @errors[:messages] << {
+          key: "board_resolution_number",
+          message: "Board resolution number #{@board_resolution_number} already exists."
         }
       end
 
