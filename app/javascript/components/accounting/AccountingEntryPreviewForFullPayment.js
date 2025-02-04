@@ -1,7 +1,7 @@
 import React from 'react';
 import {numberWithCommas} from '../utils/helpers';
 
-export default class AccountingEntryPreview extends React.Component {
+export default class AccountingEntryPreviewForFullPayment extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -194,11 +194,11 @@ export default class AccountingEntryPreview extends React.Component {
 
     return  (
       <div className="card border-danger">
-        <div className={"card-header " + this.accountingEntryContextColor()}>
+        <div className={"card-header  bg-info" }>
           <div className="row">
             <div className="col-md-6">
               <strong>
-                {this.props.book} {this.props.referenceNumber} - {this.props.datePosted}
+              {this.props.book_for_fullpayment}
               </strong>
             </div>
             <div className="col-md-6">
@@ -253,8 +253,6 @@ export default class AccountingEntryPreview extends React.Component {
               </p>
             </div>
           </div>
-          {this.renderCrbParameters()}
-          {this.renderCdbParameters()}
         </div>
       </div>
     );

@@ -7,6 +7,7 @@ import SkCubeLoading from '../SkCubeLoading';
 import ErrorDisplay from '../ErrorDisplay';
 
 import AccountingEntryPreview from '../accounting/AccountingEntryPreview';
+import AccountingEntryPreviewForFullPayment from'../accounting/AccountingEntryPreviewForFullPayment';
 
 export default class AccountingEntryComponent extends React.Component {
   constructor(props) {
@@ -45,6 +46,8 @@ export default class AccountingEntryComponent extends React.Component {
     });
   }
 
+  
+
   renderErrorDisplay() {
     if(this.state.errors) {
       return  (
@@ -67,8 +70,16 @@ export default class AccountingEntryComponent extends React.Component {
       console.log("this.state.data:");
       console.log(this.state.data);
       var accounting_entry_data = this.state.data.data.accounting_entry;
-      return  (
+      var for_full_payment_entries = this.state.data.data.for_full_payment_entries;
+       console.log(for_full_payment_entries.book); 
+       console.log("here"); 
+
+
+
+
+       return (
         <div>
+          {/* Accounting Entry Preview for the regular accounting entry */}
           <AccountingEntryPreview
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
@@ -83,8 +94,14 @@ export default class AccountingEntryComponent extends React.Component {
             handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
           />
+          <AccountingEntryPreviewForFullPayment
+            bookforfullpayment={for_full_payment_entries.book}
+           
+          />
+          
         </div>
       );
+      
     }
   }
 }

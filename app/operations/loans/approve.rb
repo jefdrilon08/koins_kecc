@@ -186,6 +186,9 @@ module Loans
                               user: @user
                             }
                           ).execute!
+                          
+                          
+                        
     #   # Check if there is an active loan with the same product
         if active_loan.present?
           amort_forpaid = AmortizationScheduleEntry.where(loan_id: active_loan.id, is_paid: nil) #kukunin lahat ng hindi pa bayad sa amortization
