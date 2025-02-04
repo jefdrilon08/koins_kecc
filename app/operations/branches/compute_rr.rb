@@ -255,7 +255,8 @@ module Branches
             last_name: r.fetch("member_last_name"),
             middle_name: r.fetch("member_middle_name"),
             identification_number: r.fetch("member_identification_number"),
-            status: Member.find_by(id: r.fetch("member_id"))&.status
+            status: Member.find_by(id: r.fetch("member_id"))&.status,
+            gender: Member.find_by(id: r.fetch("member_id"))&.gender
           },
           branch: {
             id: r.fetch("branch_id"),
