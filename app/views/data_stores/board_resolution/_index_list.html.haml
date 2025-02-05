@@ -1,0 +1,45 @@
+%table.table.table-bordered.table-sm.table-hover
+  %thead
+    %tr
+      %th
+      %th.text-center
+        Branch
+      %th.text-center
+        Month
+      %th.text-center
+        Year
+      %th.text-center
+        Board Resolution Number
+      %th.text-center
+        Status
+  %thead
+    - @records.each do |o|
+      %tr
+        %td.text-center
+          = link_to "board_resolution/#{o.id}" do
+            .bi.bi-search
+        %td.text-center
+          %strong
+          #{o.meta.with_indifferent_access[:branch_name]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:month]}
+        %td.text-center
+          #{o.meta.with_indifferent_access[:year]} 
+        %td.text-center
+          #{o.meta.with_indifferent_access[:board_resolution_number]} 
+        %td.text-center
+          - if o[:status] == "processing"
+            .badge.bg-info
+              Processing
+          - elsif o[:status] == "done"
+            .badge.bg-success
+              Done
+          - elsif o[:status] == "pending"
+            .badge.bg-danger
+              pending
+          - elsif o[:status] == "approved"
+            .badge.bg-success
+              approved
+          - elsif o[:status] == "error"
+            .badge.bg-danger
+              Error

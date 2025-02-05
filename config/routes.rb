@@ -440,6 +440,7 @@ Rails.application.routes.draw do
 
     #board resolution routes
     get "/board_resolution", to: "board_resolution#index"
+    get "/board_resolution/:id", to: "board_resolution#show"
     #Dormant routes
     get "/dormant", to: "dormant#index"
     get "/dormant/:id", to: "dormant#show"
