@@ -8,6 +8,8 @@
         Center
       %th
         Member
+      %th 
+        Beneficiary
       %th
         Maturity Date
       %th
@@ -27,6 +29,13 @@
             no member
           -else  
             #{o.member_name.uniq.join(",")}
+        %td
+          - records = o.records_last
+          - number = o.data['records'].count
+          - if number > 1
+            #{records["kok_data"]["first_name"]} #{records["kok_data"]["middle_name"]} #{records["kok_data"]["last_name"]}
+          -else  
+            No beneficiary
         %td 
           - records = o.records_last
           - number = o.data['records'].count
