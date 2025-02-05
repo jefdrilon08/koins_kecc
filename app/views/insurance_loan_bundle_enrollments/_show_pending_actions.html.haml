@@ -32,6 +32,10 @@
                     .form-group
                       %label Plan Type        
                       = select_tag :plan_type, options_for_select(["DAKILA PLAN 40K"], @plan_type), id: 'input-plan-type', class: 'form-control'
+                  .col-md-4
+                    .form-group
+                      %label Enrolled Status        
+                      = select_tag :enrolled_status, options_for_select(["NEW", "RENEWAL-SATO-TRANSFER"], @plan_type), id: 'input-enrolled-status', class: 'form-control'
                   
               .col-md-6
                 .row

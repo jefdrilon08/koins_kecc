@@ -36,6 +36,7 @@ export default class FormPersonalInfo extends React.Component {
   async componentDidMount() {
     try {
       const regions = await AddressService.getRegions();
+      this.setState({ regions })
       const provinces = await AddressService.getProvince();
       const municipalities = await AddressService.getMunicipality();
       const barangays = await AddressService.getDistricts();
@@ -319,20 +320,22 @@ export default class FormPersonalInfo extends React.Component {
   }
 
   renderRegions() {
+    const { regions } = this.state;
+    const selectedRegion = this.props.data.data.address.region;
+
     var elements = [
       <option value="" key="region-x">
         -- SELECT --
       </option>
     ];
 
-    this.state.regions.forEach((o, i) => {
+    regions.forEach((o, i) => {
       elements.push(
-        <option value={o.id} key={"region-" + i}>
-          {o.name}
+        <option value={o.id || o} key={"region-" + i} selected={selectedRegion === o.id || selectedRegion === o}>
+          {o.name || o} 
         </option>
       );
     });
-
     return elements;
     
   }
@@ -360,17 +363,18 @@ export default class FormPersonalInfo extends React.Component {
   // }
 
   renderProvinces() {
-    var selectedProvince = this.props.data.data.address.province;
+    const { provinces } = this.state;
+    const selectedProvince = this.props.data.data.address.province;
     var elements = [
       <option value="" key="province-x">
       -- SELECT --
       </option>
     ];
 
-    this.state.provinces.forEach((o, i) => {
+    provinces.forEach((o, i) => {
       elements.push(
-        <option value={o.id} key={"province-" + i} selected={selectedProvince === o.id}>
-          {o.name}
+        <option value={o.id || o} key={"province-" + i} selected={selectedProvince === o.id || selectedProvince === o}>
+          {o.name || o} 
         </option>
       );
     });
@@ -399,16 +403,19 @@ export default class FormPersonalInfo extends React.Component {
   // }
 
   renderCities() {
+    const { municipalities } = this.state;
+    const selectedCity = this.props.data.data.address.city;
+
     var elements = [
       <option value="" key="municipality-x">
       -- SELECT --
       </option>
     ];
 
-    this.state.municipalities.forEach((o, i) => {
+    municipalities.forEach((o, i) => {
       elements.push(
-        <option value={o.id} key={"municipality-" + i}>
-          {o.name}
+        <option value={o.id || o} key={"municipality-" + i} selected={selectedCity === o.id || selectedCity === o}>
+          {o.name || o} 
         </option>
       );
     });
@@ -433,11 +440,12 @@ export default class FormPersonalInfo extends React.Component {
   //       </option>
   //     )
   //   });
-
+ 
   //   return elements;
   // }
 
   renderBarangay() {
+    const { barangays } = this.state;
     var selectedBarangay = this.props.data.data.address.district;
     var elements = [
       <option value="" key="district-x">
@@ -445,10 +453,10 @@ export default class FormPersonalInfo extends React.Component {
       </option>
     ];
 
-    this.state.barangays.forEach((o, i) => {
+    barangays.forEach((o, i) => {
       elements.push(
-        <option value={o.id} key={"district-" + i} selected={selectedBarangay === o.id}>
-          {o.name}
+        <option value={o.id} key={"district-" + i} selected={selectedBarangay === o.id || selectedBarangay === o}>
+          {o.name || o}
         </option>
       );
     });

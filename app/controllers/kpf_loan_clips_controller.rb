@@ -103,7 +103,7 @@ class KpfLoanClipsController < ApplicationController
     @subheader_side_actions = []
 
     if @kpf_loan_clip.pending?
-      if ["OAS", "MIS", "REMOTE-MIS"].include? current_user.roles.last
+      if ["OAS", "MIS", "REMOTE-MIS", "REMOTE-BK", "REMOTE-FM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-print",
           class: "fa fa-print",
@@ -118,7 +118,7 @@ class KpfLoanClipsController < ApplicationController
             id: "btn-check",
             link: "#",
             class: "fa fa-check",
-            text: "For-Checking"
+            text: "Check"
           }
         end
 

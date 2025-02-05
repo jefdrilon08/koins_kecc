@@ -66,12 +66,19 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       redirect_to insurance_loan_bundle_enrollments_path
     end
 
-    @members  = Member.active.where(
-                  center_id: @insurance_loan_bundle_enrollment.center.id
-                ).where.not(
-                  id: @insurance_loan_bundle_enrollment.member_ids
-                ).order("last_name ASC")
-
+    if !Settings.activate_microinsurance
+      @members  = Member.active.where(
+                    center_id: @insurance_loan_bundle_enrollment.center.id
+                  ).where.not(
+                    id: @insurance_loan_bundle_enrollment.member_ids
+                  ).order("last_name ASC")
+    else
+      @members  = Member.inforce_lapsed_resigned.where(
+                    center_id: @insurance_loan_bundle_enrollment.center.id
+                  ).where.not(
+                    id: @insurance_loan_bundle_enrollment.member_ids
+                  ).order("last_name ASC")
+    end
     @kok_data = @insurance_loan_bundle_enrollment.data.with_indifferent_access[:kok_data]
 
     if @kok_data.present?
@@ -102,7 +109,12 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       @benif_relationship = @kok_data[:benif_relationship]
     end
 
-    @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    if !Settings.activate_microinsurance
+      @members  = Member.active.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    else
+      @members  = Member.inforce_lapsed_resigned.where(center_id: @insurance_loan_bundle_enrollment.center.id)
+    end
+
     @records  = @insurance_loan_bundle_enrollment.data.with_indifferent_access["records"]
 
     @subheader_items = [
@@ -122,7 +134,7 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
     @subheader_side_actions = []
 
     if @insurance_loan_bundle_enrollment.pending?
-      if ["OAS", "MIS", "REMOTE-MIS"].include? current_user.roles.last
+      if ["OAS", "MIS", "REMOTE-MIS", "REMOTE-BK", "REMOTE-FM"].include? current_user.roles.last
         @subheader_side_actions << {
           id: "btn-print",
           class: "fa fa-print",
@@ -131,14 +143,24 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
             id: "#{@insurance_loan_bundle_enrollment}"
           }
         }
-
-        if @insurance_loan_bundle_enrollment.records_count > 0
-            @subheader_side_actions << {
-            id: "btn-check",
-            link: "#",
-            class: "fa fa-check",
-            text: "For-Checking"
-          }
+        if !Settings.activate_microinsurance
+          if @insurance_loan_bundle_enrollment.records_count > 0
+              @subheader_side_actions << {
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "For-Checking"
+            }
+          end
+        else
+          if @insurance_loan_bundle_enrollment.records_count > 0
+              @subheader_side_actions << {
+              id: "btn-check",
+              link: "#",
+              class: "fa fa-check",
+              text: "Finalize"
+            }
+          end
         end
 
         @subheader_side_actions << {

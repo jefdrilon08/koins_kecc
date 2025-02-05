@@ -1210,12 +1210,18 @@ namespace :kezar do
       is_interest             = 'false'
       insurance_status        = 'inforce','lapsed'
       account_subtype         = 'Life Insurance Fund','Retirement Fund'
-      branch_id               = ENV["BRANCH_ID"]
+      cluster_ids             = 'f1a49658-ccb4-46e5-85c0-0dd7be235149', '34fe2cdf-509e-48df-85a7-ba5375654171', 'b7021735-6d38-4dcb-9e8a-d1a8aedd07a8', 'd92e42cb-a4c1-427d-ab94-ed47468e2498', '6ac74069-2e04-4ab0-92fa-91aad045ce9a', 'dd81b181-81ab-4716-a690-d0ad0257acd6', 'd781f765-6c77-48dd-99f8-d075358a26a1', '8804ddd2-2ca9-430c-baf1-610dd23c7679', '8395887b-4736-492b-8590-506a0b746ac7', '8db81fc0-f3f4-4911-a7cd-2428a81f39fb'
 
+      if ENV["BRANCH_ID"].present?
+        branch_id               = ENV["BRANCH_ID"]
+      else
+        branch_ids              = Branch.where(cluster_id: cluster_ids).pluck(:id)
+        branch_id               = branch_ids
+      end
       bearer_token            = ENV["ACCESS_TOKEN"]
       start_date              = ENV["START_DATE"] || ""
       end_date                = ENV["END_DATE"] || ""
-      # raise [start_date, end_date].inspect
+      raise branch_id.inspect
     # --------------End Declarations--------------#
 
     account_transactions = AccountTransaction.select(
@@ -1246,7 +1252,7 @@ namespace :kezar do
           AND (account_transactions.data->>'is_interest' = ? OR account_transactions.data->>'is_interest' IS NULL)
           AND members.insurance_status IN (?)
           AND member_accounts.account_subtype IN (?)
-          AND members.branch_id = ?
+          AND members.branch_id IN (?)
           AND
             CASE
               WHEN members.data->'resignation_records' IS NULL THEN
