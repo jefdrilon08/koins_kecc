@@ -1,0 +1,59 @@
+#modal-new.modal.fade{ tabindex: "-1", "aria-labelledby" => "modalTitle", "aria-hidden" => "true" }
+  .modal-dialog.modal-lg.modal-dialog-centered
+    .modal-content
+      .modal-header.bg-light
+        %h3.modal-title#modalTitle.fw-bold Board Resolution
+        %button.btn-close{ "data-bs-dismiss" => "modal", "aria-label" => "Close" }
+
+      .modal-body
+        .modal-body-content
+          .row.gx-3
+            .col-md-6
+              .form-group.mb-3
+                %label{ for: "select-branch" } Branch
+                = select_tag :branch_id, 
+                  options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), 
+                  class: "form-select select-select2", id: "select-branch", 
+                  prompt: "-- SELECT BRANCH --", "data-placeholder" => "Choose a Branch", required: true
+
+            .col-md-6
+              .form-group.mb-3
+                %label{ for: "select-month" } Month
+                = select_tag :month, 
+                  options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m] }), 
+                  class: "form-select", id: "select-month", 
+                  prompt: "-- SELECT MONTH --", required: true
+
+            .col-md-6
+              .form-group.mb-3
+                %label{ for: "select-year" } Year
+                = select_tag :year, 
+                  options_for_select((Date.today.year - 10..Date.today.year + 10).to_a.reverse), 
+                  class: "form-select", id: "select-year", 
+                  prompt: "-- SELECT YEAR --", required: true
+
+            .col-md-6
+              .form-group.mb-3
+                %label{ for: "select-status" } Status
+                = select_tag :status, 
+                  options_for_select([['Active', 'active'], ['Resigned', 'resigned']]), 
+                  class: "form-select", id: "select-status", 
+                  prompt: "-- SELECT STATUS --", required: true
+
+            .col-md-6
+              .form-group.mb-3
+                %label{ for: "input-board-resolution-number" } Board Resolution Number
+                = text_field_tag :board_resolution_number, nil, 
+                  class: "form-control", id: "input-board-resolution-number", 
+                  placeholder: "Enter Board Resolution Number", required: true,
+                  oninput: "this.value = this.value.toUpperCase();"
+
+          .message.text-danger.mt-2
+
+      .modal-footer.bg-light.d-flex.justify-content-end.gap-2
+        %button#btn-confirm.btn.btn-primary.fw-bold.text-uppercase
+          %i.fa.fa-check.me-1
+          Confirm
+        %button.btn.btn-outline-secondary.text-uppercase{ "data-bs-dismiss" => "modal", type: "button" }
+          %i.fa.fa-times.me-1
+          Cancel

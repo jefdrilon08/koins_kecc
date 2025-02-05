@@ -1,0 +1,9 @@
+.row
+  .col
+    .card
+      .card-body
+        %h5 Board Resolution Details
+        = render partial: "member_details", locals: { board_resolution: @records }
+
+
+= render partial: "data_stores/board_resolution/modals/approve_board_resolution"         

@@ -1,0 +1,27 @@
+%div{ style: "margin-bottom: 25px;" }
+  %div{ style: "max-height: 300px; overflow-y: auto;" }
+    %table.table.table-bordered.table-sm.table-hover{ style: "width: 100%;" }
+      %thead
+        %tr
+          %th{ style: "min-width: 100px;" } Member
+          %th{ style: "min-width: 100px;" } Center
+          %th{ style: "min-width: 100px;" } Status
+          %th{ style: "min-width: 100px;" } Board Resolution Number
+          %th{ style: "min-width: 100px;" } Membership Date
+      %tbody
+        - if @records.present?
+          - @records.each do |record|
+            %tr
+              %td
+                - if record["member_id"].present?
+                  = link_to(member_path(record["member_id"]), target: "_blank") do
+                    %strong= record[:full_name]
+                - else
+                  %strong= record[:full_name]
+              %td= record["center_name"]
+              %td= record["member_status"]
+              %td= record["board_resolution_number"]
+              %td= record["membership_date"]
+        - else
+          %tr
+            %td{ colspan: 6 } No Board Resolution records found.
