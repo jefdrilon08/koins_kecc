@@ -62,22 +62,23 @@ export default class AccountingEntryComponent extends React.Component {
   }
 
   render() {
-    if(this.state.isLoading) {
-      return  (
-        <SkCubeLoading/>
+    if (this.state.isLoading) {
+      return (
+        <SkCubeLoading />
       );
     } else {
       console.log("this.state.data:");
       console.log(this.state.data);
       var accounting_entry_data = this.state.data.data.accounting_entry;
       var for_full_payment_entries = this.state.data.data.for_full_payment_entries;
-       console.log(for_full_payment_entries.book); 
-       console.log("here"); 
-
-
-
-
-       return (
+      
+      console.log(for_full_payment_entries); 
+      console.log("here"); 
+  
+      // Check if for_full_payment_entries has valid data
+      const hasFullPaymentEntries = for_full_payment_entries && Object.keys(for_full_payment_entries).length > 0;
+  
+      return (
         <div>
           {/* Accounting Entry Preview for the regular accounting entry */}
           <AccountingEntryPreview
@@ -94,14 +95,19 @@ export default class AccountingEntryComponent extends React.Component {
             handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
           />
-          <AccountingEntryPreviewForFullPayment
-            bookforfullpayment={for_full_payment_entries.book}
-           
-          />
           
+          {/* Only render AccountingEntryPreviewForFullPayment if there are full payment entries */}
+          {hasFullPaymentEntries && (
+            <AccountingEntryPreviewForFullPayment
+              book_for_fullpayment={for_full_payment_entries.book}
+              particular_for_fullpayment={for_full_payment_entries.particular}
+              approved_by_for_full_payment={for_full_payment_entries.prepared_by}
+              journalEntryRecordsforfullpayment={for_full_payment_entries.journal_entries} 
+              branch_for_full_payment={for_full_payment_entries.branch_name}
+            />
+          )}
         </div>
       );
-      
     }
   }
 }
