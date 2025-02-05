@@ -86,133 +86,131 @@ export default class AccountingEntryPreviewForFullPayment extends React.Componen
     }
   };
 
-  renderBalancedWarning() {
-    var debitAmount   = 0.00;
-    var creditAmount  = 0.00;
+  // renderBalancedWarning() {
+  //   var debitAmount   = 0.00;
+  //   var creditAmount  = 0.00;
 
-    for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "DR") {
-        debitAmount += parseFloat(this.props.journalEntries[i].amount);
-      } else if(this.props.journalEntries[i].post_type == "CR") {
-        creditAmount += parseFloat(this.props.journalEntries[i].amount);
-      }
-    }
+  //   for(var i = 0; i < this.props.journalEntries.length; i++) {
+  //     if(this.props.journalEntries[i].post_type == "DR") {
+  //       debitAmount += parseFloat(this.props.journalEntries[i].amount);
+  //     } else if(this.props.journalEntries[i].post_type == "CR") {
+  //       creditAmount += parseFloat(this.props.journalEntries[i].amount);
+  //     }
+  //   }
 
-    if(!this.props.balanced) {
-      return (
-        <div className="callout callout-danger">
-          <strong>
-            Entries are not balanced.. Debit: {numberWithCommas(debitAmount)} Credit: {numberWithCommas(creditAmount)}
-          </strong>
-        </div>
-      );
-    }
-  }
+  //   if(!this.props.balanced) {
+  //     return (
+  //       <div className="callout callout-danger">
+  //         <strong>
+  //           Entries are not balanced.. Debit: {numberWithCommas(debitAmount)} Credit: {numberWithCommas(creditAmount)}
+  //         </strong>
+  //       </div>
+  //     );
+  //   }
+  // }
 
   render() {
     var context = this;
-    var journalEntryRecords = [];
+    var journalEntryRecordsforfullpayment = [];
 
 
-    // Debit entries
-    for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "DR" && this.props.journalEntries[i].amount > 0) {
-        var btnRemove = "";
-        var btnEdit   = "";
+    // Debit entries for journalEntries_for_full_payment
+for (var i = 0; i < this.props.journalEntryRecordsforfullpayment.length; i++) {
+  if (this.props.journalEntryRecordsforfullpayment[i].post_type == "DR" && this.props.journalEntryRecordsforfullpayment[i].amount > 0) {
+    var btnRemove = "";
+    var btnEdit = "";
 
-        if(this.props.status == "pending") {
-          btnRemove = <button 
-                        className="btn btn-sm btn-danger"
-                        onClick={context.props.handleRemoveClicked.bind(this, i)}
-                      >
-                        <span className="bi bi-x"/>
-                      </button>;
+    if (this.props.status == "pending") {
+      btnRemove = <button
+        className="btn btn-sm btn-danger"
+        onClick={context.props.handleRemoveClicked.bind(this, i)}
+      >
+        <span className="bi bi-x" />
+      </button>;
 
-          btnEdit = <button
-                      className="btn btn-sm btn-info"
-                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
-                    >
-                      <span className="bi bi-pencil"/>
-                    </button>
-        }
-
-        journalEntryRecords.push(
-          <tr key={"je-dr-" + i}>
-            <td>
-              {btnEdit}
-              {btnRemove}
-              {this.props.journalEntries[i].accounting_code_name}
-            </td>
-            <td className="text-end">
-              {numberWithCommas(this.props.journalEntries[i].amount)}
-            </td>
-            <td className="text-end">
-            </td>
-          </tr>
-        );
-      }
+      btnEdit = <button
+        className="btn btn-sm btn-info"
+        onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+      >
+        <span className="bi bi-pencil" />
+      </button>;
     }
 
-    // Credit entries
-    for(var i = 0; i < this.props.journalEntries.length; i++) {
-      if(this.props.journalEntries[i].post_type == "CR" && this.props.journalEntries[i].amount > 0) {
-        var btnRemove = "";
-        var btnEdit   = "";
+    journalEntryRecordsforfullpayment.push(
+      <tr key={"je-dr-full-" + i}>
+        <td>
+          {btnEdit}
+          {btnRemove}
+          {this.props.journalEntryRecordsforfullpayment[i].accounting_code_name}
+        </td>
+        <td className="text-end">
+          {numberWithCommas(this.props.journalEntryRecordsforfullpayment[i].amount)}
+        </td>
+        <td className="text-end"></td>
+      </tr>
+    );
+  }
+}
 
-        if(this.props.status == "pending") {
-          btnRemove = <button 
-                        className="btn btn-sm btn-danger"
-                        onClick={context.props.handleRemoveClicked.bind(this, i)}
-                      >
-                        <span className="bi bi-x"/>
-                      </button>;
+// Credit entries for journalEntries_for_full_payment
+for (var i = 0; i < this.props.journalEntryRecordsforfullpayment.length; i++) {
+  if (this.props.journalEntryRecordsforfullpayment[i].post_type == "CR" && this.props.journalEntryRecordsforfullpayment[i].amount > 0) {
+    var btnRemove = "";
+    var btnEdit = "";
 
-          btnEdit = <button
-                      className="btn btn-sm btn-info"
-                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
-                    >
-                      <span className="bi bi-pencil"/>
-                    </button>
-        }
+    if (this.props.status == "pending") {
+      btnRemove = <button
+        className="btn btn-sm btn-danger"
+        onClick={context.props.handleRemoveClicked.bind(this, i)}
+      >
+        <span className="bi bi-x" />
+      </button>;
 
-        journalEntryRecords.push(
-          <tr key={"je-cr-" + i}>
-            <td>
-              {btnEdit}
-              {btnRemove}
-              {this.props.journalEntries[i].accounting_code_name}
-            </td>
-            <td className="text-end">
-            </td>
-            <td className="text-end">
-              {numberWithCommas(this.props.journalEntries[i].amount)}
-            </td>
-          </tr>
-        );
-      }
+      btnEdit = <button
+        className="btn btn-sm btn-info"
+        onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+      >
+        <span className="bi bi-pencil" />
+      </button>;
     }
+
+    journalEntryRecordsforfullpayment.push(
+      <tr key={"je-cr-full-" + i}>
+        <td>
+          {btnEdit}
+          {btnRemove}
+          {this.props.journalEntryRecordsforfullpayment[i].accounting_code_name}
+        </td>
+        <td className="text-end"></td>
+        <td className="text-end">
+          {numberWithCommas(this.props.journalEntryRecordsforfullpayment[i].amount)}
+        </td>
+      </tr>
+    );
+  }
+}
+
 
     return  (
       <div className="card border-danger">
-        <div className={"card-header  bg-info" }>
+        <div className={"card-header bg-info"}>
           <div className="row">
             <div className="col-md-6">
               <strong>
-              {this.props.book_for_fullpayment}
+                {this.props.book_for_fullpayment}
               </strong>
             </div>
             <div className="col-md-6">
               <div className="text-end">
                 <div className="text-muted">
                   <span className="fa fa-store"/>
-                  {this.props.branch}
+                  {this.props.branch_for_full_payment}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="card-body">
-          {this.renderBalancedWarning()}
           <table className="table table-sm">
             <thead>
               <tr>
@@ -228,7 +226,7 @@ export default class AccountingEntryPreviewForFullPayment extends React.Componen
               </tr>
             </thead>
             <tbody>
-              {journalEntryRecords}
+              {journalEntryRecordsforfullpayment}
             </tbody>
           </table>
           <hr/>
@@ -238,7 +236,7 @@ export default class AccountingEntryPreviewForFullPayment extends React.Componen
                 Particular:
               </label>
               <p>
-                {this.props.particular}
+                {this.props.particular_for_fullpayment}
               </p>
             </div>
             <div className="col">
@@ -249,12 +247,13 @@ export default class AccountingEntryPreviewForFullPayment extends React.Componen
                   </strong>
                 </label>
                 <br/>
-                {this.props.approved_by}
+                {/* {this.props.approved_by} */}
               </p>
             </div>
           </div>
+          {this.renderCrbParameters()}
         </div>
       </div>
     );
   }
-}
+} 
