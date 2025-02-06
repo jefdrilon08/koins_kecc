@@ -4,8 +4,6 @@ module Reports
       @start_date       = start_date
       @end_date         = end_date
       @branch           = branch
-      @all_branches     = Branch.all
-      @branch_ids       = Branch.pluck(:id).map { |id| "'#{id}'" }.join(", ")
       # raise @branch_ids.inspect
 
       # this will generate for a specific branch
