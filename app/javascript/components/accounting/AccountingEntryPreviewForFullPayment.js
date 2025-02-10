@@ -236,7 +236,8 @@ for (var i = 0; i < this.props.journalEntryRecordsforfullpayment.length; i++) {
                 Particular:
               </label>
               <p>
-                {this.props.particular_for_fullpayment}
+              {`${this.props.particular_for_fullpayment},cv#${this.props.check_number_cv} ck#${this.props.check_number_ck}`}
+
               </p>
             </div>
             <div className="col">

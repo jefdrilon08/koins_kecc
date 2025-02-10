@@ -71,9 +71,10 @@ export default class AccountingEntryComponent extends React.Component {
       console.log(this.state.data);
       var accounting_entry_data = this.state.data.data.accounting_entry;
       var for_full_payment_entries = this.state.data.data.for_full_payment_entries;
-      
-      console.log(for_full_payment_entries); 
-      console.log("here"); 
+      var for_full_payment_check = this.state.data.data.for_full_payment.check_number;
+      var for_full_payment_vocher = this.state.data.data.for_full_payment.bank_check_number;
+
+      console.log(this.state.data);
   
       // Check if for_full_payment_entries has valid data
       const hasFullPaymentEntries = for_full_payment_entries && Object.keys(for_full_payment_entries).length > 0;
@@ -104,6 +105,9 @@ export default class AccountingEntryComponent extends React.Component {
               approved_by_for_full_payment={for_full_payment_entries.prepared_by}
               journalEntryRecordsforfullpayment={for_full_payment_entries.journal_entries} 
               branch_for_full_payment={for_full_payment_entries.branch_name}
+              check_number_ck = {for_full_payment_check}
+              check_number_cv = {for_full_payment_vocher}
+
             />
           )}
         </div>
