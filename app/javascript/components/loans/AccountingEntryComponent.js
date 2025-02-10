@@ -75,6 +75,13 @@ export default class AccountingEntryComponent extends React.Component {
           // Extract voucher data from state
       var voucherData = this.state.data.data.voucher || {};
 
+      var member = this.state.data.data.member || {};
+      var first_name = member.first_name || "";
+      var middle_name = member.middle_name || "";
+      var last_name = member.last_name || "";
+
+    
+
       // Get the check numbers
       var bankCheckNumber = voucherData.bank_check_number || "";
       var checkNumber = voucherData.check_number || "";
@@ -130,6 +137,9 @@ export default class AccountingEntryComponent extends React.Component {
               branch_for_full_payment={for_full_payment_entries.branch_name}
               check_number_ck = {bankCheckNumber}
               check_number_cv = {checkNumber}
+              first_name = {first_name}
+              middle_name = {middle_name}
+              last_name = {last_name}
 
             />
           )}
