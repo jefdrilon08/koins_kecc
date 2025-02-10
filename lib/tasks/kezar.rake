@@ -1221,7 +1221,7 @@ namespace :kezar do
       bearer_token            = ENV["ACCESS_TOKEN"]
       start_date              = ENV["START_DATE"] || ""
       end_date                = ENV["END_DATE"] || ""
-      raise branch_id.inspect
+
     # --------------End Declarations--------------#
 
     account_transactions = AccountTransaction.select(
