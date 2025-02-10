@@ -17,7 +17,7 @@ module Loans
       
       #@particular = "To cancel loan liquidation of jerrrss #{@loan.member.full_name }, CD REF# #{@loan_data[:accounting_entry][:reference_number]} .- #{@loan.branch.name}"
       @particular = "Payment of Loan / Deposit of Funds #{@loan.member.full_name }, #{@loan.branch.name}"
-
+                     
 
 
       @accounting_entry_data  = {
