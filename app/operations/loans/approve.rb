@@ -165,6 +165,7 @@ module Loans
         #   interest_balance: active_loan.interest_balance
         # }
 
+        
         # loan_inf = Loan.find(@loan.id)
         # loan_inf_data = loan_inf.data.with_indifferent_access
         # loan_inf_data[:for_full_payment] = full_payment

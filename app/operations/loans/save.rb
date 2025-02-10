@@ -309,7 +309,10 @@ module Loans
       present_loan_id: active_loan.id, 
       pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
       principal_paid: active_loan.principal_balance.to_f,
-      interest_balance: active_loan.interest_balance
+      interest_balance: active_loan.interest_balance,
+      bank_check_number: active_loan.data["voucher"]["bank_check_number"],  
+      check_number: active_loan.data["voucher"]["check_number"], 
+     # clip_number: active_loan.data["clip_number"]
     }
   
     # Update the loan to save the accounting entry
