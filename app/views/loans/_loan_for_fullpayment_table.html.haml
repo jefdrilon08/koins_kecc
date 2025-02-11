@@ -1,31 +1,32 @@
-- if @loan.active? && @loan.data["for_full_payment"].present?
+- if @loan.data["for_full_payment"].present?
   - full_payment_data = @loan.data["for_full_payment"]
-  - if full_payment_data.is_a?(Array)
-    - first_item = full_payment_data[0]
-    %table.table.table-hover.table-sm
-      %tbody
-        %tr
-          %th PN Number:
-          %td.text-end= first_item["pn_number_for_full_payment"] if first_item.is_a?(Hash)
-        %tr
-          %th Principal Paid:
-          %td.text-end= first_item["principal_paid"] if first_item.is_a?(Hash)
-        %tr
-          %th Interest Balance:
-          %td.text-end= first_item["interest_balance"] if first_item.is_a?(Hash)
-  - elsif full_payment_data.is_a?(Hash)
-    %table.table.table-hover.table-sm
-      %tbody
-        %tr
-          %th PN Number:
-          %td.text-end= full_payment_data["pn_number_for_full_payment"]
-        %tr
-          %th Principal Paid:
-          %td.text-end= full_payment_data["principal_paid"]
-        %tr
-          %th Interest Balance:
-          %td.text-end= full_payment_data["interest_balance"]
-  - else
-    %p Invalid data for full payment.
+  - credit_entries = @loan.data.dig("accounting_entry", "credit_journal_entries")
+  - cash_in_bank_entry = credit_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" }
+  - cash_in_bank_amount = cash_in_bank_entry ? cash_in_bank_entry["amount"].to_f : 0.0
+
+  - journal_entries = @loan.data.dig("accounting_entry", "journal_entries")
+  - journal_cash_entry = journal_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" && entry["post_type"] == "DR" }
+  - journal_cash_amount = journal_cash_entry ? journal_cash_entry["amount"].to_f : 0.0
+
+  - debit_entries = @loan.data.dig("for_full_payment_entries", "debit_journal_entries")
+  - debit_cash_entry = debit_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" }
+  - debit_cash_amount = debit_cash_entry ? debit_cash_entry["amount"].to_f : 0.0
+
+  - total_net = cash_in_bank_amount - debit_cash_amount
+
+  %table.table.table-hover.table-sm
+    %tbody
+      %tr
+        %th PN Number:
+        %td.text-end= full_payment_data["pn_number_for_full_payment"]
+      %tr
+        %th Principal Paid:
+        %td.text-end= full_payment_data["principal_paid"]
+      %tr
+        %th Interest Balance:
+        %td.text-end= full_payment_data["interest_balance"]
+      %tr
+        %th Total Net:
+        %td.text-end= total_net
 - else
   %p No data available for full payment.

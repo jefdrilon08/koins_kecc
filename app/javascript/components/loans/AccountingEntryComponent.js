@@ -72,9 +72,40 @@ export default class AccountingEntryComponent extends React.Component {
       var accounting_entry_data = this.state.data.data.accounting_entry;
       var for_full_payment_entries = this.state.data.data.for_full_payment_entries;
       
-      console.log(for_full_payment_entries); 
-      console.log("here"); 
-  
+          // Extract voucher data from state
+      var voucherData = this.state.data.data.voucher || {};
+
+      var member = this.state.data.data.member || {};
+      var first_name = member.first_name || "";
+      var middle_name = member.middle_name || "";
+      var last_name = member.last_name || "";
+
+    
+
+      // Get the check numbers
+      var bankCheckNumber = voucherData.bank_check_number || "";
+      var checkNumber = voucherData.check_number || "";
+
+      console.log("Bank Check Number:", bankCheckNumber);
+      console.log("Check Number:", checkNumber);
+
+      
+    
+
+      
+      // var debitAmount = for_full_payment_entries.debit_journal_entries[0].amount;
+      // var accounting_amount = accounting_entry_data.journal_entries[3].amount;
+
+      // var net_amount = accounting_amount - debitAmount;
+      
+      // console.log(debitAmount);
+      // console.log(accounting_amount);
+      // console.log(net_amount);
+
+      console.log(this.state.data);
+      
+    
+
       // Check if for_full_payment_entries has valid data
       const hasFullPaymentEntries = for_full_payment_entries && Object.keys(for_full_payment_entries).length > 0;
   
@@ -104,6 +135,12 @@ export default class AccountingEntryComponent extends React.Component {
               approved_by_for_full_payment={for_full_payment_entries.prepared_by}
               journalEntryRecordsforfullpayment={for_full_payment_entries.journal_entries} 
               branch_for_full_payment={for_full_payment_entries.branch_name}
+              check_number_ck = {bankCheckNumber}
+              check_number_cv = {checkNumber}
+              first_name = {first_name}
+              middle_name = {middle_name}
+              last_name = {last_name}
+
             />
           )}
         </div>
