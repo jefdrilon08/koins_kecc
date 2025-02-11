@@ -187,6 +187,30 @@ module Loans
                               user: @user
                             }
                           ).execute!
+    # Step 5: Create full_payment hash with relevant data
+full_payment = {
+  present_loan_id: active_loan.id, 
+  pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
+  principal_paid: active_loan.principal_balance.to_f,
+  interest_balance: active_loan.interest_balance,
+  bank_check_number: active_loan.data["voucher"]["bank_check_number"],  
+  check_number: active_loan.data["voucher"]["check_number"],
+  reference_number: accounting_entry.reference_number, # Use the reference number from approved entry
+  approved_by: accounting_entry.approved_by
+}
+
+# Step 6: Update the loan with full payment and accounting entry details
+loan_inf = Loan.find(@loan.id)
+loan_inf_data = loan_inf.data.with_indifferent_access
+
+# Add the full_payment and full_payment_entries to the loan data
+loan_inf_data[:for_full_payment] = full_payment
+loan_inf_data[:for_full_payment_entries] = full_payment_entry
+
+# Step 7: Save the updated loan data
+loan_inf.update(data: loan_inf_data)
+                        
+
                           
                           
                         
