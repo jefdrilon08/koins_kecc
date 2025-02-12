@@ -69,11 +69,11 @@ export default class AccountingEntryComponent extends React.Component {
     } else {
       console.log("this.state.data:");
       console.log(this.state.data);
-      var accounting_entry_data = this.state.data.data.accounting_entry;
-      var for_full_payment_entries = this.state.data.data.for_full_payment_entries;
-      var for_full_payment = this.state.data.data.for_full_payment.reference_number;
-      var for_full_paymentapproved = this.state.data.data.accounting_entry.approved_by;
-      var approved_by_fullpayment = this.state.data.data.for_full_payment.approved_by;
+      var accounting_entry_data = this.state.data?.data?.accounting_entry || null;
+      var for_full_payment_entries = this.state.data?.data?.for_full_payment_entries || null;
+      var for_full_payment = this.state.data?.data?.for_full_payment?.reference_number || null;
+      var for_full_paymentapproved = this.state.data?.data?.accounting_entry?.approved_by || null;
+      var approved_by_fullpayment = this.state.data?.data?.for_full_payment?.approved_by || null;
 
       console.log(approved_by_fullpayment);
 
