@@ -1,74 +1,79 @@
 .message
+%br
+.message
 .row
-  .col
+  = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
+  .col{class: "col-md-8"}
+    %h6
+      Kasagana-ka Mutual Benefit Association, Inc.
     .form-group
       %h3
-        Calamity Assistance Information
+        Calamity Assistance
+%hr
 .row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Prepared
         = text_field_tag :date_prepared, @claim.date_prepared, class: 'form-control ', type: 'date', id: 'date-prepared'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Date Requested
         = text_field_tag :date_requested,@claim.data["date_requested"], class: 'form-control', type: 'date', id: 'date-requested'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label 
+      %label.col.control-label{class: "col-md-12"} 
         Date Event
         = text_field_tag :date_of_event, @claim.data["date_of_event"], class: 'form-control', type: 'date', id: 'date-of-event'
-.row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Type of Calamity
         = text_field_tag :type_of_calamity, @claim.data["type_of_calamity"], class: 'form-control', id: 'type-of-calamity'
-  .col
+.row
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Purpose
         = text_field_tag :purpose, @claim.data["purpose"], class: 'form-control', value: 'Payment for Calamity Assistance', id: 'purpose'   
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Amount
         = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount'
-.row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Name of Beneficiary
         = text_field_tag :name_of_beneficiary, @claim.data["name_of_beneficiary"], class: 'form-control', id: 'name-of-beneficiary'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Name of Payee
         = text_field_tag :name_of_payee, @claim.data["name_of_payee"], class: 'form-control', id: 'name-of-payee'
 .row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Prepared by
         = text_field_tag :prepared_by, @claim.prepared_by, class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize       
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-.row
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Name
         = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
+%br
 .row
   .col
     .form-actions
