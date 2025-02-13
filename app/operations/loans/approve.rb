@@ -170,8 +170,8 @@ module Loans
         # loan_inf_data = loan_inf.data.with_indifferent_access
         # loan_inf_data[:for_full_payment] = full_payment
         # loan_inf.update(data: loan_inf_data)
-        
-        full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user).execute!
+        @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name },#{@loan.member.middle_name } #{@loan.member.last_name } cv# #{@loan.data.with_indifferent_access['voucher']['check_number']} ck# #{@loan.data.with_indifferent_access['voucher']['bank_check_number']} #{@loan.branch.name}"
+        full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user, particular: @particular).execute!
         
         accounting_entry  = ::Accounting::AccountingEntries::Save.new(
                             config: {
@@ -195,11 +195,12 @@ full_payment = {
   interest_balance: active_loan.interest_balance,
   bank_check_number: active_loan.data["voucher"]["bank_check_number"],  
   check_number: active_loan.data["voucher"]["check_number"],
-  reference_number: accounting_entry.reference_number, # Use the reference number from approved entry
-  approved_by: accounting_entry.approved_by
+  reference_number: accounting_entry.reference_number,
+  approved_by: accounting_entry.approved_by,
+  accounting_entry_id: accounting_entry.id  # Include the new accounting entry ID
+
 }
 
-# Step 6: Update the loan with full payment and accounting entry details
 loan_inf = Loan.find(@loan.id)
 loan_inf_data = loan_inf.data.with_indifferent_access
 
@@ -209,6 +210,9 @@ loan_inf_data[:for_full_payment_entries] = full_payment_entry
 
 # Step 7: Save the updated loan data
 loan_inf.update(data: loan_inf_data)
+
+accounting_entry.id
+
                         
 
                           
