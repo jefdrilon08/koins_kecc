@@ -1,7 +1,11 @@
 module Loans
   class BuildAccountingEntryForFullPayment
-    def initialize(loan:, current_user:)
+    def initialize(loan:, current_user:, particular:)
       @loan = loan
+
+      loan_id = @loan.id
+
+
       #@loan_data = loan.data.with_indifferent_access
       
       @for_debit =  AccountingCode.find(Settings.branch_accounting_codes.select{ |o| o["branch_id"] == @loan.branch_id }.first["cash_in_bank_accounting_code_id"])
@@ -16,10 +20,14 @@ module Loans
       @prepared_by = current_user.full_name
       
       #@particular = "To cancel loan liquidation of jerrrss #{@loan.member.full_name }, CD REF# #{@loan_data[:accounting_entry][:reference_number]} .- #{@loan.branch.name}"
-      @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name }, #{@loan.member.middle_name } #{ @loan.member.last_name }  #{@loan.branch.name}" 
-                     
+      # @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name },#{@loan.member.middle_name } #{@loan.member.last_name } #{@loan.id}  #{@loan.branch.name}"
+      if particular == nil
+       @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name },#{@loan.member.middle_name } #{@loan.member.last_name } #{@loan.id}  #{@loan.branch.name}"
+      else
+      @particular = particular             
+      end
 
-      @accounting_entry_data  = {
+      @accounting_entry_data  = { 
         book: @book,
         date_prepared: @current_date.strftime("%B %d, %Y"),
         company_name: Settings.company_name,
