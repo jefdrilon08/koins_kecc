@@ -3,7 +3,7 @@ module BoardResolution
     def initialize(config:)
       @errors = { messages: [] }
       @config = config
-      @branch = @config[:branch]
+      # @branch = @config[:branch]
       @month = @config[:month].upcase
       @year = @config[:year].to_s
       @status = @config[:status]
@@ -11,15 +11,27 @@ module BoardResolution
     end
 
     def execute!
+
       if DataStore.where(
-        "meta ->> 'branch_id' = ? AND meta ->> 'month' = ? AND meta ->> 'year' = ? AND meta ->> 'status' = ? AND meta ->> 'board_resolution_number' = ?",
-        @branch.id.to_s, @month, @year, @status, @board_resolution_number
+        "meta ->> 'month' = ? AND meta ->> 'year' = ? AND meta ->> 'status' = ? AND meta ->> 'board_resolution_number' = ?",
+         @month, @year, @status, @board_resolution_number
       ).exists?
         @errors[:messages] << {
           key: "board_resolution",
-          message: "Board resolution already exists for #{@branch.name}, #{@month} #{@year}, and status #{@status} with a board resolution number of #{@board_resolution_number}"
+          message: "Board resolution already exists for #{@month} #{@year}, and status #{@status} with a board resolution number of #{@board_resolution_number}"
         }
       end
+
+
+      # if DataStore.where(
+      #   "meta ->> 'branch_id' = ? AND meta ->> 'month' = ? AND meta ->> 'year' = ? AND meta ->> 'status' = ? AND meta ->> 'board_resolution_number' = ?",
+      #   @branch.id.to_s, @month, @year, @status, @board_resolution_number
+      # ).exists?
+      #   @errors[:messages] << {
+      #     key: "board_resolution",
+      #     message: "Board resolution already exists for #{@branch.name}, #{@month} #{@year}, and status #{@status} with a board resolution number of #{@board_resolution_number}"
+      #   }
+      # end
 
       # if DataStore.where("meta ->> 'board_resolution_number' = ?", @board_resolution_number).exists?
       #   @errors[:messages] << {
