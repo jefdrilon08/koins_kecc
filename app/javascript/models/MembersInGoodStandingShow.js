@@ -19,9 +19,9 @@ var _cacheDom = function() {
 
   $btnPrint         = $("#btn-print");
   $printMessage     = $(".print-message");
-  $btnPrintPdf      =  $("#btn-print-pdf");
+  $btnPrintPdf      = $("#btn-print-pdf");
   $btnExcel         = $("#btn-excel");
-
+  $modalPrint       = $("#modal-print");
   $message          = $(".message");
   templateErrorList = $("#template-error-list").html();
   loader            = $("#template-loader").html();
