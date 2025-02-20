@@ -8,7 +8,7 @@ module Pages
     end
 
     def execute!
-      if @branch.present? && @insurance_status.present? 
+      if @branch.present? && @insurance_status.present?
         branch_query!
       elsif @branch.present?
         branch_only_query!
@@ -48,7 +48,7 @@ module Pages
           LEFT JOIN centers c ON c.id = a.center_id
           LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
           LEFT JOIN referrers e ON e.id = a.coordinator_id
-          WHERE 
+          WHERE
             d.data->>'is_interest' = 'false'
             AND b.account_subtype = 'Life Insurance Fund'
             AND a.insurance_status = '#{@insurance_status}'
@@ -113,7 +113,7 @@ module Pages
           LEFT JOIN centers c ON c.id = a.center_id
           LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
           LEFT JOIN referrers e ON e.id = a.coordinator_id
-          WHERE 
+          WHERE
           d.data->>'is_interest' = 'false'
           AND b.account_subtype = 'Life Insurance Fund'
           AND a.insurance_status IN ('inforce', 'lapsed')
@@ -171,7 +171,7 @@ module Pages
           LEFT JOIN member_accounts b ON b.member_id = a.id
           LEFT JOIN centers c ON c.id = a.center_id
           LEFT JOIN account_transactions d ON d.subsidiary_id = b.id
-          WHERE 
+          WHERE
           d.data->>'is_interest' = 'false'
           AND b.account_subtype = 'Life Insurance Fund'
           AND a.insurance_status IN ('inforce', 'lapsed')
@@ -222,26 +222,26 @@ module Pages
             "INSURANCE ACCOUNT STATUS"
             ],style: header
 
-          sheet.add_row [ 
+          sheet.add_row [
             "Member",
             "Recognition Date",
             "Reinstatement Date",
             "Member Status",
             "Insurance Status",
-            "Center", 
-            "Length of Membership", 
-            "Certificate Number", 
-            "Mobile Number", 
+            "Center",
+            "Length of Membership",
+            "Certificate Number",
+            "Mobile Number",
             "LIFE",
-            "Coverage Date", 
-            "LIFE Number of Weeks Due", 
-            "LIFE Amount Due", 
+            "Coverage Date",
+            "LIFE Number of Weeks Due",
+            "LIFE Amount Due",
             "Status",
             "RF",
-            "Coverage Date", 
-            "RF Number of Weeks Due", 
-            "RF Amount Due", 
-            "Status", 
+            "Coverage Date",
+            "RF Number of Weeks Due",
+            "RF Amount Due",
+            "Status",
             "Date of Birth",
             "Age",
             "Member Type",
@@ -256,18 +256,18 @@ module Pages
             age                               = Member.find(id).age
             current_date                      = Date.today
             rf_amount_display                        = (member.fetch("lif_last_transaction_amount").to_i / 3).to_i
-            member_type                       = member.fetch("member_type") 
+            member_type                       = member.fetch("member_type")
             insurance_date_resigned           = member.fetch("insurance_date_resigned")
             insurance_status                  = member.fetch("insurance_status")
-         
+
             if member.fetch("reinstatement_date").present?
               old_recognition_date            = member.fetch("old_recognition_date").to_date
               reinstatement_date              = member.fetch("reinstatement_date").to_date
               date_stop                       = member.fetch("date_stop").to_date
               length_of_stay                  = Member.find(id).length_of_stay
-              
-              #Life Insurance Fund 
-                lif_sum_amount                = member.fetch("lif_sum_amount").to_i 
+
+              #Life Insurance Fund
+                lif_sum_amount                = member.fetch("lif_sum_amount").to_i
                 lif_account                   = member.fetch("lif_last_transaction_amount")
                 lif_transaction_date          = member.fetch("lif_transaction_date").to_date
                 lif_default                   = 15
@@ -276,10 +276,10 @@ module Pages
                 lif_coverage                  = (old_recognition_date + ((lif_sum_amount / lif_default) * 7).to_i + (reinstatement_date - date_stop).to_i).strftime("%B %d, %Y")
 
                 # lif_coverage                  = (reinstatement_date + lif_add).strftime("%B %d, %Y")
-             
+
                 lif_num_days                  = (current_date - reinstatement_date).to_i + (date_stop - old_recognition_date).to_i
                 lif_num_weeks                 = (lif_num_days / 7).to_i + 1
-                            
+
                 lif_insured_amount            = lif_num_weeks  * lif_default
                 # raise lif_num_weeks.inspect
                 lif_amt_past_due              = (lif_sum_amount - lif_insured_amount).to_i * -1
@@ -291,7 +291,7 @@ module Pages
                 total_compute_life            = (lif_sum_amount / lif_default).to_i
                 lif_lapsed                    = (total_compute_life - lif_num_weeks).to_i
                 days_lapsed                   = (current_date - lif_transaction_date).to_i
-                
+
                 if member_type == "GK"
                   status = "resigned"
                 end
@@ -301,11 +301,11 @@ module Pages
                 end
 
                 if status == "resigned" && lif_sum_amount == 0.0
-                  status = "resigned"  
+                  status = "resigned"
                 end
 
                 if status == "archived" && lif_sum_amount == 0.0
-                  status = "transferred"  
+                  status = "transferred"
                 end
 
                 if lif_sum_amount == 0.0 && insurance_date_resigned.present?
@@ -313,7 +313,7 @@ module Pages
                 end
 
                 if status == "resigned" && insurance_date_resigned.present? && lif_sum_amount == 0.0
-                  status = "resigned"  
+                  status = "resigned"
                 end
 
                 if lif_amt_past_due >= 2340 && insurance_status != "resigned" && lif_sum_amount > 0.0 && member_type != "GK"
@@ -348,7 +348,7 @@ module Pages
               #Life Insurance Fund
 
               #Retirement Fund
-                rf_sum_amount                = ReadOnlyMemberAccount.where(account_subtype: 'Retirement Fund', member_id: id).sum(:balance).to_f 
+                rf_sum_amount                = ReadOnlyMemberAccount.where(account_subtype: 'Retirement Fund', member_id: id).sum(:balance).to_f
                 rf_default                   = 5
 
                 rf_add                       = (rf_sum_amount / rf_default).weeks
@@ -360,23 +360,23 @@ module Pages
                 rf_insured_amount            = rf_num_weeks  * rf_default
                 rf_amt_past_due              = (rf_sum_amount - rf_insured_amount) * -1
                 rf_num_weeks_past_due        = (rf_amt_past_due / rf_default)
-              #Retirement Fund  
+              #Retirement Fund
             elsif member.fetch("recognition_date").present?
               recognition_date        = Date.parse(member.fetch("recognition_date"))
               length_of_stay          = Member.find(id).length_of_stay
 
-              #Life Insurance Fund 
-                lif_sum_amount                = member.fetch("lif_sum_amount").to_i 
+              #Life Insurance Fund
+                lif_sum_amount                = member.fetch("lif_sum_amount").to_i
                 lif_account                   = member.fetch("lif_last_transaction_amount")
                 lif_transaction_date          = member.fetch("lif_transaction_date").to_date
                 lif_default                   = 15
 
                 lif_add                       = (lif_sum_amount / lif_default).weeks
                 lif_coverage                  = (recognition_date + lif_add).strftime("%B %d, %Y")
-                
+
                 lif_num_days                  = (current_date - recognition_date).to_i
                 lif_num_weeks                 = (lif_num_days / 7).to_i + 1
-                
+
                 lif_insured_amount            = lif_num_weeks  * lif_default
                 lif_amt_past_due              = (lif_sum_amount - lif_insured_amount).to_i * -1
 
@@ -386,7 +386,7 @@ module Pages
                 total_compute_life            = (lif_sum_amount / lif_default).to_i
                 lif_lapsed                    = (total_compute_life - lif_num_weeks).to_i
                 days_lapsed                   = (current_date - lif_transaction_date).to_i
-                
+
                 if member_type == "GK"
                   status = "resigned"
                 end
@@ -396,11 +396,11 @@ module Pages
                 end
 
                 if status == "resigned" && lif_sum_amount == 0.0
-                  status = "resigned"  
+                  status = "resigned"
                 end
 
                 if status == "archived" && lif_sum_amount == 0.0
-                  status = "transferred"  
+                  status = "transferred"
                 end
 
                 if lif_sum_amount == 0.0 && insurance_date_resigned.present?
@@ -408,7 +408,7 @@ module Pages
                 end
 
                 if status == "resigned" && insurance_date_resigned.present? && lif_sum_amount == 0.0
-                  status = "resigned"  
+                  status = "resigned"
                 end
 
                 if lif_amt_past_due >= 2340 && insurance_status != "resigned" && lif_sum_amount > 0.0 && member_type != "GK"
@@ -443,7 +443,7 @@ module Pages
               #Life Insurance Fund
 
               #Retirement Fund
-                rf_sum_amount                = ReadOnlyMemberAccount.where(account_subtype: 'Retirement Fund', member_id: id).sum(:balance).to_f 
+                rf_sum_amount                = ReadOnlyMemberAccount.where(account_subtype: 'Retirement Fund', member_id: id).sum(:balance).to_f
                 rf_default                   = 5
 
                 rf_add                       = ((rf_sum_amount / rf_default).to_i).weeks
@@ -455,12 +455,12 @@ module Pages
                 rf_insured_amount            = rf_num_weeks  * rf_default
                 rf_amt_past_due              = (rf_sum_amount - rf_insured_amount) * -1
                 rf_num_weeks_past_due        = (rf_amt_past_due / rf_default)
-              #Retirement Fund  
+              #Retirement Fund
             end
 
             sheet.add_row [
                 member.fetch("member_name"),
-                if recognition_date.present? #old recognition_date from reinstate 
+                if recognition_date.present? #old recognition_date from reinstate
                   member.fetch("recognition_date").try(:to_date).strftime("%b %d, %Y")
                 else
                   member.fetch("old_recognition_date").try(:to_date).strftime("%b %d, %Y")
