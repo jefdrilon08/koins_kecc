@@ -1,9 +1,9 @@
 module Pages
   class InsuranceAccountStatusReports
     def initialize(branch:, insurance_status:)
-      @branch     = branch       
+      @branch     = branch
       @insurance_status = insurance_status
-      @centers    = Center.where(branch_id: @branch).order("name ASC")        
+      @centers    = Center.where(branch_id: @branch).order("name ASC")
     end
 
     def execute!
@@ -16,7 +16,7 @@ module Pages
         member_center[:center]    = center.to_s
         member_center[:members]   = []
         @members = ReadOnlyMember.active_and_resigned.where(center_id: center.id).order("last_name ASC")
-          
+
         if @insurance_status.present?
           @members = @members.where(insurance_status: @insurance_status)
         end
@@ -26,7 +26,7 @@ module Pages
             recognition_date  = member.data['recognition_date']
             current_date = Date.today
             member_record = {}
-            
+
             if recognition_date.present? and member.lif_amount != 0
               #rf compute
               @rf_default = 5
@@ -55,7 +55,7 @@ module Pages
               @lif_insured_amount    = @lif_num_weeks.to_i  * @lif_default.to_i
               @lif_amt_past_due      = (@lif_account.to_i - @lif_insured_amount.to_i) * -1
               @lif_num_weeks_past_due  = (@lif_amt_past_due.to_i / @lif_default.to_i)
-              
+
               if @lif_account.to_i > @lif_insured_amount.to_i
                 @lif_status = "advanced"
               elsif @lif_account.to_i < @lif_insured_amount.to_i
@@ -70,7 +70,7 @@ module Pages
               member_record[:recognition_date]       = member.data['recognition_date']
               member_record[:status]                 = member.status
               member_record[:insurance_status]       = member.insurance_status
-              member_record[:length_of_stay_report]         = member.length_of_stay_report
+              member_record[:length_of_stay_report]  = member.length_of_stay_reports
               member_record[:identification_number]  = member.identification_number
               member_record[:rf_account]             = @rf_account
               member_record[:rf_coverage]            = @rf_coverage
@@ -82,14 +82,14 @@ module Pages
               member_record[:lif_num_weeks_past_due] = @lif_num_weeks_past_due
               member_record[:lif_amt_past_due]       = @lif_amt_past_due
               member_record[:lif_status]             = @lif_status
-              member_center[:members] << member_record 
+              member_center[:members] << member_record
             end
           end
 
           @data[:centers] << member_center
         end
       end
-      
+
       @data
     end
   end

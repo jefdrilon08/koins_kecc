@@ -33,7 +33,8 @@ module BoardResolution
           year: @year,
           date_generated: @current_date,
           date_approved: "",
-          status: @status
+          status: @status,
+          board_resolution_number: @board_resolution_number
         },
         data: { record: [] },
         status: "pending"

@@ -10,16 +10,19 @@ export default Filter = (props) => {
     centers,
     officers,
     status,
+    gender,
     currentView,
     currentCenterId,
     currentOfficerId,
     currentLoanProductId,
     currentStatus,
+    currentGender,
     handleViewToggled,
     handleCenterChanged,
     handleOfficerChanged,
     handleLoanProductChanged,
     handleStatusChanged,
+    handleGenderChanged,
     handleLoanProductTaggingChanged,
   } = props;
 
@@ -44,6 +47,26 @@ export default Filter = (props) => {
       });
     }
   }, [currentLoanProductId]);
+
+  const renderGenderOptions = () => {
+    let options = [];
+
+    options.push(
+      <option key="" value="">
+        -- SELECT --
+      </option>
+    );
+    
+    gender.forEach((item) => {
+      options.push(
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
+
+    return options;
+  };
 
   const renderStatusOptions = () => {
     let options = [];
@@ -293,7 +316,20 @@ export default Filter = (props) => {
           {renderStatusOptions()}
         </select>
       </div>
-    </div>
+      </div>
+      <div className="col-md-3 col-xs-12">
+      <div className="form-group">
+        <label>Gender</label>
+        <select
+         className="form-control"
+         value={currentGender} 
+         onChange={handleGenderChanged}
+         >
+          {renderGenderOptions()}
+        </select>
+      </div>
+      </div>
+
     </div>
   );
 }
