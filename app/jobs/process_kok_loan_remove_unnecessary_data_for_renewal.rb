@@ -14,7 +14,6 @@ class ProcessKokLoanRemoveUnnecessaryDataForRenewal < ApplicationJob
       kok_data["records"].delete_at(2)
 
       kok_record.update!(data: kok_data)
-      kok_record.update(status: "approved")
     end
   end
 end
