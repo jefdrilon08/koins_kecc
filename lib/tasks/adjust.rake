@@ -1577,7 +1577,6 @@ namespace :adjust do
 
                       if attachment_file.save
                         puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
-                        member_inforce_count += 1
                         attachment_count += 1
                       else
                         puts "File not uploaded for #{member.identification_number}"
@@ -1597,6 +1596,7 @@ namespace :adjust do
                   end
                 end
               end
+              member_inforce_count += 1
             elsif member.lapsed_insurance_status?
               puts "Found directory for member #{member.full_name}"
               Dir["#{f}/*"].each do |ff|
@@ -1617,7 +1617,7 @@ namespace :adjust do
 
                       if attachment_file.save
                         puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
-                        member_lapsed_count += 1
+
                         attachment_count += 1
                       else
                         puts "File not uploaded for #{member.identification_number}"
@@ -1637,6 +1637,7 @@ namespace :adjust do
                   end
                 end
               end
+              member_lapsed_count += 1
             elsif member.pending_insurance_status?
               puts "Found directory for member #{member.full_name}"
               Dir["#{f}/*"].each do |ff|
@@ -1657,7 +1658,6 @@ namespace :adjust do
 
                       if attachment_file.save
                         puts "Successfully uploaded file #{ff} for #{member.identification_number} #{filename}"
-                        member_pending_count += 1
                         attachment_count += 1
                       else
                         puts "File not uploaded for #{member.identification_number}"
@@ -1677,6 +1677,11 @@ namespace :adjust do
                   end
                 end
               end
+              member_pending_count += 1
+            else
+              puts "Member #{sub_dir_name} not found"
+              error_count += 1
+              error_ids << sub_dir_name
             end
           end
         else
@@ -1700,7 +1705,6 @@ namespace :adjust do
     puts "Total Not Uploaded Attachments: #{not_uploaded}"
     puts "Not Uploaded Member IDs: #{not_uploaded_id.join(', ')}"
     puts "-------------------------------------------------------"
-
   end
 
   task :destroy_thumbs_attachment_file => :environment do
