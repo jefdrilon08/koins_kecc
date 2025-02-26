@@ -12,16 +12,16 @@ module DataStores
         ]
         @records = DataStore.where("meta ->> ? = ?", 'data_store_type', 'BOARD_RESOLUTION')
 
-        branch_id = params[:branch_id]
+        # branch_id = params[:branch_id]
         month = params[:month] 
         year = params[:year]
         board_resolution_number = params[:board_resolution_number]  
 
         # Filter by Branch
-      if params[:branch_id].present?
-        @records = @records.where("meta ->> ? = ?", 'branch_id', params[:branch_id])
-        @no_records_message = "No records found for the selected branch." if @records.empty?
-      end
+      # if params[:branch_id].present?
+      #   @records = @records.where("meta ->> ? = ?", 'branch_id', params[:branch_id])
+      #   @no_records_message = "No records found for the selected branch." if @records.empty?
+      # end
 
       # Filter by Month
       if month.present?

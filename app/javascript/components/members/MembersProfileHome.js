@@ -257,14 +257,17 @@ export default function MembersProfileHome(props) {
               Resolution Number
               <div className="value text-muted">
                 <b>
-                  {props.member.status === "active" && props.member.data.new_reso ? 
-  (props.member.data.new_reso.resolution_number ? 
+                {props.member.data && props.member.data.board_resolution_number 
+                  ? props.member.data.board_resolution_number 
+                  : "N/A"}
+                  {/* {props.member.status === "active" && props.member.data.new_reso ? 
+  (props.member.data.new_reso.board_resolution_number ? 
     props.member.data.new_reso.resolution_number : "N/A") 
   : (props.member.status === "resigned" && props.member.data.resigned_reso ?
-    (props.member.data.resigned_reso.resolution_number ?
-      props.member.data.resigned_reso.resolution_number : "N/A")
+    (props.member.data.resigned_reso.board_resolution_number ?
+      props.member.data.resigned_reso.board_resolution_number : "N/A")
     : "N/A")
-}
+} */}
                 </b>
               </div>
             </li>

@@ -6,7 +6,7 @@ module BoardResolution
             @user       = @config[:user]
             @date       = ::Utils::GetCurrentDate.new(
                             config: {
-                            branch: Branch.find(@data_store.meta["branch_id"])
+                            # branch: Branch.find(@data_store.meta["branch_id"])
                             }
                         ).execute!
         end

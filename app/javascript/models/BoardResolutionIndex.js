@@ -9,7 +9,7 @@ var templateErrorList;
 var $modalNew;
 var $btnNew;
 var $btnConfirm;
-var $Selectbranch;
+// var $Selectbranch;
 var $SelectMonth;
 var $SelectYear;
 var $SelectStatus;
@@ -21,7 +21,7 @@ var _cacheDom = function() {
     $btnNew       = $("#btn-new");
     $btnConfirm   = $("#btn-confirm");
     $btnCancel    = $(".btn[data-bs-dismiss='modal']");
-    $Selectbranch = $("#select-branch");
+    // $Selectbranch = $("#select-branch");
     $SelectMonth  = $("#select-month");
     $SelectYear   = $("#select-year");
     $SelectStatus = $("#select-status");
@@ -35,7 +35,7 @@ var _cacheDom = function() {
 
 var _bindEvents = function() {
     $btnNew.on("click", function(){
-        $Selectbranch.val(""); 
+        // $Selectbranch.val(""); 
         $message.html("");
         $SelectMonth.val("");
         $SelectYear.val("");
@@ -45,18 +45,18 @@ var _bindEvents = function() {
         updateModalTitle("");
     });
     
-    $Selectbranch.on("change", function() {
-        var selectedBranch = $(this).find("option:selected").text();
+    // $Selectbranch.on("change", function() {
+    //     var selectedBranch = $(this).find("option:selected").text();
 
-        if (selectedBranch === "-- SELECT --") {
-            updateModalTitle("");
-        } else {
-            updateModalTitle(selectedBranch);
-        }
-    });
+    //     if (selectedBranch === "-- SELECT --") {
+    //         updateModalTitle("");
+    //     } else {
+    //         updateModalTitle(selectedBranch);
+    //     }
+    // });
 
     $btnConfirm.on("click", function(){
-        var branch  = $Selectbranch.val();
+        // var branch  = $Selectbranch.val();
         var month  = $SelectMonth.val();
         var year   = $SelectYear.val();
         var status = $SelectStatus.val();
@@ -71,12 +71,12 @@ var _bindEvents = function() {
         var monthName = (month && month >= 1 && month <= 12) ? monthNames[month - 1] : null;
         var yearString = (year) ? year.toString() : null;
 
-        if (!branch || branch == "-- SELECT --") {
-            $message.html("Please select a branch.");
-            $message.addClass("text-danger");
-            console.error("No branch selected.");
-            return;
-        }
+        // if (!branch || branch == "-- SELECT --") {
+        //     $message.html("Please select a branch.");
+        //     $message.addClass("text-danger");
+        //     console.error("No branch selected.");
+        //     return;
+        // }
 
         if (!month || !year) {
             $message.html("Please select both month and year.");
@@ -107,10 +107,10 @@ var _bindEvents = function() {
             url: "/api/v1/data_stores/board_resolution/create",
             method: 'POST',
             data: {
-                branch_id: branch,
+                // branch_id: branch,
                 month: monthName,
                 year: yearString,
-                status: status,
+                member_status: status,
                 board_resolution_number: boardResolutionNumber,
                 authenticity_token: _authenticityToken
             },
@@ -140,7 +140,7 @@ var _bindEvents = function() {
     });
 
     $btnCancel.on("click", function() {
-        $Selectbranch.val("");
+        // $Selectbranch.val("");
         $SelectMonth.val("");
         $SelectYear.val("");
         $SelectStatus.val(""); 
@@ -151,10 +151,10 @@ var _bindEvents = function() {
         updateModalTitle("");
     });
 
-    function updateModalTitle(branchName) {
-        var title = branchName ? `Board Resolution Records for ${branchName}` : 'Board Resolution Records';
-        $(".modal-title").text(title);
-    }
+    // function updateModalTitle(branchName) {
+    //     var title = branchName ? `Board Resolution Records for ${branchName}` : 'Board Resolution Records';
+    //     $(".modal-title").text(title);
+    // }
 
 }
 

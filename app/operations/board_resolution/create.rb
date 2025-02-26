@@ -89,7 +89,7 @@ module BoardResolution
         next unless member_date_resigned.present? && member_date_resigned.between?(@date_from, @date_to)
 
         @records << {
-          id: member.id,
+          member_id: member.id,
           full_name: "#{member.last_name}, #{member.first_name} #{member.middle_name}",
           branch_id: member.branch_id,
           center_id: member.center_id,
