@@ -1002,7 +1002,7 @@ branch_accounting_codes:
 #north 3
   -
     branch_id: "18cebed1-4838-4335-9023-ffd35c5e2629"                              #baliuag
-    cash_in_bank_accounting_code_id: "de8f82db-2342-4180-8a93-2271501b18fb"
+    cash_in_bank_accounting_code_id: "50bd284d-5e89-45b8-b8ed-f3a3ab292a32"
     #cash_in_bank_accounting_code_id: "e6d70aca-8a59-4ebb-9f6d-6319c2ab0932"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"

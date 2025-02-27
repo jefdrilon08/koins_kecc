@@ -15,7 +15,15 @@
   - debit_cash_entry = debit_entries.find { |entry| entry["accounting_code_id"] == cash_in_bank_accounting_code_id }
   - debit_cash_amount = debit_cash_entry ? debit_cash_entry["amount"].to_f : 0.0
 
-  - total_net = cash_in_bank_amount - debit_cash_amount
+  -# Find the E-Wallet USSC entry in credit journal entries using the name
+  - ussc_entry = credit_entries.find { |entry| entry["name"].strip == "E-Wallet USSC" }
+  - ussc_amount = ussc_entry ? ussc_entry["amount"].to_f : 0.0
+
+  - # Subtract USSC amount from total_net only if no cash_in_bank_amount
+  - if cash_in_bank_amount == 0.0
+    - total_net = ussc_amount - debit_cash_amount
+  - else
+    - total_net = cash_in_bank_amount - debit_cash_amount - ussc_amount
 
   %table.table.table-hover.table-sm
     %tbody

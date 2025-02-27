@@ -3,8 +3,6 @@
     %tr
       %th
       %th.text-center
-        Branch
-      %th.text-center
         Month
       %th.text-center
         Year
@@ -18,9 +16,6 @@
         %td.text-center
           = link_to "board_resolution/#{o.id}" do
             .bi.bi-search
-        %td.text-center
-          %strong
-          #{o.meta.with_indifferent_access[:branch_name]}
         %td.text-center
           #{o.meta.with_indifferent_access[:month]}
         %td.text-center
