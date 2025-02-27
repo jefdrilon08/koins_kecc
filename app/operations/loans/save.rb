@@ -280,52 +280,56 @@ module Loans
 
         @loan.save! 
       end
-  # Get the active loan
-  active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
+ # Get the active loan
+active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first
 
-  if active_loan.present?
-    # Create an entry for full payment
-    full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user).execute!
+if active_loan.present?
+  # Create an entry for full payment
   
-    # Save the accounting entry
-    accounting_entry = ::Accounting::AccountingEntries::Save.new(
-      config: {
-        id: nil,
-        accounting_entry_data: full_payment_entry,
-        user: @user
-      }
-    ).execute!
+  full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user, particular: nil).execute!
+
+  # Remove the creation and saving of accounting entry
+  # accounting_entry = ::Accounting::AccountingEntries::Save.new(
+  #   config: {
+  #     id: nil,
+  #     accounting_entry_data: full_payment_entry,
+  #     user: @user
+  #   }
+  # ).execute!
   
-    # Approve the accounting entry
-    accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-      config: {
-        accounting_entry: accounting_entry,
-        user: @user
-      }
-    ).execute!
+  # Remove approval of the accounting entry
+  # accounting_entry = ::Accounting::AccountingEntries::Approve.new(
+  #   config: {
+  #     accounting_entry: accounting_entry,
+  #     user: @user
+  #   }
+  # ).execute!
+
+  # Create data for full payment details without unnecessary fields
+  full_payment = {
+    present_loan_id: active_loan.id, 
+    pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
+    principal_paid: active_loan.principal_balance.to_f,
+    interest_balance: active_loan.interest_balance,
+    bank_check_number: active_loan.data["voucher"]["bank_check_number"],  
+    check_number: active_loan.data["voucher"]["check_number"],
+    
+    
+   # clip_number: active_loan.data["clip_number"]
+  }
+
   
-    # Create data for full payment details without unnecessary fields
-    full_payment = {
-      present_loan_id: active_loan.id, 
-      pn_number_for_full_payment: Loan.find(active_loan.id).pn_number,
-      principal_paid: active_loan.principal_balance.to_f,
-      interest_balance: active_loan.interest_balance,
-      bank_check_number: active_loan.data["voucher"]["bank_check_number"],  
-      check_number: active_loan.data["voucher"]["check_number"], 
-     # clip_number: active_loan.data["clip_number"]
-    }
-  
-    # Update the loan to save the accounting entry
-    loan_inf = Loan.find(@loan.id)
-    loan_inf_data = loan_inf.data.with_indifferent_access
-  
-    # Replace arrays with single hash objects
-    loan_inf_data[:for_full_payment] = full_payment
-    loan_inf_data[:for_full_payment_entries] = full_payment_entry
-  
-    # Update the loan data with the new full payment details
-    loan_inf.update(data: loan_inf_data)
-  end
+  # Update the loan to save the full payment data without creating an entry
+  loan_inf = Loan.find(@loan.id)
+  loan_inf_data = loan_inf.data.with_indifferent_access
+
+  # Replace arrays with single hash objects
+  loan_inf_data[:for_full_payment] = full_payment
+  loan_inf_data[:for_full_payment_entries] = full_payment_entry
+
+  # Update the loan data with the new full payment details
+  loan_inf.update(data: loan_inf_data)
+end
       @loan
     end
 

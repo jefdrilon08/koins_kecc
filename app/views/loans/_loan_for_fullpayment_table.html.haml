@@ -1,15 +1,18 @@
-- if @loan.data["for_full_payment"].present?
+- if @loan.data["for_full_payment"].present? && @loan.data["for_full_payment"].is_a?(Hash)
   - full_payment_data = @loan.data["for_full_payment"]
-  - credit_entries = @loan.data.dig("accounting_entry", "credit_journal_entries")
-  - cash_in_bank_entry = credit_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" }
+  - credit_entries = @loan.data.dig("accounting_entry", "credit_journal_entries") || []
+
+  - cash_in_bank_accounting_code_id = Settings.branch_accounting_codes.select { |o| o["branch_id"] == @loan.branch_id }.first["cash_in_bank_accounting_code_id"]
+
+  - cash_in_bank_entry = credit_entries.find { |entry| entry["accounting_code_id"] == cash_in_bank_accounting_code_id }
   - cash_in_bank_amount = cash_in_bank_entry ? cash_in_bank_entry["amount"].to_f : 0.0
 
-  - journal_entries = @loan.data.dig("accounting_entry", "journal_entries")
-  - journal_cash_entry = journal_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" && entry["post_type"] == "DR" }
+  - journal_entries = @loan.data.dig("accounting_entry", "journal_entries") || []
+  - journal_cash_entry = journal_entries.find { |entry| entry["accounting_code_id"] == cash_in_bank_accounting_code_id && entry["post_type"] == "DR" }
   - journal_cash_amount = journal_cash_entry ? journal_cash_entry["amount"].to_f : 0.0
 
-  - debit_entries = @loan.data.dig("for_full_payment_entries", "debit_journal_entries")
-  - debit_cash_entry = debit_entries&.find { |entry| entry["accounting_code_id"] == "32b1eda6-9620-494b-ae08-17e14e4d5244" }
+  - debit_entries = @loan.data.dig("for_full_payment_entries", "debit_journal_entries") || []
+  - debit_cash_entry = debit_entries.find { |entry| entry["accounting_code_id"] == cash_in_bank_accounting_code_id }
   - debit_cash_amount = debit_cash_entry ? debit_cash_entry["amount"].to_f : 0.0
 
   - total_net = cash_in_bank_amount - debit_cash_amount
@@ -18,15 +21,15 @@
     %tbody
       %tr
         %th PN Number:
-        %td.text-end= full_payment_data["pn_number_for_full_payment"]
+        %td.text-end= full_payment_data.fetch("pn_number_for_full_payment", "N/A")
       %tr
         %th Principal Paid:
-        %td.text-end= full_payment_data["principal_paid"]
+        %td.text-end= full_payment_data.fetch("principal_paid", 0.0)
       %tr
         %th Interest Balance:
-        %td.text-end= full_payment_data["interest_balance"]
+        %td.text-end= full_payment_data.fetch("interest_balance", 0.0)
       %tr
-        %th Total Net:
+        %th Total Net Pay:
         %td.text-end= total_net
 - else
   %p No data available for full payment.

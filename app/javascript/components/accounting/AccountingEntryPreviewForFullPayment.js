@@ -197,7 +197,7 @@ for (var i = 0; i < this.props.journalEntryRecordsforfullpayment.length; i++) {
           <div className="row">
             <div className="col-md-6">
               <strong>
-                {this.props.book_for_fullpayment}
+                {this.props.book_for_fullpayment} {this.props.ref_number_forfullpayment} -
               </strong>
             </div>
             <div className="col-md-6">
@@ -248,7 +248,7 @@ for (var i = 0; i < this.props.journalEntryRecordsforfullpayment.length; i++) {
                   </strong>
                 </label>
                 <br/>
-                {/* {this.props.approved_by} */}
+                {this.props.approved_by_full}
               </p>
             </div>
           </div>

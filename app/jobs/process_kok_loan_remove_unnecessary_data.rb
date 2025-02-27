@@ -14,15 +14,12 @@ class ProcessKokLoanRemoveUnnecessaryData < ApplicationJob
       kok_data["records"].delete_at(2)
 
       kok_record.update!(data: kok_data)
-      kok_record.update(status: "approved")
-
     else
       kok_record = InsuranceLoanBundleEnrollment.find(@id)
       kok_data = kok_record.data
       kok_data["records"].delete_at(2)
 
       kok_record.update!(data: kok_data)
-      kok_record.update(status: "for-renewal")
     end
   end
 end

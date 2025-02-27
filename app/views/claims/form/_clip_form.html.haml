@@ -1,101 +1,13 @@
-
+%br
 .message
 .row
-  .col
+  = image_tag('kmba.ico', alt: 'Kmba Logo', style: 'max-width: 100px; height: auto;')
+  .col{class: "col-md-8"}
+    %h6
+      Kasagana-ka Mutual Benefit Association, Inc.
     .form-group
       %h3
-        CLIP Information
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Date Prepared
-        = text_field_tag :date_prepared, @claim.date_prepared, id: 'date-prepared', type: 'date', class: 'form-control select-select2'
-  .col
-    .form-group
-      %label.col.control-label
-        Creditors Name
-        = select_tag :creditors_name, options_for_select(Claim::CREDITORS_NAME ,@claim.data["creditors_name"]), class: 'form-control', id: 'creditors-name' , prompt: "-- Select --"
-  .col
-    .form-group 
-      %label.col.control-label
-        Debtors Name
-        = text_field_tag :member_name, @claim.data["member_name"], class: 'form-control', id: 'member-name', value: @claim.member.full_name 
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Beneficiary
-        = text_field_tag :beneficiary, @claim.data["beneficiary"], class: 'form-control', id: 'beneficiary'
-  .col
-    .form-group
-      %label.col.control-label 
-        Date of Birth
-        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', id: 'date-of-birth', value: @claim.member.date_of_birth, type: 'date' 
-  .col
-    .form-group
-      %label.col.control-label
-        Age
-        = text_field_tag :age, @claim.data["age"], class: 'form-control', id: 'age', value: @claim.member.age 
-.row
-  .col
-    .form-group
-      %label.col.control-label 
-        Gender
-        = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender'
-  .col
-    .form-group
-      %label.col.control-label
-        Policy Number
-        = text_field_tag :policy_number, @claim.data["policy_number"], class: 'form-control', id: 'policy-number'
-  .col
-    .form-group
-      %label.col.control-label
-        Date of Death
-        = text_field_tag :date_of_death, @claim.data["date_of_death"], class: 'form-control', id: 'date-of-death',type: 'date' 
-  .col
-    .form-group 
-      %label.col.control-label
-        Cause of Death   
-        = text_field_tag :cause_of_death, @claim.data["cause_of_death"], class: 'form-control',id: 'cause-of-death' 
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Type of Loan
-        = select_tag :type_of_loan, options_for_select(Claim::TYPES_OF_LOAN, @claim.data["type_of_loan"]), class: "form-control select-select2 js-searchable", id: 'type-of-loan', prompt: "-- Select --"
-  .col
-    .form-group
-      %label.col.control-label
-        Term of Loan(weeks)
-        =  text_field_tag :terms, @claim.data["terms"], class: 'form-control', id: 'terms'
-  .col
-    .form-group
-      %label.col.control-label
-        Effective Date of Coverage
-        = text_field_tag :effective_date_of_coverage, @claim.data["effective_date_of_coverage"] , class: 'form-control', id: 'effective-date-of-coverage',type: 'date'
-  .col
-    .form-group
-      %label.col.control-label
-        Expiration Date of Coverage
-        = text_field_tag :expiration_date_of_coverage, @claim.data["expiration_date_of_coverage"], class: 'form-control', id: 'expiration-date-of-coverage', type: 'date'
-.row
-  .col
-    .form-group
-      %label.col.control-label
-        Amount of Loan
-        = text_field_tag :amount_of_loan, @claim.data["amount_of_loan"], class: 'form-control', id: 'amount-of-loan'
-  .col
-    .form-group
-      %label.col.control-label
-        Amount Payable to Beneficiary(Paid Amount)
-        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount-payable-to-beneficiary'
-  .col
-    .form-group
-      %label.col.control-label
-        Amount Payable to Creditor(Balance)
-        = text_field_tag :amount_payable_to_creditor, @claim.data["amount_payable_to_creditor"], class: 'form-control', id: 'amount-payable-to-creditor'
-.row
+        Credit Life Insurance Plan (CLIP)
   .col
     .form-group
       %label.col.control-label
@@ -103,46 +15,136 @@
         = text_field_tag  :prepared_by, @claim.prepared_by,class: 'form-control', id: 'prepared-by', value: current_user.print_full_name.titleize   
   .col
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
+        Date Prepared
+        = text_field_tag :date_prepared, @claim.date_prepared, id: 'date-prepared', value: Date.today.strftime('%Y-%m-%d'), type: 'date', class: 'form-control select-select2'
+%hr
+.row 
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Creditors Name
+        = select_tag :creditors_name, options_for_select(Claim::CREDITORS_NAME ,@claim.data["creditors_name"]), class: 'form-control', id: 'creditors-name' , prompt: "-- Select --"
+  .col{class: "col-md-3"}
+    .form-group 
+      %label.col.control-label{class: "col-md-12"}
+        Debtors Name
+        = text_field_tag :member_name, @claim.data["member_name"], class: 'form-control', id: 'member-name', value: @claim.member.full_name 
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Date of Birth
+        = text_field_tag :date_of_birth, @claim.data["date_of_birth"], class: 'form-control', id: 'date-of-birth', value: @claim.member.date_of_birth, type: 'date'
+  .col{class: "col-md-1"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"}
+        Age
+        = text_field_tag :age, @claim.data["age"], class: 'form-control', id: 'age', value: @claim.member.age
+  .col{class: "col-md-2"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Policy Number
+        = text_field_tag :policy_number, @claim.data["policy_number"], class: 'form-control', id: 'policy-number'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Beneficiary
+        = text_field_tag :beneficiary, @claim.data["beneficiary"], class: 'form-control', id: 'beneficiary'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Gender
+        = select_tag :gender, options_for_select(["FEMALE","MALE"], @claim.data["gender"]), class: 'form-control' , id: 'gender'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Date of Death
+        = text_field_tag :date_of_death, @claim.data["date_of_death"], class: 'form-control', id: 'date-of-death',type: 'date' 
+  .col{class: "col-md-3"}
+    .form-group 
+      %label.col.control-label{class: "col-md-12"} 
+        Cause of Death   
+        = text_field_tag :cause_of_death, @claim.data["cause_of_death"], class: 'form-control',id: 'cause-of-death'
+.row
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Type of Loan
+        = select_tag :type_of_loan, options_for_select(Claim::TYPES_OF_LOAN, @claim.data["type_of_loan"]), class: "form-control select-select2 js-searchable", id: 'type-of-loan', prompt: "-- Select --"
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Term of Loan(weeks)
+        =  text_field_tag :terms, @claim.data["terms"], class: 'form-control', id: 'terms'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Effective Date of Coverage
+        = text_field_tag :effective_date_of_coverage, @claim.data["effective_date_of_coverage"] , class: 'form-control', id: 'effective-date-of-coverage',type: 'date'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Expiration Date of Coverage
+        = text_field_tag :expiration_date_of_coverage, @claim.data["expiration_date_of_coverage"], class: 'form-control', id: 'expiration-date-of-coverage', type: 'date'
+.row
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Amount of Loan
+        = text_field_tag :amount_of_loan, @claim.data["amount_of_loan"], class: 'form-control', id: 'amount-of-loan'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Amount Payable to Beneficiary(Paid Amount)
+        = text_field_tag :amount, @claim.data["amount"], class: 'form-control', id: 'amount-payable-to-beneficiary'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
+        Amount Payable to Creditor(Balance)
+        = text_field_tag :amount_payable_to_creditor, @claim.data["amount_payable_to_creditor"], class: 'form-control', id: 'amount-payable-to-creditor'
+  .col{class: "col-md-3"}
+    .form-group
+      %label.col.control-label{class: "col-md-12"} 
         Transaction Type
         = select_tag :transaction_type, options_for_select(["Online", "Check"], @claim.data["transaction_type"]), class: 'form-control select-select2', id: 'transaction-type'
 .row
-  .col-md-3
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Claims Payment through
         = text_field_tag :claims_payment, @claim.data["claims_payment"], class: 'form-control', id: 'claims-payment'
-  .col-md-5
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Account Name
         = text_field_tag :account_name, @claim.data["account_name"], class: 'form-control', id: 'account-name'
-  .col-md-4
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"} 
         Account Number
         = text_field_tag :account_number, @claim.data["account_number"], class: 'form-control', id: 'account-number'
 .row
-  .col-md-3
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Claims Payment through (Creditor)
         = text_field_tag :claims_payment_creditor, @claim.data["claims_payment_creditor"], class: 'form-control', id: 'claims-payment-creditor'
-  .col-md-5
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Name (Creditor)
         = select_tag :account_name_creditor, options_for_select(Claim::CREDITORS_NAME_FULL ,@claim.data["account_name_creditor"]), class: 'form-control', id: 'account-name-creditor' , prompt: "-- Select --"
-  .col-md-4
+  .col{class: "col-md-3"}
     .form-group
-      %label.col.control-label
+      %label.col.control-label{class: "col-md-12"}
         Account Number (Creditor)
         = text_field_tag :account_number_creditor, @claim.data["account_number_creditor"], class: 'form-control', id: 'account-number-creditor'    
-.row
-  .col
-    .form-group
-      %label
-        = text_field_tag :control, @control, class: 'form-control', id: 'control'
+-# .row
+-#   .col
+-#     .form-group
+-#       %label
+-#         = text_field_tag :control, @control, class: 'form-control', id: 'control'
+%br
 .row
   .col
     .form-actions
