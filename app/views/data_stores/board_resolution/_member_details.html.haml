@@ -1,5 +1,5 @@
 %div{ style: "margin-bottom: 25px;" }
-  %div{ style: "max-height: 300px; overflow-y: auto;" }
+  %div{ style: "max-height: 1000px; overflow-y: auto;" }
     %table.table.table-bordered.table-sm.table-hover{ style: "width: 100%;" }
       %thead
         %tr
@@ -7,13 +7,16 @@
           %th{ style: "min-width: 100px;" } Center
           %th{ style: "min-width: 100px;" } Status
           %th{ style: "min-width: 100px;" } Board Resolution Number
-          %th{ style: "min-width: 100px;" } Membership Date
+          - if @records.any? { |record| record["member_status"] == "active" }
+            %th{ style: "min-width: 100px;" } Membership Date
+          - else
+            %th{ style: "min-width: 100px;" } Date Resigned
       %tbody
         - if @records.present?
           - @records.each do |record|
             %tr
               %td
-                - if record["member_id"].present?
+                - if record["member_id"].present? 
                   = link_to(member_path(record["member_id"]), target: "_blank") do
                     %strong= record[:full_name]
                 - else
@@ -21,7 +24,13 @@
               %td= record["center_name"]
               %td= record["member_status"]
               %td= record["board_resolution_number"]
-              %td= record["membership_date"]
+              - if record["member_status"] == "active"
+                %td= record["membership_date"]
+              - elsif record["member_status"] == "resigned"
+                %td= record["date_resigned"]
+              - else
+                %td.text-muted Not Available
+
         - else
           %tr
             %td{ colspan: 6 } No Board Resolution records found.
