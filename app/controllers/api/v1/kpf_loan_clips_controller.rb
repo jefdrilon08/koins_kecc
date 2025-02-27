@@ -28,7 +28,7 @@ module Api
           user: current_user
         }
 
-        if ["MIS", "OAS"].include? current_user.roles.last
+        if ["OAS", "MIS", "REMOTE-MIS", "REMOTE-BK", "REMOTE-FM"].include? current_user.roles.last
           errors  = KpfLoanClips::ValidateCheck.new(
                       config: config
                     ).execute!
