@@ -10,7 +10,9 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "error",
     "lapsed",
     "on-grace-period",
-    "over-age"
+    "over-age",
+    "resigned",
+    "matured"
   ]
 
   belongs_to :center
