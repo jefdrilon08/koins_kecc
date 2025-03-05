@@ -26,12 +26,12 @@ module Reports
           WHERE
             branch_id = '#{@branch_id.id}'
             AND status = '#{@status}'
-            AND (record->'clip_data'->>'effectivity_date')::date >= '#{@start_date_query}'
-            AND (record->'clip_data'->>'effectivity_date')::date <= '#{@end_date_query}'
+            AND (record->'clip_data'->>'effective_date')::date >= '#{@start_date_query}'
+            AND (record->'clip_data'->>'effective_date')::date <= '#{@end_date_query}'
             AND date_approved >= '#{@approval_date_from}'
             AND date_approved <= '#{@approval_date_to}'
           ORDER BY
-            record->'clip_data'->>'effectivity_date'
+            record->'clip_data'->>'effective_date'
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -60,10 +60,10 @@ module Reports
           WHERE
             branch_id = '#{@branch_id.id}'
             AND status = '#{@status}'
-            AND (record->'clip_data'->>'effectivity_date')::date >= '#{@start_date_query}'
-            AND (record->'clip_data'->>'effectivity_date')::date <= '#{@end_date_query}'
+            AND (record->'clip_data'->>'effective_date')::date >= '#{@start_date_query}'
+            AND (record->'clip_data'->>'effective_date')::date <= '#{@end_date_query}'
           ORDER BY
-            record->'clip_data'->>'effectivity_date'
+            record->'clip_data'->>'effective_date'
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -105,7 +105,7 @@ module Reports
           FROM
               last_data_element
           ORDER BY
-              last_data->'clip_data'->>'effectivity_date' DESC
+              last_data->'clip_data'->>'effective_date' DESC
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -146,7 +146,7 @@ module Reports
           FROM
               last_data_element
           ORDER BY
-              last_data->'clip_data'->>'effectivity_date' DESC
+              last_data->'clip_data'->>'effective_date' DESC
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
@@ -186,7 +186,7 @@ module Reports
           FROM
               last_data_element
           ORDER BY
-              last_data->'clip_data'->>'effectivity_date' DESC
+              last_data->'clip_data'->>'effective_date' DESC
         SQL
 
         query = ActiveRecord::Base.connection.execute(sql_query)
