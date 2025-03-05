@@ -1,15 +1,15 @@
 module InsuranceLoanBundleEnrollments
-  class Declined
-    
+  class Transferred
     def initialize(config:)
+
       @config                           = config
       @insurance_loan_bundle_enrollment = @config[:insurance_loan_bundle_enrollment]
-      @data                             = @insurance_loan_bundle_enrollment.data.with_indifferent_access 
+      @data                             = @insurance_loan_bundle_enrollment.data.with_indifferent_access
     end
 
     def execute!
       @insurance_loan_bundle_enrollment.update!(
-        status: "declined",
+        status: "transferred",
         data: @data,
       )
 

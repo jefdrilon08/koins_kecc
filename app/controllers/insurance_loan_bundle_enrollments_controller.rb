@@ -196,6 +196,24 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
       end
     end
 
+    if @insurance_loan_bundle_enrollment.lapsed?
+      if ["MIS", "FM", "CM", "REMOTE-MIS"].include? current_user.roles.last
+        @subheader_side_actions << {
+            id: "btn-resigned",
+            link: "#",
+            class: "fa fa-check",
+            text: "Move to Resigned"
+        }
+
+        @subheader_side_actions << {
+            id: "btn-matured",
+            link: "#",
+            class: "fa fa-check",
+            text: "Move to Matured"
+        }
+      end
+    end
+
     if (@insurance_loan_bundle_enrollment.for_renewal? ||  @insurance_loan_bundle_enrollment.on_grace_period?) && @insurance_loan_bundle_enrollment.records_last[:kok_data][:age] < 76
       if ["MIS", "BK", "SBK", "FM", "CM", "REMOTE-MIS"].include? current_user.roles.last
         @subheader_side_actions << {
@@ -211,6 +229,14 @@ class InsuranceLoanBundleEnrollmentsController < ApplicationController
             class: "fa fa-check",
             text: "Decline"
         }
+
+        @subheader_side_actions << {
+            id: "btn-transferred",
+            link: "#",
+            class: "fa fa-check",
+            text: "Move to Transferred"
+        }
+
       end
     end
 

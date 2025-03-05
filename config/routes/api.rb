@@ -306,6 +306,9 @@ namespace :api do
     post "/insurance_loan_bundle_enrollments/pending", to: "insurance_loan_bundle_enrollments#pending"
     post "/insurance_loan_bundle_enrollments/check", to: "insurance_loan_bundle_enrollments#check"
     post "/insurance_loan_bundle_enrollments/declined", to: "insurance_loan_bundle_enrollments#declined"
+    post "/insurance_loan_bundle_enrollments/resigned", to: "insurance_loan_bundle_enrollments#resigned"
+    post "/insurance_loan_bundle_enrollments/matured", to: "insurance_loan_bundle_enrollments#matured"
+    post "/insurance_loan_bundle_enrollments/transferred", to: "insurance_loan_bundle_enrollments#transferred"
 
     # KPF Loan Clips
     post "/kpf_loan_clips/save", to: "kpf_loan_clips#save"

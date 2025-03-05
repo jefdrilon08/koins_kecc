@@ -12,7 +12,8 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
     "on-grace-period",
     "over-age",
     "resigned",
-    "matured"
+    "matured",
+    "transferred"
   ]
 
   belongs_to :center
@@ -28,6 +29,9 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
   scope :approved, -> { where(status: "approved").order("collection_date ASC") }
   scope :declined, -> { where(status: "declined").order("collection_date ASC") }
   scope :lapsed, -> { where(status: "lapsed").order("collection_date ASC") }
+  scope :resigned, -> { where(status: "resigned").order("collection_date ASC") }
+  scope :matured, -> { where(status: "matured").order("collection_date ASC") }
+  scope :transferred, -> { where(status: "transferred").order("collection_date ASC") }
 
   def load_defaults
     if self.status.blank?
@@ -109,6 +113,18 @@ class InsuranceLoanBundleEnrollment < ApplicationRecord
 
   def over_age?
     self.status == "over-age"
+  end
+
+  def resigned?
+    self.status == "resigned"
+  end
+
+  def matured?
+    self.status == "matured"
+  end
+
+  def transferred?
+    self.status == "transferred"
   end
 
   def member_ids
