@@ -75,6 +75,15 @@
           - elsif o.lapsed?
             .badge.bg-danger
               Lapsed
+          - elsif o.resigned?
+            .badge.bg-danger
+              Resigned
+          - elsif o.matured?
+            .badge.bg-danger
+              Matured
+          - elsif o.transferred?
+            .badge.bg-danger
+              Transferred
           - elsif o.for_renewal?
             .badge.bg-secondary
               For-Renewal

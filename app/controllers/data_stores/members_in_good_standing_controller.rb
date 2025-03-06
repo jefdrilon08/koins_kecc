@@ -102,7 +102,10 @@ module DataStores
     
     def members_in_good_standing_excel
       download_excel = ::MembersInGoodStanding::MigsDownloadExcel.new(record: params[:record]).execute!
-      filename = "members_in_good_standing.xlsx"
+      data_store = DataStore.find(params[:id])
+      @data = data_store.data.with_indifferent_access
+      @branch = @data.dig("branch", "name")
+      filename = "#{@branch}_members_in_good_standing.xlsx"
       download_excel.serialize "#{Rails.root}/tmp/#{filename}"
       send_file "#{Rails.root}/tmp/#{filename}", filename: filename, type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     end

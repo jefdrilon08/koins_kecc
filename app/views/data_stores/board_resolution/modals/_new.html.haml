@@ -10,14 +10,6 @@
           .row.gx-3
             .col-md-6
               .form-group.mb-3
-                %label{ for: "select-branch" } Branch
-                = select_tag :branch_id, 
-                  options_from_collection_for_select(@branches, :id, :name, @branch.try(:id)), 
-                  class: "form-select select-select2", id: "select-branch", 
-                  prompt: "-- SELECT BRANCH --", "data-placeholder" => "Choose a Branch", required: true
-
-            .col-md-6
-              .form-group.mb-3
                 %label{ for: "select-month" } Month
                 = select_tag :month, 
                   options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m] }), 

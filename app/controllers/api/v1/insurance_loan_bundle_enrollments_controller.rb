@@ -155,6 +155,86 @@ module Api
         end
       end
 
+      def resigned
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          user: current_user
+        }
+
+        if ["MIS", "OAS", "FM"].include? current_user.roles.last
+          errors  = InsuranceLoanBundleEnrollments::ValidateResigned.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Resigned.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
+      def matured
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          user: current_user
+        }
+
+        if ["MIS", "OAS", "FM"].include? current_user.roles.last
+          errors  = InsuranceLoanBundleEnrollments::ValidateMatured.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Matured.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
+
+      def transferred
+        insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.find(params[:id])
+        config = {
+          insurance_loan_bundle_enrollment: insurance_loan_bundle_enrollment,
+          user: current_user
+        }
+
+        if ["MIS", "OAS", "FM"].include? current_user.roles.last
+          errors  = InsuranceLoanBundleEnrollments::ValidateTransferred.new(
+                      config: config
+                    ).execute!
+
+          if errors[:messages].any?
+            render json: { errors: errors }, status: 400
+          else
+            insurance_loan_bundle_enrollment  = InsuranceLoanBundleEnrollments::Transferred.new(
+                                        config: config
+                                      ).execute!
+
+            render json: { message: "Successfully proceed claim" }
+          end
+        else
+          errors << "Unauthorized to perform this transaction"
+          render json: { message: "Unauthorized", errors: errors }, status: 401
+        end
+      end
 
       def remove_member
         insurance_loan_bundle_enrollment = InsuranceLoanBundleEnrollment.where(id: params[:id]).first

@@ -36,7 +36,7 @@ module InsuranceLoanBundleEnrollments
 
       @maturity_date                          = @last_effectivity_date.to_date + 2.year - 2.days
       @effectivity_date                       = @last_effectivity_date.to_date + 1.year - 1.day
-      @enrolled_status                        = "RENEWAL"
+      @enrolled_status                        = "FOR-RENEWAL"
       @plan_type                              = @previous_plan_type
       @plan_category                          = @previous_plan_category
       @client_type                            = @previous_client_type

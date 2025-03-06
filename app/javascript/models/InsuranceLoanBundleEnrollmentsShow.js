@@ -13,6 +13,19 @@ var $modalCheck;
 var $btnDeclined;
 var $btnConfirmDeclined;
 var $modalDeclined;
+
+var $btnResigned;
+var $btnConfirmResigned;
+var $modalResigned;
+
+var $btnMatured;
+var $btnConfirmMatured;
+var $modalMatured;
+
+var $btnTransferred;
+var $btnConfirmTransferred;
+var $modalTransferred;
+
 var $btnPending;
 var $btnConfirmPending;
 var $modalPending;
@@ -63,6 +76,9 @@ var _urlDelete             = "/api/v1/insurance_loan_bundle_enrollments/remove_m
 var _urlApprove            = "/api/v1/insurance_loan_bundle_enrollments/approve";
 var _urlCheckTransaction   = "/api/v1/insurance_loan_bundle_enrollments/check";
 var _urlDeclineTransaction = "/api/v1/insurance_loan_bundle_enrollments/declined";
+var _urlResignTransaction  = "/api/v1/insurance_loan_bundle_enrollments/resigned";
+var _urlMatureTransaction  = "/api/v1/insurance_loan_bundle_enrollments/matured";
+var _urlTransferTransaction  = "/api/v1/insurance_loan_bundle_enrollments/transferred";
 
 var _cacheDom = function() {
 
@@ -83,6 +99,12 @@ var _cacheDom = function() {
   $btnConfirmDeclined   = $("#btn-confirm-declined");
   $btnPending           = $("#btn-pending");
   $btnConfirmPending    = $("#btn-confirm-pending");
+  $btnResigned          = $("#btn-resigned");
+  $btnConfirmResigned   = $("#btn-confirm-resigned");
+  $btnMatured           = $("#btn-matured");
+  $btnConfirmMatured    = $("#btn-confirm-matured");
+  $btnTransferred           = $("#btn-transferred");
+  $btnConfirmTransferred    = $("#btn-confirm-transferred");
 
 
   $modalApprove = new bootstrap.Modal(
@@ -95,6 +117,18 @@ var _cacheDom = function() {
 
   $modalDeclined = new bootstrap.Modal(
     document.getElementById("modal-declined-confirmation")
+  );
+
+  $modalResigned = new bootstrap.Modal(
+    document.getElementById("modal-resigned-confirmation")
+  );
+
+  $modalMatured = new bootstrap.Modal(
+    document.getElementById("modal-matured-confirmation")
+  );
+
+  $modalTransferred = new bootstrap.Modal(
+    document.getElementById("modal-transferred-confirmation")
   );
   
   $selectMember             = $("#select-member");
@@ -154,7 +188,7 @@ var _bindEvents = function() {
       $inputCivilStatus.hide();
     }
 
-  //prind pdf
+  //print pdf
   $btnPrint.on("click", function() {
     $modalPrint.show();
 
@@ -179,6 +213,24 @@ var _bindEvents = function() {
   // declined
   $btnDeclined.on("click", function() {
     $modalDeclined.show();
+    $message.html("");
+  });
+
+  // resigned
+  $btnResigned.on("click", function() {
+    $modalResigned.show();
+    $message.html("");
+  });
+
+  // matured
+  $btnMatured.on("click", function() {
+    $modalMatured.show();
+    $message.html("");
+  });
+
+  // transfer
+  $btnTransferred.on("click", function() {
+    $modalTransferred.show();
     $message.html("");
   });
 
@@ -340,6 +392,126 @@ var _bindEvents = function() {
           );
 
           $btnConfirmCheck.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  //Resigned
+  $btnConfirmResigned.on("click", function() {
+    $btnConfirmResigned.prop("disabled", true);
+
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken
+    };
+
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlResignTransaction,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmResigned.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  //Matured
+  $btnConfirmMatured.on("click", function() {
+    $btnConfirmMatured.prop("disabled", true);
+
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken
+    };
+
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlMatureTransaction,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmMatured.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  //Transfer
+  $btnConfirmTransferred.on("click", function() {
+    $btnConfirmTransferred.prop("disabled", true);
+
+    var data  = {
+      id: _id,
+      authenticity_token: _authenticityToken
+    };
+
+    $message.html("Loading...");
+
+    $.ajax({
+      url: _urlTransferTransaction,
+      method: 'POST',
+      data: data,
+      success: function(response) {
+        $message.html("Success! Reloading...");
+        window.location.reload();
+      },
+      error: function(response) {
+        var errors = [];
+
+        try {
+          errors = JSON.parse(response.responseText).errors.full_messages;
+        } catch(err) {
+          errors.push("Something went wrong.");
+        } finally {
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmTransferred.prop("disabled", false);
         }
       }
     });
