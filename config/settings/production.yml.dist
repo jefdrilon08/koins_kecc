@@ -413,14 +413,14 @@ memberships:
     name: "K-KOOP"
     type: "Cooperative"
     is_main: true
-    fee: 20.00
+    fee: 200.00
     accounting_code_id: "670af83a-e34d-4838-9c0f-23584c0f1a6a"
     payment_default: true
   -
     name: "K-MBA"
     type: "Insurance"
     is_main: true
-    fee: 100.00
+    fee: 0.00
     accounting_code_id: "cb25d3d2-f708-49b2-b9ec-2babf2118391"
     payment_default: false
 
