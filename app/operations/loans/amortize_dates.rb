@@ -30,13 +30,19 @@ module Loans
           current_date =  current_date + 1.month
         end
       elsif @term == "semi-monthly"
-        @amorts.each do |o|
-          o.update!(
-            due_date: current_date
-          )
-
-          current_date =  current_date + 15.days
+        @amorts.each_with_index do |o, i|
+          due_day = i.even? ? 15 : current_date.end_of_month.day
+          due_date = current_date.change(day: due_day)
+          o.update!(due_date: due_date)
+          current_date = current_date.next_month if i.odd?
         end
+        #@amorts.each do |o|
+        #  o.update!(
+        #    due_date: current_date
+        #  )
+
+         # current_date =  current_date + 15.days
+        #end
       end
 
       ::Loans::UpdateMaturityDate.new(

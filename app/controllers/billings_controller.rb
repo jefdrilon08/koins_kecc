@@ -115,14 +115,14 @@ class BillingsController < ApplicationController
 
           end
 
-          if @data[:save]["id"] != current_user.id and helpers.is_cm_mis?
+          if current_user.id and helpers.is_cm_mis?
             @subheader_side_actions << {
               id: "btn-check",
               link: "#",
               class: "fa fa-check",
               text: "Check"
             }
-          elsif @data[:save]["id"] != current_user.id and helpers.is_mis_fm?
+          elsif current_user.id and helpers.is_mis_fm?
             @subheader_side_actions << {
                 id: "btn-check",
                 link: "#",

@@ -222,7 +222,18 @@ module Loans
       # Deductions
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
-        if deduction_type == "share_capital_fee"
+        if deduction_type == "application_fee"
+          accounting_code = AccountingCode.find(s_deduction.accounting_code_id)
+          amount          = s_deduction.amount
+          journal_entries << {
+            accounting_code_id: accounting_code.id,
+            code: accounting_code.code,
+            name: accounting_code.name,
+            amount: amount
+          }
+          temp_amount -= amount
+
+        elsif deduction_type == "share_capital_fee"
             total_member_shares = MemberAccount.where(member_id: @member.id, account_subtype: "Share Capital").last.balance.to_f / 100.0
             
             @share_capital_deposit = Settings.defaults["share_capital_deposits"].last["regular_share_deposits"].select{ |a|   @loan.principal.to_f >= a["min_amount"]  and @loan.principal.to_f <= a["max_amount"]}

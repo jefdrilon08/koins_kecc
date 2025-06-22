@@ -1,7 +1,6 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
-
   root to: "pages#index"
   devise_for :users, skip: [:sessions]
 

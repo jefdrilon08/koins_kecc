@@ -28,7 +28,7 @@ module Billings
 
       @active_loans = ReadOnlyLoan.active.where(member_id: @member.id)
 
-      @members  = ReadOnlyMember.active_and_involutary.where(center_id: @member.center.id)
+      @members  = ReadOnlyMember.active.where(center_id: @member.center.id)
       valid_loan_product_ids  = ReadOnlyLoan.active.where(member_id: @members.pluck(:id)).pluck(:loan_product_id).uniq
 
       @entry_point_loan_products      = ReadOnlyLoanProduct.entry_point.where(id: valid_loan_product_ids)

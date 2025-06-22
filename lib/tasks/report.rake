@@ -45,7 +45,11 @@ namespace :report do
             interest_balance = rec['interest_balance']
             total_paid = rec['total_paid']
             principal_due = rec['principal_due']
-            totalRR = [rec['principal_paid_due'] / principal_due, 1].min
+            totalRR = if principal_due.to_f > 0 
+              [rec['principal_paid_due'] / principal_due, 1].min
+            else
+              0.0
+            end
             rr_percentage = (totalRR / 1) * 100
             num_days_par = rec['num_days_par']
             par = rec['par']

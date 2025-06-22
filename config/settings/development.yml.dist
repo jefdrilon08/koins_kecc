@@ -943,7 +943,7 @@ branch_accounting_codes:
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
   -
-    branch_id: "6a8b4597-af32-4daa-8484-508ae8790f26"                              #trecemartires
+    branch_id: "599b0669-3d9b-4f62-b812-d07b613ce0d6"                              #trecemartires
     cash_in_bank_accounting_code_id: "7a57b55f-2f43-4f8d-84ff-1b9750fff669"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"

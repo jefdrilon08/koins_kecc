@@ -648,10 +648,46 @@ export default class ApplicationFormComponent extends React.Component {
           18
         </option>
       );
+      
+      termItems.push(
+        <option value={20} key={"semi-monthly-" + 20}>
+          20
+        </option>
+      );
 
       termItems.push(
         <option value={24} key={"semi-monthly-" + 24}>
           24
+        </option>
+      );
+      termItems.push(
+        <option value={36} key={"semi-monthly-" + 36}>
+          36
+        </option>
+      );
+      termItems.push(
+        <option value={40} key={"semi-monthly-" + 40}>
+          40
+        </option>
+      );
+      termItems.push(
+        <option value={72} key={"semi-monthly-" + 72}>
+          72
+        </option>
+      );
+      termItems.push(
+        <option value={80} key={"semi-monthly-" + 80}>
+          80
+        </option>
+      );
+      termItems.push(
+        <option value={48} key={"semi-monthly-" + 48}>
+          48
+        </option>
+      );
+      termItems.push(
+        <option value={96} key={"semi-monthly-" + 96}>
+          96
         </option>
       );
       termItems.push(

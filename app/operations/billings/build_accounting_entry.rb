@@ -9,6 +9,9 @@ module Billings
       @user             = @config[:user]
       @collection_date  = @config[:collection_date].try(:to_date) || Date.today
       @data             = @config[:data].with_indifferent_access
+        
+    
+
 
       @center           = @config[:center]
 

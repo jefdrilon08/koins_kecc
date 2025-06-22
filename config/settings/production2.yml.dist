@@ -880,7 +880,7 @@ equity_accounting_codes:
 branch_accounting_codes:
   -
     branch_id: "599b0669-3d9b-4f62-b812-d07b613ce0d6"                              #ceu
-    cash_in_bank_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
+    cash_in_bank_accounting_code_id: "32dbabd2-b165-4fc4-91d5-4b140654ccde"
     withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -1060,7 +1060,7 @@ loan_products:
         meta:
           
   -
-    loan_product_id: "54630b06-b9e9-418e-aa19-80fdcfc58357"                         # short Loan
+    loan_product_id: "a4c77ebb-2bfd-48d4-83a1-0ba7076025f1"                         # short Loan
     receivable_accounting_code_id: "bf306bb2-55cf-4f05-80ce-8933f190771e"
     interest_receivable_accounting_code_id: "fa98582d-45eb-4e2e-b355-ce1e05c050cd"
     default_amount: 7000.00
@@ -1372,84 +1372,6 @@ loan_products:
         deduction_type: "application_fee"
         meta: 
   -
-    loan_product_id: "e6345340-af7e-40fe-8c87-823d910d053c"                         # LOVE LOAN B
-    receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
-    interest_receivable_accounting_code_id: "37bc5013-9a2b-42a2-a904-0747f8f6d276"
-    default_amount: 7000.00
-    maintaining_balance:
-      account_type: "SAVINGS"
-      account_subtype: "K-IMPOK"
-      percentage: 0.2
-      threshold: 0.00
-    midas:
-      contract_type: 22
-      contract_phase: "AC"
-      transaction_type: "NA"
-      loan_purpose: "ET"
-    deductions:
-      -
-        name: "Service Fee - Love Loan B"
-        accounting_code_id: "fea5c808-a5d8-413d-8bcf-df21755b2fb8"
-        amount: 0.00
-        sms_amount_status: true
-        sms_amount: 10.00
-        skip_term_map: false
-        deduction_type: "member_type_deduction_ratio"
-        skip_for_membership_type_status: true
-        skip_for_membership_type: ["K-PWD"]
-        business_permit_available: true
-        business_permit_amount: 500
-        skip_for_special_loan_fund: "true"
-        use_for_special_loan_fund: "true"
-        meta:
-          member_type: "Regular"
-          term_map:
-            weekly:
-              -
-                num_installments: 15
-                ratio: 0.02
-              -
-                num_installments: 25
-                ratio: 0.02
-              -
-                num_installments: 35
-                ratio: 0.02
-              -
-                num_installments: 50
-                ratio: 0.02
-            monthly:
-              -
-                num_installments: 3
-                ratio: 0.02
-              -
-                num_installments: 6
-                ratio: 0.02
-              -
-                num_installments: 9
-                ratio: 0.02
-              -
-                num_installments: 12
-                ratio: 0.02
-            semi_monthly:
-              -
-                num_installments: 6
-                ratio: 0.02
-              -
-                num_installments: 12
-                ratio: 0.02
-              -
-                num_installments: 18
-                ratio: 0.02
-              -
-                num_installments: 24
-                ratio: 0.02
-      -
-        name: "Application Fee - Love Loan B"
-        accounting_code_id: "1276b743-9367-42cc-aa1e-67c2b1d1f075"
-        amount: 20
-        deduction_type: "application_fee"
-        meta: 
-  -
     loan_product_id: "34b41bbe-d544-4ab3-87c3-f5e012df25ce"                         # SPECIAL LOAN
     receivable_accounting_code_id: "9157776a-311f-426e-8df6-a24c4e6f9aed"
     interest_receivable_accounting_code_id: "72848c18-c60c-4145-b22e-53706814ec4e"
@@ -1555,10 +1477,6 @@ loan_product_accounting_codes:
     loan_product_id: "b136150d-98ca-42e8-8cf1-80a2a6a950ce"                         # LOVE LOAN A
     receivable_accounting_code_id: "d3a5d237-59d1-4a9d-84d0-1bebf7a0d95f"
     interest_receivable_accounting_code_id: "6cc59109-3bac-434d-8fec-eee2bab6549f"
-  -
-    loan_product_id: "e6345340-af7e-40fe-8c87-823d910d053c"                         # LOVE LOAN B
-    receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
-    interest_receivable_accounting_code_id: "37bc5013-9a2b-42a2-a904-0747f8f6d276"
   -   
     loan_product_id: "34b41bbe-d544-4ab3-87c3-f5e012df25ce"                         # SPECIAL LOAN
     receivable_accounting_code_id: "9157776a-311f-426e-8df6-a24c4e6f9aed"
@@ -1589,10 +1507,6 @@ loan_product_accounting_codes_for_writeoff:
     loan_product_id: "b136150d-98ca-42e8-8cf1-80a2a6a950ce"                         # LOVE LOAN A
     receivable_accounting_code_id: "d3a5d237-59d1-4a9d-84d0-1bebf7a0d95f"
     allowance_for_impairment_losses_accounting_code_id: "6cc59109-3bac-434d-8fec-eee2bab6549f"
-  -
-    loan_product_id: "e6345340-af7e-40fe-8c87-823d910d053c"                         # LOVE LOAN B
-    receivable_accounting_code_id: "a1b06b10-9830-4b63-9516-e657fb15978a"
-    allowance_for_impairment_losses_accounting_code_id: "cc14648f-4b94-4d45-a6fe-9b679673f0ed"
   -
     loan_product_id: "34b41bbe-d544-4ab3-87c3-f5e012df25ce"                         # SPECIAL LOAN
     receivable_accounting_code_id: "9157776a-311f-426e-8df6-a24c4e6f9aed"

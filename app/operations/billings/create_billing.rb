@@ -22,8 +22,8 @@ module Billings
       end
       #if @billing.data['billing_type'].present?
       #  if @billing.data['billing_type'] == "regular"
-          #@members  = ReadOnlyMember.active.where(center_id: @center.id)
-          @members  = ReadOnlyMember.active_and_involutary.where(center_id: @center.id)
+          @members  = ReadOnlyMember.active.where(center_id: @center.id)
+          #@members  = ReadOnlyMember.active_and_involutary.where(center_id: @center.id)
           
       #  elsif @billing.data['billing_type'] == "for-involutary"
       #    @members  = ReadOnlyMember.resigned.where("center_id = ? AND (data -> 'resignation' ->> 'type') = ?", @center.id, "involuntary")
@@ -94,7 +94,7 @@ module Billings
 
       end
       load_headers_and_totals!
-
+    
       # Load accounting entry
       @data[:accounting_entry]  = ::Billings::BuildAccountingEntry.new(
                                     config: {
