@@ -39,8 +39,7 @@ vendor/bundle/
 # Ignore node modules
 /node_modules
 
-# Ignore backup directory
-/db_backup
+
 
 # Ignore react generated files
 /app/assets/javascripts/*.react.js
