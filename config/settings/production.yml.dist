@@ -605,7 +605,7 @@ time_deposit:
       premature_interest_rate_with_loans: 0.000416667
 
   deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
-  withdraw_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+  withdraw_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   interest_accounting_code_id: ""
 
 defaults:
@@ -809,11 +809,11 @@ insurance_accounting_codes:
     withdrawal_accounting_code_id: ""
   -
     insurance_type: "K-BENTE"
-    deposit_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    deposit_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
     withdrawal_accounting_code_id: ""
   -
     insurance_type: "K-KALINGA"
-    deposit_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    deposit_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
     withdrawal_accounting_code_id: ""
 
 
@@ -843,23 +843,23 @@ savings_accounting_codes:
   -
     savings_type: "K-IMPOK"
     deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     savings_type: "Golden K"
     deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     savings_type: "Savings Investment Fund"
     deposit_accounting_code_id: "b14ce0e7-05f1-4a72-8627-b84f8aa2f9f3"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     savings_type: "Maintaining Balance Savings"
     deposit_accounting_code_id: "1e849571-b1e3-49d8-af5d-2bcbb4b5c314"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     savings_type: "Personal Savings Account"
     deposit_accounting_code_id: "ba2c06dc-749a-4ca3-b09c-950669385126"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     savings_type: "Time Deposit"
     deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
@@ -873,7 +873,7 @@ equity_accounting_codes:
   -
     equity_type: "CBU"
     deposit_accounting_code_id: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
-    withdrawal_accounting_code_id: "84c56c8d-803c-4a30-9720-ad90c4e30abc"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
 
 
 
@@ -970,6 +970,15 @@ loan_products:
                 num_installments: 48
                 ratio: 0.02
               -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
                 num_installments: 96
                 ratio: 0.02
       -
@@ -1052,6 +1061,21 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
       -
         name: " Application Fee - Travel Loan"
         accounting_code_id: "6d1c23d2-1768-4e9d-839c-7c99eff2479b"
@@ -1131,6 +1155,21 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
       -
         name: "Application Fee - Short Term"
         accounting_code_id: "40a7013d-c0f5-4dde-9e66-403a2ab663e2"
@@ -1208,6 +1247,21 @@ loan_products:
                 ratio: 0.02
               -
                 num_installments: 24
+                ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
                 ratio: 0.02
       -
         name: "Application Fee - Hospitalization"
@@ -1287,6 +1341,21 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
       -
         name: "Application Fee - Livelihood Loan"
         accounting_code_id: "1fb892cd-e9ff-4ce6-9272-ad11e82b555d"
@@ -1342,29 +1411,47 @@ loan_products:
             monthly:
               -
                 num_installments: 3
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 6
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 9
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.02
+                ratio: 0.01
             semi_monthly:
               -
                 num_installments: 6
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 12
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 18
-                ratio: 0.02
+                ratio: 0.01
               -
                 num_installments: 24
-                ratio: 0.02
+                ratio: 0.01
+              -
+                num_installments: 36
+                ratio: 0.01
+              -
+                num_installments: 48
+                ratio: 0.01
+              -
+                num_installments: 50
+                ratio: 0.01
+              -
+                num_installments: 72
+                ratio: 0.01
+              -
+                num_installments: 80
+                ratio: 0.01
+              -
+                num_installments: 96
+                ratio: 0.01
       -
         name: "Application Fee - Love Loan A"
         accounting_code_id: "02abc997-85c7-4848-ba94-651ce8729bc1"
@@ -1442,6 +1529,21 @@ loan_products:
                 ratio: 0.02
               -
                 num_installments: 24
+                ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
                 ratio: 0.02
       -
         name: "Application Fee - Love Loan B"
@@ -1521,12 +1623,214 @@ loan_products:
               -
                 num_installments: 24
                 ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
       -
         name: "Application Fee - Special"
         accounting_code_id: "a7d5f55a-de53-452a-866e-cf75cb57ac13"
         amount: 20
         deduction_type: "application_fee"
         meta:
+  -
+    loan_product_id: "6a329925-0344-46f2-bd9a-72b4cdc1f55c"                         # Birthday
+    receivable_accounting_code_id: "efc4c77e-24d9-4c5f-875b-36ca74ced03d"
+    interest_receivable_accounting_code_id: "2eb6206d-6773-4f87-911d-24e8c2c7b002"
+    default_amount: 7000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
+    deductions:
+      -
+        name: "Service Fee - Birthday Loan"
+        accounting_code_id: "605bd7bb-7ca5-458d-b7df-3a3b75d80939"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.02
+              -
+                num_installments: 35
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.02
+              -
+                num_installments: 6
+                ratio: 0.02
+              -
+                num_installments: 9
+                ratio: 0.02
+              -
+                num_installments: 12
+                ratio: 0.02
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.02
+              -
+                num_installments: 12
+                ratio: 0.02
+              -
+                num_installments: 18
+                ratio: 0.02
+              -
+                num_installments: 24
+                ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
+      -
+        name: "Application Fee - Birthday Loan"
+        accounting_code_id: "6d1c23d2-1768-4e9d-839c-7c99eff2479b"
+        amount: 20
+        deduction_type: "application_fee"
+        meta:
+  -
+    loan_product_id: "81bc3e78-f0e5-4060-9a2e-479f60f13a14"                         # Medical Loan
+    receivable_accounting_code_id: "b6b8f234-f2cf-4a6e-b22a-e0fbce25d6da"
+    interest_receivable_accounting_code_id: "71f7aae7-9e8d-4d62-91f9-a91d87f9d978"
+    default_amount: 7000.00
+    maintaining_balance:
+      account_type: "SAVINGS"
+      account_subtype: "K-IMPOK"
+      percentage: 0.2
+      threshold: 0.00
+    midas:
+      contract_type: 22
+      contract_phase: "AC"
+      transaction_type: "NA"
+      loan_purpose: "ET"
+    deductions:
+      -
+        name: "Service Fee - Medical Loan"
+        accounting_code_id: "1cf33ca9-d7f0-418c-af1e-97984b1c3174"
+        amount: 0.00
+        sms_amount_status: true
+        sms_amount: 10.00
+        skip_term_map: false
+        deduction_type: "member_type_deduction_ratio"
+        skip_for_membership_type_status: true
+        skip_for_membership_type: ["K-PWD"]
+        business_permit_available: true
+        business_permit_amount: 500
+        skip_for_special_loan_fund: "true"
+        use_for_special_loan_fund: "true"
+        meta:
+          member_type: "Regular"
+          term_map:
+            weekly:
+              -
+                num_installments: 15
+                ratio: 0.02
+              -
+                num_installments: 25
+                ratio: 0.02
+              -
+                num_installments: 35
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+            monthly:
+              -
+                num_installments: 3
+                ratio: 0.02
+              -
+                num_installments: 6
+                ratio: 0.02
+              -
+                num_installments: 9
+                ratio: 0.02
+              -
+                num_installments: 12
+                ratio: 0.02
+            semi_monthly:
+              -
+                num_installments: 6
+                ratio: 0.02
+              -
+                num_installments: 12
+                ratio: 0.02
+              -
+                num_installments: 18
+                ratio: 0.02
+              -
+                num_installments: 24
+                ratio: 0.02
+              -
+                num_installments: 48
+                ratio: 0.02
+              -
+                num_installments: 50
+                ratio: 0.02
+              -
+                num_installments: 72
+                ratio: 0.02
+              -
+                num_installments: 80
+                ratio: 0.02
+              -
+                num_installments: 96
+                ratio: 0.02
+      -
+        name: "Application Fee - Medical Loan"
+        accounting_code_id: "b25b2c9c-e4f5-40d7-adfd-e29e13eb56d8"
+        amount: 20
+        deduction_type: "application_fee"
+        meta:
+          
 
 
 
