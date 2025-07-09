@@ -57,6 +57,26 @@ module Loans
     end
     
     def execute!
+
+        if  @loan_data[:paid_loans].present?
+            @loan_data[:data] ||= {}
+            @loan_data[:data][:paid_loans] = @loan_data[:paid_loans]
+        end
+
+      if @loan_data[:paid_loan].present?
+          paid = @loan_data[:paid_loan]
+
+          @loan_data[:data] ||= {}
+          @loan_data[:data][:paid_loan] = {
+            loan_product_id: paid[:loan_product_id] || nil,
+            total_paid:      paid[:total_paid]      || 0,
+            interest_paid:   paid[:interest_paid]   || 0,
+            principal_paid:  paid[:principal_paid]  || 0,
+            total_balance:   paid[:total_balance]   || 0
+          }
+      end
+
+
       @loan.pn_number         = @loan_data[:pn_number]
       @loan.date_prepared     = @loan_data[:date_prepared]
       @loan.date_released     = @loan_data[:date_released]

@@ -362,4 +362,25 @@ class LoansController < ApplicationController
       "due_date ASC"
     )
   end
+
+
+  def active_loans
+    @member = Member.find(params[:member_id])
+    active_loans = Loan.where(member_id: @member.id, status: 'active')
+
+    if active_loans.any?
+      render json: {
+        message: "ok",
+        count: active_loans.count,
+        loans: active_loans.as_json(only: [:id, :member_id, :loan_product_id, :principal_balance, :interest_balance],include: {
+            loan_product: {
+              only: [:name]
+            }
+          })
+      }
+    else
+    render json: { message: "no active loan found" }, status: :not_found
+  end
+  
+  end
 end

@@ -622,7 +622,7 @@ module Api
         loan_data = JSON.parse(params[:payload]).with_indifferent_access
         
         #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access 
-
+        paid_loans = loan_data[:data][:paid_loans] || {}
         payment_type = params[:payment_type]
         sub_type = params[:sub_type]
 

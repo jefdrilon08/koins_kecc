@@ -9,6 +9,20 @@ export const customStyles = {
   }
 };
 
+export const customEntryStyle = {
+  content: {
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '20px',
+    width: '350px',
+    marginBottom :'180px'
+  }
+};
+
+
+
+
 export const months = [
   { value: 1, label: "January" },
   { value: 2, label: "February" },

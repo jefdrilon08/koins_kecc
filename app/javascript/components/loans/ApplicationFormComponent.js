@@ -11,6 +11,8 @@ import ApplicationFormFinancialInformation from './ApplicationFormFinancialInfor
 import ApplicationFormCLIPBeneficiary from './ApplicationFormCLIPBeneficiary';
 import ApplicationFormProjectType from './ApplicationFormProjectType';
 import ApplicationTransferOption from './ApplicationTransferOption';
+import ApplicationFormActiveLoans from './ApplicationFormActiveLoans';
+
 
 export default class ApplicationFormComponent extends React.Component {
   constructor(props) {
@@ -41,6 +43,7 @@ export default class ApplicationFormComponent extends React.Component {
       isMobileNumberExist: false,
       paymentType: "",
       subType: "",
+      paidLoansFromChild: [],
       errors: false
     };
   }
@@ -391,14 +394,39 @@ export default class ApplicationFormComponent extends React.Component {
     this.updateData(data);
   }
 
+// handleSaveClick = () => {
+//   const { paidLoansFromChild } = this.state;
+
+//   alert("Paid loans received from child:\n" + JSON.stringify(paidLoansFromChild, null, 2));
+// };
+
+
+handlePaidLoans = (paidLoans) => {
+
+  this.setState(prev => ({
+    paidLoansFromChild: paidLoans,
+        data: {
+          ...prev.data,
+          paid_loans: paidLoans 
+        }
+      }), () => {
+        console.log("State updated with paid_loans array:", this.state.data.paid_loans);
+      });
+    };
+
   handleSave() {
     const context = this;
     const state   = context.state;
 
+    if (!state.data.paid_loans || state.data.paid_loans.length === 0) {
+    alert("Active loans are required.");
+    return;
+  }
+
+
     this.setState({
       isSaving: true
     });
-
     const formData = new FormData();
 
     if(state.coMakerProfilePicture) {
@@ -1280,6 +1308,27 @@ export default class ApplicationFormComponent extends React.Component {
                 disabled={this.state.isSaving || this.state.isActive}
                 data={this.state.data}
               />
+            </div>
+          </div>
+          {/* Active Loan */}
+          <h5>
+            Active Loan
+          </h5>
+          <div className="card">
+            <div className="card-body">
+            <ApplicationFormActiveLoans
+                memberId={this.props.memberId}
+                activeLoans={this.state.activeLoans}
+                  onPaidLoansExtracted={this.handlePaidLoans}
+                  // onPaidLoansExtracted={(data) => console.log(data)}
+              />
+              {/* <button
+                className="btn btn-primary"
+                onClick={this.handleSaveClick}
+              >
+                <span className="bi bi-check" />
+                Save
+              </button> */}
             </div>
           </div>
           <hr/>
