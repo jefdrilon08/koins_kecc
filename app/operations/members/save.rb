@@ -26,6 +26,7 @@ module Members
     end
 
     def execute!
+      @member.identification_number = @member_data[:identification_number]
       @member.first_name      = @member_data[:first_name]
       @member.middle_name     = @member_data[:middle_name]
       @member.last_name       = @member_data[:last_name]

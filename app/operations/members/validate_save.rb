@@ -15,6 +15,15 @@ module Members
     end
 
     def execute!
+
+      # Validate Identification Number
+      if @member_data[:identification_number].blank?
+        @errors[:messages] << {
+          key: "identification_number",
+          message: "Identification number required"
+        }
+      end
+
       # Validate first_name
 
       if @member_data[:first_name].blank?

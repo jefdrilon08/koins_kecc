@@ -64,6 +64,13 @@ export default class FormPersonalInfo extends React.Component {
     }
   }
 
+  handleIdentificationNumberChanged(event) {
+    var data = this.props.data;
+    data.identification_number = event.target.value ? event.target.value.toUpperCase() : "";
+
+    this.props.updateData(data);
+  }
+
   handleFirstNameChanged(event) {
     var data        = this.props.data;
     data.first_name = event.target.value ? event.target.value.toUpperCase() : "";
@@ -478,6 +485,15 @@ export default class FormPersonalInfo extends React.Component {
       <div>
         <div className="row">
           <div className="col">
+            <div className="form-group">
+              <label>Identification Number</label>
+              <input
+                value={this.props.data.identification_number}
+                className="form-control"
+                onChange={this.handleIdentificationNumberChanged.bind(this)}
+                disabled={this.props.formDisabled}
+              />
+            </div>
             <div className="form-group">
               <label>Pangalan</label>
               <input
