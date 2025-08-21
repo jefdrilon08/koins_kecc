@@ -1267,7 +1267,7 @@ export default class ApplicationFormComponent extends React.Component {
               />
             </div>
           </div>
-          <h5>
+          {/* <h5>
             Project Type
           </h5>
           <div className="card">
@@ -1281,7 +1281,7 @@ export default class ApplicationFormComponent extends React.Component {
                 data={this.state.data}
               />
             </div>
-          </div>
+          </div> */}
           <hr/>
           <h5>
             Bank Transfer
