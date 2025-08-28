@@ -14,6 +14,17 @@ export default function MembersProfileInsurance(props) {
       .catch(error => console.error(error));
   }, []);
 
+   useEffect(() => {
+    console.log("Roles from props:", props.roles);
+  }, [props.roles]);
+
+  const isMisUser = props.roles?.includes("MIS");
+
+   // Calculate total for visible rows only
+  const visibleTotal = props.records
+    .filter(o => isMisUser || o.type === "Credit Life Insurance Plan")
+    .reduce((sum, o) => sum + Number(o.balance || 0), 0);
+
 
   return (
     <table className="table table-bordered table-hover table-sm">
@@ -39,7 +50,9 @@ export default function MembersProfileInsurance(props) {
         </tr>
       </thead>
       <tbody>
-        {props.records.map((o) => {
+        {props.records
+          .filter(o => isMisUser || o.type === "Credit Life Insurance Plan")
+          .map((o) => {
           return (
             <tr key={`insurance-${o.id}`}>
               <td>
@@ -63,7 +76,8 @@ export default function MembersProfileInsurance(props) {
           </td>
           <td className="text-end">
             <strong>
-              {props.total}
+              {/* {props.total} */}
+              {visibleTotal}
             </strong>
           </td>
         </tr>
