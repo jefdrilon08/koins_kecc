@@ -122,7 +122,7 @@ export default class FormApplicationHeader extends React.Component {
                 <br/>
               </div>
             </div>
-            <div className="col-md-3 col-xs-12">
+            {/* <div className="col-md-3 col-xs-12">
               <div className="form-group">
                 <label>
                   Arrangement
@@ -134,7 +134,7 @@ export default class FormApplicationHeader extends React.Component {
                   disabled={this.props.formDisabled}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

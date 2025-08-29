@@ -155,14 +155,14 @@ module Members
         }
       end
 
-      if Settings.activate_microloans
-        if @membership_arrangement.blank?
-          @errors[:messages] << {
-            key: "membership_arrangement_id",
-            message: "Membership arrangement not found"
-          }
-        end
-      end
+      # if Settings.activate_microloans
+      #   if @membership_arrangement.blank?
+      #     @errors[:messages] << {
+      #       key: "membership_arrangement_id",
+      #       message: "Membership arrangement not found"
+      #     }
+      #   end
+      # end
 
       if @membership_type.blank?
         @errors[:messages] << {
