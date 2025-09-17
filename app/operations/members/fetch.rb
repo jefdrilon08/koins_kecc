@@ -45,6 +45,7 @@ module Members
           num_years: 0,
           proof: ""
         },
+        principal_borrower: [],
         banks: [],
         # legal_dependents: [],
         beneficiaries: [],

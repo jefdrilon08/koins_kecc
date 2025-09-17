@@ -448,23 +448,58 @@ module Api
         render json: { loan_products: loan_products }
       end
 
-      def member_co_makers
-        member    = Member.find(params[:id])
-        co_makers = []
+    def get_members
+      members = Member
+                  .joins(:branch)
+                  .select("members.id, members.first_name, members.middle_name, members.last_name, branches.name AS branch_name")
+                  .order("members.last_name, members.first_name, members.middle_name")
 
-        Member.active.where(center_id: member.center.id).where.not(id: member.id).each do |o|
-          co_makers << {
-            value: o.id,
-            label: o.full_name,
-            id: o.id,
-            first_name: o.first_name,
-            middle_name: o.middle_name,
-            last_name: o.last_name
-          }
-        end
+      render json: members.map { |m|
+        {
+          id: m.id,
+          name: [
+            m.last_name,
+            [m.first_name, m.middle_name].reject(&:blank?).join(' ')
+          ].reject(&:blank?).join(', ')
+        }
+      }
+    end
 
-        render json: { co_makers: co_makers }
+    def principal_borrowers_active_count
+      member = Member.find(params[:id])
+
+      data    = member.data.present? ? member.data.with_indifferent_access : {}
+      records = Array.wrap(data[:principal_borrower])
+
+      # Count principal borrower records with loan_status == "active"
+      active_count = records.count do |pb|
+        pb.to_h.with_indifferent_access[:loan_status].to_s.strip.downcase == "active"
       end
+
+      render json: { active_count: active_count }
+    end
+
+
+
+
+
+      # def member_co_makers
+      #   member    = Member.find(params[:id])
+      #   co_makers = []
+
+      #   Member.active.where(center_id: member.center.id).where.not(id: member.id).each do |o|
+      #     co_makers << {
+      #       value: o.id,
+      #       label: o.full_name,
+      #       id: o.id,
+      #       first_name: o.first_name,
+      #       middle_name: o.middle_name,
+      #       last_name: o.last_name
+      #     }
+      #   end
+
+      #   render json: { co_makers: co_makers }
+      # end
 
       def delete_survey_answer
         survey_answer = SurveyAnswer.where(id: params[:id]).first
