@@ -36,7 +36,8 @@ export default class AccountingEntryComponent extends React.Component {
         console.log(response);
         context.setState({
           isLoading: false,
-          data: response.loan
+          data: response.loan,
+          accountingCodes: response.accounting_codes
         });
       },
       error: function(response) {
@@ -46,7 +47,10 @@ export default class AccountingEntryComponent extends React.Component {
     });
   }
 
-  
+  handleAccountingCodeClick(entry) {
+    console.log("Clicked Entry:", entry);
+    alert(`You clicked on ${entry.accounting_code_name} with amount ${entry.amount}`);
+  }  
 
   renderErrorDisplay() {
     if(this.state.errors) {
@@ -118,6 +122,8 @@ export default class AccountingEntryComponent extends React.Component {
         <div>
           {/* Accounting Entry Preview for the regular accounting entry */}
           <AccountingEntryPreview
+            id={this.state.data.id}
+            loanstatus={this.state.data.status}
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
             datePrepared={accounting_entry_data.date_prepared}
@@ -130,6 +136,8 @@ export default class AccountingEntryComponent extends React.Component {
             isLoading={this.state.isLoading}
             handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
+            handleEntryClick={this.handleAccountingCodeClick.bind(this)}
+            accountingCodes={this.state.accountingCodes}
           />
           
           {/* Only render AccountingEntryPreviewForFullPayment if there are full payment entries */}

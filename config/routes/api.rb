@@ -504,6 +504,8 @@ namespace :api do
     post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
     post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
     post "/loans/fraud_save", to: "loans#fraud_save"
+    post "/loans/edit_entry_amount", to: "loans#edit_entry_amount"
+    post "/loans/edit_accounting_name", to: "loans#edit_accounting_name"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"
