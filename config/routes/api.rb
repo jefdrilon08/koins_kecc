@@ -628,6 +628,9 @@ namespace :api do
     post "/membership_payment_collections/remove_member", to: "membership_payment_collections#remove_member"
 
     # Deposit Collection
+    get  "/deposit_collections/fetch_accounting_codes", to: "deposit_collections#fetch_accounting_codes"
+    post "/deposit_collections/edit_accounting_name",   to: "deposit_collections#edit_accounting_name"
+    post "/deposit_collections/edit_entry_amount",      to: "deposit_collections#edit_entry_amount"
     post "/deposit_collections", to: "deposit_collections#create"
     post "/deposit_collections/modify_transaction_record", to: "deposit_collections#modify_transaction_record"
     post "/deposit_collections/approve", to: "deposit_collections#approve"

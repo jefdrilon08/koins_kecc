@@ -17,7 +17,8 @@ export default class DepositCollectionUIComponent extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
-      data: false
+      data: false,
+      accountingCodes: []
     };
   }
 
@@ -39,6 +40,18 @@ export default class DepositCollectionUIComponent extends React.Component {
           isLoading: false,
           data: response
         });
+
+      $.ajax({
+        url: "/api/v1/deposit_collections/fetch_accounting_codes",
+        method: "GET",
+        success: function(res) {
+          const codes = (res.accounting_codes || []).map(c => ({ id: c.id, name: c.name }));
+          context.setState({ accountingCodes: codes });
+        },
+        error: function() {
+          console.log("Failed to load accounting codes");
+        }
+      });
       },
       error: function(response) {
         console.log(response);
@@ -430,6 +443,8 @@ export default class DepositCollectionUIComponent extends React.Component {
             Accounting Entry
           </h6>
           <AccountingEntryPreview
+            contextType="deposit_collection"
+            id={this.props.id}
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
             datePrepared={accounting_entry_data.date_prepared}
@@ -437,12 +452,16 @@ export default class DepositCollectionUIComponent extends React.Component {
             approved_by={accounting_entry_data.approved_by}
             branch={accounting_entry_data.branch_name}
             balanced={true}
-            status={accounting_entry_data.status}
+            // status={accounting_entry_data.status}
+            status={this.state.data.status}
             journalEntries={accounting_entry_data.journal_entries}
             isLoading={this.state.isLoading}
-            handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+            // handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+            // handleJournalEntryEdit={() => {}} 
             data={accounting_entry_data.data}
             accountingFundId={accounting_entry_data.accounting_fund_id}
+            accountingCodes={this.state.accountingCodes || []} 
+            onUpdated={() => this.fetchDepositCollectionData()} 
           />
         </div>
       );

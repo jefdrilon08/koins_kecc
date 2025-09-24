@@ -16,9 +16,27 @@ export default class AccountingEntryPreview extends React.Component {
       newSelectedAccountingCode: '', // Stores the NEW selection from dropdown
       selectedAmount: '', // Stores selected amount value
       loanId: this.props.id,
+      recordId: this.props.id,
       isSubmitting: false,
     };
   }
+
+  endpoints() {
+    const type = this.props.contextType || 'loan';
+    if (type === 'deposit_collection') {
+      return {
+        editNameUrl:   `/api/v1/deposit_collections/edit_accounting_name`, 
+        editAmountUrl: `/api/v1/deposit_collections/edit_entry_amount`, 
+        idKey:         'id', 
+      };
+    }
+    return {
+      editNameUrl:   `/api/v1/loans/edit_accounting_name`,
+      editAmountUrl: `/api/v1/loans/edit_entry_amount`,
+      idKey:         'loan_id',
+    };
+  }
+
 
   // Opens the modal for editing accounting code
   handleCodeClick = (entry) => {
@@ -58,7 +76,8 @@ export default class AccountingEntryPreview extends React.Component {
   };
 
   handleSaveAccountingCode = () => {
-    const { selectedEntry, newSelectedAccountingCode, loanId, isSubmitting } = this.state;
+    // const { selectedEntry, newSelectedAccountingCode, loanId, isSubmitting } = this.state;
+    const { selectedEntry, newSelectedAccountingCode, recordId, isSubmitting } = this.state;
 
     if (isSubmitting) return;
   
@@ -83,15 +102,23 @@ export default class AccountingEntryPreview extends React.Component {
 
     this.setState({ isSubmitting: true });
   
+    // const requestData = {
+    //   loan_id: loanId,
+    //   accounting_code_id: selectedEntry.accounting_code_id,
+    //   accounting_code_new: selectedCodeObj.id,
+    // };
+
+    const { editNameUrl, idKey } = this.endpoints(); 
     const requestData = {
-      loan_id: loanId,
       accounting_code_id: selectedEntry.accounting_code_id,
       accounting_code_new: selectedCodeObj.id,
     };
+   if (idKey) requestData[idKey] = recordId;
   
     const authenticityToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
   
-    axios.post("/api/v1/loans/edit_accounting_name",
+    // axios.post("/api/v1/loans/edit_accounting_name",
+    axios.post(editNameUrl,
       requestData,
       {
         headers: {
@@ -103,8 +130,11 @@ export default class AccountingEntryPreview extends React.Component {
     .then(response => {
       console.log("Accounting code updated:", response.data);
       alert("Accounting code updated successfully.");
+      // this.setState({ showCodeModal: false, isSubmitting: false });
+      // window.location.reload();
       this.setState({ showCodeModal: false, isSubmitting: false });
-      window.location.reload();
+      if (typeof this.props.onUpdated === 'function') { this.props.onUpdated(); }
+      else { window.location.reload(); }
     })
     .catch(error => {
       console.error("Failed to update accounting code:", error);
@@ -120,7 +150,8 @@ export default class AccountingEntryPreview extends React.Component {
   };
 
   handleSaveAmount = () => {
-    const { selectedAmount, selectedEntry, loanId, isSubmitting} = this.state;
+    // const { selectedAmount, selectedEntry, loanId, isSubmitting} = this.state;
+    const { selectedAmount, selectedEntry, recordId, isSubmitting} = this.state;
 
     if (isSubmitting) return;
     
@@ -144,15 +175,22 @@ export default class AccountingEntryPreview extends React.Component {
 
     this.setState({ isSubmitting: true });
 
+    // const requestData = {
+    //   loan_id: loanId,
+    //   accounting_code_id: selectedEntry.accounting_code_id,
+    //   amount: parseFloat(amount.toFixed(2))
+    // }
+    const { editAmountUrl, idKey } = this.endpoints();
     const requestData = {
-      loan_id: loanId,
       accounting_code_id: selectedEntry.accounting_code_id,
       amount: parseFloat(amount.toFixed(2))
-    }
+    };
+    if (idKey) requestData[idKey] = recordId;
 
     const authenticityToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
   
-    axios.post("/api/v1/loans/edit_entry_amount", 
+    // axios.post("/api/v1/loans/edit_entry_amount", 
+    axios.post(editAmountUrl,
       requestData,
       {
         headers: {
@@ -164,8 +202,11 @@ export default class AccountingEntryPreview extends React.Component {
     .then(response => {
       console.log("Amount updated:", response.data);
       alert("Amount updated successfully.");
-      this.setState({ showAmountModal: false });
-      window.location.reload();
+      // this.setState({ showAmountModal: false });
+      // window.location.reload();
+      this.setState({ showAmountModal: false, isSubmitting: false });
+      if (typeof this.props.onUpdated === 'function') { this.props.onUpdated(); }
+      else { window.location.reload(); }
     })
     .catch(error => {
       console.error("Failed to update amount:", error);
@@ -281,13 +322,16 @@ export default class AccountingEntryPreview extends React.Component {
     var context = this;
     var journalEntryRecords = [];
 
-    const isPending = this.props.loanstatus === "pending";
+    // const isPending = this.props.loanstatus === "pending";
+    const isPending = (this.props.loanstatus || this.props.status) === "pending";
 
     console.log("Is Pending:", isPending, "Loan Status:", this.props.loanstatus);
 
     const codeOptions = (this.props.accountingCodes || []).map(c => ({
       value: String(c.id),
-      label: `${c.code} - ${c.name}`
+      label: (this.props.contextType === 'deposit_collection')
+        ? c.name
+        : (c.code ? `${c.code} - ${c.name}` : c.name),
     }));
     const currentCodeOption =
       codeOptions.find(o => o.value === String(this.state.newSelectedAccountingCode)) || null;
@@ -300,20 +344,42 @@ export default class AccountingEntryPreview extends React.Component {
         var btnRemove = "";
         var btnEdit   = "";
 
-        if(this.props.status == "pending") {
-          btnRemove = <button 
-                        className="btn btn-sm btn-danger"
-                        onClick={context.props.handleRemoveClicked.bind(this, i)}
-                      >
-                        <span className="bi bi-x"/>
-                      </button>;
+        // if(this.props.status == "pending") {
+        //   btnRemove = <button 
+        //                 className="btn btn-sm btn-danger"
+        //                 onClick={context.props.handleRemoveClicked.bind(this, i)}
+        //               >
+        //                 <span className="bi bi-x"/>
+        //               </button>;
 
-          btnEdit = <button
-                      className="btn btn-sm btn-info"
-                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
-                    >
-                      <span className="bi bi-pencil"/>
-                    </button>
+        //   btnEdit = <button
+        //               className="btn btn-sm btn-info"
+        //               onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+        //             >
+        //               <span className="bi bi-pencil"/>
+        //             </button>
+        // }
+        if (this.props.status === "pending") {
+          if (typeof context.props.handleRemoveClicked === "function") {
+            btnRemove = (
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => context.props.handleRemoveClicked(i)}     // add here
+              >
+                <span className="bi bi-x"/>
+              </button>
+            );
+          }
+          if (typeof context.props.handleJournalEntryEdit === "function") {
+            btnEdit = (
+              <button
+                className="btn btn-sm btn-info"
+                onClick={() => context.props.handleJournalEntryEdit(i)}   // add here
+              >
+                <span className="bi bi-pencil"/>
+              </button>
+            );
+          }
         }
 
         journalEntryRecords.push(
@@ -357,20 +423,43 @@ export default class AccountingEntryPreview extends React.Component {
         var btnRemove = "";
         var btnEdit   = "";
 
-        if(this.props.status == "pending") {
-          btnRemove = <button 
-                        className="btn btn-sm btn-danger"
-                        onClick={context.props.handleRemoveClicked.bind(this, i)}
-                      >
-                        <span className="bi bi-x"/>
-                      </button>;
+        // if(this.props.status == "pending") {
+        //   btnRemove = <button 
+        //                 className="btn btn-sm btn-danger"
+        //                 onClick={context.props.handleRemoveClicked.bind(this, i)}
+        //               >
+        //                 <span className="bi bi-x"/>
+        //               </button>;
 
-          btnEdit = <button
-                      className="btn btn-sm btn-info"
-                      onClick={context.props.handleJournalEntryEdit.bind(this, i)}
-                    >
-                      <span className="bi bi-pencil"/>
-                    </button>
+        //   btnEdit = <button
+        //               className="btn btn-sm btn-info"
+        //               onClick={context.props.handleJournalEntryEdit.bind(this, i)}
+        //             >
+        //               <span className="bi bi-pencil"/>
+        //             </button>
+        // }
+
+        if (this.props.status === "pending") {
+          if (typeof context.props.handleRemoveClicked === "function") {
+            btnRemove = (
+              <button
+                className="btn btn-sm btn-danger"
+                onClick={() => context.props.handleRemoveClicked(i)}     
+              >
+                <span className="bi bi-x"/>
+              </button>
+            );
+          }
+          if (typeof context.props.handleJournalEntryEdit === "function") {
+            btnEdit = (
+              <button
+                className="btn btn-sm btn-info"
+                onClick={() => context.props.handleJournalEntryEdit(i)}   
+              >
+                <span className="bi bi-pencil"/>
+              </button>
+            );
+          }
         }
 
         journalEntryRecords.push(
