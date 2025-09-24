@@ -3,6 +3,69 @@ module Api
     class WithdrawalCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
+      def edit_accounting_name
+        withdrawal_collection = WithdrawalCollection.find(params[:id])
+
+        unless withdrawal_collection.pending?
+          return render json: { error: "Not editable unless pending" }, status: 400
+        end
+
+        accounting_code_id  = params[:accounting_code_id]
+        accounting_code_new = params[:accounting_code_new]
+
+        accounting_code = AccountingCode.find_by(id: accounting_code_id)
+        if accounting_code.nil?
+          return render json: { error: "AccountingCode with the given ID not found" }, status: :not_found
+        end
+        
+
+        config = {
+          id: params[:id],
+          accounting_code_id: accounting_code_id,
+          accounting_code_new: accounting_code_new
+        }
+
+        ::WithdrawalCollections::AccountingEntryEditName.new(config: config).execute!
+
+        render json: {
+          message: "Accounting entry updated successfully",
+          updated_withdrawal_collection_data: withdrawal_collection.data
+        }, status: :ok
+      end
+
+      def edit_entry_amount
+        withdrawal_collection = WithdrawalCollection.find(params[:id])
+        data = withdrawal_collection.data.with_indifferent_access
+
+        unless withdrawal_collection.pending?
+          return render json: { error: "Not editable unless pending" }, status: 400
+        end
+
+        amount             = params[:amount]
+        accounting_code_id = params[:accounting_code_id]
+
+        config = {
+          id: params[:id],
+          accounting_code_id: accounting_code_id,
+          amount: amount
+        }.compact
+
+        ::WithdrawalCollections::AccountingEntryEditAmount.new(config: config).execute!
+
+        render json: {
+          message: "Accounting entry updated successfully",
+          updated_withdrawal_collection_data: withdrawal_collection.data
+        }, status: :ok
+      end
+
+      def fetch_accounting_codes
+        codes = AccountingCode.order("name ASC").pluck(:id, :name).map { |id, name|
+          { id: id, name: name }                        
+        }
+
+        render json: { accounting_codes: codes }
+      end
+
       def fetch
         withdrawal_collection = WithdrawalCollection.find(params[:id])
 

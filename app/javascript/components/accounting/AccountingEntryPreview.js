@@ -30,6 +30,13 @@ export default class AccountingEntryPreview extends React.Component {
         idKey:         'id', 
       };
     }
+    if (type === 'withdrawal_collection') {
+      return {
+        editNameUrl:   `/api/v1/withdrawal_collections/edit_accounting_name`,
+        editAmountUrl: `/api/v1/withdrawal_collections/edit_entry_amount`,
+        idKey:         'id',
+      };
+    }
     return {
       editNameUrl:   `/api/v1/loans/edit_accounting_name`,
       editAmountUrl: `/api/v1/loans/edit_entry_amount`,
@@ -189,7 +196,6 @@ export default class AccountingEntryPreview extends React.Component {
 
     const authenticityToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
   
-    // axios.post("/api/v1/loans/edit_entry_amount", 
     axios.post(editAmountUrl,
       requestData,
       {
@@ -327,12 +333,12 @@ export default class AccountingEntryPreview extends React.Component {
 
     console.log("Is Pending:", isPending, "Loan Status:", this.props.loanstatus);
 
+    const showNameOnly = ['deposit_collection', 'withdrawal_collection'].includes(this.props.contextType);
     const codeOptions = (this.props.accountingCodes || []).map(c => ({
       value: String(c.id),
-      label: (this.props.contextType === 'deposit_collection')
-        ? c.name
-        : (c.code ? `${c.code} - ${c.name}` : c.name),
+      label: showNameOnly ? c.name : (c.code ? `${c.code} - ${c.name}` : c.name),
     }));
+
     const currentCodeOption =
       codeOptions.find(o => o.value === String(this.state.newSelectedAccountingCode)) || null;
 

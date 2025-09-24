@@ -666,6 +666,9 @@ namespace :api do
     post "/time_deposit_collections/update_si_number", to: "time_deposit_collections#update_si_number"
 
     # Withdrawal Collection
+    get  "/withdrawal_collections/fetch_accounting_codes", to: "withdrawal_collections#fetch_accounting_codes"
+    post "/withdrawal_collections/edit_accounting_name",   to: "withdrawal_collections#edit_accounting_name"
+    post "/withdrawal_collections/edit_entry_amount",      to: "withdrawal_collections#edit_entry_amount"
     post "/withdrawal_collections", to: "withdrawal_collections#create"
     post "/withdrawal_collections/modify_transaction_record", to: "withdrawal_collections#modify_transaction_record"
     post "/withdrawal_collections/approve", to: "withdrawal_collections#approve"

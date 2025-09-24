@@ -15,13 +15,24 @@ export default class WithdrawalCollectionUIComponent extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
-      data: false
+      data: false,
+      accountingCodes: []
     };
   }
 
   componentDidMount() {
     this.fetchWithdrawalCollectionData();
+    this.fetchAccountingCodes();
   }
+
+    fetchAccountingCodes() {
+      $.ajax({
+        url: "/api/v1/withdrawal_collections/fetch_accounting_codes",
+        method: "GET",
+        success: (res) => this.setState({ accountingCodes: res.accounting_codes || [] }),
+        error: () => console.log("Failed to load accounting codes")
+      });
+    }
 
   fetchWithdrawalCollectionData() {
     var context = this;
@@ -177,6 +188,8 @@ export default class WithdrawalCollectionUIComponent extends React.Component {
             Accounting Entry
           </h6>
           <AccountingEntryPreview
+            contextType="withdrawal_collection"
+            id={this.props.id}
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
             datePrepared={accounting_entry_data.date_prepared}
@@ -184,11 +197,14 @@ export default class WithdrawalCollectionUIComponent extends React.Component {
             approved_by={accounting_entry_data.approved_by}
             branch={accounting_entry_data.branch_name}
             balanced={true}
-            status={accounting_entry_data.status}
+            // status={accounting_entry_data.status}
+            status={this.state.data.status}
             journalEntries={accounting_entry_data.journal_entries}
             isLoading={this.state.isLoading}
-            handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+            // handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             data={accounting_entry_data.data}
+            accountingCodes={this.state.accountingCodes}
+            onUpdated={() => this.fetchWithdrawalCollectionData()}
           />
         </div>
       );

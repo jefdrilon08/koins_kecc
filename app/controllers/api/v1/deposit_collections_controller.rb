@@ -3,7 +3,7 @@ module Api
     class DepositCollectionsController < ActionController::Base
       before_action :authenticate_user!
 
-       def edit_accounting_name
+      def edit_accounting_name
         deposit_collection = DepositCollection.find(params[:id])
         data = deposit_collection.data.with_indifferent_access
 
