@@ -51,10 +51,48 @@ export default class ApplicationFormComponent extends React.Component {
   componentDidMount() {
     var context = this;
 
+  // Kunin ang paid_loans data mula sa #react-root
+var paidLoansFetch = document.getElementById("react-root")?.dataset?.paidLoansData;
+
+// Siguraduhin na may laman bago i-parse
+if (paidLoansFetch) {
+  try {
+    paidLoansFetch = JSON.parse(paidLoansFetch);
+  } catch (e) {
+    console.error("Error parsing paid_loans_data:", e);
+    paidLoansFetch = [];
+  }
+} else {
+  paidLoansFetch = [];
+}
+
+// I-console log
+console.log("RAW paid_loans_data:", paidLoansFetch);
+
+
+this.setState({ paidLoansFromChild: paidLoansFetch || [] });
+
     var data  = {
       id: this.props.id,
       member_id: this.props.memberId
     }
+
+
+    // Fetch active loans for member
+$.ajax({
+  url: "/loans/active_loans",
+  data: { member_id: this.props.memberId },
+  method: 'GET',
+  success: (response) => {
+    if (response.message === "ok") {
+      this.setState({ activeLoans: response.loans });
+    } else {
+      console.warn("Failed to fetch active loans:", response.message);
+    }
+  },
+  error: (err) => console.error(err)
+});
+
 
     // Fetch co_makers
     $.ajax({
@@ -82,8 +120,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Products");
-        console.log(response);
+        console.log("Got Loan Products",response);
+        // console.log(response);
         console.log(context.state.data);
         // Set currentLoanProductId
         var data  = context.state.data;
@@ -106,8 +144,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Product Types");
-        console.log(response);
+        console.log("Got Loan Product Types",response);
+        // console.log(response);
         
         var data = context.state.data;
 
@@ -125,8 +163,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Product Types");
-        console.log(response);
+        console.log("Got Loan Product Types",response);
+        // console.log(response);
         
         var data = context.state.data;
 
@@ -394,34 +432,35 @@ export default class ApplicationFormComponent extends React.Component {
     this.updateData(data);
   }
 
-// handleSaveClick = () => {
-//   const { paidLoansFromChild } = this.state;
-
-//   alert("Paid loans received from child:\n" + JSON.stringify(paidLoansFromChild, null, 2));
-// };
-
-
 handlePaidLoans = (paidLoans) => {
-
   this.setState(prev => ({
     paidLoansFromChild: paidLoans,
-        data: {
-          ...prev.data,
-          paid_loans: paidLoans 
-        }
-      }), () => {
-        console.log("State updated with paid_loans array:", this.state.data.paid_loans);
-      });
-    };
+    data: { ...prev.data, paid_loans: paidLoans }
+  }), () => {
+    // Compute loanBalancesById including total_paid
+    const loanBalancesById = this.state.paidLoansFromChild.reduce((acc, loan) => {
+      acc[loan.id] = {
+        principal_balance: Number(loan.principal_balance || 0),
+        interest_balance:  Number(loan.interest_balance  || 0),
+        total_balance:     Number(loan.total_balance || 0),
+        total_paid:        Number(loan.total_paid || 0)
+      };
+      return acc;
+    }, {});
+    console.log("loanBalancesById:", loanBalancesById);
+    this.setState({ loanBalancesById });
+  });
+}
+
 
   handleSave() {
     const context = this;
     const state   = context.state;
-
-    if (!state.data.paid_loans || state.data.paid_loans.length === 0) {
-    alert("Active loans are required.");
-    return;
-  }
+    // need changes 
+  //   if (!state.data.paid_loans || state.data.paid_loans.length === 0) {
+  //   alert("Active loans are required.");
+  //   return;
+  // }
 
 
     this.setState({
@@ -1319,16 +1358,20 @@ handlePaidLoans = (paidLoans) => {
             <ApplicationFormActiveLoans
                 memberId={this.props.memberId}
                 activeLoans={this.state.activeLoans}
+                 loanProducts={this.state.loanProducts} 
                   onPaidLoansExtracted={this.handlePaidLoans}
-                  // onPaidLoansExtracted={(data) => console.log(data)}
+                  paidLoans={this.state.paidLoansFromChild}
+                  principal={this.state.data.principal}
               />
-              {/* <button
-                className="btn btn-primary"
-                onClick={this.handleSaveClick}
-              >
-                <span className="bi bi-check" />
-                Save
-              </button> */}
+
+              {/* <ApplicationFormActiveLoans
+    memberId={this.props.memberId}
+    activeLoans={this.state.activeLoans}
+    loanProducts={this.state.loanProducts} 
+    onPaidLoansExtracted={this.handlePaidLoans}
+    paidLoans={this.state.paidLoansFromChild}
+    principal={this.state.data.principal}
+/> */}
             </div>
           </div>
           <hr/>

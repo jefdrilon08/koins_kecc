@@ -4,6 +4,7 @@ module Loans
       @config       = config
     
       @loan_data    = @config[:loan_data]
+      # @Active_loans =  @loan_data[:paid_loans]
       @user         = @config[:user]
 
       @loan_product = LoanProduct.where(id: @loan_data[:loan_product_id]).first
@@ -75,6 +76,24 @@ module Loans
             total_balance:   paid[:total_balance]   || 0
           }
       end
+
+      # if @Active_loans.present?
+      #   loan_data = (@loan_data || {}).with_indifferent_access
+
+      #   grand_total_paid = 0.0
+
+      # if loan_data[:paid_loans].present?
+      #   grand_total_paid = loan_data[:paid_loans].map do |l|
+      #     l = l.with_indifferent_access
+      #     l[:total_paid].to_f
+      #   end.sum
+      # end
+
+      #   if grand_total_paid >= @loan.principal.to_f
+      #      raise StandardError, "Grand total paid (#{grand_total_paid}) is greater than loan principal (#{@loan.principal})"
+
+      #   end
+      # end
 
 
       @loan.pn_number         = @loan_data[:pn_number]
@@ -308,22 +327,6 @@ if active_loan.present?
   
   full_payment_entry = ::Loans::BuildAccountingEntryForFullPayment.new(loan: active_loan, current_user: @user, particular: nil).execute!
 
-  # Remove the creation and saving of accounting entry
-  # accounting_entry = ::Accounting::AccountingEntries::Save.new(
-  #   config: {
-  #     id: nil,
-  #     accounting_entry_data: full_payment_entry,
-  #     user: @user
-  #   }
-  # ).execute!
-  
-  # Remove approval of the accounting entry
-  # accounting_entry = ::Accounting::AccountingEntries::Approve.new(
-  #   config: {
-  #     accounting_entry: accounting_entry,
-  #     user: @user
-  #   }
-  # ).execute!
 
   # Create data for full payment details without unnecessary fields
   full_payment = {

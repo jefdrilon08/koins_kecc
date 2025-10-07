@@ -67,6 +67,92 @@ module Loans
         # Check if the member has the same loan product
     
      
+        # For Active Loans payment
+      paid_loan = activeLoanPayment
+      if paid_loan.present?
+
+    paid_loansx = paid_loan.data["paid_loans"]
+    puts "Paid Loans: #{paid_loansx.inspect}"
+
+    paid_loan_ids = paid_loansx.map { |pl| pl["id"] }.compact
+    puts "Paid Loan Active LOAN ID: #{paid_loan_ids.inspect}"
+
+    loans = @member.loans.where(
+    loan_product_id: paid_loansx.map { |pl| pl["loan_product_id"] }
+    ).index_by(&:loan_product_id)
+
+    paid_loan_ids  = paid_loansx.map do |pl|
+      loans[pl["loan_product_id"]]&.id
+    end.compact
+    
+    paid_loan_ids.each do |loan_id|
+      #1st step get the is_paid nil in amortization
+      active_amort = AmortizationScheduleEntry.where(loan_id: loan_id, is_paid: nil)
+      total_principal = 0
+      total_interest = 0
+      total_paid = 0
+      amort_entries = {
+        amort_entries: [],
+        total_principal_paid: "",
+        amount_due: "",
+        particular: "",
+        approved_by: "",
+        total_interest_paid: ""
+    }  
+
+
+      active_amort.each do |am|
+        total_principal =  total_principal + am.principal_balance
+        total_interest = total_interest +  am.interest_balance
+        AmortizationScheduleEntry.find(am.id).update(interest: 0.0, interest_balance: 0.0,amount_due: am.principal_balance, )
+        amort_entries[:amort_entries] << {
+          id: am.id,
+          due_date: am.due_date,
+          principal_paid: am.principal_balance,
+          interest_paid: 0.0
+        }
+
+      end
+        
+        amort_entries[:total_principal_paid]  = total_principal
+        amort_entries[:amount_due]            = total_principal
+        amort_entries[:particular]            = "test"
+        amort_entries[:approved_by]           = "#{@user.first_name} #{@user.last_name}".upcase
+        amort_entries[:total_interest_paid]   = 0.0
+        
+        transaction = AccountTransaction.create!(
+            subsidiary_id: loan_id,
+            subsidiary_type: "Loan",
+            amount: total_principal,
+            transaction_type: "loan_payment",
+            transacted_at: Time.now,
+            status: "approved",
+            data: amort_entries
+        )
+       
+
+       #2nd step get the total interest unpaid and save to the loan
+       for_full_payment_loan = Loan.find(loan_id)
+       for_full_payment_loan_data = for_full_payment_loan.data.with_indifferent_access
+       for_full_payment_loan_data[:total_zero_out_interest] = total_interest
+       for_full_payment_loan.update!(data: for_full_payment_loan_data )
+       
+        loan = Loan.find(loan_id)
+          loan.update!(
+            interest: 0.0,
+            interest_balance: 0.0 
+          )
+
+
+      
+         ::Loans::FixAmort.new(loan: Loan.find(loan_id)).execute!
+  
+       
+      end #end of paid_loan
+      
+    end        
+    
+    # Check if the member has the same loan product
     
       if @loan.data["sms_fee_available"].present? || @loan.data["sms_fee_available"] == false 
         @member_data[:sms_record] = {
@@ -154,6 +240,44 @@ module Loans
     end
 
     private
+
+    def build_active_loan_entry!
+  paid_loan_ids = [@loan.id]
+
+  config = {
+    loan: @loan,
+    user: @user,
+    member: @member,
+    loan_product: @loan_product,
+    amount: @loan.principal,
+    book: "JVB"
+  }
+
+  entry = Loans::BuildAccountingEntryForActiveLoan.new(
+    config: config,
+    paid_loan_ids: paid_loan_ids
+  ).execute!
+
+  puts "Active Loan Accounting Entry: #{entry.inspect}"
+end
+
+
+
+    def activeLoanPayment
+    # actloan =  @member.loans.find { |loan| loan.data["paid_loans"].present? }
+      actloan = @member.loans.find do |loan|
+          loan_data = loan.data.with_indifferent_access
+          loan_data["paid_loans"].present?
+      end
+
+      actloan
+    end
+
+
+    def active_loan_fullpayment(paid_loan_ids)
+       @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name },#{@loan.member.middle_name } #{@loan.member.last_name } cv# #{@loan.data.with_indifferent_access['voucher']['check_number']} ck# #{@loan.data.with_indifferent_access['voucher']['bank_check_number']} #{@loan.branch.name}"
+        
+    end
 
      def perform_active_loansproduct!
         active_loan = @member.loans.active.where(loan_product_id: @loan_product.id).first

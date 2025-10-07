@@ -1,3 +1,4 @@
+
 import React from "react";
 import $ from 'jquery';
 import Modal from 'react-modal';
@@ -23,17 +24,57 @@ export default class ApplicationFormActiveLoans extends React.Component {
     this.fetchActiveLoans = this.fetchActiveLoans.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchActiveLoans();
+  // componentDidMount() {
+  //   if (this.props.paidLoans && this.props.paidLoans.length > 0) {
+  //     this.setState(
+  //       {
+  //         addedLoans: this.props.paidLoans,
+  //         showTable: true
+  //       },
+  //       () => {
+  //         this.handleActivePaidLoan();
+  //         console.log("Paid Loans on Mount (Child):", this.state.addedLoans);
+  //       }
+  //     );
+  //   }
+  //   this.fetchActiveLoans();
+  // }
+componentDidMount() {
+  if (this.props.paidLoans && this.props.paidLoans.length > 0) {
+    // Map the paidLoans to ensure amountPaid defaults to principal if not set
+    const mappedLoans = this.props.paidLoans.map(loan => {
+      const principal = Number(loan.principal_balance || 0);
+      return {
+        ...loan,
+        amountPaid: loan.amountPaid != null ? Number(loan.amountPaid) : principal
+      };
+    });
+
+    this.setState({
+      addedLoans: mappedLoans,
+      showTable: true
+    }, () => {
+      this.handleActivePaidLoan();
+      console.log("Paid Loans on Mount (Child):", this.state.addedLoans);
+    });
+  }
+
+  this.fetchActiveLoans();
+}
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.addedLoans !== this.state.addedLoans) {
+      if (this.props.onPaidLoansExtracted) {
+        this.props.onPaidLoansExtracted(this.handleActivePaidLoan());
+      }
+    }
   }
 
   fetchActiveLoans() {
-    var context = this;
+    const context = this;
     $.ajax({
       url: "/loans/active_loans",
-      data: {
-        member_id: this.props.memberId
-      },
+      data: { member_id: this.props.memberId },
       method: "GET",
       success: function (response) {
         if (response.message === "ok") {
@@ -48,59 +89,84 @@ export default class ApplicationFormActiveLoans extends React.Component {
     });
   }
 
-  // handleAddClick() {
-  //   const { selectedLoanId, addedLoans, activeLoans } = this.state;
-
-  //   if (!selectedLoanId) return alert("Please select a loan first.");
-
-  //   const selectedLoan = activeLoans.find(loan => loan.id === selectedLoanId);
-  //   if (!selectedLoan) return alert("Loan not found.");
-  //   if (addedLoans.some(loan => loan.id === selectedLoan.id))
-  //     return alert("This loan has already been added.");
-
-  //   this.setState({
-  //     addedLoans: [...addedLoans, selectedLoan],
-  //     selectedLoanId: "",
-  //     showTable: true,
-  //   });
-  // }
-
-
   handleAddClick() {
-  const { selectedLoanId, addedLoans, activeLoans } = this.state;
+    const { selectedLoanId, addedLoans, activeLoans } = this.state;
 
-  if (!selectedLoanId) {
-    alert("Please select a loan first.");
-    return;
+    const selectedLoan = activeLoans.find(loan => loan.loan_product_id === selectedLoanId);
+    if (!selectedLoan) {
+      alert("Loan not found.");
+      return;
+    }
+
+    if (addedLoans.some(loan => loan.loan_product_id === selectedLoan.loan_product_id)) {
+      alert("This loan has already been added.");
+      return;
+    }
+
+    const updatedLoans = [...addedLoans, selectedLoan];
+
+    this.setState({
+      addedLoans: updatedLoans,
+      selectedLoanId: "",
+      showTable: true,
+    }, () => {
+      this.handleActivePaidLoan();
+    });
   }
-
-  const selectedLoan = activeLoans.find(loan => loan.id === selectedLoanId);
-  if (!selectedLoan) {
-    alert("Loan not found.");
-    return;
-  }
-
-  if (addedLoans.some(loan => loan.id === selectedLoan.id)) {
-    alert("This loan has already been added.");
-    return;
-  }
-
-  const updatedLoans = [...addedLoans, selectedLoan];
-
-  this.setState({
-    addedLoans: updatedLoans,
-    selectedLoanId: "",
-    showTable: true,
-  }, () => {
-    // ✅ Trigger loan data throw after state is updated
-    this.handleActivePaidLoan();
-  });
-}
-
 
   handleActiveLoanChanged(event) {
     this.setState({ selectedLoanId: event.target.value });
   }
+
+  // handleActivePaidLoan() {
+  //   const { addedLoans } = this.state;
+
+  //   const paidLoans = addedLoans.map((loan) => {
+  //     const principal = Number(loan.principal_balance || 0);
+  //     const interest = Number(loan.interest_balance || 0);
+  //     const totalBalance = principal + interest;
+
+  //     // Default totalPaid is principal if amountPaid not set
+  //     const totalPaid = loan.amountPaid != null ? Number(loan.amountPaid) : principal;
+
+  //     return {
+  //       ...loan,
+  //       total_balance: totalBalance,
+  //       total_paid: totalPaid,
+  //       amountPaid: totalPaid
+  //     };
+  //   });
+
+  //   if (this.props.onPaidLoansExtracted) {
+  //     this.props.onPaidLoansExtracted(paidLoans);
+  //   }
+
+  //   return paidLoans;
+  // }
+handleActivePaidLoan() {
+  const { addedLoans } = this.state;
+
+  const paidLoans = addedLoans.map((loan) => {
+    const principal = Number(loan.principal_balance || 0);
+    const interest = Number(loan.interest_balance || 0);
+    const totalBalance = principal + interest;
+
+    const totalPaid = loan.amountPaid != null ? Number(loan.amountPaid) : principal;
+
+    return {
+      ...loan,
+      total_balance: totalBalance,
+      total_paid: totalPaid,
+      amountPaid: totalPaid
+    };
+  });
+
+  if (this.props.onPaidLoansExtracted) {
+    this.props.onPaidLoansExtracted(paidLoans);
+  }
+
+  return paidLoans;
+}
 
   TotalPaid() {
     const { addedLoans } = this.state;
@@ -108,10 +174,9 @@ export default class ApplicationFormActiveLoans extends React.Component {
     const totalPrincipal = addedLoans.reduce((sum, loan) => sum + Number(loan.principal_balance || 0), 0);
     const totalInterest = addedLoans.reduce((sum, loan) => sum + Number(loan.interest_balance || 0), 0);
     const totalBalance = totalPrincipal + totalInterest;
+
     const totalAmountPaid = addedLoans.reduce((sum, loan) => {
-    const principal = Number(loan.principal_balance || 0);
-    const interest = Number(loan.interest_balance || 0);
-      return sum + (loan.amountPaid != null ? Number(loan.amountPaid) : principal + interest);
+      return sum + (loan.amountPaid != null ? Number(loan.amountPaid) : Number(loan.principal_balance || 0));
     }, 0);
 
     return {
@@ -123,15 +188,11 @@ export default class ApplicationFormActiveLoans extends React.Component {
   }
 
   handleEditClick(loan, index) {
-    const principal = Number(loan.principal_balance || 0);
-    const interest = Number(loan.interest_balance || 0);
-    const totalBalance = principal + interest;
-
     this.setState({
       showEditModal: true,
       loanEditIndex: index,
-      loanEditId: loan.id,
-      loanEditAmount: loan.amountPaid != null ? loan.amountPaid : totalBalance,
+      loanEditId: loan.loan_product_id,
+      loanEditAmount: loan.amountPaid != null ? loan.amountPaid : Number(loan.principal_balance || 0),
     });
   }
 
@@ -143,39 +204,22 @@ export default class ApplicationFormActiveLoans extends React.Component {
     }
   }
 
-  // handleSaveEdit() {
-  //   const { addedLoans, loanEditIndex, loanEditAmount } = this.state;
-  //   const updatedLoans = [...addedLoans];
-  //   updatedLoans[loanEditIndex].amountPaid = Number(loanEditAmount);
-
-  //   this.setState({
-  //     addedLoans: updatedLoans,
-  //     showEditModal: false,
-  //     loanEditIndex: null,
-  //     loanEditId: null,
-  //     loanEditAmount: 0,
-  //   }, () => {
-  //     alert("Edit saved successfully!");
-  //   });
-  // }
-
   handleSaveEdit() {
-  const { addedLoans, loanEditIndex, loanEditAmount } = this.state;
-  const updatedLoans = [...addedLoans];
-  updatedLoans[loanEditIndex].amountPaid = Number(loanEditAmount);
+    const { addedLoans, loanEditIndex, loanEditAmount } = this.state;
+    const updatedLoans = [...addedLoans];
+    updatedLoans[loanEditIndex].amountPaid = Number(loanEditAmount);
 
-  this.setState({
-    addedLoans: updatedLoans,
-    showEditModal: false,
-    loanEditIndex: null,
-    loanEditId: null,
-    loanEditAmount: 0,
-  }, () => {
-    alert("Edit saved successfully!");
-    this.handleActivePaidLoan(); // ✅ auto-trigger
-  });
-}
-
+    this.setState({
+      addedLoans: updatedLoans,
+      showEditModal: false,
+      loanEditIndex: null,
+      loanEditId: null,
+      loanEditAmount: 0,
+    }, () => {
+      alert("Edit saved successfully!");
+      this.handleActivePaidLoan();
+    });
+  }
 
   renderEditBalance() {
     return (
@@ -211,44 +255,6 @@ export default class ApplicationFormActiveLoans extends React.Component {
     );
   }
 
-
-  // for rendering or throwing the data
-handleActivePaidLoan() {
-  const { addedLoans, activeLoans } = this.state;
-
-//   if (addedLoans.length === 0) {
-//     alert("Please add an active loan first.");
-//     return;
-//   }else {
-//     alert("Active loan sucessfully added")
-// }
-
-
-  const paidLoans = addedLoans.map((loan) => {
-    const principal = Number(loan.principal_paid || 0);
-    const principalbal = Number(loan.principal_balance || 0);
-    const interest = Number(loan.interest_balance || 0);
-    const totalBalance = principalbal + interest;
-    const totalPaid = loan.amountPaid != null ? Number(loan.amountPaid) : totalBalance;
-
-    return {
-      loan_product_id: loan.loan_product_id || loan.loan_product.id || "N/A",
-      total_paid: totalPaid,
-      interest_paid: totalPaid,
-      principal_paid: principal,
-      total_balance: totalBalance
-    };
-  });
-
-   if (this.props.onPaidLoansExtracted) {
-    this.props.onPaidLoansExtracted(paidLoans);
-  }
-  
-  return paidLoans;
-}
-
-
-
   render() {
     const { addedLoans, showTable, activeLoans, selectedLoanId } = this.state;
     const { totalPrincipal, totalInterest, totalBalance, totalAmountPaid } = this.TotalPaid();
@@ -262,11 +268,12 @@ handleActivePaidLoan() {
       <option key="default" value="">
         -- SELECT --
       </option>,
-      ...activeLoans.map(loan => (
-        <option key={loan.id} value={loan.id}>
-          {loan.loan_product.name || "No Product Name"}
-        </option>
-      )),
+      ...activeLoans
+        .map(loan => (
+          <option key={loan.loan_product_id} value={loan.loan_product_id}>
+            {loan.loan_product?.name || loan.loan_product_name || loan.loan_product_id}
+          </option>
+        )),
     ];
 
     return (
@@ -320,11 +327,11 @@ handleActivePaidLoan() {
                 const principal = Number(loan.principal_balance || 0);
                 const interest = Number(loan.interest_balance || 0);
                 const totalBalance = principal + interest;
-                const totalPaid = loan.amountPaid != null ? loan.amountPaid : totalBalance;
+                const totalPaid = loan.amountPaid != null ? loan.amountPaid : principal;
 
                 return (
-                  <tr key={loan.id}>
-                    <td>{loan.loan_product.name}</td>
+                  <tr key={loan.loan_product_id}>
+                    <td>{loan.loan_product?.name || loan.loan_product_name || loan.loan_product_id}</td>
                     <td className="text-end">{formatNumber(principal)}</td>
                     <td className="text-end">{formatNumber(interest)}</td>
                     <td className="text-end">{formatNumber(totalBalance)}</td>
@@ -354,8 +361,6 @@ handleActivePaidLoan() {
             </tfoot>
           </table>
         )}
-        <div className="d-flex justify-content-end">
-      </div>
       </div>
     );
   }
