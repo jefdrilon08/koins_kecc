@@ -10,6 +10,24 @@ class LoansController < ApplicationController
     end
   end
 
+  def approve
+    begin
+      loan = Loan.find(params[:id])
+
+      ::Loans::Approve.new(
+        config: {
+          loan: loan,
+          user: current_user
+        }
+      ).execute!
+
+      render json: { message: "Loan approved successfully" }, status: :ok
+    rescue => e
+      Rails.logger.error("APPROVE ERROR: #{e.message} Loan ID: #{loan&.id}")
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
+  end
+
   def index
     @loans = Loan.includes(:member).where(
       "loans.branch_id IN (?)", 
@@ -77,9 +95,18 @@ class LoansController < ApplicationController
   end
 
   def form
-    if ::Users::FetchValidRoles.new(module_name: :form_edit_loan).execute!.empty?
-      redirect_to member_path(@member)
-    else
+      @member = Member.where(id: params[:member_id]).first
+
+      if @member.blank?
+        redirect_to members_path
+      end
+
+      if ::Users::FetchValidRoles.new(module_name: :form_edit_loan).execute!.empty?
+        redirect_to member_path(@member)
+        return
+      end
+
+      loan = nil
       if params[:id].present?
         loan  = Loan.find(params[:id])
       end
@@ -87,13 +114,11 @@ class LoansController < ApplicationController
       if loan.present? and loan.is_restructured
         redirect_to member_path(@member)
       end
-
-      @member = Member.where(id: params[:member_id]).first
-  
       @branch = @member.branch
 
-      if @member.blank?
-        redirect_to members_path
+      paid_loans_data = []
+      if loan.present? && loan.data["paid_loans"].present?
+        paid_loans_data = loan.data["paid_loans"]
       end
 
       # subheader items
@@ -129,9 +154,41 @@ class LoansController < ApplicationController
           use_co_maker_one: use_co_maker_one,
           use_co_maker_two: use_co_maker_two,
           use_co_maker_three: use_co_maker_three
-        }
+        },
+        paidLoans: paid_loans_data
       }
+
+      paid_loans_data = []
+
+    if loan.present? && loan.data["paid_loans"].present?
+      paid_loans_data = loan.data["paid_loans"]
+
+      # Fetch actual loans and products to enrich the paid_loans_data
+      loan_ids       = paid_loans_data.map { |pl| pl["id"] }.compact
+      loans_by_id    = Loan.where(id: loan_ids).index_by(&:id)
+
+      product_ids    = paid_loans_data.map { |pl| pl["loan_product_id"] }.compact
+      products_by_id = LoanProduct.where(id: product_ids).index_by(&:id)
+
+      paid_loans_data.each do |pl|
+        l = loans_by_id[pl["id"]]
+        if l
+          pl["principal_balance"] = l.principal_balance
+          pl["interest_balance"]  = l.interest_balance
+          pl["total_paid"]        = l.total_paid || 0
+        else
+          pl["principal_balance"] ||= 0.0
+          pl["interest_balance"]  ||= 0.0
+          pl["total_paid"]        ||= 0.0
+        end
+
+        pl["total_balance"] = (pl["principal_balance"] || 0) + (pl["interest_balance"] || 0)
+
+        product = products_by_id[pl["loan_product_id"]]
+        pl["loan_product_name"] = product&.name
+      end
     end
+
   end
 
   def reverse_form
@@ -362,5 +419,26 @@ class LoansController < ApplicationController
     @amortization_schedule = @loan.amortization_schedule_entries.order(
       "due_date ASC"
     )
+  end
+
+
+  def active_loans
+    @member = Member.find(params[:member_id])
+    active_loans = Loan.where(member_id: @member.id, status: 'active')
+
+    if active_loans.any?
+      render json: {
+        message: "ok",
+        count: active_loans.count,
+        loans: active_loans.as_json(only: [:id, :member_id, :loan_product_id, :principal_balance, :interest_balance],include: {
+            loan_product: {
+              only: [:name]
+            }
+          })
+      }
+    else
+    render json: { message: "no active loan found" }, status: :not_found
+  end
+  
   end
 end

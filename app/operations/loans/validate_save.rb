@@ -8,6 +8,8 @@ module Loans
       @user         = @config[:user]
       @loan_product = LoanProduct.where(id: @loan_data[:loan_product_id]).first
       @member       = Member.where(id: @loan_data[:member_id]).first
+      @loan         = Loan.where(id: @loan_data[:id]).first if @loan_data[:id].present?
+
     end
 
     def execute!
@@ -87,6 +89,18 @@ module Loans
           key: "voucher.date_of_check",
           message: "Voucher Date of Check required"
         }
+      end
+      
+       active_loans = @loan_data[:paid_loans] || []
+      if active_loans.present? && @loan.present?
+        grand_total_paid = active_loans.map { |l| l[:total_paid].to_f }.sum
+        if grand_total_paid >= @loan.principal.to_f
+          @errors[:messages] << {
+            key: "paid_loans",
+            # message: "Active Loans Total (#{grand_total_paid}) is greater than loan principal (#{@loan.principal})"
+            message:"Active loans total is greater than loan principal"
+          }
+        end
       end
 
       #not_yet_implemented!

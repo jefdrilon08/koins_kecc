@@ -11,6 +11,8 @@ import ApplicationFormFinancialInformation from './ApplicationFormFinancialInfor
 import ApplicationFormCLIPBeneficiary from './ApplicationFormCLIPBeneficiary';
 import ApplicationFormProjectType from './ApplicationFormProjectType';
 import ApplicationTransferOption from './ApplicationTransferOption';
+import ApplicationFormActiveLoans from './ApplicationFormActiveLoans';
+
 
 export default class ApplicationFormComponent extends React.Component {
   constructor(props) {
@@ -41,24 +43,68 @@ export default class ApplicationFormComponent extends React.Component {
       isMobileNumberExist: false,
       paymentType: "",
       subType: "",
+//<<<<<<< active_loans_accounting_etry
+//      paidLoansFromChild: [],
+//      errors: false
+//=======
       errors: false,
       firstCoMaker: null,
       secondCoMaker: null,
       thirdCoMaker: null,
       coMakersError: null,
       pbErrorOn: null,
+//>>>>>>> master
     };
   }
 
   componentDidMount() {
     var context = this;
 
+  // Kunin ang paid_loans data mula sa #react-root
+var paidLoansFetch = document.getElementById("react-root")?.dataset?.paidLoansData;
+
+// Siguraduhin na may laman bago i-parse
+if (paidLoansFetch) {
+  try {
+    paidLoansFetch = JSON.parse(paidLoansFetch);
+  } catch (e) {
+    console.error("Error parsing paid_loans_data:", e);
+    paidLoansFetch = [];
+  }
+} else {
+  paidLoansFetch = [];
+}
+
+// I-console log
+console.log("RAW paid_loans_data:", paidLoansFetch);
+
+
+this.setState({ paidLoansFromChild: paidLoansFetch || [] });
+
     var data  = {
       id: this.props.id,
       member_id: this.props.memberId
     }
 
+//<<<<<<< active_loans_accounting_etry
+
+    // Fetch active loans for member
+$.ajax({
+  url: "/loans/active_loans",
+  data: { member_id: this.props.memberId },
+  method: 'GET',
+  success: (response) => {
+    if (response.message === "ok") {
+      this.setState({ activeLoans: response.loans });
+    } else {
+      console.warn("Failed to fetch active loans:", response.message);
+    }
+  },
+  error: (err) => console.error(err)
+});
+//=======
     this.loadAllMembers();
+//>>>>>>> master
 
 
     // Fetch co_makers
@@ -87,8 +133,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Products");
-        console.log(response);
+        console.log("Got Loan Products",response);
+        // console.log(response);
         console.log(context.state.data);
         // Set currentLoanProductId
         var data  = context.state.data;
@@ -111,8 +157,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Product Types");
-        console.log(response);
+        console.log("Got Loan Product Types",response);
+        // console.log(response);
         
         var data = context.state.data;
 
@@ -130,8 +176,8 @@ export default class ApplicationFormComponent extends React.Component {
       },
       method: 'GET',
       success: function(response) {
-        console.log("Got Loan Product Types");
-        console.log(response);
+        console.log("Got Loan Product Types",response);
+        // console.log(response);
         
         var data = context.state.data;
 
@@ -554,9 +600,36 @@ export default class ApplicationFormComponent extends React.Component {
     this.updateData(data);
   }
 
+handlePaidLoans = (paidLoans) => {
+  this.setState(prev => ({
+    paidLoansFromChild: paidLoans,
+    data: { ...prev.data, paid_loans: paidLoans }
+  }), () => {
+    // Compute loanBalancesById including total_paid
+    const loanBalancesById = this.state.paidLoansFromChild.reduce((acc, loan) => {
+      acc[loan.id] = {
+        principal_balance: Number(loan.principal_balance || 0),
+        interest_balance:  Number(loan.interest_balance  || 0),
+        total_balance:     Number(loan.total_balance || 0),
+        total_paid:        Number(loan.total_paid || 0)
+      };
+      return acc;
+    }, {});
+    console.log("loanBalancesById:", loanBalancesById);
+    this.setState({ loanBalancesById });
+  });
+}
+
+
   handleSave() {
     const context = this;
     const state   = context.state;
+    // need changes 
+  //   if (!state.data.paid_loans || state.data.paid_loans.length === 0) {
+  //   alert("Active loans are required.");
+  //   return;
+  // }
+
 
      if (!this.validateCoMakers()) {
       return;
@@ -565,7 +638,6 @@ export default class ApplicationFormComponent extends React.Component {
     this.setState({
       isSaving: true
     });
-
     const formData = new FormData();
 
     if(state.coMakerProfilePicture) {
@@ -1537,7 +1609,36 @@ export default class ApplicationFormComponent extends React.Component {
                 data={this.state.data}
               />
             </div>
-          </div> */}
+//<<<<<<< active_loans_accounting_etry
+          </div>
+          {/* Active Loan */}
+          <h5>
+            Active Loan
+          </h5>
+          <div className="card">
+            <div className="card-body">
+            <ApplicationFormActiveLoans
+                memberId={this.props.memberId}
+                activeLoans={this.state.activeLoans}
+                 loanProducts={this.state.loanProducts} 
+                  onPaidLoansExtracted={this.handlePaidLoans}
+                  paidLoans={this.state.paidLoansFromChild}
+                  principal={this.state.data.principal}
+              />
+
+              {/* <ApplicationFormActiveLoans
+    memberId={this.props.memberId}
+    activeLoans={this.state.activeLoans}
+    loanProducts={this.state.loanProducts} 
+    onPaidLoansExtracted={this.handlePaidLoans}
+    paidLoans={this.state.paidLoansFromChild}
+    principal={this.state.data.principal}
+/> */}
+            </div>
+          </div>
+//=======
+//          </div> */}
+//>>>>>>> master
           <hr/>
           <h5>
             Bank Transfer

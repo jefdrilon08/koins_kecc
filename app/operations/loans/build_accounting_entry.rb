@@ -1,6 +1,6 @@
 module Loans
   class BuildAccountingEntry
-    def initialize(config:)
+    def initialize(config:, paid_loan_ids: [])
       @config       = config
       @bank_data    = @config[:bank_data]
       @loan         = @config[:loan]
@@ -9,9 +9,11 @@ module Loans
       @loan_product = @config[:loan_product]
       @amount       = @config[:amount].to_f.round(2)
       @book         = @config[:book] || "CDB"
+      #@book         = "CDB"
       @loan_data    = @loan.data.with_indifferent_access
       @voucher_data = @loan_data[:voucher]
-
+      @Active_loans =  @loan_data[:paid_loans]
+      @paid_loan_ids = paid_loan_ids
       @current_date = ::Utils::GetCurrentDate.new(
                         config: {
                           branch: @branch
@@ -155,6 +157,43 @@ module Loans
     def build_debit_journal_entries!
       journal_entries = []
 
+      # journal_entries << {
+      #   accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2",-
+      #   code: "1.01.17",
+      #   name: "SBC 8065-002 All in one account",
+      #   amount: "5000".to_f
+      # }  
+      
+
+
+        #collection--------------------------------------------------------------------------
+     
+
+      if @Active_loans.present?
+
+        # grand_total_paid = @Active_loans.sum { |loan| loan["total_paid"].to_f }
+
+        branch_id = @loan.branch_id
+        branch_settings = Settings.branch_accounting_codes.find { |b| b["branch_id"] == branch_id }
+
+        if branch_settings.present?
+          cash_in_bank_id   = branch_settings["cash_in_bank_accounting_code_id"]
+          cash_in_bank_code = AccountingCode.find(cash_in_bank_id)
+
+          # journal_entries << {
+          #   accounting_code_id: cash_in_bank_code.id,
+          #   code:  cash_in_bank_code.code,
+          #   name:  cash_in_bank_code.name,
+          #   amount: grand_total_paid.to_f
+          # }
+        else
+          raise "No branch settings found for branch_id: #{branch_id}"
+        end
+      end
+
+      #--------------------------------------------------------------------------------------
+
+
       # Receivable
       accounting_code = AccountingCode.find(@settings.receivable_accounting_code_id)
       amount          = @amount
@@ -215,10 +254,41 @@ module Loans
 
     def build_credit_journal_entries!
       # compute amount released by deducting from @amount
+
       temp_amount = @amount
 
       journal_entries = []
 
+        
+       #-------------------------------------------------------------------
+
+      if @Active_loans.present?
+        loan_product_ids = @Active_loans.map { |loan| loan["loan_product_id"] }
+        total_paid_map   = @Active_loans.index_by { |loan| loan["loan_product_id"] }
+
+        grand_total_paid = @Active_loans.sum { |loan| loan["total_paid"].to_f }
+
+        matched_products = Settings.loan_products.select do |lp|
+          loan_product_ids.include?(lp["loan_product_id"])
+        end
+
+        matched_products.each do |prod|
+          receivable_id   = prod["receivable_accounting_code_id"]
+          accounting_code = AccountingCode.find(receivable_id)
+
+          loan_data = total_paid_map[prod["loan_product_id"]]
+          amount    = loan_data["total_paid"].to_f
+
+          journal_entries << {
+            accounting_code_id: accounting_code.id,
+            code:               accounting_code.code,
+            name:               accounting_code.name,
+            amount:             amount
+          }
+        end
+      end
+
+      #---------------------------------------------------------------------
       # Deductions
       @settings.deductions.each do |s_deduction|
         deduction_type  = s_deduction.deduction_type
@@ -976,15 +1046,20 @@ module Loans
         accounting_code = AccountingCode.find(@settings.amount_released_accounting_code_id)
       end
       
+      # for active loan
+      final_amount = temp_amount - (grand_total_paid || 0)
+
       journal_entries << {
         accounting_code_id: accounting_code.id,
         code: accounting_code.code,
         name: accounting_code.name,
-        amount: temp_amount
+        amount: final_amount
+        # amount: temp_amount
       }
 
       # Update amount
-      @amount_released  = temp_amount
+      # @amount_released  = temp_amount
+      @amount_released = final_amount
       #grouped_data = journal_entries.group_by { |entry| entry[:code] }
 
       # Sum the amounts and create new combined entries

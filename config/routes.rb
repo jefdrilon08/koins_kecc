@@ -225,6 +225,10 @@ Rails.application.routes.draw do
   # Loans
   resources :loans, only: [:index, :show] do
     get "/adjustment/:adjustment_record_id", to: "loans#adjustment", as: :adjustment
+     collection do
+    get :active_loans
+  end
+  
   end
 
   resources :member_account_validations do

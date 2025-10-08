@@ -2,4 +2,9 @@
   .col
     .card
       .card-body
-        #react-root
+        #react-root{ 
+          data: { 
+            loan_form_data: @payload.to_json,
+            paid_loans_data: (@payload[:paidLoans] || []).to_json
+          } 
+        }
