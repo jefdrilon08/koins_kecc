@@ -57,6 +57,7 @@ module Loans
 
     def execute!
   
+//<<<<<<< active_loans_accounting_etry
         post_accounting_entry!
         perform_deposits!
         
@@ -153,6 +154,14 @@ module Loans
     end        
     
     # Check if the member has the same loan product
+//=======
+  //    post_accounting_entry!
+    //  perform_deposits!
+      
+     // if @active_loan != nil        
+     //   perform_active_loansproduct!
+     // end    
+//>>>>>>> master
     
       if @loan.data["sms_fee_available"].present? || @loan.data["sms_fee_available"] == false 
         @member_data[:sms_record] = {
@@ -236,11 +245,15 @@ module Loans
         maturity_date: maturity_date
       )
 
+      persist_principal_borrowers!
+
       @loan
+      
     end
 
     private
 
+//<<<<<<< active_loans_accounting_etry
     def build_active_loan_entry!
   paid_loan_ids = [@loan.id]
 
@@ -277,6 +290,42 @@ end
     def active_loan_fullpayment(paid_loan_ids)
        @particular = "Payment of Loan / Deposit of Funds #{@loan.member.first_name },#{@loan.member.middle_name } #{@loan.member.last_name } cv# #{@loan.data.with_indifferent_access['voucher']['check_number']} ck# #{@loan.data.with_indifferent_access['voucher']['bank_check_number']} #{@loan.branch.name}"
         
+//=======
+    def persist_principal_borrowers!
+      co_makers = @loan.data.is_a?(Hash) ? @loan.data.with_indifferent_access[:co_makers] : []
+      return if co_makers.blank?
+
+      principal_name = [@member.last_name, @member.first_name, @member.middle_name].reject(&:blank?).join(', ')
+      entry = {
+        member_id:         @member.id,
+        member_name:       principal_name,
+        loan_id:           @loan.id,
+        loan_product_id:   @loan.loan_product_id,
+        loan_product_name: @loan.loan_product&.name,
+        loan_pn_number:    @loan.pn_number,
+        loan_status:       @loan.status
+      }
+
+      co_makers.each do |cm|
+        cm_id = cm.is_a?(Hash) ? (cm[:id] || cm['id']) : cm
+        next if cm_id.blank?
+
+        cm_member = Member.find_by(id: cm_id)
+        next unless cm_member
+
+        cm_data = (cm_member.data.presence || {}).with_indifferent_access
+        cm_data[:principal_borrower] = Array(cm_data[:principal_borrower])
+
+        next if cm_data[:principal_borrower].any? { |row|
+          row.with_indifferent_access[:loan_id].to_s == @loan.id.to_s
+        }
+
+        cm_data[:principal_borrower] << entry
+        cm_member.update!(data: cm_data)
+      end
+    rescue => e
+      Rails.logger.error("[Loans::Approve] persist_principal_borrowers! #{e.class}: #{e.message}")
+//>>>>>>> master
     end
 
      def perform_active_loansproduct!

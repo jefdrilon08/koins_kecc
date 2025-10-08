@@ -3,6 +3,7 @@ import MembersProfileLegalDependents from "./MembersProfileLegalDependents";
 import MembersProfileBeneficiaries from "./MembersProfileBeneficiaries";
 import MembersProfileResignationRecords from "./MembersProfileResignationRecords";
 import MembersProfileProjectType from "./MembersProfileProjectType";
+import MembersProfilePrincipalBorrowers from "./MembersProfilePrincipalBorrowers";
 import axios from 'axios';
 import AddressService from "../utils/AddressService";
 
@@ -526,6 +527,12 @@ export default function MembersProfileHome(props) {
       <hr/>
       <div className="row">
         <div className="col">
+          {/* Principal Borrowers */}
+        <h3 className="text-muted">Principal Borrowers</h3>
+        <MembersProfilePrincipalBorrowers
+          records={props?.member?.data?.principal_borrower || []}
+        />
+        <hr className="my-4" />
           <h3 className="text-muted">
             Project Type
           </h3>

@@ -3,7 +3,7 @@
     %tr
       %th{ width: "5%" }
       %th
-        OR Number
+        SI Number
       %th
         Collection Date
       %th
@@ -26,7 +26,7 @@
           = link_to deposit_collection_path(o) do
             .bi.bi-search
         %td
-          #{o.or_number}
+          #{o.si_number}
         %td
           %strong
             #{o.collection_date.strftime("%b %d, %Y")}

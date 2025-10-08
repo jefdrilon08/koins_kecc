@@ -15,6 +15,15 @@ module Members
     end
 
     def execute!
+
+      # Validate Identification Number
+      if @member_data[:identification_number].blank?
+        @errors[:messages] << {
+          key: "identification_number",
+          message: "Identification number required"
+        }
+      end
+
       # Validate first_name
 
       if @member_data[:first_name].blank?
@@ -146,14 +155,14 @@ module Members
         }
       end
 
-      if Settings.activate_microloans
-        if @membership_arrangement.blank?
-          @errors[:messages] << {
-            key: "membership_arrangement_id",
-            message: "Membership arrangement not found"
-          }
-        end
-      end
+      # if Settings.activate_microloans
+      #   if @membership_arrangement.blank?
+      #     @errors[:messages] << {
+      #       key: "membership_arrangement_id",
+      #       message: "Membership arrangement not found"
+      #     }
+      #   end
+      # end
 
       if @membership_type.blank?
         @errors[:messages] << {

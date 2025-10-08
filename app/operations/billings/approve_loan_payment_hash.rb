@@ -124,9 +124,47 @@ module Billings
           status: "paid",
           max_active_date: @date_paid
         )
+        update_principal_borrowers_on_co_makers!("paid")
       end
 
       @account_transaction
+    end
+
+    private 
+
+    # For each co-maker in loan.data["co_makers"], find that Member and,
+    # inside member.data[:principal_borrower], set loan_status="paid" for this loan_id
+    def update_principal_borrowers_on_co_makers!(new_status)
+      loan_data = @loan.data
+      return unless loan_data.is_a?(Hash)
+
+      co_makers = Array.wrap(loan_data["co_makers"])
+      return if co_makers.blank?
+
+      co_makers.each do |cm|
+        cm_id = cm.is_a?(Hash) ? (cm["id"] || cm[:id]) : cm
+        next if cm_id.blank?
+
+        member = Member.find_by(id: cm_id)
+        next unless member
+
+        d   = member.data.try(:with_indifferent_access) || {}
+        arr = Array.wrap(d[:principal_borrower])
+        next if arr.blank?
+
+        changed = false
+        arr.each do |pb|
+          if pb[:loan_id].to_s == @loan.id.to_s
+            pb[:loan_status] = new_status
+            changed = true
+          end
+        end
+
+        if changed
+          d[:principal_borrower] = arr
+          member.update!(data: d) 
+        end
+      end
     end
   end
 end

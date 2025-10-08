@@ -4,8 +4,8 @@
       %th
       %th
         Collection Date
-      %th
-        OR Number
+      -# %th
+      -#   OR Number
       %th
         SI Number
       %th
@@ -29,9 +29,9 @@
         %td
           %strong
             #{o.collection_date.strftime("%b %d, %Y")}
-        %td
-          %strong
-            #{o.or_number}
+        -# %td
+        -#   %strong
+        -#     #{o.or_number}
         %td
           - if o.si_number.present?
             #{o.si_number}

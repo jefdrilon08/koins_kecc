@@ -3,6 +3,56 @@ module Api
     class LoansController < ApiController
       before_action :authenticate_user!
       
+      def edit_accounting_name
+        loan = Loan.find(params[:loan_id])
+        loan_data = loan.data.with_indifferent_access
+        
+        accounting_code_id = params[:accounting_code_id]
+        accounting_code_new = params[:accounting_code_new]
+
+        accounting_code = AccountingCode.find_by(id: accounting_code_id)
+  
+        if accounting_code.nil?
+          return render json: { error: "AccountingCode with the given ID not found" }, status: :not_found
+        end      
+
+        config = {
+          loan_id: loan.id,
+          accounting_code_id: accounting_code_id,
+          accounting_code_new: accounting_code_new
+        }
+
+        accounting_entry = Loans::AccountingEntryEditName.new(config: config)
+        accounting_entry.execute!
+      
+        render json: {
+          message: "Accounting entry updated successfully",
+          updated_loan_data: loan.data
+        }, status: :ok
+
+      end
+
+      def edit_entry_amount
+        loan = Loan.find(params[:loan_id])
+        loan_data = loan.data.with_indifferent_access
+      
+        amount = params[:amount]
+        accounting_code_id = params[:accounting_code_id]
+      
+        config = {
+          loan_id: loan.id,
+          accounting_code_id: accounting_code_id,
+          amount: amount
+        }.compact
+      
+        accounting_entry = Loans::AccountingEntryEditAmount.new(config: config)
+        accounting_entry.execute!
+            
+        render json: {
+          message: "Accounting entry updated successfully",
+          updated_loan_data: loan.data
+        }, status: :ok
+      end
 
       def reverse_approve_loan_reason
         loan = Loan.find( params[:id])
@@ -523,6 +573,14 @@ module Api
       def fetch
         member  = Member.where(id: params[:member_id]).first
 
+        accounting_codes = AccountingCode.all.order("name ASC").map{ |code|
+          {
+            id: code.id,
+            code: code.code,
+            name: code.name
+          }
+        }
+
         if member.blank?
           render json: { message: "member not found" }, status: 400
         else
@@ -562,7 +620,7 @@ module Api
                                       }
                                     }
 
-          render json: { loan: loan, project_type_categories: project_type_categories, transfer_option: transfer_option }
+          render json: { loan: loan, project_type_categories: project_type_categories, transfer_option: transfer_option, accounting_codes: accounting_codes }
         end
       end
       

@@ -225,6 +225,7 @@ export default function MembersProfile(props) {
                   <MembersProfileInsurance
                     records={insuranceAccounts || []}
                     total={totalInsurance}
+                    roles={roles}
                   />
                 </div>
                 <div id="equity_accounts" className="home p-3 tab-pane" role="tabpanel">

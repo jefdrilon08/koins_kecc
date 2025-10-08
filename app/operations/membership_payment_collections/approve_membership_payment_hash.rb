@@ -36,37 +36,41 @@ module MembershipPaymentCollections
       @membership_payment_record.save!
 
       if @membership_settings.type == "Cooperative" and @membership_settings.is_main == true
-        identification_number = @member.identification_number
 
-        if identification_number.blank?
-          identification_number = ::Members::GenerateMemberIdentificationNumber.new(
-                                    member: @member
-                                  ).execute!
+        # === AUTO GENERATE IDENTIFCATION NUMBER FOR MEMBER ===
+        # identification_number = @member.identification_number
 
-          while Member.where("upper(identification_number) = ?", identification_number.upcase).count > 0 do
-            # Update branch counter
-            old_counter = @member.branch.member_counter || 0
-            new_counter = old_counter + 1
-            @member.branch.update!(member_counter: new_counter)
+        # if identification_number.blank?
+        #   identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+        #                             member: @member
+        #                           ).execute!
 
-            identification_number = ::Members::GenerateMemberIdentificationNumber.new(
-                                      member: @member
-                                    ).execute!
-          end
-        end
+        #   while Member.where("upper(identification_number) = ?", identification_number.upcase).count > 0 do
+        #     # Update branch counter
+        #     old_counter = @member.branch.member_counter || 0
+        #     new_counter = old_counter + 1
+        #     @member.branch.update!(member_counter: new_counter)
+
+        #     identification_number = ::Members::GenerateMemberIdentificationNumber.new(
+        #                               member: @member
+        #                             ).execute!
+        #   end
+        # end
+        
         member_data = @member.data.with_indifferent_access
         member_data[:hide_status] = "active"
         @member.update!(
           status: "active",
-          identification_number: identification_number,
+          # identification_number: identification_number,
           data: member_data
         )
 
+        # === THIS IS ALSO RELATED TO AUTO GENERATE IDENTFICATION NUMBER BUT EVERY BRANCH SO MUST NEED UNIQUE ===
         # Update branch counter
-        old_counter = @member.branch.member_counter || 1
-        new_counter = old_counter + 1
+        # old_counter = @member.branch.member_counter || 1
+        # new_counter = old_counter + 1
 
-        @member.branch.update!(member_counter: new_counter)
+        # @member.branch.update!(member_counter: new_counter)
       end
 
       if @membership_settings.type == "Insurance" and @membership_settings.is_main == true

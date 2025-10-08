@@ -45,6 +45,7 @@ module Members
           num_years: 0,
           proof: ""
         },
+        principal_borrower: [],
         banks: [],
         # legal_dependents: [],
         beneficiaries: [],
@@ -72,6 +73,7 @@ module Members
   
       @member_data  = {
         id: @member.id || "",
+        identification_number: @member.identification_number || "",
         first_name: @member.first_name || "",
         middle_name: @member.middle_name || "",
         last_name: @member.last_name || "",

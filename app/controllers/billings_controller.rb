@@ -26,6 +26,13 @@ class BillingsController < ApplicationController
       @status = params[:status]
       @billings = @billings.where(status: @status)
     end
+
+    if params[:si_number].present?
+      @si_number = params[:si_number]
+      @billings = @billings.where("LOWER(si_number) = ?", @si_number.downcase)
+    end
+
+
     if params[:or_number].present?
       @or_number = params[:or_number]
       @billings = @billings.where(or_number: @or_number)

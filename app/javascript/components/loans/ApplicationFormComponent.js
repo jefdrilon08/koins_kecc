@@ -43,8 +43,17 @@ export default class ApplicationFormComponent extends React.Component {
       isMobileNumberExist: false,
       paymentType: "",
       subType: "",
-      paidLoansFromChild: [],
-      errors: false
+//<<<<<<< active_loans_accounting_etry
+//      paidLoansFromChild: [],
+//      errors: false
+//=======
+      errors: false,
+      firstCoMaker: null,
+      secondCoMaker: null,
+      thirdCoMaker: null,
+      coMakersError: null,
+      pbErrorOn: null,
+//>>>>>>> master
     };
   }
 
@@ -77,6 +86,7 @@ this.setState({ paidLoansFromChild: paidLoansFetch || [] });
       member_id: this.props.memberId
     }
 
+//<<<<<<< active_loans_accounting_etry
 
     // Fetch active loans for member
 $.ajax({
@@ -92,25 +102,28 @@ $.ajax({
   },
   error: (err) => console.error(err)
 });
+//=======
+    this.loadAllMembers();
+//>>>>>>> master
 
 
     // Fetch co_makers
-    $.ajax({
-      url: "/api/v1/members/member_co_makers",
-      data: {
-        id: context.props.memberId
-      },
-      method: 'GET',
-      success: function(response) {
-        console.log(response);
-        context.setState({
-          coMakers: response.co_makers
-        });
-      },
-      error: function(response) {
-        console.log(response);
-      }
-    });
+    // $.ajax({
+    //   url: "/api/v1/members/member_co_makers",
+    //   data: {
+    //     id: context.props.memberId
+    //   },
+    //   method: 'GET',
+    //   success: function(response) {
+    //     console.log(response);
+    //     context.setState({
+    //       coMakers: response.co_makers
+    //     });
+    //   },
+    //   error: function(response) {
+    //     console.log(response);
+    //   }
+    // });
 
     // Fetch loan_products
     $.ajax({
@@ -283,7 +296,10 @@ $.ajax({
           currentProjectTypeCategoryId: currentProjectTypeCategoryId,
           currentBankTransferId: currentBankTransferId,
           coMakerProfilePicture: response.loan.co_maker_relative_profile_picture_url,
-          coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url });
+          coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url,
+          }, () => {
+          context.syncSelectedCoMakers();
+         });
       },
       error: function(response) {
         console.log(response);
@@ -291,6 +307,74 @@ $.ajax({
       }
     });
   }
+
+  // helper to read active Principal Borrower count for a member 
+  fetchPrincipalBorrowersActiveCount(memberId) {
+    return new Promise((resolve) => {
+      if (!memberId) return resolve(0);
+      $.ajax({
+        url: `/api/v1/members/${memberId}/principal_borrowers_active_count`,
+        method: 'GET',
+        success: (resp) => resolve(resp?.active_count ?? 0),
+        error: (err) => {
+          console.error("Error checking PB active count:", err);
+          resolve(0); // fail-safe
+        }
+      });
+    });
+  }
+
+  // clear warning if >= 3
+  async checkPBAndWarn(memberId, source) {
+    if (!memberId) return;
+    const count = await this.fetchPrincipalBorrowersActiveCount(memberId);
+
+    const msg = "This member has already 3 Principal Borrower (active).";
+
+    if (count >= 3) {
+      this.setState({
+        coMakersError: msg,
+        pbErrorOn: source,
+      });
+    } else {
+      if (this.state.coMakersError?.includes("Principal Borrower") && this.state.pbErrorOn === source) {
+        this.setState({ coMakersError: null, pbErrorOn: null });
+      }
+    }
+  }
+
+  // Helpers
+  syncSelectedCoMakers = () => {
+    const { data, coMakers } = this.state;
+    if (!data || !data.data) return;
+
+    // Prefer array
+    let raw = Array.isArray(data.data.co_makers) ? data.data.co_makers.slice(0,3) : [];
+    if (raw.length === 0) {
+      const legacy = [];
+      if (data.data.co_maker_one && (data.data.co_maker_one.id || data.data.co_maker_one.value)) legacy.push(data.data.co_maker_one);
+      if (data.data.co_maker_two) legacy.push(data.data.co_maker_two);
+      if (data.data.co_maker_three) legacy.push(data.data.co_maker_three);
+      raw = legacy.slice(0,3);
+    }
+
+    const toOption = (cm) => {
+      if (!cm) return null;
+      const id = typeof cm === 'object' ? (cm.id ?? cm.value) : cm;
+      if (id === undefined || id === null) return null;
+      const fromList = coMakers.find(o => String(o.value) === String(id));
+      const label = fromList?.label || cm.name || cm.label || String(id);
+      return { value: id, label };
+    };
+
+    this.setState({
+      firstCoMaker:  toOption(raw[0]),
+      secondCoMaker: toOption(raw[1]),
+      thirdCoMaker:  toOption(raw[2]),
+    }, () => {
+      this.setState({ coMakersError: this.computeCoMakersError() });
+    });
+  };
 
   renderErrorDisplay() {
     if(this.state.errors) {
@@ -380,33 +464,117 @@ $.ajax({
     this.updateData(data);
   }
 
-  handleCoMakerThree(event) {
-    var data  = this.state.data;
+  // Old function for Co-makers
+  // handleCoMakerThree(event) {
+  //   var data  = this.state.data;
 
-    data.data.co_maker_three = event.target.value.toUpperCase();
+  //   data.data.co_maker_three = event.target.value.toUpperCase();
 
-    this.updateData(data);
-  }
+  //   this.updateData(data);
+  // }
 
-  handleCoMakerTwo(event) {
-    var data = this.state.data;
+  // handleCoMakerTwo(event) {
+  //   var data = this.state.data;
 
-    data.data.co_maker_two = event.target.value.toUpperCase();
+  //   data.data.co_maker_two = event.target.value.toUpperCase();
 
-    this.updateData(data);
-  }
+  //   this.updateData(data);
+  // }
 
-  handleCoMakerOne(o) {
-    var data  = this.state.data;
+  // handleCoMakerOne(o) {
+  //   var data  = this.state.data;
 
-    for(var i = 0; i < this.state.coMakers.length; i++) {
-      if(this.state.coMakers[i].id == o.value) {
-        data.data.co_maker_one  = this.state.coMakers[i];
+  //   for(var i = 0; i < this.state.coMakers.length; i++) {
+  //     if(this.state.coMakers[i].id == o.value) {
+  //       data.data.co_maker_one  = this.state.coMakers[i];
+  //     }
+  //   }
+
+  //   this.updateData(data);
+  // }
+
+  
+  loadAllMembers() {
+    const context = this;
+    $.ajax({
+      url: "/api/v1/members/get_members",
+      method: "GET",
+      success(response) {
+        const coMakers = (response || []).map(m => ({
+          value: m.id,
+          label: m.branch_name ? `${m.name} — (${m.branch_name})` : m.name,
+        }));
+
+        context.setState({ coMakers }, () => {
+          context.syncSelectedCoMakers();
+        });
+      },
+      error(err) {
+        console.error("Error fetching members:", err);
+        context.setState({ coMakers: [] });
       }
+    });
+  }
+
+  // ===== Co-maker validation =====
+  computeCoMakersError = () => {
+    const { firstCoMaker, secondCoMaker, thirdCoMaker } = this.state;
+
+    const selected = [firstCoMaker?.value, secondCoMaker?.value, thirdCoMaker?.value]
+      .filter(v => v !== undefined && v !== null)
+      .map(v => String(v));
+
+    // Borrower cannot be a co-maker
+    const borrowerId = String(this.props.memberId);
+    if (selected.some(v => v === borrowerId)) {
+      return "Borrower cannot be selected as a co-maker.";
     }
 
-    this.updateData(data);
+    // Must be unique
+    if (new Set(selected).size !== selected.length) {
+      return "Co-makers must be unique.";
+    }
+
+    return null;
+  };
+
+  validateCoMakers() {
+    const err = this.computeCoMakersError();
+    this.setState({ coMakersError: err });
+    return !err;
   }
+
+
+
+  // ===== Co-maker selectors =====
+  // First Co-maker
+  handleFirstCoMaker(selectedOption) {
+    this.setState({ firstCoMaker: selectedOption }, () => {
+      const err = this.computeCoMakersError();
+      this.setState({ coMakersError: err });
+      this.checkPBAndWarn(selectedOption?.value, "first");
+    });
+  }
+
+  // Second Co-maker
+  handleSecondCoMaker(selectedOption) {
+    this.setState({ secondCoMaker: selectedOption }, () => {
+      const err = this.computeCoMakersError();
+      this.setState({ coMakersError: err });
+      this.checkPBAndWarn(selectedOption?.value, "second");
+    });
+  }
+
+  // Third Co-maker
+  handleThirdCoMaker(selectedOption) {
+    this.setState({ thirdCoMaker: selectedOption }, () => {
+      const err = this.computeCoMakersError();
+      this.setState({ coMakersError: err });
+      this.checkPBAndWarn(selectedOption?.value, "third");
+    });
+  }
+
+
 
   handleNumInstallments(event) {
     var data  = this.state.data;
@@ -463,6 +631,10 @@ handlePaidLoans = (paidLoans) => {
   // }
 
 
+     if (!this.validateCoMakers()) {
+      return;
+    }
+
     this.setState({
       isSaving: true
     });
@@ -482,7 +654,28 @@ handlePaidLoans = (paidLoans) => {
     // FOR MOBILE NUMBER
     formData.append('mobile_number', state.memberMobileNumber);
 
-    formData.append('payload', JSON.stringify(state.data));
+    // co_makers
+    const unique = [];
+    const seen = new Set();
+    [state.firstCoMaker, state.secondCoMaker, state.thirdCoMaker]
+      .filter(Boolean)
+      .forEach(cm => {
+        const key = String(cm.value);
+        if (!seen.has(key)) { seen.add(key); unique.push(cm); }
+      });
+
+    const coMakersPayload = unique.map(cm => ({ id: cm.value, name: cm.label }));
+
+    const payload = {
+      ...(state.data || {}),
+      data: {
+        ...((state.data && state.data.data) || {}),
+        co_makers: coMakersPayload,
+      },
+    };
+
+    // formData.append('payload', JSON.stringify(state.data));
+    formData.append("payload", JSON.stringify(payload));
     formData.append('authenticity_token', context.props.authenticityToken);
 
     $.ajax({
@@ -1038,6 +1231,21 @@ handlePaidLoans = (paidLoans) => {
       var serviceFeeAvailable = this.state.data.data.service_fee_available || false;
       var smsFeeAvailable = this.state.data.data.sms_fee_available || false;
 
+      // Disable logic for duplicate/self choices
+      const borrowerId = String(this.props.memberId);
+      const firstId  = this.state.firstCoMaker?.value;
+      const secondId = this.state.secondCoMaker?.value;
+      const thirdId  = this.state.thirdCoMaker?.value;
+
+      const disableForFirst  = (opt) => [secondId, thirdId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
+      const disableForSecond = (opt) => [firstId, thirdId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
+      const disableForThird  = (opt) => [firstId, secondId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
+
+      const isBusy = this.state.isSaving || this.state.isActive;
+      const pbLimitHit = this.state.coMakersError?.includes("Principal Borrower");
+      const disableSecondDueToPB = pbLimitHit && this.state.pbErrorOn === 'first';
+      const disableThirdDueToPB  = pbLimitHit && (this.state.pbErrorOn === 'first' || this.state.pbErrorOn === 'second');
+
       console.log(this.props.settings)
 
       return  (
@@ -1047,6 +1255,59 @@ handlePaidLoans = (paidLoans) => {
             Co-maker Information
           </h5>
           <div className="card">
+            <div className="card-body">
+              <div className="row">
+              {/* First Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>First Co-maker</label>
+                  <Select
+                    value={this.state.firstCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleFirstCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy}
+                  />
+                </div>
+              </div>
+
+              {/* Second Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>Second Co-maker</label>
+                  <Select
+                    value={this.state.secondCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleSecondCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy || disableSecondDueToPB}
+                  />
+                </div>
+              </div>
+
+              {/* Third Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>Third Co-maker</label>
+                  <Select
+                    value={this.state.thirdCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleThirdCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy || disableThirdDueToPB}
+                  />
+                </div>
+              </div>
+              </div>
+              {this.state.coMakersError && (
+                <div className="alert alert-danger py-2 my-2" role="alert">
+                  {this.state.coMakersError}
+                </div>
+              )}
+            </div>
+          </div>
+          <br></br>
+          {/* <div className="card">
             <div className="card-body">
               <div className="row">
                 <div className="col-md-4 col-xs-12">
@@ -1120,7 +1381,7 @@ handlePaidLoans = (paidLoans) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="row">
             <div className="col">
               <div className="form-group">
@@ -1334,7 +1595,7 @@ handlePaidLoans = (paidLoans) => {
               />
             </div>
           </div>
-          <h5>
+          {/* <h5>
             Project Type
           </h5>
           <div className="card">
@@ -1348,6 +1609,7 @@ handlePaidLoans = (paidLoans) => {
                 data={this.state.data}
               />
             </div>
+//<<<<<<< active_loans_accounting_etry
           </div>
           {/* Active Loan */}
           <h5>
@@ -1374,6 +1636,9 @@ handlePaidLoans = (paidLoans) => {
 /> */}
             </div>
           </div>
+//=======
+//          </div> */}
+//>>>>>>> master
           <hr/>
           <h5>
             Bank Transfer
@@ -1467,7 +1732,7 @@ handlePaidLoans = (paidLoans) => {
                 <button
                   className="btn btn-primary"
                   onClick={this.handleSave.bind(this)}
-                  disabled={(this.state.isSaving || this.state.isActive) || !this.state.isMobileNumberValid || this.state.isMobileNumberExist}
+                  disabled={(this.state.isSaving || this.state.isActive) || !this.state.isMobileNumberValid || this.state.isMobileNumberExist || !!this.state.coMakersError}
                 >
                   <span className="bi bi-check"/>
                   Save

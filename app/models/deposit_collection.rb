@@ -27,6 +27,10 @@ class DepositCollection < ApplicationRecord
     self.data.with_indifferent_access[:or_number]
   end
 
+  def si_number
+    self.data.with_indifferent_access[:si_number]
+  end
+
   def book
     temp_data = self.data.with_indifferent_access
 

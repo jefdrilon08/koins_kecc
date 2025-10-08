@@ -409,8 +409,10 @@ namespace :api do
     get "/members/fetch_survey_answer", to: "members#fetch_survey_answer"
     get "/members/fetch_resignation_details", to: "members#fetch_resignation_details"
     post "/members/process_resignation", to: "members#process_resignation"
+    get "/members/get_members", to: "members#get_members"
     get "/members/member_co_makers", to: "members#member_co_makers"
     get "/members/member_loan_products", to: "members#member_loan_products"
+    get "/members/:id/principal_borrowers_active_count", to: "members#principal_borrowers_active_count"
     post "/members/create_survey", to: "members#create_survey"
     post "/members/delete_survey_answer", to: "members#delete_survey_answer"
     post "/members/generate_access_token", to: "members#generate_access_token"
@@ -502,6 +504,8 @@ namespace :api do
     post "/loans/reverse_loan_reason", to: "loans#reverse_loan_reason"
     post "/loans/reverse_approve_loan_reason", to: "loans#reverse_approve_loan_reason"
     post "/loans/fraud_save", to: "loans#fraud_save"
+    post "/loans/edit_entry_amount", to: "loans#edit_entry_amount"
+    post "/loans/edit_accounting_name", to: "loans#edit_accounting_name"
     # Branches
     get "/branches", to: "branches#index"
     get "/branches/list_centers", to: "branches#list_centers"
@@ -624,6 +628,9 @@ namespace :api do
     post "/membership_payment_collections/remove_member", to: "membership_payment_collections#remove_member"
 
     # Deposit Collection
+    get  "/deposit_collections/fetch_accounting_codes", to: "deposit_collections#fetch_accounting_codes"
+    post "/deposit_collections/edit_accounting_name",   to: "deposit_collections#edit_accounting_name"
+    post "/deposit_collections/edit_entry_amount",      to: "deposit_collections#edit_entry_amount"
     post "/deposit_collections", to: "deposit_collections#create"
     post "/deposit_collections/modify_transaction_record", to: "deposit_collections#modify_transaction_record"
     post "/deposit_collections/approve", to: "deposit_collections#approve"
@@ -659,6 +666,9 @@ namespace :api do
     post "/time_deposit_collections/update_si_number", to: "time_deposit_collections#update_si_number"
 
     # Withdrawal Collection
+    get  "/withdrawal_collections/fetch_accounting_codes", to: "withdrawal_collections#fetch_accounting_codes"
+    post "/withdrawal_collections/edit_accounting_name",   to: "withdrawal_collections#edit_accounting_name"
+    post "/withdrawal_collections/edit_entry_amount",      to: "withdrawal_collections#edit_entry_amount"
     post "/withdrawal_collections", to: "withdrawal_collections#create"
     post "/withdrawal_collections/modify_transaction_record", to: "withdrawal_collections#modify_transaction_record"
     post "/withdrawal_collections/approve", to: "withdrawal_collections#approve"

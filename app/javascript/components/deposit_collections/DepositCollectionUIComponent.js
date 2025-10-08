@@ -17,7 +17,8 @@ export default class DepositCollectionUIComponent extends React.Component {
     this.state  = {
       isLoading: true,
       isSaving: false,
-      data: false
+      data: false,
+      accountingCodes: []
     };
   }
 
@@ -39,6 +40,18 @@ export default class DepositCollectionUIComponent extends React.Component {
           isLoading: false,
           data: response
         });
+
+      $.ajax({
+        url: "/api/v1/deposit_collections/fetch_accounting_codes",
+        method: "GET",
+        success: function(res) {
+          const codes = (res.accounting_codes || []).map(c => ({ id: c.id, name: c.name }));
+          context.setState({ accountingCodes: codes });
+        },
+        error: function() {
+          console.log("Failed to load accounting codes");
+        }
+      });
       },
       error: function(response) {
         console.log(response);
@@ -306,7 +319,8 @@ export default class DepositCollectionUIComponent extends React.Component {
         </div>
       );
     } else {
-      return this.state.data.data.or_number;
+      // return this.state.data.data.or_number;
+      return siNumber || "—";
     }
   }
   renderArNumber() {
@@ -364,14 +378,14 @@ export default class DepositCollectionUIComponent extends React.Component {
                   </strong>
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   OR Number:
                 </th>
                 <td className="text-end">
                   {this.renderOrNumber()}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th>
                   Service Invoice:
@@ -380,14 +394,14 @@ export default class DepositCollectionUIComponent extends React.Component {
                   {this.renderSiNumber()}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   AR Number:
                 </th>
                 <td className="text-end">
                   {this.renderArNumber()}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th>
                   Particular:
@@ -396,7 +410,7 @@ export default class DepositCollectionUIComponent extends React.Component {
                   {this.renderParticular()}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   Accounting Fund:
                 </th>
@@ -406,7 +420,7 @@ export default class DepositCollectionUIComponent extends React.Component {
                     authenticityToken={this.props.authenticityToken}
                   />
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
           <AddRecord
@@ -430,6 +444,8 @@ export default class DepositCollectionUIComponent extends React.Component {
             Accounting Entry
           </h6>
           <AccountingEntryPreview
+            contextType="deposit_collection"
+            id={this.props.id}
             book={accounting_entry_data.book}
             particular={accounting_entry_data.particular}
             datePrepared={accounting_entry_data.date_prepared}
@@ -437,12 +453,17 @@ export default class DepositCollectionUIComponent extends React.Component {
             approved_by={accounting_entry_data.approved_by}
             branch={accounting_entry_data.branch_name}
             balanced={true}
-            status={accounting_entry_data.status}
+            // status={accounting_entry_data.status}
+            status={this.state.data.status}
             journalEntries={accounting_entry_data.journal_entries}
             isLoading={this.state.isLoading}
-            handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+            // handleRemoveClicked={this.handleRemoveClicked.bind(this)}
+            // handleJournalEntryEdit={() => {}} 
             data={accounting_entry_data.data}
+            hideOrAr={true}
             accountingFundId={accounting_entry_data.accounting_fund_id}
+            accountingCodes={this.state.accountingCodes || []} 
+            onUpdated={() => this.fetchDepositCollectionData()} 
           />
         </div>
       );

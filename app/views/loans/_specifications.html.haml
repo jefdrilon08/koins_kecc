@@ -19,38 +19,82 @@
       Project Type:
     %td.text-end
       #{@loan.project_type}
+  
+  - co_makers = (@loan.data || {}).with_indifferent_access[:co_makers] || []
+
   %tr
     %th
-      Co-maker (Kasama sa sentro): 
+      First Co-maker:
     %td.text-end
-      - if @loan.has_co_maker_one?
-        = link_to member_path(@loan.data["co_maker_one"]["id"]) do
-          #{@loan.co_maker_one}
-  - if @co_maker.present? and @co_maker.profile_picture.attached?
-    %tr
-      %th
-      %td.text-end
-        = image_tag @co_maker.profile_picture, width: 100
+      - if co_makers[0].present?
+        - cm = co_makers[0].is_a?(Hash) ? co_makers[0].with_indifferent_access : { id: co_makers[0], name: nil }
+        - if cm[:id].present?
+          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
+            = cm[:name].presence || cm[:id]
+        - else
+          = cm[:name].presence || "N/A"
+      - else
+        N/A
+
   %tr
     %th
-      Co-maker (Kamag-anak):
+      Second Co-maker:
     %td.text-end
-      #{@loan.co_maker_two}
-  - if @loan.co_maker_relative_profile_picture.attached?
-    %tr
-      %th
-      %td.text-end
-        = image_tag @loan.co_maker_relative_profile_picture, width: 100
+      - if co_makers[1].present?
+        - cm = co_makers[1].is_a?(Hash) ? co_makers[1].with_indifferent_access : { id: co_makers[1], name: nil }
+        - if cm[:id].present?
+          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
+            = cm[:name].presence || cm[:id]
+        - else
+          = cm[:name].presence || "N/A"
+      - else
+        N/A
+
   %tr
     %th
-      Co-maker (Hindi kamag-anak / kapitbahay)
+      Third Co-maker:
     %td.text-end
-      #{@loan.co_maker_three}
-  - if @loan.co_maker_non_relative_profile_picture.attached?
-    %tr
-      %th
-      %td.text-end
-        = image_tag @loan.co_maker_non_relative_profile_picture, width: 100
+      - if co_makers[2].present?
+        - cm = co_makers[2].is_a?(Hash) ? co_makers[2].with_indifferent_access : { id: co_makers[2], name: nil }
+        - if cm[:id].present?
+          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
+            = cm[:name].presence || cm[:id]
+        - else
+          = cm[:name].presence || "N/A"
+      - else
+        N/A
+  -# %tr
+  -#   %th
+  -#     Co-maker (Kasama sa sentro): 
+  -#   %td.text-end
+  -#     - if @loan.has_co_maker_one?
+  -#       = link_to member_path(@loan.data["co_maker_one"]["id"]) do
+  -#         #{@loan.co_maker_one}
+  -# - if @co_maker.present? and @co_maker.profile_picture.attached?
+  -#   %tr
+  -#     %th
+  -#     %td.text-end
+  -#       = image_tag @co_maker.profile_picture, width: 100
+  -# %tr
+  -#   %th
+  -#     Co-maker (Kamag-anak):
+  -#   %td.text-end
+  -#     #{@loan.co_maker_two}
+  -# - if @loan.co_maker_relative_profile_picture.attached?
+  -#   %tr
+  -#     %th
+  -#     %td.text-end
+  -#       = image_tag @loan.co_maker_relative_profile_picture, width: 100
+  -# %tr
+  -#   %th
+  -#     Co-maker (Hindi kamag-anak / kapitbahay)
+  -#   %td.text-end
+  -#     #{@loan.co_maker_three}
+  -# - if @loan.co_maker_non_relative_profile_picture.attached?
+  -#   %tr
+  -#     %th
+  -#     %td.text-end
+  -#       = image_tag @loan.co_maker_non_relative_profile_picture, width: 100
   %tr
     %th
       Status:

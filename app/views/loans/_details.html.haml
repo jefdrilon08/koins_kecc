@@ -128,6 +128,10 @@
     = render partial: "loan_for_fullpayment_table"
 
   .col-md-8.col-xs-12
-    %h4
-      Amortization
+    .d-flex.justify-content-between.align-items-center
+      %h4
+        Amortization
+      = link_to amortization_pdf_path(@loan), target: "_blank", class: "btn btn-sm btn-outline-primary" do
+        %i.fa.fa-print
+        Print Amortization
     = render partial: "amortization"

@@ -29,12 +29,12 @@ module Administration
           }
         end
 
-        if @membership_arrangement.blank?
-          @errors[:messages] << {
-            key: "membership_arrangement",
-            message: "Membership arrangement not found"
-          }
-        end
+        # if @membership_arrangement.blank?
+        #   @errors[:messages] << {
+        #     key: "membership_arrangement",
+        #     message: "Membership arrangement not found"
+        #   }
+        # end
 
         #not_yet_implemented!
 
