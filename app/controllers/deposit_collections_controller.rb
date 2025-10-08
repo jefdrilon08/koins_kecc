@@ -29,6 +29,11 @@ class DepositCollectionsController < ApplicationController
     
     @deposit_collections = @deposit_collections.order("status DESC, collection_date DESC").page(params[:page]).per(20)
 
+    Rails.logger.info "DEBUG: DepositCollections loaded => #{@deposit_collections.size} records"
+    @deposit_collections.each do |o|
+      Rails.logger.info "ID: #{o.id}, OR: #{o.or_number}, SI: #{o.try(:si_number)}, Status: #{o.status}, Branch: #{o.branch_id}"
+    end
+
     @subheader_items = [
       { text: "Cash Management" },
       { text: "Deposits" }

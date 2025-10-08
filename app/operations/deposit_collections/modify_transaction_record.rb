@@ -90,6 +90,15 @@ module DepositCollections
               end
             end
           end
+        elsif t[:record_type] == "EQUITY" 
+          @data[:records].each_with_index do |r, i|
+            r[:records].each_with_index do |rr, j|
+              if rr[:record_type] == "EQUITY" and t[:key] == rr[:account_subtype]
+                total_collected += rr[:amount].try(:to_f).round(2)
+                @data[:totals][index][:amount] += rr[:amount].try(:to_f).round(2)
+              end
+            end
+          end
         end
       end
 
@@ -116,6 +125,9 @@ module DepositCollections
               @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
               @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
             elsif rr[:record_type] == "INSURANCE" and rr[:account_subtype] == @current_transaction[:account_subtype]
+              @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
+              @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
+            elsif rr[:record_type] == "EQUITY" and rr[:account_subtype] == @current_transaction[:account_subtype]
               @original_amount  = @data[:records][i][:records][j][:amount].try(:to_f)
               @data[:records][i][:records][j][:amount] = @current_transaction[:amount].try(:to_f).round(2)
             end

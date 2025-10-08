@@ -453,19 +453,34 @@ default_deposit_accounts:
     account_subtype: "K-IMPOK"
   -
     account_type: "SAVINGS"
-    account_subtype: "Golden K"
+    account_subtype: "Associate Savings Account"
   -
-    account_type: "SAVINGS"
-    account_subtype: "Savings Investment Fund"
+    account_type: "EQUITY"
+    account_subtype: "Share Capital"
   -
-    account_type: "SAVINGS"
-    account_subtype: "Maintaining Balance Savings"
+    account_type: "EQUITY"
+    account_subtype: "CBU"
   -
-    account_type: "INSURANCE"
-    account_subtype: "Life Insurance Fund"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "Retirement Fund"
+    account_type: "EQUITY"
+    account_subtype: "Preferred Share"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "K-IMPOK"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Golden K"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Savings Investment Fund"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Maintaining Balance Savings"
+#  -
+#    account_type: "INSURANCE"
+#    account_subtype: "Life Insurance Fund"
+#  -
+#    account_type: "INSURANCE"
+#    account_subtype: "Retirement Fund"
 
 default_withdrawal_accounts:
   -
@@ -545,6 +560,12 @@ default_member_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "Maintaining Balance Savings"
+  -
+    account_type: "EQUITY"
+    account_subtype: "Preferred Share"
+  -
+    account_type: "SAVINGS"
+    account_subtype: "Associate Savings Account"
 
 
 # Mba new insurance accounts
@@ -864,6 +885,10 @@ savings_accounting_codes:
     savings_type: "Time Deposit"
     deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     withdrawal_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+  -
+    savings_type: "Associate Savings Account"
+    deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
 
 equity_accounting_codes:
   -
@@ -874,6 +899,10 @@ equity_accounting_codes:
     equity_type: "CBU"
     deposit_accounting_code_id: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
     withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
+  -
+    equity_type: "Preferred Share"
+    deposit_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
+    withdrawal_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
 
 
 

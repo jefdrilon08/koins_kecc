@@ -269,16 +269,19 @@ export default class DepositCollectionUITable extends React.Component {
     }
   }
 
-  renderTransactionParticular() {
+    renderTransactionParticular() {
     var currentTransaction  = this.state.currentTransaction;
-    var currentMember       = this.state.currentMember;
 
     return (
       <h5>
-        SAVINGS
+        {currentTransaction.record_type}
+        {currentTransaction.account_subtype ? (
+          <span className="text-muted"> — {currentTransaction.account_subtype}</span>
+        ) : null}
       </h5>
     );
   }
+
 
   handleModalConfirm() {
     var currentTransaction  = this.state.currentTransaction;
@@ -291,6 +294,12 @@ export default class DepositCollectionUITable extends React.Component {
       id: this.props.id,
       authenticity_token: this.props.authenticityToken
     };
+
+    data.current_transaction.record_type =
+      data.current_transaction.record_type || currentTransaction.record_type;
+
+    data.current_transaction.account_subtype =
+      data.current_transaction.account_subtype || currentTransaction.account_subtype;
 
     this.setState({
       isLoading: true

@@ -5,6 +5,11 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import Select from 'react-select';
 
 export default class AccountingEntryPreview extends React.Component {
+
+  // DepositCollectionUIComponent.js: hide the OR AND AR in accounting entry
+  static defaultProps = {
+    hideOrAr: false, 
+  };
   
   constructor(props) {
     super(props);
@@ -234,33 +239,38 @@ export default class AccountingEntryPreview extends React.Component {
   }
 
   renderCrbParameters() {
-    if(this.props.book == "CRB") {
-      return (
-        <div>
-          <hr/>
-          <strong>
-            OR Number: 
-          </strong>
+
+    const { hideOrAr, data } = this.props;
+
+        if(this.props.book == "CRB") {
+          return (
+            <div>
+              <hr/>
+
+          {/* OR Number — hidden when hideOrAr is true */}
+          {!hideOrAr && (
+            <>
+              <strong>OR Number:</strong>
+              <br/>
+              <span className="text-muted">{data?.or_number}</span>
+              <br/>
+            </>
+          )}
+
+          {/* Always show Service Invoice */}
+          <strong>Service Invoice:</strong>
           <br/>
-          <span className="text-muted">
-            {this.props.data.or_number}
-          </span>
+          <span className="text-muted">{data?.si_number}</span>
           <br/>
-          <strong>
-            Service Invoice: 
-          </strong>
-          <br/>
-          <span className="text-muted">
-            {this.props.data.si_number}
-          </span>
-          <br/>
-          <strong>
-            AR Number: 
-          </strong>
-          <br/>
-          <span className="text-muted">
-            {this.props.data.ar_number}
-          </span>
+
+          {/* AR Number — hidden when hideOrAr is true */}
+          {!hideOrAr && (
+            <>
+              <strong>AR Number:</strong>
+              <br/>
+              <span className="text-muted">{data?.ar_number}</span>
+            </>
+          )}
         </div>
       );
     }

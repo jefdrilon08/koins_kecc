@@ -319,7 +319,8 @@ export default class DepositCollectionUIComponent extends React.Component {
         </div>
       );
     } else {
-      return this.state.data.data.or_number;
+      // return this.state.data.data.or_number;
+      return siNumber || "—";
     }
   }
   renderArNumber() {
@@ -377,14 +378,14 @@ export default class DepositCollectionUIComponent extends React.Component {
                   </strong>
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   OR Number:
                 </th>
                 <td className="text-end">
                   {this.renderOrNumber()}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th>
                   Service Invoice:
@@ -393,14 +394,14 @@ export default class DepositCollectionUIComponent extends React.Component {
                   {this.renderSiNumber()}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   AR Number:
                 </th>
                 <td className="text-end">
                   {this.renderArNumber()}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th>
                   Particular:
@@ -409,7 +410,7 @@ export default class DepositCollectionUIComponent extends React.Component {
                   {this.renderParticular()}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th>
                   Accounting Fund:
                 </th>
@@ -419,7 +420,7 @@ export default class DepositCollectionUIComponent extends React.Component {
                     authenticityToken={this.props.authenticityToken}
                   />
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
           <AddRecord
@@ -459,6 +460,7 @@ export default class DepositCollectionUIComponent extends React.Component {
             // handleRemoveClicked={this.handleRemoveClicked.bind(this)}
             // handleJournalEntryEdit={() => {}} 
             data={accounting_entry_data.data}
+            hideOrAr={true}
             accountingFundId={accounting_entry_data.accounting_fund_id}
             accountingCodes={this.state.accountingCodes || []} 
             onUpdated={() => this.fetchDepositCollectionData()} 
