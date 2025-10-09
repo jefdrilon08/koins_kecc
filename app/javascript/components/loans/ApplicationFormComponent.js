@@ -44,7 +44,7 @@ export default class ApplicationFormComponent extends React.Component {
       paymentType: "",
       subType: "",
 //<<<<<<< active_loans_accounting_etry
-//      paidLoansFromChild: [],
+     paidLoansFromChild: [],
 //      errors: false
 //=======
       errors: false,
@@ -1625,20 +1625,8 @@ handlePaidLoans = (paidLoans) => {
                   paidLoans={this.state.paidLoansFromChild}
                   principal={this.state.data.principal}
               />
-
-              {/* <ApplicationFormActiveLoans
-    memberId={this.props.memberId}
-    activeLoans={this.state.activeLoans}
-    loanProducts={this.state.loanProducts} 
-    onPaidLoansExtracted={this.handlePaidLoans}
-    paidLoans={this.state.paidLoansFromChild}
-    principal={this.state.data.principal}
-/> */}
             </div>
           </div>
-//=======
-//          </div> */}
-//>>>>>>> master
           <hr/>
           <h5>
             Bank Transfer
