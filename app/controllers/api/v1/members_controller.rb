@@ -465,19 +465,24 @@ module Api
       }
     end
 
+    # members_controller.rb
     def principal_borrowers_active_count
-      member = Member.find(params[:id])
+      member      = Member.find(params[:id])
+      product_id  = params[:loan_product_id].to_s
 
       data    = member.data.present? ? member.data.with_indifferent_access : {}
       records = Array.wrap(data[:principal_borrower])
 
-      # Count principal borrower records with loan_status == "active"
       active_count = records.count do |pb|
-        pb.to_h.with_indifferent_access[:loan_status].to_s.strip.downcase == "active"
+        h = pb.to_h.with_indifferent_access
+        h[:loan_status].to_s.strip.downcase == "active" &&
+          (product_id.blank? || h[:loan_product_id].to_s == product_id)
       end
 
       render json: { active_count: active_count }
     end
+
+
 
 
 

@@ -299,6 +299,7 @@ $.ajax({
           coMakerThreeProfilePicture: response.loan.co_maker_non_relative_profile_picture_url,
           }, () => {
           context.syncSelectedCoMakers();
+          context.enforceCoMakerLimit();
          });
       },
       error: function(response) {
@@ -308,40 +309,161 @@ $.ajax({
     });
   }
 
-  // helper to read active Principal Borrower count for a member 
-  fetchPrincipalBorrowersActiveCount(memberId) {
-    return new Promise((resolve) => {
-      if (!memberId) return resolve(0);
-      $.ajax({
-        url: `/api/v1/members/${memberId}/principal_borrowers_active_count`,
-        method: 'GET',
-        success: (resp) => resolve(resp?.active_count ?? 0),
-        error: (err) => {
-          console.error("Error checking PB active count:", err);
-          resolve(0); // fail-safe
-        }
-      });
+  // ===== Co-maker Limit Helpers =====
+
+  // Selected Loan Product from list
+  getSelectedLoanProduct = () => {
+    const { loanProducts, data } = this.state;
+    if (!data || !data.loan_product_id) return null;
+    return loanProducts.find(p => String(p.id) === String(data.loan_product_id)) || null;
+  };
+
+  hasName = (prod, text) => !!prod?.name && new RegExp(text, "i").test(prod.name);
+
+  // Rules:
+  // - Real Estate / Vehicle => 0 co-makers
+  // - Unified Mega Loan     => 3 co-makers
+  // - others                => 2 co-makers
+  computeMaxCoMakersAllowed = () => {
+    const prod = this.getSelectedLoanProduct();
+    if (!prod) return 2;
+    if (this.hasName(prod, "real\\s*estate") || this.hasName(prod, "vehicle")) return 0;
+    if (this.hasName(prod, "^\\s*unified\\s+mega\\s+loan\\s*$")) return 3;
+    return 2;
+  };
+
+  // Principal Borrower (PB) rules by loan product
+  computeMaxPrincipalBorrowersAllowed = () => {
+    const prod = this.getSelectedLoanProduct();
+    // Default when nothing selected
+    if (!prod) return 2;
+
+    // No PB needed for these
+    if (this.hasName(prod, "real\\s*estate") || this.hasName(prod, "vehicle")) return 0;
+
+    // Unified Mega Loan → 3 PB max
+    if (this.hasName(prod, "^\\s*unified\\s+mega\\s+loan\\s*$")) return 3;
+
+    // Others → 2 PB max
+    return 2;
+  };
+
+
+  // Is a loan product selected?
+  hasSelectedLoanProduct = () => {
+    const d = this.state.data || {};
+    const id = d.loan_product_id;
+    return !!id && id !== "" && id !== "-1";
+  };
+
+  // Human-readable requirement banner
+  getCoMakerRequirementMessage = () => {
+    if (!this.hasSelectedLoanProduct()) return null;
+
+    const max = this.computeMaxCoMakersAllowed();
+    if (max === 0) return "No co-maker is required for this loan.";
+    if (max === 1) return "This loan requires 1 co-maker.";
+    if (max === 2) return "This loan requires up to 2 co-makers.";
+    if (max === 3) return "This loan requires up to 3 co-makers.";
+    return "";
+  };
+
+  enforceCoMakerLimit = () => {
+  this.setState({ coMakersError: this.computeCoMakersError() });
+  };
+
+
+  // helper to read active loan product Principal Borrower count for a member 
+  // fetchPBActiveCountForProduct(memberId, loanProductId) {
+  // return new Promise((resolve) => {
+  //   if (!memberId || !loanProductId) {
+  //     console.warn("fetchPBActiveCountForProduct called with missing params:", { memberId, loanProductId });
+  //     return resolve(0);
+  //   }
+
+  //   $.ajax({
+  //     url: `/api/v1/members/${memberId}/principal_borrowers_active_count`,
+  //     method: 'GET',
+  //     data: { loan_product_id: loanProductId },
+  //     success: (resp) => {
+  //       resolve(resp?.active_count ?? 0);
+  //     },
+  //     error: (err) => {
+  //       resolve(0);
+  //       }
+  //       });
+  //     });
+  //   }
+
+  fetchPBActiveCountForProduct(memberId, loanProductId) {
+  return new Promise((resolve) => {
+    if (!memberId || !loanProductId) {
+      console.warn("fetchPBActiveCountForProduct called with missing params:", { memberId, loanProductId });
+      return resolve(0);
+    }
+
+    console.log("fetchPBActiveCountForProduct Request:", {
+      memberId,
+      loanProductId,
+      url: `/api/v1/members/${memberId}/principal_borrowers_active_count?loan_product_id=${loanProductId}`,
     });
-  }
+
+    $.ajax({
+      url: `/api/v1/members/${memberId}/principal_borrowers_active_count`,
+      method: "GET",
+      data: { loan_product_id: loanProductId },
+      success: (resp) => {
+        const value = resp?.active_count ?? 0;
+        console.log("fetchPBActiveCountForProduct Success:", {
+          memberId,
+          loanProductId,
+          response: resp,
+          activeCount: value,
+        });
+        resolve(value);
+      },
+      error: (err) => {
+        console.error("fetchPBActiveCountForProduct Error:", err);
+        resolve(0);
+      },
+    });
+  });
+}
+
+
+
+
 
   // clear warning if >= 3
-  async checkPBAndWarn(memberId, source) {
+    // ===== PB validation & warning (product-aware) =====
+    async checkPBAndWarn(memberId, source) {
     if (!memberId) return;
-    const count = await this.fetchPrincipalBorrowersActiveCount(memberId);
 
-    const msg = "This member has already 3 Principal Borrower (active).";
+    const pbMax = this.computeMaxPrincipalBorrowersAllowed();
+    const loanProductId = this.state.data?.loan_product_id;
 
-    if (count >= 3) {
-      this.setState({
-        coMakersError: msg,
-        pbErrorOn: source,
-      });
+    if (pbMax === 0) {
+      if (this.state.pbErrorOn === source && this.state.coMakersError?.includes("Principal Borrower")) {
+        this.setState({ coMakersError: null, pbErrorOn: null });
+      }
+      return;
+    }
+
+    const count = await this.fetchPBActiveCountForProduct(memberId, loanProductId);
+
+    if (count >= pbMax) {
+      const prod = this.getSelectedLoanProduct();
+      const prodName = prod?.name || "this loan product";
+      const msg = `This member already has ${count} Principal Borrower (active). Maximum for ${prodName} is ${pbMax}.`;
+      this.setState({ coMakersError: msg, pbErrorOn: source });
     } else {
       if (this.state.coMakersError?.includes("Principal Borrower") && this.state.pbErrorOn === source) {
         this.setState({ coMakersError: null, pbErrorOn: null });
       }
     }
   }
+
+
 
   // Helpers
   syncSelectedCoMakers = () => {
@@ -421,6 +543,8 @@ $.ajax({
       data: data,
       paymentType: data.paymentType || this.state.paymentType,
       subType: data.subType || this.state.subType,
+    }, () => {
+      this.enforceCoMakerLimit();
     });
   }
 
@@ -518,7 +642,10 @@ $.ajax({
 
   // ===== Co-maker validation =====
   computeCoMakersError = () => {
+    if (!this.hasSelectedLoanProduct()) return null;
+
     const { firstCoMaker, secondCoMaker, thirdCoMaker } = this.state;
+    const max = this.computeMaxCoMakersAllowed();
 
     const selected = [firstCoMaker?.value, secondCoMaker?.value, thirdCoMaker?.value]
       .filter(v => v !== undefined && v !== null)
@@ -533,6 +660,12 @@ $.ajax({
     // Must be unique
     if (new Set(selected).size !== selected.length) {
       return "Co-makers must be unique.";
+    }
+
+    if (selected.length > max) {
+      return max === 0
+        ? "This loan does not require co-makers."
+        : `This loan allows a maximum of ${max} co-maker(s).`;
     }
 
     return null;
@@ -550,8 +683,8 @@ $.ajax({
   // First Co-maker
   handleFirstCoMaker(selectedOption) {
     this.setState({ firstCoMaker: selectedOption }, () => {
-      const err = this.computeCoMakersError();
-      this.setState({ coMakersError: err });
+      this.enforceCoMakerLimit();
+      this.setState({ coMakersError: this.computeCoMakersError() });
       this.checkPBAndWarn(selectedOption?.value, "first");
     });
   }
@@ -559,8 +692,8 @@ $.ajax({
   // Second Co-maker
   handleSecondCoMaker(selectedOption) {
     this.setState({ secondCoMaker: selectedOption }, () => {
-      const err = this.computeCoMakersError();
-      this.setState({ coMakersError: err });
+      this.enforceCoMakerLimit();
+      this.setState({ coMakersError: this.computeCoMakersError() });
       this.checkPBAndWarn(selectedOption?.value, "second");
     });
   }
@@ -568,8 +701,8 @@ $.ajax({
   // Third Co-maker
   handleThirdCoMaker(selectedOption) {
     this.setState({ thirdCoMaker: selectedOption }, () => {
-      const err = this.computeCoMakersError();
-      this.setState({ coMakersError: err });
+      this.enforceCoMakerLimit();
+      this.setState({ coMakersError: this.computeCoMakersError() });
       this.checkPBAndWarn(selectedOption?.value, "third");
     });
   }
@@ -654,18 +787,27 @@ handlePaidLoans = (paidLoans) => {
     // FOR MOBILE NUMBER
     formData.append('mobile_number', state.memberMobileNumber);
 
-    // co_makers
+    const maxAllowed = this.computeMaxCoMakersAllowed();
+    const chosen = [state.firstCoMaker, state.secondCoMaker, state.thirdCoMaker].filter(Boolean);
+
+    if ((maxAllowed === 0 && chosen.length > 0) || chosen.length > maxAllowed) {
+      this.setState({
+        isSaving: false,
+        coMakersError: maxAllowed === 0
+          ? "This loan does not require co-makers."
+          : `This loan allows a maximum of ${maxAllowed} co-maker(s).`
+      });
+      return;
+    }
+
+    const trimmed = chosen.slice(0, maxAllowed);
     const unique = [];
     const seen = new Set();
-    [state.firstCoMaker, state.secondCoMaker, state.thirdCoMaker]
-      .filter(Boolean)
-      .forEach(cm => {
-        const key = String(cm.value);
-        if (!seen.has(key)) { seen.add(key); unique.push(cm); }
-      });
-
+    trimmed.forEach(cm => {
+      const key = String(cm.value);
+      if (!seen.has(key)) { seen.add(key); unique.push(cm); }
+    });
     const coMakersPayload = unique.map(cm => ({ id: cm.value, name: cm.label }));
-
     const payload = {
       ...(state.data || {}),
       data: {
@@ -753,6 +895,14 @@ handlePaidLoans = (paidLoans) => {
 
     data.loan_product_id  = event.target.value;
 
+    this.setState({
+      firstCoMaker: null,
+      secondCoMaker: null,
+      thirdCoMaker: null,
+      coMakersError: null,
+      pbErrorOn: null,
+    });
+
     // Fetch loan_product_types
     $.ajax({
       url: "/api/loan_product_taggings",
@@ -772,7 +922,17 @@ handlePaidLoans = (paidLoans) => {
 
         context.setState({
           loanProductTagging: response.loan_product_tagging,
-          data: data
+          data: data,
+
+          // CLEAR CO-MAKER FIELDS WHEN LOAN PRODUCT CHANGES
+          firstCoMaker: null,
+          secondCoMaker: null,
+          thirdCoMaker: null,
+          coMakersError: null,
+          pbErrorOn: null,
+
+        }, () => {
+          context.enforceCoMakerLimit();
         });
       }
     })
@@ -1231,82 +1391,15 @@ handlePaidLoans = (paidLoans) => {
       var serviceFeeAvailable = this.state.data.data.service_fee_available || false;
       var smsFeeAvailable = this.state.data.data.sms_fee_available || false;
 
-      // Disable logic for duplicate/self choices
-      const borrowerId = String(this.props.memberId);
-      const firstId  = this.state.firstCoMaker?.value;
-      const secondId = this.state.secondCoMaker?.value;
-      const thirdId  = this.state.thirdCoMaker?.value;
-
-      const disableForFirst  = (opt) => [secondId, thirdId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
-      const disableForSecond = (opt) => [firstId, thirdId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
-      const disableForThird  = (opt) => [firstId, secondId, borrowerId].filter(Boolean).map(String).includes(String(opt.value));
-
-      const isBusy = this.state.isSaving || this.state.isActive;
-      const pbLimitHit = this.state.coMakersError?.includes("Principal Borrower");
-      const disableSecondDueToPB = pbLimitHit && this.state.pbErrorOn === 'first';
-      const disableThirdDueToPB  = pbLimitHit && (this.state.pbErrorOn === 'first' || this.state.pbErrorOn === 'second');
-
-      console.log(this.props.settings)
+      // Keep your PB disable behavior
+    const isBusy = this.state.isSaving || this.state.isActive;
+    const pbLimitHit = this.state.coMakersError?.includes("Principal Borrower");
+    const disableSecondDueToPB = pbLimitHit && this.state.pbErrorOn === 'first';
+    const disableThirdDueToPB  = pbLimitHit && (this.state.pbErrorOn === 'first' || this.state.pbErrorOn === 'second');
 
       return  (
         <div>
           {this.renderErrorDisplay()}
-          <h5>
-            Co-maker Information
-          </h5>
-          <div className="card">
-            <div className="card-body">
-              <div className="row">
-              {/* First Co-maker */}
-              <div className="col-md-4 col-xs-12">
-                <div className="form-group">
-                  <label>First Co-maker</label>
-                  <Select
-                    value={this.state.firstCoMaker}
-                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
-                    onChange={(opt) => this.handleFirstCoMaker(opt?.value ? opt : null)}
-                    placeholder="-- SELECT --"
-                    isDisabled={isBusy}
-                  />
-                </div>
-              </div>
-
-              {/* Second Co-maker */}
-              <div className="col-md-4 col-xs-12">
-                <div className="form-group">
-                  <label>Second Co-maker</label>
-                  <Select
-                    value={this.state.secondCoMaker}
-                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
-                    onChange={(opt) => this.handleSecondCoMaker(opt?.value ? opt : null)}
-                    placeholder="-- SELECT --"
-                    isDisabled={isBusy || disableSecondDueToPB}
-                  />
-                </div>
-              </div>
-
-              {/* Third Co-maker */}
-              <div className="col-md-4 col-xs-12">
-                <div className="form-group">
-                  <label>Third Co-maker</label>
-                  <Select
-                    value={this.state.thirdCoMaker}
-                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
-                    onChange={(opt) => this.handleThirdCoMaker(opt?.value ? opt : null)}
-                    placeholder="-- SELECT --"
-                    isDisabled={isBusy || disableThirdDueToPB}
-                  />
-                </div>
-              </div>
-              </div>
-              {this.state.coMakersError && (
-                <div className="alert alert-danger py-2 my-2" role="alert">
-                  {this.state.coMakersError}
-                </div>
-              )}
-            </div>
-          </div>
-          <br></br>
           {/* <div className="card">
             <div className="card-body">
               <div className="row">
@@ -1569,6 +1662,62 @@ handlePaidLoans = (paidLoans) => {
             </div>
           </div>
           <hr/>
+          <h5>
+            Co-maker Information
+          </h5>
+          <div className="card">
+            <div className="card-body">
+              <div className="row">
+              {/* First Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>First Co-maker</label>
+                  <Select
+                    value={this.state.firstCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleFirstCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy}
+                  />
+                </div>
+              </div>
+
+              {/* Second Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>Second Co-maker</label>
+                  <Select
+                    value={this.state.secondCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleSecondCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy || disableSecondDueToPB}
+                  />
+                </div>
+              </div>
+
+              {/* Third Co-maker */}
+              <div className="col-md-4 col-xs-12">
+                <div className="form-group">
+                  <label>Third Co-maker</label>
+                  <Select
+                    value={this.state.thirdCoMaker}
+                    options={[{ value: "", label: "-- SELECT --"}, ...this.state.coMakers]}
+                    onChange={(opt) => this.handleThirdCoMaker(opt?.value ? opt : null)}
+                    placeholder="-- SELECT --"
+                    isDisabled={isBusy || disableThirdDueToPB}
+                  />
+                </div>
+              </div>
+              </div>
+              {this.state.coMakersError && (
+                <div className="alert alert-danger py-2 my-2" role="alert">
+                  {this.state.coMakersError}
+                </div>
+              )}
+            </div>
+          </div>
+          <br></br>
           <h5>
             Financial Information
           </h5>
