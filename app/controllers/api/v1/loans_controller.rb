@@ -680,9 +680,7 @@ module Api
         loan_data = JSON.parse(params[:payload]).with_indifferent_access
         
         #loan_data = JSON.parse(params[:data]).to_h.with_indifferent_access 
-<<<<<<< HEAD
         paid_loans = loan_data[:data][:paid_loans] || {}
-=======
         #
         # Run co-maker validation first
         cm_errors = ::Loans::ValidateCoMakers.new(payload: loan_data).call
@@ -690,7 +688,6 @@ module Api
           render json: { errors: { full_messages: cm_errors } }, status: 400 and return
         end
 
->>>>>>> d3e751a3 (Loan: Validate co_makers count per loan if allowed to be as co_maker)
         payment_type = params[:payment_type]
         sub_type = params[:sub_type]
 
