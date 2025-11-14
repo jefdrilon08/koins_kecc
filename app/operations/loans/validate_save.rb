@@ -13,6 +13,18 @@ module Loans
     end
 
     def execute!
+
+      payload_mir = @loan_data[:monthly_interest_rate] || @loan_data.dig(:data, :monthly_interest_rate)
+
+      Rails.logger.info(
+        "[ValidateSave] loan_id=#{@loan&.id || 'NEW'} " \
+        "member_id=#{@loan_data[:member_id]} " \
+        "loan_product_id=#{@loan_product&.id} " \
+        "payload_mir=#{payload_mir.inspect} " \
+        "product_mir=#{@loan_product&.monthly_interest_rate.inspect} " \
+        "product_non_teaching_mir=#{@loan_product&.non_teaching_monthly_interest_rate.inspect}"
+      )
+      
       #PROJECT TYPE present in entry point
       # if @loan_product.is_entry_point == true and @loan_data[:project_type_id].blank?
       # #if @loan_product.is_entry_point == true

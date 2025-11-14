@@ -143,7 +143,19 @@ module Loans
       else
         @loan.loan_product_tagging_id = @loan_product_tagging.id
       end
-      @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
+      # this line is replaced with the new logic that checks the member if TEACHING OR NON TEACHING.
+      # @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
+      
+      # Determine Monthly Interest Rate (MIR) based on membership arrangement
+      arrangement = MembershipArrangement.find_by(id: @member.membership_arrangement_id)&.name.to_s.strip.upcase
+
+      if arrangement == "NON TEACHING"
+        @loan.monthly_interest_rate = @loan_product.non_teaching_monthly_interest_rate || @loan_product.monthly_interest_rate
+      else
+        @loan.monthly_interest_rate = @loan_product.monthly_interest_rate
+      end
+      
+      raise "monthly_interest_rate is nil" if @loan.monthly_interest_rate.nil?
 
       if @settings.use_term_interest.present?
         @settings.use_term_interest.each do |t|
@@ -226,7 +238,7 @@ module Loans
         end
           buffer_principal  = 0.00
           result[:schedule].each do |o|
-            principal   = o[:principal].to_i.round(2)
+            principal   = o[:principal].to_f.round(2)
             interest    = o[:interest].to_f.round(2)
             amount_due  = (principal + interest).round(2)
 

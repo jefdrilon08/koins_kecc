@@ -3,6 +3,8 @@ class LoanProduct < ApplicationRecord
   validates :max_loan_amount, presence: true, numericality: true
   validates :min_loan_amount, presence: true, numericality: true
   validates :monthly_interest_rate, presence: true, numericality: true
+  validates :non_teaching_monthly_interest_rate, presence: true, numericality: true
+
 
   belongs_to :loan_product_category, optional: true
   has_many :loan_product_types, dependent: :delete_all
@@ -16,12 +18,13 @@ class LoanProduct < ApplicationRecord
       id: self.id,
       name: self.name,
       max_loan_amount: self.max_loan_amount.round(2),
-      min_loan_amount: self.min_loan_amount.round(2),
+      min_loan_amount: self.min_loan_amount.round(2), 
       denomination: self.denomination.round(2),
       insured: self.insured,
       is_entry_point: self.is_entry_point,
       is_active: self.is_active,
       monthly_interest_rate: self.monthly_interest_rate,
+      non_teaching_monthly_interest_rate: self.non_teaching_monthly_interest_rate,
       priority: self.priority,
       data: self.data
     }
