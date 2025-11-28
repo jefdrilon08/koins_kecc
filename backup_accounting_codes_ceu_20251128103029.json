@@ -1,0 +1,837 @@
+[
+  {
+    "id": "1dee33d9-8071-4ad9-99ce-ce23f45f7fbd",
+    "name": "Cash on Hand - Credit",
+    "code": "1.01.01",
+    "category": "CASH ON HAND",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-13 14:00:39 +0800"
+  },
+  {
+    "id": "2e66aa93-8826-4394-8b09-43dcc3c9e3a3",
+    "name": "Travel Loan",
+    "code": "1.03.11",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 11:03:38 +0800"
+  },
+  {
+    "id": "d3a5d237-59d1-4a9d-84d0-1bebf7a0d95f",
+    "name": "Love Loan A",
+    "code": "1.03.04",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 14:22:09 +0800"
+  },
+  {
+    "id": "a1b06b10-9830-4b63-9516-e657fb15978a",
+    "name": "Love Loan B",
+    "code": "1.03.05",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 08:50:34 +0800"
+  },
+  {
+    "id": "d047fd57-5e5a-4191-b3aa-36dc70558c28",
+    "name": "BANCO DE ORO (SA#000020158203)",
+    "code": "1.01.03",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:10:12 +0800"
+  },
+  {
+    "id": "31051519-6a1a-4d98-9678-310f9c3a2afe",
+    "name": "CITYSTATE-022202000676",
+    "code": "1.01.06",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:11:17 +0800"
+  },
+  {
+    "id": "bd3bc101-503b-4c19-8c42-19fba75f7e2d",
+    "name": "EASTWEST BANK - 200001867074",
+    "code": "1.01.07",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:11:51 +0800"
+  },
+  {
+    "id": "7a0995c9-ddf9-4666-8c99-769fa1ffb8d1",
+    "name": "EASTWEST BANK - 200019977527",
+    "code": "1.01.08",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:12:15 +0800"
+  },
+  {
+    "id": "73f40b48-e5ee-47bc-abad-efed3e9f50e3",
+    "name": "EQUICOM - Savings Account 2000139559",
+    "code": "1.01.11",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:13:36 +0800"
+  },
+  {
+    "id": "18ccc5e3-0692-4779-a4a8-fe83616ea88d",
+    "name": "Metrobank 08224954-1 Savings Account",
+    "code": "1.01.13",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:14:28 +0800"
+  },
+  {
+    "id": "b6b8f234-f2cf-4a6e-b22a-e0fbce25d6da",
+    "name": "Medical Loan",
+    "code": "1.03.06",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:18:01 +0800"
+  },
+  {
+    "id": "43a0c6bc-9305-4811-a691-cba2e73a8a65",
+    "name": "Vehicle Loan",
+    "code": "1.03.13",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:19:22 +0800"
+  },
+  {
+    "id": "46fc3298-a3b4-4468-86b7-eb2ebe1bbdef",
+    "name": "Special Calamity Loan",
+    "code": "1.03.14",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:19:45 +0800"
+  },
+  {
+    "id": "df50f41a-a191-486b-b1cf-eb36fdb728cc",
+    "name": "Petty Cash",
+    "code": "1.03.15",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:20:16 +0800"
+  },
+  {
+    "id": "693ea122-0819-440e-9de4-cf443adfb32c",
+    "name": "PhilamCare",
+    "code": "1.03.18",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:21:38 +0800"
+  },
+  {
+    "id": "71f7aae7-9e8d-4d62-91f9-a91d87f9d978",
+    "name": "Interest Income - Medical Loan",
+    "code": "4.01.06",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:25:27 +0800"
+  },
+  {
+    "id": "d5f69b05-c770-4ae3-9513-9c1fa081f834",
+    "name": "Interest Income - Vehicle Loan",
+    "code": "4.01.13",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:26:46 +0800"
+  },
+  {
+    "id": "ab8050bd-e2fe-4e87-bcb3-74eeb1c48a0b",
+    "name": "Interest Income - Petty Cash",
+    "code": "4.01.14",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:27:09 +0800"
+  },
+  {
+    "id": "18a6e070-14e5-4a90-a5ef-b9619e86364c",
+    "name": "Interest Income - Etiqa",
+    "code": "4.01.16",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:27:56 +0800"
+  },
+  {
+    "id": "f27b0547-8407-49f5-9de2-fcc193c8db07",
+    "name": "Interest Income on Bank Deposit",
+    "code": "4.06",
+    "category": "INTEREST INCOME FROM BANK DEPOSITS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:30:46 +0800"
+  },
+  {
+    "id": "fa98582d-45eb-4e2e-b355-ce1e05c050cd",
+    "name": "Interest Income - Short Term",
+    "code": "4.01.08",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 13:11:32 +0800"
+  },
+  {
+    "id": "a92a52af-bd41-4da8-8410-658e9c4f2fff",
+    "name": "Hospitalization",
+    "code": "1.03.02",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 13:10:07 +0800"
+  },
+  {
+    "id": "e9e01050-3c68-4e0c-8d42-531684291596",
+    "name": "Interest Income - Hospitalization",
+    "code": "4.01.02",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 13:12:04 +0800"
+  },
+  {
+    "id": "72848c18-c60c-4145-b22e-53706814ec4e",
+    "name": "Interest Income - Special",
+    "code": "4.01.09",
+    "category": "INTEREST INCOME FROM BANK DEPOSITS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 14:59:41 +0800"
+  },
+  {
+    "id": "32b1eda6-9620-494b-ae08-17e14e4d5244",
+    "name": "Equicom - Community Dev't Fund 2000139753",
+    "code": "1.01.10",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:13:09 +0800"
+  },
+  {
+    "id": "637df4c9-1d41-4b87-bc16-a8e70e1b93fc",
+    "name": "Real estate",
+    "code": "1.03.07",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:18:27 +0800"
+  },
+  {
+    "id": "b8227a39-f435-4a9a-af14-51c73e2dd3d4",
+    "name": "Interest Income on Investment - PFCCO",
+    "code": "4.07",
+    "category": "INTEREST INCOME FROM BANK DEPOSITS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:31:20 +0800"
+  },
+  {
+    "id": "5a616d56-f363-4016-a8b2-1ad5df924cd0",
+    "name": "Communication expense",
+    "code": "5.20",
+    "category": "EXPENSES",
+    "data": null,
+    "created_at": "2025-10-17 16:20:16 +0800",
+    "updated_at": "2025-10-17 16:20:16 +0800"
+  },
+  {
+    "id": "37bc5013-9a2b-42a2-a904-0747f8f6d276",
+    "name": "Interest Income - Love Loan B",
+    "code": "4.01.05",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 08:56:13 +0800"
+  },
+  {
+    "id": "fea5c808-a5d8-413d-8bcf-df21755b2fb8",
+    "name": "Service Fee - Love Loan B",
+    "code": "4.03.05",
+    "category": "SERVICE FEES",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 08:57:18 +0800"
+  },
+  {
+    "id": "1276b743-9367-42cc-aa1e-67c2b1d1f075",
+    "name": "Application Fee - Love Loan B",
+    "code": "4.02.05",
+    "category": "FILING FEES",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 08:58:13 +0800"
+  },
+  {
+    "id": "da8bd55c-2cf5-4cfe-b7a5-8f9834f304f2",
+    "name": "PNB 166010045726",
+    "code": "1.01.15",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:15:20 +0800"
+  },
+  {
+    "id": "2eb6206d-6773-4f87-911d-24e8c2c7b002",
+    "name": "Interest Income - Birthday Loan",
+    "code": "4.01.01",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:25:00 +0800"
+  },
+  {
+    "id": "5091fee6-b2a2-40a0-a717-c53ab483ea43",
+    "name": "Treasury Share",
+    "code": "3.01.03",
+    "category": "PAID-UP SHARE CAPITAL COMMON",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 12:46:19 +0800"
+  },
+  {
+    "id": "e31d63d9-e79b-4ae2-b34a-72e7e8c9a6c0",
+    "name": "Livelihood Loan",
+    "code": "1.03.03",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 13:57:12 +0800"
+  },
+  {
+    "id": "6cc59109-3bac-434d-8fec-eee2bab6549f",
+    "name": "Interest Income - Love Loan A",
+    "code": "4.01.04",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 14:24:14 +0800"
+  },
+  {
+    "id": "b7c23e58-e44e-46ae-a3ec-b5081d6eed32",
+    "name": "Members' Saving Deposit",
+    "code": "2.08",
+    "category": "SAVINGS DEPOSIT",
+    "data": {
+      "major_account": "Current Liabilities"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-10 15:07:10 +0800"
+  },
+  {
+    "id": "1473b8a8-4b67-4341-af54-b725e47abf77",
+    "name": "Revolving Fund",
+    "code": "1.01.02",
+    "category": "CASH ON HAND",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:16:54 +0800"
+  },
+  {
+    "id": "93686bcf-7e20-4968-8d9b-c20032a41280",
+    "name": "Technology Loan",
+    "code": "1.03.10",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:18:52 +0800"
+  },
+  {
+    "id": "6e3d53a1-befb-4691-98c1-2a4c203351c4",
+    "name": "CareHealth Plus ",
+    "code": "1.03.16",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:20:45 +0800"
+  },
+  {
+    "id": "cff0a2d5-0b06-474a-bf89-a646e50ca694",
+    "name": "Interest Income - Real Estate",
+    "code": "4.01.07",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:25:50 +0800"
+  },
+  {
+    "id": "9e68cb72-2253-492e-b502-2801830f5d13",
+    "name": "Interest Income - CareHealth Plus",
+    "code": "4.01.15",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:27:31 +0800"
+  },
+  {
+    "id": "846b6de0-d489-4d1c-bfee-41de569fe8f4",
+    "name": "Fines",
+    "code": "4.05",
+    "category": "FINES",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:31:53 +0800"
+  },
+  {
+    "id": "670af83a-e34d-4838-9c0f-23584c0f1a6a",
+    "name": "Membership Fee",
+    "code": "4.04.00",
+    "category": "MEMBERSHIP FEES",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 10:34:38 +0800"
+  },
+  {
+    "id": "bf306bb2-55cf-4f05-80ce-8933f190771e",
+    "name": "Short term",
+    "code": "1.03.08",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 13:09:45 +0800"
+  },
+  {
+    "id": "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2",
+    "name": "SBC 8065-002 All in one account",
+    "code": "1.01.17",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Liabilities"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-10 15:33:47 +0800"
+  },
+  {
+    "id": "2fe35efe-7241-4ab4-bdc0-044bdc3f3507",
+    "name": "Equicom - CETF 2000139761",
+    "code": "1.01.09",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:12:41 +0800"
+  },
+  {
+    "id": "189a0bfe-605e-4476-8931-a9838aca0ec6",
+    "name": "Interest Income - PhilamCare",
+    "code": "4.01.17",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:28:25 +0800"
+  },
+  {
+    "id": "0d2c2851-8dd1-4ff6-888c-910421b388fc",
+    "name": "PNB - REGULAR SAVINGS 140210014238",
+    "code": "1.01.14",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:14:51 +0800"
+  },
+  {
+    "id": "72605994-d42a-47d1-89b5-ce14a7c05aeb",
+    "name": "Etiqa",
+    "code": "1.03.17",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:21:12 +0800"
+  },
+  {
+    "id": "32dbabd2-b165-4fc4-91d5-4b140654ccde",
+    "name": "BPI - BisLink Account",
+    "code": "1.01.05",
+    "category": "CASH IN BANKS",
+    "data": null,
+    "created_at": "2023-12-14 11:14:03 +0800",
+    "updated_at": "2025-03-16 12:19:08 +0800"
+  },
+  {
+    "id": "ca431cb6-0a32-4c3d-b504-dcb29723ba2f",
+    "name": "BANK of COMMERCE - 118-20-001375-2",
+    "code": "1.01.04",
+    "category": "CASH IN BANKS",
+    "data": null,
+    "created_at": "2023-06-01 14:41:57 +0800",
+    "updated_at": "2025-06-22 09:10:45 +0800"
+  },
+  {
+    "id": "eab8552e-4eed-41cd-a4d7-f91e120f03da",
+    "name": "Unified Mega Loan",
+    "code": "1.03.12",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-13 13:21:26 +0800"
+  },
+  {
+    "id": "63e0514b-9c52-465b-9899-2d5d2d478695",
+    "name": "Interest Income - Unified Mega Loan",
+    "code": "4.01.12",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-13 13:22:54 +0800"
+  },
+  {
+    "id": "d5029cba-c88c-4ab3-a452-737c7c8800c7",
+    "name": "Service Fee - Unified Mega Loan",
+    "code": "4.03.12",
+    "category": "SERVICE FEE",
+    "data": null,
+    "created_at": "2025-03-13 13:24:47 +0800",
+    "updated_at": "2025-03-13 13:24:47 +0800"
+  },
+  {
+    "id": "98aaaf50-d354-474d-a8e3-628d55106350",
+    "name": "Application Fee - Unified Mega Loan",
+    "code": "4.02.12",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-13 13:29:29 +0800",
+    "updated_at": "2025-03-13 13:29:29 +0800"
+  },
+  {
+    "id": "8dcee32e-a96c-4144-abea-a03b3501dd01",
+    "name": "Rent Expense",
+    "code": "5.16",
+    "category": "EXPENSES",
+    "data": {
+      "major_account": "Expenses"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 10:42:06 +0800"
+  },
+  {
+    "id": "aa7bb9dd-e11d-4dfe-9a57-47fdbf08272b",
+    "name": "Interest Income - Travel Loan",
+    "code": "4.01.11",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 11:04:53 +0800"
+  },
+  {
+    "id": "9910464f-787d-4b5f-a64f-10caf5aa3b13",
+    "name": "Service Fee - Travel Loan",
+    "code": "4.03.11",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-16 11:07:43 +0800",
+    "updated_at": "2025-03-16 11:07:43 +0800"
+  },
+  {
+    "id": "6d1c23d2-1768-4e9d-839c-7c99eff2479b",
+    "name": "Application Fee - Travel Loan",
+    "code": "4.02.11",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-16 11:09:03 +0800",
+    "updated_at": "2025-03-16 11:09:03 +0800"
+  },
+  {
+    "id": "5e7bdcdf-4ec1-4d6c-852a-5806bd4cf4cc",
+    "name": "Deposit for Share Capital Subscription",
+    "code": "3.01.01",
+    "category": "PAID-UP SHARE CAPITAL COMMON",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 12:42:35 +0800"
+  },
+  {
+    "id": "370f5e4f-e4c8-454e-90b2-17919cc5ef92",
+    "name": "Preferred Share Capital",
+    "code": "3.01.02",
+    "category": "PAID-UP SHARE CAPITAL COMMON",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 12:45:07 +0800"
+  },
+  {
+    "id": "01ce1507-de3a-447a-801d-ce2b05880d2c",
+    "name": "Ordinary Share Capital",
+    "code": "3.01",
+    "category": "PAID-UP SHARE CAPITAL COMMON",
+    "data": {
+      "major_account": "MEMBERS' EQUITY"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-16 12:45:44 +0800"
+  },
+  {
+    "id": "249998b0-5297-4403-abe3-31c8539b3a67",
+    "name": "Service Fee - Short term",
+    "code": "4.03.08",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-16 13:12:31 +0800",
+    "updated_at": "2025-03-16 13:12:31 +0800"
+  },
+  {
+    "id": "40a7013d-c0f5-4dde-9e66-403a2ab663e2",
+    "name": "Application Fee - Short Term",
+    "code": "4.02.08",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-16 13:14:09 +0800",
+    "updated_at": "2025-03-16 13:14:09 +0800"
+  },
+  {
+    "id": "8aa04618-2fe6-4342-8ae9-e37918f8ff8a",
+    "name": "Service Fee - Hospitalization Loan",
+    "code": "4.03.02",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-17 13:13:29 +0800",
+    "updated_at": "2025-03-17 13:13:29 +0800"
+  },
+  {
+    "id": "24c7e0dd-61ef-49f1-a4d4-9fb9803456a8",
+    "name": "Application Fee - Hospitalization",
+    "code": "4.02.02",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-17 13:14:26 +0800",
+    "updated_at": "2025-03-17 13:14:26 +0800"
+  },
+  {
+    "id": "6df1ce51-804e-4db5-a53d-474a846e3ddd",
+    "name": "Interest Income - Livelihood Loan",
+    "code": "4.01.03",
+    "category": "INTEREST INCOME FROM LOANS",
+    "data": {
+      "major_account": "Income"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 14:02:39 +0800"
+  },
+  {
+    "id": "3ff8a78f-50dd-4dd9-ac12-636491eb052b",
+    "name": "Service Fee - Livelihood",
+    "code": "4.03.03",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:08:40 +0800",
+    "updated_at": "2025-03-17 14:08:40 +0800"
+  },
+  {
+    "id": "1fb892cd-e9ff-4ce6-9272-ad11e82b555d",
+    "name": "Application Fee - Livelihood Loan",
+    "code": "4.02.03",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:11:13 +0800",
+    "updated_at": "2025-03-17 14:11:13 +0800"
+  },
+  {
+    "id": "845906da-03a0-4b66-be29-b8a969c9d5bb",
+    "name": "Service Fee - Love Loan A",
+    "code": "4.03.04",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:25:34 +0800",
+    "updated_at": "2025-03-17 14:25:34 +0800"
+  },
+  {
+    "id": "02abc997-85c7-4848-ba94-651ce8729bc1",
+    "name": "Application Fee - Love Loan A",
+    "code": "4.02.04",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:27:49 +0800",
+    "updated_at": "2025-03-17 14:27:49 +0800"
+  },
+  {
+    "id": "f5edf660-9dc2-481b-9ea8-ea0a13c64b62",
+    "name": "Service Fee - Special loan",
+    "code": "4.03.09",
+    "category": "SERVICE FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:49:39 +0800",
+    "updated_at": "2025-03-17 14:49:39 +0800"
+  },
+  {
+    "id": "a7d5f55a-de53-452a-866e-cf75cb57ac13",
+    "name": "Application Fee - Special",
+    "code": "4.02.09",
+    "category": "FILING FEES",
+    "data": null,
+    "created_at": "2025-03-17 14:51:38 +0800",
+    "updated_at": "2025-03-17 14:51:38 +0800"
+  },
+  {
+    "id": "9157776a-311f-426e-8df6-a24c4e6f9aed",
+    "name": "Special",
+    "code": "1.03.09",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-03-17 14:57:56 +0800"
+  },
+  {
+    "id": "de8f82db-2342-4180-8a93-2271501b18fb",
+    "name": "LAND BANK 5391-0142-31",
+    "code": "1.01.12",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:14:05 +0800"
+  },
+  {
+    "id": "743fabb1-c34f-45f9-8276-cac89ad6c2ea",
+    "name": "RCBC - Savings Account 7590573586",
+    "code": "1.01.16",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:15:48 +0800"
+  },
+  {
+    "id": "8cc1d1df-c437-4d38-9ce0-a23a0fff38c9",
+    "name": "SBC 8065-206 - Savings account",
+    "code": "1.01.18",
+    "category": "CASH IN BANKS",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:16:12 +0800"
+  },
+  {
+    "id": "c601accc-3f7c-4789-af2a-d6927e42ffd1",
+    "name": "Remittance Clearing Accounts",
+    "code": "1.03.19",
+    "category": "LOANS RECEIVABLES",
+    "data": {
+      "major_account": "Current Assets"
+    },
+    "created_at": "2018-10-25 06:14:57 +0800",
+    "updated_at": "2025-06-22 09:22:08 +0800"
+  }
+]
