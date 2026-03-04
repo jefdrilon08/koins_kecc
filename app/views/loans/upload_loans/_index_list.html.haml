@@ -1,0 +1,24 @@
+%table.table.table-sm.table-hover.table-bordered#upload-loans-table
+  %thead
+    %tr
+      %th Row
+      %th Member ID
+      %th Branch
+      %th Center
+      %th Loan Product
+      %th.text-end Principal
+      %th.text-center Installments
+      %th.text-center Term
+      %th Date Prepared
+      %th Date Released
+      %th First Payment
+      %th PN Number
+      %th.text-center Amort
+      %th.text-center Status
+  %tbody#upload-loans-tbody
+    %tr#upload-loans-empty-row
+      %td.text-center.text-muted{ colspan: 14 }
+        %i.fa.fa-inbox.me-1
+        No loans uploaded yet. Click
+        %strong Upload Loans
+        to begin.

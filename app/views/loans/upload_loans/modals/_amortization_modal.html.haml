@@ -1,0 +1,48 @@
+.modal.fade#amortization-modal{ tabindex: "-1", role: "dialog" }
+  .modal-dialog.modal-xl{ role: "document" }
+    .modal-content
+      .modal-header
+        %h5.modal-title
+          %i.fa.fa-calendar-alt.me-2
+          Amortization Schedule
+          %small.text-muted.ms-2#amort-view-loan-info
+        %button.btn-close{ type: "button", "data-bs-dismiss": "modal" }
+      .modal-body
+        .d-flex.gap-3.mb-3
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted Principal
+            .fw-bold#amort-view-principal —
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted Total Interest
+            .fw-bold#amort-view-interest —
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted Term
+            .fw-bold#amort-view-term —
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted Installments
+            .fw-bold#amort-view-installments —
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted First Payment
+            .fw-bold#amort-view-first-date —
+          .border.rounded.px-3.py-2.text-center
+            .small.text-muted Maturity
+            .fw-bold#amort-view-maturity —
+
+        .table-responsive
+          %table.table.table-sm.table-hover.table-bordered
+            %thead
+              %tr
+                %th.text-center #
+                %th Due Date
+                %th.text-end Principal
+                %th.text-end Interest
+                %th.text-end Amount Due
+                %th.text-center Status
+            %tbody#amort-view-tbody
+              %tr
+                %td.text-center.text-muted{ colspan: 6 }
+                  %i.fa.fa-spinner.fa-spin.me-1
+                  Loading...
+
+      .modal-footer
+        %button.btn.btn-sm.btn-secondary{ type: "button", "data-bs-dismiss": "modal" } Close

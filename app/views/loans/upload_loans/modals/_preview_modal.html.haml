@@ -1,0 +1,37 @@
+.modal.fade#result-modal{ tabindex: "-1", role: "dialog" }
+  .modal-dialog{ role: "document" }
+    .modal-content
+      .modal-header
+        %h5.modal-title#result-modal-title Result
+        %button.btn-close{ type: "button", "data-bs-dismiss": "modal" }
+      .modal-body
+        #result-success.d-none
+          .text-center.py-3
+            %svg{ xmlns: "http://www.w3.org/2000/svg", width: "64", height: "64", viewBox: "0 0 24 24", fill: "none", stroke: "#28a745", "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" }
+              %circle{ cx: "12", cy: "12", r: "10", fill: "#28a745", stroke: "#28a745" }
+              %polyline{ points: "7 13 10 16 17 9", stroke: "white", "stroke-width": "2.5" }
+            %h5.mt-2 Upload Successful!
+            %p#result-success-msg.text-muted
+          .d-flex.justify-content-center.gap-2
+            = link_to "View Loans", loans_path, class: "btn btn-sm btn-primary"
+            %button.btn.btn-sm.btn-outline-secondary{ type: "button", "data-bs-dismiss": "modal", id: "btn-upload-more" }
+              Upload More
+
+        #result-error.d-none
+          .text-center.py-2
+            %svg{ xmlns: "http://www.w3.org/2000/svg", width: "64", height: "64", viewBox: "0 0 24 24", fill: "none", stroke: "#dc3545", "stroke-width": "2.5", "stroke-linecap": "round", "stroke-linejoin": "round" }
+              %circle{ cx: "12", cy: "12", r: "10", fill: "#dc3545", stroke: "#dc3545" }
+              %line{ x1: "8", y1: "8", x2: "16", y2: "16", stroke: "white", "stroke-width": "2.5" }
+              %line{ x1: "16", y1: "8", x2: "8", y2: "16", stroke: "white", "stroke-width": "2.5" }
+            %h6.mt-2 Upload Failed
+            %p.text-muted.small Some rows had errors. Please fix and re-upload.
+          .table-responsive
+            %table.table.table-sm.table-bordered
+              %thead
+                %tr
+                  %th Row
+                  %th Member ID
+                  %th Errors
+              %tbody#result-error-tbody
+      .modal-footer
+        %button.btn.btn-sm.btn-secondary{ type: "button", "data-bs-dismiss": "modal" } Close

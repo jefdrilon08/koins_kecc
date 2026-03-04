@@ -271,6 +271,7 @@ import HolidayIndex from '../models/HolidayIndex.js';
 import ReportsBillingLapsedMemberReports from '../models/ReportsBillingLapsedMemberReports.js';
 import BoardResolutionIndex from '../models/BoardResolutionIndex.js';
 import BoardResolutionShow from '../models/BoardResolutionShow.js';
+import UploadLoansIndex from "../models/UploadLoansIndex.js";
 
 //const renderComponent = (Component, payload) => {
 //  ReactDOM.render(
@@ -521,7 +522,8 @@ const hooks = {
   "data_stores/dormant/show":                         [DormantShow],
   "data_stores/holiday/index":                        [HolidayIndex],
   "data_stores/board_resolution/index":               [BoardResolutionIndex],
-  "data_stores/board_resolution/show":                [BoardResolutionShow]
+  "data_stores/board_resolution/show":                [BoardResolutionShow],
+  "upload_loans/index":                         [UploadLoansIndex],
 
 }
 

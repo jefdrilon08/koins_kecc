@@ -1,0 +1,16 @@
+.d-flex.justify-content-between.align-items-center.mb-3
+  .d-flex.gap-2.align-items-center
+    %input.form-control.form-control-sm{ type: "text", id: "search-upload-loans", placeholder: "Search member ID, PN number...", style: "width: 280px;" }
+    %select.form-select.form-select-sm#filter-upload-status{ style: "width: 140px;" }
+      %option{ value: "" } All Status
+      %option{ value: "pending" } Pending
+      %option{ value: "uploaded" } Uploaded
+      %option{ value: "failed" } Failed
+
+  .d-flex.gap-2
+    %button.btn.btn-sm.btn-outline-secondary#btn-download-template{ type: "button" }
+      %i.fa.fa-download
+      Download Template
+    %button.btn.btn-sm.btn-primary#btn-open-upload-modal{ type: "button" }
+      %i.fa.fa-upload
+      Upload Loans

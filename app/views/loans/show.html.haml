@@ -35,7 +35,7 @@
                   #btn-change-book.btn.btn-info.btn-sm
                     .fa.fa-sync
                     Change Book
-          #react-root
+          #react-root{ data: { id: @loan.id, member_id: @loan.member_id } }
       #amortization-table.tab-pane{:role => "tabpanel"}
         .p-3
           = render partial: "amortization_table"
