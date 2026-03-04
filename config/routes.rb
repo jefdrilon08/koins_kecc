@@ -231,6 +231,9 @@ Rails.application.routes.draw do
   
   end
 
+  get "/upload_loans", to: "upload_loans#index", as: :upload_loans
+
+
   resources :member_account_validations do
     get "approve", to: "member_account_validations#approve", as: :approve
     get "reverse", to: "member_account_validations#reverse", as: :reverse

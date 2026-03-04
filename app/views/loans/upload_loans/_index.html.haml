@@ -1,0 +1,11 @@
+.card
+  .card-header
+    %h5.mb-0 Bulk Loan Upload
+
+  .card-body
+    = render 'loans/upload_loans/index_toolbar'
+    = render 'loans/upload_loans/index_list'
+
+  = render 'loans/upload_loans/modals/upload_modal'
+  = render 'loans/upload_loans/modals/preview_modal'
+  = render 'loans/upload_loans/modals/amortization_modal'

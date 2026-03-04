@@ -1,0 +1,191 @@
+.modal.fade#upload-modal{ tabindex: "-1", role: "dialog" }
+  .modal-dialog.modal-xl{ role: "document", style: "max-width: 860px;" }
+    .modal-content{ style: "border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.2);" }
+
+      .modal-header{ style: "background: linear-gradient(135deg, #c45200 0%, #e86a00 100%); border: none; padding: 20px 28px;" }
+        .d-flex.align-items-center.gap-3
+          .d-flex.align-items-center.justify-content-center{ style: "width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:10px;" }
+            %i.fa.fa-upload{ style: "color:#fff;font-size:16px;" }
+          %div
+            %h5.mb-0{ style: "color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.3px;" } Bulk Loan Upload
+            %p.mb-0{ style: "color:rgba(255,255,255,0.65);font-size:12px;" } Import loans from CSV or Excel file
+        %button.btn-close.btn-close-white{ type: "button", "data-bs-dismiss": "modal", style: "opacity:0.7;" }
+
+      .px-4.pt-4.pb-2{ style: "background:#fffaf5;border-bottom:1px solid #fde0c0;" }
+        .d-flex.align-items-center
+          .d-flex.align-items-center#step-ind-1
+            .d-flex.align-items-center.justify-content-center.fw-bold{ style: "width:28px;height:28px;border-radius:50%;font-size:12px;background:#c45200;color:#fff;transition:all .3s;" } 1
+            .ms-2.small{ style: "font-weight:700;color:#c45200;font-size:12px;transition:all .3s;" } Upload File
+          .flex-grow-1.mx-2{ style: "height:1px;background:#fde0c0;" }
+          .d-flex.align-items-center#step-ind-2
+            .d-flex.align-items-center.justify-content-center.fw-bold{ style: "width:28px;height:28px;border-radius:50%;font-size:12px;background:#fde0c0;color:#c48060;transition:all .3s;" } 2
+            .ms-2.small{ style: "font-weight:500;color:#c48060;font-size:12px;transition:all .3s;" } Preview
+          .flex-grow-1.mx-2{ style: "height:1px;background:#fde0c0;" }
+          .d-flex.align-items-center#step-ind-3
+            .d-flex.align-items-center.justify-content-center.fw-bold{ style: "width:28px;height:28px;border-radius:50%;font-size:12px;background:#fde0c0;color:#c48060;transition:all .3s;" } 3
+            .ms-2.small{ style: "font-weight:500;color:#c48060;font-size:12px;transition:all .3s;" } Amortization
+          .flex-grow-1.mx-2{ style: "height:1px;background:#fde0c0;" }
+          .d-flex.align-items-center#step-ind-4
+            .d-flex.align-items-center.justify-content-center.fw-bold{ style: "width:28px;height:28px;border-radius:50%;font-size:12px;background:#fde0c0;color:#c48060;transition:all .3s;" } 4
+            .ms-2.small{ style: "font-weight:500;color:#c48060;font-size:12px;transition:all .3s;" } Confirm
+
+      .modal-body{ style: "padding: 28px; background: #fff;" }
+
+        #upload-step-1
+          .rounded-3.p-5.text-center{ id: "upload-dropzone", style: "border: 2px dashed #fde0c0; cursor:pointer; transition: all .2s; background:#fffdf9;" }
+            .mb-3
+              .d-inline-flex.align-items-center.justify-content-center{ style: "width:64px;height:64px;background:linear-gradient(135deg,#ffe8d0,#fdc090);border-radius:16px;" }
+                %i.fa.fa-file-csv{ style: "font-size:26px;color:#c45200;" }
+            %p.fw-semibold.mb-1{ style: "color:#6b2800;font-size:15px;" } Drag & drop your file here
+            %p.mb-4{ style: "font-size:13px;color:#c48060;" } Supports CSV, XLSX, XLS formats
+            %label.btn.btn-sm.px-4{ for: "loan-file-input", style: "background:#c45200;color:#fff;border-radius:8px;font-size:13px;font-weight:600;padding:8px 20px;" }
+              %i.fa.fa-folder-open.me-2
+              Browse Files
+            %input#loan-file-input{ type: "file", accept: ".csv,.xlsx,.xls", style: "display:none" }
+
+          .d-none.mt-3#file-selected-info
+            .d-flex.align-items-center.gap-3.p-3{ style: "background:#ffe8d0;border:1px solid #fdc090;border-radius:10px;" }
+              .d-flex.align-items-center.justify-content-center{ style: "width:36px;height:36px;background:#e86a00;border-radius:8px;flex-shrink:0;" }
+                %i.fa.fa-file-alt{ style: "color:#fff;font-size:14px;" }
+              %div.flex-grow-1
+                %p.mb-0.fw-semibold{ style: "font-size:13px;color:#6b2800;" }
+                  %span#file-name-display
+                %p.mb-0{ style: "font-size:11px;color:#c48060;" }
+                  %span#file-size-display
+              %button.btn.btn-sm{ type: "button", id: "btn-clear-file", style: "color:#ef4444;background:none;border:none;padding:4px 8px;" }
+                %i.fa.fa-times
+
+          .alert.alert-danger.d-none.mt-3.rounded-3{ id: "preview-alert", style: "font-size:13px;border:none;background:#fef2f2;" }
+            %ul.mb-0#preview-alert-list
+
+        #upload-step-2.d-none
+          .d-flex.align-items-center.justify-content-between.mb-3
+            %h6.mb-0{ style: "color:#6b2800;font-weight:700;" } Loan Preview
+          .table-responsive{ style: "border-radius:10px;border:1px solid #fde0c0;overflow:hidden;" }
+            %table.table.table-sm.mb-0{ style: "font-size:12px;" }
+              %thead{ style: "background:#fffaf5;" }
+                %tr
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;padding-left:16px;" } Row
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Member ID
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Loan Product
+                  %th.py-3.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Principal
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Installments
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Term
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Date Prepared
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Date Released
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } First Payment
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } PN #
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Valid
+              %tbody#preview-table-tbody
+
+        #upload-step-3.d-none
+          .p-4.mb-4.rounded-3{ style: "background:#fffaf5;border:1px solid #fde0c0;" }
+            .d-flex.align-items-center.gap-2.mb-3
+              .d-flex.align-items-center.justify-content-center{ style: "width:28px;height:28px;background:#c45200;border-radius:6px;" }
+                %i.fa.fa-globe{ style: "color:#fff;font-size:11px;" }
+              %h6.mb-0{ style: "color:#6b2800;font-weight:700;font-size:13px;" } Global Settings
+              %span.ms-2{ style: "font-size:11px;color:#c48060;" } Applied to all loans unless overridden per row
+            .row.g-3
+              .col-md-5
+                %label.form-label{ style: "font-size:12px;font-weight:600;color:#6b2800;margin-bottom:6px;" } First Date of Payment
+                %input.form-control.form-control-sm{ type: "date", id: "global-first-payment", style: "border-radius:8px;border-color:#fde0c0;font-size:13px;" }
+              .col-md-4
+                %label.form-label{ style: "font-size:12px;font-weight:600;color:#6b2800;margin-bottom:6px;" } Term Override
+                %select.form-select.form-select-sm#global-term-override{ style: "border-radius:8px;border-color:#fde0c0;font-size:13px;" }
+                  %option{ value: "" } Keep from file
+                  %option{ value: "weekly" } Weekly
+                  %option{ value: "monthly" } Monthly
+                  %option{ value: "semi-monthly" } Semi-Monthly
+
+          .d-flex.align-items-center.justify-content-between.mb-2
+            %h6.mb-0{ style: "color:#6b2800;font-weight:700;font-size:13px;" } Per-Loan Settings
+          .table-responsive{ style: "border-radius:10px;border:1px solid #fde0c0;overflow:hidden;" }
+            %table.table.table-sm.mb-0{ style: "font-size:12px;" }
+              %thead{ style: "background:#fffaf5;" }
+                %tr
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;padding-left:16px;" } Row
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Member ID
+                  %th.py-3.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Principal
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Term
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Installments
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } First Payment
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Maturity Est.
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Customize
+              %tbody#amort-settings-tbody
+
+          .mt-3.d-none.rounded-3{ id: "amort-detail-panel", style: "border:1px solid #fdc090;background:#fffdf9;overflow:hidden;" }
+            .d-flex.align-items-center.justify-content-between.px-4.py-3{ style: "background:#ffe8d0;border-bottom:1px solid #fdc090;" }
+              .d-flex.align-items-center.gap-2
+                %i.fa.fa-calendar-alt{ style: "color:#e86a00;font-size:13px;" }
+                %h6.mb-0{ style: "color:#6b2800;font-weight:700;font-size:13px;", id: "amort-panel-heading" } Customize Installment Dates
+              %button.btn.btn-sm#btn-close-amort-panel{ type: "button", style: "background:none;border:none;color:#c48060;padding:4px 8px;" }
+                %i.fa.fa-times
+            %p.px-4.pt-3.mb-2{ style: "font-size:12px;color:#c48060;" } Override individual due dates. Leave blank to use the auto-generated date.
+            .px-4.pb-3
+              .table-responsive{ style: "border-radius:8px;border:1px solid #fdc090;overflow:hidden;" }
+                %table.table.table-sm.mb-0{ style: "font-size:12px;background:#fff;" }
+                  %thead{ style: "background:#fffaf5;" }
+                    %tr
+                      %th.py-2.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } #
+                      %th.py-2{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Default Due Date
+                      %th.py-2{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Custom Due Date
+                      %th.py-2.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Principal
+                      %th.py-2.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Interest
+                      %th.py-2.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Amount Due
+                  %tbody#amort-detail-tbody
+            .d-flex.justify-content-end.gap-2.px-4.pb-3
+              %button.btn.btn-sm#btn-reset-amort-detail{ type: "button", style: "border:1px solid #fde0c0;background:#fff;color:#6b2800;border-radius:8px;font-size:12px;font-weight:600;padding:6px 16px;" }
+                %i.fa.fa-undo.me-1
+                Reset
+              %button.btn.btn-sm#btn-save-amort-detail{ type: "button", style: "background:#c45200;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;padding:6px 16px;" }
+                %i.fa.fa-save.me-1
+                Save Dates
+
+        #upload-step-4.d-none
+          .row.g-3.mb-4
+            .col-md-4
+              .text-center.p-4.rounded-3{ style: "background:#ffe8d0;border:1px solid #fdc090;" }
+                %div{ style: "font-size:32px;font-weight:800;color:#e86a00;line-height:1;", id: "confirm-total" } 0
+                %div{ style: "font-size:12px;color:#c48060;margin-top:4px;font-weight:500;" } Total Loans
+            .col-md-4
+              .text-center.p-4.rounded-3{ style: "background:#f0fdf4;border:1px solid #86efac;" }
+                %div{ style: "font-size:32px;font-weight:800;color:#16a34a;line-height:1;", id: "confirm-valid" } 0
+                %div{ style: "font-size:12px;color:#6b7280;margin-top:4px;font-weight:500;" } Valid
+            .col-md-4
+              .text-center.p-4.rounded-3{ style: "background:#f0fdf4;border:1px solid #6ee7b7;" }
+                %div{ style: "font-size:32px;font-weight:800;color:#15803d;line-height:1;", id: "confirm-custom-amort" } 0
+                %div{ style: "font-size:12px;color:#6b7280;margin-top:4px;font-weight:500;" } With Custom Amort
+          .table-responsive{ style: "border-radius:10px;border:1px solid #fde0c0;overflow:hidden;" }
+            %table.table.table-sm.mb-0{ style: "font-size:12px;" }
+              %thead{ style: "background:#fffaf5;" }
+                %tr
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;padding-left:16px;" } Row
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Member ID
+                  %th.py-3.text-end{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Principal
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Installments
+                  %th.py-3{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } First Payment
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Custom Amort
+                  %th.py-3.text-center{ style: "color:#c48060;font-weight:600;border-bottom:1px solid #fde0c0;" } Paid / Remaining
+              %tbody#confirm-table-tbody
+
+      .modal-footer{ style: "background:#fffaf5;border-top:1px solid #fde0c0;padding:16px 28px;gap:8px;" }
+        %button.btn.btn-sm.d-none{ type: "button", id: "btn-step-back", style: "border:1px solid #fde0c0;background:#fff;color:#6b2800;border-radius:8px;font-size:13px;font-weight:600;padding:7px 18px;" }
+          %i.fa.fa-arrow-left.me-1
+          Back
+        %button.btn.btn-sm{ type: "button", "data-bs-dismiss": "modal", style: "border:1px solid #fde0c0;background:#fff;color:#6b2800;border-radius:8px;font-size:13px;font-weight:600;padding:7px 18px;" }
+          Cancel
+        .ms-auto.d-flex.gap-2
+          %button.btn.btn-sm{ type: "button", id: "btn-preview", disabled: true, style: "background:#c45200;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;padding:7px 20px;" }
+            %i.fa.fa-eye.me-2
+            Preview Loans
+          %button.btn.btn-sm.d-none{ type: "button", id: "btn-to-amort", style: "background:#c45200;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;padding:7px 20px;" }
+            Next: Amortization
+            %i.fa.fa-arrow-right.ms-2
+          %button.btn.btn-sm.d-none{ type: "button", id: "btn-to-confirm", style: "background:#c45200;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;padding:7px 20px;" }
+            Next: Confirm
+            %i.fa.fa-arrow-right.ms-2
+          %button.btn.btn-sm.d-none{ type: "button", id: "btn-save-upload", style: "background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;padding:7px 20px;" }
+            %i.fa.fa-check.me-2
+            Upload Loans
+        .spinner-border.spinner-border-sm.d-none{ role: "status", id: "upload-spinner", style: "color:#c45200;" }
+          %span.visually-hidden Loading...

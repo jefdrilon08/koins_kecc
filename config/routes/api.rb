@@ -217,7 +217,13 @@ namespace :api do
   end
 
   namespace :v1 do
-   #mbs_transfer
+
+    # Upload Loans
+    post "/upload_loans/preview",      to: "upload_loans#preview"
+    post "/upload_loans/save",         to: "upload_loans#save"
+    get  "/upload_loans/amortization", to: "upload_loans#amortization"
+
+    #mbs_transfer
     post "mbs_transfer/create", to: "mbs_transfer#create"
     post "mbs_transfer/add_member", to: "mbs_transfer#add_member"
     post "mbs_transfer/update_amount", to: "mbs_transfer#update_amount"
