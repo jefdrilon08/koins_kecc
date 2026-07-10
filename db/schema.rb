@@ -10,9 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_06_024333) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
@@ -41,7 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
     t.json "data"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.string "external_ref"
+    t.uuid "external_ref"
     t.index ["subsidiary_id", "transacted_at"], name: "idx_compute_interest1", where: "(((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text])) AND (NOT ((data ->> 'is_interest'::text) = 'true'::text)))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_1", where: "((transaction_type)::text = ANY (ARRAY[('deposit'::character varying)::text, ('withdraw'::character varying)::text]))"
     t.index ["subsidiary_id", "transacted_at"], name: "manual_idx_14"
@@ -841,10 +840,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
     t.index ["member_id"], name: "index_hiip_claims_on_member_id"
   end
 
-  create_table "holidays", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "holiday_record_details", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "holiday_name"
-    t.string "holiday_date"
+    t.date "holiday_date"
     t.string "status"
+    t.json "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "holiday_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "holiday_name"
+    t.date "holiday_date"
+    t.string "status"
+    t.json "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -1047,7 +1056,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "last_name"
-    t.string "gender"
     t.index ["member_id"], name: "index_legal_dependents_on_member_id"
   end
 
@@ -1063,9 +1071,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
     t.string "reference_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "co_maker_member_id"
-    t.string "co_maker_first_name", null: false
-    t.string "co_maker_last_name", null: false
     t.uuid "loan_product_tagging_id"
     t.date "date_approved"
     t.index ["loan_product_id"], name: "index_loan_applications_on_loan_product_id"
@@ -1110,6 +1115,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
     t.integer "priority"
     t.uuid "loan_product_category_id"
     t.boolean "is_active"
+    t.decimal "non_teaching_monthly_interest_rate"
     t.index ["loan_product_category_id"], name: "index_loan_products_on_loan_product_category_id"
     t.index ["priority"], name: "manual_idx_6"
   end
@@ -1825,7 +1831,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_05_052214) do
   add_foreign_key "loan_applications", "loan_product_taggings"
   add_foreign_key "loan_applications", "loan_products"
   add_foreign_key "loan_applications", "members"
-  add_foreign_key "loan_applications", "members", column: "co_maker_member_id"
   add_foreign_key "loan_product_taggings", "loan_products"
   add_foreign_key "loan_product_types", "loan_products"
   add_foreign_key "loan_products", "loan_product_categories"
