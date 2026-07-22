@@ -4,16 +4,16 @@ module Billings
 
     SAVINGS_SUBTYPES = [
       "K-IMPOK",
-      "Golden K",
-      "Maintaining Balance Savings"
+    #  "Golden K",
+    #  "Maintaining Balance Savings"
     ]
 
     INSURANCE_SUBTYPES  = [
-      "Life Insurance Fund",
-      "Retirement Fund",
-      "K-BENTE",
-      "K-KALINGA",
-      "Hospital Income Insurance Plan"
+    #  "Life Insurance Fund",
+    #  "Retirement Fund",
+    #  "K-BENTE",
+    #  "K-KALINGA",
+    #  "Hospital Income Insurance Plan"
 
     ]
     
@@ -156,14 +156,14 @@ module Billings
 
         defaults  = Settings.try(:defaults).try(:equity_deposits)
         #raise defaults.inspect
-
-        if defaults.present? and @member.data['subscription'].present?   and @member.data['subscription']["is_subscribed"] == true
-          defaults.each do |o|
-            if o.account_subtype == equity_subtype
-              data[:amount] = o.amount
-            end
-          end
-        end
+        data[:amount] = member_account.data.with_indifferent_access[:semi_monthly_collection]
+        #if defaults.present? and @member.data['subscription'].present?   and @member.data['subscription']["is_subscribed"] == true
+        #  defaults.each do |o|
+        #    if o.account_subtype == equity_subtype
+        #      data[:amount] = o.amount
+        #    end
+        #  end
+        #end
       
 
 
@@ -291,15 +291,16 @@ module Billings
 
       # Default amount
       loan_amount = @member.loans.active.sum(:principal)
-      @settings_savings_deposits.each do |o|
-        if o.account_subtype == savings_subtype
-          o.regular_loan_deposits.each do |rs|
-            if loan_amount >= rs.min_amount and loan_amount < rs.max_amount
-              data[:amount] = rs.deposit_amount
-            end
-          end
-        end
-      end
+      data[:amount] = member_account.data.with_indifferent_access[:semi_monthly_collection]
+      #@settings_savings_deposits.each do |o|
+      #  if o.account_subtype == savings_subtype
+      #    o.regular_loan_deposits.each do |rs|
+      #      if loan_amount >= rs.min_amount and loan_amount < rs.max_amount
+      #        data[:amount] = rs.deposit_amount
+      #      end
+      #    end
+      #  end
+      #end
       
       else
      

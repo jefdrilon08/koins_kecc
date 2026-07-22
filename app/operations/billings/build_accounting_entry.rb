@@ -118,7 +118,8 @@ module Billings
 
       # Cash in Bank
       # if withdraw payment > 0
-      accounting_code = ReadOnlyAccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
+      #accounting_code = ReadOnlyAccountingCode.find(@branch_accounting_code_settings.cash_in_bank_accounting_code_id)
+      accounting_code = ReadOnlyAccountingCode.find(@branch_accounting_code_settings.billing_cash_in_bank_record_id)
       amount          = @data[:total_collected]
 
       if @total_wp > 0

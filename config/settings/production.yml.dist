@@ -451,18 +451,18 @@ default_deposit_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "K-IMPOK"
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Associate Savings Account"
-  -
-    account_type: "EQUITY"
-    account_subtype: "Share Capital"
-  -
-    account_type: "EQUITY"
-    account_subtype: "CBU"
-  -
-    account_type: "EQUITY"
-    account_subtype: "Preferred Share"
+      #  -
+      #    account_type: "SAVINGS"
+      #account_subtype: "Associate Savings Account"
+      #-
+      #account_type: "EQUITY"
+      #account_subtype: "Share Capital"
+      #  -
+      #account_type: "EQUITY"
+      #account_subtype: "CBU"
+      #-
+      #account_type: "EQUITY"
+      #account_subtype: "Preferred Share"
 #  -
 #    account_type: "SAVINGS"
 #    account_subtype: "K-IMPOK"
@@ -486,30 +486,30 @@ default_withdrawal_accounts:
   -
     account_type: "SAVINGS"
     account_subtype: "K-IMPOK"
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Golden K"
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Savings Investment Fund"
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Personal Savings Account"
-  -
-    account_type: "SAVINGS"
-    account_subtype: "Maintaining Balance Savings"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "Life Insurance Fund"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "Retirement Fund"
-  -
-    account_type: "INSURANCE"
-    account_subtype: "Equity Value"
-  -
-    account_type: "EQUITY"
-    account_subtype: "CBU"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Golden K"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Savings Investment Fund"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Personal Savings Account"
+#  -
+#    account_type: "SAVINGS"
+#    account_subtype: "Maintaining Balance Savings"
+#  -
+#    account_type: "INSURANCE"
+#    account_subtype: "Life Insurance Fund"
+#  -
+#    account_type: "INSURANCE"
+#    account_subtype: "Retirement Fund"
+#  -
+#    account_type: "INSURANCE"
+#    account_subtype: "Equity Value"
+#  -
+#    account_type: "EQUITY"
+#    account_subtype: "CBU"
 
 default_member_accounts:
   -
@@ -863,8 +863,8 @@ savings_insurance_transfer_accounting_codes:
 savings_accounting_codes:
   -
     savings_type: "K-IMPOK"
-    deposit_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
-    withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
+    deposit_accounting_code_id: "aa7bb9dd-e11d-4dfe-9a57-47fdbf08272b"
+    withdrawal_accounting_code_id: "d047fd57-5e5a-4191-b3aa-36dc70558c28"
   -
     savings_type: "Golden K"
     deposit_accounting_code_id: "f719c253-a9ba-4d81-ae52-dc8d8d0848f2"
@@ -897,7 +897,7 @@ equity_accounting_codes:
     withdrawal_accounting_code_id: "370f5e4f-e4c8-454e-90b2-17919cc5ef92"
   -
     equity_type: "CBU"
-    deposit_accounting_code_id: "5091fee6-b2a2-40a0-a717-c53ab483ea43"
+    deposit_accounting_code_id: "2903b737-0fea-4a24-8709-d5e42d625d1b"
     withdrawal_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
   -
     equity_type: "Preferred Share"
@@ -909,8 +909,9 @@ equity_accounting_codes:
 branch_accounting_codes:
   -
     branch_id: "599b0669-3d9b-4f62-b812-d07b613ce0d6"                              #ceu
-    cash_in_bank_accounting_code_id: "9b9d0047-6f5a-4561-8a08-7d1281e8a4b2"
-    withdraw_payment_accounting_code_id: "b7c23e58-e44e-46ae-a3ec-b5081d6eed32"
+    cash_in_bank_accounting_code_id: "d047fd57-5e5a-4191-b3aa-36dc70558c28"
+    billing_cash_in_bank_record_id: "0cd5019d-9ecc-4e49-a9d8-eab38b8201aa"
+    withdraw_payment_accounting_code_id: "aa7bb9dd-e11d-4dfe-9a57-47fdbf08272b"
     interest_expense_accounting_code_id: "273b28da-bbf7-4c62-b18b-ac1281d30296"
     time_deposit_accounting_code_id: "db5200f6-2c0d-4889-a868-f8b3e0446070"
     due_to_accounting_code_id: "0bb90ced-05ad-4174-8e82-97082996aae1"
