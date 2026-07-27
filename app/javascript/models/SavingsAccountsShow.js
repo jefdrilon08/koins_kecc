@@ -6,6 +6,14 @@ var $btnSyncMaintaningBalance;
 var $btnConfirmSyncMaintainingBalance;
 var $modalSyncMaintainingBalance;
 var $inputMaintainingBalance;
+var $btnUpdateSemiMonthlyCollection;
+var $btnConfirmUpdateSemiMonthlyCollection;
+var $modalUpdateSemiMonthlyCollection;
+var $inputSemiMonthlyCollection;
+var $btnUpdateEquityValue;
+var $btnConfirmUpdateEquityValue;
+var $modalUpdateEquityValue;
+var $inputEquityValue;
 
 var $btnRequestTimeDepositWithdrawal;
 var $btnConfirmRequestTimeDepositWithdrawal;
@@ -58,13 +66,26 @@ var _cacheDom = function() {
 
   $btnSyncMaintaningBalance         = $("#btn-sync-maintaining-balance");
   $btnConfirmSyncMaintainingBalance = $("#btn-confirm-sync-maintaining-balance");
-  
+
   $modalSyncMaintainingBalance = new bootstrap.Modal(
     document.getElementById("modal-sync-maintaining-balance")
   )
 
+  $btnUpdateSemiMonthlyCollection = $("#btn-update-semi-monthly-collection");
+  $btnConfirmUpdateSemiMonthlyCollection = $("#btn-confirm-update-semi-monthly-collection");
+  $modalUpdateSemiMonthlyCollection = new bootstrap.Modal(
+    document.getElementById("modal-update-semi-monthly-collection")
+  )
+
+  $btnUpdateEquityValue = $("#btn-update-equity-value");
+  $btnConfirmUpdateEquityValue = $("#btn-confirm-update-equity-value");
+  $modalUpdateEquityValue = new bootstrap.Modal(
+    document.getElementById("modal-update-equity-value")
+  )
 
   $inputMaintainingBalance          = $("#input-maintaining-balance");
+  $inputSemiMonthlyCollection       = $("#input-semi-monthly-collection");
+  $inputEquityValue                 = $("#input-equity-value");
 
   $btnRequestTimeDepositWithdrawal        = $("#btn-request-time-deposit-withdrawal");
   $btnConfirmRequestTimeDepositWithdrawal = $("#btn-confirm-request-time-deposit-withdrawal");
@@ -303,7 +324,99 @@ var _bindEvents = function() {
     });
   });
 
+  $btnUpdateSemiMonthlyCollection.on("click", function() {
+    $message.html("");
+    $modalUpdateSemiMonthlyCollection.show();
+  });
 
+  $btnConfirmUpdateSemiMonthlyCollection.on("click", function() {
+    var semiMonthlyCollection = $inputSemiMonthlyCollection.val();
+
+    $btnConfirmUpdateSemiMonthlyCollection.prop("disabled", true);
+    $inputSemiMonthlyCollection.prop("disabled", true);
+
+    $.ajax({
+      url: "/api/v1/savings_accounts/update_semi_monthly_collection",
+      method: 'POST',
+      data: {
+        id: id,
+        authenticity_token: authenticityToken,
+        semi_monthly_collection: semiMonthlyCollection
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmUpdateSemiMonthlyCollection.prop("disabled", false);
+          $inputSemiMonthlyCollection.prop("disabled", false);
+        }
+      }
+    });
+  });
+
+  $btnUpdateEquityValue.on("click", function() {
+    $message.html("");
+    $modalUpdateEquityValue.show();
+  });
+
+  $btnConfirmUpdateEquityValue.on("click", function() {
+    var equityValue = $inputEquityValue.val();
+
+    $btnConfirmUpdateEquityValue.prop("disabled", true);
+    $inputEquityValue.prop("disabled", true);
+
+    $.ajax({
+      url: "/api/v1/savings_accounts/update_equity_value",
+      method: 'POST',
+      data: {
+        id: id,
+        authenticity_token: authenticityToken,
+        equity_value: equityValue
+      },
+      success: function(response) {
+        $message.html("Success! Redirecting...");
+        window.location.reload();
+      },
+      error: function(response) {
+        console.log(response);
+        var errors  = [];
+        try {
+          errors  = JSON.parse(response.responseText).full_messages;
+        } catch(err) {
+          errors  = ["Something went wrong"];
+          console.log(err);
+        } finally {
+          console.log(errors);
+          $message.html(
+            Mustache.render(
+              templateErrorList,
+              { errors: errors }
+            )
+          );
+
+          $btnConfirmUpdateEquityValue.prop("disabled", false);
+          $inputEquityValue.prop("disabled", false);
+        }
+      }
+    });
+  });
 
 };
 

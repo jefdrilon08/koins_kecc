@@ -150,6 +150,80 @@ module Api
         end
       end
 
+      def update_semi_monthly_collection
+        savings_account = MemberAccount.savings.where(id: params[:id]).first
+        old_value = savings_account.data.with_indifferent_access[:semi_monthly_collection]
+        semi_monthly_collection = params[:semi_monthly_collection]
+
+        config = {
+          savings_account: savings_account,
+          semi_monthly_collection: semi_monthly_collection,
+          user: current_user
+        }
+
+        errors = ::SavingsAccounts::ValidateUpdateSemiMonthlyCollection.new(
+                   config: config
+                 ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          savings_account = ::SavingsAccounts::UpdateSemiMonthlyCollection.new(
+                              config: config
+                            ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified savings account #{savings_account.id} semi monthly collection from #{old_value} to #{semi_monthly_collection}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              savings_account: savings_account.id,
+              old_semi_monthly_collection: old_value,
+              semi_monthly_collection: semi_monthly_collection
+            }
+          )
+
+          render json: { id: savings_account.id }
+        end
+      end
+
+      def update_equity_value
+        savings_account = MemberAccount.savings.where(id: params[:id]).first
+        old_value = savings_account.data.with_indifferent_access[:equity_value]
+        equity_value = params[:equity_value]
+
+        config = {
+          savings_account: savings_account,
+          equity_value: equity_value,
+          user: current_user
+        }
+
+        errors = ::SavingsAccounts::ValidateUpdateEquityValue.new(
+                   config: config
+                 ).execute!
+
+        if errors[:messages].any?
+          render json: errors, status: 400
+        else
+          savings_account = ::SavingsAccounts::UpdateEquityValue.new(
+                              config: config
+                            ).execute!
+
+          ActivityLog.create!(
+            content: "#{current_user.full_name} modified savings account #{savings_account.id} equity value from #{old_value} to #{equity_value}",
+            activity_type: "modification",
+            data: {
+              user_id: current_user.id,
+              savings_account: savings_account.id,
+              old_equity_value: old_value,
+              equity_value: equity_value
+            }
+          )
+
+          render json: { id: savings_account.id }
+        end
+      end
+
       def index
         members = Member.all.order("last_name ASC").where(branch_id: @branches.pluck(:id))
 

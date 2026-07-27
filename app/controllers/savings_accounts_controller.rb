@@ -147,6 +147,18 @@ class SavingsAccountsController < ApplicationController
         text: "Sync Maintaining Balance"
       },
       {
+        id: "btn-update-semi-monthly-collection",
+        class: "fa fa-edit",
+        link: "#",
+        text: "Update Semi Monthly Collection"
+      },
+      {
+        id: "btn-update-equity-value",
+        class: "fa fa-money",
+        link: "#",
+        text: "Update Equity Value"
+      },
+      {
       id: "btn-print-ledger",
       link: "#",
       class: "fa fa-print",
