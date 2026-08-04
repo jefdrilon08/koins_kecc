@@ -20,48 +20,30 @@
     %td.text-end
       #{@loan.project_type}
   
-  - co_makers = (@loan.data || {}).with_indifferent_access[:co_makers] || []
+  - co_makers = Array.wrap((@loan.data || {}).with_indifferent_access[:co_makers]).compact
+  - if co_makers.blank?
+    - legacy_co_makers = []
+    - [(@loan.data || {}).with_indifferent_access[:co_maker_one], (@loan.data || {}).with_indifferent_access[:co_maker_two], (@loan.data || {}).with_indifferent_access[:co_maker_three]].compact.each do |legacy|
+      - legacy_co_makers << legacy
+    - co_makers = legacy_co_makers
 
-  %tr
-    %th
-      First Co-maker:
-    %td.text-end
-      - if co_makers[0].present?
-        - cm = co_makers[0].is_a?(Hash) ? co_makers[0].with_indifferent_access : { id: co_makers[0], name: nil }
-        - if cm[:id].present?
-          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
-            = cm[:name].presence || cm[:id]
-        - else
-          = cm[:name].presence || "N/A"
-      - else
-        N/A
-
-  %tr
-    %th
-      Second Co-maker:
-    %td.text-end
-      - if co_makers[1].present?
-        - cm = co_makers[1].is_a?(Hash) ? co_makers[1].with_indifferent_access : { id: co_makers[1], name: nil }
-        - if cm[:id].present?
-          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
-            = cm[:name].presence || cm[:id]
-        - else
-          = cm[:name].presence || "N/A"
-      - else
-        N/A
-
-  %tr
-    %th
-      Third Co-maker:
-    %td.text-end
-      - if co_makers[2].present?
-        - cm = co_makers[2].is_a?(Hash) ? co_makers[2].with_indifferent_access : { id: co_makers[2], name: nil }
-        - if cm[:id].present?
-          = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
-            = cm[:name].presence || cm[:id]
-        - else
-          = cm[:name].presence || "N/A"
-      - else
+  - if co_makers.present?
+    - co_makers.each_with_index do |co_maker, index|
+      - cm = co_maker.is_a?(Hash) ? co_maker.with_indifferent_access : { id: co_maker, name: nil }
+      %tr
+        %th
+          = "Co-maker #{index + 1}:"
+        %td.text-end
+          - if cm[:id].present?
+            = link_to(member_path(cm[:id]), target: "_blank", rel: "noopener noreferrer", class: "text-primary text-decoration-none") do
+              = cm[:name].presence || cm[:id]
+          - else
+            = cm[:name].presence || "N/A"
+  - else
+    %tr
+      %th
+        Co-makers:
+      %td.text-end
         N/A
   -# %tr
   -#   %th

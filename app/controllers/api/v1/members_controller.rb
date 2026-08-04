@@ -451,12 +451,18 @@ module Api
     def get_members
       members = Member
                   .joins(:branch)
-                  .select("members.id, members.first_name, members.middle_name, members.last_name, branches.name AS branch_name")
+                  .select("members.id, members.first_name, members.middle_name, members.last_name, members.identification_number, members.status, branches.name AS branch_name")
                   .order("members.last_name, members.first_name, members.middle_name")
 
       render json: members.map { |m|
         {
           id: m.id,
+          first_name: m.first_name,
+          middle_name: m.middle_name,
+          last_name: m.last_name,
+          identification_number: m.identification_number,
+          status: m.status,
+          branch_name: m.branch_name,
           name: [
             m.last_name,
             [m.first_name, m.middle_name].reject(&:blank?).join(' ')
