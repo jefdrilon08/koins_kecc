@@ -33,3 +33,5 @@
                   #{number_to_currency(o.amount, unit: "")}
                 %td.text-end.text-muted
                   #{number_to_currency(o.data["ending_balance"], unit: "")}
+= render partial: "equity_accounts/modals/update_equity_value" if @equity_account.account_subtype == "CBU"
+= render partial: "templates/error_list"

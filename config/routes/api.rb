@@ -456,10 +456,10 @@ namespace :api do
     get "/savings_accounts", to: "savings_accounts#index"
     post "/savings_accounts/sync_maintaining_balance", to: "savings_accounts#sync_maintaining_balance"
     post "/savings_accounts/update_semi_monthly_collection", to: "savings_accounts#update_semi_monthly_collection"
-    post "/savings_accounts/update_equity_value", to: "savings_accounts#update_equity_value"
     post "/savings_accounts/request_time_deposit_withdrawal", to: "savings_accounts#request_time_deposit_withdrawal"
     post "/savings_accounts/delete_withdrawal_request", to: "savings_accounts#delete_withdrawal_request"
     post "/savings_accounts/approve_withdrawal_request", to: "savings_accounts#approve_withdrawal_request"
+    post "/equity_accounts/update_equity_value", to: "equity_accounts#update_equity_value"
 
     # /api/
     # Member Parameter

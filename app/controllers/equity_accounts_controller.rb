@@ -73,6 +73,14 @@ class EquityAccountsController < ApplicationController
     ]
 
     @subheader_side_actions = [
+      *(@equity_account.account_subtype == "CBU" ? [
+        {
+          id: "btn-update-equity-value",
+          class: "fa fa-money",
+          link: "#",
+          text: "Update Equity Value"
+        }
+      ] : []),
       {
         class: "",
         link: "#",

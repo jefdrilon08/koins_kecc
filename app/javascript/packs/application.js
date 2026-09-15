@@ -73,6 +73,7 @@ import AllowanceLosses from "../components/allowance_losses/Generate.js";
 // "init" Objects
 import SavingsAccountsShow from "../models/SavingsAccountsShow.js";
 import SavingsAccountsShowWithdrawalRequest from "../models/ShowWithdrawalRequest.js";
+import EquityAccountsShow from "../models/EquityAccountsShow.js";
 import AccountingCodesIndex from "../models/AccountingCodesIndex.js";
 import AccountingBooksIndex from "../models/AccountingBooksIndex.js";
 import LoansShow from "../models/LoansShow.js";
@@ -294,6 +295,7 @@ const hooks = {
   //"pages/forgot_password":                            [PagesForgotPassword],
   "savings_accounts/show":                            [SavingsAccountsShow],
   "savings_accounts/time_deposit_withdrawal":         [SavingsAccountsShowWithdrawalRequest],
+  "equity_accounts/show":                             [EquityAccountsShow],
   "accounting/crb":                                   [AccountingBooksIndex],
   "accounting/cdb":                                   [AccountingBooksIndex],
   "accounting/jvb":                                   [AccountingBooksIndex],
