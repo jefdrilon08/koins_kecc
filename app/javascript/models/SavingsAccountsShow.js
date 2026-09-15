@@ -10,10 +10,6 @@ var $btnUpdateSemiMonthlyCollection;
 var $btnConfirmUpdateSemiMonthlyCollection;
 var $modalUpdateSemiMonthlyCollection;
 var $inputSemiMonthlyCollection;
-var $btnUpdateEquityValue;
-var $btnConfirmUpdateEquityValue;
-var $modalUpdateEquityValue;
-var $inputEquityValue;
 
 var $btnRequestTimeDepositWithdrawal;
 var $btnConfirmRequestTimeDepositWithdrawal;
@@ -77,15 +73,9 @@ var _cacheDom = function() {
     document.getElementById("modal-update-semi-monthly-collection")
   )
 
-  $btnUpdateEquityValue = $("#btn-update-equity-value");
-  $btnConfirmUpdateEquityValue = $("#btn-confirm-update-equity-value");
-  $modalUpdateEquityValue = new bootstrap.Modal(
-    document.getElementById("modal-update-equity-value")
-  )
 
   $inputMaintainingBalance          = $("#input-maintaining-balance");
   $inputSemiMonthlyCollection       = $("#input-semi-monthly-collection");
-  $inputEquityValue                 = $("#input-equity-value");
 
   $btnRequestTimeDepositWithdrawal        = $("#btn-request-time-deposit-withdrawal");
   $btnConfirmRequestTimeDepositWithdrawal = $("#btn-confirm-request-time-deposit-withdrawal");
@@ -366,53 +356,6 @@ var _bindEvents = function() {
 
           $btnConfirmUpdateSemiMonthlyCollection.prop("disabled", false);
           $inputSemiMonthlyCollection.prop("disabled", false);
-        }
-      }
-    });
-  });
-
-  $btnUpdateEquityValue.on("click", function() {
-    $message.html("");
-    $modalUpdateEquityValue.show();
-  });
-
-  $btnConfirmUpdateEquityValue.on("click", function() {
-    var equityValue = $inputEquityValue.val();
-
-    $btnConfirmUpdateEquityValue.prop("disabled", true);
-    $inputEquityValue.prop("disabled", true);
-
-    $.ajax({
-      url: "/api/v1/savings_accounts/update_equity_value",
-      method: 'POST',
-      data: {
-        id: id,
-        authenticity_token: authenticityToken,
-        equity_value: equityValue
-      },
-      success: function(response) {
-        $message.html("Success! Redirecting...");
-        window.location.reload();
-      },
-      error: function(response) {
-        console.log(response);
-        var errors  = [];
-        try {
-          errors  = JSON.parse(response.responseText).full_messages;
-        } catch(err) {
-          errors  = ["Something went wrong"];
-          console.log(err);
-        } finally {
-          console.log(errors);
-          $message.html(
-            Mustache.render(
-              templateErrorList,
-              { errors: errors }
-            )
-          );
-
-          $btnConfirmUpdateEquityValue.prop("disabled", false);
-          $inputEquityValue.prop("disabled", false);
         }
       }
     });
